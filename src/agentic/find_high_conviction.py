@@ -53,9 +53,26 @@ BASE_FEATS = ["return_1d", "return_20d",
               "market_breadth_50dma", "market_breadth_200dma"]
 
 # Feature prefixes auto-pulled from extra_features.parquet
-EXTRA_PREFIXES = ("alpha_", "vol_", "rv_", "scr_", "qvm_", "acad_",
-                   "usdinr", "eurinr", "gbpinr", "jpyinr",
-                   "wiki_", "spx", "us10y", "dxy", "brent", "gold")
+# ---------------------------------------------------------------------------
+# SAFE: time-series features that vary per (symbol, date). These pass the
+# (nunique > 1) per-symbol check and are honest model inputs.
+SAFE_EXTRA_PREFIXES = (
+    "alpha_", "vol_", "rv_",
+    "usdinr", "eurinr", "gbpinr", "jpyinr",
+    "wiki_", "spx", "us10y", "dxy", "brent", "gold",
+    "macro_", "sec_",
+)
+
+# QUARANTINED: feature prefixes confirmed CONTAMINATED by the
+# 2026-05-01 leakage audit (reports/leakage_audit_20260501.md).
+# Each of these is built from a single recent snapshot and broadcast as a
+# constant per-symbol value across all historical training rows. Re-enabling
+# any of these without first shipping the time-series fundamentals layer
+# (Phase 2 of the remediation plan) violates CONSTITUTION.md §1.2.
+LEAKING_EXTRA_PREFIXES = ("scr_", "qvm_", "acad_")
+
+# What we actually load:
+EXTRA_PREFIXES = SAFE_EXTRA_PREFIXES   # leaking prefixes deliberately excluded
 
 
 def build_panel_with_extras() -> tuple[pd.DataFrame, list[str]]:
