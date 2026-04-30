@@ -63,11 +63,18 @@ running the relevant claim through src/agentic/devils_advocate.py.
 - Devil's advocate fires before any new claim ships
 
 ### What's actually true (verified, NOT marketing claims)
-- **180-day horizon, +15% target, ~85% prospective hit rate** — the only honestly validated combo
-- **Dynamic gate at 0.95 calibrated**: 9-year median ~+8% ann (cash-dominated)
+- **180-day horizon, +15% target, ~85% prospective hit rate** — the only honestly validated combo (uses BASE_FEATS only; survives 2026-05-01 leakage audit)
+- **Dynamic gate at 0.95 calibrated**: 9-year median ~+8% ann (cash-dominated; uses BASE_FEATS only; clean)
 - **2018-19 negatives gone with discipline gate** (cash on no-fire days)
 - **30% min target NOT yet met unlevered**; needs market-neutral overlay or 1.5-2× MTF leverage
 - **9-year backtest with strict prospective protocol**: median ROI ~+8%, range +7% to +19%
+
+### CONTAMINATED — do NOT cite outputs from these (as of 2026-05-01)
+- `find_high_conviction.py` daily picks (auto-loads 47 leaked features via `scr_*`, `qvm_*`, `acad_*` prefixes — see `reports/leakage_audit_20260501.md`)
+- Any "calibrated daily score 0.85+" claim from that pipeline
+- Any expected-return number derived from extras-enabled scoring
+
+Remediation tracked under CRITICAL #1 in `reports/devils_advocate_audit.md`.
 
 ### What's a LIE that the prior Claude almost shipped (don't repeat)
 - ~~"26 names today at 90% calibrated to double in 180d"~~ — overfit, in-sample calibration
