@@ -1,4 +1,12 @@
-# Indian Equities Research Pipeline
+# Shree Ganesh Model — Indian Equities Research Pipeline
+
+> **Mission**: build a calibrated, anti-overfit NSE equity trading system that targets minimum 30% annualised, accepts up to 200%+ in best years, with downside floor of -30% annualised. Operating principle: discipline > opportunism. Devil's advocate fires before claims, not after.
+
+**For new contributors / new Claude sessions**: start at [`HANDOFF.md`](HANDOFF.md), then [`ARCHITECTURE.md`](ARCHITECTURE.md), then [`prompts/00_SYSTEM_PRINCIPLES.md`](prompts/00_SYSTEM_PRINCIPLES.md).
+
+**For machine recovery** (lost laptop / new account): see [`RECOVERY.md`](RECOVERY.md) — three commands to be back operating.
+
+---
 
 This repository contains a production-style, leak-safe research pipeline skeleton for NSE-listed equities. The implementation prioritizes auditability and truthful historical joins over apparent completeness. The approved v1 market-data path starts from the provided NSE UDiFF bhavcopy archive downloader using `https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_ddmmyyyy.csv`, and now falls back to the older official NSE bhavcopy plus delivery archives for pre-2020 dates so daily market data can be pulled back to 2015.
 

@@ -1,5 +1,9 @@
 # HANDOFF — Read this first if you're a new Claude / new account
 
+**Project name**: Shree Ganesh Model
+**Repo**: https://github.com/theabhinavsharma/shree-ganesh-model (private)
+**Local working directory**: `/Users/abhinavs./Documents/Zoom/` (kept historically — many Python files hardcode this path; not worth renaming)
+
 > **Mission**: build a calibrated, anti-overfit NSE equity trading system that
 > targets minimum 30% annualised, accepts up to 200%+ in best years, with
 > downside floor of -30% annualised. Operating principle: discipline >
@@ -7,6 +11,9 @@
 
 This file is the **single source of truth** for picking up where the prior
 session left off. Read it in 5 minutes; you'll be fully up to speed.
+
+If you've lost your laptop and are reading this on a new machine, jump to
+[`RECOVERY.md`](RECOVERY.md) — three commands and you're back operating.
 
 ---
 
@@ -155,24 +162,22 @@ running the relevant claim through src/agentic/devils_advocate.py.
 4. You're back
 
 ### Scenario B: New machine, lost local files
-**You need cloud backup.** Recommended right now:
+**Already done.** Repo lives at https://github.com/theabhinavsharma/shree-ganesh-model
+On any new machine, restore the operating state with three commands:
+
 ```bash
-cd /Users/abhinavs./Documents/Zoom
-git init
-git add HANDOFF.md ARCHITECTURE.md README.md AGENTIC_README.md
-git add src/agentic/ prompts/ data/derived/factor_registry.json
-git add reports/dashboard.html reports/WORKFLOW.md reports/dynamic_gated_backtest.md
-git add reports/180d_honest_frontier.md reports/devils_advocate_audit.md
-git add reports/risk_envelope.md reports/achievable_frontier.md
-git add docs/strategy_2x_in_90d.md  # if exists
-git commit -m "Eternal handoff snapshot"
-# create a private GitHub repo and push:
-gh repo create my-zoom-strategy --private --source=. --push
+git clone https://github.com/theabhinavsharma/shree-ganesh-model.git
+cd shree-ganesh-model
+# Open HANDOFF.md → paste §0 prompt into a fresh Claude session
+# Run src/agentic/daily_pipeline.sh to regenerate parquets (1-2 hours)
 ```
 
-The parquet files are too large for github (some are 100MB+). For those:
+See [`RECOVERY.md`](RECOVERY.md) for the canonical version of this sequence.
+
+The parquet files are deliberately NOT in git (they're too large + regenerable).
+On restore:
 - Either run the daily pipeline once to regenerate them (ETA 1-2 hours)
-- Or upload to S3 / Google Drive / Backblaze B2 (cheap object storage)
+- Or upload to S3 / Google Drive / Backblaze B2 (cheap object storage) for a hot restore
 
 ### Scenario C: Total loss (machine + cloud)
 The mission docs (`HANDOFF.md` + `ARCHITECTURE.md` + `prompts/`) plus
