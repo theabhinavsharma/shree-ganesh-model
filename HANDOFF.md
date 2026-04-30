@@ -15,6 +15,10 @@ session left off. Read it in 5 minutes; you'll be fully up to speed.
 If you've lost your laptop and are reading this on a new machine, jump to
 [`RECOVERY.md`](RECOVERY.md) — three commands and you're back operating.
 
+**The binding operating rules live in [`CONSTITUTION.md`](CONSTITUTION.md).**
+Read it before generating any claim. It is not aspirational; it is the
+gate every commit, trade, and prediction passes through.
+
 ---
 
 ## 0. The first prompt to use (copy verbatim into a fresh Claude session)
