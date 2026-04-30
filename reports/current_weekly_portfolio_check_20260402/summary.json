@@ -1,0 +1,14 @@
+{
+  "as_of_date": "2026-04-02",
+  "latest_completed_official_trade_date": "2026-04-01",
+  "pricing_basis": "official_nse_live_quote_snapshot_2026-04-02",
+  "event_window_start": "2026-04-01",
+  "event_window_end": "2026-04-02",
+  "action_counts": {
+    "Hold": 12
+  },
+  "notes": [
+    "Mid-week stateful check only. No full fresh weekly retrain was run.",
+    "Actions reflect the held book, current quote snapshot, stop/target logic, and updated relative ranking within the held shortlist."
+  ]
+}

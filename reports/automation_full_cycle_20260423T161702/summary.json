@@ -1,0 +1,44 @@
+{
+  "run_id": "20260423T161702",
+  "started_at": "2026-04-23T16:17:02",
+  "finished_at": "2026-04-23T16:24:54",
+  "source_universe_path": "/Users/abhinavs./Documents/Zoom/reports/unified_7d1d_5pct_20260422_for_20260423_allstocks/official_quote_trade_snapshot_20260422.csv",
+  "symbols_requested": 2286,
+  "official_quote_rows": 2286,
+  "official_quote_ok": 2285,
+  "official_quote_errors": 1,
+  "official_quote_coverage": 0.9995625546806649,
+  "fresh_day1_path": "/Users/abhinavs./Documents/Zoom/reports/day1_5pct_allnames_20260422_for_20260423_best_bet/current_shortlist_allnames_20260422_for_20260423.csv",
+  "fresh_day1_completed": true,
+  "fresh_day1_top_symbols": [
+    "GOKULAGRO",
+    "SUNTECK",
+    "IDEAFORGE",
+    "SURANASOL",
+    "ARE&M",
+    "IRMENERGY",
+    "IVZINNIFTY",
+    "KEYFINSERV",
+    "JMA",
+    "SINTERCOM"
+  ],
+  "max_calibrated_hit_rate_1d_5pct": 0.0697208092987815,
+  "paper_hit_rate_top25": 0.1,
+  "paper_top10_mean_return_pct": 0.5791388354903815,
+  "paper_top10_median_return_pct": -1.0879864463607114,
+  "etf_or_non_equity_leaks_top10": [
+    "IVZINNIFTY"
+  ],
+  "gates": {
+    "official_quote_refresh_coverage_ge_90pct": true,
+    "fresh_day1_model_completed": true,
+    "calibrated_hit_rate_ge_20pct": false,
+    "no_etf_or_non_equity_in_top10": false,
+    "paper_top10_mean_return_nonnegative": true,
+    "paper_top10_median_return_nonnegative": false
+  },
+  "trade_decision": "NO_TRADE",
+  "decision_reason": "One or more strict gates failed; after 2026-04-23 1D failure, no single-day +5% calls are allowed on low calibrated confidence.",
+  "rl_status": "paper_reward_update_only_no_live_policy_promotion",
+  "rl_note": "No production RL policy is promoted. This run updates paper rewards for candidate evaluation and applies champion gates."
+}

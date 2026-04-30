@@ -1,0 +1,1 @@
+"""Indian equities research pipeline."""

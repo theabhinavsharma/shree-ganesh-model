@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-10",
+  "pricing_basis": "official NSE April 10, 2026 close",
+  "selected_universe": "liquid_20cr_plus",
+  "selected_gate": "market_median_return_20d>=0.0 & breadth_volume_1_5x>=0.1",
+  "selected_gate_test_success_rate": 0.9047619047619048,
+  "selected_gate_test_avg_winners": 3.5714285714285716,
+  "buy_count": 11,
+  "sell_count": 12,
+  "excluded_non_equity_symbols": [
+    {
+      "symbol": "LIQUIDETF",
+      "company_name": NaN
+    }
+  ],
+  "report_path": "/Users/abhinavs./Documents/Zoom/reports/manual_monday_action_20260412/weekly_action_table_20260412.csv"
+}

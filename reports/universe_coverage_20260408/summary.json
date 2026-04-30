@@ -1,0 +1,26 @@
+{
+  "as_of_date": "2026-04-08",
+  "current_live_slice": {
+    "trade_date": "2026-04-07",
+    "all_names_symbols": 2453,
+    "daily_facts_symbols_same_date": 2453,
+    "dropped_vs_daily_facts": 0,
+    "min_price_filter_applied_in_live_slice": false,
+    "market_cap_non_null_after_fix": 2043,
+    "market_cap_ge_1000_after_fix": 1239
+  },
+  "historical_panel_latest_cross_section": {
+    "trade_date": "2025-12-31",
+    "raw_daily_facts_symbols_same_date": 2381,
+    "panel_symbols_same_date": 2154,
+    "dropped_vs_daily_facts": 227,
+    "below_20_on_same_date": 227,
+    "above_or_equal_20_on_same_date": 2154
+  },
+  "conclusion": [
+    "The live ML all_names slice currently evaluates all latest daily-facts symbols; it is not dropping names because promoter or fundamental fields are missing.",
+    "The main historical exclusion visible on the latest cached panel date is the deliberate min_price >= 20 rule, not broad data loss.",
+    "The live ML market-cap universe was previously undercovered because market_cap_cr was not hydrated in build_current_feature_slice.",
+    "That live market-cap issue is now improved by merging the latest official quote snapshot and the latest full-universe official enriched snapshot already stored on disk."
+  ]
+}

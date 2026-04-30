@@ -1,0 +1,52 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-15",
+  "for_trade_date": "2026-04-16",
+  "source_basis": "official_nse_15apr2026_bhavcopy",
+  "official_bhavcopy_path": "/Users/abhinavs./Documents/Zoom/data/raw/nse_full_history_official/trade_date=2026-04-15/sec_bhavdata_full_15042026.csv",
+  "historical_training_panel_path": "data/ml/panels/day_1_5pct_eval_0cbc4f64d7e0/feature_panel.parquet",
+  "historical_training_panel_rows": 4010443,
+  "historical_universe_rows": 1671787,
+  "selected_universe": "liquid_5cr_plus",
+  "selected_universe_reason": "This is the only day-1 universe where Random Forest has already beaten the current champion in a completed benchmark on this machine.",
+  "rf_benchmark_vs_current_champion": {
+    "universe_name": "liquid_5cr_plus",
+    "top10_precision_champion": 0.1028534370946822,
+    "top10_precision_random_forest": 0.12905317769131,
+    "delta_top10_precision": 0.026199740596627802,
+    "precision_lift_champion": 3.0806133206068216,
+    "precision_lift_random_forest": 3.8653344943301233,
+    "delta_precision_lift": 0.7847211737233017,
+    "top10_recall_champion": 0.0318999155235528,
+    "top10_recall_random_forest": 0.04002574520294461,
+    "delta_top10_recall": 0.008125829679391808,
+    "top10_mean_return_champion": 0.0008555246248025,
+    "top10_mean_return_random_forest": 0.002018173147945226,
+    "delta_top10_mean_return": 0.0011626485231427258,
+    "top10_median_return_champion": -0.0018432189915136,
+    "top10_median_return_random_forest": -0.0011825178261468672,
+    "delta_top10_median_return": 0.0006607011653667328,
+    "top10_p75_return_champion": 0.014833496435115,
+    "top10_p75_return_random_forest": 0.020080381184996915,
+    "delta_top10_p75_return": 0.0052468847498819155,
+    "winner_metric": "random_forest"
+  },
+  "current_slice_rows_total": 2456,
+  "current_slice_rows_universe": 1172,
+  "event_macro_side_input_note": "Price/volume facts are official through 2026-04-15. Macro, announcements, and event_daily side inputs were reused from the latest vetted provisional paths already in the repo and may lag same-day 2026-04-15 filings.",
+  "execution_note": "Top 5 is the practical concentrated book. Use reserve names if a primary name opens above half_size_ceiling.",
+  "top5_symbols": [
+    "INDOTECH",
+    "GALLANTT",
+    "CARRARO",
+    "KECL",
+    "VINDHYATEL"
+  ],
+  "reserve_symbols": [
+    "PAISALO",
+    "EIEL",
+    "RAILTEL",
+    "HGINFRA",
+    "UTLSOLAR"
+  ]
+}

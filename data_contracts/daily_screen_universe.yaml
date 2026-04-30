@@ -1,0 +1,33 @@
+table: daily_screen_universe
+primary_key: [trade_date, symbol]
+description: Daily screening view composed from the latest lag-valid records from each supporting table.
+columns:
+  - {name: trade_date, type: date, definition: Screening date, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: false}
+  - {name: symbol, type: string, definition: NSE symbol, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: false}
+  - {name: sector, type: string, definition: Sector from stock_master, source: stock_master, update_frequency: as_needed, lag_rule: latest classification known by trade_date, nullable: true}
+  - {name: close, type: float64, definition: Daily close, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: sma_50, type: float64, definition: 50 DMA, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: sma_200, type: float64, definition: 200 DMA, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: rsi_14_daily, type: float64, definition: Daily RSI, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: rsi_14_weekly, type: float64, definition: Weekly RSI from latest completed weekly bar known by trade_date, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: rsi_14_monthly, type: float64, definition: Monthly RSI from latest completed month-end bar known by trade_date, source: stock_daily_facts, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: revenue, type: float64, definition: Latest lag-valid revenue, source: stock_quarterly_fundamentals, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: revenue_cagr_5y, type: float64, definition: Latest lag-valid revenue CAGR 5Y, source: stock_quarterly_fundamentals, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: pat_cagr_5y, type: float64, definition: Latest lag-valid PAT CAGR 5Y, source: stock_quarterly_fundamentals, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: ebitda_positive_last_5q_flag, type: boolean, definition: Latest lag-valid EBITDA positivity flag, source: stock_quarterly_fundamentals, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: eps_ttm, type: float64, definition: Latest lag-valid trailing four-quarter EPS, source: stock_quarterly_fundamentals, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: promoter_pct, type: float64, definition: Latest lag-valid promoter holding, source: stock_shareholding_quarterly, update_frequency: quarterly, lag_rule: latest effective_from_date <= trade_date, nullable: true}
+  - {name: fpi_change_pct, type: float64, definition: Latest lag-valid sector FPI change, source: sector_flow_fortnightly, update_frequency: fortnightly, lag_rule: latest effective_from_date <= trade_date with forward fill, nullable: true}
+  - {name: filter_above_50_dma, type: boolean, definition: close > sma_50 when both inputs exist, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true, derived_formula: close > sma_50}
+  - {name: filter_above_200_dma, type: boolean, definition: close > sma_200 when both inputs exist, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true, derived_formula: close > sma_200}
+  - {name: filter_volume_expansion, type: boolean, definition: volume_vs_20d exceeds configured threshold, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: filter_volume_high_3m, type: boolean, definition: same-day volume is at the trailing 63-day high when enabled in config, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: filter_delivery_expansion, type: boolean, definition: same-day delivery ratio is at the trailing 63-day high when enabled in config, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: pe_ttm, type: float64, definition: Daily close divided by latest lag-valid trailing four-quarter EPS when EPS is positive, source: derived, update_frequency: daily, lag_rule: uses latest effective fundamentals only, nullable: true}
+  - {name: filter_pe, type: boolean, definition: pe_ttm is below configured threshold, source: derived, update_frequency: daily, lag_rule: same-day row with lag-valid EPS only, nullable: true}
+  - {name: filter_rsi_daily, type: boolean, definition: Daily RSI meets configured threshold, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: filter_rsi_weekly, type: boolean, definition: Weekly RSI meets configured threshold, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: filter_rsi_monthly, type: boolean, definition: Monthly RSI meets configured threshold, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: filter_rsi, type: boolean, definition: All configured RSI timeframe filters pass, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: true}
+  - {name: strategy_drop_134_pass, type: boolean, definition: Combined pass flag for the shortlist with rules 1, 3, and 4 removed and the remaining rules expressed as explicit systematic filters, source: derived, update_frequency: daily, lag_rule: same-day row with lag-valid periodic joins only, nullable: true}
+  - {name: missing_inputs, type: string, definition: Pipe-delimited list of missing dependencies preventing full screening logic, source: derived, update_frequency: daily, lag_rule: same-day row, nullable: false}

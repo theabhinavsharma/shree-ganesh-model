@@ -1,0 +1,103 @@
+# =============================================================================
+# Eternal-handoff .gitignore
+#
+# Strategy: data/, tmp/, and most of reports/ are regenerable from the daily
+# pipeline. Only commit:
+#   - mission docs (HANDOFF, ARCHITECTURE, README, AGENTIC_README, AGENTS)
+#   - source code (src/, prompts/, configs/, tests/, data_contracts/, docs/)
+#   - critical ledgers (logs/calibration_corrections.jsonl, hypothesis_loop_log.jsonl)
+#   - factor registry (data/derived/factor_registry.json)
+#   - human-readable reports (reports/*.md, reports/dashboard.html, reports/*.html)
+# =============================================================================
+
+# ---- ignore the whole heavy data tree ----
+# Pattern: ignore everything in data/ and data/derived/, then re-allow the
+# specific files we want to keep. Order matters in gitignore.
+data/*
+data/**/*
+
+# whitelist only what HANDOFF.md says to keep:
+!data/README.md
+!data/derived/
+data/derived/*
+!data/derived/factor_registry.json
+
+tmp/
+build/
+dist/
+node_modules/
+.venv/
+venv/
+*.egg-info/
+
+# ---- logs: ignore most, keep ledgers ----
+logs/*.log
+logs/daily_pipeline_*.log
+logs/fetch_*.log
+logs/backtest_*.log
+logs/feature_factory_*.log
+logs/find_high_conviction_*.log
+logs/infinite_loop_*.log
+logs/model_diversity_*.log
+logs/dynamic_gated_*.log
+logs/screener_fundamentals_*.log
+logs/frontier_*.log
+logs/feat_imp_*.log
+logs/launchd_stdout.log
+logs/launchd_stderr.log
+
+# Keep these ledgers (CRITICAL):
+!logs/calibration_corrections.jsonl
+!logs/hypothesis_loop_log.jsonl
+!logs/agent_loop_cycles.jsonl
+
+# ---- reports: ignore caches & parquets, keep human docs ----
+reports/**/*.parquet
+reports/**/*.csv
+reports/**/*.pkl
+reports/**/*.joblib
+reports/**/*.feather
+reports/**/*.npy
+reports/**/*.npz
+reports/day1_5pct_replay_*/
+reports/day1_5pct_replay_diag_*/
+reports/day1_5pct_replay_debug_*/
+reports/day1_5pct_model_*/
+reports/day1_safe1pct_*/
+reports/week7_*/
+reports/monthly_miss_audit_*/
+reports/ml_weekly_winners/
+reports/frozen_inputs/
+
+# automation/cycle dirs have huge JSON-manifest dumps — keep their summaries only
+reports/automation_full_cycle_*/raw/
+reports/automation_full_cycle_*/*.manifest.json
+reports/current_weekly_decision_*/raw/
+reports/current_weekly_decision_*/*.manifest.json
+reports/**/*.manifest.json
+reports/**/raw/
+
+# ---- model artifacts (regenerable) ----
+*.pkl
+*.joblib
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# ---- OS / IDE ----
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+.python-version
+.ipynb_checkpoints/
+
+# ---- Spreadsheets / random scratch at root ----
+*.xlsx
+tmp_*.py
+*.swp
+quince_svid_summary.csv
+quince_svids.csv

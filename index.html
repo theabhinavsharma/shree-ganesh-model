@@ -1,0 +1,1555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Humans vs AI: Dumb Charades</title>
+    <style>
+      :root {
+        --bg: #05070d;
+        --bg-2: #0b1020;
+        --panel: rgba(11, 17, 32, 0.8);
+        --panel-2: rgba(18, 27, 46, 0.88);
+        --line: rgba(143, 174, 255, 0.16);
+        --text: #f6f8ff;
+        --muted: #93a3c7;
+        --accent: #5eead4;
+        --accent-2: #ff7a59;
+        --accent-3: #facc15;
+        --danger: #fb7185;
+        --good: #4ade80;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.48);
+        --radius: 26px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at 0% 0%, rgba(94, 234, 212, 0.16), transparent 28%),
+          radial-gradient(circle at 100% 0%, rgba(255, 122, 89, 0.18), transparent 32%),
+          radial-gradient(circle at 50% 100%, rgba(250, 204, 21, 0.12), transparent 30%),
+          linear-gradient(180deg, var(--bg), var(--bg-2));
+        color: var(--text);
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+      }
+
+      body {
+        padding: 18px;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+        transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
+      }
+
+      button:hover:not(:disabled) {
+        transform: translateY(-1px);
+      }
+
+      button:disabled {
+        opacity: 0.42;
+        cursor: not-allowed;
+      }
+
+      .app {
+        width: min(1220px, 100%);
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+
+      .glass {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(20px);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 34px;
+        padding: 28px;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        width: 340px;
+        height: 340px;
+        right: -90px;
+        bottom: -120px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 122, 89, 0.28), transparent 70%);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--accent-3);
+        font-size: 0.78rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.6rem, 7vw, 5rem);
+        line-height: 0.92;
+        max-width: 10ch;
+      }
+
+      .hero p {
+        margin-top: 12px;
+        color: var(--muted);
+        max-width: 68ch;
+        line-height: 1.45;
+        font-size: 1rem;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 18px;
+      }
+
+      .panel {
+        border-radius: var(--radius);
+        padding: 20px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .fields {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+      }
+
+      .twocol {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid rgba(143, 174, 255, 0.12);
+        background: rgba(8, 12, 22, 0.92);
+        color: var(--text);
+        padding: 14px 15px;
+        outline: none;
+      }
+
+      textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+
+      .primary,
+      .secondary,
+      .danger,
+      .ghost,
+      .winner-btn {
+        border-radius: 999px;
+        padding: 16px 18px;
+        font-weight: 700;
+      }
+
+      .primary {
+        background: linear-gradient(135deg, var(--accent-2), #ffab5b);
+        color: #180d0c;
+      }
+
+      .secondary {
+        background: linear-gradient(135deg, rgba(94, 234, 212, 0.2), rgba(94, 234, 212, 0.07));
+        color: #d8fff7;
+      }
+
+      .danger {
+        background: rgba(251, 113, 133, 0.16);
+        color: #ffd5de;
+      }
+
+      .ghost {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+      }
+
+      .winner-btn {
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--text);
+      }
+
+      .actions,
+      .control-row,
+      .score-list,
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .control-row button {
+        flex: 1 1 180px;
+        min-height: 74px;
+        font-size: 1rem;
+      }
+
+      .small-note {
+        color: var(--muted);
+        line-height: 1.45;
+        font-size: 0.92rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--accent-3);
+        font-size: 0.88rem;
+      }
+
+      .game-shell {
+        display: grid;
+        gap: 16px;
+      }
+
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .big-stage {
+        position: relative;
+        overflow: hidden;
+        border-radius: 30px;
+        min-height: 610px;
+        background:
+          linear-gradient(135deg, rgba(94, 234, 212, 0.1), transparent 38%),
+          linear-gradient(320deg, rgba(255, 122, 89, 0.14), transparent 35%),
+          rgba(16, 24, 42, 0.92);
+        border: 1px solid rgba(143, 174, 255, 0.12);
+        padding: 24px;
+        display: grid;
+        grid-template-rows: auto auto auto 1fr auto;
+        gap: 20px;
+      }
+
+      .turn-meta {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .meta-card,
+      .score-card,
+      .log-card {
+        border-radius: 22px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(143, 174, 255, 0.08);
+      }
+
+      .meta-card small,
+      .score-card small,
+      .log-card small {
+        display: block;
+        color: var(--muted);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .meta-card strong {
+        font-size: 1.08rem;
+      }
+
+      .turn-callout {
+        display: grid;
+        gap: 8px;
+        align-content: start;
+      }
+
+      .actor-name {
+        font-size: clamp(2.2rem, 6vw, 4.6rem);
+        line-height: 0.9;
+      }
+
+      .guessers {
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .timer-wrap {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+
+      .clock {
+        font-size: clamp(5rem, 15vw, 9.4rem);
+        line-height: 0.86;
+        letter-spacing: -0.06em;
+        font-weight: 800;
+      }
+
+      .progress-track {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        min-height: 22px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(143, 174, 255, 0.1);
+      }
+
+      .progress-fill {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #4ade80, #facc15 65%, #fb7185);
+        transform-origin: left center;
+        transition: transform 900ms linear, filter 160ms ease;
+      }
+
+      .pulse {
+        animation: pulse 900ms ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          filter: brightness(1);
+          box-shadow: 0 0 0 rgba(251, 113, 133, 0);
+        }
+        50% {
+          filter: brightness(1.25);
+          box-shadow: 0 0 32px rgba(251, 113, 133, 0.3);
+        }
+      }
+
+      .timer-state {
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      .alert {
+        min-height: 32px;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--danger);
+      }
+
+      .score-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .score-pill {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .score-pill strong {
+        font-size: 1.4rem;
+      }
+
+      .log {
+        display: grid;
+        gap: 10px;
+        max-height: 250px;
+        overflow: auto;
+      }
+
+      .log-item {
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #dce6ff;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 5, 11, 0.78);
+        backdrop-filter: blur(16px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        z-index: 50;
+      }
+
+      .overlay.active {
+        display: flex;
+      }
+
+      .dialog {
+        width: min(700px, 100%);
+        border-radius: 32px;
+        background: linear-gradient(180deg, rgba(8, 12, 22, 0.98), rgba(16, 24, 42, 0.96));
+        border: 1px solid rgba(143, 174, 255, 0.12);
+        box-shadow: var(--shadow);
+        padding: 26px;
+        display: grid;
+        gap: 18px;
+      }
+
+      .dialog .secret {
+        font-size: clamp(2.4rem, 7vw, 4.6rem);
+        line-height: 0.92;
+      }
+
+      .summary-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .hidden-title {
+        text-transform: uppercase;
+        letter-spacing: 0.24em;
+        color: var(--muted);
+      }
+
+      .brand-line {
+        font-size: 1.1rem;
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .turn-meta,
+        .twocol {
+          grid-template-columns: 1fr;
+        }
+
+        .big-stage {
+          min-height: auto;
+        }
+
+        .control-row button {
+          min-height: 66px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero glass">
+        <div class="eyebrow">House Party Mode</div>
+        <h1>Humans vs AI Charades</h1>
+        <p>
+          Pass-the-phone dumb charades with round-robin turns, private actor reveals, an LLM-first movie picker,
+          screaming timer alerts, and a one-screen summary you can screenshot before everyone forgets everything.
+        </p>
+      </section>
+
+      <section class="layout">
+        <aside class="panel glass stack">
+          <div class="topline">
+            <h2>Setup</h2>
+            <div class="badge" id="statusChip">Idle</div>
+          </div>
+
+          <div class="fields">
+            <div class="twocol">
+              <div class="field">
+                <label for="yearStart">Year Start</label>
+                <input id="yearStart" type="number" min="1900" max="2100" value="2015" />
+              </div>
+              <div class="field">
+                <label for="yearEnd">Year End</label>
+                <input id="yearEnd" type="number" min="1900" max="2100" value="2024" />
+              </div>
+            </div>
+
+            <div class="twocol">
+              <div class="field">
+                <label for="language">Language</label>
+                <select id="language">
+                  <option value="English">English</option>
+                  <option value="Hindi">Hindi</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="toughness">Toughness</label>
+                <input id="toughness" type="number" min="1" max="10" value="6" />
+              </div>
+            </div>
+
+            <div class="twocol">
+              <div class="field">
+                <label for="guessTime">Guess Time</label>
+                <select id="guessTime">
+                  <option value="90">90s</option>
+                  <option value="120">120s</option>
+                  <option value="150">150s</option>
+                  <option value="180">180s</option>
+                  <option value="210">210s</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="playerCount">Players</label>
+                <input id="playerCount" type="number" min="2" max="16" value="4" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="playerNames">Player Names</label>
+              <textarea id="playerNames" placeholder="One name per line">A
+B
+C
+D</textarea>
+            </div>
+
+            <div class="field">
+              <label for="apiKey">OpenAI API Key (Optional, session only)</label>
+              <input id="apiKey" type="password" placeholder="Paste key to enable AI movie selection" />
+            </div>
+
+            <div class="twocol">
+              <div class="field">
+                <label for="model">Model</label>
+                <input id="model" type="text" value="gpt-4.1-mini" />
+              </div>
+              <div class="field">
+                <label for="soundToggle">Sound</label>
+                <select id="soundToggle">
+                  <option value="on">On</option>
+                  <option value="off">Muted</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="startGame">Lock & Start</button>
+            <button class="ghost" id="resetGame">Reset</button>
+            <button class="danger" id="finishGame" disabled>End Game</button>
+          </div>
+
+          <p class="small-note" id="setupNote">
+            LLM picks from a verified candidate pool. If AI fails, the app falls back to the in-session safe cache and local catalog.
+          </p>
+
+          <div class="score-card">
+            <small>Score</small>
+            <div class="score-grid" id="scoreGrid">
+              <div class="muted">No game yet.</div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="panel glass game-shell">
+          <div class="topline">
+            <div>
+              <div class="eyebrow">Game Engine</div>
+              <h2 id="titleLine">Waiting for setup</h2>
+            </div>
+            <div class="chips">
+              <div class="badge" id="pickerBadge">Catalog standby</div>
+              <div class="badge" id="cacheBadge">Cache 0 / 200</div>
+            </div>
+          </div>
+
+          <div class="big-stage">
+            <div class="turn-meta">
+              <div class="meta-card">
+                <small>Turn</small>
+                <strong id="turnLabel">-</strong>
+              </div>
+              <div class="meta-card">
+                <small>Actor</small>
+                <strong id="actorLabel">-</strong>
+              </div>
+              <div class="meta-card">
+                <small>Guessers</small>
+                <strong id="guessersLabel">-</strong>
+              </div>
+            </div>
+
+            <div class="turn-callout">
+              <div class="brand-line">🎬 DUMB CHARADES: HUMANS vs AI</div>
+              <div class="actor-name" id="actorBig">Lock setup</div>
+              <div class="guessers" id="guessersBig">Guessers will appear here.</div>
+            </div>
+
+            <div class="timer-wrap">
+              <div class="clock" id="clock">00:00</div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <div class="timer-state" id="timerState">Timer idle</div>
+              <div class="alert" id="alertText"></div>
+            </div>
+
+            <div class="meta-card" id="secretCard">
+              <small>Movie</small>
+              <div class="hidden-title" id="secretState">Hidden until actor reveal</div>
+            </div>
+
+            <div class="control-row">
+              <button class="secondary" id="stopTimer" disabled>[STOP TIMER]</button>
+              <button class="ghost" id="pauseTimer" disabled>[PAUSE TIMER]</button>
+              <button class="danger" id="endTurn" disabled>[END TURN]</button>
+            </div>
+          </div>
+
+          <div class="log-card">
+            <small>Turn Feed</small>
+            <div class="log" id="turnLog">
+              <div class="muted">No turns yet.</div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="overlay" id="overlay">
+      <div class="dialog" id="dialog"></div>
+    </div>
+
+    <script>
+      const VERIFIED_MOVIES = [
+        { title: "Titanic", year: 1997, language: "English", toughness: 2 },
+        { title: "Forrest Gump", year: 1994, language: "English", toughness: 2 },
+        { title: "Home Alone", year: 1990, language: "English", toughness: 2 },
+        { title: "Toy Story", year: 1995, language: "English", toughness: 2 },
+        { title: "Jumanji", year: 1995, language: "English", toughness: 2 },
+        { title: "The Lion King", year: 1994, language: "English", toughness: 2 },
+        { title: "Finding Nemo", year: 2003, language: "English", toughness: 2 },
+        { title: "Gladiator", year: 2000, language: "English", toughness: 3 },
+        { title: "Cast Away", year: 2000, language: "English", toughness: 3 },
+        { title: "Jurassic Park", year: 1993, language: "English", toughness: 3 },
+        { title: "The Dark Knight", year: 2008, language: "English", toughness: 3 },
+        { title: "Avatar", year: 2009, language: "English", toughness: 3 },
+        { title: "Gravity", year: 2013, language: "English", toughness: 3 },
+        { title: "The Matrix", year: 1999, language: "English", toughness: 4 },
+        { title: "Fight Club", year: 1999, language: "English", toughness: 4 },
+        { title: "Gone Girl", year: 2014, language: "English", toughness: 4 },
+        { title: "La La Land", year: 2016, language: "English", toughness: 4 },
+        { title: "Get Out", year: 2017, language: "English", toughness: 4 },
+        { title: "The Social Network", year: 2010, language: "English", toughness: 4 },
+        { title: "Whiplash", year: 2014, language: "English", toughness: 5 },
+        { title: "Inception", year: 2010, language: "English", toughness: 5 },
+        { title: "Shutter Island", year: 2010, language: "English", toughness: 5 },
+        { title: "Parasite", year: 2019, language: "English", toughness: 5 },
+        { title: "Nightcrawler", year: 2014, language: "English", toughness: 5 },
+        { title: "The Revenant", year: 2015, language: "English", toughness: 5 },
+        { title: "Prisoners", year: 2013, language: "English", toughness: 6 },
+        { title: "Birdman", year: 2014, language: "English", toughness: 6 },
+        { title: "Interstellar", year: 2014, language: "English", toughness: 6 },
+        { title: "Lady Bird", year: 2017, language: "English", toughness: 6 },
+        { title: "The Favourite", year: 2018, language: "English", toughness: 6 },
+        { title: "Black Swan", year: 2010, language: "English", toughness: 6 },
+        { title: "Arrival", year: 2016, language: "English", toughness: 7 },
+        { title: "Memento", year: 2000, language: "English", toughness: 7 },
+        { title: "Her", year: 2013, language: "English", toughness: 7 },
+        { title: "The Lighthouse", year: 2019, language: "English", toughness: 7 },
+        { title: "The Lobster", year: 2015, language: "English", toughness: 7 },
+        { title: "Nocturnal Animals", year: 2016, language: "English", toughness: 8 },
+        { title: "Moonlight", year: 2016, language: "English", toughness: 8 },
+        { title: "Annihilation", year: 2018, language: "English", toughness: 8 },
+        { title: "Tenet", year: 2020, language: "English", toughness: 8 },
+        { title: "Past Lives", year: 2023, language: "English", toughness: 8 },
+        { title: "Enemy", year: 2013, language: "English", toughness: 8 },
+        { title: "Aftersun", year: 2022, language: "English", toughness: 9 },
+        { title: "Melancholia", year: 2011, language: "English", toughness: 9 },
+        { title: "The Banshees of Inisherin", year: 2022, language: "English", toughness: 9 },
+        { title: "Under the Skin", year: 2013, language: "English", toughness: 9 },
+        { title: "Synecdoche, New York", year: 2008, language: "English", toughness: 10 },
+        { title: "The Green Knight", year: 2021, language: "English", toughness: 10 },
+        { title: "Beau Is Afraid", year: 2023, language: "English", toughness: 10 },
+        { title: "3 Idiots", year: 2009, language: "Hindi", toughness: 2 },
+        { title: "Dangal", year: 2016, language: "Hindi", toughness: 2 },
+        { title: "Lagaan", year: 2001, language: "Hindi", toughness: 2 },
+        { title: "Munna Bhai M.B.B.S.", year: 2003, language: "Hindi", toughness: 2 },
+        { title: "Bajrangi Bhaijaan", year: 2015, language: "Hindi", toughness: 3 },
+        { title: "Swades", year: 2004, language: "Hindi", toughness: 3 },
+        { title: "Queen", year: 2013, language: "Hindi", toughness: 3 },
+        { title: "PK", year: 2014, language: "Hindi", toughness: 3 },
+        { title: "Rockstar", year: 2011, language: "Hindi", toughness: 4 },
+        { title: "Kapoor & Sons", year: 2016, language: "Hindi", toughness: 4 },
+        { title: "Piku", year: 2015, language: "Hindi", toughness: 4 },
+        { title: "Barfi!", year: 2012, language: "Hindi", toughness: 4 },
+        { title: "English Vinglish", year: 2012, language: "Hindi", toughness: 5 },
+        { title: "Zindagi Na Milegi Dobara", year: 2011, language: "Hindi", toughness: 5 },
+        { title: "Lootera", year: 2013, language: "Hindi", toughness: 5 },
+        { title: "Udaan", year: 2010, language: "Hindi", toughness: 5 },
+        { title: "Tamasha", year: 2015, language: "Hindi", toughness: 6 },
+        { title: "Detective Byomkesh Bakshy!", year: 2015, language: "Hindi", toughness: 6 },
+        { title: "October", year: 2018, language: "Hindi", toughness: 6 },
+        { title: "Monsoon Wedding", year: 2001, language: "Hindi", toughness: 6 },
+        { title: "Andhadhun", year: 2018, language: "Hindi", toughness: 7 },
+        { title: "Masaan", year: 2015, language: "Hindi", toughness: 7 },
+        { title: "Haider", year: 2014, language: "Hindi", toughness: 7 },
+        { title: "Talvar", year: 2015, language: "Hindi", toughness: 7 },
+        { title: "Tumbbad", year: 2018, language: "Hindi", toughness: 8 },
+        { title: "Bulbbul", year: 2020, language: "Hindi", toughness: 8 },
+        { title: "Qala", year: 2022, language: "Hindi", toughness: 8 },
+        { title: "Gehraiyaan", year: 2022, language: "Hindi", toughness: 8 },
+        { title: "A Death in the Gunj", year: 2016, language: "Hindi", toughness: 9 },
+        { title: "Ship of Theseus", year: 2013, language: "Hindi", toughness: 9 },
+        { title: "Manto", year: 2018, language: "Hindi", toughness: 9 },
+        { title: "Om-Dar-B-Dar", year: 1988, language: "Hindi", toughness: 10 },
+        { title: "Maqbool", year: 2003, language: "Hindi", toughness: 10 },
+        { title: "Omkara", year: 2006, language: "Hindi", toughness: 10 }
+      ];
+
+      const state = {
+        config: null,
+        locked: false,
+        turn: 0,
+        actorIndex: 0,
+        currentMovie: null,
+        currentPicker: "catalog",
+        usedTitles: new Set(),
+        cache: [],
+        scores: {},
+        log: [],
+        timer: {
+          total: 0,
+          left: 0,
+          running: false,
+          id: null,
+          thirtyPlayed: false,
+          tenPlayed: false,
+          donePlayed: false
+        },
+        reveal: {
+          left: 10,
+          id: null
+        },
+        gameActive: false,
+        audioContext: null
+      };
+
+      const els = {
+        yearStart: document.getElementById("yearStart"),
+        yearEnd: document.getElementById("yearEnd"),
+        language: document.getElementById("language"),
+        toughness: document.getElementById("toughness"),
+        guessTime: document.getElementById("guessTime"),
+        playerCount: document.getElementById("playerCount"),
+        playerNames: document.getElementById("playerNames"),
+        apiKey: document.getElementById("apiKey"),
+        model: document.getElementById("model"),
+        soundToggle: document.getElementById("soundToggle"),
+        startGame: document.getElementById("startGame"),
+        resetGame: document.getElementById("resetGame"),
+        finishGame: document.getElementById("finishGame"),
+        setupNote: document.getElementById("setupNote"),
+        statusChip: document.getElementById("statusChip"),
+        titleLine: document.getElementById("titleLine"),
+        pickerBadge: document.getElementById("pickerBadge"),
+        cacheBadge: document.getElementById("cacheBadge"),
+        turnLabel: document.getElementById("turnLabel"),
+        actorLabel: document.getElementById("actorLabel"),
+        guessersLabel: document.getElementById("guessersLabel"),
+        actorBig: document.getElementById("actorBig"),
+        guessersBig: document.getElementById("guessersBig"),
+        clock: document.getElementById("clock"),
+        progressFill: document.getElementById("progressFill"),
+        timerState: document.getElementById("timerState"),
+        alertText: document.getElementById("alertText"),
+        secretState: document.getElementById("secretState"),
+        stopTimer: document.getElementById("stopTimer"),
+        pauseTimer: document.getElementById("pauseTimer"),
+        endTurn: document.getElementById("endTurn"),
+        scoreGrid: document.getElementById("scoreGrid"),
+        turnLog: document.getElementById("turnLog"),
+        overlay: document.getElementById("overlay"),
+        dialog: document.getElementById("dialog")
+      };
+
+      function namesFromInput(raw) {
+        return raw
+          .split(/\n|,/)
+          .map((name) => name.trim())
+          .filter(Boolean);
+      }
+
+      function formatTime(total) {
+        const m = Math.floor(total / 60).toString().padStart(2, "0");
+        const s = (total % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+
+      function clampCache() {
+        if (state.cache.length > 200) {
+          state.cache = state.cache.slice(-200);
+        }
+        els.cacheBadge.textContent = `Cache ${state.cache.length} / 200`;
+      }
+
+      function addToCache(movie) {
+        const exists = state.cache.some((item) => item.title === movie.title);
+        if (!exists) {
+          state.cache.push(movie);
+          clampCache();
+        }
+      }
+
+      function getActor() {
+        return state.config.players[state.actorIndex];
+      }
+
+      function getGuessers() {
+        return state.config.players.filter((_, idx) => idx !== state.actorIndex);
+      }
+
+      function candidatePool() {
+        return VERIFIED_MOVIES.filter(
+          (movie) =>
+            movie.language === state.config.language &&
+            movie.toughness === state.config.toughness &&
+            movie.year >= state.config.yearStart &&
+            movie.year <= state.config.yearEnd &&
+            !state.usedTitles.has(movie.title)
+        );
+      }
+
+      function renderScores() {
+        if (!state.config) {
+          els.scoreGrid.innerHTML = `<div class="muted">No game yet.</div>`;
+          return;
+        }
+
+        const rows = [...state.config.players]
+          .sort((a, b) => state.scores[b] - state.scores[a] || a.localeCompare(b))
+          .map(
+            (name) => `
+              <div class="score-pill">
+                <span>${name}</span>
+                <strong>${state.scores[name]}</strong>
+              </div>
+            `
+          )
+          .join("");
+
+        els.scoreGrid.innerHTML = rows;
+      }
+
+      function renderLog() {
+        if (!state.log.length) {
+          els.turnLog.innerHTML = `<div class="muted">No turns yet.</div>`;
+          return;
+        }
+
+        els.turnLog.innerHTML = state.log
+          .slice()
+          .reverse()
+          .map(
+            (item) => `
+              <div class="log-item">
+                Turn ${item.turn}: ${item.actor} acted. ${item.result}. <strong>${item.movie}</strong>.
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function setControls(enabled) {
+        els.stopTimer.disabled = !enabled;
+        els.pauseTimer.disabled = !enabled;
+        els.endTurn.disabled = !enabled;
+      }
+
+      function closeOverlay() {
+        els.overlay.classList.remove("active");
+        els.dialog.innerHTML = "";
+      }
+
+      function openOverlay(html) {
+        els.dialog.innerHTML = html;
+        els.overlay.classList.add("active");
+      }
+
+      function updateMainBoard() {
+        if (!state.config) {
+          return;
+        }
+
+        els.turnLabel.textContent = `${state.turn}`;
+        els.actorLabel.textContent = getActor();
+        els.guessersLabel.textContent = getGuessers().join(", ");
+        els.actorBig.textContent = getActor();
+        els.guessersBig.textContent = `Guessers: ${getGuessers().join(", ")}`;
+        els.clock.textContent = formatTime(state.timer.left);
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const ratio = state.timer.total ? state.timer.left / state.timer.total : 0;
+        els.progressFill.style.transform = `scaleX(${Math.max(0, ratio)})`;
+
+        const percent = ratio * 100;
+        if (percent > 33) {
+          els.progressFill.style.filter = "hue-rotate(0deg)";
+        } else if (percent > 12) {
+          els.progressFill.style.filter = "hue-rotate(-20deg)";
+        } else {
+          els.progressFill.style.filter = "hue-rotate(-45deg)";
+        }
+
+        els.progressFill.classList.toggle("pulse", state.timer.left <= 10 && state.timer.left > 0 && state.timer.running);
+      }
+
+      function setTimerState(text) {
+        els.timerState.textContent = text;
+      }
+
+      function setAlert(text = "") {
+        els.alertText.textContent = text;
+      }
+
+      function lockFields(locked) {
+        [
+          els.yearStart,
+          els.yearEnd,
+          els.language,
+          els.toughness,
+          els.guessTime,
+          els.playerCount,
+          els.playerNames,
+          els.apiKey,
+          els.model,
+          els.soundToggle
+        ].forEach((el) => {
+          el.disabled = locked;
+        });
+      }
+
+      function shouldPlaySound() {
+        return els.soundToggle.value === "on";
+      }
+
+      function ensureAudio() {
+        if (!shouldPlaySound()) {
+          return null;
+        }
+
+        if (!state.audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) {
+            return null;
+          }
+          state.audioContext = new AudioCtx();
+        }
+
+        return state.audioContext;
+      }
+
+      function beep({ frequency = 660, duration = 0.15, type = "sine", volume = 0.04 } = {}) {
+        const ctx = ensureAudio();
+        if (!ctx) {
+          return;
+        }
+
+        if (ctx.state === "suspended") {
+          ctx.resume();
+        }
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = frequency;
+        gain.gain.value = volume;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.stop(ctx.currentTime + duration);
+      }
+
+      function playThirtySound() {
+        beep({ frequency: 540, duration: 0.16, type: "triangle", volume: 0.035 });
+      }
+
+      function playTenSound() {
+        beep({ frequency: 840, duration: 0.18, type: "square", volume: 0.05 });
+      }
+
+      function playTimeUpSound() {
+        beep({ frequency: 940, duration: 0.18, type: "square", volume: 0.06 });
+        setTimeout(() => beep({ frequency: 740, duration: 0.22, type: "square", volume: 0.06 }), 220);
+      }
+
+      function validateSetup() {
+        const yearStart = Number(els.yearStart.value);
+        const yearEnd = Number(els.yearEnd.value);
+        const toughness = Number(els.toughness.value);
+        const guessTime = Number(els.guessTime.value);
+        const playerCount = Number(els.playerCount.value);
+        const players = namesFromInput(els.playerNames.value);
+
+        if (!Number.isInteger(yearStart) || !Number.isInteger(yearEnd) || yearStart > yearEnd) {
+          return { error: "Fix the year range." };
+        }
+
+        if (!Number.isInteger(toughness) || toughness < 1 || toughness > 10) {
+          return { error: "Toughness must be 1 to 10." };
+        }
+
+        if (guessTime < 90 || (guessTime - 90) % 30 !== 0) {
+          return { error: "Time must be 90 or +30s steps." };
+        }
+
+        if (!Number.isInteger(playerCount) || playerCount < 2) {
+          return { error: "Need at least 2 players." };
+        }
+
+        if (players.length !== playerCount) {
+          return { error: "Player count and names do not match." };
+        }
+
+        const config = {
+          yearStart,
+          yearEnd,
+          language: els.language.value,
+          toughness,
+          guessTime,
+          players,
+          apiKey: els.apiKey.value.trim(),
+          model: els.model.value.trim() || "gpt-4.1-mini"
+        };
+
+        const pool = VERIFIED_MOVIES.filter(
+          (movie) =>
+            movie.language === config.language &&
+            movie.toughness === config.toughness &&
+            movie.year >= config.yearStart &&
+            movie.year <= config.yearEnd
+        );
+
+        if (!pool.length) {
+          return { error: "No verified movies for that exact setup." };
+        }
+
+        return { config };
+      }
+
+      async function pickMovieWithAI(pool) {
+        const { apiKey, model, language, toughness, yearStart, yearEnd } = state.config;
+        if (!apiKey) {
+          throw new Error("No API key");
+        }
+
+        const candidates = pool.map((movie) => movie.title).join(" | ");
+        const prompt = [
+          "You are selecting one dumb charades movie from a verified allowed list.",
+          `Language: ${language}`,
+          `Year range: ${yearStart}-${yearEnd}`,
+          `Exact toughness: ${toughness}`,
+          "Choose exactly one title from the ALLOWED TITLES list.",
+          "Avoid repeats or near-duplicates.",
+          "Return strict JSON only: {\"title\":\"...\"}",
+          `ALLOWED TITLES: ${candidates}`
+        ].join("\n");
+
+        const response = await fetch("https://api.openai.com/v1/responses", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model,
+            input: prompt
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`OpenAI error ${response.status}`);
+        }
+
+        const data = await response.json();
+        const text =
+          data.output_text ||
+          data.output?.map((item) => item?.content?.map((part) => part?.text || "").join("")).join("") ||
+          "";
+
+        let parsed;
+        try {
+          parsed = JSON.parse(text);
+        } catch (error) {
+          throw new Error("Invalid AI response");
+        }
+
+        if (!parsed?.title) {
+          throw new Error("Missing title");
+        }
+
+        const selected = pool.find((movie) => movie.title === parsed.title);
+        if (!selected) {
+          throw new Error("AI picked outside pool");
+        }
+
+        state.currentPicker = "AI";
+        addToCache(selected);
+        return selected;
+      }
+
+      function pickMovieFromCacheOrCatalog(pool) {
+        const cacheMatch = state.cache.find(
+          (movie) =>
+            movie.language === state.config.language &&
+            movie.toughness === state.config.toughness &&
+            movie.year >= state.config.yearStart &&
+            movie.year <= state.config.yearEnd &&
+            !state.usedTitles.has(movie.title)
+        );
+
+        if (cacheMatch) {
+          state.currentPicker = "Cache";
+          return cacheMatch;
+        }
+
+        state.currentPicker = "Catalog";
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      async function pickMovie() {
+        const pool = candidatePool();
+        if (!pool.length) {
+          return null;
+        }
+
+        try {
+          return await pickMovieWithAI(pool);
+        } catch (error) {
+          return pickMovieFromCacheOrCatalog(pool);
+        }
+      }
+
+      function clearTimerInterval() {
+        if (state.timer.id) {
+          clearInterval(state.timer.id);
+          state.timer.id = null;
+        }
+      }
+
+      function clearRevealInterval() {
+        if (state.reveal.id) {
+          clearInterval(state.reveal.id);
+          state.reveal.id = null;
+        }
+      }
+
+      function scorePoint(player) {
+        state.scores[player] += 1;
+        renderScores();
+      }
+
+      function beginGuessTimer() {
+        clearTimerInterval();
+        state.timer.running = true;
+        setControls(true);
+        els.pauseTimer.textContent = "[PAUSE TIMER]";
+        setTimerState("Timer running");
+        state.secretState.textContent = "Title hidden. No hints.";
+
+        state.timer.id = setInterval(() => {
+          if (!state.timer.running) {
+            return;
+          }
+
+          if (state.timer.left > 0) {
+            state.timer.left -= 1;
+            els.clock.textContent = formatTime(state.timer.left);
+            updateProgress();
+
+            if (state.timer.left === 30 && !state.timer.thirtyPlayed) {
+              state.timer.thirtyPlayed = true;
+              setAlert("⏳ 30 seconds left");
+              playThirtySound();
+            } else if (state.timer.left === 10 && !state.timer.tenPlayed) {
+              state.timer.tenPlayed = true;
+              setAlert("⚠️ 10 seconds left");
+              playTenSound();
+            } else if (state.timer.left > 30 || (state.timer.left < 30 && state.timer.left > 10)) {
+              setAlert("");
+            }
+
+            return;
+          }
+
+          if (!state.timer.donePlayed) {
+            state.timer.donePlayed = true;
+            state.timer.running = false;
+            setAlert("⏰ TIME UP  BEEP BEEP");
+            setTimerState("Timer ended. Use END TURN or confirm a correct guess.");
+            updateProgress();
+            playTimeUpSound();
+          }
+        }, 1000);
+      }
+
+      function showRevealOverlay() {
+        const actor = getActor();
+        state.reveal.left = 10;
+        openOverlay(`
+          <div class="chips">
+            <div class="badge">Turn ${state.turn}</div>
+            <div class="badge">Actor only</div>
+            <div class="badge">${state.currentPicker} pick</div>
+          </div>
+          <h3>Pass the phone to ${actor}</h3>
+          <div class="secret">${state.currentMovie.title}</div>
+          <p class="small-note">Look now. Everyone else looks away.</p>
+          <div class="badge">Reveal closes in <span id="revealCounter">10</span>s</div>
+        `);
+
+        state.secretState.textContent = "Actor reveal live";
+        clearRevealInterval();
+        state.reveal.id = setInterval(() => {
+          state.reveal.left -= 1;
+          const counter = document.getElementById("revealCounter");
+          if (counter) {
+            counter.textContent = `${state.reveal.left}`;
+          }
+          if (state.reveal.left <= 0) {
+            clearRevealInterval();
+            closeOverlay();
+            beginGuessTimer();
+          }
+        }, 1000);
+      }
+
+      async function nextTurn() {
+        state.turn += 1;
+        state.currentMovie = await pickMovie();
+
+        if (!state.currentMovie) {
+          finishGame("No movies left for this setup.");
+          return;
+        }
+
+        state.usedTitles.add(state.currentMovie.title);
+        addToCache(state.currentMovie);
+        state.timer.total = state.config.guessTime;
+        state.timer.left = state.config.guessTime;
+        state.timer.running = false;
+        state.timer.thirtyPlayed = false;
+        state.timer.tenPlayed = false;
+        state.timer.donePlayed = false;
+
+        els.titleLine.textContent = "🎬 DUMB CHARADES: HUMANS vs AI — GAME STARTED";
+        els.statusChip.textContent = "Live";
+        els.pickerBadge.textContent = `${state.currentPicker} picker`;
+        setAlert("");
+        updateMainBoard();
+        setTimerState("Private actor reveal");
+        setControls(false);
+        els.finishGame.disabled = false;
+        state.gameActive = true;
+        showRevealOverlay();
+      }
+
+      function startAutoadvance(reason) {
+        openOverlay(`
+          <div class="chips">
+            <div class="badge">Turn ${state.turn} over</div>
+            <div class="badge">${reason}</div>
+          </div>
+          <h3>Movie revealed</h3>
+          <div class="secret">${state.currentMovie.title}</div>
+          <p class="small-note">Next actor: ${state.config.players[(state.actorIndex + 1) % state.config.players.length]}</p>
+          <div class="badge">Next turn starts in <span id="nextCounter">4</span>s</div>
+          <div class="actions">
+            <button class="primary" id="goNow">Start now</button>
+          </div>
+        `);
+
+        let seconds = 4;
+        let advanced = false;
+        let auto = null;
+        const go = async () => {
+          if (advanced) {
+            return;
+          }
+          advanced = true;
+          if (auto) {
+            clearInterval(auto);
+          }
+          closeOverlay();
+          state.actorIndex = (state.actorIndex + 1) % state.config.players.length;
+          await nextTurn();
+        };
+
+        document.getElementById("goNow").addEventListener("click", go);
+
+        auto = setInterval(async () => {
+          seconds -= 1;
+          const nextCounter = document.getElementById("nextCounter");
+          if (nextCounter) {
+            nextCounter.textContent = `${seconds}`;
+          }
+
+          if (seconds <= 0) {
+            clearInterval(auto);
+            await go();
+          }
+        }, 1000);
+      }
+
+      function endTurn(resultText) {
+        clearTimerInterval();
+        clearRevealInterval();
+        state.timer.running = false;
+        setControls(false);
+        state.secretState.textContent = `Revealed: ${state.currentMovie.title}`;
+        setTimerState("Turn ended");
+        state.log.push({
+          turn: state.turn,
+          actor: getActor(),
+          movie: state.currentMovie.title,
+          result: resultText
+        });
+        renderLog();
+        startAutoadvance(resultText);
+      }
+
+      function promptWinnerSelection() {
+        const guessers = getGuessers();
+        openOverlay(`
+          <h3>Correct guess confirmed?</h3>
+          <p class="small-note">Pick the player who got it right. NO resumes the timer.</p>
+          <div class="actions" id="winnerActions">
+            ${guessers.map((name) => `<button class="winner-btn" data-name="${name}">${name}</button>`).join("")}
+          </div>
+          <div class="actions">
+            <button class="ghost" id="resumeTimer">NO</button>
+          </div>
+        `);
+
+        document.getElementById("winnerActions").querySelectorAll("button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const winner = button.dataset.name;
+            closeOverlay();
+            scorePoint(winner);
+            endTurn(`${winner} guessed correctly`);
+          });
+        });
+
+        document.getElementById("resumeTimer").addEventListener("click", () => {
+          closeOverlay();
+          state.timer.running = true;
+          setTimerState("Timer running");
+        });
+      }
+
+      function buildSummaryRows() {
+        return [...state.config.players]
+          .sort((a, b) => state.scores[b] - state.scores[a] || a.localeCompare(b))
+          .map(
+            (name) => `
+              <div class="summary-row">
+                <span>${name}</span>
+                <strong>${state.scores[name]}</strong>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function finishGame(reason = "Game ended") {
+        clearTimerInterval();
+        clearRevealInterval();
+        state.gameActive = false;
+        state.locked = false;
+        els.statusChip.textContent = "Finished";
+        els.startGame.disabled = false;
+        setControls(false);
+        els.finishGame.disabled = true;
+        openOverlay(`
+          <div class="chips">
+            <div class="badge">Game over</div>
+            <div class="badge">${reason}</div>
+          </div>
+          <h3>Screenshot this before you forget everything 🍻</h3>
+          <div class="summary-grid">
+            ${buildSummaryRows()}
+          </div>
+          <p class="small-note">Turns played: ${state.log.length}. Movies used: ${state.usedTitles.size}. Picker cache: ${state.cache.length}.</p>
+          <div class="actions">
+            <button class="primary" id="closeSummary">Back to app</button>
+          </div>
+        `);
+
+        document.getElementById("closeSummary").addEventListener("click", closeOverlay);
+      }
+
+      function resetGame() {
+        clearTimerInterval();
+        clearRevealInterval();
+        closeOverlay();
+        state.config = null;
+        state.locked = false;
+        state.turn = 0;
+        state.actorIndex = 0;
+        state.currentMovie = null;
+        state.currentPicker = "catalog";
+        state.usedTitles = new Set();
+        state.cache = [];
+        state.scores = {};
+        state.log = [];
+        state.timer = {
+          total: 0,
+          left: 0,
+          running: false,
+          id: null,
+          thirtyPlayed: false,
+          tenPlayed: false,
+          donePlayed: false
+        };
+        state.reveal = {
+          left: 10,
+          id: null
+        };
+        state.gameActive = false;
+
+        lockFields(false);
+        els.startGame.disabled = false;
+        els.statusChip.textContent = "Idle";
+        els.titleLine.textContent = "Waiting for setup";
+        els.pickerBadge.textContent = "Catalog standby";
+        els.cacheBadge.textContent = "Cache 0 / 200";
+        els.turnLabel.textContent = "-";
+        els.actorLabel.textContent = "-";
+        els.guessersLabel.textContent = "-";
+        els.actorBig.textContent = "Lock setup";
+        els.guessersBig.textContent = "Guessers will appear here.";
+        els.clock.textContent = "00:00";
+        els.secretState.textContent = "Hidden until actor reveal";
+        setTimerState("Timer idle");
+        setAlert("");
+        updateProgress();
+        renderScores();
+        renderLog();
+        setControls(false);
+        els.finishGame.disabled = true;
+        els.setupNote.textContent =
+          "LLM picks from a verified candidate pool. If AI fails, the app falls back to the in-session safe cache and local catalog.";
+      }
+
+      els.startGame.addEventListener("click", async () => {
+        const result = validateSetup();
+        if (result.error) {
+          els.setupNote.textContent = result.error;
+          return;
+        }
+
+        state.config = result.config;
+        state.scores = Object.fromEntries(state.config.players.map((player) => [player, 0]));
+        renderScores();
+        state.locked = true;
+        lockFields(true);
+        els.startGame.disabled = true;
+        els.setupNote.textContent = "Setup locked. Round robin is automatic.";
+        els.statusChip.textContent = "Loading";
+        await nextTurn();
+      });
+
+      els.resetGame.addEventListener("click", resetGame);
+
+      els.finishGame.addEventListener("click", () => {
+        if (!state.config) {
+          return;
+        }
+        finishGame("Manual finish");
+      });
+
+      els.pauseTimer.addEventListener("click", () => {
+        if (!state.gameActive) {
+          return;
+        }
+        state.timer.running = !state.timer.running;
+        els.pauseTimer.textContent = state.timer.running ? "[PAUSE TIMER]" : "[RESUME TIMER]";
+        setTimerState(state.timer.running ? "Timer running" : "Timer paused");
+        updateProgress();
+      });
+
+      els.stopTimer.addEventListener("click", () => {
+        if (!state.gameActive) {
+          return;
+        }
+        state.timer.running = false;
+        setTimerState("Timer stopped for confirmation");
+        promptWinnerSelection();
+      });
+
+      els.endTurn.addEventListener("click", () => {
+        if (!state.gameActive) {
+          return;
+        }
+        endTurn("Turn ended without a correct guess");
+      });
+
+      resetGame();
+    </script>
+  </body>
+</html>

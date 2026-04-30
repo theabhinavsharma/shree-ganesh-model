@@ -1,0 +1,12 @@
+table: sector_flow_fortnightly
+primary_key: [sector_name, fortnight_end_date]
+description: Fortnightly sector-wise FPI investment data with publication-date-aware daily forward fill.
+columns:
+  - {name: sector_name, type: string, definition: Sector name in official NSDL report, source: official NSDL fortnightly sector-wise FPI report pages, update_frequency: fortnightly, lag_rule: usable from effective_from_date only, nullable: false}
+  - {name: fortnight_end_date, type: date, definition: Period end date for fortnight, source: official NSDL fortnightly sector-wise FPI report pages, update_frequency: fortnightly, lag_rule: informational only, nullable: false}
+  - {name: published_date, type: date, definition: Public publication date, source: not yet resolved as a clean machine-readable field from the official NSDL page, update_frequency: fortnightly, lag_rule: informational only, nullable: true}
+  - {name: effective_from_date, type: date, definition: Date from which this period's values are usable, source: derived from published_date once resolved, update_frequency: fortnightly, lag_rule: published_date, nullable: true}
+  - {name: fpi_investment_value, type: float64, definition: Current fortnight-end total FPI investment value for the sector in INR crore, source: official NSDL fortnightly sector-wise FPI report pages, update_frequency: fortnightly, lag_rule: effective_from_date, nullable: true}
+  - {name: fpi_change_abs, type: float64, definition: Latest half-fortnight net investment total for the sector in INR crore, source: official NSDL fortnightly sector-wise FPI report pages, update_frequency: fortnightly, lag_rule: effective_from_date, nullable: true}
+  - {name: fpi_change_pct, type: float64, definition: Latest half-fortnight net investment divided by previous fortnight-end investment value, source: derived, update_frequency: fortnightly, lag_rule: effective_from_date, nullable: true}
+  - {name: fpi_positive_flag, type: boolean, definition: True if fpi_change_abs > 0, source: derived, update_frequency: fortnightly, lag_rule: effective_from_date, nullable: true}

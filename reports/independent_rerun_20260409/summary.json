@@ -1,0 +1,23 @@
+{
+  "status": "ok",
+  "selected_universe": "liquid_20cr_plus",
+  "selected_gate": "no_gate",
+  "as_of_trade_date": "2026-04-07 00:00:00",
+  "selected_gate_test_success_rate": 0.7115384615384616,
+  "selected_gate_test_avg_winners": 2.8461538461538463,
+  "shortlist_symbols": [
+    "CHAMBLFERT",
+    "ADANIPORTS",
+    "BAJFINANCE",
+    "KARURVYSYA",
+    "INDUSINDBK",
+    "ECLERX",
+    "WIPRO",
+    "BHARTIARTL",
+    "SHRIRAMFIN",
+    "YESBANK",
+    "LUXIND",
+    "PDSL"
+  ],
+  "decision_sheet_path": "/Users/abhinavs./Documents/Zoom/reports/independent_rerun_20260409/decision_sheet/weekly_position_decision_sheet_20260407.csv"
+}

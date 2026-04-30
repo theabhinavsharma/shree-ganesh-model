@@ -1,0 +1,34 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-21",
+  "scope": "March-April issued 1D and 7D action sheets with matured outcomes only",
+  "one_day_overall": {
+    "rows": 13,
+    "fill_rate": 0.8461538461538461,
+    "gap_miss_rate": 0.46153846153846156,
+    "target_hit_intraday_rate": 0.5384615384615384,
+    "target_hit_close_rate": 0.3076923076923077,
+    "stop_hit_intraday_rate": 0.46153846153846156,
+    "mean_close_return": 0.02968337734209227,
+    "median_close_return": 0.015102389078498257,
+    "mean_max_return": 0.07078325013505103
+  },
+  "week7_overall": {
+    "rows": 35,
+    "fill_rate": 1.0,
+    "gap_miss_rate": 0.22857142857142856,
+    "target_hit_intraday_rate": 0.6857142857142857,
+    "target_hit_close_rate": 0.42857142857142855,
+    "stop_hit_intraday_rate": 0.17142857142857143,
+    "mean_close_return": 0.05690124250692776,
+    "median_close_return": 0.04272168947311705,
+    "mean_max_return": 0.10329866124562867
+  },
+  "one_day_gap_miss_rows": 6,
+  "week7_gap_miss_rows": 8,
+  "key_findings": [
+    "Execution gaps were a real issue on 1D sheets; fill feasibility must be tracked separately from ranking quality.",
+    "Several misses still showed strong max intraday/upside tails but poor close conversion, which supports anti-chase filtering for same-day books.",
+    "Weekly baskets were more robust than 1D books on close-to-close outcomes, but overextended names remained a source of weaker median returns."
+  ]
+}

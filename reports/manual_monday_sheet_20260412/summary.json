@@ -1,0 +1,24 @@
+{
+  "status": "ok",
+  "run_root": "/Users/abhinavs./Documents/Zoom/reports/manual_monday_sheet_20260412",
+  "as_of_trade_date": "2026-04-10",
+  "selected_universe": "liquid_20cr_plus",
+  "selected_gate": "market_median_return_20d>=0.0 & breadth_volume_1_5x>=0.1",
+  "selected_gate_test_success_rate": 0.9047619047619048,
+  "selected_gate_test_avg_winners": 3.5714285714285716,
+  "top_symbols": [
+    "ITDC",
+    "NIACL",
+    "WEBELSOLAR",
+    "CONFIPET",
+    "APEX",
+    "LIQUIDETF",
+    "COHANCE",
+    "TEJASNET",
+    "RAILTEL",
+    "JINDRILL",
+    "QPOWER",
+    "DEEDEV"
+  ],
+  "decision_sheet_path": "/Users/abhinavs./Documents/Zoom/reports/manual_monday_sheet_20260412/decision_sheet/weekly_position_decision_sheet_20260410.csv"
+}

@@ -1,0 +1,144 @@
+{
+  "mode": "final",
+  "ok": false,
+  "blocked": true,
+  "run_timestamp": "2026-04-10T19:00:57.510275+05:30",
+  "refresh_steps": [
+    {
+      "name": "corporate_actions",
+      "success": false,
+      "message": "corporate actions refresh failed: HTTPSConnectionPool(host='www.nseindia.com', port=443): Max retries exceeded with url: /companies-listing/corporate-filings-actions (Caused by NameResolutionError(\"HTTPSConnection(host='www.nseindia.com', port=443): Failed to resolve 'www.nseindia.com' ([Errno 8] nodename nor servname provided, or not known)\"))",
+      "details": {}
+    },
+    {
+      "name": "market_daily_facts",
+      "success": true,
+      "message": "skipped daily facts rebuild because no new market file arrived",
+      "details": {
+        "rows": null,
+        "max_trade_date": "2026-04-07",
+        "market_age_days": 3,
+        "new_market_successes": 0,
+        "market_error_count": 3
+      }
+    },
+    {
+      "name": "announcements",
+      "success": false,
+      "message": "announcement refresh failed: HTTPSConnectionPool(host='www.nseindia.com', port=443): Max retries exceeded with url: /companies-listing/corporate-filings-announcements (Caused by NameResolutionError(\"HTTPSConnection(host='www.nseindia.com', port=443): Failed to resolve 'www.nseindia.com' ([Errno 8] nodename nor servname provided, or not known)\"))",
+      "details": {}
+    },
+    {
+      "name": "macro",
+      "success": false,
+      "message": "macro refresh failed: HTTPSConnectionPool(host='www.nseindia.com', port=443): Max retries exceeded with url: /reports-indices-historical-index-data (Caused by NameResolutionError(\"HTTPSConnection(host='www.nseindia.com', port=443): Failed to resolve 'www.nseindia.com' ([Errno 8] nodename nor servname provided, or not known)\"))",
+      "details": {}
+    }
+  ],
+  "gates": [
+    {
+      "name": "recent_cache_success",
+      "passed": false,
+      "message": "cache refresh missing or older than 36 hours",
+      "details": {
+        "cache_age_hours": 2.99
+      }
+    },
+    {
+      "name": "market_data_fresh",
+      "passed": true,
+      "message": "market data fresh and manifest-consistent",
+      "details": {
+        "as_of_trade_date": "2026-04-07",
+        "latest_market_manifest_date": "2026-04-07",
+        "market_age_days": 3,
+        "announcements_max_event_date": "2026-04-08",
+        "announcements_age_days": 2,
+        "macro_max_trade_date": "2026-04-07",
+        "macro_age_days": 3,
+        "fundamentals_max_effective_date": "2026-02-20",
+        "fundamentals_age_days": 49,
+        "shareholding_max_effective_date": "2026-04-08",
+        "shareholding_age_days": 2,
+        "fundamentals_symbol_coverage": 0.7888300040766408,
+        "shareholding_symbol_coverage": 0.8577252344068488,
+        "current_universe_symbol_count": 2453
+      }
+    },
+    {
+      "name": "announcements_fresh",
+      "passed": true,
+      "message": "announcements fresh",
+      "details": {
+        "announcements_max_event_date": "2026-04-08",
+        "announcements_age_days": 2
+      }
+    },
+    {
+      "name": "macro_fresh",
+      "passed": true,
+      "message": "macro data fresh",
+      "details": {
+        "macro_max_trade_date": "2026-04-07",
+        "macro_age_days": 3
+      }
+    },
+    {
+      "name": "fundamentals_fresh",
+      "passed": true,
+      "message": "fundamentals freshness acceptable",
+      "details": {
+        "fundamentals_max_effective_date": "2026-02-20",
+        "fundamentals_age_days": 49
+      }
+    },
+    {
+      "name": "shareholding_fresh",
+      "passed": true,
+      "message": "shareholding freshness acceptable",
+      "details": {
+        "shareholding_max_effective_date": "2026-04-08",
+        "shareholding_age_days": 2
+      }
+    },
+    {
+      "name": "fundamentals_coverage",
+      "passed": true,
+      "message": "fundamentals coverage acceptable",
+      "details": {
+        "coverage": 0.7888300040766408,
+        "threshold": 0.7,
+        "current_universe_symbol_count": 2453
+      }
+    },
+    {
+      "name": "shareholding_coverage",
+      "passed": true,
+      "message": "shareholding coverage acceptable",
+      "details": {
+        "coverage": 0.8577252344068488,
+        "threshold": 0.75,
+        "current_universe_symbol_count": 2453
+      }
+    },
+    {
+      "name": "smtp_ready",
+      "passed": false,
+      "message": "SMTP configuration missing",
+      "details": {}
+    },
+    {
+      "name": "positive_remaining_horizon",
+      "passed": true,
+      "message": "positive year-end horizon available",
+      "details": {
+        "remaining_days": 268,
+        "run_date": "2026-04-10"
+      }
+    }
+  ],
+  "artifacts": {
+    "blocked_csv": "reports/production_weekly/runs/20260410T190057/blocked_status.csv",
+    "blocked_html": "reports/production_weekly/runs/20260410T190057/blocked_status.html"
+  }
+}

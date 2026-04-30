@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "selected_universe": "cheap_micro",
+  "as_of_trade_date": "2026-04-07 00:00:00",
+  "shortlist_symbols": [
+    "AKSHAR",
+    "BALAXI",
+    "ANMOL",
+    "DIGISPICE",
+    "BTML",
+    "VIKASLIFE",
+    "VIKASECO",
+    "SBGLP",
+    "VISHWARAJ",
+    "NOIDATOLL",
+    "SADBHIN",
+    "TRU"
+  ],
+  "decision_sheet_path": "/Users/abhinavs./Documents/Zoom/reports/independent_rerun_20260409_run2/decision_sheet/weekly_position_decision_sheet_20260407.csv"
+}

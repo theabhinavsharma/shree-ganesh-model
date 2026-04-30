@@ -1,0 +1,27 @@
+table: stock_quarterly_fundamentals
+primary_key: [symbol, fiscal_period_end, effective_from_date]
+description: Quarterly fundamentals that become available only from public announcement or filing date.
+columns:
+  - {name: symbol, type: string, definition: NSE symbol, source: official NSE corporate financial-results APIs, update_frequency: quarterly, lag_rule: usable from effective_from_date only, nullable: false}
+  - {name: fiscal_period_end, type: date, definition: Fiscal quarter end date, source: official NSE corporate financial-results APIs, update_frequency: quarterly, lag_rule: informational only, nullable: false}
+  - {name: announced_date, type: date, definition: Public result broadcast date when present in NSE response, source: official NSE corporate financial-results APIs, update_frequency: quarterly, lag_rule: informational only, nullable: true}
+  - {name: effective_from_date, type: date, definition: Date from which this record is allowed in research joins, source: derived from official NSE broadcast date or filing date, update_frequency: quarterly, lag_rule: coalesce(announced_date, filing_date), nullable: false}
+  - {name: revenue, type: float64, definition: Quarterly revenue mapped from supported NSE result keys, source: official NSE corporate financial-results detail payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: ebitda, type: float64, definition: Quarterly EBITDA when derivable from supported NSE result keys, source: derived from official NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: ebit, type: float64, definition: Quarterly EBIT when derivable from supported NSE result keys, source: derived from official NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: pat, type: float64, definition: Quarterly profit after tax mapped from supported NSE result keys, source: official NSE corporate financial-results detail payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: eps, type: float64, definition: Quarterly EPS mapped from supported NSE result keys, source: official NSE corporate financial-results detail payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: debt, type: float64, definition: Total debt snapshot, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: cash, type: float64, definition: Cash and equivalents snapshot, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: net_debt, type: float64, definition: debt minus cash, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true, derived_formula: debt - cash}
+  - {name: cfo, type: float64, definition: Cash from operations, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: fcf, type: float64, definition: Free cash flow, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: roe, type: float64, definition: Return on equity, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: roce, type: float64, definition: Return on capital employed, source: unavailable from current mapped NSE result payload, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: interest_coverage, type: float64, definition: EBIT divided by finance cost when both are derivable from the NSE payload, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: eps_ttm, type: float64, definition: Trailing four-quarter EPS sum from lag-valid quarterly EPS values, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true, derived_formula: rolling_sum(eps, 4)}
+  - {name: revenue_cagr_3y, type: float64, definition: 3Y revenue CAGR, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: revenue_cagr_5y, type: float64, definition: 5Y revenue CAGR, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: pat_cagr_3y, type: float64, definition: 3Y PAT CAGR, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: pat_cagr_5y, type: float64, definition: 5Y PAT CAGR, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: ebitda_positive_last_5q_flag, type: boolean, definition: True when EBITDA is positive for last five reported quarters available as of effective date, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}

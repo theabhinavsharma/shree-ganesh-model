@@ -1,0 +1,12 @@
+{
+  "as_of_signal_date": "2026-04-22 official close / quote-trade snapshot",
+  "quote_check_time": "2026-04-23 15:53 IST",
+  "target": "5% or higher same day",
+  "names_checked": 7,
+  "hit_count": 0,
+  "hit_rate": 0.0,
+  "worst_return_pct": -4.354469060351407,
+  "best_return_pct": 1.232665639445285,
+  "root_cause": "I over-promoted a low absolute calibrated-probability basket model as a single-name/same-day trade. Execution bands and stops were heuristic, not learned. Raw model probabilities were not calibrated enough to justify live single-name conviction.",
+  "action_change": "Do not issue same-day +5% calls unless the run is complete, current-slice data is fully verified, calibrated top-bucket hit rate clears a stricter threshold, and entry/exit rules are learned/backtested rather than percentage heuristics."
+}

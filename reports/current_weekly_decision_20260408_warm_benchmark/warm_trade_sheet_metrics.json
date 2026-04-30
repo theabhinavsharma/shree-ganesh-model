@@ -1,0 +1,8 @@
+{
+  "mode": "warm_trade_sheet",
+  "wall_seconds": 23.206,
+  "max_rss_mb": 14352704.0,
+  "selected_universe": "mid_small",
+  "ranking_basis_trade_date": "2026-04-07",
+  "decision_sheet_path": "reports/current_weekly_decision_20260408_warm_benchmark/weekly_position_decision_sheet_20260408.csv"
+}

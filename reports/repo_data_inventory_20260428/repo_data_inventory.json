@@ -1,0 +1,595 @@
+{
+  "inventory_version": "2026-04-28",
+  "repo_root": "/Users/abhinavs./Documents/Zoom",
+  "purpose": "Machine-readable instructions for locating repository data, understanding what each folder serves, and deciding which datasets are authoritative versus derived or report-only.",
+  "generated_from": {
+    "contracts": [
+      "data_contracts/stock_master.yaml",
+      "data_contracts/stock_daily_facts.yaml",
+      "data_contracts/stock_quarterly_fundamentals.yaml",
+      "data_contracts/stock_shareholding_quarterly.yaml",
+      "data_contracts/sector_flow_fortnightly.yaml",
+      "data_contracts/daily_screen_universe.yaml"
+    ],
+    "docs": [
+      "docs/data_storage.md",
+      "docs/data_dictionary.md",
+      "docs/lag_rules.md",
+      "docs/nse_ingestion.md",
+      "docs/source_limitations.md"
+    ],
+    "code": [
+      "src/transform/build_daily_facts.py",
+      "src/transform/event_daily.py",
+      "src/ml/panel.py",
+      "src/portfolio/state.py",
+      "src/utils/data_catalog.py"
+    ]
+  },
+  "machine_protocol": {
+    "authoritative_market_data_rule": "Use the official NSE downloader path and raw files under data/raw/nse_full_history_official as the v1 market-data source of truth.",
+    "forbidden_assumptions": [
+      "Do not silently substitute unofficial market data for official NSE market data.",
+      "Do not fabricate missing fields or unavailable datasets.",
+      "Do not infer units from suffixes such as _pct.",
+      "Do not treat tmp/, reports/, or cached ML panels as canonical source data."
+    ],
+    "inspection_order": [
+      "1. Open the target folder README.md when present.",
+      "2. Open the file's matching .manifest.json sidecar when present.",
+      "3. Open the canonical data_contracts/*.yaml contract for the table.",
+      "4. Only then inspect the raw file content."
+    ],
+    "truth_hierarchy": [
+      "data/raw/*",
+      "data/*/normalized/*",
+      "data/derived/*",
+      "data/ml/panels and run outputs",
+      "reports and tmp"
+    ],
+    "lag_rules": [
+      {
+        "dataset": "stock_daily_facts",
+        "rule": "same-day for its trade_date"
+      },
+      {
+        "dataset": "stock_quarterly_fundamentals",
+        "rule": "usable only when effective_from_date <= trade_date"
+      },
+      {
+        "dataset": "stock_shareholding_quarterly",
+        "rule": "usable only when effective_from_date <= trade_date"
+      },
+      {
+        "dataset": "sector_flow_fortnightly",
+        "rule": "should remain blocked for historical daily joins until published_date timing is resolved"
+      },
+      {
+        "dataset": "all periodic joins",
+        "rule": "backward-only as-of joins; future-dated records are invalid"
+      }
+    ],
+    "machine_actions_on_missing_data": {
+      "required_field_missing": "blocked",
+      "optional_field_missing": "unknown_or_null",
+      "unavailable_official_source": "blocked",
+      "stale_report_artifact": "non_authoritative"
+    }
+  },
+  "folder_catalog": [
+    {
+      "path": "configs",
+      "category": "configuration",
+      "authoritativeness": "canonical_repo_config",
+      "purpose": "Run-time configuration for research, expert, weekly production, and screening thresholds.",
+      "file_count_estimate": 4,
+      "key_files": [
+        "configs/ml_research.yaml",
+        "configs/ml_expert.yaml",
+        "configs/ml_weekly_production.yaml",
+        "configs/screening.yaml"
+      ],
+      "consumed_by": [
+        "src/ml/config.py",
+        "src/ml/panel.py",
+        "src/screen/build_universe.py",
+        "src/report/production_weekly_run.py"
+      ]
+    },
+    {
+      "path": "data_contracts",
+      "category": "schema_contracts",
+      "authoritativeness": "canonical_schema_metadata",
+      "purpose": "Schema, grain, update-frequency, and lag-rule contracts for canonical tables.",
+      "file_count_estimate": 6
+    },
+    {
+      "path": "docs",
+      "category": "repository_docs",
+      "authoritativeness": "descriptive_guidance",
+      "purpose": "Human-readable storage, lag, ingestion, and source-limitation documentation.",
+      "file_count_estimate": 10
+    },
+    {
+      "path": "src",
+      "category": "code",
+      "authoritativeness": "behavioral_source_of_truth",
+      "purpose": "Ingestion, transformation, ML, screening, reporting, and portfolio-state logic.",
+      "file_count_estimate": 59
+    },
+    {
+      "path": "tests",
+      "category": "tests",
+      "authoritativeness": "validation_logic",
+      "purpose": "Regression, contract, ingestion, transform, and state workflow tests.",
+      "file_count_estimate": 36
+    },
+    {
+      "path": "data/raw/nse_full_history_official",
+      "category": "raw_market_data",
+      "authoritativeness": "official_source_of_truth",
+      "purpose": "Official NSE 2015+ daily market-data partitions by trade date.",
+      "file_count_estimate": 4098,
+      "partition_pattern": "trade_date=YYYY-MM-DD",
+      "file_patterns": [
+        "sec_bhavdata_full_ddmmyyyy.csv for 2020+ UDiFF era",
+        "cmDDMONYYYYbhav.csv.zip for pre-2020 bhavcopy",
+        "MTO_ddmmyyyy.DAT for pre-2020 delivery merge"
+      ],
+      "produced_by": [
+        "src/ingest/nse/fetch_bhavcopy.py",
+        "src/ingest/nse/io.py"
+      ],
+      "consumed_by": [
+        "src/ingest/nse/normalize.py",
+        "src/transform/build_daily_facts.py"
+      ],
+      "notes": [
+        "This is the authoritative v1 market-data ingestion root.",
+        "Pre-2020 delivery-aware features require the matching MTO delivery file."
+      ]
+    },
+    {
+      "path": "data/raw/nse_full_history",
+      "category": "raw_market_data_legacy_or_partial",
+      "authoritativeness": "non_preferred_raw_market_data",
+      "purpose": "Older or partial raw NSE history materializations kept alongside official-history work.",
+      "notes": [
+        "Prefer data/raw/nse_full_history_official for official market-history usage."
+      ]
+    },
+    {
+      "path": "data/raw/nse",
+      "category": "raw_market_data_current",
+      "authoritativeness": "raw_current_ingest",
+      "purpose": "Current/raw NSE fetch workspace for direct ingestion operations."
+    },
+    {
+      "path": "data/raw/nse_sample",
+      "category": "raw_market_data_sample",
+      "authoritativeness": "sample_only",
+      "purpose": "Sampled raw NSE partitions used for smoke tests or reduced-scope experiments."
+    },
+    {
+      "path": "data/derived",
+      "category": "derived_canonical_tables",
+      "authoritativeness": "derived_internal_canonical",
+      "purpose": "Research-ready daily fact tables derived from official inputs and formulas.",
+      "file_count_estimate": 2,
+      "key_files": [
+        "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+        "data/derived/daily_facts_official_2015_2026.parquet"
+      ],
+      "produced_by": [
+        "src/transform/build_daily_facts.py",
+        "src/transform/corporate_actions.py",
+        "src/features/indicators.py"
+      ],
+      "consumed_by": [
+        "src/ml/panel.py",
+        "src/screen/build_universe.py",
+        "src/analysis/*"
+      ],
+      "notes": [
+        "stock_daily_facts_adjusted_2015plus.parquet is adjusted and heavily used by current ML configs.",
+        "daily_facts_official_2015_2026.parquet is the official-price derived table without that naming implying adjustment."
+      ]
+    },
+    {
+      "path": "data/fundamentals_full_history/raw",
+      "category": "raw_fundamentals",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw NSE quarterly-results pulls, detail payloads, listing snapshots, and error captures.",
+      "produced_by": [
+        "src/ingest/fundamentals/nse.py",
+        "src/ingest/fundamentals/nse_batched.py"
+      ]
+    },
+    {
+      "path": "data/fundamentals_full_history/normalized",
+      "category": "normalized_fundamentals",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized quarterly fundamentals table and related variants.",
+      "file_count_estimate": 3,
+      "key_files": [
+        "data/fundamentals_full_history/normalized/stock_quarterly_fundamentals.parquet",
+        "data/fundamentals_full_history/normalized/stock_quarterly_fundamentals_all_scopes.parquet"
+      ],
+      "contract": "data_contracts/stock_quarterly_fundamentals.yaml",
+      "consumed_by": [
+        "src/screen/build_universe.py",
+        "src/ml/panel.py"
+      ]
+    },
+    {
+      "path": "data/shareholding_full_history/raw",
+      "category": "raw_shareholding",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw NSE shareholding pattern, public-shareholder detail, promoter pledge, and related error captures.",
+      "produced_by": [
+        "src/ingest/shareholding/nse.py",
+        "src/ingest/shareholding/nse_batched.py"
+      ]
+    },
+    {
+      "path": "data/shareholding_full_history/normalized",
+      "category": "normalized_shareholding",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized quarterly shareholding pattern table.",
+      "file_count_estimate": 1,
+      "key_files": [
+        "data/shareholding_full_history/normalized/stock_shareholding_quarterly.parquet"
+      ],
+      "contract": "data_contracts/stock_shareholding_quarterly.yaml",
+      "consumed_by": [
+        "src/screen/build_universe.py",
+        "src/ml/panel.py"
+      ]
+    },
+    {
+      "path": "data/shareholding_hybrid/normalized",
+      "category": "alternate_shareholding_normalized",
+      "authoritativeness": "alternate_materialization",
+      "purpose": "Alternative hybrid shareholding materialization kept for experiments or recovery workflows."
+    },
+    {
+      "path": "data/shareholding_master_only/normalized",
+      "category": "alternate_shareholding_normalized",
+      "authoritativeness": "alternate_materialization",
+      "purpose": "Alternative master-only shareholding materialization kept for experiments or targeted workflows."
+    },
+    {
+      "path": "data/events_full_history/raw",
+      "category": "raw_events",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw NSE corporate announcements pulls.",
+      "produced_by": [
+        "src/ingest/events/nse.py"
+      ]
+    },
+    {
+      "path": "data/events_full_history/normalized",
+      "category": "normalized_events",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized announcements table plus derived event_feature_daily table.",
+      "file_count_estimate": 5,
+      "key_files": [
+        "data/events_full_history/normalized/stock_announcements.parquet",
+        "data/events_full_history/normalized/event_feature_daily.parquet",
+        "data/events_full_history/normalized/README.md"
+      ],
+      "consumed_by": [
+        "src/transform/event_daily.py",
+        "src/ml/panel.py"
+      ]
+    },
+    {
+      "path": "data/events_full_history/bulk_block/raw",
+      "category": "raw_bulk_block_events",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw NSE bulk and block deal pulls.",
+      "produced_by": [
+        "src/ingest/events/nse_bulk_block.py"
+      ]
+    },
+    {
+      "path": "data/events_full_history/bulk_block/normalized",
+      "category": "normalized_bulk_block_events",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized bulk and block deals table.",
+      "file_count_estimate": 2,
+      "key_files": [
+        "data/events_full_history/bulk_block/normalized/stock_bulk_block_deals.parquet"
+      ]
+    },
+    {
+      "path": "data/events_full_history/insider/raw",
+      "category": "raw_insider_events",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw NSE insider/promoter transaction pulls.",
+      "produced_by": [
+        "src/ingest/events/nse_insider.py"
+      ]
+    },
+    {
+      "path": "data/events_full_history/insider/normalized",
+      "category": "normalized_insider_events",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized insider-trades table.",
+      "file_count_estimate": 2,
+      "key_files": [
+        "data/events_full_history/insider/normalized/stock_insider_trades.parquet"
+      ]
+    },
+    {
+      "path": "data/macro_full_history/raw",
+      "category": "raw_macro",
+      "authoritativeness": "mixed_official_public_raw",
+      "purpose": "Raw macro and index series pulls from NSE and FRED.",
+      "produced_by": [
+        "src/ingest/macro/nse_fred.py"
+      ],
+      "notes": [
+        "Includes raw/nse_index_history, raw/nse_index_yield, raw/nse_vix_history, and raw/fred."
+      ]
+    },
+    {
+      "path": "data/macro_full_history/normalized",
+      "category": "normalized_macro",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized macro feature tables including daily features and long-form series.",
+      "file_count_estimate": 3,
+      "key_files": [
+        "data/macro_full_history/normalized/macro_feature_daily.parquet",
+        "data/macro_full_history/normalized/macro_series_long.parquet",
+        "data/macro_full_history/normalized/macro_index_valuation_long.parquet"
+      ],
+      "consumed_by": [
+        "src/ml/panel.py",
+        "src/analysis/*"
+      ]
+    },
+    {
+      "path": "data/corporate_actions_full_history/raw",
+      "category": "raw_corporate_actions",
+      "authoritativeness": "official_source_raw",
+      "purpose": "Raw corporate-action inputs used for split/bonus adjustment workflows.",
+      "produced_by": [
+        "src/ingest/corporate_actions/nse.py"
+      ]
+    },
+    {
+      "path": "data/corporate_actions_full_history/normalized",
+      "category": "normalized_corporate_actions",
+      "authoritativeness": "canonical_normalized",
+      "purpose": "Normalized corporate actions table.",
+      "file_count_estimate": 1,
+      "key_files": [
+        "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet"
+      ],
+      "consumed_by": [
+        "src/transform/corporate_actions.py",
+        "src/transform/build_daily_facts.py"
+      ]
+    },
+    {
+      "path": "data/derivatives_full_history/raw",
+      "category": "raw_derivatives",
+      "authoritativeness": "official_source_raw_when_present",
+      "purpose": "Raw derivatives open-interest and MWPL source files when successfully fetched.",
+      "produced_by": [
+        "src/ingest/derivatives/nse_oi.py"
+      ],
+      "notes": [
+        "This source is known to be incomplete or unavailable in some runs; do not fabricate missing OI."
+      ]
+    },
+    {
+      "path": "data/ml/panels",
+      "category": "ml_panel_cache",
+      "authoritativeness": "cache_non_canonical",
+      "purpose": "Cached feature panels and metadata keyed by config/objective fingerprint.",
+      "file_count_estimate": 201,
+      "produced_by": [
+        "src/ml/panel.py"
+      ],
+      "notes": [
+        "Useful for reproducibility and speed, but not a source-of-truth dataset."
+      ]
+    },
+    {
+      "path": "data/ml/expert_runs",
+      "category": "ml_run_artifacts",
+      "authoritativeness": "run_specific_non_canonical",
+      "purpose": "Expert pipeline outputs such as OOF predictions, calibration tables, and universe summaries."
+    },
+    {
+      "path": "data/ml/runs",
+      "category": "ml_run_artifacts",
+      "authoritativeness": "run_specific_non_canonical",
+      "purpose": "Research-run outputs and experiment artifacts."
+    },
+    {
+      "path": "data/portfolio_state",
+      "category": "durable_operational_state",
+      "authoritativeness": "canonical_state_for_portfolio_ops",
+      "purpose": "Durable state for confirmed holdings, execution ledger, and workflow settings.",
+      "file_count_estimate": 9,
+      "key_files": [
+        "data/portfolio_state/current_positions.csv",
+        "data/portfolio_state/executed_trade_ledger.csv",
+        "data/portfolio_state/workflow_settings.json"
+      ],
+      "produced_by": [
+        "src/portfolio/state.py"
+      ]
+    },
+    {
+      "path": "data/normalized",
+      "category": "empty_or_reserved",
+      "authoritativeness": "none",
+      "purpose": "Reserved top-level normalized folder; currently empty."
+    },
+    {
+      "path": "reports",
+      "category": "human_review_outputs",
+      "authoritativeness": "non_canonical_human_review",
+      "purpose": "Dated run folders for reports, backtests, RCA, live sheets, and review outputs.",
+      "file_count_estimate": 790,
+      "notes": [
+        "Each important CSV or parquet should have a matching .manifest.json sidecar.",
+        "Use the folder README.md and summary.json first.",
+        "Reports are not source data."
+      ]
+    },
+    {
+      "path": "tmp",
+      "category": "scratch_and_partial_materializations",
+      "authoritativeness": "non_canonical_scratch",
+      "purpose": "Scratch folders, smoke tests, temporary normalized materializations, and investigation outputs.",
+      "file_count_estimate": 274,
+      "notes": [
+        "Useful for recovery and inspection.",
+        "Do not use as canonical source data unless a workflow explicitly names a tmp path."
+      ]
+    }
+  ],
+  "canonical_datasets": [
+    {
+      "name": "stock_daily_facts_adjusted_2015plus",
+      "path": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+      "contract": "data_contracts/stock_daily_facts.yaml",
+      "grain": "one row per symbol per trade_date",
+      "source_authority": "derived from official NSE raw market data plus internal adjustment and feature logic",
+      "producer_modules": [
+        "src/transform/build_daily_facts.py",
+        "src/transform/corporate_actions.py",
+        "src/features/indicators.py"
+      ],
+      "consumer_modules": [
+        "src/ml/panel.py",
+        "src/screen/build_universe.py",
+        "configs/ml_research.yaml"
+      ],
+      "usage_note": "Widely used by current ML research configs; derived and adjusted, not raw truth."
+    },
+    {
+      "name": "daily_facts_official_2015_2026",
+      "path": "data/derived/daily_facts_official_2015_2026.parquet",
+      "contract": "data_contracts/stock_daily_facts.yaml",
+      "grain": "one row per symbol per trade_date",
+      "source_authority": "derived from official NSE raw market data",
+      "usage_note": "Prefer this when you need official-price daily facts without relying on the adjusted naming path."
+    },
+    {
+      "name": "stock_master",
+      "path_candidates": [
+        "tmp/current_10_master/normalized/stock_master.parquet",
+        "tmp/current_master_candidates/normalized/stock_master.parquet"
+      ],
+      "contract": "data_contracts/stock_master.yaml",
+      "grain": "one row per symbol",
+      "source_authority": "official NSE quote/meta APIs plus optional approved mapping file",
+      "stability": "no single stable canonical path under data currently"
+    },
+    {
+      "name": "stock_quarterly_fundamentals",
+      "path": "data/fundamentals_full_history/normalized/stock_quarterly_fundamentals.parquet",
+      "contract": "data_contracts/stock_quarterly_fundamentals.yaml",
+      "grain": "one row per symbol, fiscal_period_end, effective_from_date",
+      "source_authority": "normalized official NSE fundamentals"
+    },
+    {
+      "name": "stock_shareholding_quarterly",
+      "path": "data/shareholding_full_history/normalized/stock_shareholding_quarterly.parquet",
+      "contract": "data_contracts/stock_shareholding_quarterly.yaml",
+      "grain": "one row per symbol, quarter_end, effective_from_date",
+      "source_authority": "normalized official NSE shareholding"
+    },
+    {
+      "name": "macro_feature_daily",
+      "path": "data/macro_full_history/normalized/macro_feature_daily.parquet",
+      "contract": null,
+      "grain": "one row per trade_date for broad market and cross-asset features",
+      "source_authority": "normalized NSE and FRED macro inputs"
+    },
+    {
+      "name": "stock_announcements",
+      "path": "data/events_full_history/normalized/stock_announcements.parquet",
+      "contract": null,
+      "grain": "one row per symbol per announcement event",
+      "source_authority": "normalized official NSE announcements"
+    },
+    {
+      "name": "stock_bulk_block_deals",
+      "path": "data/events_full_history/bulk_block/normalized/stock_bulk_block_deals.parquet",
+      "contract": null,
+      "grain": "one row per symbol, trade_date, client, side, and deal line",
+      "source_authority": "normalized official NSE bulk/block deals"
+    },
+    {
+      "name": "stock_insider_trades",
+      "path": "data/events_full_history/insider/normalized/stock_insider_trades.parquet",
+      "contract": null,
+      "grain": "one row per symbol per insider filing event",
+      "source_authority": "normalized official NSE insider/promoter transactions"
+    },
+    {
+      "name": "event_feature_daily",
+      "path": "data/events_full_history/normalized/event_feature_daily.parquet",
+      "contract": null,
+      "grain": "one row per symbol per trade_date",
+      "source_authority": "derived from announcements, insider, bulk/block, and optional derivatives OI",
+      "producer_modules": [
+        "src/transform/event_daily.py"
+      ]
+    },
+    {
+      "name": "stock_corporate_actions",
+      "path": "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet",
+      "contract": null,
+      "grain": "one row per symbol per corporate action event",
+      "source_authority": "normalized official corporate actions"
+    },
+    {
+      "name": "daily_screen_universe",
+      "path": "materialized in memory by screen builder; no single canonical file path",
+      "contract": "data_contracts/daily_screen_universe.yaml",
+      "grain": "one row per symbol per trade_date",
+      "source_authority": "latest lag-valid joins from daily facts, fundamentals, shareholding, sector flow, and derived booleans",
+      "producer_modules": [
+        "src/screen/build_universe.py"
+      ]
+    }
+  ],
+  "artifact_families": [
+    {
+      "pattern": "reports/day1_*",
+      "purpose": "1-day objective studies, live sheets, RCA, and challenger comparisons"
+    },
+    {
+      "pattern": "reports/week7_*",
+      "purpose": "7-day objective studies, backtests, live sheets, challenger comparisons, and gating runs"
+    },
+    {
+      "pattern": "reports/current_weekly_*",
+      "purpose": "Weekly decision sheets and stateful portfolio operations outputs"
+    },
+    {
+      "pattern": "reports/*_rca_*",
+      "purpose": "Root-cause analyses and miss audits"
+    },
+    {
+      "pattern": "data/ml/panels/*",
+      "purpose": "feature-panel cache keyed by objective and config fingerprint"
+    },
+    {
+      "pattern": "tmp/*",
+      "purpose": "scratch runs, smoke tests, targeted fetches, and temporary materializations"
+    },
+    {
+      "pattern": "data/portfolio_state/*",
+      "purpose": "durable state for confirmed holdings and execution history"
+    }
+  ]
+}

@@ -1,0 +1,1758 @@
+[
+  {
+    "id": "wq_a1",
+    "name": "Alpha-1: rank residual reversion",
+    "category": "wq101",
+    "description": "Cross-sectional rank of (close - open)/open over 5d, inverted = alpha-1 mean revert",
+    "formula": "rank(ts_argmax(SignedPower((returns < 0) ? stddev(returns,20) : close, 2), 5)) - 0.5",
+    "data_needed": [
+      "close",
+      "open",
+      "return_1d",
+      "realized_vol_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a3",
+    "name": "Alpha-3: -correlation(rank(open), rank(volume), 10)",
+    "category": "wq101",
+    "description": "Open-volume disagreement, mean-reverting",
+    "formula": "-1 * correlation(rank(open), rank(volume), 10)",
+    "data_needed": [
+      "open",
+      "volume"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a6",
+    "name": "Alpha-6: -correlation(open, volume, 10)",
+    "category": "wq101",
+    "description": "Raw open-volume correlation reversal",
+    "formula": "-1 * correlation(open, volume, 10)",
+    "data_needed": [
+      "open",
+      "volume"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a12",
+    "name": "Alpha-12: sign(delta(volume, 1)) * (-1 * delta(close, 1))",
+    "category": "wq101",
+    "description": "Volume-confirmed mean-reverter",
+    "formula": "sign(volume - volume.shift(1)) * -1 * (close - close.shift(1))",
+    "data_needed": [
+      "close",
+      "volume"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a23",
+    "name": "Alpha-23: high-extension reversal",
+    "category": "wq101",
+    "description": "If high > 20d high mean by 2\u03c3, expect mean revert",
+    "formula": "(sum(high,20)/20 < high) ? -1*(high - high.shift(2)) : 0",
+    "data_needed": [
+      "high"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a41",
+    "name": "Alpha-41: ((high*low)^0.5 - vwap) / vwap",
+    "category": "wq101",
+    "description": "Geometric-mean midprice vs vwap divergence",
+    "formula": "(high*low)**0.5 / vwap - 1",
+    "data_needed": [
+      "high",
+      "low",
+      "vwap"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need vwap proxy = total_value/volume"
+  },
+  {
+    "id": "wq_a54",
+    "name": "Alpha-54: (-1 * (low - close) * open^5) / ((low - high) * close^5)",
+    "category": "wq101",
+    "description": "Microstructure imbalance",
+    "formula": "-1*(low-close)*open**5 / ((low-high)*close**5)",
+    "data_needed": [
+      "open",
+      "high",
+      "low",
+      "close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "wq_a101",
+    "name": "Alpha-101: ((close - open) / ((high - low) + 0.001))",
+    "category": "wq101",
+    "description": "Intraday return normalized by range",
+    "formula": "(close - open) / (high - low + 0.001)",
+    "data_needed": [
+      "open",
+      "high",
+      "low",
+      "close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "vol_regime",
+    "name": "Realized-vol z-score (60d)",
+    "category": "volatility",
+    "description": "Stock-specific vol shock detector",
+    "formula": "(rv_20d - mean(rv_20d, 60)) / std(rv_20d, 60)",
+    "data_needed": [
+      "realized_vol_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "vol_term",
+    "name": "Vol term-structure: 20d/60d ratio",
+    "category": "volatility",
+    "description": "If 20d vol >> 60d vol, regime breaking",
+    "formula": "rv_20d / rv_60d",
+    "data_needed": [
+      "realized_vol_20d"
+    ],
+    "has_data": true,
+    "state": "DROP",
+    "lift_ic": -0.00975,
+    "lift_top5_precision": null,
+    "notes": "need rv_60d compute"
+  },
+  {
+    "id": "vol_of_vol",
+    "name": "Vol-of-vol (60d std of 20d vol)",
+    "category": "volatility",
+    "description": "Stocks with chaotic vol get penalized in stable regime",
+    "formula": "std(rv_20d, 60)",
+    "data_needed": [
+      "realized_vol_20d"
+    ],
+    "has_data": true,
+    "state": "IC_PASSED",
+    "lift_ic": -0.05937,
+    "lift_top5_precision": null,
+    "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
+  },
+  {
+    "id": "amihud",
+    "name": "Amihud illiquidity ratio (20d)",
+    "category": "microstructure",
+    "description": "|return| / dollar_volume averaged over 20d",
+    "formula": "mean(|return_1d| / (close*volume), 20)",
+    "data_needed": [
+      "return_1d",
+      "close",
+      "volume"
+    ],
+    "has_data": true,
+    "state": "IC_PASSED",
+    "lift_ic": -0.03075,
+    "lift_top5_precision": null,
+    "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
+  },
+  {
+    "id": "kyle_lambda",
+    "name": "Kyle's lambda (proxy)",
+    "category": "microstructure",
+    "description": "Price impact per unit volume",
+    "formula": "regression slope of |return_1d| on volume_change over 20d",
+    "data_needed": [
+      "return_1d",
+      "volume"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "turnover_skew",
+    "name": "20d turnover skewness",
+    "category": "microstructure",
+    "description": "Skewed turnover = informed trading",
+    "formula": "skew(volume/avg_vol_20d, 20)",
+    "data_needed": [
+      "volume",
+      "avg_vol_20d"
+    ],
+    "has_data": true,
+    "state": "IC_PASSED",
+    "lift_ic": -0.0235,
+    "lift_top5_precision": null,
+    "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
+  },
+  {
+    "id": "rs_sector",
+    "name": "Relative-strength rank within sector (20d)",
+    "category": "cross_sectional",
+    "description": "Stock's 20d return percentile within sector",
+    "formula": "rank(return_20d) over sector group",
+    "data_needed": [
+      "return_20d",
+      "sector"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "residual_momentum",
+    "name": "Sector-residual momentum (20d)",
+    "category": "cross_sectional",
+    "description": "Return - sector_return \u2014 orthogonalized momentum",
+    "formula": "return_20d - sector_20d_ret",
+    "data_needed": [
+      "return_20d",
+      "sector_20d_ret"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "breadth_thrust",
+    "name": "Sector breadth thrust",
+    "category": "cross_sectional",
+    "description": "% of sector members above 20-DMA",
+    "formula": "mean(close > sma_20) over sector group",
+    "data_needed": [
+      "close",
+      "sma_20",
+      "sector"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "month_end",
+    "name": "Month-end effect dummy",
+    "category": "calendar",
+    "description": "Last 3 trading days of month often see retail flow",
+    "formula": "trade_date.day >= last_3_business_days_of_month",
+    "data_needed": [
+      "trade_date"
+    ],
+    "has_data": true,
+    "state": "EVALUATED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "expiry_week",
+    "name": "Monthly F&O expiry week dummy",
+    "category": "calendar",
+    "description": "Last week of month sees position-squaring",
+    "formula": "is_last_thursday_or_within_4d_of_it",
+    "data_needed": [
+      "trade_date"
+    ],
+    "has_data": true,
+    "state": "EVALUATED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "results_week",
+    "name": "Earnings-results-week proximity",
+    "category": "calendar",
+    "description": "Days until next quarterly result announcement",
+    "formula": "min(announcement_date - today) within 30d",
+    "data_needed": [
+      "ann_30d_count"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "fii_dii_flow_5d",
+    "name": "FII+DII net flow 5d cumulative",
+    "category": "macro_flow",
+    "description": "Daily net buy-sell from NSE FIIDII bulletin",
+    "formula": "sum(fii_net + dii_net) over 5d",
+    "data_needed": [
+      "fii_net_inr",
+      "dii_net_inr"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need fetch_fii_dii.py \u2014 pulls https://www.nseindia.com/api/fiidiiTradeReact"
+  },
+  {
+    "id": "usdinr_5d",
+    "name": "USDINR change 5d",
+    "category": "macro_flow",
+    "description": "Currency pressure on IT/Pharma exporters and importers",
+    "formula": "(usdinr_today - usdinr_5d_ago) / usdinr_5d_ago",
+    "data_needed": [
+      "usdinr_close"
+    ],
+    "has_data": false,
+    "state": "EVALUATED",
+    "lift_ic": -0.01163,
+    "lift_top5_precision": null,
+    "notes": "need fetch_forex.py \u2014 RBI reference rates or yfinance INR=X"
+  },
+  {
+    "id": "brent_5d",
+    "name": "Brent crude 5d return",
+    "category": "macro_flow",
+    "description": "Oil price = direct India CPI driver, sectorally OMC/Aviation/Refineries",
+    "formula": "(brent_today - brent_5d_ago) / brent_5d_ago",
+    "data_needed": [
+      "brent_close"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "yfinance BZ=F or RBI commodity"
+  },
+  {
+    "id": "gsec_10y",
+    "name": "10y G-sec yield change 5d",
+    "category": "macro_flow",
+    "description": "Risk-free rate + bank NIMs",
+    "formula": "(yield_10y - yield_10y_5d_ago)",
+    "data_needed": [
+      "india_10y_yield"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "RBI weekly bulletin or CCIL"
+  },
+  {
+    "id": "india_vix",
+    "name": "India VIX level + 5d change",
+    "category": "macro_flow",
+    "description": "Risk-off detector",
+    "formula": "vix_today + (vix - vix_5d_ago) / vix",
+    "data_needed": [
+      "india_vix"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "NSE VIX endpoint, need fetch_vix.py"
+  },
+  {
+    "id": "nifty_pe_z",
+    "name": "NIFTY 50 PE z-score (1y)",
+    "category": "macro_flow",
+    "description": "Index-level valuation regime",
+    "formula": "(nifty_pe - mean(nifty_pe, 252)) / std(nifty_pe, 252)",
+    "data_needed": [
+      "nifty_pe"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "NSE indices PE history"
+  },
+  {
+    "id": "google_trends",
+    "name": "Google Trends per-symbol search volume",
+    "category": "alt_text",
+    "description": "Retail interest leading indicator",
+    "formula": "google_trends_score(symbol, last 7d)",
+    "data_needed": [
+      "google_trends_7d"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need fetch_google_trends.py \u2014 pytrends library, but throttles hard"
+  },
+  {
+    "id": "wiki_pageviews",
+    "name": "Wikipedia daily page-view ratio",
+    "category": "alt_text",
+    "description": "Retail attention proxy (works for famous names)",
+    "formula": "wiki_views_today / mean(wiki_views, 30)",
+    "data_needed": [
+      "wiki_pageviews_7d"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need fetch_wiki.py \u2014 Wikimedia REST API, free, fast"
+  },
+  {
+    "id": "news_velocity",
+    "name": "News count acceleration",
+    "category": "alt_text",
+    "description": "News count rising = breakout candidate",
+    "formula": "news_count_3d / news_count_30d_avg",
+    "data_needed": [
+      "news_count_5d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "sentiment_dispersion",
+    "name": "News sentiment dispersion (std)",
+    "category": "alt_text",
+    "description": "Disagreement = volatility ahead",
+    "formula": "std(news_sentiment_per_article) over 5d",
+    "data_needed": [
+      "news_sentiment_5d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need per-article sentiment retained"
+  },
+  {
+    "id": "pcr_change",
+    "name": "PCR (put-call ratio) 5d change",
+    "category": "derivatives",
+    "description": "Sentiment from options market",
+    "formula": "(pcr_oi_today - pcr_oi_5d_ago)",
+    "data_needed": [
+      "pcr_oi"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "BLOCKED \u2014 NSE option-chain endpoint blocks our IP"
+  },
+  {
+    "id": "iv_skew_change",
+    "name": "Vol skew steepening",
+    "category": "derivatives",
+    "description": "Put IV rising vs call IV = bearish positioning",
+    "formula": "iv_25d_put - iv_25d_call",
+    "data_needed": [
+      "iv_skew"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "BLOCKED \u2014 needs option-chain"
+  },
+  {
+    "id": "max_pain_dist",
+    "name": "Distance to max-pain strike",
+    "category": "derivatives",
+    "description": "Spot tends to gravitate toward max-pain at expiry",
+    "formula": "(close - max_pain) / close",
+    "data_needed": [
+      "max_pain"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "BLOCKED \u2014 needs option-chain"
+  },
+  {
+    "id": "oi_buildup",
+    "name": "Futures OI build-up direction",
+    "category": "derivatives",
+    "description": "Long buildup vs short buildup",
+    "formula": "delta_OI * sign(price_change)",
+    "data_needed": [
+      "futures_oi"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need fetch_futures_oi.py \u2014 NSE F&O OI history"
+  },
+  {
+    "id": "earnings_surprise",
+    "name": "PAT QoQ vs consensus",
+    "category": "fundamental",
+    "description": "Beat/miss vs analyst consensus",
+    "formula": "actual_pat / consensus_pat - 1",
+    "data_needed": [
+      "consensus_pat"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need analyst consensus \u2014 Trendlyne / Bloomberg"
+  },
+  {
+    "id": "promoter_pledge",
+    "name": "Promoter pledge change 60d",
+    "category": "fundamental",
+    "description": "Pledge release = promoters confident; pledge increase = bad",
+    "formula": "pledged_pct - pledged_pct_60d_ago",
+    "data_needed": [
+      "promoter_pledge_pct"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "need fetch_pledge.py \u2014 NSE promoter shareholding pattern"
+  },
+  {
+    "id": "promoter_holding_chg",
+    "name": "Promoter holding QoQ change",
+    "category": "fundamental",
+    "description": "Promoter buying = strong signal",
+    "formula": "promoter_holding - promoter_holding_q-1",
+    "data_needed": [
+      "promoter_holding_pct"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "quarterly NSE shareholding pattern"
+  },
+  {
+    "id": "rating_change",
+    "name": "Credit-rating action 90d",
+    "category": "fundamental",
+    "description": "Upgrade/downgrade = catalyst",
+    "formula": "rating_action_dummy",
+    "data_needed": [
+      "credit_rating_action"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": "CRISIL/ICRA/CARE feeds"
+  },
+  {
+    "id": "anchor_52w_high",
+    "name": "52w-high anchoring",
+    "category": "behavioral",
+    "description": "Stocks within 5% of 52w-high overreact on bad news (anchoring + loss aversion)",
+    "formula": "(close >= 0.95*week52_high) * news_sentiment_5d_negative",
+    "data_needed": [
+      "week52_high",
+      "news_sentiment_5d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "post_earnings_drift",
+    "name": "Post-earnings announcement drift (PEAD)",
+    "category": "behavioral",
+    "description": "Stocks beating estimates drift up for 60-90 days (slow-information processing)",
+    "formula": "(qoq_pat_growth > 25) * days_since_results <= 60",
+    "data_needed": [
+      "qoq_pat_growth",
+      "ann_result_5d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "round_number_bias",
+    "name": "Round-number resistance",
+    "category": "behavioral",
+    "description": "Stocks pause at psychological levels (\u20b9100, \u20b9500, \u20b91000); breakout = momentum",
+    "formula": "abs(close - round(close, -2)) / close < 0.01 * 5d_above_level",
+    "data_needed": [
+      "close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "herding_volume_spike",
+    "name": "Retail herding via volume spike",
+    "category": "behavioral",
+    "description": "Volume > 5\u00d7 ADV with low delivery% = retail crowd trade, mean reverts",
+    "formula": "(volume_vs_20d > 5) * (delivery_pct < 25) * -1",
+    "data_needed": [
+      "volume_vs_20d",
+      "delivery_pct"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "overnight_overreaction",
+    "name": "Overnight gap mean reversion",
+    "category": "behavioral",
+    "description": "Open >> previous close = retail FOMO; reverts intraday",
+    "formula": "(open / prev_close - 1) > 0.05",
+    "data_needed": [
+      "open",
+      "prev_close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "high_low_range_pct",
+    "name": "Intraday range expansion",
+    "category": "microstructure",
+    "description": "(high - low) / close >> 20d avg = volatility regime shift",
+    "formula": "(high-low)/close vs rolling(20).mean()",
+    "data_needed": [
+      "high",
+      "low",
+      "close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "delivery_pct_z",
+    "name": "Delivery % anomaly z-score",
+    "category": "microstructure",
+    "description": "High delivery% spike = institutional accumulation (vs intraday churn)",
+    "formula": "(delivery_pct - rolling_mean_60d) / rolling_std_60d",
+    "data_needed": [
+      "delivery_pct"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "vwap_deviation",
+    "name": "Close vs VWAP residual",
+    "category": "microstructure",
+    "description": "Closing far from VWAP = end-of-day directional pressure",
+    "formula": "(close - vwap) / vwap",
+    "data_needed": [
+      "close",
+      "total_traded_value",
+      "total_traded_qty"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "sector_dispersion",
+    "name": "Within-sector return dispersion",
+    "category": "network",
+    "description": "When sector dispersion is low, leaders mean-revert; when high, momentum sustains",
+    "formula": "std(member returns_5d) within sector",
+    "data_needed": [
+      "sector",
+      "return_1d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "sector_leader_lag",
+    "name": "Sector leader-lagger spread",
+    "category": "network",
+    "description": "Top sector leaders' moves predict laggers within 3-5 days",
+    "formula": "shift(top_quartile_in_sector_5d_ret, 3)",
+    "data_needed": [
+      "sector",
+      "return_5d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "index_inclusion_anticipation",
+    "name": "Index-inclusion candidate run-up",
+    "category": "network",
+    "description": "Stocks ranked just outside NIFTY 50/500 cutoff often rally pre-rebalance",
+    "formula": "rank by mcap, within rank 50-70 of NIFTY 500 universe",
+    "data_needed": [
+      "mcap_rank"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "monthly_expiry_pin",
+    "name": "Expiry-day pin to max-pain",
+    "category": "calendar",
+    "description": "On monthly expiry, spot gravitates to max-pain strike",
+    "formula": "is_expiry_day * sign(close - max_pain)",
+    "data_needed": [
+      "max_pain",
+      "trade_date"
+    ],
+    "has_data": false,
+    "notes": "needs option chain",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "post_results_revision",
+    "name": "Analyst revision post-results window",
+    "category": "calendar",
+    "description": "30 days after Q-results, analyst consensus drifts toward actuals",
+    "formula": "consensus_drift_post_results",
+    "data_needed": [
+      "consensus_pat",
+      "ann_result_5d"
+    ],
+    "has_data": false,
+    "notes": "paid consensus data",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "fy_end_window_dressing",
+    "name": "March-end window dressing",
+    "category": "calendar",
+    "description": "Mid/small caps held by funds rally last week of March (window dressing)",
+    "formula": "(month==3) * (date_within_last_5_business_days)",
+    "data_needed": [
+      "trade_date"
+    ],
+    "has_data": true,
+    "state": "EVALUATED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "monsoon_agri_seasonal",
+    "name": "Monsoon seasonality (June-Sep)",
+    "category": "calendar",
+    "description": "Agri-rural names rally pre-monsoon, fade if rainfall disappoints",
+    "formula": "rolling(monsoon_progress) * is_agri_sector",
+    "data_needed": [
+      "sector",
+      "monsoon_data"
+    ],
+    "has_data": false,
+    "notes": "IMD daily monsoon API",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "usdinr_it_pharma_lift",
+    "name": "Weak INR \u2192 IT/Pharma lift (5d)",
+    "category": "macro_conditional",
+    "description": "USDINR rising 1% in 5d \u2192 IT/Pharma names with USD revenue rally",
+    "formula": "usdinr_5d_chg * (sector in ['NIFTY IT', 'NIFTY PHARMA'])",
+    "data_needed": [
+      "usdinr",
+      "sector"
+    ],
+    "has_data": true,
+    "state": "EVALUATED",
+    "lift_ic": -0.01163,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "oil_omc_inverse",
+    "name": "Oil rising \u2192 OMC margin compression",
+    "category": "macro_conditional",
+    "description": "Brent up 5%+ \u2192 BPCL/HPCL/IOC margin pressure",
+    "formula": "brent_5d_chg * is_omc_name",
+    "data_needed": [
+      "brent_close",
+      "sector"
+    ],
+    "has_data": false,
+    "notes": "needs Brent fetcher",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "yield_rise_bank_lift",
+    "name": "10y yield rise \u2192 Bank NIM lift",
+    "category": "macro_conditional",
+    "description": "Yield rising \u2192 bank NIMs improve; banks rally",
+    "formula": "yield_5d_chg * is_bank_name",
+    "data_needed": [
+      "india_10y_yield",
+      "sector"
+    ],
+    "has_data": false,
+    "notes": "RBI bulletin",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "vix_spike_defensive_lift",
+    "name": "VIX spike \u2192 defensive sector lift",
+    "category": "macro_conditional",
+    "description": "INDIA VIX up 20%+ in 3d \u2192 FMCG/Pharma outperform; high-beta lag",
+    "formula": "vix_3d_chg * sector_beta_proxy",
+    "data_needed": [
+      "india_vix",
+      "sector"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "earnings_acceleration",
+    "name": "QoQ growth acceleration",
+    "category": "fundamental",
+    "description": "QoQ growth this Q > QoQ growth last Q = acceleration; predicts 30-day strength",
+    "formula": "qoq_pat_growth - qoq_pat_growth_prev_q",
+    "data_needed": [
+      "qoq_pat_growth"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "margin_expansion",
+    "name": "Operating margin expansion",
+    "category": "fundamental",
+    "description": "PAT growth > Revenue growth = margin lift, predicts re-rating",
+    "formula": "qoq_pat_growth - qoq_revenue_growth",
+    "data_needed": [
+      "qoq_pat_growth",
+      "qoq_revenue_growth"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "fast_pe_compression",
+    "name": "Fast PE compression (3 quarters)",
+    "category": "fundamental",
+    "description": "Falling PE despite stable earnings = price-driven discount, mean revert",
+    "formula": "(pe - pe_3q_ago) / pe_3q_ago",
+    "data_needed": [
+      "pe"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "low_pe_high_growth",
+    "name": "Low PE \u00d7 High growth (PEG proxy)",
+    "category": "fundamental",
+    "description": "PE/sector_PE < 0.7 AND QoQ growth > 20% = undervalued grower",
+    "formula": "(pe/sector_pe < 0.7) * (qoq_pat_growth > 20)",
+    "data_needed": [
+      "pe",
+      "sector_pe",
+      "qoq_pat_growth"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "promoter_pledge_release",
+    "name": "Promoter pledge release",
+    "category": "ownership",
+    "description": "Pledge % falling 5%+ QoQ = promoter regaining control; strong positive",
+    "formula": "promoter_pledge_pct - promoter_pledge_pct_prev_q",
+    "data_needed": [
+      "promoter_pledge_pct"
+    ],
+    "has_data": false,
+    "notes": "needs fetch_promoter_pledge.py \u2014 NSE shareholding pattern",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "promoter_buyback_announce",
+    "name": "Buyback announcement window",
+    "category": "ownership",
+    "description": "Days within 60 of buyback announcement = buying pressure",
+    "formula": "days_since_buyback < 60",
+    "data_needed": [
+      "ann_buyback_30d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "sast_5pct_acquisition",
+    "name": "SAST 5%+ acquisition disclosure",
+    "category": "ownership",
+    "description": "5%+ stake change reported via SAST = institutional accumulation",
+    "formula": "sast_disclosure_30d_count",
+    "data_needed": [
+      "sast_disclosures"
+    ],
+    "has_data": false,
+    "notes": "needs fetch_sast.py \u2014 NSE corporate-actions",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "mf_inclusion_velocity",
+    "name": "MF holdings increase QoQ",
+    "category": "ownership",
+    "description": "Top 10 MFs adding the same name = institutional conviction",
+    "formula": "n_mfs_holding_qoq_change",
+    "data_needed": [
+      "mf_holdings"
+    ],
+    "has_data": false,
+    "notes": "needs fetch_amfi_mf_portfolios.py \u2014 AMFI monthly",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "fno_ban_squeeze",
+    "name": "F&O ban list squeeze",
+    "category": "alt_market",
+    "description": "Stocks in F&O ban (95% MWPL hit) often see short-squeeze rallies",
+    "formula": "is_in_fno_ban_list",
+    "data_needed": [
+      "fno_ban_list"
+    ],
+    "has_data": false,
+    "notes": "needs fetch_fno_ban.py \u2014 NSE daily bulletin",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "circuit_to_circuit",
+    "name": "Upper-circuit to upper-circuit streak",
+    "category": "alt_market",
+    "description": "3+ consecutive UC days = retail momentum; reverts after streak ends",
+    "formula": "consecutive_UC_days",
+    "data_needed": [
+      "high",
+      "prev_close"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "auditor_resignation_flag",
+    "name": "Auditor resignation/qualified opinion",
+    "category": "alt_market",
+    "description": "Auditor exits or qualifies = quality red flag, leads -10% moves",
+    "formula": "auditor_change_60d",
+    "data_needed": [
+      "auditor_changes"
+    ],
+    "has_data": false,
+    "notes": "needs fetch_corporate_governance.py \u2014 BSE/NSE",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "credit_rating_action",
+    "name": "CRISIL/ICRA/CARE rating action",
+    "category": "alt_market",
+    "description": "Upgrade = +ve catalyst, downgrade = -ve catalyst, 30-day window",
+    "formula": "rating_change_30d",
+    "data_needed": [
+      "credit_rating_action"
+    ],
+    "has_data": false,
+    "notes": "CRISIL/ICRA RSS feeds",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "naukri_hiring_surge",
+    "name": "Naukri job-posting surge",
+    "category": "alt_market",
+    "description": "30%+ jump in job postings (Naukri) = expansion mode",
+    "formula": "naukri_postings_30d_z",
+    "data_needed": [
+      "naukri_postings"
+    ],
+    "has_data": false,
+    "notes": "Naukri scrape per company",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "app_store_rank",
+    "name": "App Store / Play Store rank",
+    "category": "alt_market",
+    "description": "For D2C/fintech: app rank improvement \u2192 revenue growth proxy",
+    "formula": "app_rank_30d_change",
+    "data_needed": [
+      "app_store_rank"
+    ],
+    "has_data": false,
+    "notes": "App Annie / Sensor Tower (paid) or scrape",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "google_trends_z",
+    "name": "Google Trends search z-score",
+    "category": "alt_market",
+    "description": "Search volume z-score per company name (retail attention)",
+    "formula": "(search_today - mean_30d) / std_30d",
+    "data_needed": [
+      "google_trends_7d"
+    ],
+    "has_data": false,
+    "notes": "pytrends \u2014 heavy throttle",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "rsi_x_volume",
+    "name": "RSI \u00d7 Volume confirmation",
+    "category": "interaction",
+    "description": "RSI > 70 with volume > 2\u00d7 ADV = momentum confirmed (not exhaustion)",
+    "formula": "(rsi_14_daily > 70) * (volume_vs_20d > 2)",
+    "data_needed": [
+      "rsi_14_daily",
+      "volume_vs_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "low_vol_breakout",
+    "name": "Low-vol regime breakout",
+    "category": "interaction",
+    "description": "Stock breaking 20-day high after compressed-vol regime = high R:R",
+    "formula": "(close > rolling_max_20) * (realized_vol_20d < rolling_quantile(0.3))",
+    "data_needed": [
+      "close",
+      "realized_vol_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "fii_dii_divergence",
+    "name": "FII selling \u00d7 DII buying divergence",
+    "category": "interaction",
+    "description": "When FII sells but DII buys, stocks DII favors outperform 7d",
+    "formula": "(fii_net_5d < 0) * (dii_net_5d > 0)",
+    "data_needed": [
+      "fii_net_inr",
+      "dii_net_inr"
+    ],
+    "has_data": false,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_brent_5d",
+    "name": "Brent crude 5d return",
+    "category": "commodity_macro",
+    "description": "Brent up 3%+ in 5d \u2192 OMC margin pain, aviation/paint cost shock, CPI risk",
+    "formula": "brent.pct_change(5)",
+    "data_needed": [
+      "brent"
+    ],
+    "has_data": true,
+    "notes": "fetched via fetch_commodity_prices.py",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "macro_brent_60d_regime",
+    "name": "Brent 60d regime",
+    "category": "commodity_macro",
+    "description": "Brent +20% over 60d = inflation + INR pressure (large-cap pharma/IT lift)",
+    "formula": "brent.pct_change(60)",
+    "data_needed": [
+      "brent"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_gold_5d",
+    "name": "Gold 5d return (safe-haven flow)",
+    "category": "commodity_macro",
+    "description": "Gold rising while equities flat = risk-off rotation; defensive lift",
+    "formula": "gold.pct_change(5)",
+    "data_needed": [
+      "gold"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_copper_60d",
+    "name": "Dr. Copper \u2014 60d global growth signal",
+    "category": "commodity_macro",
+    "description": "Copper rising 60d = global capex cycle; metals + capital goods lift in India",
+    "formula": "copper.pct_change(60)",
+    "data_needed": [
+      "copper"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_gold_brent_ratio",
+    "name": "Gold/Brent ratio (risk regime)",
+    "category": "commodity_macro",
+    "description": "Gold/Brent rising = global risk-off (oil weak, gold strong)",
+    "formula": "gold / brent",
+    "data_needed": [
+      "gold",
+      "brent"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_natgas_5d",
+    "name": "Natural gas 5d (city-gas margin signal)",
+    "category": "commodity_macro",
+    "description": "Henry Hub up 10%+ in 5d \u2192 IGL/MGL/GAIL margin compression",
+    "formula": "natgas.pct_change(5)",
+    "data_needed": [
+      "natgas"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_zinc_aluminum",
+    "name": "Zinc + Aluminum 60d (Hindalco/Vedanta direct)",
+    "category": "commodity_macro",
+    "description": "Base-metals 60d return drives metals-sector earnings",
+    "formula": "(zinc.pct_change(60) + aluminum.pct_change(60)) / 2",
+    "data_needed": [
+      "zinc",
+      "aluminum"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_agri_basket",
+    "name": "Agri commodity basket (wheat+corn+sugar)",
+    "category": "commodity_macro",
+    "description": "Agri up = rural inflation; HUL/ITC/Marico margin pressure but rural-discretionary lifts",
+    "formula": "(wheat.pct_change(60) + corn.pct_change(60) + sugar.pct_change(60)) / 3",
+    "data_needed": [
+      "wheat",
+      "corn",
+      "sugar"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_us10y_5d_chg",
+    "name": "US 10y yield 5d change",
+    "category": "global_rates_macro",
+    "description": "US 10y +20bp in 5d \u2192 FII outflow risk, EM equities sell off",
+    "formula": "us_10y.diff(5)",
+    "data_needed": [
+      "us_10y"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_dxy_5d",
+    "name": "DXY 5d return (INR pressure)",
+    "category": "global_rates_macro",
+    "description": "DXY up 2%+ in 5d historically \u2192 -3% NIFTY 7d ahead",
+    "formula": "dxy.pct_change(5)",
+    "data_needed": [
+      "dxy"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_us_vix_z",
+    "name": "US VIX z-score 60d",
+    "category": "global_rates_macro",
+    "description": "VIX z > 2 \u2192 high-beta India underperforms 5-10d ahead",
+    "formula": "(us_vix - mean(us_vix, 60)) / std(us_vix, 60)",
+    "data_needed": [
+      "us_vix"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_spx_60d",
+    "name": "S&P 500 60d return (global risk appetite)",
+    "category": "global_rates_macro",
+    "description": "SPX +5%+ over 60d = global risk-on; small/mid caps in India also rally",
+    "formula": "spx.pct_change(60)",
+    "data_needed": [
+      "spx"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_eem_relative_spx",
+    "name": "EEM vs SPX 5d relative",
+    "category": "global_rates_macro",
+    "description": "EEM > SPX = EM rotation in (positive for India), opposite = out",
+    "formula": "eem.pct_change(5) - spx.pct_change(5)",
+    "data_needed": [
+      "eem",
+      "spx"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_china_proxy",
+    "name": "Hang Seng 60d (China proxy)",
+    "category": "global_rates_macro",
+    "description": "HSI up = China stimulus working; Indian metal/textile/chem importers feel pinch",
+    "formula": "hsi.pct_change(60)",
+    "data_needed": [
+      "hsi"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_jpy_carry_unwind",
+    "name": "JPY strength (carry-unwind risk)",
+    "category": "global_rates_macro",
+    "description": "USDJPY -2%+ in 5d = carry-trade unwind, global risk cascade",
+    "formula": "-1 * usdjpy.pct_change(5)",
+    "data_needed": [
+      "usdjpy"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_btc_proxy",
+    "name": "Bitcoin 30d return (liquidity proxy)",
+    "category": "global_rates_macro",
+    "description": "BTC +20% over 30d = liquidity flush, global risk-on",
+    "formula": "btc.pct_change(30)",
+    "data_needed": [
+      "btc"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_inr_5d",
+    "name": "USDINR 5d move (INR weakness)",
+    "category": "global_rates_macro",
+    "description": "INR weakening 1%+ in 5d \u2192 IT/Pharma USD-revenue lift",
+    "formula": "usdinr.pct_change(5)",
+    "data_needed": [
+      "usdinr"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_brent_inr_pain",
+    "name": "Brent \u00d7 INR (importer pain index)",
+    "category": "commodity_macro",
+    "description": "(brent \u00d7 usdinr) up 5%+ in 20d = double-whammy on margins",
+    "formula": "(brent * usdinr).pct_change(20)",
+    "data_needed": [
+      "brent",
+      "usdinr"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_mf_equity_yoy",
+    "name": "MF equity AUM YoY %",
+    "category": "mf_flow_macro",
+    "description": "Equity AUM growing 25%+ YoY = strong domestic flow (cushion in selloffs)",
+    "formula": "equity_aum_cr / equity_aum_cr.shift(252) - 1",
+    "data_needed": [
+      "equity_aum_cr"
+    ],
+    "has_data": true,
+    "notes": "monthly data ffill'd to daily",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "macro_sip_yoy",
+    "name": "SIP inflow YoY %",
+    "category": "mf_flow_macro",
+    "description": "SIP YoY > 20% = sticky retail money; market drawdowns absorbed",
+    "formula": "sip_inflow_cr / sip_inflow_cr.shift(252) - 1",
+    "data_needed": [
+      "sip_inflow_cr"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_mf_equity_share",
+    "name": "MF equity share of total AUM",
+    "category": "mf_flow_macro",
+    "description": "Equity share rising = re-allocation from debt; multibagger fuel",
+    "formula": "equity_aum_cr / total_aum_cr",
+    "data_needed": [
+      "equity_aum_cr",
+      "total_aum_cr"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_breadth_50_5d_chg",
+    "name": "NSE breadth_50 5d change",
+    "category": "market_breadth_macro",
+    "description": "Breadth widening 5%+ in 5d = follow-through; multibagger basket window",
+    "formula": "breadth_50.diff(5)",
+    "data_needed": [
+      "breadth_50"
+    ],
+    "has_data": true,
+    "notes": "from market_breadth_panel",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "macro_breadth_dispersion_z",
+    "name": "Cross-section dispersion z-score",
+    "category": "market_breadth_macro",
+    "description": "Dispersion z > 1.5 = stock-pickers' market; multibagger names emerge",
+    "formula": "(dispersion_20d - mean(dispersion_20d, 60)) / std(...)",
+    "data_needed": [
+      "cross_section_dispersion_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_new_high_low_diff",
+    "name": "New 52w highs minus lows",
+    "category": "market_breadth_macro",
+    "description": "Net new highs \u2265 +20 = momentum environment; breakouts work",
+    "formula": "new_52w_highs - new_52w_lows",
+    "data_needed": [
+      "new_52w_highs",
+      "new_52w_lows"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_smid_lcap_rotation",
+    "name": "Small/mid-cap vs large-cap breadth diff",
+    "category": "market_breadth_macro",
+    "description": "Smid breadth > lcap breadth by 10pp = small-cap rally regime",
+    "formula": "breadth_50_smid - breadth_50_lcap",
+    "data_needed": [
+      "breadth_50_smid",
+      "breadth_50_lcap"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_sector_rs_top_q",
+    "name": "Top-quartile sector RS_60d",
+    "category": "sector_rotation_macro",
+    "description": "Stocks belonging to top-RS sectors outperform; sector tailwind effect",
+    "formula": "rank within sector_rs_60d, top quartile dummy",
+    "data_needed": [
+      "sector_rs_60d"
+    ],
+    "has_data": true,
+    "notes": "join to industry_panel",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "macro_sector_breadth_lift",
+    "name": "Sector breadth 5d-rising",
+    "category": "sector_rotation_macro",
+    "description": "Sector breadth rising 10pp+ in 5d = sector momentum entering",
+    "formula": "sector_breadth_50.diff(5) per sector",
+    "data_needed": [
+      "sector_breadth_50"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_sector_dispersion",
+    "name": "Within-sector dispersion (low = leader-driven)",
+    "category": "sector_rotation_macro",
+    "description": "Low sector dispersion = leaders carry sector; high = stockpicker",
+    "formula": "sector_dispersion_20d",
+    "data_needed": [
+      "sector_dispersion_20d"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_sentiment_avg",
+    "name": "Macro news sentiment composite",
+    "category": "macro_sentiment",
+    "description": "Avg sentiment across rbi/economy/fii/oil/fed/geopolitics topics; risk-on proxy",
+    "formula": "mean(sentiment_7d) across all macro topics",
+    "data_needed": [
+      "macro_sent_avg"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_sent_recession_risk",
+    "name": "Recession-risk topic sentiment",
+    "category": "macro_sentiment",
+    "description": "Negative recession-risk sentiment = upcoming sell pressure",
+    "formula": "macro_sent__recession_risk",
+    "data_needed": [
+      "macro_sent__recession_risk"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_sent_rbi_dovish",
+    "name": "RBI policy sentiment (dovish dummy)",
+    "category": "macro_sentiment",
+    "description": "Positive RBI sentiment = rate cut expected; banks/NBFCs lift",
+    "formula": "macro_sent__rbi_policy",
+    "data_needed": [
+      "macro_sent__rbi_policy"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_risk_off_composite",
+    "name": "Risk-off composite (DXY+VIX+gold up)",
+    "category": "behavioral_macro",
+    "description": "DXY 5d > 0 AND VIX z > 1 AND gold 5d > 0 = full risk-off triple",
+    "formula": "(dxy_5d>0)*(us_vix_z_60d>1)*(gold_5d_pct>0)",
+    "data_needed": [
+      "dxy",
+      "us_vix",
+      "gold"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_risk_on_composite",
+    "name": "Risk-on composite (SPX+EEM+breadth)",
+    "category": "behavioral_macro",
+    "description": "SPX 60d > 5% AND EEM > SPX AND NSE breadth_50 > 60% = full risk-on",
+    "formula": "(spx_60d>0.05)*(eem_rs_to_spx>0)*(breadth_50>0.60)",
+    "data_needed": [
+      "spx",
+      "eem",
+      "breadth_50"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_regime_gate_v1_dummy",
+    "name": "Regime Gate v1 dummy (deploy day flag)",
+    "category": "behavioral_macro",
+    "description": "Encodes the validated gate: market_20d \u2264 -2% AND breadth_50 \u2208 [50,75]",
+    "formula": "(market_20d_sum <= -0.02) * (breadth_50 in [0.5, 0.75])",
+    "data_needed": [
+      "market_20d_sum",
+      "breadth_50"
+    ],
+    "has_data": true,
+    "notes": "tests whether the gate itself works as a feature in the model",
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null
+  },
+  {
+    "id": "macro_oil_to_omc_lead",
+    "name": "Oil 5d \u2192 OMC lag (sector inverse)",
+    "category": "cross_asset_macro",
+    "description": "Brent up 5%+ \u2192 BPCL/HPCL/IOC underperform 3-5d later",
+    "formula": "brent_5d_pct (interacted with is_omc dummy)",
+    "data_needed": [
+      "brent"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_yield_to_bank_lead",
+    "name": "10y yield \u2192 bank lift lag",
+    "category": "cross_asset_macro",
+    "description": "US 10y +30bp \u2192 India banks NIM expansion thesis (5-10d lift)",
+    "formula": "us_10y_5d_chg (interacted with is_bank dummy)",
+    "data_needed": [
+      "us_10y"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_inr_to_it_pharma",
+    "name": "INR weakness \u2192 IT/Pharma lift",
+    "category": "cross_asset_macro",
+    "description": "INR -1%+ in 5d \u2192 IT/Pharma export-heavy names lift 3-7d",
+    "formula": "usdinr.pct_change(5) (interacted with is_it_pharma dummy)",
+    "data_needed": [
+      "usdinr"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  },
+  {
+    "id": "macro_copper_to_capital_goods",
+    "name": "Copper 60d \u2192 capital goods lift",
+    "category": "cross_asset_macro",
+    "description": "Copper +10% in 60d \u2192 L&T/Siemens/ABB get re-rated upward 30d ahead",
+    "formula": "copper.pct_change(60) (interacted with is_capital_goods)",
+    "data_needed": [
+      "copper"
+    ],
+    "has_data": true,
+    "state": "PROPOSED",
+    "lift_ic": null,
+    "lift_top5_precision": null,
+    "notes": ""
+  }
+]

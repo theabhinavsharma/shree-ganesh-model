@@ -1,0 +1,31 @@
+{
+  "status": "ok",
+  "as_of_date": "2026-04-08",
+  "ranking_basis_trade_date": "2026-04-07",
+  "selected_universe": "mid_small",
+  "selected_universe_summary": {
+    "horizon_name": "week_7",
+    "universe_name": "mid_small",
+    "row_count": 107399,
+    "base_rate_5pct": 0.16150057263103,
+    "top_quantile_precision_5pct": 0.2196221343909602,
+    "top_quantile_return": 0.0098382048613739,
+    "top_n_precision_5pct": 0.2246433203631647,
+    "top_n_return": 0.008554686733334,
+    "selected_row_count": 11100,
+    "selected_hit_count": 2444,
+    "selected_precision_pooled": 0.2201801801801801,
+    "selected_precision_ci_low": 0.212569158851385,
+    "selected_precision_ci_high": 0.2279848131197027,
+    "selected_precision_p_value": 1.6682206044644596e-58,
+    "sort_primary": 0.2196221343909602,
+    "sort_secondary": 0.0098382048613739,
+    "sort_tertiary": -1.6682206044644596e-58
+  },
+  "focus_panel_path": "data/ml/panels/week_7_5cee10c9a1b3/feature_panel.parquet",
+  "calibration_path": "data/ml/expert_runs/20260408T090057Z/week_7_calibration.csv",
+  "decision_sheet_path": "reports/current_weekly_decision_20260408/weekly_position_decision_sheet_20260408.csv",
+  "shortlist_count": 12,
+  "quote_symbol_count": 24,
+  "current_positions_count": 12
+}

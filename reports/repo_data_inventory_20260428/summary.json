@@ -1,0 +1,25 @@
+{
+  "artifact": "repo_data_inventory",
+  "as_of_date": "2026-04-28",
+  "repo_root": "/Users/abhinavs./Documents/Zoom",
+  "scope": "Folder-level and dataset-level inventory for machine consumption",
+  "folder_catalog_count": 28,
+  "canonical_dataset_count": 12,
+  "artifact_family_count": 7,
+  "authoritative_market_data_root": "data/raw/nse_full_history_official",
+  "non_authoritative_zones": [
+    "tmp",
+    "reports",
+    "data/ml/panels",
+    "data/ml/expert_runs",
+    "data/ml/runs"
+  ],
+  "known_gaps": [
+    "stock_master does not currently have a single stable canonical path under data/; live materializations are in tmp/ folders.",
+    "sector_state_daily.parquet is not currently present as a canonical on-disk table.",
+    "sector_flow_fortnightly published_date timing is unresolved, so historical daily joins should remain disabled or blocked.",
+    "fundamentals debt, cash, CFO, FCF, ROE, and ROCE fields remain partially unavailable from the mapped NSE payload.",
+    "Adjusted daily facts are widely used by current ML configs, but they are derived internal tables, not raw truth."
+  ],
+  "recommended_machine_entrypoint": "/Users/abhinavs./Documents/Zoom/reports/repo_data_inventory_20260428/repo_data_inventory.json"
+}

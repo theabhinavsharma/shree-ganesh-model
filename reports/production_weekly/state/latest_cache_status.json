@@ -1,0 +1,64 @@
+{
+  "mode": "cache",
+  "ok": true,
+  "run_timestamp": "2026-04-27T12:45:00+05:30",
+  "refresh_steps": [
+    {
+      "name": "corporate_actions",
+      "success": true,
+      "message": "merged corporate actions cache",
+      "details": {
+        "rows": 24747,
+        "latest_ex_date": "2026-04-27",
+        "new_rows_added": 13
+      }
+    },
+    {
+      "name": "market_daily_facts",
+      "success": true,
+      "message": "rebuilt adjusted daily facts",
+      "details": {
+        "rows": 4778824,
+        "max_trade_date": "2026-04-24",
+        "new_market_successes": 3,
+        "market_error_count": 1
+      }
+    },
+    {
+      "name": "announcements",
+      "success": true,
+      "message": "merged announcements cache",
+      "details": {
+        "rows": 37285,
+        "latest_event_date": "2026-04-27"
+      }
+    },
+    {
+      "name": "macro",
+      "success": true,
+      "message": "merged macro cache",
+      "details": {
+        "rows": 14115,
+        "latest_trade_date": "2026-04-24"
+      }
+    },
+    {
+      "name": "fundamentals",
+      "success": true,
+      "message": "merged recent fundamentals fetches into full cached history",
+      "details": {
+        "rows": 75315,
+        "latest_effective_from_date": "2026-02-20"
+      }
+    },
+    {
+      "name": "shareholding",
+      "success": true,
+      "message": "merged recent shareholding fetches into full cached history",
+      "details": {
+        "rows": 82004,
+        "latest_effective_from_date": "2026-04-27"
+      }
+    }
+  ]
+}

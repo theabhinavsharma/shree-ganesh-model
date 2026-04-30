@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "completed_runs_compared": [
+    "run1_full_prefinal",
+    "run2_postfix",
+    "run2_quick_postfix"
+  ],
+  "repeatability_verdict": "postfix_runs_match_each_other_but_not_prefix_run",
+  "notes": [
+    "run1_full_prefinal used the full production selection path before later bug fixes were applied end-to-end.",
+    "run2_postfix and run2_quick_postfix both selected the same cheap_micro universe and identical 12 names.",
+    "The fresh full production rerun launched afterward had not completed at the time this report was written."
+  ]
+}

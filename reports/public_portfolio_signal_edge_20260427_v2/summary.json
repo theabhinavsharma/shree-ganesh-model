@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "panel_path": "data/ml/panels/week_7_5pct_public_signal_edge_083cc849ae02/feature_panel.parquet",
+  "as_of_trade_date": "2026-04-24",
+  "train_end_date": "2022-12-31",
+  "baseline_test_precision_7d_5pct": 0.14703283607932807,
+  "row_count": 4189138,
+  "test_row_count": 1570894,
+  "features_evaluated": 12
+}

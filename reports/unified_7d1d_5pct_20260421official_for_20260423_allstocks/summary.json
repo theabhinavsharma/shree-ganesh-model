@@ -1,0 +1,37 @@
+{
+  "status": "ok",
+  "scoring_as_of_data_date": "2026-04-21",
+  "trade_for_date": "2026-04-23",
+  "bhavcopy_for_2026_04_22_status": "not_used",
+  "all_stocks_evaluated_count_1d": 4182405,
+  "all_stocks_evaluated_count_7d": 4182405,
+  "top_1d_symbols": [
+    "NELCAST",
+    "KITEX",
+    "ACEINTEG",
+    "SHRINGARMS",
+    "EMSLIMITED",
+    "SMCGLOBAL",
+    "ALLTIME",
+    "IITL",
+    "GSLSU",
+    "POKARNA"
+  ],
+  "top_7d_symbols": [
+    "BLISSGVS",
+    "MSPL",
+    "HAPPYFORGE",
+    "COHANCE",
+    "RAILTEL",
+    "NCC",
+    "MCLOUD",
+    "ASHAPURMIN",
+    "ARIHANTCAP",
+    "NELCAST"
+  ],
+  "notes": [
+    "No universe shortlist was used. The all_names mask was scored directly for both windows.",
+    "Training and calibration are time-respecting and use completed official history through 2026-04-21.",
+    "This artifact uses the latest completed official daily close because 2026-04-22 bhavcopy was not available at run time."
+  ]
+}

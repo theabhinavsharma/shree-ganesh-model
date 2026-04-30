@@ -1,0 +1,24 @@
+{
+  "run_root": "/Users/abhinavs./Documents/Zoom/reports/day1_5pct_baseline_runs/20260413T104003Z",
+  "selected_models": [
+    {
+      "objective_name": "day_5pct_baseline",
+      "selected_universe": "cheap_micro",
+      "current_scores_path": "/Users/abhinavs./Documents/Zoom/reports/day1_5pct_baseline_runs/20260413T104003Z/day_5pct_baseline/current_scores.csv",
+      "universe_name": "cheap_micro",
+      "panel_path": "data/ml/panels/day_5pct_baseline_a9171a3292ac/feature_panel.parquet",
+      "feature_count": 92,
+      "fold_count": 6,
+      "mean_auc": 0.6112085414735705,
+      "mean_brier": 0.23428761710723242,
+      "mean_log_loss": 0.6606264114379883,
+      "mean_top_quantile_precision": 0.09869435830887237,
+      "mean_top_quantile_return": 0.003753065470406422,
+      "mean_top_n_precision": 0.10482006470282333,
+      "mean_top_n_return": 0.0039165204178960595,
+      "mean_test_rows": 31415.5
+    }
+  ],
+  "objective_count": 1,
+  "universe_count": 6
+}

@@ -1,0 +1,34 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-10",
+  "source_run": "/Users/abhinavs./Documents/Zoom/reports/ml_weekly_winners/20260412T133644Z",
+  "selected_universe": "liquid_20cr_plus",
+  "selected_gate": "market_median_return_20d>=0.0 & breadth_volume_1_5x>=0.1",
+  "selected_gate_test_success_rate": 0.9047619047619048,
+  "selected_gate_test_avg_winners": 3.5714285714285716,
+  "anti_chase_rule": {
+    "exclude_if_return_5d_gt": 0.25,
+    "require_pred_return_7d_gte": 0.0,
+    "require_above_50_dma_or_volume_high_63d": true
+  },
+  "buy_symbols": [
+    "WEBELSOLAR",
+    "CONFIPET",
+    "COHANCE",
+    "JINDRILL"
+  ],
+  "sell_symbols": [
+    "PREMIERPOL",
+    "GLOBAL",
+    "HINDWAREAP",
+    "SAGCEM",
+    "TIL",
+    "ORICONENT",
+    "BHAGYANGR",
+    "DBOL",
+    "INDOSTAR",
+    "ADVANCE",
+    "RELTD",
+    "TEXINFRA"
+  ]
+}

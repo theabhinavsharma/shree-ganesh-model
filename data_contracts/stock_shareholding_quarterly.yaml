@@ -1,0 +1,16 @@
+table: stock_shareholding_quarterly
+primary_key: [symbol, quarter_end, effective_from_date]
+description: Quarterly shareholding pattern available only after public exchange filing date.
+columns:
+  - {name: symbol, type: string, definition: NSE symbol, source: official NSE shareholding and pledged-data APIs, update_frequency: quarterly, lag_rule: usable from effective_from_date only, nullable: false}
+  - {name: quarter_end, type: date, definition: Shareholding quarter end date, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: informational only, nullable: false}
+  - {name: filing_date, type: date, definition: Exchange filing date, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: informational only, nullable: true}
+  - {name: effective_from_date, type: date, definition: Date from which record is usable in joins, source: derived from official NSE broadcast/submission/system timestamps, update_frequency: quarterly, lag_rule: coalesce(broadcast_date, submission_date, system_date), nullable: false}
+  - {name: promoter_pct, type: float64, definition: Promoter shareholding percent, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: promoter_pledged_pct, type: float64, definition: Promoter pledged percent, source: official NSE pledged-data API, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: fii_fpi_pct, type: float64, definition: FII/FPI shareholding percent derived from available foreign portfolio investor categories in the NSE public-shareholder breakdown, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: dii_pct, type: float64, definition: DII shareholding percent derived from available domestic institutional categories in the NSE public-shareholder breakdown, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: mf_pct, type: float64, definition: Mutual fund shareholding percent derived from the NSE public-shareholder breakdown, source: official NSE shareholding API, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true}
+  - {name: promoter_pct_qoq_change, type: float64, definition: Quarter-on-quarter change in promoter holding, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true, derived_formula: promoter_pct - lag(promoter_pct,1)}
+  - {name: fii_fpi_pct_qoq_change, type: float64, definition: Quarter-on-quarter change in FII/FPI holding, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true, derived_formula: fii_fpi_pct - lag(fii_fpi_pct,1)}
+  - {name: dii_pct_qoq_change, type: float64, definition: Quarter-on-quarter change in DII holding, source: derived, update_frequency: quarterly, lag_rule: effective_from_date, nullable: true, derived_formula: dii_pct - lag(dii_pct,1)}

@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "repeatable": true,
+  "selected_universe": "liquid_20cr_plus",
+  "selected_gate": "no_gate",
+  "top_symbols_same": true,
+  "buy_symbols_same": true,
+  "validated_runs": [
+    "/Users/abhinavs./Documents/Zoom/reports/ml_weekly_winners/20260409T154314Z",
+    "/Users/abhinavs./Documents/Zoom/reports/ml_weekly_winners/20260409T154536Z"
+  ]
+}

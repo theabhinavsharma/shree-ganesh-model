@@ -1,0 +1,48 @@
+{
+  "status": "ok",
+  "objective": {
+    "name": "day_1_5pct_eval",
+    "horizon_days": 1,
+    "target_return": 0.05,
+    "analysis_start_date": "2015-01-01",
+    "evaluation_end_date": "2025-12-31",
+    "min_price": 20.0,
+    "top_n": 10
+  },
+  "panel_path": "data/ml/panels/day_1_5pct_eval_0cbc4f64d7e0/feature_panel.parquet",
+  "panel_rows_total": 4010443,
+  "panel_rows_universe": 1671787,
+  "universe_name": "liquid_5cr_plus",
+  "champion_metrics_path": "reports/day1_5pct_model_20260413/universe_metrics.csv",
+  "challenger": {
+    "name": "random_forest",
+    "classifier_trees": 20,
+    "regressor_trees": 12,
+    "max_depth": 6,
+    "min_samples_leaf": 300,
+    "n_jobs": 2,
+    "random_state": 42
+  },
+  "comparison": {
+    "universe_name": "liquid_5cr_plus",
+    "top10_precision_champion": 0.1028534370946822,
+    "top10_precision_random_forest": 0.12905317769131,
+    "delta_top10_precision": 0.026199740596627802,
+    "precision_lift_champion": 3.0806133206068216,
+    "precision_lift_random_forest": 3.8653344943301233,
+    "delta_precision_lift": 0.7847211737233017,
+    "top10_recall_champion": 0.0318999155235528,
+    "top10_recall_random_forest": 0.04002574520294461,
+    "delta_top10_recall": 0.008125829679391808,
+    "top10_mean_return_champion": 0.0008555246248025,
+    "top10_mean_return_random_forest": 0.002018173147945226,
+    "delta_top10_mean_return": 0.0011626485231427258,
+    "top10_median_return_champion": -0.0018432189915136,
+    "top10_median_return_random_forest": -0.0011825178261468672,
+    "delta_top10_median_return": 0.0006607011653667328,
+    "top10_p75_return_champion": 0.014833496435115,
+    "top10_p75_return_random_forest": 0.020080381184996915,
+    "delta_top10_p75_return": 0.0052468847498819155,
+    "winner_metric": "random_forest"
+  }
+}

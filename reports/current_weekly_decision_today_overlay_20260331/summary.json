@@ -1,0 +1,33 @@
+{
+  "as_of_date": "2026-03-31",
+  "ranking_basis_trade_date": "2026-03-25",
+  "technical_basis_trade_date": "2026-03-30",
+  "pricing_basis": "official_nse_live_quote_snapshot_2026-03-31",
+  "event_window_start": "2026-03-28",
+  "event_window_end": "2026-03-31",
+  "universe_size": 12,
+  "top_symbols": [
+    "PREMIERPOL",
+    "GLOBAL",
+    "HINDWAREAP",
+    "SAGCEM",
+    "TIL",
+    "ORICONENT",
+    "BHAGYANGR",
+    "DBOL",
+    "INDOSTAR",
+    "RELTD",
+    "ADVANCE",
+    "TEXINFRA"
+  ],
+  "event_lifts": {
+    "promoter_buy": 1.1028371946740216,
+    "order_win": 1.0855215309011936,
+    "results": 1.0340491323262813,
+    "approval": 1.007918410582504
+  },
+  "notes": [
+    "Today overlay only. Not a full fresh weekly retrain.",
+    "Uses official NSE sources only: March 30 bhavcopy, March 31 quote snapshot, announcements, and insider filings."
+  ]
+}

@@ -1,0 +1,331 @@
+table: stock_daily_facts
+primary_key: [trade_date, symbol]
+description: Daily normalized stock fact table with leak-safe derived price and activity features.
+columns:
+  - name: trade_date
+    type: date
+    definition: Trading date for the row.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day market data row for that trading date.
+    nullable: false
+  - name: symbol
+    type: string
+    definition: NSE trading symbol.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: false
+  - name: series
+    type: string
+    definition: Exchange series code.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: open
+    type: float64
+    definition: Open price.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: high
+    type: float64
+    definition: High price.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: low
+    type: float64
+    definition: Low price.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: close
+    type: float64
+    definition: Close price.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: last_price
+    type: float64
+    definition: Last traded price reported by the bhavcopy.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: avg_price
+    type: float64
+    definition: Average traded price reported by the bhavcopy.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: prev_close
+    type: float64
+    definition: Prior close reported by source.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: total_traded_qty
+    type: int64
+    definition: Total traded quantity.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: total_traded_value
+    type: float64
+    definition: Total traded value.
+    source: derived from NSE bhavcopy turnover in lacs
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+    derived_formula: turnover_lacs * 100000
+  - name: num_trades
+    type: int64
+    definition: Number of trades.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: deliverable_qty
+    type: int64
+    definition: Deliverable quantity reported by the bhavcopy.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+  - name: delivery_pct
+    type: float64
+    definition: Delivery percent reported by the bhavcopy, stored as a 0-1 ratio.
+    source: NSE bhavcopy
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: true
+    derived_formula: DELIV_PER / 100
+  - name: sma_20
+    type: float64
+    definition: 20-day simple moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(close, 20)
+  - name: sma_50
+    type: float64
+    definition: 50-day simple moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(close, 50)
+  - name: sma_100
+    type: float64
+    definition: 100-day simple moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(close, 100)
+  - name: sma_200
+    type: float64
+    definition: 200-day simple moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(close, 200)
+  - name: ema_20
+    type: float64
+    definition: 20-day exponential moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: ewm(close, span=20)
+  - name: ema_50
+    type: float64
+    definition: 50-day exponential moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: ewm(close, span=50)
+  - name: ema_200
+    type: float64
+    definition: 200-day exponential moving average of close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: ewm(close, span=200)
+  - name: rsi_14_daily
+    type: float64
+    definition: 14-period daily RSI on close.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: Wilder RSI 14
+  - name: rsi_14_weekly
+    type: float64
+    definition: 14-period RSI on weekly closes using the latest completed weekly bar available by trade_date.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses weekly closes known through trade_date only.
+    nullable: true
+    derived_formula: Wilder RSI 14 on resampled W-FRI close
+  - name: rsi_14_monthly
+    type: float64
+    definition: 14-period RSI on monthly closes using the latest completed month-end bar available by trade_date.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses month-end closes known through trade_date only.
+    nullable: true
+    derived_formula: Wilder RSI 14 on resampled month-end close
+  - name: return_1d
+    type: float64
+    definition: One-day simple return.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close and prior close through trade_date.
+    nullable: true
+    derived_formula: close / lag(close,1) - 1
+  - name: return_20d
+    type: float64
+    definition: 20-trading-day simple return.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses close values through trade_date only.
+    nullable: true
+    derived_formula: close / lag(close,20) - 1
+  - name: avg_vol_20d
+    type: float64
+    definition: 20-day rolling average traded quantity.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses traded quantity through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(total_traded_qty, 20)
+  - name: avg_vol_60d
+    type: float64
+    definition: 60-day rolling average traded quantity.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses traded quantity through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(total_traded_qty, 60)
+  - name: volume_vs_20d
+    type: float64
+    definition: Current volume divided by 20-day average volume.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses same-day volume and rolling history through trade_date.
+    nullable: true
+    derived_formula: total_traded_qty / avg_vol_20d
+  - name: volume_vs_60d
+    type: float64
+    definition: Current volume divided by 60-day average volume.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses same-day volume and rolling history through trade_date.
+    nullable: true
+    derived_formula: total_traded_qty / avg_vol_60d
+  - name: vol_max_63d
+    type: float64
+    definition: Highest traded quantity observed in the trailing 63 trading days including trade_date.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses traded quantity through trade_date only.
+    nullable: true
+    derived_formula: rolling_max(total_traded_qty, 63)
+  - name: volume_high_63d_flag
+    type: boolean
+    definition: True when same-day traded quantity equals or exceeds the trailing 63-day maximum.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses traded quantity through trade_date only.
+    nullable: true
+    derived_formula: total_traded_qty >= vol_max_63d
+  - name: avg_delivery_qty_20d
+    type: float64
+    definition: 20-day rolling average deliverable quantity.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses deliverable quantity through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(deliverable_qty, 20)
+  - name: delivery_qty_vs_20d
+    type: float64
+    definition: Current deliverable quantity divided by 20-day average deliverable quantity.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses same-day deliverable quantity and rolling history through trade_date.
+    nullable: true
+    derived_formula: deliverable_qty / avg_delivery_qty_20d
+  - name: avg_delivery_pct_20d
+    type: float64
+    definition: 20-day rolling average delivery ratio.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses delivery ratio history through trade_date only.
+    nullable: true
+    derived_formula: rolling_mean(delivery_pct, 20)
+  - name: delivery_pct_vs_20d
+    type: float64
+    definition: Current delivery ratio divided by 20-day average delivery ratio.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses same-day delivery ratio and rolling history through trade_date.
+    nullable: true
+    derived_formula: delivery_pct / avg_delivery_pct_20d
+  - name: delivery_pct_max_63d
+    type: float64
+    definition: Highest delivery ratio observed in the trailing 63 trading days including trade_date.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses delivery ratio through trade_date only.
+    nullable: true
+    derived_formula: rolling_max(delivery_pct, 63)
+  - name: delivery_pct_high_63d_flag
+    type: boolean
+    definition: True when same-day delivery ratio equals or exceeds the trailing 63-day maximum.
+    source: derived
+    update_frequency: daily
+    lag_rule: Uses delivery ratio through trade_date only.
+    nullable: true
+    derived_formula: delivery_pct >= delivery_pct_max_63d
+  - name: raw_file_name
+    type: string
+    definition: Raw source file name for auditability.
+    source: ingestion metadata
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: false
+  - name: fetch_timestamp
+    type: timestamp
+    definition: UTC fetch timestamp for raw file capture.
+    source: ingestion metadata
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: false
+  - name: source_url
+    type: string
+    definition: Source URL used for fetch.
+    source: ingestion metadata
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: false
+  - name: verified_price_flag
+    type: boolean
+    definition: True when required core price fields parsed successfully.
+    source: derived validation
+    update_frequency: daily
+    lag_rule: Same-day.
+    nullable: false

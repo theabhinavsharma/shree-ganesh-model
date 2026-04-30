@@ -1,0 +1,32 @@
+{
+  "as_of_date": "2026-04-21",
+  "month_definition": "trailing 30 trading-day return >= 15%",
+  "anchor_date": "2026-03-10",
+  "winner_count": 537,
+  "share_with_forward_7td_ge_15pct_from_anchor": 0.0260707635009311,
+  "share_with_forward_7td_between_5pct_and_15pct_from_anchor": 0.1154562383612663,
+  "share_with_forward_7td_below_5pct_from_anchor": 0.8361266294227188,
+  "share_with_forward_7td_negative_from_anchor": 0.6182495344506518,
+  "median_forward_7td_from_anchor": -0.01768488745980701,
+  "mean_forward_7td_from_anchor": -0.009967461979017097,
+  "pfocus": [
+    {
+      "symbol": "PFOCUS",
+      "latest_ret_30td": 0.17193358328869834,
+      "forward_7td_from_anchor": -0.08534190323156587,
+      "forward_15td_from_anchor": 0.1760399928584182,
+      "forward_30td_from_anchor": 0.17193358328869834,
+      "anchor_close": 280.05,
+      "anchor_ret_7td": 0.09896793941058735,
+      "anchor_ret_15td": 0.024435746424260163,
+      "anchor_ret_30td": 0.2958078845086063,
+      "rsi_14_daily": 59.586017635716374,
+      "anchor_above_50dma": true,
+      "anchor_above_200dma": true,
+      "volume_vs_20d": 0.8778906991534758,
+      "traded_value_vs_20d": 0.9074010305404633,
+      "first_week_category": "negative first-week move"
+    }
+  ],
+  "key_takeaway": "Most trailing 30-trading-day winners did not begin as explosive 7-day 15% setups one month earlier; they were mainly slow-burn or rebound moves."
+}

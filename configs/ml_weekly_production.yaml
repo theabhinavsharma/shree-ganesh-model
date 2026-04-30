@@ -1,0 +1,23 @@
+expert_config: "configs/ml_expert.yaml"
+
+settings:
+  run_output_dir: "reports/ml_weekly_winners"
+  portfolio_state_dir: "data/portfolio_state"
+  selection_universes:
+    - "liquid_20cr_plus"
+    - "liquid_5cr_plus"
+    - "mid_small"
+    - "mcap_1000cr_plus"
+  top_n: 12
+  objective_min_winners: 2
+  cash_buffer_pct: 10.0
+  cadence_day_local: "MONDAY"
+  cadence_time_local: "20:30"
+  timezone_name: "Asia/Kolkata"
+  min_search_weeks: 20
+  min_test_weeks: 10
+  min_search_success_rate: 0.55
+  min_test_success_rate: 0.60
+  min_all_success_rate: 0.55
+  search_years: [2023, 2024]
+  test_years: [2025]

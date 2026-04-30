@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-17",
+  "trade_for_date": "2026-04-20",
+  "source_report": "/Users/abhinavs./Documents/Zoom/reports/day1_champion_allnames_20260419_for_20260420",
+  "fresh_entry_rule": {
+    "data_ok_required": true,
+    "max_return_20d": 0.3,
+    "max_rsi_14_daily": 78.0,
+    "max_return_1d": 0.2
+  },
+  "note": "No universe shortlist was used in the underlying model. This sheet is a fresh-entry-only overlay on the all-stocks champion top10."
+}

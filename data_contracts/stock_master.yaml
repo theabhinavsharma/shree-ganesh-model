@@ -1,0 +1,67 @@
+table: stock_master
+primary_key: [symbol]
+description: Master record for listed NSE securities used by the research universe.
+columns:
+  - name: symbol
+    type: string
+    definition: NSE trading symbol.
+    source: NSE market data / official NSE industry classification / user mapping file
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in public source.
+    nullable: false
+  - name: isin
+    type: string
+    definition: ISIN code when publicly available in source files.
+    source: official NSE quote/meta APIs
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in public source.
+    nullable: true
+  - name: company_name
+    type: string
+    definition: Official company/security name.
+    source: official NSE quote/meta APIs
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in public source.
+    nullable: true
+  - name: listing_status
+    type: string
+    definition: active, suspended, delisted, or unknown.
+    source: official NSE quote/meta APIs
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in public source.
+    nullable: false
+  - name: sector
+    type: string
+    definition: NSE sector classification.
+    source: official NSE industry classification / user mapping file
+    update_frequency: as_needed
+    lag_rule: Usable from the public classification date.
+    nullable: true
+  - name: industry
+    type: string
+    definition: Industry string exposed in official NSE quote/meta APIs.
+    source: official NSE quote/meta APIs / user mapping file
+    update_frequency: as_needed
+    lag_rule: Usable from the public classification date.
+    nullable: true
+  - name: basic_industry
+    type: string
+    definition: NSE basic industry classification.
+    source: official NSE industry classification / user mapping file
+    update_frequency: as_needed
+    lag_rule: Usable from the public classification date.
+    nullable: true
+  - name: instrument_type
+    type: string
+    definition: Equity instrument type or series family.
+    source: official NSE quote/meta APIs / mapping input
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in public source.
+    nullable: true
+  - name: benchmark_index
+    type: string
+    definition: Optional benchmark or sector index mapping placeholder.
+    source: user mapping
+    update_frequency: as_needed
+    lag_rule: Same-day once observed in mapping input.
+    nullable: true

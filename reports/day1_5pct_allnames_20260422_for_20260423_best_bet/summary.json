@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "as_of_trade_date": "2026-04-22",
+  "trade_for_date": "2026-04-23",
+  "mode": "day1_5pct_allnames_live_only",
+  "historical_eval_end_date": "2025-12-31",
+  "live_daily_facts_path": "/Users/abhinavs./Documents/Zoom/reports/week7_15pct_xgboost_allnames_20260422_for_20260423_refresh/daily_facts_with_20260422_overlay.parquet",
+  "top_symbol": "GOKULAGRO",
+  "top10_symbols": [
+    "GOKULAGRO",
+    "SUNTECK",
+    "IDEAFORGE",
+    "SURANASOL",
+    "ARE&M",
+    "IRMENERGY",
+    "IVZINNIFTY",
+    "KEYFINSERV",
+    "JMA",
+    "SINTERCOM"
+  ],
+  "note": "Historical day-1 OOF evaluation reused the completed cached path; live current slice was refreshed to official 2026-04-22 overlay and scored across all_names."
+}
