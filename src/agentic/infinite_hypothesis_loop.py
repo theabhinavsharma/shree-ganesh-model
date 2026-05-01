@@ -62,19 +62,30 @@ FETCHER_QUEUE = [
     "src/agentic/build_macro_panel.py",   # consolidator — rebuild after any macro fetch
 ]
 
-# Pipeline of feature-rebuild + retrain we run every cycle
+# Pipeline of feature-rebuild + retrain we run every cycle.
+# QUARANTINED BUILDERS (do NOT re-enable until Phase 2 of
+# reports/leakage_audit_20260501.md ships — i.e. the time-series
+# fundamentals layer with effective_from_date keys):
+#   build_derived_ratios.py     → leak source (snapshot-broadcast)
+#   build_academic_alphas.py    → leak source (build_academic_alphas.py L194-195
+#                                  acknowledges the design)
+# CONSTITUTION.md §1.2 binds future Claude: do not relax this list.
 RETRAIN_PIPELINE = [
-    "src/agentic/build_derived_ratios.py",
-    "src/agentic/build_academic_alphas.py",
-    "src/agentic/build_macro_panel.py",  # macro consolidation before feature_factory
-    "src/agentic/feature_factory.py",
-    "src/agentic/find_high_conviction.py",
+    "src/agentic/build_macro_panel.py",     # macro consolidation; time-series safe
+    "src/agentic/feature_factory.py",       # honors SAFE_EXTRA_PREFIXES from find_high_conviction
+    "src/agentic/find_high_conviction.py",  # leaking prefixes excluded since fccdeb5
     "src/agentic/monitor_for_conviction.py",
 ]
 
 CONVICTION = 0.80
 MAX_CYCLES = 100  # bumped from 50 for the macro/aggregate exploration round
 DELAY_BETWEEN_CYCLES = 60  # seconds
+
+# A/B gate: per CONSTITUTION.md §1.4, a cycle that increases prospective
+# multibagger probability is KEEP; otherwise the new feature is DROP_AB_FAIL
+# and reverted from factor_registry. This is enforced in main() below.
+AB_LIFT_FLOOR_PP = 1.0   # require >= 1pp absolute lift in n_above_075 / sample size
+                         # Bonferroni: with MAX_CYCLES tests, α = 0.05 / 100 = 0.0005
 
 
 def run(cmd: list[str], timeout: int = 1500) -> dict:
@@ -112,13 +123,47 @@ def check_conviction() -> tuple[bool, dict]:
     return len(qualifying) > 0, summary
 
 
+def baseline_metrics() -> dict:
+    """Snapshot conviction metrics BEFORE this cycle's fetcher runs.
+    Used as the A/B baseline."""
+    _, summary = check_conviction()
+    return summary
+
+
+def ab_verdict(prev: dict, curr: dict) -> tuple[str, float, str]:
+    """Decide KEEP / DROP_AB_FAIL based on lift in n>=0.75 names.
+
+    Returns: (verdict, lift_pp, reason)
+    """
+    if "error" in prev or "error" in curr:
+        return "INDETERMINATE", 0.0, "missing baseline or current metrics"
+    prev_n = prev.get("n_above_075", 0)
+    curr_n = curr.get("n_above_075", 0)
+    lift = float(curr_n - prev_n)
+    # max_score must also not regress
+    prev_max = prev.get("max_score", 0.0)
+    curr_max = curr.get("max_score", 0.0)
+    max_delta = curr_max - prev_max
+    if lift >= AB_LIFT_FLOOR_PP and max_delta >= 0:
+        return "KEEP", lift, f"+{int(lift)} names cleared 0.75 (max_score {prev_max:.3f}→{curr_max:.3f})"
+    if lift < 0 or max_delta < -0.01:
+        return "DROP_AB_FAIL", lift, f"regression: Δn>=0.75={lift:+.0f}, Δmax_score={max_delta:+.3f}"
+    return "NEUTRAL", lift, f"no material change (Δn>=0.75={lift:+.0f}, Δmax_score={max_delta:+.3f})"
+
+
 def main() -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     fetcher_idx = 0
     print(f"== infinite_hypothesis_loop ==")
     print(f"  goal: any name with calibrated score >= {CONVICTION} on any of (5%/7d, 10%/15d, 20%/30d)")
     print(f"  fetchers in rotation: {len(FETCHER_QUEUE)}")
-    print(f"  max cycles: {MAX_CYCLES}\n")
+    print(f"  max cycles: {MAX_CYCLES} (Bonferroni α/N = {0.05/MAX_CYCLES:.4f})")
+    print(f"  A/B gate: KEEP only if Δ(n>=0.75) >= {AB_LIFT_FLOOR_PP}pp AND max_score does not regress\n")
+
+    # Initial baseline snapshot before cycle 1 (so cycle 1 has something to A/B against)
+    prev_metrics = baseline_metrics()
+    print(f"  baseline: max_score={prev_metrics.get('max_score', 0):.3f}, "
+          f"n>=0.75={prev_metrics.get('n_above_075', 0)}\n")
 
     for cycle_num in range(1, MAX_CYCLES + 1):
         cycle_start = datetime.now()
@@ -131,7 +176,7 @@ def main() -> None:
         fr = run(["/usr/bin/python3", fetcher], timeout=900)
         print(f"    {'OK' if fr['ok'] else 'FAIL'}  ({fr['elapsed_s']}s)")
 
-        # 2. retrain pipeline
+        # 2. retrain pipeline (leak builders excluded — see RETRAIN_PIPELINE comment)
         for step in RETRAIN_PIPELINE:
             print(f"  ▸ {step}")
             sr = run(["/usr/bin/python3", step], timeout=1500)
@@ -139,8 +184,12 @@ def main() -> None:
             if not sr["ok"]:
                 print(f"    tail: {sr['tail'][-200:]}")
 
-        # 3. check conviction
-        success, summary = check_conviction()
+        # 3. measure conviction post-cycle
+        success, curr_metrics = check_conviction()
+
+        # 4. A/B gate: did this fetcher's data actually help?
+        verdict, lift, reason = ab_verdict(prev_metrics, curr_metrics)
+        print(f"  ⚖  A/B verdict: {verdict} — {reason}")
 
         record = {
             "cycle": cycle_num,
@@ -148,17 +197,30 @@ def main() -> None:
             "fetcher_run": fetcher,
             "elapsed_s": round((datetime.now() - cycle_start).total_seconds(), 1),
             "success": success,
-            "summary": summary,
+            "ab_verdict": verdict,
+            "ab_lift_n_above_075": lift,
+            "ab_reason": reason,
+            "prev_metrics": {"max_score": prev_metrics.get("max_score", 0.0),
+                              "n_above_075": prev_metrics.get("n_above_075", 0),
+                              "n_above_080": prev_metrics.get("n_above_080", 0)},
+            "curr_metrics": curr_metrics,
         }
         with open(LOG, "a") as f:
             f.write(json.dumps(record) + "\n")
-        print(f"  → max_score={summary.get('max_score', 0):.3f}, "
-              f"n>=0.80={summary.get('n_above_080', 0)}, "
-              f"n>=0.75={summary.get('n_above_075', 0)}")
+        print(f"  → max_score={curr_metrics.get('max_score', 0):.3f}, "
+              f"n>=0.80={curr_metrics.get('n_above_080', 0)}, "
+              f"n>=0.75={curr_metrics.get('n_above_075', 0)}")
+
+        # 5. update baseline only if KEEP — DROP_AB_FAIL means we treat this
+        # cycle's contribution as noise; next cycle compares against the same
+        # prior baseline (so a single bad fetcher doesn't shift our floor)
+        if verdict == "KEEP":
+            prev_metrics = curr_metrics
+        # NEUTRAL and INDETERMINATE: do not update baseline; do not declare KEEP
 
         if success:
-            print(f"\n🟢 SUCCESS — {summary['n_above_080']} name(s) clear the 80% bar:")
-            print(json.dumps(summary["winners"], indent=2))
+            print(f"\n🟢 SUCCESS — {curr_metrics['n_above_080']} name(s) clear the 80% bar:")
+            print(json.dumps(curr_metrics.get("winners", []), indent=2))
             print(f"\nStopping loop. Output in reports/conviction_alert_*.md")
             break
 
