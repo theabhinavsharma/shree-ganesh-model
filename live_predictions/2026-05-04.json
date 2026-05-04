@@ -20,6 +20,15 @@
     ],
     "note": "Score for 100% target is RELATIVE ranking, not validated absolute probability. Sample at high-score band in 2025 OOS = 0."
   },
+  "corporate_action_adjustment_audit_20260504": {
+    "status": "PARTIAL_CONTAMINATION",
+    "top5_perpame_clean": true,
+    "top5_clean_evidence": "KENNAMET, KOVAI, NOVARTIND, AUSOMENT, KIRLFER each audited: 0 splits/bonuses on record, 0 suspect single-day drops > -20%",
+    "dataset_wide_issue": "Some symbols (e.g. BESTAGRO 2026-01-16 bonus 1:2, multiple gold ETFs) show unadjusted phantom drops in stock_daily_facts_adjusted_2015plus.parquet despite the _adjusted filename suffix. Affects the 8.47% base rate calibrator with unknown upward bias.",
+    "ledger_entry": "logs/calibration_corrections.jsonl entry dated 2026-05-04",
+    "implication_for_this_call": "Per-name forward measurement is clean (top-5 unaffected). Absolute probability scores (e.g. KENNAMET 0.897) carry an unknown upward bias from a contaminated calibrator; treat as STRONG RELATIVE RANKING.",
+    "remediation_planned": "Build src/agentic/apply_adjustments.py to regenerate adjusted prices from raw + corporate_actions.parquet, with a cross-validation against observed ex-date price jumps."
+  },
   "base_rate_2x_180d_2025_OOS": 0.0847,
   "universe_size_liquid": 1409,
   "predictions_top10_2x": [
