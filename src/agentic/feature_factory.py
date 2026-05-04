@@ -24,6 +24,8 @@ import numpy as np
 ROOT = Path("/Users/abhinavs./Documents/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 MACRO = ROOT / "data/derived/macro_timeseries.parquet"
+MACRO_PANEL = ROOT / "data/derived/macro_panel.parquet"           # NEW: consolidated 150-col macro panel
+INDUSTRY_PANEL = ROOT / "data/derived/industry_panel.parquet"     # NEW: per-sector aggregates
 WIKI = ROOT / "data/derived/wiki_pageviews.parquet"
 SCREENER_FUND = ROOT / "data/derived/screener_fundamentals.parquet"
 DERIVED_RATIOS = ROOT / "data/derived/derived_ratios.parquet"
@@ -197,6 +199,117 @@ def main() -> None:
         sub = aa[["symbol"] + keep_aa].rename(columns={c: f"acad_{c}" for c in keep_aa})
         df = df.merge(sub, on="symbol", how="left")
 
+    # ─── 5e. MACRO PANEL (commodities / global rates / breadth / MF AUM / sentiment) ──
+    if MACRO_PANEL.exists():
+        print("  joining macro_panel.parquet (commodities, global rates, breadth, MF AUM, macro sentiment) …")
+        mp = pd.read_parquet(MACRO_PANEL)
+        mp["trade_date"] = pd.to_datetime(mp["trade_date"])
+        # everything except trade_date applies identically to all stocks for that date
+        # (it's a date-level signal — global regime / commodity / breadth)
+        # whitelist: numeric only; skip already-joined cols (FX) to avoid collision
+        existing = set(df.columns)
+        candidate_cols = []
+        for c in mp.columns:
+            if c == "trade_date": continue
+            if c in existing: continue  # already joined (e.g., usdinr)
+            if not pd.api.types.is_numeric_dtype(mp[c]): continue
+            candidate_cols.append(c)
+        # forward-fill across business days (commodity quotes don't always align with NSE)
+        mp = mp.sort_values("trade_date")
+        for c in candidate_cols:
+            mp[c] = mp[c].ffill(limit=5)
+        # rename with macro_ prefix where it doesn't clash (so we can detect them)
+        rename_map = {}
+        for c in candidate_cols:
+            if not c.startswith(("macro_", "rs_60d__", "sector_breadth_50__", "sector_dispersion_20d__")):
+                rename_map[c] = f"macro_{c}"
+        if rename_map:
+            mp = mp.rename(columns=rename_map)
+            candidate_cols = [rename_map.get(c, c) for c in candidate_cols]
+        df = df.merge(mp[["trade_date"] + candidate_cols], on="trade_date", how="left")
+        print(f"    joined {len(candidate_cols)} macro/aggregate columns from macro_panel")
+
+    # ─── 5f. INDUSTRY PANEL (sector-relative strength, per-symbol via sector lookup) ──
+    if INDUSTRY_PANEL.exists():
+        print("  joining industry_panel.parquet (sector RS / breadth / dispersion) …")
+        ip = pd.read_parquet(INDUSTRY_PANEL)
+        ip["trade_date"] = pd.to_datetime(ip["trade_date"])
+        # need a sector mapping for each symbol — use the same source as fetch_industry_indicators
+        sec_map = None
+        for src in [ROOT / "data/derived/paper_trading_ledger.parquet",
+                    ROOT / "data/derived/confluence_picks.parquet"]:
+            if src.exists():
+                try:
+                    m = pd.read_parquet(src, columns=["symbol", "sector"]).drop_duplicates("symbol")
+                    m = m[m["sector"].notna() & (m["sector"] != "")]
+                    sec_map = m if sec_map is None else pd.concat([sec_map, m]).drop_duplicates("symbol")
+                except Exception:
+                    pass
+        if sec_map is not None:
+            df = df.merge(sec_map, on="symbol", how="left")
+            keep_industry = ["sector_breadth_50", "sector_5d_ret", "sector_20d_ret", "sector_60d_ret",
+                             "sector_dispersion_20d", "sector_leader_lag_spread",
+                             "rs_5d", "rs_20d", "rs_60d", "sector_volume_z_60d"]
+            keep_industry = [c for c in keep_industry if c in ip.columns]
+            ip_sub = ip[["trade_date", "sector"] + keep_industry].rename(
+                columns={c: f"sec_{c}" for c in keep_industry}
+            )
+            df = df.merge(ip_sub, on=["trade_date", "sector"], how="left")
+            df = df.drop(columns=["sector"])
+            print(f"    joined {len(keep_industry)} sector-relative columns × symbol-sector lookup ({len(sec_map):,} symbols)")
+
+    # ─── 5g. MACRO × STOCK INTERACTIONS ────────────────────────────────
+    # Macro features are constant per date; cross-sectional model can only USE
+    # them via INTERACTIONS with stock-level features. We engineer 5 surgical
+    # interactions seeded from highest-|IC| non-suspect KEEPs in the macro
+    # evaluator output (reports/factor_evaluation_macro.md, 2026-05-01).
+    print("  building macro × stock interactions (5 surgical) …")
+    # First need adv_rank per date (size proxy for smallcap interaction)
+    if "avg_traded_value_20d" in df.columns:
+        df["adv_rank_norm"] = df.groupby("trade_date")["avg_traded_value_20d"].rank(
+            ascending=False, pct=True)
+        # higher rank_norm = lower ADV = smaller cap
+    # need stock-level signals
+    if "return_20d" not in df.columns:
+        df["return_20d_calc"] = df.groupby("symbol")["close"].pct_change(20)
+        ret20_col = "return_20d_calc"
+    else:
+        ret20_col = "return_20d"
+    if "above_50dma" not in df.columns and "sma_50" in df.columns:
+        df["above_50dma_calc"] = (df["close"] > df["sma_50"]).astype(int)
+        above50_col = "above_50dma_calc"
+    elif "above_50dma" in df.columns:
+        above50_col = "above_50dma"
+    else:
+        above50_col = None
+    if "sma_200" in df.columns:
+        df["dist_sma200_calc"] = df["close"] / df["sma_200"] - 1
+        distsma200_col = "dist_sma200_calc"
+    else:
+        distsma200_col = None
+
+    # ─── PRUNED 2026-05-01 after factor_evaluator A/B test ─────────────
+    # Tested 5 continuous × continuous (H-INT-1..5) and 5 regime-dummy × stock
+    # (H-INT-1b..5b). 9 of 10 DROPPED on cross-sectional IC test.
+    # Only ONE survived; keeping it. The 9 noise features were dragging
+    # max_score from 0.62 baseline → 0.547 when included en-masse.
+    #
+    # KEPT (passed: |IC|=0.0495, t=-4.60, decile spread +1.94%, IR 2.97):
+    #   macro_int_regimevix_x_rv20  =  regime(VIX_z top-tertile over 252d) × rv_20d
+    print("  building macro × stock interactions (1 KEEP only after A/B prune) …")
+    def _top_tertile_dummy(s: pd.Series, window: int = 252) -> pd.Series:
+        q67 = s.rolling(window, min_periods=60).quantile(2.0/3.0)
+        return (s >= q67).astype(float)
+
+    if "macro_us_vix_z_60d" in df.columns and "rv_20d" in df.columns:
+        vix_series = df.groupby("trade_date")["macro_us_vix_z_60d"].first().sort_index()
+        regime_vix = _top_tertile_dummy(vix_series, 252).rename("regime_vix_spike")
+        df = df.merge(regime_vix.reset_index(), on="trade_date", how="left")
+        df["macro_int_regimevix_x_rv20"] = df["regime_vix_spike"] * df["rv_20d"]
+
+    int_cols = [c for c in df.columns if c.startswith("macro_int_")]
+    print(f"    built {len(int_cols)} interaction features: {int_cols}")
+
     # ─── 6. WIKIPEDIA ATTENTION ────────────────────────────────────────
     if WIKI.exists():
         print("  joining wikipedia pageviews …")
@@ -211,7 +324,8 @@ def main() -> None:
                 c.startswith("is_") or c == "dom" or c.endswith("_5d_chg") or c.endswith("_20d_chg") or
                 c.startswith("usdinr") or c.startswith("eurinr") or c.startswith("gbpinr") or c.startswith("jpyinr") or
                 c.startswith("wiki_") or c == "rv_60d" or c.startswith("scr_") or
-                c.startswith("qvm_") or c.startswith("acad_")]
+                c.startswith("qvm_") or c.startswith("acad_") or
+                c.startswith("macro_") or c.startswith("sec_")]   # NEW: macro_panel + industry sector cols
     keep_cols = ["symbol", "trade_date"] + new_cols
     out = df[keep_cols].copy()
 

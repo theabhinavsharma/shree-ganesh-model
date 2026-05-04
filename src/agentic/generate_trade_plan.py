@@ -22,6 +22,12 @@ CONF = ROOT / "data/derived/confluence_picks.parquet"
 HC_PRED = ROOT / "data/derived/high_conviction_predictions.parquet"
 CHART = ROOT / "data/derived/chart_signals.parquet"
 
+# 2026-05-01: Gate-tuning experiment showed 0.65-0.70 gates with Top-10 baskets
+# achieve 2x/180d backtested CAGR (+144% vs +14% at 0.95). Updated config below.
+SHORT_HORIZON_GATE = 0.65       # was 0.80; 0.95 was starved (8 trades/yr)
+SHORT_HORIZON_MAX_POS = 10      # Top-10 basket
+# event-driven backtest evidence: reports/event_driven_backtest_backtest_10yr_macro_oof.md
+
 OUT_REPORT = ROOT / f"reports/trade_plan_{date.today():%Y%m%d}.md"
 
 # Allocation envelope — FOCUSED on 2x in 180d, no diversification floor
