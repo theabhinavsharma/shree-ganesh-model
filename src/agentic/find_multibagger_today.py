@@ -77,10 +77,31 @@ def build_panel() -> pd.DataFrame:
 
 
 def build_target(df: pd.DataFrame, threshold: float, horizon: int) -> pd.Series:
-    fwd_max = df.groupby("symbol")["high"].transform(lambda s: s.shift(-1).rolling(horizon, min_periods=1).max())
+    """Compute 'did forward HIGH within `horizon` trading days reach +threshold above today's close'.
+
+    PATCHED 2026-05-04: previous implementation used
+        s.shift(-1).rolling(horizon).max()
+    which is BACKWARD-looking (window covers t-horizon+2 .. t+1, mostly past data).
+    That target was a near-tautology (close <= recent rolling high almost always)
+    and caused the model's calibrated scores to saturate at 1.000 for many large
+    caps that shouldn't double in 180d. Same bug we already fixed once in
+    backtest_multibagger_strategy.py during the 2026-04-29 forward-max audit.
+
+    The CORRECT forward-max uses the reversed-rolling trick which is O(N)
+    memory regardless of horizon (no large-column concat needed). Position t
+    holds max(high[t+1], ..., high[t+horizon]); NaN where window incomplete.
+    """
+    def _fwd_max(s: pd.Series) -> pd.Series:
+        rev = s.iloc[::-1]
+        rolled = rev.rolling(horizon, min_periods=horizon).max()
+        return rolled.iloc[::-1].shift(-1)
+
+    fwd_max = (df.groupby("symbol", sort=False, group_keys=False)["high"]
+                  .transform(_fwd_max))
     fwd_pct = fwd_max / df["close"] - 1
     target = (fwd_pct >= threshold).astype(int)
-    complete = df.groupby("symbol", sort=False)["high"].shift(-horizon).notna()
+    # mark rows where the full forward window isn't observable as -1 (excluded)
+    complete = fwd_max.notna()
     target[~complete] = -1
     return target
 
