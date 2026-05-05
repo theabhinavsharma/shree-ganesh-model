@@ -1,0 +1,93 @@
+{
+  "as_of_date": "2026-05-05",
+  "version": "v3_post_contamination_audit",
+  "horizon_days": 180,
+  "resolution_date": "2026-10-31",
+  "supersedes_for_decision": "v1 (commit 5474cd6) and v2 (commit pending) \u2014 both retain timestamps; v3 is the actionable basket after dataset-wide contamination audit",
+  "lead_with_contradiction": "User pushed back: 'split errors biasing us?' \u2014 correct. Audit found 424 drops worse than -50% in the dataset, of which 399 (94%) have NO matching corporate-action record. The CA table itself is incomplete. v2's new entrants MANAKALUCO and GRAUWEIL had recent unrecorded -46% and -41% drops \u2014 they are PROBABLY artifacts, not real recovery candidates. Dropped.",
+  "contamination_audit": {
+    "method": "any single-day drop < -30% on a stock with no CA record OR with a CA record whose factor doesn't match the magnitude",
+    "dataset_wide_severe_drops_lt_neg50pct": 424,
+    "with_matching_ca_record_within_5d": 25,
+    "without_ca_record": 399,
+    "implication": "Calibrator trained on dataset where ~5% of severe-drop training rows are phantoms; per-symbol bias is severe for a small set of names but ripples into score compression for clean names too via bin-boundary shifts."
+  },
+  "tier1_verified_clean_cross_validated": [
+    {
+      "symbol": "KENNAMET",
+      "close_at_call": 2725.0,
+      "fresh_score_2x_180d": 0.141,
+      "rsi_14": 59.4,
+      "adv_20d_cr": 2.21
+    },
+    {
+      "symbol": "KOVAI",
+      "close_at_call": 5657.6,
+      "fresh_score_2x_180d": 0.1793,
+      "rsi_14": 82.9,
+      "adv_20d_cr": 1.65
+    },
+    {
+      "symbol": "NOVARTIND",
+      "close_at_call": 1030.5,
+      "fresh_score_2x_180d": 0.1793,
+      "rsi_14": 77.6,
+      "adv_20d_cr": 1.05
+    }
+  ],
+  "tier2_clean_single_pipeline": [
+    {
+      "symbol": "KIRLFER",
+      "close_at_call": 434.75,
+      "fresh_score_2x_180d": 0.075,
+      "rsi_14": 38.0,
+      "adv_20d_cr": 3.76
+    },
+    {
+      "symbol": "MTARTECH",
+      "close_at_call": 6457.1,
+      "fresh_score_2x_180d": 0.0297,
+      "rsi_14": 86.8,
+      "adv_20d_cr": 559.25
+    }
+  ],
+  "tier3_minor_concern": [
+    {
+      "symbol": "AUSOMENT",
+      "close_at_call": 147.79,
+      "fresh_score_2x_180d": 0.1691,
+      "rsi_14": 59.7,
+      "adv_20d_cr": 3.24
+    }
+  ],
+  "dropped_due_to_contamination": [
+    {
+      "symbol": "MANAKALUCO",
+      "reason": "Suspect drops -45.8% on 2026-04-27 and -37.1% on 2024-05-27. NO corporate-action record for either. Model likely flagging it as recovery candidate based on phantom drops."
+    },
+    {
+      "symbol": "GRAUWEIL",
+      "reason": "Suspect drop -41.0% on 2026-04-20. NO corporate-action record. Same artifact pattern."
+    },
+    {
+      "symbol": "MIDCAP",
+      "reason": "Catastrophic drop -90.1% on 2026-02-27. NO CA record. Almost certainly ETF unit-restructure event."
+    },
+    {
+      "symbol": "BESTAGRO",
+      "reason": "Bonus 1:2 ex-date 2026-01-16 with proven unadjusted -89.8% drop (CA factor recorded as 1.5 but actual dilution ~10x). Plus another unrecorded -42% on 2024-04-10."
+    }
+  ],
+  "sizing_rule": {
+    "tier1_per_name_pct": 3.0,
+    "tier2_per_name_pct": 1.5,
+    "tier3_per_name_pct": 0.5,
+    "max_basket_total_pct": 12.5,
+    "hard_sl_per_name_pct": -15,
+    "trail_sl_target_pct": 30,
+    "rest_in_liquidplus_yield_pct": 7
+  },
+  "constitution_note": "v1 (5474cd6) and v2 (post-rerun) commits remain in git as timestamped records. v3 is what we trade on. The progression v1->v2->v3 is itself the publishable artifact: it shows the system catches its own errors as data updates and audits run.",
+  "next_remediation": "Build src/agentic/apply_adjustments.py to regenerate adjusted prices from raw NSE bhavcopy + corporate_actions + a heuristic for events the CA table doesn't cover (gold ETFs, mergers). Until then, treat the dataset-wide calibrator as biased upward.",
+  "ts_committed_utc": "2026-05-05T08:23:22.569472Z"
+}
