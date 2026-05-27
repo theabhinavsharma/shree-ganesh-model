@@ -1,0 +1,184 @@
+{
+  "as_of_date": "2026-05-27",
+  "data_through": "2026-05-26",
+  "version": "v10_full_ml_ensemble_cross_engine",
+  "engines_run": [
+    "find_high_conviction",
+    "find_multibagger_today",
+    "run_multi_horizon",
+    "find_180d_frontier_honest"
+  ],
+  "engines_pending": [
+    "find_achievable_frontier (53min CPU, still cooking)"
+  ],
+  "framework": "Cross-engine consensus \u2014 names that appear in TOP-10 of multiple independent ML models",
+  "no_name_clears_80pct_calibrated": true,
+  "regime_gate_verdict": "WAIT (all 1,404 names)",
+  "tier1_high_signal_chase_risk": [
+    {
+      "symbol": "MODISONLTD",
+      "close": 251.13,
+      "buy_low": 248.62,
+      "buy_high": 253.64,
+      "target_5pct": 263.69,
+      "sl_3pct": 243.6,
+      "hold_days": 7,
+      "weight_pct": 2.0,
+      "engines_in_top10": 3,
+      "h1_cal": 0.76,
+      "s5_7d": 0.565,
+      "rsi": 87.8,
+      "return_20d": 0.473,
+      "adv_cr": 3.61,
+      "risk_flag": "RSI 88, +47pct 20d \u2014 chase zone",
+      "tier": 1
+    },
+    {
+      "symbol": "BLISSGVS",
+      "close": 381.05,
+      "buy_low": 377.24,
+      "buy_high": 384.86,
+      "target_5pct": 400.1,
+      "sl_3pct": 369.62,
+      "hold_days": 7,
+      "weight_pct": 2.0,
+      "engines_in_top10": 3,
+      "h1_cal": 0.71,
+      "s5_7d": 0.546,
+      "rsi": 85.8,
+      "return_20d": 0.415,
+      "adv_cr": 95.04,
+      "risk_flag": "RSI 86, +42pct 20d \u2014 chase zone, but liquid",
+      "tier": 1,
+      "liquidity_premium": true
+    },
+    {
+      "symbol": "YASHO",
+      "close": 2249.8,
+      "buy_low": 2227.3,
+      "buy_high": 2272.3,
+      "target_5pct": 2362.29,
+      "sl_3pct": 2182.31,
+      "hold_days": 7,
+      "weight_pct": 1.0,
+      "engines_in_top10": 3,
+      "h1_cal": 0.67,
+      "s5_7d": 0.534,
+      "rsi": 83.5,
+      "return_20d": 0.508,
+      "adv_cr": 8.5,
+      "risk_flag": "RSI 84, +51pct 20d \u2014 chase zone",
+      "tier": 1
+    },
+    {
+      "symbol": "NOVARTIND",
+      "close": 1415.7,
+      "buy_low": 1401.54,
+      "buy_high": 1429.86,
+      "target_5pct": 1486.49,
+      "sl_3pct": 1373.23,
+      "hold_days": 7,
+      "weight_pct": 1.0,
+      "engines_in_top10": 3,
+      "h1_cal": 0.65,
+      "s5_7d": 0.52,
+      "rsi": 82.2,
+      "return_20d": 0.347,
+      "adv_cr": 5.61,
+      "risk_flag": "RSI 82 borderline chase",
+      "tier": 1,
+      "carryover_from_v5": true
+    }
+  ],
+  "tier2_signal_plus_non_chase": [
+    {
+      "symbol": "CORDSCABLE",
+      "close": 229.54,
+      "buy_low": 227.24,
+      "buy_high": 231.84,
+      "target_5pct": 241.02,
+      "sl_3pct": 222.65,
+      "hold_days": 15,
+      "weight_pct": 2.0,
+      "engines_in_top10": 2,
+      "h1_cal": 0.67,
+      "s5_7d": 0.531,
+      "rsi": 67.5,
+      "return_20d": 0.273,
+      "adv_cr": 3.4,
+      "rationale": "Triangulated, clean, RSI 67 (NOT in chase zone) - best risk-adjusted",
+      "tier": 2
+    },
+    {
+      "symbol": "NGLFINE",
+      "close": 2819.8,
+      "buy_low": 2791.6,
+      "buy_high": 2848.0,
+      "target_5pct": 2960.79,
+      "sl_3pct": 2735.21,
+      "hold_days": 15,
+      "weight_pct": 2.0,
+      "engines_in_top10": 2,
+      "h1_cal": 0.64,
+      "s5_7d": 0.522,
+      "rsi": 67.6,
+      "return_20d": 0.244,
+      "adv_cr": 6.15,
+      "rationale": "Triangulated, decent liquidity, RSI 68",
+      "tier": 2
+    },
+    {
+      "symbol": "COASTCORP",
+      "close": 61.12,
+      "buy_low": 60.51,
+      "buy_high": 61.73,
+      "target_5pct": 64.18,
+      "sl_3pct": 59.29,
+      "hold_days": 15,
+      "weight_pct": 1.0,
+      "engines_in_top10": 2,
+      "h1_cal": 0.65,
+      "s5_7d": 0.514,
+      "rsi": 60.3,
+      "return_20d": 0.075,
+      "adv_cr": 1.13,
+      "rationale": "Triangulated, lowest RSI of all picks, micro-liquid",
+      "tier": 2
+    }
+  ],
+  "excluded_due_to_contamination": [
+    "PRECOT",
+    "SPORTKING",
+    "GRAUWEIL",
+    "BESTAGRO",
+    "DJML"
+  ],
+  "excluded_due_to_chase_extreme": [],
+  "carryover_picks": {
+    "CONSOFINVT": "v9 file; NOT in cross-engine top-10. Single-engine pick only. Lower priority now.",
+    "KAPSTON": "Top in multibagger engine ONLY. Not triangulated. Single-engine signal."
+  },
+  "three_path_recommendation": {
+    "aggressive_path_A": [
+      "MODISONLTD@2%",
+      "BLISSGVS@2%"
+    ],
+    "conservative_path_B": [
+      "CORDSCABLE@2%",
+      "NGLFINE@2%"
+    ],
+    "balanced_path_C": [
+      "BLISSGVS@2%",
+      "CORDSCABLE@2%"
+    ]
+  },
+  "max_basket_total_pct": 11.0,
+  "rest_in_liquidplus_pct": 89.0,
+  "constitution_caveats": [
+    "\u00a71.1 Honesty \u2014 NO name clears 0.80 calibrated bar. All picks are sub-conviction.",
+    "\u00a71.5 macro RISK_OFF/WAIT \u2014 these are USER OVERRIDE trades.",
+    "\u00a71.2 \u2014 Lead with contradiction: 4 of 7 picks are in chase zone (RSI 80+, ret_20d 35-51%); trend reversal is the primary risk.",
+    "\u00a71.4 Bonferroni \u2014 at alpha/30 (multi-test correction) no name clears 0.005 significance."
+  ],
+  "ts_committed_utc": "2026-05-27T10:51:26.463274Z"
+}
