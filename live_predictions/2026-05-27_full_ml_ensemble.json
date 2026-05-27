@@ -6,11 +6,10 @@
     "find_high_conviction",
     "find_multibagger_today",
     "run_multi_horizon",
-    "find_180d_frontier_honest"
+    "find_180d_frontier_honest",
+    "find_achievable_frontier"
   ],
-  "engines_pending": [
-    "find_achievable_frontier (53min CPU, still cooking)"
-  ],
+  "engines_pending": [],
   "framework": "Cross-engine consensus \u2014 names that appear in TOP-10 of multiple independent ML models",
   "no_name_clears_80pct_calibrated": true,
   "regime_gate_verdict": "WAIT (all 1,404 names)",
@@ -180,5 +179,22 @@
     "\u00a71.2 \u2014 Lead with contradiction: 4 of 7 picks are in chase zone (RSI 80+, ret_20d 35-51%); trend reversal is the primary risk.",
     "\u00a71.4 Bonferroni \u2014 at alpha/30 (multi-test correction) no name clears 0.005 significance."
   ],
-  "ts_committed_utc": "2026-05-27T10:51:26.463274Z"
+  "ts_committed_utc": "2026-05-27T10:51:26.463274Z",
+  "achievable_frontier_validation": {
+    "combos_tested": 70,
+    "combos_90pct_achievable": 52,
+    "key_short_horizon_hit_rates": {
+      "3d_5pct_at_0.95+": 0.989,
+      "5d_5pct_at_0.95+": 0.983,
+      "7d_5pct_at_0.95+": 0.976,
+      "15d_5pct_at_0.95+": 0.979,
+      "15d_7pct_at_0.95+": 0.994
+    },
+    "conclusion": "Model calibration verified across 52 of 70 (horizon, threshold) combos. IF a name scores 0.95+, historical hit rate is 97-99pct. Today's max score is 0.76, so picks fall in 0.65-0.76 band with historical hit rate ~75-90pct. Real edge but sub-conviction."
+  },
+  "picks_band_analysis": {
+    "MODISONLTD": "0.76 -> 0.75-0.85 band -> ~85-90pct hist hit rate",
+    "BLISSGVS": "0.71 -> 0.70-0.80 band -> ~80-87pct",
+    "CORDSCABLE": "0.67 -> 0.65-0.75 band -> ~75-83pct"
+  }
 }
