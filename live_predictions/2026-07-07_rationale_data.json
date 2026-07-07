@@ -1,0 +1,603 @@
+{
+ "as_of": "2026-07-07",
+ "data_through": "2026-07-06",
+ "regime": "WAIT",
+ "macro": {
+  "usdinr": {
+   "v": 95.4,
+   "chg_20d": 0.4739336492890933,
+   "as_of": "2026-07-06"
+  },
+  "brent": {
+   "v": 71.59,
+   "chg_20d": -26.41587007914482,
+   "as_of": "2026-07-06"
+  },
+  "wti": {
+   "v": 71.87,
+   "chg_20d": -23.80195080576759,
+   "as_of": "2026-07-06"
+  },
+  "us_10y": {
+   "v": 4.49,
+   "chg_20d": -5.999999999999961,
+   "as_of": "2026-07-06"
+  },
+  "dxy": {
+   "v": 120.6902,
+   "chg_20d": 0.5055665618226124,
+   "as_of": "2026-07-06"
+  },
+  "us_vix": {
+   "v": 15.81,
+   "chg_20d": -26.499302649930268,
+   "as_of": "2026-07-06"
+  },
+  "spx": {
+   "v": 7537.43,
+   "chg_20d": 2.0814654903883456,
+   "as_of": "2026-07-06"
+  },
+  "copper": {
+   "v": 13483.75153846154,
+   "chg_20d": 0.0,
+   "as_of": "2026-07-06"
+  }
+ },
+ "sectors": [
+  {
+   "sector": "NIFTY REALTY",
+   "sector_5d_ret": 0.08278182102663537,
+   "sector_20d_ret": 0.12422347084344516,
+   "sector_60d_ret": 0.13848973089419397,
+   "rs_20d": 0.08590286105675733,
+   "sector_breadth_50": 0.9
+  },
+  {
+   "sector": "NIFTY PHARMA",
+   "sector_5d_ret": 0.042561281732073256,
+   "sector_20d_ret": 0.06759829682508782,
+   "sector_60d_ret": 0.19386674132658915,
+   "rs_20d": 0.029277687038399988,
+   "sector_breadth_50": 1.0
+  },
+  {
+   "sector": "NIFTY MICROCAP 250",
+   "sector_5d_ret": 0.020034354694919963,
+   "sector_20d_ret": 0.06258616010958132,
+   "sector_60d_ret": 0.16720845585394295,
+   "rs_20d": 0.024265550322893487,
+   "sector_breadth_50": 0.6398305084745762
+  },
+  {
+   "sector": "NIFTY INFRA",
+   "sector_5d_ret": 0.015197945913343216,
+   "sector_20d_ret": 0.05869044180405984,
+   "sector_60d_ret": 0.10079397253400195,
+   "rs_20d": 0.02036983201737201,
+   "sector_breadth_50": 0.9285714285714286
+  },
+  {
+   "sector": "NIFTY FMCG",
+   "sector_5d_ret": 0.029025892416909265,
+   "sector_20d_ret": 0.05274273466470846,
+   "sector_60d_ret": 0.062106971273624655,
+   "rs_20d": 0.01442212487802063,
+   "sector_breadth_50": 0.6666666666666666
+  },
+  {
+   "sector": "NIFTY 500",
+   "sector_5d_ret": 0.014765520077520073,
+   "sector_20d_ret": 0.051030762012193545,
+   "sector_60d_ret": 0.11089570145344131,
+   "rs_20d": 0.012710152225505714,
+   "sector_breadth_50": 0.6733333333333333
+  },
+  {
+   "sector": "NIFTY CONSUMER DURABLES",
+   "sector_5d_ret": 0.009576481922093535,
+   "sector_20d_ret": 0.049060404370471405,
+   "sector_60d_ret": 0.027053478482423805,
+   "rs_20d": 0.010739794583783574,
+   "sector_breadth_50": 0.46153846153846156
+  },
+  {
+   "sector": "NIFTY FINANCIAL SERVICES",
+   "sector_5d_ret": 0.008282676991171271,
+   "sector_20d_ret": 0.04863913862416435,
+   "sector_60d_ret": 0.009000063347802371,
+   "rs_20d": 0.010318528837476519,
+   "sector_breadth_50": 0.38461538461538464
+  },
+  {
+   "sector": "NIFTY AUTO",
+   "sector_5d_ret": 0.016767670145970432,
+   "sector_20d_ret": 0.0484265667689899,
+   "sector_60d_ret": 0.06830207000913742,
+   "rs_20d": 0.010105956982302065,
+   "sector_breadth_50": 0.7333333333333333
+  },
+  {
+   "sector": "NIFTY BANK",
+   "sector_5d_ret": -0.008748159460754665,
+   "sector_20d_ret": 0.04607883897537572,
+   "sector_60d_ret": 0.04314820937861053,
+   "rs_20d": 0.00775822918868789,
+   "sector_breadth_50": 0.6428571428571429
+  },
+  {
+   "sector": "NIFTY PVT BANK",
+   "sector_5d_ret": 0.010650778605754863,
+   "sector_20d_ret": 0.02823982140955328,
+   "sector_60d_ret": 0.1890688150611215,
+   "rs_20d": -0.010080788377134553,
+   "sector_breadth_50": 1.0
+  },
+  {
+   "sector": "OTHER",
+   "sector_5d_ret": -0.0063764350722678815,
+   "sector_20d_ret": 0.02780451194178186,
+   "sector_60d_ret": 0.18158647631599964,
+   "rs_20d": -0.01051609784490597,
+   "sector_breadth_50": 0.5862068965517241
+  },
+  {
+   "sector": "NIFTY PSE",
+   "sector_5d_ret": 0.0004729694664873385,
+   "sector_20d_ret": 0.011193722273462131,
+   "sector_60d_ret": -0.03292514553577035,
+   "rs_20d": -0.0271268875132257,
+   "sector_breadth_50": 0.375
+  },
+  {
+   "sector": "NIFTY SMALLCAP 250",
+   "sector_5d_ret": -0.01788065870312569,
+   "sector_20d_ret": 0.007673164724326803,
+   "sector_60d_ret": -0.00047122710116183814,
+   "rs_20d": -0.03064744506236103,
+   "sector_breadth_50": 0.5
+  },
+  {
+   "sector": "NIFTY MEDIA",
+   "sector_5d_ret": -0.00370883970478005,
+   "sector_20d_ret": 0.0024388129440771436,
+   "sector_60d_ret": 0.11801871026490662,
+   "rs_20d": -0.03588179684261069,
+   "sector_breadth_50": 0.6666666666666666
+  },
+  {
+   "sector": "NIFTY ENERGY",
+   "sector_5d_ret": -0.008087883915159648,
+   "sector_20d_ret": -0.00725324319598831,
+   "sector_60d_ret": 0.11348828839307434,
+   "rs_20d": -0.04557385298267614,
+   "sector_breadth_50": 0.358974358974359
+  },
+  {
+   "sector": "NIFTY IT",
+   "sector_5d_ret": -0.002600971838421795,
+   "sector_20d_ret": -0.03865951044874109,
+   "sector_60d_ret": -0.03446275947002636,
+   "rs_20d": -0.07698012023542891,
+   "sector_breadth_50": 0.3
+  },
+  {
+   "sector": "NIFTY METAL",
+   "sector_5d_ret": 0.02217180553042984,
+   "sector_20d_ret": -0.04531513533306211,
+   "sector_60d_ret": 0.000969380618405354,
+   "rs_20d": -0.08363574511974994,
+   "sector_breadth_50": 0.13333333333333333
+  },
+  {
+   "sector": "NIFTY OIL & GAS",
+   "sector_5d_ret": 0.016512429686082353,
+   "sector_20d_ret": -0.051633654985610344,
+   "sector_60d_ret": 0.15048518765723684,
+   "rs_20d": -0.08995426477229818,
+   "sector_breadth_50": 1.0
+  },
+  {
+   "sector": "NIFTY SMALLCAP 100",
+   "sector_5d_ret": 0.014114832535885302,
+   "sector_20d_ret": -0.05548128342245995,
+   "sector_60d_ret": 0.03693737769080219,
+   "rs_20d": -0.09380189320914778,
+   "sector_breadth_50": 1.0
+  }
+ ],
+ "picks": [
+  {
+   "symbol": "DELTACORP",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 65.22,
+   "buy_low": 64.57,
+   "buy_high": 65.87,
+   "target": 68.48,
+   "sl": 63.26,
+   "band_fit": 3.0,
+   "ml_score": 0.665,
+   "cs_score": 0.502,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 46.8,
+    "ret_5d_pct": 1.2,
+    "ret_20d_pct": -1.5,
+    "ret_60d_pct": 11.8,
+    "ret_120d_pct": -6.7,
+    "ret_252d_pct": -28.3,
+    "dist_sma_50_pct": -6.0,
+    "dist_sma_200_pct": -4.2,
+    "off_52w_high_pct": -31.5,
+    "above_52w_low_pct": 32.2,
+    "volume_vs_20d": 0.38,
+    "delivery_pct": 0.5,
+    "delivery_vs_20d": 1.36,
+    "adv_20d_cr": 18.7
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-07-02",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    },
+    {
+     "date": "2026-07-02",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    }
+   ],
+   "all_announcements_count_60d": 5
+  },
+  {
+   "symbol": "VIJAYA",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 1347.4,
+   "buy_low": 1333.93,
+   "buy_high": 1360.87,
+   "target": 1414.77,
+   "sl": 1306.98,
+   "band_fit": 3.0,
+   "ml_score": 0.608,
+   "cs_score": 0.561,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 54.4,
+    "ret_5d_pct": -1.5,
+    "ret_20d_pct": -1.8,
+    "ret_60d_pct": 37.2,
+    "ret_120d_pct": 36.4,
+    "ret_252d_pct": 33.5,
+    "dist_sma_50_pct": 5.6,
+    "dist_sma_200_pct": 26.9,
+    "off_52w_high_pct": -3.6,
+    "above_52w_low_pct": 56.4,
+    "volume_vs_20d": 0.69,
+    "delivery_pct": 0.4,
+    "delivery_vs_20d": 0.99,
+    "adv_20d_cr": 49.2
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-05-11",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Shareholders meeting"
+    },
+    {
+     "date": "2026-05-07",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Outcome of Board Meeting"
+    }
+   ],
+   "all_announcements_count_60d": 25
+  },
+  {
+   "symbol": "MANALIPETC",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 63.31,
+   "buy_low": 62.68,
+   "buy_high": 63.94,
+   "target": 66.48,
+   "sl": 61.41,
+   "band_fit": 3.0,
+   "ml_score": 0.573,
+   "cs_score": 0.561,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 50.8,
+    "ret_5d_pct": -0.3,
+    "ret_20d_pct": -2.0,
+    "ret_60d_pct": 15.0,
+    "ret_120d_pct": 8.4,
+    "ret_252d_pct": -9.9,
+    "dist_sma_50_pct": 4.8,
+    "dist_sma_200_pct": 6.0,
+    "off_52w_high_pct": -20.1,
+    "above_52w_low_pct": 60.8,
+    "volume_vs_20d": 0.32,
+    "delivery_pct": 0.3,
+    "delivery_vs_20d": 0.72,
+    "adv_20d_cr": 5.8
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-06-18",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    },
+    {
+     "date": "2026-06-12",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    },
+    {
+     "date": "2026-05-21",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Outcome of Board Meeting"
+    }
+   ],
+   "all_announcements_count_60d": 19
+  },
+  {
+   "symbol": "IRCON",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 134.26,
+   "buy_low": 132.92,
+   "buy_high": 135.6,
+   "target": 140.97,
+   "sl": 130.23,
+   "band_fit": 3.0,
+   "ml_score": 0.551,
+   "cs_score": 0.495,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 45.1,
+    "ret_5d_pct": 0.1,
+    "ret_20d_pct": -1.7,
+    "ret_60d_pct": -1.6,
+    "ret_120d_pct": -17.4,
+    "ret_252d_pct": -30.6,
+    "dist_sma_50_pct": -5.1,
+    "dist_sma_200_pct": -11.5,
+    "off_52w_high_pct": -31.5,
+    "above_52w_low_pct": 16.5,
+    "volume_vs_20d": 0.7,
+    "delivery_pct": 0.3,
+    "delivery_vs_20d": 0.92,
+    "adv_20d_cr": 23.3
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-06-26",
+     "cat": "approval",
+     "tags": "approval",
+     "desc": "Updates"
+    },
+    {
+     "date": "2026-06-26",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Updates"
+    },
+    {
+     "date": "2026-06-23",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Bagging/Receiving of orders/contracts"
+    },
+    {
+     "date": "2026-05-27",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Action(s) taken or orders passed"
+    },
+    {
+     "date": "2026-05-22",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Outcome of Board Meeting"
+    },
+    {
+     "date": "2026-05-07",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Updates"
+    }
+   ],
+   "all_announcements_count_60d": 22
+  },
+  {
+   "symbol": "PNBGILTS",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 89.63,
+   "buy_low": 88.73,
+   "buy_high": 90.53,
+   "target": 94.11,
+   "sl": 86.94,
+   "band_fit": 2.5,
+   "ml_score": 0.666,
+   "cs_score": 0.561,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 53.8,
+    "ret_5d_pct": -1.6,
+    "ret_20d_pct": -5.1,
+    "ret_60d_pct": 27.4,
+    "ret_120d_pct": 11.0,
+    "ret_252d_pct": -6.8,
+    "dist_sma_50_pct": 9.3,
+    "dist_sma_200_pct": 10.2,
+    "off_52w_high_pct": -22.3,
+    "above_52w_low_pct": 51.5,
+    "volume_vs_20d": 0.31,
+    "delivery_pct": 0.3,
+    "delivery_vs_20d": 0.92,
+    "adv_20d_cr": 13.7
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-06-04",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    },
+    {
+     "date": "2026-06-03",
+     "cat": "order_win",
+     "tags": "order_win",
+     "desc": "Spurt in Volume"
+    }
+   ],
+   "all_announcements_count_60d": 7
+  },
+  {
+   "symbol": "CHAMBLFERT",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 476.05,
+   "buy_low": 471.29,
+   "buy_high": 480.81,
+   "target": 499.85,
+   "sl": 461.77,
+   "band_fit": 2.5,
+   "ml_score": 0.611,
+   "cs_score": 0.52,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 52.7,
+    "ret_5d_pct": 1.5,
+    "ret_20d_pct": 1.8,
+    "ret_60d_pct": 4.2,
+    "ret_120d_pct": 8.2,
+    "ret_252d_pct": -13.5,
+    "dist_sma_50_pct": 3.0,
+    "dist_sma_200_pct": 4.0,
+    "off_52w_high_pct": -16.4,
+    "above_52w_low_pct": 15.5,
+    "volume_vs_20d": 0.28,
+    "delivery_pct": 0.5,
+    "delivery_vs_20d": 1.21,
+    "adv_20d_cr": 49.0
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-05-14",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Outcome of Board Meeting"
+    }
+   ],
+   "all_announcements_count_60d": 60
+  },
+  {
+   "symbol": "CHENNPETRO",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 1120.4,
+   "buy_low": 1109.2,
+   "buy_high": 1131.6,
+   "target": 1176.42,
+   "sl": 1086.79,
+   "band_fit": 2.5,
+   "ml_score": 0.561,
+   "cs_score": 0.492,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 49.5,
+    "ret_5d_pct": 1.7,
+    "ret_20d_pct": -5.2,
+    "ret_60d_pct": 15.0,
+    "ret_120d_pct": 30.3,
+    "ret_252d_pct": 52.7,
+    "dist_sma_50_pct": 2.0,
+    "dist_sma_200_pct": 17.2,
+    "off_52w_high_pct": -8.6,
+    "above_52w_low_pct": 78.7,
+    "volume_vs_20d": 0.37,
+    "delivery_pct": 0.3,
+    "delivery_vs_20d": 0.97,
+    "adv_20d_cr": 102.7
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-05-14",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Reply to Clarification- Financial results"
+    }
+   ],
+   "all_announcements_count_60d": 7
+  },
+  {
+   "symbol": "KIOCL",
+   "weight_pct": 12.5,
+   "tier": 2,
+   "close": 387.05,
+   "buy_low": 383.18,
+   "buy_high": 390.92,
+   "target": 406.4,
+   "sl": 375.44,
+   "band_fit": 2.5,
+   "ml_score": 0.542,
+   "cs_score": 0.522,
+   "engines_count": 0,
+   "micro": {
+    "rsi_14d": 44.1,
+    "ret_5d_pct": -1.2,
+    "ret_20d_pct": -4.5,
+    "ret_60d_pct": 8.1,
+    "ret_120d_pct": 3.5,
+    "ret_252d_pct": 28.8,
+    "dist_sma_50_pct": -2.7,
+    "dist_sma_200_pct": 0.8,
+    "off_52w_high_pct": -38.3,
+    "above_52w_low_pct": 34.4,
+    "volume_vs_20d": 0.33,
+    "delivery_pct": 0.5,
+    "delivery_vs_20d": 1.24,
+    "adv_20d_cr": 6.8
+   },
+   "news_event_flags_15d": {},
+   "material_announcements_60d": [
+    {
+     "date": "2026-06-25",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Reply to Clarification- Financial results"
+    },
+    {
+     "date": "2026-06-18",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Clarification - Financial Results"
+    },
+    {
+     "date": "2026-05-27",
+     "cat": "results",
+     "tags": "results",
+     "desc": "Outcome of Board Meeting"
+    }
+   ],
+   "all_announcements_count_60d": 4
+  }
+ ]
+}
