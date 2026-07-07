@@ -2169,6 +2169,29 @@ Required output, in order:
     notices get mislabeled as order wins by keyword taggers — only
     "Bagging/Receiving of orders/contracts" is a real order win.
 
+18. SIMPLICITY LAYER (src/agentic/simplicity_auditor.py +
+    prompts/06_SIMPLICITY_AUDITOR.md + src/agentic/build_recreation_kit.py)
+    — the stdlib-first enforcement system. Build it stdlib-only (ast,
+    argparse, json, pathlib, hashlib, re) — it must practice what it enforces:
+    a) `audit` — AST scan for DEAD_FUNC, DEAD_CLASS, UNUSED_IMPORT
+       (skip __future__), ONE_METHOD_CLS, TRIVIAL_WRAPPER, DUP_FUNC
+       (normalised-body-hash), DEP_OVER_STDLIB (requests→urllib, click→argparse,
+       tenacity→6-line retry loop, loguru→logging; pandas/numpy/pyarrow/
+       lightgbm/sklearn/shap pre-approved for data work), GOD_FILE (>800 LOC),
+       DEEP_NESTING (>5). Writes reports/simplicity_audit.md. Never auto-rewrites.
+    b) `debt-add` / `debt-report` — logs/debt_ledger.jsonl: every deliberate
+       shortcut recorded with where/shortcut/why/planned_fix/loc_impact/
+       speed_impact, repayable. A shortcut without a ledger entry is a bug.
+    c) metrics — every audit appends files/LOC/findings-by-category/runtime to
+       logs/simplicity_metrics.jsonl with Δloc vs previous run. Size drift is
+       measured, not argued.
+    d) build_recreation_kit.py — regenerates the CURRENT INVENTORY block in
+       this very prompt from the code on every pipeline run (module docstring
+       first lines, categorised). The kit stays current by construction.
+    Both wired into run_weekly_pipeline.sh step 4.5 (non-fatal), and the
+    LLM gate (prompt 06) reviews every change: abstraction must be earned by
+    the SECOND concrete use; delete over deprecate; one file until it hurts.
+
 Critical operating rules (from §Constitution + hard-won corrections):
 - NEVER claim 80%+ confidence on a threshold where 2025 OOS sample is empty
 - NEVER disable the contamination filter
@@ -2178,6 +2201,13 @@ Critical operating rules (from §Constitution + hard-won corrections):
 - NEVER trust a backtest under a full market cycle / thousands of trades
 - NEVER use window-level exit approximations — day-by-day sequencing only,
   next-open entry, ≥0.30% costs (the coarse version overstated CAGR by ~36pp)
+- NEVER add a third-party dependency without proof the stdlib equivalent was
+  tried and is insufficient (heavy data libs pre-approved: pandas/numpy/
+  pyarrow/lightgbm/sklearn/shap)
+- NEVER take a deliberate shortcut without a debt-ledger entry (where/why/
+  planned fix/loc/speed impact) — an unrecorded shortcut is a bug
+- ALWAYS run the simplicity audit after changes — zero NEW findings per change,
+  and cite Δloc from logs/simplicity_metrics.jsonl for any simplification claim
 - ALWAYS lead with the contradiction when newer evidence overrides prior claim
 - ALWAYS use one-shot git -c flags for user.name/email (never modify global config)
 - ALWAYS keep live_predictions/ files immutable (no rewriting committed artifacts)
@@ -2197,6 +2227,150 @@ the rebuild complete:
    diverged on: the label (touch vs exit-rule), the universe cut, the QC
    bands, or the band_fit ranking — in that order of likelihood.
 Then commit everything and push to a new private GitHub repo.
+
+═══ CURRENT INVENTORY (auto-generated) ═══
+As of 2026-07-07 · 116 files · 25,436 LOC · regenerated on every
+weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
+
+[Data fetchers]  (28)
+  src/agentic/build_macro_panel.py                     — Consolidate ALL macro/aggregate features into a single daily panel.
+  src/agentic/build_news_event_features.py             — News + corporate-event feature builder — 5d and 15d windows, stock + industry.
+  src/agentic/fetch_amfi_mf_holdings.py                — Fetch AMFI mutual-fund AUM data — non-conventional ownership signal.
+  src/agentic/fetch_announcements_historical.py        — Backfill NSE corporate announcements from 2016-01-01 to today.
+  src/agentic/fetch_block_deals.py                     — Fetch NSE block deals + bulk deals and turn them into a per-stock smart-money signal.
+  src/agentic/fetch_broker_recos.py                    — Aggregate published broker / advisor stock recommendations from free public sources.
+  src/agentic/fetch_commodity_prices.py                — Fetch commodity prices via FRED (Federal Reserve Economic Data) — free, no auth.
+  src/agentic/fetch_fii_dii.py                         — Fetch FII / DII daily provisional flows from NSE.
+  src/agentic/fetch_forex_macro.py                     — Fetch macro time-series — USDINR, Brent, India 10y yield, India VIX.
+  src/agentic/fetch_fundamentals.py                    — Enrich the universe with fundamentals ratios per stock from NSE.
+  src/agentic/fetch_global_macro.py                    — Cross-country macro fetcher — global signals affecting India.
+  src/agentic/fetch_global_macro_sentiment.py          — Macro-level sentiment — country, market, commodity, central-bank headlines.
+  src/agentic/fetch_global_rates.py                    — Fetch global rates / risk indices via FRED — free, no auth.
+  src/agentic/fetch_industry_indicators.py             — Compute INDUSTRY/SECTOR aggregate indicators from existing prices parquet.
+  src/agentic/fetch_market_breadth.py                  — Compute MARKET BREADTH features from existing prices parquet.
+  src/agentic/fetch_news_per_symbol.py                 — Per-symbol news enrichment via Google News RSS.
+  src/agentic/fetch_news_rss.py                        — Pull RSS feeds for Indian-market news and tag each item with mentioned NSE symbols.
+  src/agentic/fetch_options_chain.py                   — Fetch NSE F&O options chain data for each F&O underlying and write per-stock
+  src/agentic/fetch_pib_releases.py                    — Fetch Press Information Bureau (PIB) press releases from 2016-present.
+  src/agentic/fetch_reddit.py                          — Pull recent posts from public Reddit JSON for India-investing subs.
+  src/agentic/fetch_screener_fundamentals.py           — Fetch comprehensive fundamentals from Screener.in per-company pages.
+  src/agentic/fetch_screener_screens.py                — Pull curated Screener.in stock screens — FII/DII buying, promoter buying, etc.
+  src/agentic/fetch_stock_fii_dii.py                   — Fetch stock-level FII/DII holdings from NSE quarterly shareholding pattern.
+  src/agentic/fetch_superstar_holdings.py              — Fetch publicly disclosed 'Superstar' investor holdings from Tickertape.
+  src/agentic/fetch_wiki_pageviews.py                  — Fetch Wikipedia page-view counts as a retail-attention proxy.
+  src/agentic/fetch_youtube.py                         — Pull recent videos from Indian-finance YouTube channels (RSS, no API key needed) and
+  src/agentic/refresh_announcements.py                 — Incrementally extend the corp_announcements parquet by fetching the last 14 days
+  src/agentic/refresh_prices.py                        — Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet.
+
+[ML engines]  (8)
+  src/agentic/compare_short_horizons.py                — Head-to-head: 10%/30d vs 5%/15d short-horizon trade.
+  src/agentic/find_180d_frontier_honest.py             — HONEST 180-day frontier — calibrated prospectively.
+  src/agentic/find_achievable_frontier.py              — Frontier search: at what (return %, horizon) combinations does the model
+  src/agentic/find_achievable_targets.py               — For each (threshold % × horizon days) combination, find the minimum
+  src/agentic/find_high_conviction.py                  — Train 3 horizon×threshold models, calibrate to TRUE probability, then find
+  src/agentic/find_multibagger_targets.py              — Multibagger achievability — for each (large-threshold × long-horizon) combo,
+  src/agentic/find_multibagger_today.py                — Pick today's stocks that hit ≥ 90% calibrated probability of doubling
+  src/agentic/run_multi_horizon.py                     — Multi-horizon ensemble: 1d, 7d, 21d models stacked.
+
+[Backtests]  (11)
+  src/agentic/backtest_10yr.py                         — 10-year walk-forward backtest of the v3 ensemble (2016 → 2025).
+  src/agentic/backtest_10yr_15d5pct.py                 — PROPER 10-YEAR BACKTEST — 15D/+5% hybrid pipeline.
+  src/agentic/backtest_10yr_macro.py                   — 9-year walk-forward backtest WITH macro-enriched feature set.
+  src/agentic/backtest_10yr_with_factors.py            — A/B 10-year walk-forward backtest WITH 5 KEEP factors added.
+  src/agentic/backtest_dynamic_gated.py                — Dynamic-gated backtest — what the user actually wanted measured.
+  src/agentic/backtest_event_driven.py                 — Event-driven, fixed-capital, signal-gated backtest.
+  src/agentic/backtest_event_window.py                 — Event-window backtest — different architecture from event-feature stacking.
+  src/agentic/backtest_hybrid_15d5pct.py               — HONEST BACKTEST — hybrid 15D/+5% pipeline.
+  src/agentic/backtest_multibagger_strategy.py         — Backtest the multibagger strategy: every week in 2024-2025, pick the
+  src/agentic/backtest_news_features.py                — News-feature A/B backtest.
+  src/agentic/backtest_regime_gated.py                 — Test if a regime gate improves the multibagger strategy. Compare:
+
+[QC / gates]  (5)
+  src/agentic/data_completeness.py                     — Data completeness audit — runs daily, fails LOUDLY if any stock in the
+  src/agentic/devils_advocate.py                       — Devil's Advocate — automated audit battery.
+  src/agentic/emit_freshness_status.py                 — Emit reports/freshness_status.md — a standalone freshness dashboard.
+  src/agentic/filter_cascade.py                        — Filter cascade — show exactly what gets dropped at each gate, with counts.
+  src/agentic/verify_freshness.py                      — Freshness gate — refuses to let the pipeline proceed if any critical input is stale.
+
+[RL loop]  (2)
+  src/agentic/miss_learner.py                          — MISS-DRIVEN RL LEARNER — the first version.
+  src/agentic/train_missed_winner_classifier.py        — OPTION 2: Supervised ML classifier for missed winners.
+
+[Basket / output]  (3)
+  src/agentic/build_status_dashboard.py                — Live status dashboard — what's the system doing RIGHT NOW.
+  src/agentic/generate_daily_brief.py                  — Synthesize the daily brief from latest model outputs + alt-data signals.
+  src/agentic/generate_hybrid_basket.py                — Generate the WEEKLY 15D/+5% hybrid basket.
+
+[Simplicity layer]  (2)
+  src/agentic/build_recreation_kit.py                  — Recreation-kit generator — keeps SHOWCASE.html's inventory CURRENT, never historical.
+  src/agentic/simplicity_auditor.py                    — Simplicity auditor — stdlib-first policy enforcement + technical-debt ledger.
+
+[Orchestrators]  (3)
+  src/agentic/daily_pipeline.sh                        — Daily agentic pipeline — fetches alt data, refreshes catalyst features, retrains model, builds brief.
+  src/agentic/daily_refresh.sh                         — Daily refresh — news + events + predictions + git push.
+  src/agentic/run_weekly_pipeline.sh                   — WEEKLY 15D/+5% PIPELINE ORCHESTRATOR
+
+[Agent runner]  (1)
+  src/agentic/run_agent.py                             — Programmatic agent runner — actually invokes the prompt files.
+
+[Agent prompts]  (9)
+  prompts/00_SYSTEM_PRINCIPLES.md                      — System Principles — All Agents
+  prompts/01_HYPOTHESIS_GENERATOR.md                   — Agent: Hypothesis Generator
+  prompts/02_DATA_FETCHER.md                           — Agent: Data Fetcher
+  prompts/03_BACKTEST_VALIDATOR.md                     — Agent: Backtest Validator
+  prompts/04_TRADE_REVIEWER.md                         — Agent: Trade Reviewer / Daily PM
+  prompts/05_DEVILS_ADVOCATE.md                        — Agent: Devil's Advocate
+  prompts/06_SIMPLICITY_AUDITOR.md                     — SIMPLICITY AUDITOR — the stdlib-first gate
+  prompts/INDEX.md                                     — Agent Prompts — Index
+  prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
+
+[Other tools]  (44)
+  src/agentic/ab_test_event_features.py                — A/B test: does adding 11.3y of catalyst/event features lift the 5%/15d model?
+  src/agentic/ab_test_event_polarity.py                — 4-arm A/B test on the 5%/15d model:
+  src/agentic/agent_loop.py                            — Agent loop — one cycle of hypothesis → fetch → compile → evaluate → verdict.
+  src/agentic/analyze_regime_for_strategy.py           — Analyze WHY the multibagger strategy worked in Feb/Sep 2024 and failed
+  src/agentic/analyze_superstar_alpha.py               — Analyze whether superstar-held stocks deliver alpha vs non-held.
+  src/agentic/analyze_superstar_horizons.py            — Multi-horizon superstar-confluence analysis.
+  src/agentic/build_academic_alphas.py                 — Operationalize alpha factors from academic finance literature.
+  src/agentic/build_catalyst_features.py               — Per-(symbol, trade_date) catalyst feature matrix from tagged announcements + insider trades.
+  src/agentic/build_chart_signals.py                   — Multi-timeframe chart pattern + technical signal detector.
+  src/agentic/build_confluence_picks.py                — Aggregate confluence picker — find stocks where MULTIPLE independent
+  src/agentic/build_dashboard.py                       — Public dashboard — built around Jobs-To-Be-Done.
+  src/agentic/build_derived_ratios.py                  — Compute derived ratios from existing fundamentals — 50+ new factors
+  src/agentic/build_event_polarity.py                  — Build TWO new sets of polarity-aware event features:
+  src/agentic/build_handoff.py                         — Regenerate HANDOFF.md with current state snapshot.
+  src/agentic/build_html_viewer.py                     — Build a single self-contained HTML file that renders all the mermaid
+  src/agentic/build_workflow_diagram.py                — Auto-generate a Mermaid workflow diagram from daily_pipeline.sh.
+  src/agentic/catalyst_tagger.py                       — NLP-tag NSE corporate announcements into catalyst categories.
+  src/agentic/compute_feature_importance.py            — Compute feature-importance for the v3 long ensemble + tag each feature
+  src/agentic/factor_evaluator.py                      — Factor evaluator — measure each new feature's lift on 7d-forward return.
+  src/agentic/factor_evaluator_macro.py                — Macro-aware factor evaluator — for date-level (NOT cross-sectional) features.
+  src/agentic/factor_registry.py                       — Factor / data hypothesis registry — the "what to try next" catalog.
+  src/agentic/feature_descriptions.py                  — Plain-English description for every feature the model uses.
+  src/agentic/feature_factory.py                       — Feature factory — compile new factors from existing data.
+  src/agentic/find_quiet_accumulation.py               — 6TH ENGINE — Quiet Accumulation Scanner.
+  src/agentic/generate_event_driven_today.py           — Today's actionable event-driven picks under the new gate config.
+  src/agentic/generate_pro_brief.py                    — Pro-format daily brief — every top pick gets:
+  src/agentic/generate_trade_plan.py                   — Daily trade plan — the single document the user reads each morning.
+  src/agentic/hypothesis_agent.py                      — LLM-driven hypothesis agent — generates STRONG factor hypotheses
+  src/agentic/hypothesis_agent_macro.py                — Macro / aggregate hypothesis agent — appends NON-CONVENTIONAL,
+  src/agentic/infinite_hypothesis_loop.py              — Never-sleeping hypothesis loop.
+  src/agentic/inspect_symbol.py                        — Per-symbol inspector — given a ticker, dump everything the system knows.
+  src/agentic/joint_signal_analyzer.py                 — Joint-signal analyzer.
+  src/agentic/monitor_for_conviction.py                — Daily conviction monitor — fires alerts at the 0.95 calibrated band.
+  src/agentic/paper_trading_recorder.py                — Paper-trading recorder: every run, score yesterday's brief picks against
+  src/agentic/portfolio_sizer.py                       — Portfolio sizer: given today's long/short candidates, produce a sized,
+  src/agentic/risk_envelope.py                         — Risk envelope — codify the user's stated bounds:
+  src/agentic/run_model_diversity.py                   — Train 5 diverse model families on the same feature set + label.
+  src/agentic/run_short_side.py                        — Short-side model: predict P(stock falls >= 5% in any of next 7 trading days,
+  src/agentic/run_v3_with_catalysts.py                 — v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features.
+  src/agentic/score_sentiment.py                       — Finance-tuned sentiment scorer for news / reddit / youtube text.
+  src/agentic/sector_weak_shorts.py                    — Sector-weak large-cap short overlay.
+  src/agentic/track_multibagger_basket.py              — Live tracker for the multibagger basket — proves whether the 90%-conviction
+  src/agentic/write_live_prediction.py                 — Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs.
+  src/agentic/install_schedule.sh                      — Install / reinstall the launchd schedule for the daily pipeline.
+
+═══ END INVENTORY ═══
 
 Reference URL: https://github.com/theabhinavsharma/shree-ganesh-model
 (my existing working version — feel free to fetch any file you need)
@@ -2308,6 +2482,18 @@ function copyPrompt() {
         <div class="role">Reviewer</div>
         <h4>Code Reviewer</h4>
         <p>Reviews every code change for correctness, regressions, missing validation. Catches leak reintroductions before they ship.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(0,240,168,0.1);color:var(--good)">SX</div>
+        <div class="role">Simplicity Gate</div>
+        <h4>Simplicity Auditor</h4>
+        <p>Enforces stdlib-first, simplest-correct-solution during development — not cleanup after. Mechanical half (<code>simplicity_auditor.py</code>, stdlib-only by design): dead code, unused imports, duplicate bodies, single-method classes, trivial wrappers, deps-with-stdlib-equivalents, god files. Judgment half (<code>prompts/06_SIMPLICITY_AUDITOR.md</code>): abstraction must be earned by the SECOND use. Every deliberate shortcut goes to <code>logs/debt_ledger.jsonl</code> with loc/speed impact; every run appends files/LOC/findings/runtime to <code>logs/simplicity_metrics.jsonl</code> so size drift is measured, not argued. First run on this repo: 162 findings across 45k LOC in 1.2s.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(106,142,255,0.1);color:var(--accent-3)">RK</div>
+        <div class="role">Anti-Drift</div>
+        <h4>Recreation-Kit Generator</h4>
+        <p><code>build_recreation_kit.py</code> scans the repo every pipeline run and regenerates the CURRENT INVENTORY inside the copy-paste prompt below — every script, engine, gate, agent prompt and orchestrator with its one-line purpose. The recreation kit cannot drift into a historical document: it is rebuilt from the code weekly, by construction.</p>
       </div>
     </div>
   </div>
