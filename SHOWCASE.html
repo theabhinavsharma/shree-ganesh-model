@@ -1373,7 +1373,10 @@ def is_actionable(symbol):
     <h3 style="color: var(--fg); margin: 32px 0 12px;">The trade spec</h3>
     <pre><code><span class="comment"># One basket per week. 8 names, equal weight, 100% deployed.</span>
 TARGET      = +5%           <span class="comment"># book HALF here, trail rest with SL at +2.5%</span>
-STOP_LOSS   = -3%           <span class="comment"># sell 100%, no exceptions</span>
+STOP_LOSS   = -3%           <span class="comment"># sell 100%, no exceptions.</span>
+                            <span class="comment"># ⚠️ UNDER REVIEW per 2026-07-07 correction below:</span>
+                            <span class="comment"># day-by-day sim says -3% is inside small-cap noise</span>
+                            <span class="comment"># (fires on 63.5% of trades → negative after costs)</span>
 TIMEOUT     = 15 trading days   <span class="comment"># exit whatever remains at market</span>
 NAMES       = 8 × 12.5%     <span class="comment"># equal weight, no cash drag</span>
 REFRESH     = weekly (Monday), full pipeline re-run
@@ -1398,6 +1401,23 @@ SL_PX       = close × 0.97
         <tr><td>Weeks positive (8-name basket)</td><td colspan="2">64.8% · mean +1.76%/15d · worst -3.0% · best +14.6% · ≈34.6% CAGR compounded</td></tr>
       </tbody>
     </table>
+
+    <div class="caveat" style="border-color: var(--bad);">
+      <div class="caveat-title">🚨 CORRECTION 2026-07-07 — day-by-day sequencing collapses the headline P&L</div>
+      <p>The table above uses a <strong>window-level approximation</strong>: both-touch ("whipsaw") trades booked at an assumed +1.0%, entry assumed at signal-day close, days never sequenced. Re-simulating the SAME 4,221 trades <strong>day-by-day</strong> (walk the path in order, conservative SL-first on same-day both-touch, entry at next-day open — the only executable entry since baskets are emitted after close):</p>
+      <table class="results-table" style="margin: 12px 0;">
+        <thead><tr><th>Geometry (entry = next-day open)</th><th>Tgt hit</th><th>SL hit</th><th>Mean/trade</th><th>After 0.30% costs</th><th>CAGR after costs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SL -3% + book-half/trail-2.5 (CURRENT spec)</strong></td><td>36.0%</td><td><strong style="color: var(--bad)">63.5%</strong></td><td>+0.225%</td><td>-0.075%</td><td><strong style="color: var(--bad)">-1.3% ❌</strong></td></tr>
+          <tr><td>SL -5% + book-half/trail-2.5</td><td>49.7%</td><td>48.7%</td><td>+0.422%</td><td>+0.122%</td><td>+2.1%</td></tr>
+          <tr><td>SL -7% + book-half/trail-2.5</td><td>57.0%</td><td>38.9%</td><td>+0.458%</td><td>+0.158%</td><td>+2.7%</td></tr>
+          <tr><td>NO SL, day-15 timeout + book-half/trail</td><td>66.5%</td><td>0%</td><td>+0.771%</td><td>+0.471%</td><td><strong style="color: var(--good)">+8.3%</strong></td></tr>
+        </tbody>
+      </table>
+      <p>Where the coarse +1.77% came from: (1) the +1.0% whipsaw assumption — in reality the stop fires FIRST in most both-touch windows (day-by-day, the -3% SL fires on 63.5% of trades); (2) signal-close entry isn't executable — next-open entry costs ~0.39%/trade in gap-up drift. Same-day both-touch ambiguity affects only 1.9% of trades, so this correction is robust to sequencing assumptions. <strong>The +5% target is fine (66.5% touch it in 15d unstopped); the -3% stop is inside small-cap noise on a 15-day horizon and is the value-destroyer.</strong> Also tested: the ±1% "never chase" buy zone LOWERED mean per trade (+0.615% → +0.295%) — the gapped-up names were disproportionately the winners.</p>
+      <p>Tail-risk price of dropping the SL: 5th-percentile trade -16.7%, worst trade -56%, worst 8-name basket week -26.6%. The stop decision is a risk-tolerance decision, not a free lunch. The band-fit ≥ 2 subset has NOT yet been re-run day-by-day (the +2.29% above will also compress; run pending).</p>
+      <p><strong>Standing rule from this correction: no window-level exit approximations. Every exit-rule claim must come from day-by-day sequenced simulation, entered at next-day open, net of ≥0.30% round-trip costs.</strong></p>
+    </div>
 
     <h3 style="color: var(--fg); margin: 32px 0 12px;">The band-fit score — where the edge actually lives</h3>
     <p style="color: var(--fg-dim); font-size: 14px;">The backtest's single most important finding: <strong style="color: var(--bad)">the ML classifier is OVERCONFIDENT above 0.85</strong> — those "safest" picks hit only 18.9% vs 23.9% for the honest 0.5–0.7 band. Consolidation beats momentum. Moderate RSI beats extended RSI. We score every candidate 0–3:</p>
@@ -2118,9 +2138,16 @@ Required output, in order:
 
 14. 10-YEAR BACKTEST (src/agentic/backtest_10yr_15d5pct.py) — before trusting
     ANY filter change, re-run: 529 weekly baskets 2016-2026, walk-forward
-    LightGBM retrained every 13 weeks, exact exit-rule simulation
-    (target/SL/whipsaw/timeout). 32 trades is an anecdote. Bands are only
-    valid if earned here.
+    LightGBM retrained every 13 weeks. 32 trades is an anecdote. Bands are
+    only valid if earned here.
+    ⚠️ EXIT SIMULATION MUST BE DAY-BY-DAY (2026-07-07 correction): walk each
+    trade's path in date order, enter at NEXT-DAY OPEN (signal-close entry is
+    not executable — baskets are emitted after close), resolve same-day
+    both-touch as SL-first, subtract ≥0.30% round-trip costs. NEVER book
+    both-touch windows at an assumed value — that approximation turned a
+    -1.3%-CAGR geometry into a +34.6% mirage. Relative band rankings
+    (consolidation &gt; chase, ML 0.5-0.7 &gt; 0.85+) survived the correction;
+    absolute P&L claims did not.
 
 15. RL MISS LOOP (src/agentic/miss_learner.py +
     train_missed_winner_classifier.py) — weekly, two SEPARATE artifacts:
@@ -2149,6 +2176,8 @@ Critical operating rules (from §Constitution + hard-won corrections):
 - NEVER emit a basket without the freshness gate passing (file AND column level)
 - NEVER rank picks by raw ML score — the ≥0.85 band underperforms; use band_fit
 - NEVER trust a backtest under a full market cycle / thousands of trades
+- NEVER use window-level exit approximations — day-by-day sequencing only,
+  next-open entry, ≥0.30% costs (the coarse version overstated CAGR by ~36pp)
 - ALWAYS lead with the contradiction when newer evidence overrides prior claim
 - ALWAYS use one-shot git -c flags for user.name/email (never modify global config)
 - ALWAYS keep live_predictions/ files immutable (no rewriting committed artifacts)
@@ -2288,7 +2317,7 @@ function copyPrompt() {
 <section id="ledger">
   <div class="container">
     <div class="section-tag" style="color: var(--bad)">The Honesty</div>
-    <h2 class="section-title">12 mistakes we documented & fixed</h2>
+    <h2 class="section-title">13 mistakes we documented & fixed</h2>
     <p class="section-sub">Most "AI picks stocks" content hides its failures. We publish them. The credibility moat is the FAILURE LOG, not the wins.</p>
 
     <div class="ledger">
@@ -2357,6 +2386,12 @@ function copyPrompt() {
         <h5>Green tick on 55-day-stale macro data</h5>
         <div class="what-wrong">❌ Emitted a basket while brent/DXY/US-10Y/VIX were forward-filled from 2026-05-07 and announcements were 65 days old. Yahoo silently 429'd, the fetcher wrote nothing, and every check passed because file DATES looked fresh while COLUMNS were rotten.</div>
         <div class="fix">✓ verify_freshness.py: 10 file-level + 14 column-level contracts (last non-null date per critical column). Wired into the basket generator with verify_or_die() — no bypass path. FRED fallback for Yahoo. Freshness dashboard at the top of every brief.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-07</span>
+        <h5>Window-level exit math inflated the 10-yr backtest</h5>
+        <div class="what-wrong">❌ The 4,224-trade backtest booked both-touch ("whipsaw") windows at an assumed +1.0% and entered at signal-day close (not executable — baskets are emitted after close). Day-by-day resequencing of the SAME trades at next-open entry: the -3% SL fires on 63.5% of trades, and the CURRENT geometry is -1.3% CAGR after 0.30% costs — not +34.6%.</div>
+        <div class="fix">✓ Standing rule: no window-level exit approximations — every exit-rule claim must come from day-by-day sequenced simulation, next-open entry, net of ≥0.30% costs. Finding: +5% target is fine (66.5% touch unstopped); the -3% stop is inside small-cap noise and is the value-destroyer. SL geometry under review (no-SL + day-15 timeout = +8.3% CAGR after costs, at the price of a -56% worst-trade tail).</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-07-07</span>
@@ -2521,9 +2556,21 @@ git push origin main</code></pre>
         </tr>
         <tr>
           <td>8-name 100%-deploy basket, 15d return</td>
-          <td><span class="tag-good">VERIFIED</span></td>
-          <td>mean +1.76% · 64.8% weeks positive · ≈34.6% CAGR<br><span style="font-size:12px; color: var(--fg-dim);">Tail-dependent: best basket +117% is 1 of 529; excluding the top 5% of baskets the mean basket sum drops to ~+10%</span></td>
+          <td><span class="tag-neutral">SUPERSEDED</span></td>
+          <td>mean +1.76% · ≈34.6% CAGR — window-level approximation; see day-by-day row below<br><span style="font-size:12px; color: var(--fg-dim);">Tail-dependent: best basket +117% is 1 of 529; excluding the top 5% of baskets the mean basket sum drops to ~+10%</span></td>
           <td>Same run, top-8-per-week portfolio sim</td>
+        </tr>
+        <tr>
+          <td>Day-by-day resequenced, CURRENT geometry (SL -3%, next-open entry, 0.30% costs)</td>
+          <td><span class="tag-bad">NEGATIVE</span></td>
+          <td>-0.075%/trade · <strong>-1.3% CAGR</strong> — the -3% stop fires on 63.5% of trades</td>
+          <td>2026-07-07 correction, same 4,221 trades</td>
+        </tr>
+        <tr>
+          <td>Day-by-day, NO SL + day-15 timeout + book-half/trail</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>+0.471%/trade after costs · <strong>+8.3% CAGR</strong> · tail: worst trade -56%</td>
+          <td>2026-07-07 correction, same 4,221 trades</td>
         </tr>
         <tr>
           <td>ML score ≥0.85 band ("most confident")</td>
@@ -2600,7 +2647,7 @@ git push origin main</code></pre>
         </tr>
         <tr>
           <td>Hides failures, shows wins</td>
-          <td>Public failure log: 12 documented mistakes</td>
+          <td>Public failure log: 13 documented mistakes</td>
         </tr>
         <tr>
           <td>One model, no cross-validation</td>

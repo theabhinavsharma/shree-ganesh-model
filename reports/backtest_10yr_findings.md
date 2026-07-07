@@ -123,6 +123,26 @@ Filter change committed to `src/agentic/generate_hybrid_basket.py`:
 - Selection now sorts by `band_fit` first, `ml_score` second (not just ml_score)
 - 100% deploy: 8 names × 12.5% each (previously 3+6 tiers at ~13.5% total)
 
+## ⚠️ 2026-07-07 CORRECTION — day-by-day sequencing collapses the headline
+
+The numbers above use a **window-level approximation**: any trade whose window touched both target and SL was booked at an assumed +1.0% ("whipsaw"), entry was assumed at signal-day close, and days were never sequenced. Re-simulating the SAME 4,221 trades **day-by-day** (walk the path in order; conservative SL-first on same-day both-touch; entry at next-day open, the only executable entry since baskets are emitted after close):
+
+| Geometry (entry = next-day open) | Tgt hit | SL hit | Mean/trade | Median | After 0.30% costs | CAGR after costs |
+|---|--:|--:|--:|--:|--:|--:|
+| **SL -3% + book-half/trail-2.5 (CURRENT)** | 36.0% | **63.5%** | **+0.225%** | **-3.00%** | **-0.075%** | **-1.3%** ❌ |
+| SL -5% + book-half/trail-2.5 | 49.7% | 48.7% | +0.422% | +0.52% | +0.122% | +2.1% |
+| SL -7% + book-half/trail-2.5 | 57.0% | 38.9% | +0.458% | +3.75% | +0.158% | +2.7% |
+| NO SL, day-15 timeout + book-half/trail | 66.5% | 0% | +0.771% | +3.75% | +0.471% | **+8.3%** |
+
+- Same-day both-touch ambiguity affects only 1.9% of trades (80/4,221) — the SL-first/target-first band is tight ([+0.225%, +0.372%] at SL-3). The correction is robust, not an artifact of sequencing assumptions.
+- **Where the coarse +1.77% came from**: (1) the +1.0% whipsaw assumption — in reality the stop hits FIRST in most both-touch windows; day-by-day the -3% SL fires on 63.5% of trades; (2) entry at signal close is not executable — next-open entry costs ~0.39%/trade (gap-up drift, consistent with ledger item 2026-06-17).
+- **The ±1% limit buy zone also tested**: skipping gap-ups (146 no-fills) LOWERED mean from +0.615% to +0.295% (close-entry basis) — the gapped names were disproportionately winners. "Never chase" is a cost, not a protection, on this evidence.
+- **The +5% target is fine** (66.5% of trades touch it in 15d unstopped); the **-3% stop is inside small-cap noise** on a 15-day horizon and is the value-destroyer.
+- Tail risk without SL: P5 trade -16.7%, worst trade -56%, worst 8-name basket week -26.6%. The stop decision is a risk-tolerance decision, not a free lunch.
+- NOT yet re-tested day-by-day: the band-fit ≥ 2 subset (the +2.29% coarse number above will also compress; run pending).
+
+**Standing rule from this correction: no window-level exit approximations. All exit-rule claims must come from day-by-day sequenced simulation, entered at next-day open, net of ≥0.30% round-trip costs.**
+
 ## Honest caveats
 
 1. **44.9% whipsaw rate** — nearly half of trades hit both target AND SL intraday. Real-world fills matter enormously. The backtest assumes a clean SL-first-then-target sequence when both hit.
