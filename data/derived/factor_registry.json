@@ -159,7 +159,7 @@
     ],
     "has_data": true,
     "state": "DROP",
-    "lift_ic": -0.00975,
+    "lift_ic": -0.00985,
     "lift_top5_precision": null,
     "notes": "need rv_60d compute"
   },
@@ -174,7 +174,7 @@
     ],
     "has_data": true,
     "state": "IC_PASSED",
-    "lift_ic": -0.05937,
+    "lift_ic": -0.0594,
     "lift_top5_precision": null,
     "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
   },
@@ -191,7 +191,7 @@
     ],
     "has_data": true,
     "state": "IC_PASSED",
-    "lift_ic": -0.03075,
+    "lift_ic": -0.03089,
     "lift_top5_precision": null,
     "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
   },
@@ -223,9 +223,9 @@
     ],
     "has_data": true,
     "state": "IC_PASSED",
-    "lift_ic": -0.0235,
+    "lift_ic": -0.02351,
     "lift_top5_precision": null,
-    "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr)"
+    "notes": "high cross-sectional IC but no top-5 portfolio lift in 9-yr A/B (delta -0.06%/yr) | macro_eval ts_ic=-0.0807 spread=-0.13% n=742"
   },
   {
     "id": "rs_sector",
@@ -238,10 +238,10 @@
       "sector"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "DROP",
+    "lift_ic": -0.1216,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1216 spread=-0.088% n=742"
   },
   {
     "id": "residual_momentum",
@@ -271,10 +271,10 @@
       "sector"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "DROP",
+    "lift_ic": -0.1406,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1406 spread=-0.107% n=742"
   },
   {
     "id": "month_end",
@@ -332,10 +332,10 @@
       "dii_net_inr"
     ],
     "has_data": false,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "DROP",
+    "lift_ic": 0.1939,
     "lift_top5_precision": null,
-    "notes": "need fetch_fii_dii.py \u2014 pulls https://www.nseindia.com/api/fiidiiTradeReact"
+    "notes": "need fetch_fii_dii.py \u2014 pulls https://www.nseindia.com/api/fiidiiTradeReact | macro_eval ts_ic=0.1939 spread=-0.314% n=504"
   },
   {
     "id": "usdinr_5d",
@@ -350,7 +350,7 @@
     "state": "EVALUATED",
     "lift_ic": -0.01163,
     "lift_top5_precision": null,
-    "notes": "need fetch_forex.py \u2014 RBI reference rates or yfinance INR=X"
+    "notes": "need fetch_forex.py \u2014 RBI reference rates or yfinance INR=X | macro_eval ts_ic=-0.053 spread=-0.451% n=555"
   },
   {
     "id": "brent_5d",
@@ -362,10 +362,10 @@
       "brent_close"
     ],
     "has_data": false,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": "yfinance BZ=F or RBI commodity"
+    "notes": "yfinance BZ=F or RBI commodity | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "gsec_10y",
@@ -392,10 +392,10 @@
       "india_vix"
     ],
     "has_data": false,
-    "state": "PROPOSED",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": "NSE VIX endpoint, need fetch_vix.py"
+    "notes": "NSE VIX endpoint, need fetch_vix.py | macro_eval ts_ic=None spread=-0.606% n=742"
   },
   {
     "id": "nifty_pe_z",
@@ -467,10 +467,10 @@
       "news_sentiment_5d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0957,
     "lift_top5_precision": null,
-    "notes": "need per-article sentiment retained"
+    "notes": "need per-article sentiment retained | macro_eval ts_ic=-0.0957 spread=-1.17% n=742"
   },
   {
     "id": "pcr_change",
@@ -497,10 +497,10 @@
       "iv_skew"
     ],
     "has_data": false,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "DROP",
+    "lift_ic": -0.0807,
     "lift_top5_precision": null,
-    "notes": "BLOCKED \u2014 needs option-chain"
+    "notes": "BLOCKED \u2014 needs option-chain | macro_eval ts_ic=-0.0807 spread=-0.13% n=742"
   },
   {
     "id": "max_pain_dist",
@@ -542,10 +542,10 @@
       "consensus_pat"
     ],
     "has_data": false,
-    "state": "PROPOSED",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": "need analyst consensus \u2014 Trendlyne / Bloomberg"
+    "notes": "need analyst consensus \u2014 Trendlyne / Bloomberg | macro_eval ts_ic=None spread=-0.606% n=742"
   },
   {
     "id": "promoter_pledge",
@@ -603,10 +603,10 @@
       "news_sentiment_5d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.1907,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1907 spread=-1.05% n=742"
   },
   {
     "id": "post_earnings_drift",
@@ -619,10 +619,10 @@
       "ann_result_5d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=None spread=-0.606% n=742"
   },
   {
     "id": "round_number_bias",
@@ -650,10 +650,10 @@
       "delivery_pct"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": 0.08,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=0.08 spread=0.905% n=742"
   },
   {
     "id": "overnight_overreaction",
@@ -683,10 +683,10 @@
       "close"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.1907,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1907 spread=-1.05% n=742"
   },
   {
     "id": "delivery_pct_z",
@@ -731,10 +731,10 @@
       "return_1d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "EVALUATED",
+    "lift_ic": -0.02068,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0957 spread=-1.17% n=742"
   },
   {
     "id": "sector_leader_lag",
@@ -747,10 +747,10 @@
       "return_5d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "EVALUATED",
+    "lift_ic": -0.00941,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1216 spread=-0.088% n=742"
   },
   {
     "id": "index_inclusion_anticipation",
@@ -825,8 +825,8 @@
       "monsoon_data"
     ],
     "has_data": false,
-    "notes": "IMD daily monsoon API",
-    "state": "PROPOSED",
+    "notes": "IMD daily monsoon API | macro_eval ts_ic=None spread=-0.606% n=742",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null
   },
@@ -844,7 +844,7 @@
     "state": "EVALUATED",
     "lift_ic": -0.01163,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.053 spread=-0.451% n=555"
   },
   {
     "id": "oil_omc_inverse",
@@ -904,10 +904,10 @@
       "qoq_pat_growth"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=None spread=-0.606% n=742"
   },
   {
     "id": "margin_expansion",
@@ -952,10 +952,10 @@
       "qoq_pat_growth"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.1907,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.1907 spread=-1.05% n=742"
   },
   {
     "id": "promoter_pledge_release",
@@ -1073,8 +1073,8 @@
       "credit_rating_action"
     ],
     "has_data": false,
-    "notes": "CRISIL/ICRA RSS feeds",
-    "state": "PROPOSED",
+    "notes": "CRISIL/ICRA RSS feeds | macro_eval ts_ic=None spread=-0.606% n=742",
+    "state": "INSUFFICIENT",
     "lift_ic": null,
     "lift_top5_precision": null
   },
@@ -1134,10 +1134,10 @@
       "volume_vs_20d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": 0.08,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=0.08 spread=0.905% n=742"
   },
   {
     "id": "low_vol_breakout",
@@ -1181,8 +1181,8 @@
       "brent"
     ],
     "has_data": true,
-    "notes": "fetched via fetch_commodity_prices.py",
-    "state": "PROPOSED",
+    "notes": "fetched via fetch_commodity_prices.py | macro_eval ts_ic=-0.0701 spread=0.601% n=742",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null
   },
@@ -1196,10 +1196,10 @@
       "brent"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_gold_5d",
@@ -1211,10 +1211,10 @@
       "gold"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_copper_60d",
@@ -1226,10 +1226,10 @@
       "copper"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_gold_brent_ratio",
@@ -1242,10 +1242,10 @@
       "brent"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_natgas_5d",
@@ -1257,10 +1257,10 @@
       "natgas"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_zinc_aluminum",
@@ -1273,10 +1273,10 @@
       "aluminum"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_agri_basket",
@@ -1290,10 +1290,10 @@
       "sugar"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_us10y_5d_chg",
@@ -1305,10 +1305,10 @@
       "us_10y"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_dxy_5d",
@@ -1320,10 +1320,10 @@
       "dxy"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_us_vix_z",
@@ -1335,10 +1335,10 @@
       "us_vix"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_spx_60d",
@@ -1350,10 +1350,10 @@
       "spx"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_eem_relative_spx",
@@ -1366,10 +1366,10 @@
       "spx"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_china_proxy",
@@ -1381,10 +1381,10 @@
       "hsi"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_jpy_carry_unwind",
@@ -1396,10 +1396,10 @@
       "usdjpy"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_btc_proxy",
@@ -1411,10 +1411,10 @@
       "btc"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_inr_5d",
@@ -1426,10 +1426,10 @@
       "usdinr"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_brent_inr_pain",
@@ -1442,10 +1442,10 @@
       "usdinr"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_mf_equity_yoy",
@@ -1457,9 +1457,9 @@
       "equity_aum_cr"
     ],
     "has_data": true,
-    "notes": "monthly data ffill'd to daily",
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "notes": "monthly data ffill'd to daily | macro_eval ts_ic=-0.0701 spread=0.601% n=742",
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null
   },
   {
@@ -1472,10 +1472,10 @@
       "sip_inflow_cr"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_mf_equity_share",
@@ -1488,10 +1488,10 @@
       "total_aum_cr"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_breadth_50_5d_chg",
@@ -1503,8 +1503,8 @@
       "breadth_50"
     ],
     "has_data": true,
-    "notes": "from market_breadth_panel",
-    "state": "PROPOSED",
+    "notes": "from market_breadth_panel | macro_eval ts_ic=-0.0701 spread=0.601% n=742",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null
   },
@@ -1518,10 +1518,10 @@
       "cross_section_dispersion_20d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_new_high_low_diff",
@@ -1534,10 +1534,10 @@
       "new_52w_lows"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_smid_lcap_rotation",
@@ -1550,10 +1550,10 @@
       "breadth_50_lcap"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_sector_rs_top_q",
@@ -1565,9 +1565,9 @@
       "sector_rs_60d"
     ],
     "has_data": true,
-    "notes": "join to industry_panel",
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "notes": "join to industry_panel | macro_eval ts_ic=-0.0701 spread=0.601% n=742",
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null
   },
   {
@@ -1580,10 +1580,10 @@
       "sector_breadth_50"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_sector_dispersion",
@@ -1595,10 +1595,10 @@
       "sector_dispersion_20d"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_sentiment_avg",
@@ -1610,10 +1610,10 @@
       "macro_sent_avg"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_sent_recession_risk",
@@ -1625,10 +1625,10 @@
       "macro_sent__recession_risk"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_sent_rbi_dovish",
@@ -1640,10 +1640,10 @@
       "macro_sent__rbi_policy"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_risk_off_composite",
@@ -1657,10 +1657,10 @@
       "gold"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_risk_on_composite",
@@ -1674,10 +1674,10 @@
       "breadth_50"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_regime_gate_v1_dummy",
@@ -1690,9 +1690,9 @@
       "breadth_50"
     ],
     "has_data": true,
-    "notes": "tests whether the gate itself works as a feature in the model",
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "notes": "tests whether the gate itself works as a feature in the model | macro_eval ts_ic=-0.0701 spread=0.601% n=742",
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null
   },
   {
@@ -1705,10 +1705,10 @@
       "brent"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_yield_to_bank_lead",
@@ -1720,10 +1720,10 @@
       "us_10y"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_inr_to_it_pharma",
@@ -1735,10 +1735,10 @@
       "usdinr"
     ],
     "has_data": true,
-    "state": "PROPOSED",
-    "lift_ic": null,
+    "state": "KEEP",
+    "lift_ic": -0.0701,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   },
   {
     "id": "macro_copper_to_capital_goods",
@@ -1750,9 +1750,9 @@
       "copper"
     ],
     "has_data": true,
-    "state": "PROPOSED",
+    "state": "EVALUATED",
     "lift_ic": null,
     "lift_top5_precision": null,
-    "notes": ""
+    "notes": " | macro_eval ts_ic=-0.0701 spread=0.601% n=742"
   }
 ]

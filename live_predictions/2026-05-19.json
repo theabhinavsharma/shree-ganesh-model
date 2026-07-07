@@ -1,0 +1,42 @@
+{
+  "as_of_date": "2026-05-19",
+  "version": "v6_no_fire_day",
+  "verdict": "DO_NOT_TRADE \u2014 no name clears the high-confidence bar",
+  "trading_basket_5pct_15d": {
+    "horizon_days": 15,
+    "picks": []
+  },
+  "long_horizon_basket_180d": {
+    "horizon_days": 180,
+    "picks": []
+  },
+  "summary_one_line": "score_5pct calibrator collapsed (2 of 1397 non-zero); max score_15pct=0.317 below 0.50 floor; 0 names cross-validated",
+  "checklist_results": {
+    "devils_advocate": "FAILED \u2014 2 CRITICAL + 3 HIGH open since 2026-05-07",
+    "factor_evaluator": "PASSED gate \u2014 0 factors KEEP",
+    "ab_test_events": "WATCHLIST \u2014 no lift, regressed -1.7pp top-50 EV",
+    "top15_per_name_audit": "0 of 15 PASS all 7 checks",
+    "score_5pct_calibrator": "COLLAPSED \u2014 only 2 of 1,397 non-zero",
+    "monotonicity": "85% violations \u2014 structural break",
+    "contamination_in_top15": [
+      "PRECOT",
+      "SPORTKING",
+      "GLOBAL",
+      "MANAKALUCO"
+    ],
+    "price_freshness": "PASS \u2014 2026-05-18 EOD confirmed",
+    "launchd_cron": "BROKEN since 2026-05-07 \u2014 Operation not permitted"
+  },
+  "infrastructure_fixes_needed": [
+    "macOS Full Disk Access for launchd (System Settings \u2192 Privacy \u2192 FDA \u2192 add /usr/bin/bash)",
+    "Recalibrate isotonic on 2025 OOF (currently 2024 only)",
+    "Debug score_5pct collapse \u2014 likely base rate too high (~79pct) for discriminator"
+  ],
+  "constitution_invoked": [
+    "\u00a71.5 \u2014 Cash on no-fire days is the discipline default",
+    "\u00a71.2 \u2014 Leading with the contradiction: 8 May had signal, 19 May does not",
+    "\u00a71.4 \u2014 Bonferroni: 8 thresholds tested, no name clears alpha=0.05/8=0.00625"
+  ],
+  "recommended_action": "Park 100% in LIQUIDPLUS @ 7% ann. Hold the KENNAMET realized +18% gain. Reassess after calibrator fix.",
+  "ts_committed_utc": "2026-05-19T05:47:52.117206Z"
+}

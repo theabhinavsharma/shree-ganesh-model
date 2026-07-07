@@ -70,10 +70,19 @@ def build_panel() -> pd.DataFrame:
 
 
 def build_target(df: pd.DataFrame, horizon: int, threshold: float) -> pd.Series:
-    fwd_max = df.groupby("symbol")["high"].transform(lambda s: s.shift(-1).rolling(horizon, min_periods=1).max())
+    """Forward-max target. PATCHED 2026-05-04 (the prior session summary
+    claimed this was already fixed, but disk still had the BACKWARD-looking
+    form). Uses reversed-rolling trick: max of high[t+1..t+horizon]."""
+    def _fwd_max(s: pd.Series) -> pd.Series:
+        rev = s.iloc[::-1]
+        rolled = rev.rolling(horizon, min_periods=horizon).max()
+        return rolled.iloc[::-1].shift(-1)
+
+    fwd_max = (df.groupby("symbol", sort=False, group_keys=False)["high"]
+                  .transform(_fwd_max))
     fwd_pct = fwd_max / df["close"] - 1
     target = (fwd_pct >= threshold).astype(int)
-    complete = df.groupby("symbol", sort=False)["high"].shift(-horizon).notna()
+    complete = fwd_max.notna()
     target[~complete] = -1
     return target
 

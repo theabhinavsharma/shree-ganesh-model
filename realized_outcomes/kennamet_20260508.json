@@ -1,0 +1,34 @@
+{
+  "trade_id": "kennamet_20260508",
+  "symbol": "KENNAMET",
+  "prediction_source_commit": "b89860e",
+  "prediction_file": "live_predictions/2026-05-08.json",
+  "model_call": {
+    "score_5d_target": 0.7239,
+    "score_15d_target": 0.8166,
+    "horizon_days_modeled": 15,
+    "buy_range": [
+      2805.26,
+      2861.94
+    ],
+    "target_5pct": 2975.28,
+    "stop_loss_3pct": 2748.59,
+    "weight_pct": 5.0,
+    "tier": 1,
+    "rationale": "Cross-validated #1 on 15d, #2 on 7d. RSI 64. Clean per-name (no contamination)."
+  },
+  "actual_trade": {
+    "entry_price_estimated_mid": 2833.6,
+    "exit_price": 3345.0,
+    "gain_per_share": 511.4,
+    "return_pct": 18.05,
+    "hold_days": 1,
+    "exit_reason": "intraday_spike_take_profit",
+    "model_target_blown_through_pp": 13.05
+  },
+  "constitution_caveat": "N=1 result. Direction validated; magnitude exceeded model. Cannot extrapolate to all picks until more samples land. Per \u00a71.4, single-trade success is not statistical evidence.",
+  "portfolio_impact_at_5pct_weight": {
+    "contribution_to_portfolio_return_pct": 0.905
+  },
+  "ts_logged_utc": "2026-05-08T04:51:07.639330Z"
+}

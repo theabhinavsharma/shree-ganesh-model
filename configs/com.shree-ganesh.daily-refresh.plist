@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.shree-ganesh.daily-refresh</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/abhinavs./Documents/Zoom/src/agentic/daily_refresh.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/abhinavs./Documents/Zoom</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_daily_refresh_stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_daily_refresh_stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/homebrew/bin</string>
+        <key>HOME</key>
+        <string>/Users/abhinavs.</string>
+    </dict>
+
+    <!--
+        Schedule: weekdays at 18:30 IST (post-market-close).
+        macOS launchd uses LOCAL timezone — set times in user's local TZ (IST here).
+        The user's machine is configured for IST so 18:30 = 18:30 local.
+        On Sundays at 18:30, the daily_refresh.sh script ALSO runs the weekly
+        devils_advocate + news_features backtest (logic in the script itself).
+    -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <!-- Mon -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>1</integer>
+        </dict>
+        <!-- Tue -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>2</integer>
+        </dict>
+        <!-- Wed -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>3</integer>
+        </dict>
+        <!-- Thu -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>4</integer>
+        </dict>
+        <!-- Fri -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>5</integer>
+        </dict>
+        <!-- Sun (weekly full audit baked into the script) -->
+        <dict>
+            <key>Hour</key><integer>18</integer>
+            <key>Minute</key><integer>30</integer>
+            <key>Weekday</key><integer>0</integer>
+        </dict>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>Nice</key>
+    <integer>10</integer>
+</dict>
+</plist>

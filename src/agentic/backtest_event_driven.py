@@ -34,9 +34,10 @@ import pandas as pd
 import numpy as np
 
 ROOT = Path("/Users/abhinavs./Documents/Zoom")
-OOF = ROOT / "data/derived/backtest_10yr_oof.parquet"
+import os
+OOF = ROOT / os.environ.get("OOF_FILE", "data/derived/backtest_10yr_oof.parquet")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
-OUT_REPORT = ROOT / "reports/event_driven_backtest.md"
+OUT_REPORT = ROOT / f"reports/event_driven_backtest_{OOF.stem}.md"
 
 CASH_ANN = 0.07
 CASH_DAILY = (1 + CASH_ANN) ** (1 / 252) - 1
@@ -359,7 +360,20 @@ def main() -> None:
         ("Single-name 0.85",         0.85, 1, 7, 0.05, -0.03),
         ("Top-5 basket 0.85",        0.85, 5, 7, 0.05, -0.03),
         ("Top-5 basket 0.80",        0.80, 5, 7, 0.05, -0.03),
-        ("Single-name 0.95 wider", 0.95, 1, 10, 0.07, -0.04),
+        ("Single-name 0.95 wider",   0.95, 1, 10, 0.07, -0.04),
+        # ─── GATE-TUNING GRID (per PM directive, F result <5pp ─ rework gating) ───
+        ("Top-10 basket 0.80",       0.80, 10, 7, 0.05, -0.03),
+        ("Top-10 basket 0.75",       0.75, 10, 7, 0.05, -0.03),
+        ("Top-10 basket 0.70",       0.70, 10, 7, 0.05, -0.03),
+        ("Top-10 basket 0.65",       0.65, 10, 7, 0.05, -0.03),
+        ("Top-20 basket 0.65",       0.65, 20, 7, 0.05, -0.03),
+        ("Top-5 basket 0.80 hold15", 0.80, 5, 15, 0.10, -0.05),
+        ("Top-5 basket 0.80 hold30", 0.80, 5, 30, 0.20, -0.07),
+        ("Top-5 basket 0.80 noSL",   0.80, 5, 7, 0.05, None),
+        ("Top-5 basket 0.70 noSL",   0.70, 5, 7, 0.05, None),
+        ("Top-10 basket 0.70 noSL",  0.70, 10, 7, 0.05, None),
+        ("Top-5 basket 0.80 widerT", 0.80, 5, 10, 0.08, -0.04),
+        ("Single-name 0.70",         0.70, 1, 7, 0.05, -0.03),
     ]
 
     results = []
@@ -392,9 +406,10 @@ def main() -> None:
     md.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for r in results:
         s = r["stats"]
+        sl_str = f"{s['SL_PCT']*100:+.0f}%" if s['SL_PCT'] is not None else "none"
         md.append(
             f"| {s['label']} | {s['GATE']:.2f} | {s['MAX_POS']} | {s['HOLD_DAYS']}d | "
-            f"{s['TARGET_PCT']*100:+.0f}% | {s['SL_PCT']*100:+.0f}% | "
+            f"{s['TARGET_PCT']*100:+.0f}% | {sl_str} | "
             f"{s['n_trades']} | {s['hit_rate']*100:.0f}% | "
             f"{s['avg_return_per_trade']*100:+.2f}% | "
             f"{s['deployed_pct_mean']*100:.0f}% | "

@@ -1,0 +1,102 @@
+{
+  "as_of_date": "2026-05-05",
+  "horizon_days": 180,
+  "resolution_date": "2026-10-31",
+  "method": "cross_validated_two_pipelines",
+  "pipeline_1": {
+    "name": "find_180d_frontier_honest",
+    "feature_set": "BASE_FEATS only (clean per leakage_audit_20260501.md)",
+    "calibration": "isotonic fit on 2024 OOF, applied forward"
+  },
+  "pipeline_2": {
+    "name": "multibagger_pipeline_post_45a09dd_bugfix",
+    "bug_fixed": "forward-max tautology removed in user commit 45a09dd",
+    "calibration": "score_100pct_180d, calibrated forward"
+  },
+  "tier1_cross_validated_top3": [
+    {
+      "rank": 1,
+      "symbol": "KENNAMET",
+      "close_at_call": 2698.9,
+      "p1_score_2x_180d": 0.8974,
+      "p2_score_2x_180d": 0.2644,
+      "rsi_14": 57.8,
+      "return_20d": 0.0197,
+      "adv_20d_cr": 2.46
+    },
+    {
+      "rank": 2,
+      "symbol": "KOVAI",
+      "close_at_call": 5693.8,
+      "p1_score_2x_180d": 0.4097,
+      "p2_score_2x_180d": 0.2352,
+      "rsi_14": 84.1,
+      "return_20d": 1.2253,
+      "adv_20d_cr": 1.8
+    },
+    {
+      "rank": 3,
+      "symbol": "NOVARTIND",
+      "close_at_call": 1033.05,
+      "p1_score_2x_180d": 0.2562,
+      "p2_score_2x_180d": 0.2874,
+      "rsi_14": 78.2,
+      "return_20d": 0.4608,
+      "adv_20d_cr": 1.06
+    }
+  ],
+  "tier2_pipeline1_extensions": [
+    {
+      "rank": 1,
+      "symbol": "AUSOMENT",
+      "close_at_call": 142.93,
+      "p1_score_2x_180d": 0.2282,
+      "rsi_14": 57.4,
+      "adv_20d_cr": 3.2
+    },
+    {
+      "rank": 2,
+      "symbol": "KIRLFER",
+      "close_at_call": 435.6,
+      "p1_score_2x_180d": 0.2167,
+      "rsi_14": 38.5,
+      "adv_20d_cr": 4.1
+    }
+  ],
+  "tier2_pipeline2_extensions": [
+    {
+      "rank": 1,
+      "symbol": "MTARTECH",
+      "close_at_call": 6457.1,
+      "p2_score_2x_180d": 0.2644,
+      "rsi_14": 86.8,
+      "adv_20d_cr": 559.25
+    },
+    {
+      "rank": 2,
+      "symbol": "MIDCAP",
+      "close_at_call": 17.26,
+      "p2_score_2x_180d": 0.2207,
+      "rsi_14": 17.7,
+      "adv_20d_cr": 1.05
+    }
+  ],
+  "sizing_rule": {
+    "tier1_per_name_pct": 2.5,
+    "tier2_per_name_pct": 1.0,
+    "max_basket_total_pct": 10.5,
+    "hard_sl_per_name_pct": -15,
+    "trail_sl_target_pct": 30,
+    "rest_in_liquidplus_yield_pct": 7
+  },
+  "constitution_caveats": [
+    "Per CONSTITUTION.md \u00a71.1: corporate-action calibrator bias is unresolved (entry 2026-05-04 in calibration_corrections.jsonl). Absolute scores carry unknown upward bias. Treat as STRONG RELATIVE RANKINGS.",
+    "Per CONSTITUTION.md \u00a71.4: 80%-confidence bar at 100% threshold was empirically empty in 2025 OOS. Top-3 names are model's high-confidence picks, not validated 80% prospective claims.",
+    "Per CONSTITUTION.md \u00a71.5: -30% drawdown floor binds. Tier-1+2 capped at 10.5% basket exposure.",
+    "Independence assumption in basket P(>=1 2x) is overstated; real basket-of-3 P(>=1 doubles in 180d) ~ 60-75% after correlation correction.",
+    "MTARTECH/KOVAI/NOVARTIND are momentum-loaded (RSI > 75, 20d returns > +40%). Persistence-of-trend may reverse.",
+    "Day-over-day stability vs 2026-05-04 commit 4b092e1: top-5 of pipeline 1 IDENTICAL (100% match) \u2014 signal is stable.",
+    "Infinite hypothesis loop: 9 cycles since 2026-05-04 launch, all DROP_AB_FAIL. No new data source has lifted prospective probability. Existing BASE_FEATS hold the alpha."
+  ],
+  "ts_committed_utc": "2026-05-05T08:08:59.713422Z"
+}

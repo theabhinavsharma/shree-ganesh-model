@@ -1,0 +1,41 @@
+{
+  "as_of_date": "2026-05-27",
+  "version": "v8_single_pick_consofinvt",
+  "user_request": "ONE stock 15-30% ROI in 15 days",
+  "honest_framing": "Model targets 180d horizon. 15-day delivery requires KENNAMET-style overshoot. The probabilities below are MODEL-SAID for 180d; 15d probability is lower.",
+  "pick": {
+    "symbol": "CONSOFINVT",
+    "close_at_call": 227.85,
+    "buy_range_low": 225.57,
+    "buy_range_high": 230.13,
+    "stop_loss_3pct": 221.0,
+    "primary_target_5pct": 239.24,
+    "stretch_target_15pct_user_min_ask": 262.03,
+    "reach_target_30pct_user_max_ask": 296.2,
+    "model_probabilities_180d_horizon": {
+      "p_plus_5pct": 0.872,
+      "p_plus_15pct": 0.642,
+      "p_plus_30pct": 0.477,
+      "p_plus_50pct": 0.207
+    },
+    "honest_15d_probability_estimates_lower": "15d overshoot of 30pct estimated 10-15pct (vs 48pct over 180d). KENNAMET delivered 18pct in 1 day - real, but rare.",
+    "rsi_14": 62.2,
+    "return_20d": 0.313,
+    "adv_20d_cr": 1.86,
+    "tier": "sub-conviction (s15=0.64 below 0.70 KENNAMET floor)",
+    "weight_pct_recommended": 3.0,
+    "hold_max_days": 15,
+    "exit_rule": "target hit OR SL hit OR 15d elapsed"
+  },
+  "constitution_caveats": [
+    "\u00a71.1 Honesty: 15-30% in 15d is NOT what model says. Model says 87pct chance of +5pct over 180d. 15d delivery of 15-30pct is an overshoot bet.",
+    "\u00a71.4 Bonferroni: alpha/15 not cleared - sub-conviction signal",
+    "\u00a71.5 Macro filter cascade is RISK_OFF - user override required to trade",
+    "Per realized_outcomes/kennamet_20260508.json: KENNAMET (s15=0.82) delivered +18.1pct in 1 day. CONSOFINVT has lower conviction (s15=0.64) but similar setup type."
+  ],
+  "worst_case_pct": -3.0,
+  "base_case_pct": 5.0,
+  "stretch_pct": 15.0,
+  "reach_pct": 30.0,
+  "ts_committed_utc": "2026-05-27T09:56:10.921242Z"
+}

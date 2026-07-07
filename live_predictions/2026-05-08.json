@@ -1,0 +1,268 @@
+{
+  "as_of_date": "2026-05-08",
+  "version": "v5_actionable_tables",
+  "active_trading_horizons": [
+    "7d",
+    "15d"
+  ],
+  "model": "find_180d_frontier_honest.py + v3 contamination filter",
+  "universe_size_liquid": 1416,
+  "contaminated_dropped_count": 812,
+  "basket_7d": {
+    "horizon_days": 7,
+    "target_pct": 5,
+    "stop_loss_pct": -3,
+    "picks": [
+      {
+        "symbol": "KIRLFER",
+        "ltp": 453.1,
+        "buy_range_low": 448.57,
+        "buy_range_high": 457.63,
+        "target_5pct": 475.76,
+        "stop_loss_3pct": 439.51,
+        "score": 0.7287,
+        "rsi_14": 51.8,
+        "return_20d": -0.0286,
+        "adv_20d_cr": 3.95,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "KENNAMET",
+        "ltp": 2833.6,
+        "buy_range_low": 2805.26,
+        "buy_range_high": 2861.94,
+        "target_5pct": 2975.28,
+        "stop_loss_3pct": 2748.59,
+        "score": 0.7239,
+        "rsi_14": 64.2,
+        "return_20d": 0.0813,
+        "adv_20d_cr": 2.25,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "BFUTILITIE",
+        "ltp": 605.95,
+        "buy_range_low": 599.89,
+        "buy_range_high": 612.01,
+        "target_5pct": 636.25,
+        "stop_loss_3pct": 587.77,
+        "score": 0.6681,
+        "rsi_14": 37.4,
+        "return_20d": -0.2393,
+        "adv_20d_cr": 4.41,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "EMBDL",
+        "ltp": 69.96,
+        "buy_range_low": 69.26,
+        "buy_range_high": 70.66,
+        "target_5pct": 73.46,
+        "stop_loss_3pct": 67.86,
+        "score": 0.6361,
+        "rsi_14": 42.1,
+        "return_20d": -0.1559,
+        "adv_20d_cr": 37.96,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "NOVARTIND",
+        "ltp": 1066.3,
+        "buy_range_low": 1055.64,
+        "buy_range_high": 1076.96,
+        "target_5pct": 1119.62,
+        "stop_loss_3pct": 1034.31,
+        "score": 0.5744,
+        "rsi_14": 79.7,
+        "return_20d": 0.4919,
+        "adv_20d_cr": 1.14,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "KAPSTON",
+        "ltp": 340.8,
+        "buy_range_low": 337.39,
+        "buy_range_high": 344.21,
+        "target_5pct": 357.84,
+        "stop_loss_3pct": 330.58,
+        "score": 0.5675,
+        "rsi_14": 90.6,
+        "return_20d": 0.7114,
+        "adv_20d_cr": 2.36,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      },
+      {
+        "symbol": "KOVAI",
+        "ltp": 5716.0,
+        "buy_range_low": 5658.84,
+        "buy_range_high": 5773.16,
+        "target_5pct": 6001.8,
+        "stop_loss_3pct": 5544.52,
+        "score": 0.5624,
+        "rsi_14": 80.6,
+        "return_20d": 1.1412,
+        "adv_20d_cr": 1.72,
+        "horizon_days": 7,
+        "exit_rule": "target hit OR SL hit OR 7 trading days elapsed"
+      }
+    ]
+  },
+  "basket_15d": {
+    "horizon_days": 15,
+    "target_pct": 5,
+    "stop_loss_pct": -3,
+    "expected_max_ann_ev_pct": 52.5,
+    "picks": [
+      {
+        "symbol": "KENNAMET",
+        "ltp": 2833.6,
+        "buy_range_low": 2805.26,
+        "buy_range_high": 2861.94,
+        "target_5pct": 2975.28,
+        "stop_loss_3pct": 2748.59,
+        "score": 0.8166,
+        "rsi_14": 64.2,
+        "return_20d": 0.0813,
+        "adv_20d_cr": 2.25,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "KIRLFER",
+        "ltp": 453.1,
+        "buy_range_low": 448.57,
+        "buy_range_high": 457.63,
+        "target_5pct": 475.76,
+        "stop_loss_3pct": 439.51,
+        "score": 0.7958,
+        "rsi_14": 51.8,
+        "return_20d": -0.0286,
+        "adv_20d_cr": 3.95,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "NOVARTIND",
+        "ltp": 1066.3,
+        "buy_range_low": 1055.64,
+        "buy_range_high": 1076.96,
+        "target_5pct": 1119.62,
+        "stop_loss_3pct": 1034.31,
+        "score": 0.7327,
+        "rsi_14": 79.7,
+        "return_20d": 0.4919,
+        "adv_20d_cr": 1.14,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "KOVAI",
+        "ltp": 5716.0,
+        "buy_range_low": 5658.84,
+        "buy_range_high": 5773.16,
+        "target_5pct": 6001.8,
+        "stop_loss_3pct": 5544.52,
+        "score": 0.6297,
+        "rsi_14": 80.6,
+        "return_20d": 1.1412,
+        "adv_20d_cr": 1.72,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "EMBDL",
+        "ltp": 69.96,
+        "buy_range_low": 69.26,
+        "buy_range_high": 70.66,
+        "target_5pct": 73.46,
+        "stop_loss_3pct": 67.86,
+        "score": 0.618,
+        "rsi_14": 42.1,
+        "return_20d": -0.1559,
+        "adv_20d_cr": 37.96,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "KAPSTON",
+        "ltp": 340.8,
+        "buy_range_low": 337.39,
+        "buy_range_high": 344.21,
+        "target_5pct": 357.84,
+        "stop_loss_3pct": 330.58,
+        "score": 0.481,
+        "rsi_14": 90.6,
+        "return_20d": 0.7114,
+        "adv_20d_cr": 2.36,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      },
+      {
+        "symbol": "BFUTILITIE",
+        "ltp": 605.95,
+        "buy_range_low": 599.89,
+        "buy_range_high": 612.01,
+        "target_5pct": 636.25,
+        "stop_loss_3pct": 587.77,
+        "score": 0.481,
+        "rsi_14": 37.4,
+        "return_20d": -0.2393,
+        "adv_20d_cr": 4.41,
+        "horizon_days": 15,
+        "exit_rule": "target hit OR SL hit OR 15 trading days elapsed"
+      }
+    ]
+  },
+  "cross_validated_high_conviction": [
+    "BFUTILITIE",
+    "EMBDL",
+    "KAPSTON",
+    "KENNAMET",
+    "KIRLFER",
+    "KOVAI",
+    "NOVARTIND"
+  ],
+  "sizing_consolidated": {
+    "cross_validated_per_name_pct": [
+      {
+        "symbol": "KENNAMET",
+        "weight_pct": 5.0
+      },
+      {
+        "symbol": "KIRLFER",
+        "weight_pct": 5.0
+      },
+      {
+        "symbol": "NOVARTIND",
+        "weight_pct": 3.0
+      },
+      {
+        "symbol": "KOVAI",
+        "weight_pct": 2.0
+      },
+      {
+        "symbol": "BFUTILITIE",
+        "weight_pct": 2.0
+      },
+      {
+        "symbol": "EMBDL",
+        "weight_pct": 2.0
+      }
+    ],
+    "max_total_basket_pct": 19,
+    "rest_in_liquidplus_yield_pct": 7
+  },
+  "constitution_caveats": [
+    "5%/15d horizon proven empirically (+52.5% ann EV) per reports/compare_short_horizons.md",
+    "Catalyst event features dropped \u2014 top-50 P regressed -0.9pp per ab_test_event_features.md",
+    "Calibrator biased upward by 399 unrecorded -30%+ drops in dataset; treat scores as relative ranks",
+    "Hard SL -3% per name binding; cash on no-fire days non-negotiable"
+  ],
+  "ts_committed_utc": "2026-05-08T04:28:37.386823Z"
+}

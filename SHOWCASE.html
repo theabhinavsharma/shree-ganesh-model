@@ -1,0 +1,2915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shree Ganesh Model — A Calibrated AI Trading System (Built in Public)</title>
+<meta name="description" content="How we built a rigorous, calibrated NSE equity trading system with Claude — 5 ML engines, devil's advocate audits, +18% realized trades. Everything open source.">
+<meta property="og:title" content="Shree Ganesh Model — Built in Public">
+<meta property="og:description" content="5 ML engines + devil's advocate + calibrated forward record. Open source. Built with Claude.">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg-2: #14141d;
+  --bg-3: #1c1c28;
+  --fg: #e8e8ee;
+  --fg-dim: #9090a0;
+  --accent-1: #00f0a8;
+  --accent-2: #ff8c42;
+  --accent-3: #6a8eff;
+  --accent-4: #ff5577;
+  --border: #2a2a3a;
+  --good: #00f0a8;
+  --bad: #ff5577;
+  --warn: #ffcc44;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, 'Inter', BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+code, pre, .mono { font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace; }
+
+/* hero */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 80px 24px;
+  background: radial-gradient(ellipse at top left, rgba(0,240,168,0.08), transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(106,142,255,0.08), transparent 50%);
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+.hero-content { max-width: 1100px; text-align: center; position: relative; z-index: 1; }
+.tag {
+  display: inline-block; padding: 6px 14px; border: 1px solid var(--border);
+  border-radius: 999px; font-size: 12px; color: var(--fg-dim);
+  background: var(--bg-2); margin-bottom: 24px;
+}
+.tag .dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-1); margin-right: 8px; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+h1 {
+  font-size: clamp(38px, 6vw, 76px);
+  font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #ffffff 0%, #b0b0c8 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+h1 .accent {
+  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-3) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--fg-dim); max-width: 800px; margin: 0 auto 48px;
+}
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px; max-width: 1000px; margin: 0 auto 48px;
+}
+.stat {
+  padding: 24px 16px; background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.stat .num {
+  font-size: 36px; font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-3) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat .label { font-size: 13px; color: var(--fg-dim); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  text-decoration: none; transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-3) 100%);
+  color: #0a0a0f;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,240,168,0.25); }
+.btn-secondary { background: var(--bg-2); color: var(--fg); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent-1); }
+
+/* sections */
+section { padding: 100px 24px; }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-tag {
+  display: inline-block; padding: 4px 12px; border: 1px solid var(--border);
+  border-radius: 999px; font-size: 11px; color: var(--accent-1);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 700; line-height: 1.1;
+  letter-spacing: -0.02em; margin-bottom: 16px;
+}
+.section-sub { font-size: 18px; color: var(--fg-dim); margin-bottom: 48px; max-width: 700px; }
+
+/* story */
+.story-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.story-card {
+  padding: 28px; background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 12px; transition: all 0.2s;
+}
+.story-card:hover { border-color: var(--accent-1); transform: translateY(-4px); }
+.story-card h3 { font-size: 22px; margin-bottom: 12px; }
+.story-card p { color: var(--fg-dim); font-size: 15px; }
+.story-card .step {
+  display: inline-block; font-size: 11px; color: var(--accent-2);
+  background: rgba(255,140,66,0.1); padding: 4px 10px; border-radius: 999px;
+  margin-bottom: 12px; font-weight: 600;
+}
+
+/* kennamet case study */
+.case-study {
+  background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 100%);
+  border: 1px solid var(--border); border-radius: 16px; padding: 48px;
+  margin: 32px 0;
+}
+.case-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;
+}
+@media (max-width: 768px) { .case-grid { grid-template-columns: 1fr; } }
+.case-num {
+  font-size: 80px; font-weight: 800; line-height: 1; color: var(--good);
+}
+.case-num .delta { font-size: 24px; color: var(--fg-dim); }
+.case-table {
+  width: 100%; font-size: 14px; border-collapse: collapse;
+}
+.case-table td { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.case-table td:first-child { color: var(--fg-dim); }
+.case-table td:last-child { text-align: right; }
+
+/* architecture diagram */
+.arch {
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px; margin: 32px 0; overflow-x: auto;
+}
+.arch-svg { width: 100%; min-width: 800px; height: 440px; }
+.arch-svg rect, .arch-svg text { transition: all 0.3s; }
+.arch-svg .engine { fill: var(--bg-3); stroke: var(--accent-1); stroke-width: 2; }
+.arch-svg .engine-text { fill: var(--fg); font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; }
+.arch-svg .agent { fill: var(--bg-3); stroke: var(--accent-2); stroke-width: 2; }
+.arch-svg .agent-text { fill: var(--fg); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.arch-svg .data { fill: var(--bg-3); stroke: var(--accent-3); stroke-width: 2; }
+.arch-svg .data-text { fill: var(--fg); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.arch-svg .output { fill: rgba(0,240,168,0.1); stroke: var(--good); stroke-width: 2; }
+.arch-svg .output-text { fill: var(--good); font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; }
+.arch-svg .arrow { stroke: var(--fg-dim); stroke-width: 1.5; fill: none; marker-end: url(#arr); }
+.arch-svg .label-small { fill: var(--fg-dim); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+/* constitution */
+.constitution {
+  background: var(--bg-2); border-left: 4px solid var(--accent-2);
+  padding: 32px; border-radius: 0 12px 12px 0;
+}
+.constitution-list { list-style: none; padding: 0; }
+.constitution-list li {
+  padding: 14px 0; padding-left: 36px; position: relative; border-bottom: 1px solid var(--border);
+}
+.constitution-list li:last-child { border-bottom: none; }
+.constitution-list li::before {
+  content: ""; position: absolute; left: 0; top: 22px;
+  width: 18px; height: 2px; background: var(--accent-2);
+}
+.constitution-list .principle { font-weight: 700; color: var(--fg); }
+.constitution-list .desc { color: var(--fg-dim); font-size: 14px; }
+
+/* agents */
+.agent-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.agent-card {
+  padding: 24px; background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 12px; transition: all 0.2s;
+}
+.agent-card:hover { border-color: var(--accent-2); }
+.agent-card .agent-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px;
+  margin-bottom: 16px;
+}
+.agent-card h4 { font-size: 18px; margin-bottom: 6px; }
+.agent-card p { color: var(--fg-dim); font-size: 14px; line-height: 1.55; }
+.agent-card .role { font-size: 11px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+
+/* mistakes ledger */
+.ledger {
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px;
+}
+.ledger-item {
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+}
+.ledger-item:last-child { border-bottom: none; }
+.ledger-item .date {
+  display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--accent-2); padding: 2px 8px; background: rgba(255,140,66,0.1);
+  border-radius: 4px; margin-bottom: 6px;
+}
+.ledger-item h5 { font-size: 16px; margin-bottom: 6px; }
+.ledger-item .what-wrong { color: var(--bad); font-size: 14px; margin-bottom: 4px; }
+.ledger-item .fix { color: var(--good); font-size: 14px; }
+
+/* build steps */
+.steps {
+  counter-reset: step;
+}
+.step-row {
+  display: flex; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--border);
+}
+.step-row:last-child { border-bottom: none; }
+.step-num {
+  font-size: 48px; font-weight: 800; color: var(--accent-1); line-height: 1;
+  min-width: 80px; font-family: 'JetBrains Mono', monospace;
+}
+.step-body h4 { font-size: 22px; margin-bottom: 8px; }
+.step-body p { color: var(--fg-dim); margin-bottom: 12px; }
+.step-body pre {
+  background: var(--bg-3); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px; font-size: 13px; overflow-x: auto; margin: 8px 0;
+}
+
+/* code */
+pre {
+  background: var(--bg-2) !important;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 13px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+code { color: var(--accent-1); }
+pre code { color: var(--fg); }
+.terminal-line .prompt { color: var(--accent-1); }
+.terminal-line .comment { color: var(--fg-dim); }
+
+/* results table */
+.results-table {
+  width: 100%; border-collapse: collapse; margin: 24px 0;
+  font-size: 14px; background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.results-table th, .results-table td {
+  padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.results-table th {
+  background: var(--bg-3); font-weight: 600; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg-dim);
+}
+.results-table td:nth-child(n+3) { text-align: right; font-family: 'JetBrains Mono', monospace; }
+.results-table tr:last-child td { border-bottom: none; }
+.tag-good { color: var(--good); font-weight: 600; }
+.tag-bad { color: var(--bad); font-weight: 600; }
+.tag-neutral { color: var(--warn); font-weight: 600; }
+
+/* caveats */
+.caveat {
+  background: rgba(255,85,119,0.05); border: 1px solid rgba(255,85,119,0.2);
+  border-radius: 12px; padding: 24px; margin: 16px 0;
+}
+.caveat-title { color: var(--bad); font-weight: 600; margin-bottom: 8px; }
+
+/* footer */
+footer {
+  padding: 80px 24px 40px; border-top: 1px solid var(--border); text-align: center;
+}
+footer p { color: var(--fg-dim); font-size: 14px; margin: 8px 0; }
+footer .repo {
+  display: inline-block; padding: 14px 28px; background: var(--accent-1); color: #0a0a0f;
+  border-radius: 8px; text-decoration: none; font-weight: 700; margin: 16px 0;
+}
+
+/* utilities */
+.hl-good { color: var(--good); }
+.hl-bad { color: var(--bad); }
+.hl-warn { color: var(--warn); }
+.mt-32 { margin-top: 32px; }
+.center { text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- CHAT-SCROLL HERO — sticky portraits, bubbles tied to scroll progress -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Inter:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --comic-red: #E63946;
+  --comic-red-dark: #B82F3A;
+  --comic-yellow: #FFD23F;
+  --comic-blue: #2E63E8;
+  --comic-cream: #FFF4D6;
+  --comic-cream-2: #FFE9B0;
+  --comic-black: #0F0E17;
+  --claude-orange: #D97757;
+  --claude-orange-light: #E89779;
+  --claude-orange-dark: #B5613D;
+  --halftone-dot: radial-gradient(circle at 1px 1px, var(--comic-black) 1.2px, transparent 1.5px);
+  --ink: #1a1820;
+  --ink-soft: #4a4655;
+  --ink-mute: #6b6675;
+  --cream-warm: #FFF4D6;
+  --cream-card: #FFEFC0;
+  --cream-card-2: #FFE49A;
+  --hairline: rgba(15, 14, 23, 0.12);
+}
+body { background: var(--cream-warm) !important; color: var(--ink) !important; }
+
+/* ============================================================
+   CHAT-SCROLL HERO
+   - Tall section (500vh) acts as scroll-trigger zone
+   - Inside, a 100vh sticky container holds Abhinav (left) + Claude (right)
+   - Center chat feed: bubbles fade in/out based on scroll progress
+   - When scroll exits the zone, sticky releases naturally → next section
+   ============================================================ */
+.chat-scroll-zone {
+  position: relative;
+  height: 450vh;   /* 4.5 viewports tall = ~10 messages × ~45vh per message (another 25% tighter) */
+  background: var(--cream-warm);
+  background-image: var(--halftone-dot);
+  background-size: 18px 18px;
+}
+.chat-scroll-zone::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 210, 63, 0.20), transparent 70%);
+  pointer-events: none;
+}
+
+.chat-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Title sits at top of viewport, fades as user scrolls past intro */
+.chat-banner {
+  position: absolute;
+  top: 24px; left: 50%; transform: translateX(-50%);
+  text-align: center;
+  z-index: 4;
+  opacity: 1;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.chat-banner.hide { opacity: 0; }
+.chat-banner h1 {
+  font-family: 'Bangers', sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 400; line-height: 1.0;
+  color: var(--comic-black);
+  text-shadow: 2px 2px 0 var(--comic-yellow), 4px 4px 0 var(--comic-red);
+  margin: 0;
+}
+.chat-banner h1 .y { color: var(--comic-yellow); text-shadow: 2px 2px 0 var(--comic-black), 4px 4px 0 var(--comic-red); }
+.chat-banner h1 .b { color: var(--comic-blue); text-shadow: 2px 2px 0 var(--comic-yellow), 4px 4px 0 var(--comic-black); }
+.chat-banner .scroll-hint {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 13px; color: var(--ink-mute);
+  margin-top: 6px;
+  animation: scroll-arrow 1.4s ease-in-out infinite;
+}
+@keyframes scroll-arrow {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%      { transform: translateY(4px); opacity: 1; }
+}
+
+.chat-grid {
+  display: grid;
+  grid-template-columns: 1fr minmax(420px, 720px) 1fr;
+  gap: 24px;
+  width: 100%;
+  height: 100vh;
+  max-width: 1500px;
+  padding: 100px 32px 40px;
+  align-items: center;
+}
+
+/* === STICKY SPEAKERS === */
+.speaker {
+  position: relative;
+  height: 70vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.speaker.abhinav { justify-content: flex-start; }
+.speaker.claude  { justify-content: flex-end; }
+
+.speaker .photo-wrap {
+  position: relative;
+  display: grid;
+  width: 480px;
+  height: 80vh;
+  align-items: end;
+  justify-items: center;
+  animation: abhinav-breathe 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+.speaker.abhinav .photo-wrap img {
+  grid-area: 1 / 1;     /* stack all 8 photos in same cell */
+  max-height: 80vh;
+  max-width: 480px;
+  width: auto;
+  height: auto;
+  filter: drop-shadow(6px 8px 0 var(--comic-black));
+  opacity: 0;
+  transition: opacity 0.45s ease-out, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.96);
+}
+.speaker.abhinav .photo-wrap img.active {
+  opacity: 1;
+  transform: scale(1);
+}
+@keyframes abhinav-breathe {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-7px) rotate(1deg); }
+}
+
+.speaker .name-tag {
+  position: absolute;
+  bottom: -12px;
+  background: var(--comic-black);
+  color: var(--comic-yellow);
+  font-family: 'Bangers', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  padding: 6px 18px;
+  border-radius: 8px;
+  border: 3px solid var(--comic-yellow);
+  box-shadow: 3px 3px 0 var(--comic-red);
+}
+.speaker.abhinav .name-tag { left: 24px; }
+.speaker.claude .name-tag  { right: 24px; }
+
+.claude-svg {
+  width: 320px; height: 320px;
+  filter: drop-shadow(6px 8px 0 var(--comic-black));
+  animation: claude-breathe 3.6s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes claude-breathe {
+  0%, 100% { transform: translateY(0) rotate(3deg); }
+  50%      { transform: translateY(-9px) rotate(-3deg); }
+}
+
+/* === CHAT FEED (middle column) === */
+.chat-feed {
+  position: relative;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.msg {
+  position: absolute;
+  top: 50%;
+  padding: 22px 30px;
+  border: 4px solid var(--comic-black);
+  border-radius: 24px;
+  font-family: 'Permanent Marker', cursive;
+  font-size: clamp(18px, 2vw, 26px);
+  line-height: 1.35;
+  color: var(--comic-black);
+  box-shadow: 6px 6px 0 var(--comic-black);
+  max-width: 90%;
+  opacity: 0;
+  transform: translateY(40px) translateZ(0);
+  transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.msg.active {
+  opacity: 1;
+  transform: translateY(-50%) translateZ(0);
+  pointer-events: auto;
+}
+.msg.exit-up {
+  opacity: 0;
+  transform: translateY(-130%) translateZ(0);
+}
+
+.msg-abhinav {
+  background: var(--comic-cream-2);
+  color: var(--comic-black);
+  left: 0;
+  border-bottom-left-radius: 6px;
+}
+/* Long pointy tail (black outer) pointing LEFT toward Abhinav */
+.msg-abhinav::after {
+  content: ""; position: absolute;
+  left: -62px; bottom: 14px;
+  width: 64px; height: 34px;
+  background: var(--comic-black);
+  clip-path: polygon(100% 0, 100% 100%, 0 65%);
+}
+/* Cream inner fill, slightly inset */
+.msg-abhinav::before {
+  content: ""; position: absolute;
+  left: -52px; bottom: 18px;
+  width: 56px; height: 26px;
+  background: var(--comic-cream-2);
+  clip-path: polygon(100% 0, 100% 100%, 0 65%);
+  z-index: 2;
+}
+
+.msg-claude {
+  background: var(--claude-orange);
+  color: white;
+  right: 0;
+  border-bottom-right-radius: 6px;
+}
+/* Long pointy tail pointing RIGHT toward Claude bot */
+.msg-claude::after {
+  content: ""; position: absolute;
+  right: -62px; bottom: 14px;
+  width: 64px; height: 34px;
+  background: var(--comic-black);
+  clip-path: polygon(0 0, 0 100%, 100% 65%);
+}
+.msg-claude::before {
+  content: ""; position: absolute;
+  right: -52px; bottom: 18px;
+  width: 56px; height: 26px;
+  background: var(--claude-orange);
+  clip-path: polygon(0 0, 0 100%, 100% 65%);
+  z-index: 2;
+}
+
+.msg .punch {
+  display: inline-block;
+  background: var(--comic-yellow);
+  color: var(--comic-black);
+  padding: 0 8px;
+  border-radius: 4px;
+  border: 2px solid var(--comic-black);
+  font-weight: 700;
+}
+
+/* === Progress indicator (right edge of viewport) === */
+.chat-progress {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.chat-progress.show { opacity: 1; }
+.chat-progress .pip {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(15, 14, 23, 0.2);
+  border: 1.5px solid var(--comic-black);
+  transition: all 0.3s;
+}
+.chat-progress .pip.active {
+  background: var(--comic-red);
+  transform: scale(1.4);
+}
+.chat-progress .pip.past {
+  background: var(--comic-black);
+}
+
+/* End-of-chat outro cue */
+.chat-outro {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Permanent Marker', cursive;
+  font-size: 14px;
+  color: var(--ink-mute);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.chat-outro.show { opacity: 1; }
+.chat-outro::after {
+  content: " ↓";
+  animation: bounce-down 1s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
+/* === Bottom loader: appears in last 30% of chat scroll === */
+.bottom-loader {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--comic-black);
+  color: var(--comic-yellow);
+  padding: 14px 24px 18px;
+  z-index: 60;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.35s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  border-top: 4px solid var(--comic-red);
+}
+.bottom-loader.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.loader-text {
+  font-family: 'Bangers', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-align: center;
+  color: var(--comic-yellow);
+  text-shadow: 2px 2px 0 var(--comic-red);
+}
+.loader-text .pct {
+  color: var(--comic-cream-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  margin-left: 8px;
+}
+.loader-bar {
+  height: 12px;
+  background: rgba(255,210,63,0.15);
+  border: 2px solid var(--comic-yellow);
+  border-radius: 999px;
+  overflow: hidden;
+  max-width: 680px;
+  margin: 0 auto;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+}
+.loader-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--comic-red), var(--comic-yellow), var(--comic-red));
+  background-size: 30px 100%;
+  transition: width 0.18s linear;
+  border-radius: 999px;
+  animation: loader-stripe 1.2s linear infinite;
+}
+@keyframes loader-stripe {
+  0%   { background-position: 0 0; }
+  100% { background-position: 30px 0; }
+}
+
+/* ============================================================
+   Below-hero overrides — copy from prior design-v3
+   ============================================================ */
+section { background: var(--cream-warm); color: var(--ink) !important; }
+section .container .section-tag {
+  background: var(--comic-yellow); color: var(--ink) !important;
+  border: 2.5px solid var(--comic-black); padding: 5px 14px;
+  font-family: 'Bangers', sans-serif !important;
+  font-size: 14px !important; letter-spacing: 0.12em !important; font-weight: 400 !important;
+  box-shadow: 2px 2px 0 var(--comic-black);
+  border-radius: 999px !important;
+  display: inline-block !important;
+  margin-bottom: 16px !important;
+}
+.section-title {
+  font-family: 'Bangers', sans-serif !important;
+  font-size: clamp(28px, 4vw, 44px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: 0.02em !important;
+  color: var(--ink) !important;
+  font-weight: 400 !important;
+  margin-bottom: 14px !important;
+  max-width: 920px;
+}
+.section-sub { color: var(--ink-soft) !important; opacity: 1 !important; font-size: 16px !important; max-width: 700px; }
+
+/* Story cards */
+.story-card {
+  background: var(--cream-card) !important;
+  border: 4px solid var(--comic-black) !important;
+  border-radius: 12px !important;
+  box-shadow: 5px 5px 0 var(--comic-black) !important;
+  padding: 24px !important;
+}
+.story-card:hover { transform: translate(-3px, -3px) rotate(-0.5deg); box-shadow: 9px 9px 0 var(--comic-black) !important; }
+.story-card h3 { color: var(--ink) !important; font-size: 18px !important; font-family: 'Bangers', sans-serif !important; }
+.story-card p { color: var(--ink-soft) !important; font-size: 14px !important; line-height: 1.55 !important; }
+.story-card .step {
+  background: var(--comic-red) !important; color: white !important;
+  font-family: 'Bangers', sans-serif !important; letter-spacing: 0.08em;
+  font-size: 13px !important; padding: 4px 12px !important;
+  border-radius: 6px !important; display: inline-block !important;
+  margin-bottom: 12px !important; border: 2px solid var(--comic-black) !important;
+  box-shadow: 2px 2px 0 var(--comic-black);
+}
+
+/* Kennamet case study */
+#kennamet { background: var(--cream-warm) !important; }
+.case-study {
+  background: var(--comic-yellow) !important;
+  border: 5px solid var(--comic-black) !important;
+  box-shadow: 8px 8px 0 var(--comic-black) !important;
+  border-radius: 16px !important;
+}
+.case-num { color: var(--ink) !important; }
+.case-num .delta { color: var(--comic-red) !important; }
+.case-table td { color: var(--ink) !important; border-bottom: 1px solid rgba(15,14,23,0.2) !important; font-size: 14px !important; }
+.case-table td:first-child { color: var(--ink-soft) !important; }
+
+/* Code blocks */
+:not(pre) > code {
+  background: var(--comic-yellow) !important; color: var(--ink) !important;
+  padding: 2px 7px !important; border-radius: 4px !important;
+  border: 1.5px solid var(--comic-black);
+  font-size: 0.9em !important; font-family: 'JetBrains Mono', monospace !important;
+}
+pre {
+  background: #1a1820 !important; border: 4px solid var(--comic-black) !important;
+  box-shadow: 5px 5px 0 var(--comic-black); border-radius: 10px !important;
+  padding: 18px 22px !important; overflow-x: auto !important;
+  color: #fff8e0 !important;
+}
+pre code, pre code * {
+  background: transparent !important; border: none !important; padding: 0 !important;
+  color: #fff8e0 !important; font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12.5px !important; line-height: 1.6 !important;
+}
+pre code .comment { color: #8a8568 !important; font-style: italic; }
+
+/* Agent cards */
+.agent-card {
+  background: var(--cream-card) !important;
+  border: 4px solid var(--comic-black) !important;
+  border-radius: 12px !important;
+  box-shadow: 5px 5px 0 var(--comic-black) !important;
+  padding: 22px !important;
+}
+.agent-card:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--comic-black) !important; }
+.agent-card h4 { color: var(--ink) !important; font-size: 19px !important; font-family: 'Bangers', sans-serif !important; }
+.agent-card p { color: var(--ink-soft) !important; font-size: 13.5px !important; opacity: 1 !important; line-height: 1.55 !important; }
+.agent-card .role { color: var(--comic-red) !important; font-weight: 700; font-size: 11px !important; letter-spacing: 0.12em !important; }
+.agent-card .agent-icon { width: 44px !important; height: 44px !important; font-weight: 800 !important; border: 2px solid var(--comic-black) !important; border-radius: 10px !important; }
+
+/* Constitution */
+.constitution { background: var(--cream-card) !important; border-left: 4px solid var(--comic-red) !important; border: 4px solid var(--comic-black) !important; box-shadow: 6px 6px 0 var(--comic-black); border-left-color: var(--comic-red) !important; border-left-width: 8px !important; border-radius: 0 12px 12px 0 !important; }
+.constitution-list li .principle { color: var(--ink) !important; }
+.constitution-list li .desc { color: var(--ink-soft) !important; opacity: 0.9; }
+
+/* Ledger */
+#ledger { background: var(--cream-warm) !important; }
+.ledger { background: var(--cream-card) !important; border: 4px solid var(--comic-black) !important; border-radius: 12px !important; box-shadow: 6px 6px 0 var(--comic-black) !important; }
+.ledger-item h5 { color: var(--ink) !important; font-size: 17px !important; font-family: 'Bangers', sans-serif !important; }
+.ledger-item .date {
+  background: var(--comic-red) !important; color: white !important;
+  font-weight: 700; border: 2px solid var(--comic-black);
+  border-radius: 6px !important; padding: 3px 10px !important;
+  font-family: 'JetBrains Mono', monospace !important; font-size: 11.5px !important;
+}
+.ledger-item .what-wrong { color: #a02530 !important; font-weight: 600; }
+.ledger-item .fix { color: #1f7a4a !important; font-weight: 600; }
+
+/* Build steps */
+.step-num { color: var(--comic-red) !important; font-family: 'Bangers', sans-serif !important; font-weight: 400 !important; opacity: 0.9; }
+.step-body h4 { color: var(--ink) !important; font-size: 22px !important; font-family: 'Bangers', sans-serif !important; }
+.step-body p { color: var(--ink-soft) !important; font-size: 14.5px !important; line-height: 1.55 !important; }
+
+/* Results */
+#results { background: var(--cream-warm) !important; }
+.results-table { background: var(--cream-card) !important; border: 4px solid var(--comic-black) !important; border-radius: 12px !important; box-shadow: 6px 6px 0 var(--comic-black); overflow: hidden; }
+.results-table th { background: var(--comic-black) !important; color: var(--comic-yellow) !important; font-size: 12.5px !important; padding: 12px 16px !important; }
+.results-table td { color: var(--ink) !important; padding: 12px 16px !important; border-bottom: 1px solid var(--hairline) !important; }
+.tag-good { color: #1a8c5a !important; }
+.tag-bad { color: var(--comic-red) !important; }
+
+/* Magic prompt */
+.magic-prompt-box { background: #1a1820 !important; border: 4px solid var(--comic-black) !important; border-radius: 12px !important; box-shadow: 6px 6px 0 var(--comic-black); overflow: hidden; margin-bottom: 20px !important; }
+.magic-prompt-header { background: var(--comic-yellow) !important; color: var(--ink) !important; padding: 10px 18px !important; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--comic-black) !important; font-family: 'Permanent Marker', cursive !important; font-size: 13.5px !important; }
+.magic-prompt-box pre { box-shadow: none !important; border: none !important; border-radius: 0 !important; margin: 0 !important; }
+
+/* Signals */
+.tab-btn { background: var(--cream-card) !important; border: 3px solid var(--comic-black) !important; color: var(--ink) !important; box-shadow: 3px 3px 0 var(--comic-black); font-family: 'Bangers', sans-serif !important; font-size: 15px !important; letter-spacing: 0.06em !important; padding: 10px 18px !important; font-weight: 400 !important; }
+.tab-btn.active { background: var(--comic-red) !important; color: white !important; border-color: var(--comic-black) !important; }
+.signal-card { background: var(--cream-card) !important; border: 3px solid var(--comic-black) !important; box-shadow: 4px 4px 0 var(--comic-black) !important; padding: 18px 16px !important; min-height: 96px !important; }
+.signal-card:hover { transform: translate(-2px, -2px) !important; box-shadow: 7px 7px 0 var(--comic-black) !important; }
+.signal-card .sig-icon { font-size: 24px !important; margin-bottom: 8px !important; }
+.signal-card .sig-name { font-size: 12.5px !important; color: var(--comic-red) !important; }
+.signal-card .sig-disp { color: var(--ink) !important; font-size: 13.5px !important; }
+.signal-card .click-hint { display: none !important; }
+.signal-card::after {
+  content: "→"; position: absolute; bottom: 8px; right: 12px;
+  font-family: 'Bangers', sans-serif; color: var(--comic-red); font-size: 18px;
+  opacity: 0; transition: opacity 0.15s, transform 0.15s;
+}
+.signal-card:hover::after { opacity: 1; transform: translateX(2px); }
+
+/* Modal */
+.modal { background: var(--cream-warm) !important; border: 5px solid var(--comic-black) !important; box-shadow: 10px 10px 0 var(--comic-black); }
+.modal-content h3 { color: var(--comic-red) !important; font-family: 'JetBrains Mono', monospace; }
+.modal-content .modal-display { color: var(--ink-soft) !important; }
+.modal-content .modal-section h4 { color: var(--comic-red) !important; }
+.modal-content .formula { background: var(--comic-black) !important; color: var(--comic-yellow) !important; border: 2px solid var(--comic-black); }
+
+/* Caveat */
+.caveat { background: rgba(230,57,70,0.08) !important; border: 3px solid var(--comic-red) !important; padding: 18px !important; border-radius: 10px; }
+.caveat p { color: var(--ink) !important; }
+
+/* Footer */
+footer { background: var(--comic-yellow) !important; border-top: 6px solid var(--comic-black) !important; color: var(--ink) !important; }
+footer p { color: var(--ink) !important; font-weight: 500; }
+footer .repo { background: var(--comic-red) !important; color: white !important; border: 4px solid var(--comic-black); box-shadow: 5px 5px 0 var(--comic-black); font-family: 'Bangers', sans-serif; letter-spacing: 0.05em; font-size: 18px !important; }
+
+/* Section tag overrides — already styled above */
+.arch { background: var(--cream-card) !important; border: 4px solid var(--comic-black) !important; box-shadow: 6px 6px 0 var(--comic-black); }
+
+/* === MOBILE (≤768px): avatars as small circles top-corners, bubble fills the screen === */
+@media (max-width: 768px) {
+  .chat-banner { top: 14px; }
+  .chat-banner h1 { font-size: 22px !important; line-height: 1.1 !important; }
+  .chat-banner .scroll-hint { font-size: 11px; margin-top: 4px; }
+
+  /* Use block layout — speakers are absolute-positioned at top */
+  .chat-grid {
+    display: block;
+    padding: 0;
+    height: 100vh;
+    position: relative;
+  }
+
+  .speaker {
+    position: absolute;
+    top: 88px;
+    height: auto;
+    width: auto;
+    z-index: 5;
+  }
+  .speaker.abhinav { left: 18px; justify-content: flex-start; }
+  .speaker.claude  { right: 18px; justify-content: flex-end; }
+
+  .speaker .photo-wrap {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--comic-black);
+    background: var(--cream-warm);
+    box-shadow: 4px 4px 0 var(--comic-red);
+    display: block;
+  }
+  .speaker.abhinav .photo-wrap img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: 50% 8%;   /* keep the face front and centered in the circle */
+    filter: none;
+  }
+  .claude-svg { width: 96px; height: 96px; filter: none; }
+
+  .speaker .name-tag {
+    position: absolute;
+    bottom: -10px;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-width: 2px;
+    box-shadow: 2px 2px 0 var(--comic-red);
+  }
+
+  /* Chat feed — full width, bubble anchored near top of feed (just below avatars) */
+  .chat-feed {
+    position: absolute;
+    top: 210px;        /* clears 88 + 96 + 10 tag + breathing room */
+    bottom: 100px;     /* clears bottom loader */
+    left: 0; right: 0;
+    height: auto;
+    padding: 0 14px;
+    align-items: flex-start;
+  }
+  .msg {
+    position: absolute;
+    top: 24px !important;       /* anchor near top of chat-feed, close to avatars */
+    left: 14px !important;
+    right: 14px !important;
+    max-width: none;
+    font-size: 19px !important;
+    line-height: 1.4 !important;
+    padding: 20px 22px;
+    border-radius: 18px;
+    border-width: 3.5px;
+    box-shadow: 5px 5px 0 var(--comic-black);
+    transform: translateY(40px) translateZ(0);
+  }
+  .msg.active   { transform: translateY(0) translateZ(0); }
+  .msg.exit-up  { transform: translateY(-60px) translateZ(0); opacity: 0; }
+
+  /* Tails point UP toward the avatars (avatars are now ABOVE the bubble) */
+  .msg-abhinav::after,
+  .msg-abhinav::before,
+  .msg-claude::after,
+  .msg-claude::before {
+    bottom: auto;
+  }
+  .msg-abhinav::after {
+    left: 22px; top: -22px;
+    width: 28px; height: 24px;
+    clip-path: polygon(0 100%, 100% 100%, 30% 0);
+  }
+  .msg-abhinav::before {
+    left: 26px; top: -18px;
+    width: 22px; height: 20px;
+    clip-path: polygon(0 100%, 100% 100%, 30% 0);
+  }
+  .msg-claude::after {
+    right: 22px; left: auto; top: -22px;
+    width: 28px; height: 24px;
+    clip-path: polygon(0 100%, 100% 100%, 70% 0);
+  }
+  .msg-claude::before {
+    right: 26px; left: auto; top: -18px;
+    width: 22px; height: 20px;
+    clip-path: polygon(0 100%, 100% 100%, 70% 0);
+  }
+
+  .chat-progress { right: 8px; gap: 5px; }
+  .chat-progress .pip { width: 6px; height: 6px; border-width: 1px; }
+
+  .bottom-loader { padding: 10px 14px 12px; border-top-width: 3px; }
+  .loader-text { font-size: 13px; margin-bottom: 5px; letter-spacing: 0.06em; }
+  .loader-text .pct { font-size: 11px; margin-left: 6px; }
+  .loader-bar { height: 8px; max-width: 100%; }
+
+  .chat-outro { font-size: 11px; bottom: 90px; }
+
+  /* Below-hero sections — sane mobile padding and font sizes */
+  .container { padding-left: 16px !important; padding-right: 16px !important; }
+  section { padding: 48px 0 !important; }
+  .section-title { font-size: 26px !important; line-height: 1.15 !important; }
+  .section-sub { font-size: 14.5px !important; }
+  pre code, pre code * { font-size: 11px !important; }
+  pre { padding: 14px 16px !important; }
+}
+
+/* Extra-narrow phones (≤380px) — shrink avatars a touch more */
+@media (max-width: 380px) {
+  .speaker .photo-wrap { width: 84px; height: 84px; }
+  .claude-svg { width: 84px; height: 84px; }
+  .chat-feed { top: 196px; }
+  .msg { font-size: 17px !important; padding: 18px 20px; }
+}
+</style>
+
+<section class="chat-scroll-zone" id="chatHero">
+  <div class="chat-sticky">
+
+    <div class="chat-banner" id="chatBanner">
+      <h1><span style="color:var(--comic-red); -webkit-text-fill-color:var(--comic-red); text-shadow:2px 2px 0 var(--comic-black), 4px 4px 0 var(--comic-yellow);">BHAAI!</span> <span class="y">a chat</span> with <span class="b">an AI</span></h1>
+      <div class="scroll-hint">scroll down ↓</div>
+    </div>
+
+    <div class="chat-grid">
+      <!-- LEFT — Abhinav, sticky. All 8 photos stacked; one .active at a time, cross-faded per step -->
+      <div class="speaker abhinav">
+        <div class="photo-wrap" id="abhinavStack">
+          <img src="assets/webp/abnv1.webp" class="active" data-i="0" alt="Abhinav"/>
+          <img src="assets/webp/abnv2.webp" data-i="1" alt=""/>
+          <img src="assets/webp/abnv3.webp" data-i="2" alt=""/>
+          <img src="assets/webp/abnv4.webp" data-i="3" alt=""/>
+          <img src="assets/webp/abnv5.webp" data-i="4" alt=""/>
+          <img src="assets/webp/abnv6.webp" data-i="5" alt=""/>
+          <img src="assets/webp/abnv7.webp" data-i="6" alt=""/>
+          <img src="assets/webp/abnv8.webp" data-i="7" alt=""/>
+        </div>
+        <div class="name-tag">ABHINAV</div>
+      </div>
+
+      <!-- MIDDLE — chat feed (one bubble visible at a time) -->
+      <div class="chat-feed" id="chatFeed">
+        <div class="msg msg-abhinav"     data-step="0">Hi! I'm <strong>Abhinav</strong>. Indian retail trader.</div>
+        <div class="msg msg-abhinav"     data-step="1">I want to <strong>2× my money in 180 days.</strong></div>
+        <div class="msg msg-claude"      data-step="2">That's not how calibrated probability works…</div>
+        <div class="msg msg-claude"      data-step="3">But let's build something that <strong>actually has edge</strong>.</div>
+        <div class="msg msg-abhinav"     data-step="4">Show me.</div>
+        <div class="msg msg-claude"      data-step="5">5 ML engines · devil's advocate · operator-pump detection · strict walk-forward.</div>
+        <div class="msg msg-claude"      data-step="6">Every mistake logged publicly. <strong>10 so far.</strong></div>
+        <div class="msg msg-abhinav"     data-step="7">What's the realistic number?</div>
+        <div class="msg msg-claude"      data-step="8"><span class="punch">3.2% every 15 days.</span> Last 3 months. Consistently.</div>
+        <div class="msg msg-abhinav"     data-step="9">Bhaai. Let's open-source it. 🤝</div>
+      </div>
+
+      <!-- RIGHT — Claude, sticky -->
+      <div class="speaker claude">
+        <svg class="claude-svg" viewBox="0 0 100 110" aria-hidden="true">
+          <ellipse cx="50" cy="55" rx="42" ry="42" fill="#D97757" stroke="#0F0E17" stroke-width="4"/>
+          <ellipse cx="50" cy="55" rx="36" ry="36" fill="none" stroke="#B5613D" stroke-width="2" stroke-dasharray="3,4" opacity="0.4"/>
+          <circle cx="36" cy="50" r="5.5" fill="#0F0E17"/>
+          <circle cx="64" cy="50" r="5.5" fill="#0F0E17"/>
+          <circle cx="38" cy="48" r="2" fill="white"/>
+          <circle cx="66" cy="48" r="2" fill="white"/>
+          <path d="M 35 70 Q 50 80 65 70" stroke="#0F0E17" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M 25 28 Q 30 16 40 20" stroke="#0F0E17" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <path d="M 75 28 Q 70 16 60 20" stroke="#0F0E17" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <circle cx="22" cy="38" r="3.5" fill="#FFD23F" stroke="#0F0E17" stroke-width="2"/>
+          <circle cx="78" cy="38" r="3.5" fill="#FFD23F" stroke="#0F0E17" stroke-width="2"/>
+        </svg>
+        <div class="name-tag">CLAUDE</div>
+      </div>
+    </div>
+
+    <div class="chat-outro" id="chatOutro">keep scrolling for the story</div>
+  </div>
+
+  <!-- Bottom loader: fades in during last 30% of chat scroll, fills to 100% as we approach the main site -->
+  <div class="bottom-loader" id="bottomLoader">
+    <div class="loader-text">JUMPING TO THE MAIN STUFF<span class="pct" id="loaderPct">0%</span></div>
+    <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  </div>
+
+  <!-- Progress pips (fixed to viewport, fade in once chat starts) -->
+  <div class="chat-progress" id="chatProgress">
+    <div class="pip" data-step="0"></div>
+    <div class="pip" data-step="1"></div>
+    <div class="pip" data-step="2"></div>
+    <div class="pip" data-step="3"></div>
+    <div class="pip" data-step="4"></div>
+    <div class="pip" data-step="5"></div>
+    <div class="pip" data-step="6"></div>
+    <div class="pip" data-step="7"></div>
+    <div class="pip" data-step="8"></div>
+    <div class="pip" data-step="9"></div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const zone     = document.getElementById('chatHero');
+  const banner   = document.getElementById('chatBanner');
+  const outro    = document.getElementById('chatOutro');
+  const progress = document.getElementById('chatProgress');
+  const pips     = progress.querySelectorAll('.pip');
+  const msgs     = document.querySelectorAll('#chatFeed .msg');
+  const photos   = document.querySelectorAll('#abhinavStack img');
+  const loader   = document.getElementById('bottomLoader');
+  const loaderFill = document.getElementById('loaderFill');
+  const loaderPct  = document.getElementById('loaderPct');
+  const total    = msgs.length;
+  const nPhotos  = photos.length;
+  let lastStep   = -1;
+  let lastPhoto  = 0;
+
+  // Hand-picked photo for each chat step so I'm "talking with my hands"
+  // (10 steps → 8 photos with sensible reuse)
+  const photoForStep = [0, 1, 1, 2, 3, 4, 5, 6, 6, 7];
+
+  function update() {
+    const rect       = zone.getBoundingClientRect();
+    const scrollable = zone.offsetHeight - window.innerHeight;
+    const scrolled   = -rect.top;
+    const progressP  = Math.max(0, Math.min(1, scrolled / scrollable));
+
+    // Map progress (0..1) to step (0..total-1). Intro & outro buffers at edges.
+    const introBuffer = 0.06;
+    const outroBuffer = 0.10;
+    const usable      = 1 - introBuffer - outroBuffer;
+    const stepFloat   = Math.max(0, Math.min(total - 0.001, (progressP - introBuffer) / usable * total));
+    const step        = Math.floor(stepFloat);
+
+    if (step !== lastStep) {
+      msgs.forEach((m, i) => {
+        m.classList.remove('active', 'exit-up');
+        if (i < step)      m.classList.add('exit-up');
+        else if (i === step) m.classList.add('active');
+      });
+      pips.forEach((p, i) => {
+        p.classList.remove('active', 'past');
+        if (i < step)      p.classList.add('past');
+        else if (i === step) p.classList.add('active');
+      });
+
+      // Swap Abhinav photo for this step
+      const wantPhoto = photoForStep[step] ?? 0;
+      if (wantPhoto !== lastPhoto) {
+        photos.forEach((img, i) => img.classList.toggle('active', i === wantPhoto));
+        lastPhoto = wantPhoto;
+      }
+
+      lastStep = step;
+    }
+
+    banner.classList.toggle('hide', progressP > 0.04);
+    progress.classList.toggle('show', progressP > 0.04 && progressP < 1 - outroBuffer * 0.5);
+    outro.classList.toggle('show', step >= total - 1 && progressP > 1 - outroBuffer);
+
+    // Bottom loader: appears in last 30% of scroll, fills 0→100% as we approach the release
+    const loaderStart = 0.70;
+    if (progressP >= loaderStart) {
+      const lp = Math.min(1, (progressP - loaderStart) / (1 - loaderStart));
+      loader.classList.add('show');
+      loaderFill.style.width = (lp * 100).toFixed(1) + '%';
+      loaderPct.textContent = Math.round(lp * 100) + '%';
+    } else {
+      loader.classList.remove('show');
+    }
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => { update(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+  update();
+})();
+</script>
+
+
+<!-- THE STORY -->
+<section id="story">
+  <div class="container">
+    <div class="section-tag">The Journey</div>
+    <h2 class="section-title">From "make me 2x in 180 days" to a publishable AI strategy</h2>
+    <p class="section-sub">It started with a retail trader who wanted to double his money. It ended with a rigorous system that refuses to ship overfit claims — and produces real, calibrated edge.</p>
+
+    <div class="story-grid">
+      <div class="story-card">
+        <span class="step">DAY 1</span>
+        <h3>The 2x dream</h3>
+        <p>"Make me 2x in 180 days at 80% confidence." Almost shipped 26 names with in-sample calibration leak. <strong>Caught in time.</strong> Real prospective hit rate: 12.4%, not 90%.</p>
+      </div>
+      <div class="story-card">
+        <span class="step">WEEK 1</span>
+        <h3>Built the constitution</h3>
+        <p>Honesty about uncertainty. Pre-commit to falsification. Strict walk-forward (calibrate-on-prior-year-only). Living calibration ledger. Reproducibility = publishability.</p>
+      </div>
+      <div class="story-card">
+        <span class="step">WEEK 2</span>
+        <h3>Devil's advocate audit (10-vector)</h3>
+        <p>Caught a 47-feature look-ahead leak. Quarantined in source. Added CI tests. Logged in <code>logs/calibration_corrections.jsonl</code>.</p>
+      </div>
+      <div class="story-card">
+        <span class="step">WEEK 3</span>
+        <h3>KENNAMET +18% in 1 day</h3>
+        <p>First live forward-record win. Model said top conviction (4/4 engines). User entered ₹2,833, exited ₹3,345. Documented in git. <strong>Calibration verified.</strong></p>
+      </div>
+      <div class="story-card">
+        <span class="step">WEEK 4</span>
+        <h3>Operator-pump detection</h3>
+        <p>User caught me promoting a manipulated micro-cap. Added consecutive-UC detection. Now QC kills 3-5 names per basket. <strong>Honesty enforced.</strong></p>
+      </div>
+      <div class="story-card">
+        <span class="step">WEEK 7</span>
+        <h3>Forward record growing</h3>
+        <p>Daily routine scheduled. Every weekday at 6:34 PM IST a fresh basket lands in git. Immutable timestamped artifacts for the publishability case.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KENNAMET CASE STUDY -->
+<section id="kennamet">
+  <div class="container">
+    <div class="section-tag" style="color: var(--good)">The First Real Win</div>
+    <h2 class="section-title">KENNAMET — model said top, market validated +18% in 1 day</h2>
+    <p class="section-sub">A textbook example of the system working. Cross-engine consensus, clean per-name profile, model target +5% — actual outcome: +18% intraday.</p>
+
+    <div class="case-study">
+      <div class="case-grid">
+        <div>
+          <div class="case-num">+18.1%<span class="delta"> in 1 day</span></div>
+          <p style="margin-top: 16px; color: var(--fg-dim);">Entry ₹2,833.60 → Exit ₹3,345 in a single trading session. Model's +5% target blown through by 13pp. <strong>Direction right, magnitude exceeded.</strong></p>
+        </div>
+        <div>
+          <table class="case-table">
+            <tr><td>Score (15d horizon)</td><td><code>0.82</code> (#1 conviction)</td></tr>
+            <tr><td>Score (7d horizon)</td><td><code>0.72</code> (#2 conviction)</td></tr>
+            <tr><td>Engines agreeing</td><td>4 of 5 (cross-validated)</td></tr>
+            <tr><td>Contamination check</td><td class="hl-good">CLEAN</td></tr>
+            <tr><td>RSI 14</td><td>64 (no chase)</td></tr>
+            <tr><td>Entry date</td><td><code>2026-05-08</code></td></tr>
+            <tr><td>Exit date</td><td><code>2026-05-08</code> (intraday)</td></tr>
+            <tr><td>Position weight</td><td>5% of portfolio</td></tr>
+            <tr><td>Portfolio impact</td><td class="hl-good">+0.91%</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="caveat">
+      <div class="caveat-title">⚠️ Honest caveat</div>
+      <p>One trade is not statistical proof (N=1). The +18% overshoot from a +5% model target could mean (a) the model is conservative on top conviction names (good), or (b) lucky one-off. We need 10+ realized outcomes before claiming the pattern is real. This is what the daily forward record is for.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-tag">The Architecture</div>
+    <h2 class="section-title">5 ML engines, parallel + cross-validated</h2>
+    <p class="section-sub">A name only ships if it appears in ≥2 engines' top-15 AND survives contamination QC AND operator-pump detection AND RSI &lt; 80 filter. Most names die in the cascade.</p>
+
+    <div class="arch">
+      <svg class="arch-svg" viewBox="0 0 1100 440">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--fg-dim)"/>
+          </marker>
+        </defs>
+
+        <!-- Data layer -->
+        <rect class="data" x="20" y="20" width="200" height="60" rx="8"/>
+        <text class="data-text" x="40" y="50">NSE Bhavcopy</text>
+        <text class="label-small" x="40" y="68">price + delivery</text>
+
+        <rect class="data" x="20" y="100" width="200" height="60" rx="8"/>
+        <text class="data-text" x="40" y="130">Corp Actions</text>
+        <text class="label-small" x="40" y="148">splits + bonuses</text>
+
+        <rect class="data" x="20" y="180" width="200" height="60" rx="8"/>
+        <text class="data-text" x="40" y="210">NSE Filings</text>
+        <text class="label-small" x="40" y="228">37k+ events</text>
+
+        <rect class="data" x="20" y="260" width="200" height="60" rx="8"/>
+        <text class="data-text" x="40" y="290">Macro Panel</text>
+        <text class="label-small" x="40" y="308">145 features</text>
+
+        <!-- Engines -->
+        <rect class="engine" x="280" y="20" width="280" height="40" rx="6"/>
+        <text class="engine-text" x="295" y="46">find_180d_frontier_honest</text>
+
+        <rect class="engine" x="280" y="80" width="280" height="40" rx="6"/>
+        <text class="engine-text" x="295" y="106">find_high_conviction</text>
+
+        <rect class="engine" x="280" y="140" width="280" height="40" rx="6"/>
+        <text class="engine-text" x="295" y="166">find_multibagger_today</text>
+
+        <rect class="engine" x="280" y="200" width="280" height="40" rx="6"/>
+        <text class="engine-text" x="295" y="226">run_multi_horizon</text>
+
+        <rect class="engine" x="280" y="260" width="280" height="40" rx="6"/>
+        <text class="engine-text" x="295" y="286">compare_short_horizons</text>
+
+        <!-- Agents -->
+        <rect class="agent" x="620" y="50" width="200" height="40" rx="6"/>
+        <text class="agent-text" x="635" y="76">devil's advocate (10v)</text>
+
+        <rect class="agent" x="620" y="110" width="200" height="40" rx="6"/>
+        <text class="agent-text" x="635" y="136">debugger (per-name DD)</text>
+
+        <rect class="agent" x="620" y="170" width="200" height="40" rx="6"/>
+        <text class="agent-text" x="635" y="196">supervisor (orchestrate)</text>
+
+        <rect class="agent" x="620" y="230" width="200" height="40" rx="6"/>
+        <text class="agent-text" x="635" y="256">code-reviewer</text>
+
+        <rect class="agent" x="620" y="290" width="200" height="40" rx="6"/>
+        <text class="agent-text" x="635" y="316">contamination filter</text>
+
+        <!-- Output -->
+        <rect class="output" x="880" y="120" width="200" height="120" rx="8"/>
+        <text class="output-text" x="905" y="165">FINAL BASKET</text>
+        <text class="label-small" x="905" y="190">QC'd · cross-validated</text>
+        <text class="label-small" x="905" y="210">7-9 names</text>
+        <text class="label-small" x="905" y="228">14-17% exposure</text>
+
+        <!-- Arrows from data → engines -->
+        <path class="arrow" d="M225,50 L275,50"/>
+        <path class="arrow" d="M225,130 L275,110"/>
+        <path class="arrow" d="M225,210 L275,170"/>
+        <path class="arrow" d="M225,290 L275,230"/>
+        <path class="arrow" d="M225,290 L275,290"/>
+
+        <!-- Arrows from engines → agents -->
+        <path class="arrow" d="M565,40 L615,70"/>
+        <path class="arrow" d="M565,100 L615,130"/>
+        <path class="arrow" d="M565,160 L615,190"/>
+        <path class="arrow" d="M565,220 L615,250"/>
+        <path class="arrow" d="M565,280 L615,310"/>
+
+        <!-- Arrows from agents → output -->
+        <path class="arrow" d="M825,70 L875,150"/>
+        <path class="arrow" d="M825,130 L875,170"/>
+        <path class="arrow" d="M825,190 L875,180"/>
+        <path class="arrow" d="M825,250 L875,200"/>
+        <path class="arrow" d="M825,310 L875,220"/>
+
+        <!-- Labels -->
+        <text class="label-small" x="20" y="380">DATA LAYER</text>
+        <text class="label-small" x="280" y="380">ML ENGINES (run in parallel)</text>
+        <text class="label-small" x="620" y="380">QC AGENTS &amp; FILTERS</text>
+        <text class="label-small" x="880" y="380">FORWARD RECORD</text>
+      </svg>
+    </div>
+
+    <pre><code><span class="comment"># How the cross-engine vote works</span>
+def is_actionable(symbol):
+    in_engines = sum(symbol in top_15(e) for e in ENGINES)  <span class="comment"># count of top-15 hits</span>
+    if in_engines < 2:                  return False         <span class="comment"># need cross-validation</span>
+    if contaminated(symbol):            return False         <span class="comment"># unrecorded -30%+ drop</span>
+    if operator_pump(symbol):           return False         <span class="comment"># 3+ consecutive UCs</span>
+    if rsi(symbol) > 80:                return False         <span class="comment"># chase zone</span>
+    if adv_cr(symbol) < 2.0:            return False         <span class="comment"># illiquid</span>
+    if score_5pct_15d(symbol) < 0.55:   return False         <span class="comment"># below floor</span>
+    return True</code></pre>
+  </div>
+</section>
+
+<!-- 15D/+5% PLAYBOOK — THE CURRENT PRODUCTION STRATEGY -->
+<section id="playbook">
+  <div class="container">
+    <div class="section-tag" style="color: var(--good)">The Production Strategy (July 2026)</div>
+    <h2 class="section-title">The 15D/+5% playbook — earned from a 4,224-trade backtest</h2>
+    <p class="section-sub">This is the exact strategy running today. Every parameter below was earned from a 10-year walk-forward backtest (529 weekly baskets, Jan 2016 → Jun 2026), not chosen by intuition. Copy it whole — every number matters.</p>
+
+    <div class="caveat" style="border-color: var(--accent-1);">
+      <div class="caveat-title">📌 THE OUTPUT CONTRACT — read this before you build anything</div>
+      <p>This repo contains TWO generations of system and several diagnostic layers. If you rebuild from this page, the ONE production output you must reproduce is:</p>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; margin: 10px 0;"><strong>live_predictions/YYYY-MM-DD_15d5pct.json</strong> — 8 names × 12.5%, emitted weekly by <code>generate_hybrid_basket.py</code> via <code>run_weekly_pipeline.sh</code>, behind the freshness gate.</p>
+      <p>Everything else — <code>find_achievable_frontier.py</code> (frontier grid), frontier/high-conviction scorers with a ≥0.90 calibrated bar, the multibagger and 180d engines — are <strong>upstream engines and diagnostics</strong>, NOT the tradeable output. A known failure mode: copiers rebuild the older "frontier picks" layer (touch-probability, score ≥0.90, -7% stop) and get completely different picks. That layer answers a different question: <em>"will the intraday high TOUCH +X%?"</em> (58% base rate at 15d/5%, hence 98%+ band hit rates). The production playbook answers <em>"will the trade exit profitably under +5% target / -3% SL-first / 15-day timeout?"</em> (23-27% clean hits). Touch-probability selects high-volatility momentum names — <strong>exactly the names our QC filter excludes</strong>, because the same volatility that touches +5% touches -3% first (44.9% whipsaw rate). If your rebuild's daily output is a <code>frontier_picks_*.md</code> with 0.90-bar picks and a -7% stop, you built the deprecated diagnostic layer.</p>
+      <p><strong>Convergence check</strong>: run <code>verify_freshness.py</code> (must exit 0), then <code>run_weekly_pipeline.sh --skip-fetch --dry-run</code> on the same <code>data_through</code> date and compare your basket JSON's symbols, weights, band_fit and levels (close ×0.99/1.01/1.05/0.97) against a committed one in <code>live_predictions/</code>. Same data + same filter → same 8 names. LightGBM <code>random_state=42</code> everywhere; universe cut ADV ≥ ₹5cr AND close &gt; ₹50 (the older frontier layer used ADV ≥ ₹1cr — another silent divergence source).</p>
+    </div>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The trade spec</h3>
+    <pre><code><span class="comment"># One basket per week. 8 names, equal weight, 100% deployed.</span>
+TARGET      = +5%           <span class="comment"># book HALF here, trail rest with SL at +2.5%</span>
+STOP_LOSS   = -3%           <span class="comment"># sell 100%, no exceptions.</span>
+                            <span class="comment"># ⚠️ UNDER REVIEW per 2026-07-07 correction below:</span>
+                            <span class="comment"># day-by-day sim says -3% is inside small-cap noise</span>
+                            <span class="comment"># (fires on 63.5% of trades → negative after costs)</span>
+TIMEOUT     = 15 trading days   <span class="comment"># exit whatever remains at market</span>
+NAMES       = 8 × 12.5%     <span class="comment"># equal weight, no cash drag</span>
+REFRESH     = weekly (Monday), full pipeline re-run
+
+<span class="comment"># Level construction (generate_hybrid_basket.py _pick):</span>
+BUY_ZONE    = close × [0.99, 1.01]   <span class="comment"># limit orders only, never chase a gap</span>
+TARGET_PX   = close × 1.05
+SL_PX       = close × 0.97
+<span class="comment"># Basket file: live_predictions/YYYY-MM-DD_15d5pct.json (immutable, git-committed).
+# Each basket also records a regime_gate verdict (DEPLOY/WAIT) from the multibagger engine —
+# all-Tier-2 baskets in regime WAIT carry expected hit ≈24%, below the 27.5% band-fit optimum.</span></code></pre>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The 10-year backtest that earned these numbers</h3>
+    <p style="color: var(--fg-dim); font-size: 14px;">Walk-forward LightGBM: train on all history before each week, retrain every 13 weeks (raw scores, no calibration layer — a known simplification vs the isotonic-calibrated engines). Simulated the exact exit rule (target/SL/whipsaw/timeout). Script: <code>src/agentic/backtest_10yr_15d5pct.py</code></p>
+    <table class="results-table">
+      <thead><tr><th>Metric</th><th>Baseline (all 4,224 trades)</th><th>With band-fit filter (n=699)</th></tr></thead>
+      <tbody>
+        <tr><td>Target +5% hit rate</td><td>23.3%</td><td><strong style="color: var(--good)">27.2%</strong></td></tr>
+        <tr><td>SL -3% rate</td><td>30.9%</td><td>28.2%</td></tr>
+        <tr><td>Whipsaw (both intraday)</td><td>44.9%</td><td>43.8%</td></tr>
+        <tr><td>Mean return / trade</td><td>+1.77%</td><td><strong style="color: var(--good)">+2.29%</strong></td></tr>
+        <tr><td>Weeks positive (8-name basket)</td><td colspan="2">64.8% · mean +1.76%/15d · worst -3.0% · best +14.6% · ≈34.6% CAGR compounded</td></tr>
+      </tbody>
+    </table>
+
+    <div class="caveat" style="border-color: var(--bad);">
+      <div class="caveat-title">🚨 CORRECTION 2026-07-07 — day-by-day sequencing collapses the headline P&L</div>
+      <p>The table above uses a <strong>window-level approximation</strong>: both-touch ("whipsaw") trades booked at an assumed +1.0%, entry assumed at signal-day close, days never sequenced. Re-simulating the SAME 4,221 trades <strong>day-by-day</strong> (walk the path in order, conservative SL-first on same-day both-touch, entry at next-day open — the only executable entry since baskets are emitted after close):</p>
+      <table class="results-table" style="margin: 12px 0;">
+        <thead><tr><th>Geometry (entry = next-day open)</th><th>Tgt hit</th><th>SL hit</th><th>Mean/trade</th><th>After 0.30% costs</th><th>CAGR after costs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>SL -3% + book-half/trail-2.5 (CURRENT spec)</strong></td><td>36.0%</td><td><strong style="color: var(--bad)">63.5%</strong></td><td>+0.225%</td><td>-0.075%</td><td><strong style="color: var(--bad)">-1.3% ❌</strong></td></tr>
+          <tr><td>SL -5% + book-half/trail-2.5</td><td>49.7%</td><td>48.7%</td><td>+0.422%</td><td>+0.122%</td><td>+2.1%</td></tr>
+          <tr><td>SL -7% + book-half/trail-2.5</td><td>57.0%</td><td>38.9%</td><td>+0.458%</td><td>+0.158%</td><td>+2.7%</td></tr>
+          <tr><td>NO SL, day-15 timeout + book-half/trail</td><td>66.5%</td><td>0%</td><td>+0.771%</td><td>+0.471%</td><td><strong style="color: var(--good)">+8.3%</strong></td></tr>
+        </tbody>
+      </table>
+      <p>Where the coarse +1.77% came from: (1) the +1.0% whipsaw assumption — in reality the stop fires FIRST in most both-touch windows (day-by-day, the -3% SL fires on 63.5% of trades); (2) signal-close entry isn't executable — next-open entry costs ~0.39%/trade in gap-up drift. Same-day both-touch ambiguity affects only 1.9% of trades, so this correction is robust to sequencing assumptions. <strong>The +5% target is fine (66.5% touch it in 15d unstopped); the -3% stop is inside small-cap noise on a 15-day horizon and is the value-destroyer.</strong> Also tested: the ±1% "never chase" buy zone LOWERED mean per trade (+0.615% → +0.295%) — the gapped-up names were disproportionately the winners.</p>
+      <p>Tail-risk price of dropping the SL: 5th-percentile trade -16.7%, worst trade -56%, worst 8-name basket week -26.6%. The stop decision is a risk-tolerance decision, not a free lunch. The band-fit ≥ 2 subset has NOT yet been re-run day-by-day (the +2.29% above will also compress; run pending).</p>
+      <p><strong>Standing rule from this correction: no window-level exit approximations. Every exit-rule claim must come from day-by-day sequenced simulation, entered at next-day open, net of ≥0.30% round-trip costs.</strong></p>
+    </div>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The band-fit score — where the edge actually lives</h3>
+    <p style="color: var(--fg-dim); font-size: 14px;">The backtest's single most important finding: <strong style="color: var(--bad)">the ML classifier is OVERCONFIDENT above 0.85</strong> — those "safest" picks hit only 18.9% vs 23.9% for the honest 0.5–0.7 band. Consolidation beats momentum. Moderate RSI beats extended RSI. We score every candidate 0–3:</p>
+    <pre><code>def band_fit_score(row):
+    <span class="comment"># Earned bands (10-yr hit rates in comments)</span>
+    s = 0.0
+    if -0.05 &lt;= row.return_20d &lt;= 0.00: s += 1.0   <span class="comment"># 27.5% hit — BEST band (consolidation)</span>
+    elif -0.10 &lt;= row.return_20d &lt;= 0.02: s += 0.5 <span class="comment"># -15..-5 band: 26.3% (2nd best)</span>
+    if 45 &lt;= row.rsi_14 &lt;= 55: s += 1.0            <span class="comment"># 25.5% hit — moderate RSI wins</span>
+    elif 42 &lt;= row.rsi_14 &lt;= 58: s += 0.5
+    if 0.50 &lt;= row.ml_score &lt;= 0.70: s += 1.0      <span class="comment"># 23.9% hit — the HONEST zone</span>
+    elif 0.45 &lt;= row.ml_score &lt;= 0.75: s += 0.5
+    elif row.ml_score &gt;= 0.85: s -= 0.5            <span class="comment"># 18.9% hit — PENALTY, overconfident.</span>
+                                                   <span class="comment"># NOTE: interim fix — the classifier itself</span>
+                                                   <span class="comment"># has NOT been recalibrated yet; the penalty</span>
+                                                   <span class="comment"># routes around the flaw, it doesn't cure it.</span>
+    return s
+<span class="comment"># Selection: Tier-1 = 2+ engine consensus, ranked by band_fit then cs_score.
+# Tier-2 backfill = ML 0.50-0.75 AND band_fit >= 1.5. Total always 8 names.</span></code></pre>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The QC filter (tightened from backtest evidence)</h3>
+    <pre><code>rsi_14        in [42, 60]      <span class="comment"># was 40-72 — extended names underperform</span>
+return_20d    in [-10%, +15%]  <span class="comment"># was -15/+30 — chase mode (20-30%) hits only 19.5%</span>
+return_5d     in [-5%, +5%]    <span class="comment"># was -5/+10 — no parabolics</span>
+volume_vs_20d &lt; 2              <span class="comment"># was &lt;3 — no distribution days</span>
+close         &gt; ₹50            <span class="comment"># no penny stocks</span>
+adv_20d       ≥ ₹5cr           <span class="comment"># exit liquidity</span>
+max_uc_streak &lt; 2              <span class="comment"># operator-pump kill — a "UC day" is</span>
+                               <span class="comment">#   return_1d ∈ [+4.98%, +10.05%], and the streak is the max</span>
+                               <span class="comment">#   consecutive run over the TRAILING 45 CALENDAR DAYS</span>
+contamination = NONE           <span class="comment"># no -30%+ single-day drop lacking a corp-action within ±5d</span></code></pre>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">Other findings a copier must not miss</h3>
+    <ul style="color: var(--fg-dim); font-size: 14px; line-height: 2;">
+      <li>🐻 <strong style="color: var(--fg);">BEAR regime (breadth &lt;30% above 200DMA) is the BEST regime</strong> — +2.17% mean/trade, lowest SL rate (26.3%). Value shows up when the crowd panics. Don't sit out bear tapes.</li>
+      <li>⚡ <strong style="color: var(--fg);">44.9% of trades touch BOTH target and SL intraday</strong> (whipsaw). The backtest assumes SL-fills-first — conservative. Your real fills decide half the P&L; use limit orders inside the buy zone, never chase.</li>
+      <li>🔁 <strong style="color: var(--fg);">RL miss loop</strong>: every week, <code>miss_learner.py</code> diagnoses last week's missed winners into 5 buckets — UNIVERSE_MISS (not in data) / MODEL_COVERAGE_MISS (score &lt;0.50) / THRESHOLD_MISS (score OK but ranked outside top-30) / CAUGHT (in an engine top-30) / CORRECTLY_FILTERED (QC killed it for cause) — appended to <code>logs/miss_learnings.jsonl</code>. Separately, <code>train_missed_winner_classifier.py</code> retrains a supervised LightGBM on historical price-feature windows labeled <code>peak_return_forward_15d ≥ +15% AND passes today's QC filter</code> — the ledger diagnoses WHERE misses happen; the classifier trains on the underlying price history, not the ledger itself.</li>
+      <li>📰 <strong style="color: var(--fg);">"Spurt in Volume" trap</strong>: NSE announcement taggers mislabel exchange surveillance notices as order wins. Only "Bagging/Receiving of orders/contracts" is a real order win. Treat volume-spurt notices as accumulation hints, never as business catalysts.</li>
+      <li>🧪 <strong style="color: var(--fg);">Rationale is adversarially verified</strong>: every per-pick rationale is written by one analyst agent and fact-checked by a paired independent skeptic agent against the raw data blob (2026-07-07 basket: 16 agents, 5/8 clean first pass, 3 numeric errors caught before shipping). Hard-won detail: <strong>give the verifier every source document the analyst had</strong> — our PNBGILTS verifier flagged correct backtest numbers as "fabricated" because the backtest table wasn't in its context.</li>
+      <li>📉 <strong style="color: var(--fg);">32 trades is an anecdote, not a backtest.</strong> Our first "backtest" was 4 weeks / 32 trades and it nearly shipped a bad filter. Minimum bar: full market cycle, thousands of trades, walk-forward retraining.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FRESHNESS GATE -->
+<section id="freshness">
+  <div class="container">
+    <div class="section-tag" style="color: var(--bad)">The Guardrail</div>
+    <h2 class="section-title">The freshness gate — born from our worst incident</h2>
+    <p class="section-sub">On 2026-07-01 we emitted a basket built on macro data <strong>55 days stale</strong> — and reported it with a green tick. Yahoo Finance silently returned HTTP 429, the fetcher wrote nothing, the panel forward-filled old values, and every check passed because the file's <em>dates</em> looked fresh while its <em>columns</em> were rotten. If you copy one non-obvious thing from this page, copy this.</p>
+
+    <pre><code><span class="comment"># The bug class: file-level freshness LIES.
+# macro_panel.parquet: trade_date max = 2026-06-30  ✓ "fresh"
+# but dxy/brent/us_10y last NON-NULL value = 2026-05-07  ✗ 55 days stale (forward-filled)</span>
+
+<span class="comment"># The fix: TWO levels of contract, verified before ANY basket can emit</span>
+FILE-LEVEL  : max(date_col) or mtime vs business-day limit    <span class="comment"># 11 contracts</span>
+COLUMN-LEVEL: last non-null date PER CRITICAL COLUMN vs limit <span class="comment"># 14 contracts</span>
+
+<span class="comment"># Contracts (verify_freshness.py) — limits in business days. 25 checks total.</span>
+PRICES        3bd   cols: close, rsi_14_daily, return_20d, volume_vs_20d (3bd each)
+CS_ENGINE     3bd   (mtime)   <span class="comment"># compare_short_horizons — primary 15D/5% engine</span>
+HC_ENGINE     3bd   (mtime)   <span class="comment"># high conviction</span>
+MB_ENGINE     3bd   (mtime)   <span class="comment"># multibagger (also emits the regime gate)</span>
+F180_ENGINE   3bd   (mtime)   <span class="comment"># 180d honest frontier</span>
+MH_ENGINE     3bd   (mtime)   <span class="comment"># multi_horizon CSV — was UNGATED until 2026-07-07;</span>
+                              <span class="comment"># the completeness audit for this page caught it</span>
+ML_CLASSIFIER 3bd   (mtime)
+MACRO_PANEL   3bd   cols: usdinr 3bd · brent/wti/us_10y/dxy/us_vix/spx 5bd each
+INDUSTRY      3bd   cols: sector_5d_ret, sector_20d_ret, rs_20d (3bd each)
+NEWS_EVENTS   5bd
+ANNOUNCEMENTS 10bd
+
+<span class="comment"># Enforcement — NO bypass path:</span>
+generate_hybrid_basket.py  → verify_or_die() on entry; refuses to emit if ANY check fails
+run_weekly_pipeline.sh     → step 3.5 hard-fails the whole run (exit 1)
+emit_freshness_status.py   → reports/freshness_status.md dashboard, every run
+daily brief                → freshness table at the TOP, impossible to miss</code></pre>
+
+    <pre><code><span class="comment"># And because sources DO fail: FRED fallback for Yahoo 429s (fetch_global_macro.py)</span>
+^TNX → DGS10 · DX-Y.NYB → DTWEXBGS · ^VIX → VIXCLS · ^GSPC → SP500
+<span class="comment"># Daily brent/wti do NOT come from Yahoo at all — they come from FRED directly
+# via fetch_commodity_prices.py (DCOILBRENTEU / DCOILWTICO). Brent was one of the
+# stale-incident columns, so know your actual source chain.
+# 3 retries + exponential backoff on both sources.
+# If ALL sources fail → exit non-zero → the gate catches the stale column downstream.
+# A fetcher that fails silently is worse than one that crashes loudly.</span></code></pre>
+  </div>
+</section>
+
+<!-- SIGNALS / FEATURES TAB -->
+<section id="signals">
+  <div class="container">
+    <div class="section-tag" style="color: var(--accent-3)">The Inputs</div>
+    <h2 class="section-title">Every signal we feed the engines — hover for "why", click for "how"</h2>
+    <p class="section-sub">50+ features across 8 categories. Hover any card for a one-line vibe check. Click to see the math, the data source, and the Python snippet to compute it.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tech">📈 Price/Technical</button>
+      <button class="tab-btn" data-tab="vol">💧 Volume/Liquidity</button>
+      <button class="tab-btn" data-tab="volat">⚡ Volatility</button>
+      <button class="tab-btn" data-tab="market">🌐 Market Context</button>
+      <button class="tab-btn" data-tab="news">📰 News/Events</button>
+      <button class="tab-btn" data-tab="macro">💱 Macro</button>
+      <button class="tab-btn" data-tab="qc">🛡️ QC / Risk Flags</button>
+      <button class="tab-btn" data-tab="targets">🎯 Model Targets</button>
+    </div>
+
+    <div id="signal-cards" class="signal-grid"></div>
+  </div>
+</section>
+
+<!-- SIGNAL DETAIL MODAL -->
+<div id="signal-modal" class="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<style>
+.tabs {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+  background: var(--bg-2); border: 1px solid var(--border); color: var(--fg-dim);
+  padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 14px;
+  font-family: inherit; transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--fg); border-color: var(--accent-3); }
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent-1) 100%);
+  color: #0a0a0f; border-color: transparent; font-weight: 600;
+}
+
+.signal-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;
+}
+.signal-card {
+  position: relative; padding: 18px; background: var(--bg-2);
+  border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+  transition: all 0.2s; min-height: 92px;
+}
+.signal-card:hover {
+  border-color: var(--accent-3); transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(106,142,255,0.15);
+}
+.signal-card .sig-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+.signal-card .sig-name {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  color: var(--accent-1); font-weight: 600; margin-bottom: 4px; word-break: break-all;
+}
+.signal-card .sig-disp { font-size: 14px; color: var(--fg); font-weight: 500; }
+.signal-card .sig-hover {
+  position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%) translateY(100%);
+  background: var(--bg-3); color: var(--fg); padding: 8px 12px;
+  border-radius: 6px; font-size: 12px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
+  border: 1px solid var(--border);
+}
+.signal-card:hover .sig-hover { opacity: 1; }
+.signal-card .click-hint {
+  position: absolute; top: 12px; right: 12px; font-size: 10px;
+  color: var(--fg-dim); opacity: 0.6;
+}
+
+.modal-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal-backdrop.active { display: flex; }
+.modal {
+  background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px; max-width: 760px; width: 100%; max-height: 86vh; overflow-y: auto;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px; background: transparent; border: none;
+  color: var(--fg-dim); font-size: 28px; cursor: pointer; width: 36px; height: 36px;
+  border-radius: 50%; transition: all 0.15s;
+}
+.modal-close:hover { background: var(--bg-3); color: var(--fg); }
+.modal-content h3 {
+  font-family: 'JetBrains Mono', monospace; font-size: 22px;
+  color: var(--accent-1); margin-bottom: 4px; word-break: break-all;
+}
+.modal-content .modal-display { font-size: 14px; color: var(--fg-dim); margin-bottom: 24px; }
+.modal-content .modal-section {
+  margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+}
+.modal-content .modal-section:last-child { border-bottom: none; }
+.modal-content .modal-section h4 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--accent-3); margin-bottom: 8px;
+}
+.modal-content .formula {
+  background: var(--bg-3); padding: 12px 16px; border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-1);
+  margin-bottom: 8px; overflow-x: auto;
+}
+.modal-content pre {
+  background: var(--bg-3) !important; padding: 14px; border-radius: 8px;
+  font-size: 12px; overflow-x: auto;
+}
+.modal-content .source-link {
+  display: inline-block; padding: 4px 10px; background: var(--bg-3);
+  border: 1px solid var(--border); border-radius: 6px; font-family: monospace;
+  font-size: 12px; color: var(--accent-2); text-decoration: none;
+}
+</style>
+
+<script>
+const SIGNALS = {
+  tech: [
+    { name: "return_1d", display: "1-Day Return", icon: "📈",
+      hover: "yesterday's close vs day before — short memory",
+      desc: "Single-day percentage return. Captures very-short momentum or pullback.",
+      formula: "(close_t / close_{t-1}) - 1",
+      source: "Computed in src/features/indicators.py from NSE bhavcopy close prices.",
+      code: "df['return_1d'] = df.groupby('symbol')['close'].pct_change()" },
+    { name: "return_20d", display: "20-Day Return", icon: "🏃",
+      hover: "monthly momentum — has it been running?",
+      desc: "Trailing 20-trading-day return. Primary momentum signal. >50% = chase zone. <-20% = oversold candidate.",
+      formula: "(close_t / close_{t-20}) - 1",
+      source: "Computed in src/features/indicators.py rolling window.",
+      code: "df['return_20d'] = df.groupby('symbol')['close'].pct_change(20)" },
+    { name: "rsi_14_daily", display: "RSI 14 (daily)", icon: "🌡️",
+      hover: "the fever thermometer — >80 chase, <30 oversold",
+      desc: "Wilder's RSI on daily closes, 14-period. >70 = overbought, >80 = chase zone (we skip these), <30 = deep oversold (reversion candidate). The single most-cited filter in our QC.",
+      formula: "100 - (100 / (1 + avg_gain_14 / avg_loss_14))",
+      source: "Computed via pandas-ta or manual EWM in src/features/indicators.py.",
+      code: "delta=df['close'].diff()\ngain=delta.where(delta>0,0).ewm(14).mean()\nloss=-delta.where(delta<0,0).ewm(14).mean()\nrsi=100-100/(1+gain/loss)" },
+    { name: "rsi_14_weekly", display: "RSI 14 (weekly)", icon: "📅",
+      hover: "the medium-term mood",
+      desc: "RSI on weekly close prices (resampled). Smoother than daily; catches multi-week trends.",
+      formula: "Same as daily RSI but on weekly close",
+      source: "df.resample('W')['close'].last() → RSI",
+      code: "weekly = df.set_index('trade_date').groupby('symbol')['close'].resample('W').last()" },
+    { name: "rsi_14_monthly", display: "RSI 14 (monthly)", icon: "📊",
+      hover: "the big-picture vibe",
+      desc: "Monthly-resampled RSI. Highest LightGBM importance in our model — captures multi-year regime context.",
+      formula: "Same RSI formula on monthly resampled close",
+      source: "Monthly resampling of NSE bhavcopy.",
+      code: "monthly = df.set_index('trade_date').groupby('symbol')['close'].resample('M').last()" },
+    { name: "dist_sma20", display: "Dist from 20-SMA", icon: "📏",
+      hover: "how far above/below the 1-month avg",
+      desc: "Distance of current close from 20-day simple moving average, as a fraction. Captures short-term trend extension.",
+      formula: "(close / SMA_20) - 1",
+      source: "src/features/indicators.py SMA computation.",
+      code: "df['dist_sma20'] = df['close'] / df.groupby('symbol')['close'].rolling(20).mean().values - 1" },
+    { name: "dist_sma50", display: "Dist from 50-SMA", icon: "📐",
+      hover: "above or below the quarter-trend",
+      desc: "Distance from 50-day SMA. Medium-term trend indicator. Negative = below trend (reversion play).",
+      formula: "(close / SMA_50) - 1",
+      source: "Same as dist_sma20 with 50-day window.",
+      code: "df['dist_sma50'] = df['close'] / df.groupby('symbol')['close'].rolling(50).mean().values - 1" },
+    { name: "dist_sma200", display: "Dist from 200-SMA", icon: "🗻",
+      hover: "the bull/bear line — above it = uptrend",
+      desc: "Distance from 200-day SMA. Long-term trend. The 200-SMA is the institutional bull-bear line. Above = secular uptrend.",
+      formula: "(close / SMA_200) - 1",
+      source: "Same as above with 200-day window.",
+      code: "df['dist_sma200'] = df['close'] / df.groupby('symbol')['close'].rolling(200).mean().values - 1" },
+    { name: "above_50dma", display: "Above 50-DMA?", icon: "✅",
+      hover: "binary — is it above the 50-day MA?",
+      desc: "Binary flag: 1 if close > SMA_50, else 0. Simple but effective trend filter.",
+      formula: "1 if close > SMA_50 else 0",
+      source: "src/features/indicators.py boolean flag.",
+      code: "df['above_50dma'] = (df['close'] > df['sma_50']).astype(int)" },
+    { name: "above_200dma", display: "Above 200-DMA?", icon: "🚀",
+      hover: "binary bull/bear classifier",
+      desc: "Binary flag for above 200-day SMA. Critical filter — most multi-baggers historically traded above 200-DMA before their run.",
+      formula: "1 if close > SMA_200 else 0",
+      source: "src/features/indicators.py",
+      code: "df['above_200dma'] = (df['close'] > df['sma_200']).astype(int)" }
+  ],
+  vol: [
+    { name: "adv_20d_cr", display: "ADV 20-day (₹cr)", icon: "💰",
+      hover: "how much volume in ₹cr daily — is it tradeable?",
+      desc: "Average Daily traded VALUE over 20 days, in ₹crores. Our PRIMARY liquidity filter — we require ≥2cr/day for any trade. <1cr = excluded universe. ≥50cr = mega-liquid.",
+      formula: "mean(close × volume / 1e7, window=20)",
+      source: "NSE bhavcopy total_traded_value field, rolling 20-day mean.",
+      code: "df['adv_20d_cr'] = df.groupby('symbol')['total_traded_value'].rolling(20).mean().values / 1e7" },
+    { name: "volume_vs_20d", display: "Volume vs 20-day avg", icon: "📊",
+      hover: "today's volume spike vs normal",
+      desc: "Today's share volume ÷ 20-day average. >2.0 = unusual interest. >5.0 = something happened (news, breakout, dump).",
+      formula: "volume_t / mean(volume, window=20)",
+      source: "NSE bhavcopy total_traded_qty.",
+      code: "df['volume_vs_20d'] = df['volume'] / df.groupby('symbol')['volume'].rolling(20).mean().values" },
+    { name: "traded_value_vs_20d", display: "Value vs 20-day avg", icon: "💵",
+      hover: "money flowing in vs normal",
+      desc: "Today's traded value ÷ 20-day avg traded value. Better than raw volume because it accounts for price changes.",
+      formula: "traded_value_t / mean(traded_value, window=20)",
+      source: "NSE bhavcopy.",
+      code: "df['traded_value_vs_20d'] = df['total_traded_value'] / df.groupby('symbol')['total_traded_value'].rolling(20).mean().values" },
+    { name: "delivery_pct", display: "Delivery %", icon: "📦",
+      hover: "real buyers vs day-trade churn",
+      desc: "% of traded shares marked for delivery (NSE bhavcopy field). High % = real conviction buyers (not intraday speculators). Low % = pure intraday churn (operator pattern).",
+      formula: "deliverable_qty / total_traded_qty",
+      source: "NSE delivery file — separate fetch in src/ingest/nse/.",
+      code: "df['delivery_pct'] = df['deliverable_qty'] / df['total_traded_qty']" },
+    { name: "vol_max_63d", display: "Volume Max 63d", icon: "⛰️",
+      hover: "is today's volume a recent peak?",
+      desc: "Maximum volume in trailing 63 trading days (~3 months). Used to detect volume breakouts — when current volume hits a 63-day high, attention is on the name.",
+      formula: "max(volume, window=63)",
+      source: "Rolling computation on bhavcopy.",
+      code: "df['vol_max_63d'] = df.groupby('symbol')['volume'].rolling(63).max().values" }
+  ],
+  volat: [
+    { name: "realized_vol_20d", display: "Realized Vol 20d", icon: "🎢",
+      hover: "annualized choppiness",
+      desc: "Annualized standard deviation of 1-day returns over trailing 20 days. Higher = riskier. Used in position sizing (smaller positions for higher vol names).",
+      formula: "std(return_1d, window=20) × √252",
+      source: "Computed in src/features/indicators.py",
+      code: "df['realized_vol_20d'] = df.groupby('symbol')['return_1d'].rolling(20).std() * np.sqrt(252)" },
+    { name: "vol_of_vol_60d", display: "Vol of Vol 60d", icon: "🌪️",
+      hover: "is the volatility itself volatile?",
+      desc: "Standard deviation of the rolling-vol series. Indicates regime stability. Spike in vol-of-vol = regime shift coming.",
+      formula: "std(realized_vol_20d, window=60)",
+      source: "Second-order rolling computation.",
+      code: "df['vol_of_vol_60d'] = df.groupby('symbol')['realized_vol_20d'].rolling(60).std()" },
+    { name: "rv_60d", display: "Realized Vol 60d", icon: "📉",
+      hover: "long-horizon noise level",
+      desc: "60-day rolling realized volatility. Smoother than 20d, used for medium-horizon model targets.",
+      formula: "std(return_1d, window=60) × √252",
+      source: "src/features/indicators.py",
+      code: "df['rv_60d'] = df.groupby('symbol')['return_1d'].rolling(60).std() * np.sqrt(252)" }
+  ],
+  market: [
+    { name: "market_5d_ret", display: "Nifty 5-day return", icon: "🌅",
+      hover: "the week's market mood",
+      desc: "Trailing 5-day return of the median liquid stock (proxy for Nifty 500 breadth). Captures short-term market direction.",
+      formula: "median(return_1d) across liquid universe, summed over 5 days",
+      source: "Computed in build_panel() in src/agentic/find_180d_frontier_honest.py",
+      code: "market_med = df[df['adv_20d_cr']>=1].groupby('trade_date')['return_1d'].median()" },
+    { name: "market_20d_ret", display: "Nifty 20-day return", icon: "📅",
+      hover: "the month's market regime",
+      desc: "20-day cumulative market return. Bull/bear regime indicator.",
+      formula: "cumulative median return over 20 days",
+      source: "Same as market_5d_ret, longer window.",
+      code: "df['market_20d_ret'] = df.groupby('symbol')['market_1d_ret'].transform(lambda s: s.rolling(20).sum())" },
+    { name: "market_breadth_50dma", display: "Breadth above 50-DMA", icon: "🌊",
+      hover: "% of stocks in short uptrend",
+      desc: "Fraction of liquid universe whose price is above their 50-day SMA. Strong breadth = bull regime. <30% breadth = correction.",
+      formula: "count(close > SMA_50) / count(liquid_universe) on each date",
+      source: "Daily aggregate across all liquid stocks.",
+      code: "mkt = liq.groupby('trade_date').agg(market_breadth_50dma=('above_50dma','mean'))" },
+    { name: "market_breadth_200dma", display: "Breadth above 200-DMA", icon: "🏔️",
+      hover: "% of stocks in long-term uptrend",
+      desc: "Same as 50-DMA breadth but with 200-day SMA. Most-important LightGBM feature in our model — the long-term regime indicator.",
+      formula: "count(close > SMA_200) / count(liquid_universe)",
+      source: "Daily aggregate.",
+      code: "mkt = liq.groupby('trade_date').agg(market_breadth_200dma=('above_200dma','mean'))" },
+    { name: "sector_rs_20d", display: "Sector RS 20d", icon: "🔀",
+      hover: "is the sector leading or lagging Nifty?",
+      desc: "Sector return minus Nifty return over 20 days. Positive = sector leading, negative = lagging. Used in industry_panel.parquet for sector rotation context.",
+      formula: "sector_20d_return - nifty_20d_return",
+      source: "data/derived/industry_panel.parquet",
+      code: "industry_panel['rs_20d'] = industry_panel['sector_20d_ret'] - industry_panel['nifty_20d']" }
+  ],
+  news: [
+    { name: "evt_5d_total", display: "Total Events (5d)", icon: "📰",
+      hover: "how many corporate filings in last 5 days",
+      desc: "Count of all corporate-filing events in trailing 5 days for this symbol. From NSE corporate announcements feed.",
+      formula: "sum(events, window=5d) per symbol",
+      source: "data/events_full_history/normalized/stock_announcements.parquet, rolled in build_news_event_features.py",
+      code: "df['evt_5d_total'] = events_per_symbol.rolling('5D').sum()" },
+    { name: "evt_5d_order_win", display: "Order Wins (5d)", icon: "🏆",
+      hover: "contracts/deals won in last week",
+      desc: "Count of 'order_win' tagged events in 5d. NSE filings classified as new contracts, deals, government tenders, partnerships.",
+      formula: "sum(is_order_win, window=5d)",
+      source: "is_order_win flag in stock_announcements.parquet (regex-tagged from description text).",
+      code: "df['evt_5d_order_win'] = events[events['is_order_win']].rolling('5D').count()" },
+    { name: "evt_5d_approval", display: "Approvals (5d)", icon: "✅",
+      hover: "regulatory/board approvals received",
+      desc: "Count of 'approval' events: regulatory clearances, board approvals, court wins, license grants.",
+      formula: "sum(is_approval, window=5d)",
+      source: "is_approval flag in announcements.",
+      code: "df['evt_5d_approval'] = events[events['is_approval']].rolling('5D').count()" },
+    { name: "evt_5d_promoter_buy", display: "Promoter Buying (5d)", icon: "💼",
+      hover: "insiders buying their own stock — strong signal",
+      desc: "Promoter purchases in the last 5 days. Classical insider-buying signal. Strong bullish indicator when present.",
+      formula: "sum(is_promoter_buying, window=5d)",
+      source: "is_promoter_buying flag derived from NSE filing descriptions.",
+      code: "df['evt_5d_promoter_buy'] = events[events['is_promoter_buying']].rolling('5D').count()" },
+    { name: "evt_5d_pledge_change", display: "Pledge Changes (5d)", icon: "⚠️",
+      hover: "promoters pledging more shares = stress signal",
+      desc: "Promoter pledge increase events in 5d. CONTRA-bullish — signals promoter financial stress. Increased pledge often precedes price decline.",
+      formula: "sum(is_pledge_change, window=5d)",
+      source: "is_pledge_change flag in announcements.",
+      code: "df['evt_5d_pledge_change'] = events[events['is_pledge_change']].rolling('5D').count()" },
+    { name: "evt_15d_total", display: "Total Events (15d)", icon: "📚",
+      hover: "fortnight event volume",
+      desc: "Same as evt_5d_total but with 15-day window. Captures slower-moving event flow.",
+      formula: "sum(events, window=15d)",
+      source: "Same source, longer window.",
+      code: "df['evt_15d_total'] = events_per_symbol.rolling('15D').sum()" },
+    { name: "evt_ind_5d_total", display: "Industry Events (5d)", icon: "🏭",
+      hover: "events across the whole sector",
+      desc: "Aggregate event count across all symbols in the same industry over 5d. Captures sector-wide activity (sector tender wins, regulatory moves).",
+      formula: "sum(events, window=5d) grouped by industry_hint",
+      source: "industry_hint field in announcements + sector mapping.",
+      code: "ind_evt = events.groupby(['industry_hint','date'])['event'].count()" },
+    { name: "news_5d_sentiment", display: "News Sentiment (5d)", icon: "💭",
+      hover: "media tone toward the stock",
+      desc: "Aggregate sentiment score (-1 to +1) of news mentions in last 5d. From RSS news feed. CURRENTLY: placeholder zeros — A/B test showed catalyst features regressed top-50 EV by -1.7pp; DROPPED from model until LLM-embeddings of full text replace count-only.",
+      formula: "mean(sentiment_score) over 5d window",
+      source: "data/derived/news_features.parquet (currently snapshot-only; backfill needed).",
+      code: "df['news_5d_sentiment'] = news.groupby('symbol').rolling('5D')['sentiment'].mean()" }
+  ],
+  macro: [
+    { name: "usdinr", display: "USD/INR FX Rate", icon: "💵",
+      hover: "rupee strength — affects export/import stocks",
+      desc: "USD/INR exchange rate. Higher INR depreciation (USD up) typically benefits IT, pharma exporters; hurts oil importers.",
+      formula: "Daily USD/INR mid-rate",
+      source: "Frankfurter API (ECB-backed) via fetch_forex_macro.py",
+      code: "import urllib.request; r=urllib.request.urlopen('https://api.frankfurter.app/latest?from=USD&to=INR')" },
+    { name: "us10y", display: "US 10-Year Yield", icon: "🏛️",
+      hover: "global cost of money — risk-off thermometer",
+      desc: "10-year US Treasury yield. Rising = global tightening, risk-off, EM outflows. Critical macro overlay.",
+      formula: "10Y constant-maturity Treasury yield",
+      source: "FRED via fetch_global_rates.py (free key)",
+      code: "from fredapi import Fred; fred.get_series('DGS10')" },
+    { name: "dxy", display: "DXY (Dollar Index)", icon: "💲",
+      hover: "USD vs basket — risk-on/off proxy",
+      desc: "ICE Dollar Index. Strong DXY = capital flowing INTO USD, OUT of EMs (India). Negative correlation with Indian markets.",
+      formula: "Weighted geometric mean USD vs EUR/JPY/GBP/CAD/SEK/CHF",
+      source: "Yahoo Finance ticker DX-Y.NYB via fetch_global_macro.py",
+      code: "import yfinance as yf; yf.download('DX-Y.NYB')" },
+    { name: "brent", display: "Brent Crude (USD/bbl)", icon: "🛢️",
+      hover: "energy = India's import bill",
+      desc: "Brent crude price. India imports ~85% of oil. High Brent = inflation pressure, fiscal stress, currency weakness.",
+      formula: "Brent front-month futures USD/bbl",
+      source: "Yahoo Finance BZ=F via fetch_commodity_prices.py",
+      code: "yf.download('BZ=F', period='5y')" },
+    { name: "gold", display: "Gold (USD/oz)", icon: "🥇",
+      hover: "safe haven — when fear rises, gold rises",
+      desc: "Spot gold price. Risk-off hedge. Gold rallies = market fear up = equities under pressure.",
+      formula: "Spot gold USD/troy ounce",
+      source: "Yahoo Finance GC=F",
+      code: "yf.download('GC=F', period='5y')" },
+    { name: "spx", display: "S&P 500 (5d return)", icon: "🇺🇸",
+      hover: "global risk-on/off via US equities",
+      desc: "S&P 500 5-day return. Indian markets correlate with US (~0.4 daily). SPX up overnight → SGX Nifty premium → Indian open gap up.",
+      formula: "5-day return of ^GSPC",
+      source: "Yahoo Finance ^GSPC",
+      code: "yf.download('^GSPC')['Close'].pct_change(5)" }
+  ],
+  qc: [
+    { name: "max_uc_streak_30d", display: "Consecutive UCs (30d)", icon: "🚨",
+      hover: "operator pump detector — 3+ days in a row = pump",
+      desc: "Max number of consecutive upper-circuit days (+5% or +10% lock) in trailing 30 days. ≥3 = OPERATOR PUMP suspect. This is the QC rule that killed SILVERTUC.",
+      formula: "max streak of consecutive UC closes",
+      source: "QC computed inline from return_1d series.",
+      code: "p['is_uc'] = (p['return_1d']>=0.0498)&(p['return_1d']<=0.05005)\nmax_streak = consecutive_true_count(p['is_uc'])" },
+    { name: "contamination_flag", display: "Contamination Check", icon: "☢️",
+      hover: "unrecorded split/bonus → fake price drops in training",
+      desc: "Flag for any single-day drop worse than -30% in price history that has NO matching corporate-action record within ±5 days. 399 of 424 severe drops in our dataset are unrecorded — these contaminate training. Any flagged symbol is DROPPED from basket.",
+      formula: "any((return_1d < -0.30) AND no_ca_match_within_5d)",
+      source: "Cross-check stock_daily_facts_adjusted + corporate_actions.parquet",
+      code: "for sym, drops in big_drops_per_sym:\n  if not ca_within_5d(drops): contaminated.add(sym)" },
+    { name: "rsi_chase_flag", display: "RSI Chase Zone (>80)", icon: "🔥",
+      hover: "RSI 80+ = momentum running too hot",
+      desc: "Boolean: RSI_14_daily > 80. We exclude these from longer-horizon baskets — chase reversal is the primary risk.",
+      formula: "rsi_14_daily > 80",
+      source: "Computed from RSI series.",
+      code: "df['chase_flag'] = df['rsi_14_daily'] > 80" },
+    { name: "illiquid_flag", display: "Illiquid (<2cr/day)", icon: "🚫",
+      hover: "can't enter/exit cleanly",
+      desc: "ADV_20d_cr < 2 ₹ crores/day = excluded. Even if model loves it, you cannot transact a meaningful size at the quoted price.",
+      formula: "adv_20d_cr < 2.0",
+      source: "From traded_value series.",
+      code: "df['illiquid_flag'] = df['adv_20d_cr'] < 2.0" },
+    { name: "penny_stock_flag", display: "Penny Stock (<₹30)", icon: "🪙",
+      hover: "sub-₹30 stocks = high manipulation risk",
+      desc: "Boolean: close < ₹30. Almost universally operator-driven. We drop these even if model scores high.",
+      formula: "close < 30",
+      source: "Direct check on close price.",
+      code: "df['penny_flag'] = df['close'] < 30" },
+    { name: "score_monotonicity", display: "Score Monotonicity Check", icon: "📐",
+      hover: "P(+5%) should be >= P(+10%) — sanity check",
+      desc: "For a sane calibrator: P(+5%) ≥ P(+10%) ≥ P(+20%). Violations = calibrator broken. Our 19-May incident had 85% violations — we detected and fixed.",
+      formula: "violation = score_5pct < score_10pct OR score_10pct < score_15pct",
+      source: "Debugger agent runs this on every prediction parquet.",
+      code: "viol = (df['score_5pct'] < df['score_100pct']).sum() / len(df)\nif viol > 0.05: raise CalibratorBrokenError" },
+    { name: "regime_gate_verdict", display: "Macro Regime Gate", icon: "🚦",
+      hover: "DEPLOY = go, WAIT = cash",
+      desc: "Three-state macro gate: DEPLOY (broad green light), WAIT (cautious), RISK_OFF (stay in cash). Computed from breadth + VIX-proxy + macro composites. Constitution §1.5: cash on WAIT.",
+      formula: "DEPLOY if breadth>0.5 AND vol_proxy<threshold; WAIT if mixed; RISK_OFF if breadth<0.3",
+      source: "src/agentic/filter_cascade.py",
+      code: "if breadth_50>0.5 and vol_proxy<0.04: 'DEPLOY'\nelif breadth_50<0.3: 'RISK_OFF'\nelse: 'WAIT'" },
+    { name: "calibration_band", display: "Calibration Band Check", icon: "🎯",
+      hover: "validated band sample size in OOS",
+      desc: "For each (horizon, threshold) the model claims confidence on, we check how many OOS samples fell in the 0.95+ band. If <50 = INSUFFICIENT_SAMPLE, claim is unverified.",
+      formula: "n_in_0.95_band(year_X) > 50 → achievable_90 = True else False",
+      source: "find_achievable_frontier.py output → reports/achievable_frontier.md",
+      code: "n_top_band = (preds[(preds['score']>=0.95)]['outcome']==1).count()\nachievable = n_top_band >= 50" }
+  ],
+  targets: [
+    { name: "score_5pct_15d", display: "P(+5% in 15 days)", icon: "🎯",
+      hover: "the user's question — calibrated probability of +5% within 15 trading days",
+      desc: "Calibrated probability that the stock hits +5% within 15 trading days. THE primary trading signal. Empirically validated: at score 0.95+, hit rate is 97.9% (n=578). Target +5% / SL -3% / 15d → ~+52% ann EV at top decile.",
+      formula: "isotonic_calibrator(ensemble_predict(features), fit_on=year-1, tested_on=year)",
+      source: "src/agentic/compare_short_horizons.py output → data/derived/compare_short_horizons.parquet",
+      code: "lgb + xgb ensemble → mean prob → isotonic regression calibrated on prior year OOF" },
+    { name: "score_100pct_180d", display: "P(2x in 180 days)", icon: "🚀",
+      hover: "the multibagger dream — sub-conviction in 2026",
+      desc: "Calibrated probability that the stock 2x's within 180 trading days. EMPIRICALLY UNREACHABLE at 80%+ confidence in 2025 OOS (n_in_top_band = 0). Use as RELATIVE ranking, not absolute claim.",
+      formula: "Same calibration chain, with +100% target",
+      source: "find_multibagger_today.py + multibagger_today_predictions.parquet",
+      code: "labels = (fwd_max_high / close - 1) >= 1.0   # binary"},
+    { name: "score_h1_cal", display: "P(1-day move)", icon: "⚡",
+      hover: "intraday momentum signal",
+      desc: "Multi-horizon model's 1-day calibrated score. Best for catching short-term breakouts. Top score in universe today was 0.80 (VENUSREM 1 Jun).",
+      formula: "1-day-ahead binary classifier calibrated isotonic",
+      source: "src/agentic/run_multi_horizon.py → tmp/from_scratch_7d_run/multi_horizon_top.csv",
+      code: "label_h1 = (close_{t+1} > close_t * 1.01).astype(int)" },
+    { name: "score_h7_cal", display: "P(7-day move)", icon: "📅",
+      hover: "weekly horizon — sweet spot",
+      desc: "7-day calibrated probability. Optimal balance of signal stability and turnover.",
+      formula: "7-day calibrated isotonic on ensemble",
+      source: "multi_horizon engine, h7 column",
+      code: "label_h7 = (close_{t+7} > close_t * threshold).astype(int)" },
+    { name: "score_h21_cal", display: "P(21-day move)", icon: "📆",
+      hover: "monthly horizon — slow money",
+      desc: "21-day calibrated probability. Smoother but less timely.",
+      formula: "21-day calibrated isotonic",
+      source: "multi_horizon engine, h21 column",
+      code: "label_h21 = (close_{t+21} > close_t * threshold).astype(int)" },
+    { name: "consensus_engine_count", display: "Cross-Engine Vote", icon: "🤝",
+      hover: "how many of 5 engines agree on this name",
+      desc: "Number of ML engines (of 5) that have this symbol in their top-20. We require ≥2 for any name to enter the basket. SILVERTUC was 4/4 once — taught us cross-engine count ≠ risk-adjusted quality.",
+      formula: "sum(symbol in top_20(engine) for engine in [180d, hc, mb, mh, csh])",
+      source: "Composed across all 5 engine outputs.",
+      code: "engine_count[sym] = sum(sym in top20(e) for e in ENGINES)" }
+  ]
+};
+
+function renderTab(tab) {
+  const cards = SIGNALS[tab].map((s, i) => `
+    <div class="signal-card" onclick="openModal('${tab}', ${i})">
+      <div class="click-hint">click for details</div>
+      <span class="sig-icon">${s.icon}</span>
+      <div class="sig-name">${s.name}</div>
+      <div class="sig-disp">${s.display}</div>
+      <div class="sig-hover">${s.hover}</div>
+    </div>
+  `).join("");
+  document.getElementById('signal-cards').innerHTML = cards;
+}
+
+function openModal(tab, i) {
+  const s = SIGNALS[tab][i];
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-content">
+      <h3>${s.name}</h3>
+      <div class="modal-display">${s.icon} ${s.display}</div>
+      <div class="modal-section">
+        <h4>What it captures</h4>
+        <p>${s.desc}</p>
+      </div>
+      <div class="modal-section">
+        <h4>Math / Formula</h4>
+        <div class="formula">${s.formula}</div>
+      </div>
+      <div class="modal-section">
+        <h4>Where to fetch it</h4>
+        <p>${s.source}</p>
+      </div>
+      <div class="modal-section">
+        <h4>Python snippet</h4>
+        <pre><code>${s.code}</code></pre>
+      </div>
+    </div>
+  `;
+  document.getElementById('signal-modal').classList.add('active');
+}
+
+function closeModal(e) {
+  if (e && e.target.id && e.target.id !== 'signal-modal') return;
+  document.getElementById('signal-modal').classList.remove('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTab(btn.dataset.tab);
+    });
+  });
+  renderTab('tech');
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+<!-- THE MAGIC PROMPT -->
+<section id="magic-prompt">
+  <div class="container">
+    <div class="section-tag" style="color: var(--accent-1)">The Recreation Kit</div>
+    <h2 class="section-title">Upload this HTML to Claude + paste the prompt below → get the entire system</h2>
+    <p class="section-sub">This is the bootstrap. One HTML file. One paste-able prompt. Any Claude instance reads both and rebuilds the entire infrastructure — all 5 engines, the constitution, the QC pipeline, the forward record. Zero magic. Full reproducibility.</p>
+
+    <div class="magic-prompt-box">
+      <div class="magic-prompt-header">
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fg-dim);">📋 Paste this entire block into a new Claude chat (with this HTML attached)</span>
+        <button onclick="copyPrompt()" style="background: var(--accent-1); color: #0a0a0f; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px;">Copy Prompt</button>
+      </div>
+      <pre id="magic-prompt-text" style="margin: 0; border-radius: 0 0 12px 12px; padding: 20px; font-size: 13px;"><code>I'm attaching SHOWCASE.html — a complete spec for a calibrated NSE equity ML
+trading system called the Shree Ganesh Model. Read the file FIRST, then build
+the system end-to-end in /Users/&lt;me&gt;/Documents/shree-ganesh-model/.
+
+⚠️ OUTPUT CONTRACT (read §Playbook "THE OUTPUT CONTRACT" box first): the ONE
+production deliverable is live_predictions/YYYY-MM-DD_15d5pct.json — 8 names
+× 12.5%, emitted by generate_hybrid_basket.py via run_weekly_pipeline.sh,
+behind the freshness gate. The frontier/achievable-frontier layer (touch-
+probability labels, ≥0.90 calibrated bar, -7% stop, ADV ≥ ₹1cr universe) is
+a DEPRECATED DIAGNOSTIC — do NOT make it the final output. Its "hit rates"
+measure whether the intraday high TOUCHES +X% (58% base rate at 15d/5%), not
+exit-rule P&L. If your daily output is frontier_picks_*.md, you built the
+wrong layer.
+
+Required output, in order:
+
+1. CONSTITUTION.md — copy the 7 binding rules from the §Constitution section.
+   These are gates on every commit, trade, prediction.
+
+2. Data layer (src/ingest/nse/):
+   - NSE bhavcopy fetcher (15-year history, daily incremental)
+   - Corporate actions fetcher (splits/bonuses/dividends)
+   - NSE corporate filings (announcements with event_category tags)
+   - Save as: data/derived/stock_daily_facts_adjusted_2015plus.parquet,
+     data/corporate_actions_full_history/*, data/events_full_history/*
+
+3. Feature factory (src/agentic/feature_factory.py) — compute every signal in the
+   §Signals tab of the HTML. Categories: price/technical, volume/liquidity,
+   volatility, market context, news/events, macro, QC flags. Each feature must
+   pass: tests/test_no_per_symbol_constants.py (median nunique per symbol ≥ 2).
+
+4. Five ML engines (src/agentic/, each parallel):
+   - find_180d_frontier_honest.py — 180d horizon, 8 thresholds, strict walk-forward
+     (calibrate on year-1 only, test on year)
+   - find_high_conviction.py — 7d/15d/30d horizons, isotonic calibration
+   - find_multibagger_today.py — 180d/252d/378d 2x targets
+   - run_multi_horizon.py — 1d/7d/21d triangulation, output triangulated flag
+   - compare_short_horizons.py — 5%/15d vs 10%/30d head-to-head with EV math
+
+5. QC pipeline (src/agentic/devils_advocate.py + filter_cascade.py):
+   - 10-vector audit: leakage, calibration drift, multi-test, survivorship,
+     regime fit, signal independence, sample size, distribution shift,
+     hyperparameter leak, cherry-pick
+   - Operator-pump detection: max_uc_streak_30d ≥ 3 OR (n_uc ≥ 4 AND n_lc ≥ 2)
+     NOTE: the 15D/5% playbook (step 13) uses a TIGHTER version — streak &lt; 2
+     over trailing 45 calendar days, UC day = return_1d ∈ [+4.98%, +10.05%]
+   - Contamination filter: any -30%+ single-day drop with no corp_action ±5d → DROP
+   - RSI &gt; 80 chase filter, ADV &lt; 2cr illiquid filter, close &lt; ₹30 penny filter
+
+6. Cross-engine consensus logic:
+   - Name in top-15 of ≥2 engines → tier 2
+   - Name in top-15 of ≥3 engines → tier 1
+   - Name in 4/5 engines → tier "unanimous" (BUT also check for operator pump —
+     cross-engine agreement on micro-cap UC-pumpers is correlated noise,
+     not 4 independent signals)
+
+7. Forward record (live_predictions/):
+   - Every weekday after market close (18:30 IST) run scheduled task to:
+     a) refresh prices, b) re-run all 5 engines, c) apply QC,
+     d) write live_predictions/YYYY-MM-DD_15d5pct.json with: picks, buy zones
+        (close ×0.99-1.01), targets (×1.05), SLs (×0.97), weights, tier,
+        band_fit, ml_score, engines_count, regime_gate, input mtimes, caveats
+     e) git commit + push as immutable timestamped artifact
+
+8. Realized outcomes (realized_outcomes/):
+   - When a user closes a trade, write realized_outcomes/SYMBOL_YYYYMMDD.json
+     with entry, exit, hold days, model call, vs actual
+   - Append to logs/calibration_corrections.jsonl if model was meaningfully wrong
+
+9. Calibration corrections ledger (logs/calibration_corrections.jsonl):
+   - Append-only JSONL of every mistake caught, with date/claim/what_was_wrong/
+     correction/lesson. This is the publishability credibility moat.
+
+10. Tests (tests/):
+    - test_no_per_symbol_constants.py — every model-loaded feature must vary per
+      (symbol, date) — assert df.groupby('symbol')[col].nunique().median() > 1
+    - test_no_unadjusted_corporate_actions.py — assert no single-day drop &lt; -25%
+      on any date overlapping a corporate_actions ex_date
+
+11. RECOVERY.md — copy the 3-command restore sequence from §Build section
+
+12. FRESHNESS GATE (src/agentic/verify_freshness.py) — build this BEFORE any
+    basket generator. Two levels, per §Freshness section of the HTML.
+    11 file-level + 14 column-level = 25 checks:
+    - FILE-level: max(date_col) or mtime vs business-day limits
+      (prices + ALL FIVE engines incl. the multi_horizon CSV + ml_classifier +
+       macro + industry = 3bd, news 5bd, announcements 10bd)
+    - COLUMN-level: last NON-NULL date per critical column
+      (PRICES: close/rsi_14_daily/return_20d/volume_vs_20d 3bd each;
+       MACRO: usdinr 3bd, brent/wti/us_10y/dxy/us_vix/spx 5bd each;
+       INDUSTRY: sector_5d_ret/sector_20d_ret/rs_20d 3bd each)
+    - verify_or_die() called at the TOP of the basket generator — no bypass flag
+    - emit_freshness_status.py → reports/freshness_status.md every run
+    - FRED fallback in the macro fetcher (DGS10/DTWEXBGS/VIXCLS/SP500) with
+      retries; daily brent/wti come from FRED directly (DCOILBRENTEU/DCOILWTICO
+      in fetch_commodity_prices.py). Exit non-zero if all sources fail.
+      Silent fetch failure is the most dangerous bug class in this system —
+      it cost us a 55-day-stale basket.
+
+13. THE 15D/+5% PLAYBOOK (src/agentic/generate_hybrid_basket.py) — the
+    production strategy. Copy §Playbook section EXACTLY:
+    - 8 names × 12.5% = 100% deploy · target +5% (book half, trail +2.5%) ·
+      SL -3% hard · timeout day 15 · weekly refresh
+    - QC: RSI 42-60, ret20d -10..+15%, ret5d -5..+5%, vol/20d &lt; 2, close &gt; 50,
+      ADV ≥ 5cr, max UC streak &lt; 2, zero contamination
+    - band_fit_score with the ML ≥ 0.85 PENALTY (overconfident band hits 18.9%
+      vs 23.9% for 0.5-0.7 — rank by band_fit FIRST, ml_score second)
+    - Tier-1 = 2+ engine consensus; Tier-2 backfill = ML 0.50-0.75 + band_fit ≥ 1.5
+
+14. 10-YEAR BACKTEST (src/agentic/backtest_10yr_15d5pct.py) — before trusting
+    ANY filter change, re-run: 529 weekly baskets 2016-2026, walk-forward
+    LightGBM retrained every 13 weeks. 32 trades is an anecdote. Bands are
+    only valid if earned here.
+    ⚠️ EXIT SIMULATION MUST BE DAY-BY-DAY (2026-07-07 correction): walk each
+    trade's path in date order, enter at NEXT-DAY OPEN (signal-close entry is
+    not executable — baskets are emitted after close), resolve same-day
+    both-touch as SL-first, subtract ≥0.30% round-trip costs. NEVER book
+    both-touch windows at an assumed value — that approximation turned a
+    -1.3%-CAGR geometry into a +34.6% mirage. Relative band rankings
+    (consolidation &gt; chase, ML 0.5-0.7 &gt; 0.85+) survived the correction;
+    absolute P&L claims did not.
+
+15. RL MISS LOOP (src/agentic/miss_learner.py +
+    train_missed_winner_classifier.py) — weekly, two SEPARATE artifacts:
+    a) miss_learner.py DIAGNOSES missed winners into 5 buckets
+       (UNIVERSE_MISS / MODEL_COVERAGE_MISS score&lt;0.50 / THRESHOLD_MISS
+       ranked outside top-30 / CAUGHT in an engine top-30 /
+       CORRECTLY_FILTERED killed by QC for cause) → logs/miss_learnings.jsonl
+    b) train_missed_winner_classifier.py trains LightGBM on historical
+       price-feature windows labeled peak_return_forward_15d ≥ +15% AND
+       passes-current-QC — it trains on price history, NOT on the jsonl ledger.
+
+16. WEEKLY ORCHESTRATOR (src/agentic/run_weekly_pipeline.sh) — one command:
+    data refresh → 5 engines parallel → miss learner → classifier retrain →
+    FRESHNESS GATE (step 3.5, hard fail) → hybrid basket → git commit+push.
+
+17. ADVERSARIAL RATIONALE CHECK — every published per-pick rationale gets an
+    independent skeptic agent verifying every number against the raw data
+    blob before it ships. Known trap: NSE "Spurt in Volume" surveillance
+    notices get mislabeled as order wins by keyword taggers — only
+    "Bagging/Receiving of orders/contracts" is a real order win.
+
+18. SIMPLICITY LAYER (src/agentic/simplicity_auditor.py +
+    prompts/06_SIMPLICITY_AUDITOR.md + src/agentic/build_recreation_kit.py)
+    — the stdlib-first enforcement system. Build it stdlib-only (ast,
+    argparse, json, pathlib, hashlib, re) — it must practice what it enforces:
+    a) `audit` — AST scan for DEAD_FUNC, DEAD_CLASS, UNUSED_IMPORT
+       (skip __future__), ONE_METHOD_CLS, TRIVIAL_WRAPPER, DUP_FUNC
+       (normalised-body-hash), DEP_OVER_STDLIB (requests→urllib, click→argparse,
+       tenacity→6-line retry loop, loguru→logging; pandas/numpy/pyarrow/
+       lightgbm/sklearn/shap pre-approved for data work), GOD_FILE (>800 LOC),
+       DEEP_NESTING (>5). Writes reports/simplicity_audit.md. Never auto-rewrites.
+    b) `debt-add` / `debt-report` — logs/debt_ledger.jsonl: every deliberate
+       shortcut recorded with where/shortcut/why/planned_fix/loc_impact/
+       speed_impact, repayable. A shortcut without a ledger entry is a bug.
+    c) metrics — every audit appends files/LOC/findings-by-category/runtime to
+       logs/simplicity_metrics.jsonl with Δloc vs previous run. Size drift is
+       measured, not argued.
+    d) build_recreation_kit.py — regenerates the CURRENT INVENTORY block in
+       this very prompt from the code on every pipeline run (module docstring
+       first lines, categorised). The kit stays current by construction.
+    Both wired into run_weekly_pipeline.sh step 4.5 (non-fatal), and the
+    LLM gate (prompt 06) reviews every change: abstraction must be earned by
+    the SECOND concrete use; delete over deprecate; one file until it hurts.
+
+Critical operating rules (from §Constitution + hard-won corrections):
+- NEVER claim 80%+ confidence on a threshold where 2025 OOS sample is empty
+- NEVER disable the contamination filter
+- NEVER let operator-pump names ship (consecutive UCs = drop)
+- NEVER emit a basket without the freshness gate passing (file AND column level)
+- NEVER rank picks by raw ML score — the ≥0.85 band underperforms; use band_fit
+- NEVER trust a backtest under a full market cycle / thousands of trades
+- NEVER use window-level exit approximations — day-by-day sequencing only,
+  next-open entry, ≥0.30% costs (the coarse version overstated CAGR by ~36pp)
+- NEVER add a third-party dependency without proof the stdlib equivalent was
+  tried and is insufficient (heavy data libs pre-approved: pandas/numpy/
+  pyarrow/lightgbm/sklearn/shap)
+- NEVER take a deliberate shortcut without a debt-ledger entry (where/why/
+  planned fix/loc/speed impact) — an unrecorded shortcut is a bug
+- ALWAYS run the simplicity audit after changes — zero NEW findings per change,
+  and cite Δloc from logs/simplicity_metrics.jsonl for any simplification claim
+- ALWAYS lead with the contradiction when newer evidence overrides prior claim
+- ALWAYS use one-shot git -c flags for user.name/email (never modify global config)
+- ALWAYS keep live_predictions/ files immutable (no rewriting committed artifacts)
+- ALWAYS treat "Spurt in Volume" notices as volume flags, never business catalysts
+
+When done, run the CONVERGENCE CHECK — all three must pass before you call
+the rebuild complete:
+1. python3 src/agentic/verify_freshness.py            → must exit 0
+2. bash src/agentic/run_weekly_pipeline.sh --skip-fetch --dry-run
+   → must emit live_predictions/YYYY-MM-DD_15d5pct.json with exactly 8 picks,
+     12.5% weights, levels = close ×0.99/1.01 (buy), ×1.05 (target),
+     ×0.97 (SL), and per-pick band_fit/ml_score/engines_count fields
+3. Re-run on the SAME data_through date as a committed basket in
+   live_predictions/ and diff the symbol list — same data + same filter
+   MUST give the same 8 names (LightGBM random_state=42 everywhere;
+   universe = ADV ≥ ₹5cr AND close &gt; ₹50). If your names differ, you
+   diverged on: the label (touch vs exit-rule), the universe cut, the QC
+   bands, or the band_fit ranking — in that order of likelihood.
+Then commit everything and push to a new private GitHub repo.
+
+═══ CURRENT INVENTORY (auto-generated) ═══
+As of 2026-07-07 · 116 files · 25,436 LOC · regenerated on every
+weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
+
+[Data fetchers]  (28)
+  src/agentic/build_macro_panel.py                     — Consolidate ALL macro/aggregate features into a single daily panel.
+  src/agentic/build_news_event_features.py             — News + corporate-event feature builder — 5d and 15d windows, stock + industry.
+  src/agentic/fetch_amfi_mf_holdings.py                — Fetch AMFI mutual-fund AUM data — non-conventional ownership signal.
+  src/agentic/fetch_announcements_historical.py        — Backfill NSE corporate announcements from 2016-01-01 to today.
+  src/agentic/fetch_block_deals.py                     — Fetch NSE block deals + bulk deals and turn them into a per-stock smart-money signal.
+  src/agentic/fetch_broker_recos.py                    — Aggregate published broker / advisor stock recommendations from free public sources.
+  src/agentic/fetch_commodity_prices.py                — Fetch commodity prices via FRED (Federal Reserve Economic Data) — free, no auth.
+  src/agentic/fetch_fii_dii.py                         — Fetch FII / DII daily provisional flows from NSE.
+  src/agentic/fetch_forex_macro.py                     — Fetch macro time-series — USDINR, Brent, India 10y yield, India VIX.
+  src/agentic/fetch_fundamentals.py                    — Enrich the universe with fundamentals ratios per stock from NSE.
+  src/agentic/fetch_global_macro.py                    — Cross-country macro fetcher — global signals affecting India.
+  src/agentic/fetch_global_macro_sentiment.py          — Macro-level sentiment — country, market, commodity, central-bank headlines.
+  src/agentic/fetch_global_rates.py                    — Fetch global rates / risk indices via FRED — free, no auth.
+  src/agentic/fetch_industry_indicators.py             — Compute INDUSTRY/SECTOR aggregate indicators from existing prices parquet.
+  src/agentic/fetch_market_breadth.py                  — Compute MARKET BREADTH features from existing prices parquet.
+  src/agentic/fetch_news_per_symbol.py                 — Per-symbol news enrichment via Google News RSS.
+  src/agentic/fetch_news_rss.py                        — Pull RSS feeds for Indian-market news and tag each item with mentioned NSE symbols.
+  src/agentic/fetch_options_chain.py                   — Fetch NSE F&O options chain data for each F&O underlying and write per-stock
+  src/agentic/fetch_pib_releases.py                    — Fetch Press Information Bureau (PIB) press releases from 2016-present.
+  src/agentic/fetch_reddit.py                          — Pull recent posts from public Reddit JSON for India-investing subs.
+  src/agentic/fetch_screener_fundamentals.py           — Fetch comprehensive fundamentals from Screener.in per-company pages.
+  src/agentic/fetch_screener_screens.py                — Pull curated Screener.in stock screens — FII/DII buying, promoter buying, etc.
+  src/agentic/fetch_stock_fii_dii.py                   — Fetch stock-level FII/DII holdings from NSE quarterly shareholding pattern.
+  src/agentic/fetch_superstar_holdings.py              — Fetch publicly disclosed 'Superstar' investor holdings from Tickertape.
+  src/agentic/fetch_wiki_pageviews.py                  — Fetch Wikipedia page-view counts as a retail-attention proxy.
+  src/agentic/fetch_youtube.py                         — Pull recent videos from Indian-finance YouTube channels (RSS, no API key needed) and
+  src/agentic/refresh_announcements.py                 — Incrementally extend the corp_announcements parquet by fetching the last 14 days
+  src/agentic/refresh_prices.py                        — Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet.
+
+[ML engines]  (8)
+  src/agentic/compare_short_horizons.py                — Head-to-head: 10%/30d vs 5%/15d short-horizon trade.
+  src/agentic/find_180d_frontier_honest.py             — HONEST 180-day frontier — calibrated prospectively.
+  src/agentic/find_achievable_frontier.py              — Frontier search: at what (return %, horizon) combinations does the model
+  src/agentic/find_achievable_targets.py               — For each (threshold % × horizon days) combination, find the minimum
+  src/agentic/find_high_conviction.py                  — Train 3 horizon×threshold models, calibrate to TRUE probability, then find
+  src/agentic/find_multibagger_targets.py              — Multibagger achievability — for each (large-threshold × long-horizon) combo,
+  src/agentic/find_multibagger_today.py                — Pick today's stocks that hit ≥ 90% calibrated probability of doubling
+  src/agentic/run_multi_horizon.py                     — Multi-horizon ensemble: 1d, 7d, 21d models stacked.
+
+[Backtests]  (11)
+  src/agentic/backtest_10yr.py                         — 10-year walk-forward backtest of the v3 ensemble (2016 → 2025).
+  src/agentic/backtest_10yr_15d5pct.py                 — PROPER 10-YEAR BACKTEST — 15D/+5% hybrid pipeline.
+  src/agentic/backtest_10yr_macro.py                   — 9-year walk-forward backtest WITH macro-enriched feature set.
+  src/agentic/backtest_10yr_with_factors.py            — A/B 10-year walk-forward backtest WITH 5 KEEP factors added.
+  src/agentic/backtest_dynamic_gated.py                — Dynamic-gated backtest — what the user actually wanted measured.
+  src/agentic/backtest_event_driven.py                 — Event-driven, fixed-capital, signal-gated backtest.
+  src/agentic/backtest_event_window.py                 — Event-window backtest — different architecture from event-feature stacking.
+  src/agentic/backtest_hybrid_15d5pct.py               — HONEST BACKTEST — hybrid 15D/+5% pipeline.
+  src/agentic/backtest_multibagger_strategy.py         — Backtest the multibagger strategy: every week in 2024-2025, pick the
+  src/agentic/backtest_news_features.py                — News-feature A/B backtest.
+  src/agentic/backtest_regime_gated.py                 — Test if a regime gate improves the multibagger strategy. Compare:
+
+[QC / gates]  (5)
+  src/agentic/data_completeness.py                     — Data completeness audit — runs daily, fails LOUDLY if any stock in the
+  src/agentic/devils_advocate.py                       — Devil's Advocate — automated audit battery.
+  src/agentic/emit_freshness_status.py                 — Emit reports/freshness_status.md — a standalone freshness dashboard.
+  src/agentic/filter_cascade.py                        — Filter cascade — show exactly what gets dropped at each gate, with counts.
+  src/agentic/verify_freshness.py                      — Freshness gate — refuses to let the pipeline proceed if any critical input is stale.
+
+[RL loop]  (2)
+  src/agentic/miss_learner.py                          — MISS-DRIVEN RL LEARNER — the first version.
+  src/agentic/train_missed_winner_classifier.py        — OPTION 2: Supervised ML classifier for missed winners.
+
+[Basket / output]  (3)
+  src/agentic/build_status_dashboard.py                — Live status dashboard — what's the system doing RIGHT NOW.
+  src/agentic/generate_daily_brief.py                  — Synthesize the daily brief from latest model outputs + alt-data signals.
+  src/agentic/generate_hybrid_basket.py                — Generate the WEEKLY 15D/+5% hybrid basket.
+
+[Simplicity layer]  (2)
+  src/agentic/build_recreation_kit.py                  — Recreation-kit generator — keeps SHOWCASE.html's inventory CURRENT, never historical.
+  src/agentic/simplicity_auditor.py                    — Simplicity auditor — stdlib-first policy enforcement + technical-debt ledger.
+
+[Orchestrators]  (3)
+  src/agentic/daily_pipeline.sh                        — Daily agentic pipeline — fetches alt data, refreshes catalyst features, retrains model, builds brief.
+  src/agentic/daily_refresh.sh                         — Daily refresh — news + events + predictions + git push.
+  src/agentic/run_weekly_pipeline.sh                   — WEEKLY 15D/+5% PIPELINE ORCHESTRATOR
+
+[Agent runner]  (1)
+  src/agentic/run_agent.py                             — Programmatic agent runner — actually invokes the prompt files.
+
+[Agent prompts]  (9)
+  prompts/00_SYSTEM_PRINCIPLES.md                      — System Principles — All Agents
+  prompts/01_HYPOTHESIS_GENERATOR.md                   — Agent: Hypothesis Generator
+  prompts/02_DATA_FETCHER.md                           — Agent: Data Fetcher
+  prompts/03_BACKTEST_VALIDATOR.md                     — Agent: Backtest Validator
+  prompts/04_TRADE_REVIEWER.md                         — Agent: Trade Reviewer / Daily PM
+  prompts/05_DEVILS_ADVOCATE.md                        — Agent: Devil's Advocate
+  prompts/06_SIMPLICITY_AUDITOR.md                     — SIMPLICITY AUDITOR — the stdlib-first gate
+  prompts/INDEX.md                                     — Agent Prompts — Index
+  prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
+
+[Other tools]  (44)
+  src/agentic/ab_test_event_features.py                — A/B test: does adding 11.3y of catalyst/event features lift the 5%/15d model?
+  src/agentic/ab_test_event_polarity.py                — 4-arm A/B test on the 5%/15d model:
+  src/agentic/agent_loop.py                            — Agent loop — one cycle of hypothesis → fetch → compile → evaluate → verdict.
+  src/agentic/analyze_regime_for_strategy.py           — Analyze WHY the multibagger strategy worked in Feb/Sep 2024 and failed
+  src/agentic/analyze_superstar_alpha.py               — Analyze whether superstar-held stocks deliver alpha vs non-held.
+  src/agentic/analyze_superstar_horizons.py            — Multi-horizon superstar-confluence analysis.
+  src/agentic/build_academic_alphas.py                 — Operationalize alpha factors from academic finance literature.
+  src/agentic/build_catalyst_features.py               — Per-(symbol, trade_date) catalyst feature matrix from tagged announcements + insider trades.
+  src/agentic/build_chart_signals.py                   — Multi-timeframe chart pattern + technical signal detector.
+  src/agentic/build_confluence_picks.py                — Aggregate confluence picker — find stocks where MULTIPLE independent
+  src/agentic/build_dashboard.py                       — Public dashboard — built around Jobs-To-Be-Done.
+  src/agentic/build_derived_ratios.py                  — Compute derived ratios from existing fundamentals — 50+ new factors
+  src/agentic/build_event_polarity.py                  — Build TWO new sets of polarity-aware event features:
+  src/agentic/build_handoff.py                         — Regenerate HANDOFF.md with current state snapshot.
+  src/agentic/build_html_viewer.py                     — Build a single self-contained HTML file that renders all the mermaid
+  src/agentic/build_workflow_diagram.py                — Auto-generate a Mermaid workflow diagram from daily_pipeline.sh.
+  src/agentic/catalyst_tagger.py                       — NLP-tag NSE corporate announcements into catalyst categories.
+  src/agentic/compute_feature_importance.py            — Compute feature-importance for the v3 long ensemble + tag each feature
+  src/agentic/factor_evaluator.py                      — Factor evaluator — measure each new feature's lift on 7d-forward return.
+  src/agentic/factor_evaluator_macro.py                — Macro-aware factor evaluator — for date-level (NOT cross-sectional) features.
+  src/agentic/factor_registry.py                       — Factor / data hypothesis registry — the "what to try next" catalog.
+  src/agentic/feature_descriptions.py                  — Plain-English description for every feature the model uses.
+  src/agentic/feature_factory.py                       — Feature factory — compile new factors from existing data.
+  src/agentic/find_quiet_accumulation.py               — 6TH ENGINE — Quiet Accumulation Scanner.
+  src/agentic/generate_event_driven_today.py           — Today's actionable event-driven picks under the new gate config.
+  src/agentic/generate_pro_brief.py                    — Pro-format daily brief — every top pick gets:
+  src/agentic/generate_trade_plan.py                   — Daily trade plan — the single document the user reads each morning.
+  src/agentic/hypothesis_agent.py                      — LLM-driven hypothesis agent — generates STRONG factor hypotheses
+  src/agentic/hypothesis_agent_macro.py                — Macro / aggregate hypothesis agent — appends NON-CONVENTIONAL,
+  src/agentic/infinite_hypothesis_loop.py              — Never-sleeping hypothesis loop.
+  src/agentic/inspect_symbol.py                        — Per-symbol inspector — given a ticker, dump everything the system knows.
+  src/agentic/joint_signal_analyzer.py                 — Joint-signal analyzer.
+  src/agentic/monitor_for_conviction.py                — Daily conviction monitor — fires alerts at the 0.95 calibrated band.
+  src/agentic/paper_trading_recorder.py                — Paper-trading recorder: every run, score yesterday's brief picks against
+  src/agentic/portfolio_sizer.py                       — Portfolio sizer: given today's long/short candidates, produce a sized,
+  src/agentic/risk_envelope.py                         — Risk envelope — codify the user's stated bounds:
+  src/agentic/run_model_diversity.py                   — Train 5 diverse model families on the same feature set + label.
+  src/agentic/run_short_side.py                        — Short-side model: predict P(stock falls >= 5% in any of next 7 trading days,
+  src/agentic/run_v3_with_catalysts.py                 — v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features.
+  src/agentic/score_sentiment.py                       — Finance-tuned sentiment scorer for news / reddit / youtube text.
+  src/agentic/sector_weak_shorts.py                    — Sector-weak large-cap short overlay.
+  src/agentic/track_multibagger_basket.py              — Live tracker for the multibagger basket — proves whether the 90%-conviction
+  src/agentic/write_live_prediction.py                 — Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs.
+  src/agentic/install_schedule.sh                      — Install / reinstall the launchd schedule for the daily pipeline.
+
+═══ END INVENTORY ═══
+
+Reference URL: https://github.com/theabhinavsharma/shree-ganesh-model
+(my existing working version — feel free to fetch any file you need)
+</code></pre>
+    </div>
+
+    <p style="color: var(--fg-dim); font-size: 14px;">
+      📂 <strong>The shorter version</strong>: just say "clone github.com/theabhinavsharma/shree-ganesh-model and continue building per CONSTITUTION.md + HANDOFF.md."
+      The repo already has all of this. The HTML is for people who want to UNDERSTAND before they clone.
+    </p>
+  </div>
+</section>
+
+<script>
+function copyPrompt() {
+  const text = document.getElementById('magic-prompt-text').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const old = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.background = 'var(--good)';
+    setTimeout(() => { btn.textContent = old; btn.style.background = 'var(--accent-1)'; }, 1500);
+  });
+}
+</script>
+
+<!-- CONSTITUTION -->
+<section id="constitution">
+  <div class="container">
+    <div class="section-tag" style="color: var(--accent-2)">The Binding Rules</div>
+    <h2 class="section-title">The constitution that keeps us honest</h2>
+    <p class="section-sub">Anthropic-grade structured prompts and binding operating rules. Every commit, trade, and live prediction passes these gates. Not aspirational — actually enforced in code and pytest.</p>
+
+    <div class="constitution">
+      <ul class="constitution-list">
+        <li>
+          <div class="principle">§1.1 — Honesty about uncertainty</div>
+          <div class="desc">A claim of "85% hit rate" must cite a parquet path, year range, sample size, or it doesn't ship. In-sample and prospective are never confused.</div>
+        </li>
+        <li>
+          <div class="principle">§1.2 — Pre-commit to falsification</div>
+          <div class="desc">Every new claim runs through <code>devils_advocate.py</code> BEFORE shipping. When new evidence contradicts a prior claim, lead with the contradiction. Never smooth over.</div>
+        </li>
+        <li>
+          <div class="principle">§1.3 — Strict walk-forward</div>
+          <div class="desc">Train ≤ year_X-1. Calibrate on year_X-1 only. Test on year_X. Calibrators never fit on test data, even if the metric "looks better" the other way.</div>
+        </li>
+        <li>
+          <div class="principle">§1.4 — Multiple-testing discipline</div>
+          <div class="desc">If N hypotheses tested, significance bar is α/N (Bonferroni). "Best of N" reporting is forbidden. Report median, range, and count tested.</div>
+        </li>
+        <li>
+          <div class="principle">§1.5 — Survive first, win second</div>
+          <div class="desc">The -30% annualised drawdown floor is sacred. When the discipline cascade returns 0 fire-day signals, the answer is cash. Never force a trade to look productive.</div>
+        </li>
+        <li>
+          <div class="principle">§1.6 — Living calibration ledger</div>
+          <div class="desc">Every mistake corrected goes into <code>logs/calibration_corrections.jsonl</code> with date, claim, correction, and the parquet path that exposed it. Past mistakes are not repeated.</div>
+        </li>
+        <li>
+          <div class="principle">§1.7 — Reproducibility = publishability</div>
+          <div class="desc">A claim that cannot be reproduced from a fresh clone + the daily pipeline is not publishable, no matter how strong the number.</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS USED -->
+<section id="agents">
+  <div class="container">
+    <div class="section-tag">The Team</div>
+    <h2 class="section-title">Specialised AI agents — each with one job, done well</h2>
+    <p class="section-sub">Not one Claude doing everything. A team of specialised agents, each prompted for a single responsibility. Cross-validation by composition.</p>
+
+    <div class="agent-grid">
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(255,85,119,0.1);color:var(--bad)">DA</div>
+        <div class="role">Auditor</div>
+        <h4>Devil's Advocate</h4>
+        <p>10-vector audit battery: leakage, calibration drift, multiple testing, survivorship, regime fit, signal independence, sample size, distribution shift, hyperparameter leak, cherry-pick.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(106,142,255,0.1);color:var(--accent-3)">DB</div>
+        <div class="role">Validator</div>
+        <h4>Debugger</h4>
+        <p>Sanity-checks every model output for monotonicity violations, calibrator collapse, score distribution anomalies, contamination flags. Catches what humans miss.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(0,240,168,0.1);color:var(--good)">EX</div>
+        <div class="role">Researcher</div>
+        <h4>Explorer</h4>
+        <p>Fast read-only search agent. Inventories existing checklists, audits, scripts. Maps what infrastructure exists before building anything new.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(255,140,66,0.1);color:var(--accent-2)">SV</div>
+        <div class="role">Orchestrator</div>
+        <h4>Supervisor</h4>
+        <p>Coordinates phased work across multiple subagents. Splits validation work, never edits code itself, validates each subagent's output.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(0,240,168,0.1);color:var(--good)">DD</div>
+        <div class="role">Per-Name</div>
+        <h4>DD Agent</h4>
+        <p>Runs 7-check per-name due diligence on top candidates: cross-validation, liquidity, contamination, chase risk, reversion risk, news/event flow, prior performance.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(255,140,66,0.1);color:var(--accent-2)">RV</div>
+        <div class="role">Reviewer</div>
+        <h4>Code Reviewer</h4>
+        <p>Reviews every code change for correctness, regressions, missing validation. Catches leak reintroductions before they ship.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(0,240,168,0.1);color:var(--good)">SX</div>
+        <div class="role">Simplicity Gate</div>
+        <h4>Simplicity Auditor</h4>
+        <p>Enforces stdlib-first, simplest-correct-solution during development — not cleanup after. Mechanical half (<code>simplicity_auditor.py</code>, stdlib-only by design): dead code, unused imports, duplicate bodies, single-method classes, trivial wrappers, deps-with-stdlib-equivalents, god files. Judgment half (<code>prompts/06_SIMPLICITY_AUDITOR.md</code>): abstraction must be earned by the SECOND use. Every deliberate shortcut goes to <code>logs/debt_ledger.jsonl</code> with loc/speed impact; every run appends files/LOC/findings/runtime to <code>logs/simplicity_metrics.jsonl</code> so size drift is measured, not argued. First run on this repo: 162 findings across 45k LOC in 1.2s.</p>
+      </div>
+      <div class="agent-card">
+        <div class="agent-icon" style="background:rgba(106,142,255,0.1);color:var(--accent-3)">RK</div>
+        <div class="role">Anti-Drift</div>
+        <h4>Recreation-Kit Generator</h4>
+        <p><code>build_recreation_kit.py</code> scans the repo every pipeline run and regenerates the CURRENT INVENTORY inside the copy-paste prompt below — every script, engine, gate, agent prompt and orchestrator with its one-line purpose. The recreation kit cannot drift into a historical document: it is rebuilt from the code weekly, by construction.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISTAKES LEDGER -->
+<section id="ledger">
+  <div class="container">
+    <div class="section-tag" style="color: var(--bad)">The Honesty</div>
+    <h2 class="section-title">13 mistakes we documented & fixed</h2>
+    <p class="section-sub">Most "AI picks stocks" content hides its failures. We publish them. The credibility moat is the FAILURE LOG, not the wins.</p>
+
+    <div class="ledger">
+      <div class="ledger-item">
+        <span class="date">2026-04-28</span>
+        <h5>Path B microcap basket disaster</h5>
+        <div class="what-wrong">❌ Surfaced 8 microcap trades despite filter_cascade returning 0 actionable names. User lost ~5%.</div>
+        <div class="fix">✓ Hard rule encoded: NO long picks when cascade=0. Discipline gate binding.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-04-29</span>
+        <h5>Multibagger 90% claim was overfit</h5>
+        <div class="what-wrong">❌ Calibration was in-sample. Real prospective hit rate: 12.4% per name, not 90%.</div>
+        <div class="fix">✓ Built find_180d_frontier_honest.py with strict prospective protocol (calibrate on 2024 only, test on 2025 only).</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-04-29</span>
+        <h5>Joint signal stacking → 80% confidence</h5>
+        <div class="what-wrong">❌ Falsified empirically: 3-signal stocks have 40.4% hit rate vs 42.8% baseline. Signals correlate.</div>
+        <div class="fix">✓ Removed stacking thesis. Test independence empirically before claiming it.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-04-29</span>
+        <h5>Agent prompts were docs only</h5>
+        <div class="what-wrong">❌ prompts/*.md existed but were never programmatically invoked. Devil's advocate fired AFTER claims, not before.</div>
+        <div class="fix">✓ Built run_agent.py to invoke prompts as Claude API system messages. Material claims must run devils_advocate FIRST.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-05-01</span>
+        <h5>47-feature look-ahead leak</h5>
+        <div class="what-wrong">❌ Screener (18) + QVM (20) + Academic (9) features broadcast TODAY's snapshot as constants across all historical training rows.</div>
+        <div class="fix">✓ Quarantined in source. Added pytest CI gate against per-symbol-constant features. Cannot recur.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-05-04</span>
+        <h5>Stock split adjustment incomplete</h5>
+        <div class="what-wrong">❌ 424 single-day drops worse than -50% in dataset, 399 with NO corporate-action record. Filename "_adjusted" was a label, not a contract.</div>
+        <div class="fix">✓ Per-name contamination filter added. Dataset-wide rebuild planned. Top picks individually audited.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-06-08</span>
+        <h5>SILVERTUC "4/4 engines" framing</h5>
+        <div class="what-wrong">❌ Sold a micro-cap with 3 consecutive UCs as "highest cross-validation." Cross-engine consensus on operator pumps is CORRELATED NOISE, not 4 independent signals.</div>
+        <div class="fix">✓ Added operator-pump detection to QC gate: consecutive UCs, UC+LC volatility, low delivery, extreme 20d returns.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-06-17</span>
+        <h5>Names gap up before retail can buy</h5>
+        <div class="what-wrong">❌ EOD models pick names market also notices → smart money absorbs overnight → retail gets gapped-up entries.</div>
+        <div class="fix">✓ Added "stealth signal" filter: high P + no recent UC + low recent momentum. Bias picks toward pullback names.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-06-24</span>
+        <h5>"32 trades" sold as a backtest</h5>
+        <div class="what-wrong">❌ First 15D/5% validation was 4 weeks / 32 trades — an anecdote dressed as evidence. It nearly shipped a bad filter, and 2 picks hit SL on day one.</div>
+        <div class="fix">✓ Built backtest_10yr_15d5pct.py: 529 weekly baskets, 4,224 trades, 2016-2026, walk-forward retraining every 13 weeks, exact exit-rule simulation. Every filter parameter now cites this run.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-01</span>
+        <h5>ML classifier overconfident above 0.85</h5>
+        <div class="what-wrong">❌ The classifier's MOST confident picks (score ≥0.85) hit the +5% target only 18.9% of the time — WORSE than the 0.5-0.7 band (23.9%). We had been ranking by raw ML score, systematically favoring the worst band.</div>
+        <div class="fix">✓ band_fit_score now PENALIZES ml_score ≥ 0.85 by -0.5 and rewards the honest 0.5-0.7 zone. Selection ranks band_fit first, ML score second.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-01</span>
+        <h5>Green tick on 55-day-stale macro data</h5>
+        <div class="what-wrong">❌ Emitted a basket while brent/DXY/US-10Y/VIX were forward-filled from 2026-05-07 and announcements were 65 days old. Yahoo silently 429'd, the fetcher wrote nothing, and every check passed because file DATES looked fresh while COLUMNS were rotten.</div>
+        <div class="fix">✓ verify_freshness.py: 10 file-level + 14 column-level contracts (last non-null date per critical column). Wired into the basket generator with verify_or_die() — no bypass path. FRED fallback for Yahoo. Freshness dashboard at the top of every brief.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-07</span>
+        <h5>Window-level exit math inflated the 10-yr backtest</h5>
+        <div class="what-wrong">❌ The 4,224-trade backtest booked both-touch ("whipsaw") windows at an assumed +1.0% and entered at signal-day close (not executable — baskets are emitted after close). Day-by-day resequencing of the SAME trades at next-open entry: the -3% SL fires on 63.5% of trades, and the CURRENT geometry is -1.3% CAGR after 0.30% costs — not +34.6%.</div>
+        <div class="fix">✓ Standing rule: no window-level exit approximations — every exit-rule claim must come from day-by-day sequenced simulation, next-open entry, net of ≥0.30% costs. Finding: +5% target is fine (66.5% touch unstopped); the -3% stop is inside small-cap noise and is the value-destroyer. SL geometry under review (no-SL + day-15 timeout = +8.3% CAGR after costs, at the price of a -56% worst-trade tail).</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-07</span>
+        <h5>"Spurt in Volume" mislabeled as order wins</h5>
+        <div class="what-wrong">❌ The announcement tagger pattern-matches "order" and tags exchange SURVEILLANCE notices ("Spurt in Volume") as order_win — rationales were citing fake business catalysts.</div>
+        <div class="fix">✓ Rationale rules now treat volume-spurt notices as accumulation hints only. Every per-pick rationale is fact-checked by an adversarial verifier agent against raw data before publication (caught 3 numeric errors in the 2026-07-07 basket alone).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD STEPS -->
+<section id="build">
+  <div class="container">
+    <div class="section-tag">Build Your Own</div>
+    <h2 class="section-title">8 steps to your own calibrated AI trading system</h2>
+    <p class="section-sub">Everything you need to replicate. No magic, just discipline.</p>
+
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h4>Clone the repo</h4>
+          <p>Start with the working scaffolding. All scripts, prompts, agents, tests included.</p>
+          <pre><code>git clone https://github.com/theabhinavsharma/shree-ganesh-model.git
+cd shree-ganesh-model</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h4>Set up your data fetchers</h4>
+          <p>NSE bhavcopy + corporate actions + news. The repo includes ~16 fetchers in <code>src/agentic/fetch_*.py</code>.</p>
+          <pre><code>python3 src/agentic/refresh_prices.py      # NSE bhavcopy, 15-year history
+python3 src/agentic/build_news_event_features.py  # Corporate filings
+python3 src/agentic/build_macro_panel.py   # Macro + sector context</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h4>Write the constitution FIRST (most important step)</h4>
+          <p>Before any model. Bind yourself to honesty, walk-forward, Bonferroni, calibration ledger. Without rules, the AI will tell you what you want to hear.</p>
+          <pre><code>cp CONSTITUTION.md ./   # use ours as a template
+# Edit to your context. The 7 binding principles stay.</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h4>Build the 5-engine ML stack</h4>
+          <p>Each engine has a different question: 180d frontier, short horizon (5%/15d, 10%/30d), 7d/15d/30d high conviction, multibagger (50%/75%/100% in 180d), multi-horizon (1d/7d/21d).</p>
+          <pre><code>python3 src/agentic/find_180d_frontier_honest.py    &
+python3 src/agentic/find_high_conviction.py         &
+python3 src/agentic/find_multibagger_today.py       &
+python3 src/agentic/run_multi_horizon.py            &
+python3 src/agentic/compare_short_horizons.py       &
+wait   # all 5 run in parallel</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">05</div>
+        <div class="step-body">
+          <h4>Run agents in parallel: devil's advocate + debugger + per-name DD</h4>
+          <p>Spawn specialised Claude agents. Each gets one job. Cross-validate by composition.</p>
+          <pre><code>python3 src/agentic/devils_advocate.py            # 10-vector audit
+python3 src/agentic/run_agent.py debugger ...     # sanity checks
+python3 src/agentic/run_agent.py trade_reviewer ...  # per-name DD</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">06</div>
+        <div class="step-body">
+          <h4>Apply contamination + operator-pump QC</h4>
+          <p>Drop any name with unrecorded -30%+ drops or 3+ consecutive upper-circuit days. This step prevents 80% of bad trades.</p>
+          <pre><code># Pseudocode of the QC
+for sym in candidates:
+    if has_unrecorded_big_drop(sym):     drop("contamination")
+    if max_consecutive_uc(sym, 30) >= 3: drop("operator_pump")
+    if rsi(sym) > 80:                    drop("chase")
+    if adv_cr(sym) < 2:                  drop("illiquid")
+    if close(sym) < 30:                  drop("penny")</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">07</div>
+        <div class="step-body">
+          <h4>Commit a timestamped forward-record artifact</h4>
+          <p>Every basket → <code>live_predictions/YYYY-MM-DD.json</code> → git commit. Immutable. This is the publishability case.</p>
+          <pre><code>python3 emit_forward_record.py > live_predictions/$(date +%Y-%m-%d).json
+git add live_predictions/ &amp;&amp; git commit -m "Daily forward record"
+git push origin main</code></pre>
+        </div>
+      </div>
+
+      <div class="step-row">
+        <div class="step-num">08</div>
+        <div class="step-body">
+          <h4>Log every mistake. Religiously.</h4>
+          <p>Calibration corrections ledger is the credibility moat. Document every overfit caught, every leak quarantined, every name killed by QC.</p>
+          <pre><code># logs/calibration_corrections.jsonl
+{"ts":"2026-06-08","claim":"...","what_was_wrong":"...","correction":"...","lesson":"..."}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="container">
+    <div class="section-tag">The Numbers</div>
+    <h2 class="section-title">What we have so far</h2>
+    <p class="section-sub">No projections. Just what we've measured and verified.</p>
+
+    <table class="results-table">
+      <thead>
+        <tr><th>Metric</th><th>Status</th><th>Value</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>180d / +15% target hit rate</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>~85% prospective</td>
+          <td>find_180d_frontier_honest 2025 OOS</td>
+        </tr>
+        <tr>
+          <td>9-year dynamic-gated median ann ROI</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>+8%</td>
+          <td>backtest_dynamic_gated.py walk-forward</td>
+        </tr>
+        <tr>
+          <td>5d/5pct band hit rate at score ≥ 0.95</td>
+          <td><span class="tag-neutral">SUPERSEDED</span></td>
+          <td>98.3% (n=230) — see caveat*</td>
+          <td>achievable_frontier.py</td>
+        </tr>
+        <tr>
+          <td>15d/5pct band hit rate at score ≥ 0.95</td>
+          <td><span class="tag-neutral">SUPERSEDED</span></td>
+          <td>97.9% (n=578) — see caveat*</td>
+          <td>achievable_frontier.py</td>
+        </tr>
+        <tr>
+          <td>10-yr 15D/+5% backtest — baseline hit rate</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>23.3% (4,224 trades, 529 baskets)</td>
+          <td>backtest_10yr_15d5pct.py walk-forward 2016-2026</td>
+        </tr>
+        <tr>
+          <td>10-yr 15D/+5% — with band-fit filter</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>27.2% hit, +2.29%/trade (n=699)</td>
+          <td>Same run, band_fit ≥ 2/3 subset</td>
+        </tr>
+        <tr>
+          <td>8-name 100%-deploy basket, 15d return</td>
+          <td><span class="tag-neutral">SUPERSEDED</span></td>
+          <td>mean +1.76% · ≈34.6% CAGR — window-level approximation; see day-by-day row below<br><span style="font-size:12px; color: var(--fg-dim);">Tail-dependent: best basket +117% is 1 of 529; excluding the top 5% of baskets the mean basket sum drops to ~+10%</span></td>
+          <td>Same run, top-8-per-week portfolio sim</td>
+        </tr>
+        <tr>
+          <td>Day-by-day resequenced, CURRENT geometry (SL -3%, next-open entry, 0.30% costs)</td>
+          <td><span class="tag-bad">NEGATIVE</span></td>
+          <td>-0.075%/trade · <strong>-1.3% CAGR</strong> — the -3% stop fires on 63.5% of trades</td>
+          <td>2026-07-07 correction, same 4,221 trades</td>
+        </tr>
+        <tr>
+          <td>Day-by-day, NO SL + day-15 timeout + book-half/trail</td>
+          <td><span class="tag-good">VERIFIED</span></td>
+          <td>+0.471%/trade after costs · <strong>+8.3% CAGR</strong> · tail: worst trade -56%</td>
+          <td>2026-07-07 correction, same 4,221 trades</td>
+        </tr>
+        <tr>
+          <td>ML score ≥0.85 band ("most confident")</td>
+          <td><span class="tag-bad">UNDERPERFORMS</span></td>
+          <td>18.9% hit vs 23.9% for 0.5-0.7 band</td>
+          <td>Same run — overconfidence penalty now in filter</td>
+        </tr>
+        <tr>
+          <td>KENNAMET realized return</td>
+          <td><span class="tag-good">REALIZED</span></td>
+          <td>+18.1% in 1 day</td>
+          <td>realized_outcomes/kennamet_20260508.json</td>
+        </tr>
+        <tr>
+          <td>Weekly basket hit rate (27-May, 7 names)</td>
+          <td><span class="tag-good">REALIZED</span></td>
+          <td>5 of 7 hit target (71%)</td>
+          <td>2-week realized backtest</td>
+        </tr>
+        <tr>
+          <td>2x/180d at 80%+ calibrated</td>
+          <td><span class="tag-bad">NOT ACHIEVABLE</span></td>
+          <td>Sample = 0</td>
+          <td>Honest frontier audit</td>
+        </tr>
+        <tr>
+          <td>News + catalyst features lift</td>
+          <td><span class="tag-bad">NO LIFT</span></td>
+          <td>Top-50 EV regressed -1.7pp</td>
+          <td>A/B test ab_test_event_features.md</td>
+        </tr>
+        <tr>
+          <td>30% min annual target unlevered</td>
+          <td><span class="tag-neutral">PENDING</span></td>
+          <td>Needs market-neutral overlay</td>
+          <td>Constitution §3 publishability checklist</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="caveat">
+      <div class="caveat-title">⚠️ *Caveat on the "97-98% hit rate" rows</div>
+      <p>Those achievable_frontier numbers measure "touched +5% at ANY point in the window" on an in-sample-adjacent band definition — NOT the realized exit-rule P&L. The 10-year exit-rule simulation (target/SL/whipsaw, 4,224 trades) is the honest number: 23-27% clean target hits, because 44.9% of trades touch BOTH the target and the stop intraday. If you copy this system, trust the 10-yr exit-rule numbers, not the frontier band numbers.</p>
+    </div>
+
+    <div class="caveat">
+      <div class="caveat-title">⚠️ What we DON'T claim</div>
+      <p>We do NOT claim to consistently 2x money. We do NOT claim to predict every trade. We do NOT claim AI replaces human judgment. We DO claim: a rigorous, calibrated, reproducible system whose error bars are honest and whose forward record is immutable in git. The proof is the rigour, not the headline return.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S DIFFERENT -->
+<section id="different">
+  <div class="container">
+    <div class="section-tag">The Differentiator</div>
+    <h2 class="section-title">Why this isn't just another "AI picks stocks" hype</h2>
+
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>Most "AI trading" content</th>
+          <th style="color: var(--good)">This system</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Calibrates on test data (leakage)</td>
+          <td>Strict walk-forward, calibrate on prior year ONLY</td>
+        </tr>
+        <tr>
+          <td>Shows best-of-N cherry-picks</td>
+          <td>Reports median + range + count tested (Bonferroni-corrected)</td>
+        </tr>
+        <tr>
+          <td>Hides failures, shows wins</td>
+          <td>Public failure log: 13 documented mistakes</td>
+        </tr>
+        <tr>
+          <td>One model, no cross-validation</td>
+          <td>5 independent engines, names must appear in ≥2</td>
+        </tr>
+        <tr>
+          <td>No contamination check</td>
+          <td>Detects 399+ unrecorded splits/bonuses, drops contaminated names</td>
+        </tr>
+        <tr>
+          <td>Promotes operator pumps as "high conviction"</td>
+          <td>QC kills 3+ consecutive UC names — manipulation detection</td>
+        </tr>
+        <tr>
+          <td>Backtested only, no live record</td>
+          <td>Daily forward record committed to git, immutable timestamps</td>
+        </tr>
+        <tr>
+          <td>Trusts whatever data is on disk</td>
+          <td>Freshness gate: 24 contracts (file + per-column last-non-null) — basket physically cannot emit on stale data</td>
+        </tr>
+        <tr>
+          <td>Ranks by raw model confidence</td>
+          <td>Penalizes overconfident scores — the ≥0.85 band empirically hits 18.9% vs 23.9% for 0.5-0.7</td>
+        </tr>
+        <tr>
+          <td>Publishes AI-written rationale unchecked</td>
+          <td>Every rationale adversarially fact-checked by an independent skeptic agent against raw data</td>
+        </tr>
+        <tr>
+          <td>Black-box predictions, no caveats</td>
+          <td>Every prediction includes calibration band, sample size, contraints</td>
+        </tr>
+        <tr>
+          <td>Closed source, requires subscription</td>
+          <td>100% open source under MIT-style discipline, free to fork</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="font-size: 18px; color: var(--fg);">
+    Built with <a href="https://claude.com/claude-code" style="color: var(--accent-1);">Claude</a> · ₹25L of real capital · 50 days of iteration<br>
+    <strong style="color: var(--fg);">Open source under the discipline of the calibration ledger.</strong>
+  </p>
+  <a href="https://github.com/theabhinavsharma/shree-ganesh-model" class="repo">📦 Clone the repo →</a>
+  <p style="margin-top: 32px;">
+    Inspired by: Renaissance's compounding discipline · Anthropic's honesty principles · Indian retail's hunger for a fair shot
+  </p>
+  <p style="font-size: 12px; color: var(--fg-dim); margin-top: 24px;">
+    Not investment advice. The system refuses to lie; this site refuses to oversell. Always do your own diligence.
+  </p>
+</footer>
+
+<script>
+// Simple stat count-up animation on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.story-card, .agent-card, .ledger-item, .step-row').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity 0.6s, transform 0.6s';
+  observer.observe(el);
+});
+const style = document.createElement('style');
+style.textContent = '.visible{opacity:1 !important;transform:translateY(0) !important;}';
+document.head.appendChild(style);
+</script>
+
+</body>
+</html>

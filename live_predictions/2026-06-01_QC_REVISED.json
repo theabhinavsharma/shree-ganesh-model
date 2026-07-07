@@ -1,0 +1,30 @@
+{
+  "as_of_date": "2026-06-01",
+  "data_through": "2026-06-01",
+  "version": "v14_QC_REVISED_first2weeks_june",
+  "supersedes": "v12_FINAL_first2weeks_of_june - flawed because didnt QC operator-pump patterns",
+  "qc_methodology": "Detected operator-pump patterns: consecutive UCs, UC+LC volatility within 30d, extreme 20d returns",
+  "killed_post_qc": {
+    "SILVERTUC": "3 consecutive UCs + 6 UCs / 2 LCs in 30d. Classic operator pump in micro-cap.",
+    "VENUSREM": "7 UCs + 2 LCs in 30 days, +41pct in 20d. Pump-pattern flag.",
+    "COFFEEDAY": "+10pct UC June 1 + 49pct return in 20d. Chase exhaustion."
+  },
+  "final_basket": [
+    {"symbol":"QUICKHEAL","close":174.62,"buy_low":172.87,"buy_high":176.37,"target_10pct":192.08,"sl_5pct":165.89,"weight":3.0,"qc_verdict":"CLEANEST","tier":1,"rationale":"RSI 40, ADV 89cr, no UC/LC history"},
+    {"symbol":"ROSSTECH","close":998.20,"buy_low":988.22,"buy_high":1008.18,"target_10pct":1098.02,"sl_5pct":948.29,"weight":2.5,"qc_verdict":"CLEAN","tier":1,"rationale":"RSI 56 neutral, decent liquidity"},
+    {"symbol":"NIITMTS","close":220.18,"buy_low":217.98,"buy_high":222.38,"target_10pct":242.20,"sl_5pct":209.17,"weight":2.5,"qc_verdict":"CLEAN","tier":1,"rationale":"Genuine oversold RSI 31, real reversion"},
+    {"symbol":"BLISSGVS","close":402.45,"buy_low":398.43,"buy_high":406.47,"target_10pct":442.70,"sl_5pct":382.33,"weight":2.0,"qc_verdict":"OK-MEGA-LIQUID","tier":2,"rationale":"+49pct 20d momentum but ADV 146cr can exit anytime"},
+    {"symbol":"SPARC","close":196.37,"buy_low":194.41,"buy_high":198.33,"target_10pct":216.01,"sl_5pct":186.55,"weight":2.0,"qc_verdict":"OK-MEGA-LIQUID","tier":2,"rationale":"+40pct 20d but ADV 277cr highest in universe"},
+    {"symbol":"IZMO","close":788.40,"buy_low":780.52,"buy_high":796.28,"target_10pct":867.24,"sl_5pct":748.98,"weight":1.5,"qc_verdict":"OK-SMALL","tier":3,"rationale":"Hit UC June 1 but -7pct over 20d is genuine pullback"},
+    {"symbol":"SAKAR","close":835.70,"buy_low":827.34,"buy_high":844.06,"target_10pct":919.27,"sl_5pct":793.92,"weight":1.0,"qc_verdict":"OK-SMALL","tier":3,"rationale":"+33pct 20d momentum smaller size"}
+  ],
+  "total_basket_pct": 14.5,
+  "rest_in_liquidplus_pct": 85.5,
+  "exit_rules": [
+    "+10pct target: book HALF + trail SL on remainder to +5pct",
+    "-5pct SL: sell 100pct no exceptions",
+    "Day 10 timeout (~2026-06-12): sell at market",
+    "Weekly re-evaluation on 2026-06-08"
+  ],
+  "calibration_correction_added": "Per CONSTITUTION 1.2 lead with contradiction: cross-engine consensus does NOT validate operator-pump patterns. Engine agreement on micro-caps with multi-UC streaks is correlated noise, not 4 independent signals. Future audits must include consecutive-UC detection in the QC gate."
+}

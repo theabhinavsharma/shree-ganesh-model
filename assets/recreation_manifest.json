@@ -1,0 +1,607 @@
+{
+ "generated": "2026-07-07",
+ "inventory": {
+  "Other tools": [
+   {
+    "path": "src/agentic/ab_test_event_features.py",
+    "loc": 350,
+    "purpose": "A/B test: does adding 11.3y of catalyst/event features lift the 5%/15d model?"
+   },
+   {
+    "path": "src/agentic/ab_test_event_polarity.py",
+    "loc": 292,
+    "purpose": "4-arm A/B test on the 5%/15d model:"
+   },
+   {
+    "path": "src/agentic/agent_loop.py",
+    "loc": 167,
+    "purpose": "Agent loop \u2014 one cycle of hypothesis \u2192 fetch \u2192 compile \u2192 evaluate \u2192 verdict."
+   },
+   {
+    "path": "src/agentic/analyze_regime_for_strategy.py",
+    "loc": 149,
+    "purpose": "Analyze WHY the multibagger strategy worked in Feb/Sep 2024 and failed"
+   },
+   {
+    "path": "src/agentic/analyze_superstar_alpha.py",
+    "loc": 196,
+    "purpose": "Analyze whether superstar-held stocks deliver alpha vs non-held."
+   },
+   {
+    "path": "src/agentic/analyze_superstar_horizons.py",
+    "loc": 146,
+    "purpose": "Multi-horizon superstar-confluence analysis."
+   },
+   {
+    "path": "src/agentic/build_academic_alphas.py",
+    "loc": 159,
+    "purpose": "Operationalize alpha factors from academic finance literature."
+   },
+   {
+    "path": "src/agentic/build_catalyst_features.py",
+    "loc": 139,
+    "purpose": "Per-(symbol, trade_date) catalyst feature matrix from tagged announcements + insider trades."
+   },
+   {
+    "path": "src/agentic/build_chart_signals.py",
+    "loc": 341,
+    "purpose": "Multi-timeframe chart pattern + technical signal detector."
+   },
+   {
+    "path": "src/agentic/build_confluence_picks.py",
+    "loc": 241,
+    "purpose": "Aggregate confluence picker \u2014 find stocks where MULTIPLE independent"
+   },
+   {
+    "path": "src/agentic/build_dashboard.py",
+    "loc": 1114,
+    "purpose": "Public dashboard \u2014 built around Jobs-To-Be-Done."
+   },
+   {
+    "path": "src/agentic/build_derived_ratios.py",
+    "loc": 149,
+    "purpose": "Compute derived ratios from existing fundamentals \u2014 50+ new factors"
+   },
+   {
+    "path": "src/agentic/build_event_polarity.py",
+    "loc": 203,
+    "purpose": "Build TWO new sets of polarity-aware event features:"
+   },
+   {
+    "path": "src/agentic/build_handoff.py",
+    "loc": 84,
+    "purpose": "Regenerate HANDOFF.md with current state snapshot."
+   },
+   {
+    "path": "src/agentic/build_html_viewer.py",
+    "loc": 322,
+    "purpose": "Build a single self-contained HTML file that renders all the mermaid"
+   },
+   {
+    "path": "src/agentic/build_workflow_diagram.py",
+    "loc": 199,
+    "purpose": "Auto-generate a Mermaid workflow diagram from daily_pipeline.sh."
+   },
+   {
+    "path": "src/agentic/catalyst_tagger.py",
+    "loc": 168,
+    "purpose": "NLP-tag NSE corporate announcements into catalyst categories."
+   },
+   {
+    "path": "src/agentic/compute_feature_importance.py",
+    "loc": 294,
+    "purpose": "Compute feature-importance for the v3 long ensemble + tag each feature"
+   },
+   {
+    "path": "src/agentic/factor_evaluator.py",
+    "loc": 163,
+    "purpose": "Factor evaluator \u2014 measure each new feature's lift on 7d-forward return."
+   },
+   {
+    "path": "src/agentic/factor_evaluator_macro.py",
+    "loc": 223,
+    "purpose": "Macro-aware factor evaluator \u2014 for date-level (NOT cross-sectional) features."
+   },
+   {
+    "path": "src/agentic/factor_registry.py",
+    "loc": 305,
+    "purpose": "Factor / data hypothesis registry \u2014 the \"what to try next\" catalog."
+   },
+   {
+    "path": "src/agentic/feature_descriptions.py",
+    "loc": 148,
+    "purpose": "Plain-English description for every feature the model uses."
+   },
+   {
+    "path": "src/agentic/feature_factory.py",
+    "loc": 353,
+    "purpose": "Feature factory \u2014 compile new factors from existing data."
+   },
+   {
+    "path": "src/agentic/find_quiet_accumulation.py",
+    "loc": 105,
+    "purpose": "6TH ENGINE \u2014 Quiet Accumulation Scanner."
+   },
+   {
+    "path": "src/agentic/generate_event_driven_today.py",
+    "loc": 141,
+    "purpose": "Today's actionable event-driven picks under the new gate config."
+   },
+   {
+    "path": "src/agentic/generate_pro_brief.py",
+    "loc": 438,
+    "purpose": "Pro-format daily brief \u2014 every top pick gets:"
+   },
+   {
+    "path": "src/agentic/generate_trade_plan.py",
+    "loc": 157,
+    "purpose": "Daily trade plan \u2014 the single document the user reads each morning."
+   },
+   {
+    "path": "src/agentic/hypothesis_agent.py",
+    "loc": 306,
+    "purpose": "LLM-driven hypothesis agent \u2014 generates STRONG factor hypotheses"
+   },
+   {
+    "path": "src/agentic/hypothesis_agent_macro.py",
+    "loc": 300,
+    "purpose": "Macro / aggregate hypothesis agent \u2014 appends NON-CONVENTIONAL,"
+   },
+   {
+    "path": "src/agentic/infinite_hypothesis_loop.py",
+    "loc": 233,
+    "purpose": "Never-sleeping hypothesis loop."
+   },
+   {
+    "path": "src/agentic/inspect_symbol.py",
+    "loc": 266,
+    "purpose": "Per-symbol inspector \u2014 given a ticker, dump everything the system knows."
+   },
+   {
+    "path": "src/agentic/joint_signal_analyzer.py",
+    "loc": 249,
+    "purpose": "Joint-signal analyzer."
+   },
+   {
+    "path": "src/agentic/monitor_for_conviction.py",
+    "loc": 141,
+    "purpose": "Daily conviction monitor \u2014 fires alerts at the 0.95 calibrated band."
+   },
+   {
+    "path": "src/agentic/paper_trading_recorder.py",
+    "loc": 135,
+    "purpose": "Paper-trading recorder: every run, score yesterday's brief picks against"
+   },
+   {
+    "path": "src/agentic/portfolio_sizer.py",
+    "loc": 182,
+    "purpose": "Portfolio sizer: given today's long/short candidates, produce a sized,"
+   },
+   {
+    "path": "src/agentic/risk_envelope.py",
+    "loc": 247,
+    "purpose": "Risk envelope \u2014 codify the user's stated bounds:"
+   },
+   {
+    "path": "src/agentic/run_model_diversity.py",
+    "loc": 250,
+    "purpose": "Train 5 diverse model families on the same feature set + label."
+   },
+   {
+    "path": "src/agentic/run_short_side.py",
+    "loc": 175,
+    "purpose": "Short-side model: predict P(stock falls >= 5% in any of next 7 trading days,"
+   },
+   {
+    "path": "src/agentic/run_v3_with_catalysts.py",
+    "loc": 202,
+    "purpose": "v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features."
+   },
+   {
+    "path": "src/agentic/score_sentiment.py",
+    "loc": 380,
+    "purpose": "Finance-tuned sentiment scorer for news / reddit / youtube text."
+   },
+   {
+    "path": "src/agentic/sector_weak_shorts.py",
+    "loc": 123,
+    "purpose": "Sector-weak large-cap short overlay."
+   },
+   {
+    "path": "src/agentic/track_multibagger_basket.py",
+    "loc": 142,
+    "purpose": "Live tracker for the multibagger basket \u2014 proves whether the 90%-conviction"
+   },
+   {
+    "path": "src/agentic/write_live_prediction.py",
+    "loc": 146,
+    "purpose": "Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs."
+   },
+   {
+    "path": "src/agentic/install_schedule.sh",
+    "loc": 44,
+    "purpose": "Install / reinstall the launchd schedule for the daily pipeline."
+   }
+  ],
+  "Backtests": [
+   {
+    "path": "src/agentic/backtest_10yr.py",
+    "loc": 205,
+    "purpose": "10-year walk-forward backtest of the v3 ensemble (2016 \u2192 2025)."
+   },
+   {
+    "path": "src/agentic/backtest_10yr_15d5pct.py",
+    "loc": 343,
+    "purpose": "PROPER 10-YEAR BACKTEST \u2014 15D/+5% hybrid pipeline."
+   },
+   {
+    "path": "src/agentic/backtest_10yr_macro.py",
+    "loc": 186,
+    "purpose": "9-year walk-forward backtest WITH macro-enriched feature set."
+   },
+   {
+    "path": "src/agentic/backtest_10yr_with_factors.py",
+    "loc": 206,
+    "purpose": "A/B 10-year walk-forward backtest WITH 5 KEEP factors added."
+   },
+   {
+    "path": "src/agentic/backtest_dynamic_gated.py",
+    "loc": 203,
+    "purpose": "Dynamic-gated backtest \u2014 what the user actually wanted measured."
+   },
+   {
+    "path": "src/agentic/backtest_event_driven.py",
+    "loc": 473,
+    "purpose": "Event-driven, fixed-capital, signal-gated backtest."
+   },
+   {
+    "path": "src/agentic/backtest_event_window.py",
+    "loc": 259,
+    "purpose": "Event-window backtest \u2014 different architecture from event-feature stacking."
+   },
+   {
+    "path": "src/agentic/backtest_hybrid_15d5pct.py",
+    "loc": 252,
+    "purpose": "HONEST BACKTEST \u2014 hybrid 15D/+5% pipeline."
+   },
+   {
+    "path": "src/agentic/backtest_multibagger_strategy.py",
+    "loc": 246,
+    "purpose": "Backtest the multibagger strategy: every week in 2024-2025, pick the"
+   },
+   {
+    "path": "src/agentic/backtest_news_features.py",
+    "loc": 255,
+    "purpose": "News-feature A/B backtest."
+   },
+   {
+    "path": "src/agentic/backtest_regime_gated.py",
+    "loc": 119,
+    "purpose": "Test if a regime gate improves the multibagger strategy. Compare:"
+   }
+  ],
+  "Data fetchers": [
+   {
+    "path": "src/agentic/build_macro_panel.py",
+    "loc": 201,
+    "purpose": "Consolidate ALL macro/aggregate features into a single daily panel."
+   },
+   {
+    "path": "src/agentic/build_news_event_features.py",
+    "loc": 220,
+    "purpose": "News + corporate-event feature builder \u2014 5d and 15d windows, stock + industry."
+   },
+   {
+    "path": "src/agentic/fetch_amfi_mf_holdings.py",
+    "loc": 121,
+    "purpose": "Fetch AMFI mutual-fund AUM data \u2014 non-conventional ownership signal."
+   },
+   {
+    "path": "src/agentic/fetch_announcements_historical.py",
+    "loc": 197,
+    "purpose": "Backfill NSE corporate announcements from 2016-01-01 to today."
+   },
+   {
+    "path": "src/agentic/fetch_block_deals.py",
+    "loc": 459,
+    "purpose": "Fetch NSE block deals + bulk deals and turn them into a per-stock smart-money signal."
+   },
+   {
+    "path": "src/agentic/fetch_broker_recos.py",
+    "loc": 188,
+    "purpose": "Aggregate published broker / advisor stock recommendations from free public sources."
+   },
+   {
+    "path": "src/agentic/fetch_commodity_prices.py",
+    "loc": 123,
+    "purpose": "Fetch commodity prices via FRED (Federal Reserve Economic Data) \u2014 free, no auth."
+   },
+   {
+    "path": "src/agentic/fetch_fii_dii.py",
+    "loc": 140,
+    "purpose": "Fetch FII / DII daily provisional flows from NSE."
+   },
+   {
+    "path": "src/agentic/fetch_forex_macro.py",
+    "loc": 104,
+    "purpose": "Fetch macro time-series \u2014 USDINR, Brent, India 10y yield, India VIX."
+   },
+   {
+    "path": "src/agentic/fetch_fundamentals.py",
+    "loc": 416,
+    "purpose": "Enrich the universe with fundamentals ratios per stock from NSE."
+   },
+   {
+    "path": "src/agentic/fetch_global_macro.py",
+    "loc": 196,
+    "purpose": "Cross-country macro fetcher \u2014 global signals affecting India."
+   },
+   {
+    "path": "src/agentic/fetch_global_macro_sentiment.py",
+    "loc": 154,
+    "purpose": "Macro-level sentiment \u2014 country, market, commodity, central-bank headlines."
+   },
+   {
+    "path": "src/agentic/fetch_global_rates.py",
+    "loc": 125,
+    "purpose": "Fetch global rates / risk indices via FRED \u2014 free, no auth."
+   },
+   {
+    "path": "src/agentic/fetch_industry_indicators.py",
+    "loc": 138,
+    "purpose": "Compute INDUSTRY/SECTOR aggregate indicators from existing prices parquet."
+   },
+   {
+    "path": "src/agentic/fetch_market_breadth.py",
+    "loc": 133,
+    "purpose": "Compute MARKET BREADTH features from existing prices parquet."
+   },
+   {
+    "path": "src/agentic/fetch_news_per_symbol.py",
+    "loc": 199,
+    "purpose": "Per-symbol news enrichment via Google News RSS."
+   },
+   {
+    "path": "src/agentic/fetch_news_rss.py",
+    "loc": 118,
+    "purpose": "Pull RSS feeds for Indian-market news and tag each item with mentioned NSE symbols."
+   },
+   {
+    "path": "src/agentic/fetch_options_chain.py",
+    "loc": 343,
+    "purpose": "Fetch NSE F&O options chain data for each F&O underlying and write per-stock"
+   },
+   {
+    "path": "src/agentic/fetch_pib_releases.py",
+    "loc": 278,
+    "purpose": "Fetch Press Information Bureau (PIB) press releases from 2016-present."
+   },
+   {
+    "path": "src/agentic/fetch_reddit.py",
+    "loc": 114,
+    "purpose": "Pull recent posts from public Reddit JSON for India-investing subs."
+   },
+   {
+    "path": "src/agentic/fetch_screener_fundamentals.py",
+    "loc": 249,
+    "purpose": "Fetch comprehensive fundamentals from Screener.in per-company pages."
+   },
+   {
+    "path": "src/agentic/fetch_screener_screens.py",
+    "loc": 129,
+    "purpose": "Pull curated Screener.in stock screens \u2014 FII/DII buying, promoter buying, etc."
+   },
+   {
+    "path": "src/agentic/fetch_stock_fii_dii.py",
+    "loc": 233,
+    "purpose": "Fetch stock-level FII/DII holdings from NSE quarterly shareholding pattern."
+   },
+   {
+    "path": "src/agentic/fetch_superstar_holdings.py",
+    "loc": 224,
+    "purpose": "Fetch publicly disclosed 'Superstar' investor holdings from Tickertape."
+   },
+   {
+    "path": "src/agentic/fetch_wiki_pageviews.py",
+    "loc": 156,
+    "purpose": "Fetch Wikipedia page-view counts as a retail-attention proxy."
+   },
+   {
+    "path": "src/agentic/fetch_youtube.py",
+    "loc": 143,
+    "purpose": "Pull recent videos from Indian-finance YouTube channels (RSS, no API key needed) and"
+   },
+   {
+    "path": "src/agentic/refresh_announcements.py",
+    "loc": 94,
+    "purpose": "Incrementally extend the corp_announcements parquet by fetching the last 14 days"
+   },
+   {
+    "path": "src/agentic/refresh_prices.py",
+    "loc": 81,
+    "purpose": "Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet."
+   }
+  ],
+  "Simplicity layer": [
+   {
+    "path": "src/agentic/build_recreation_kit.py",
+    "loc": 148,
+    "purpose": "Recreation-kit generator \u2014 keeps SHOWCASE.html's inventory CURRENT, never historical."
+   },
+   {
+    "path": "src/agentic/simplicity_auditor.py",
+    "loc": 344,
+    "purpose": "Simplicity auditor \u2014 stdlib-first policy enforcement + technical-debt ledger."
+   }
+  ],
+  "Basket / output": [
+   {
+    "path": "src/agentic/build_status_dashboard.py",
+    "loc": 263,
+    "purpose": "Live status dashboard \u2014 what's the system doing RIGHT NOW."
+   },
+   {
+    "path": "src/agentic/generate_daily_brief.py",
+    "loc": 184,
+    "purpose": "Synthesize the daily brief from latest model outputs + alt-data signals."
+   },
+   {
+    "path": "src/agentic/generate_hybrid_basket.py",
+    "loc": 279,
+    "purpose": "Generate the WEEKLY 15D/+5% hybrid basket."
+   }
+  ],
+  "ML engines": [
+   {
+    "path": "src/agentic/compare_short_horizons.py",
+    "loc": 300,
+    "purpose": "Head-to-head: 10%/30d vs 5%/15d short-horizon trade."
+   },
+   {
+    "path": "src/agentic/find_180d_frontier_honest.py",
+    "loc": 295,
+    "purpose": "HONEST 180-day frontier \u2014 calibrated prospectively."
+   },
+   {
+    "path": "src/agentic/find_achievable_frontier.py",
+    "loc": 242,
+    "purpose": "Frontier search: at what (return %, horizon) combinations does the model"
+   },
+   {
+    "path": "src/agentic/find_achievable_targets.py",
+    "loc": 254,
+    "purpose": "For each (threshold % \u00d7 horizon days) combination, find the minimum"
+   },
+   {
+    "path": "src/agentic/find_high_conviction.py",
+    "loc": 325,
+    "purpose": "Train 3 horizon\u00d7threshold models, calibrate to TRUE probability, then find"
+   },
+   {
+    "path": "src/agentic/find_multibagger_targets.py",
+    "loc": 234,
+    "purpose": "Multibagger achievability \u2014 for each (large-threshold \u00d7 long-horizon) combo,"
+   },
+   {
+    "path": "src/agentic/find_multibagger_today.py",
+    "loc": 286,
+    "purpose": "Pick today's stocks that hit \u2265 90% calibrated probability of doubling"
+   },
+   {
+    "path": "src/agentic/run_multi_horizon.py",
+    "loc": 180,
+    "purpose": "Multi-horizon ensemble: 1d, 7d, 21d models stacked."
+   }
+  ],
+  "QC / gates": [
+   {
+    "path": "src/agentic/data_completeness.py",
+    "loc": 477,
+    "purpose": "Data completeness audit \u2014 runs daily, fails LOUDLY if any stock in the"
+   },
+   {
+    "path": "src/agentic/devils_advocate.py",
+    "loc": 414,
+    "purpose": "Devil's Advocate \u2014 automated audit battery."
+   },
+   {
+    "path": "src/agentic/emit_freshness_status.py",
+    "loc": 109,
+    "purpose": "Emit reports/freshness_status.md \u2014 a standalone freshness dashboard."
+   },
+   {
+    "path": "src/agentic/filter_cascade.py",
+    "loc": 212,
+    "purpose": "Filter cascade \u2014 show exactly what gets dropped at each gate, with counts."
+   },
+   {
+    "path": "src/agentic/verify_freshness.py",
+    "loc": 264,
+    "purpose": "Freshness gate \u2014 refuses to let the pipeline proceed if any critical input is stale."
+   }
+  ],
+  "RL loop": [
+   {
+    "path": "src/agentic/miss_learner.py",
+    "loc": 236,
+    "purpose": "MISS-DRIVEN RL LEARNER \u2014 the first version."
+   },
+   {
+    "path": "src/agentic/train_missed_winner_classifier.py",
+    "loc": 214,
+    "purpose": "OPTION 2: Supervised ML classifier for missed winners."
+   }
+  ],
+  "Agent runner": [
+   {
+    "path": "src/agentic/run_agent.py",
+    "loc": 98,
+    "purpose": "Programmatic agent runner \u2014 actually invokes the prompt files."
+   }
+  ],
+  "Orchestrators": [
+   {
+    "path": "src/agentic/daily_pipeline.sh",
+    "loc": 98,
+    "purpose": "Daily agentic pipeline \u2014 fetches alt data, refreshes catalyst features, retrains model, builds brief."
+   },
+   {
+    "path": "src/agentic/daily_refresh.sh",
+    "loc": 112,
+    "purpose": "Daily refresh \u2014 news + events + predictions + git push."
+   },
+   {
+    "path": "src/agentic/run_weekly_pipeline.sh",
+    "loc": 235,
+    "purpose": "WEEKLY 15D/+5% PIPELINE ORCHESTRATOR"
+   }
+  ],
+  "Agent prompts": [
+   {
+    "path": "prompts/00_SYSTEM_PRINCIPLES.md",
+    "loc": 154,
+    "purpose": "System Principles \u2014 All Agents"
+   },
+   {
+    "path": "prompts/01_HYPOTHESIS_GENERATOR.md",
+    "loc": 178,
+    "purpose": "Agent: Hypothesis Generator"
+   },
+   {
+    "path": "prompts/02_DATA_FETCHER.md",
+    "loc": 184,
+    "purpose": "Agent: Data Fetcher"
+   },
+   {
+    "path": "prompts/03_BACKTEST_VALIDATOR.md",
+    "loc": 160,
+    "purpose": "Agent: Backtest Validator"
+   },
+   {
+    "path": "prompts/04_TRADE_REVIEWER.md",
+    "loc": 214,
+    "purpose": "Agent: Trade Reviewer / Daily PM"
+   },
+   {
+    "path": "prompts/05_DEVILS_ADVOCATE.md",
+    "loc": 150,
+    "purpose": "Agent: Devil's Advocate"
+   },
+   {
+    "path": "prompts/06_SIMPLICITY_AUDITOR.md",
+    "loc": 56,
+    "purpose": "SIMPLICITY AUDITOR \u2014 the stdlib-first gate"
+   },
+   {
+    "path": "prompts/INDEX.md",
+    "loc": 86,
+    "purpose": "Agent Prompts \u2014 Index"
+   },
+   {
+    "path": "prompts/META_REPROMPT.md",
+    "loc": 161,
+    "purpose": "Meta-Reprompt \u2014 How I Re-Prompt Myself Each User Turn"
+   }
+  ]
+ }
+}

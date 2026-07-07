@@ -1,0 +1,38 @@
+{
+  "as_of_date": "2026-05-27",
+  "data_through": "2026-05-26",
+  "version": "v9_consofinvt_refreshed",
+  "supersedes": "live_predictions/2026-05-27_consofinvt_single_pick.json (built on 2026-05-21 stale data)",
+  "lead_with_contradiction": "Prior file was on 21-May data; CONSOFINVT has since moved 227.85 -> 234.29 (+2.83pct). Score_5pct softened 0.87 -> 0.58 because near-term overshoot already partly realized. Score_15pct and score_30pct unchanged.",
+  "pick": {
+    "symbol": "CONSOFINVT",
+    "ltp": 234.29,
+    "buy_range_low": 231.95,
+    "buy_range_high": 236.63,
+    "stop_loss_3pct": 227.26,
+    "primary_target_5pct": 246.0,
+    "stretch_target_15pct_user_min": 269.43,
+    "reach_target_30pct_user_max": 304.58,
+    "fresh_scores_180d_horizon": {
+      "p_plus_5pct": 0.58,
+      "p_plus_15pct": 0.636,
+      "p_plus_30pct": 0.485
+    },
+    "rsi_14": 66.2,
+    "return_20d": 0.249,
+    "adv_20d_cr": 1.43,
+    "weight_pct_recommended": 1.75,
+    "rationale": "Only cross-validated clean name in 1,201 liquid universe. s5 softened but s15/s30 unchanged. Stock in confirmed uptrend (up 4 of last 5d). Reward/risk asymmetric: -3pct downside vs +5/+15/+30pct upside."
+  },
+  "order_ticket": {
+    "action": "BUY",
+    "symbol": "CONSOFINVT",
+    "limit_low": 231.95,
+    "limit_high": 236.63,
+    "hard_sl": 227.26,
+    "target1_book_half": 246.0,
+    "target2_book_rest": 269.43,
+    "max_hold_trading_days": 15
+  },
+  "ts_committed_utc": "2026-05-27T10:04:48.332679Z"
+}

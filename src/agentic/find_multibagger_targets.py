@@ -66,26 +66,31 @@ def build_panel() -> pd.DataFrame:
 
 
 def build_target(df: pd.DataFrame, threshold: float, horizon: int) -> pd.Series:
-    """Forward max-high over horizon days; 1 if (max_high / close - 1) >= threshold."""
-    # for very long horizons (>250d) avoid the big concat; use rolling-max trick
-    if horizon <= 60:
-        shifts = pd.concat(
-            [df.groupby("symbol", sort=False)["high"].shift(-k) for k in range(1, horizon + 1)],
-            axis=1,
-        )
-        fwd_max = shifts.max(axis=1)
-    else:
-        # rolling max: shift -1 then take rolling(window).max() on a reversed-time view
-        # cheap implementation: compute per-group max via cummax-from-future
-        df_g = df.copy()
-        df_g["_idx"] = df_g.groupby("symbol").cumcount()
-        df_g = df_g.sort_values(["symbol", "trade_date"])
-        # for each row, max of high over rows idx+1 .. idx+horizon
-        fwd_max = (df_g.groupby("symbol")["high"]
-                       .transform(lambda s: s.shift(-1).rolling(horizon, min_periods=1).max()))
+    """Forward max-high over horizon days; 1 if (max_high / close - 1) >= threshold.
+
+    PATCHED 2026-05-04: previous long-horizon branch (horizon > 60) used
+        s.shift(-1).rolling(horizon).max()
+    which is BACKWARD-looking and made the target a near-tautology — the
+    same forward-max bug we already fixed once in
+    backtest_multibagger_strategy.py during the 2026-04-29 audit. This
+    contaminated every horizon > 60 (so 90d / 180d / 252d / 378d targets
+    were all training on garbage) and is the root cause of the saturated
+    1.000 calibrated scores in find_multibagger_today.py.
+
+    The CORRECT forward-max uses the reversed-rolling trick which is
+    O(N) memory regardless of horizon (no 378-column concat needed).
+    """
+    def _fwd_max(s: pd.Series) -> pd.Series:
+        # max of next `horizon` values (high[t+1..t+horizon]); NaN where incomplete
+        rev = s.iloc[::-1]
+        rolled = rev.rolling(horizon, min_periods=horizon).max()
+        return rolled.iloc[::-1].shift(-1)
+
+    fwd_max = (df.groupby("symbol", sort=False, group_keys=False)["high"]
+                  .transform(_fwd_max))
     fwd_pct = fwd_max / df["close"] - 1
     target = (fwd_pct >= threshold).astype(int)
-    complete = df.groupby("symbol", sort=False)["high"].shift(-horizon).notna()
+    complete = fwd_max.notna()
     target[~complete] = -1
     return target
 

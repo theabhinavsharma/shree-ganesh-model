@@ -1,0 +1,64 @@
+{
+  "as_of_date": "2026-05-21",
+  "data_through": "2026-05-21",
+  "version": "v7_partial_recovery_sub_conviction",
+  "verdict_strict": "STAY IN CASH \u2014 constitution-compliant",
+  "verdict_tactical": "Optional 2.5pct deploy on CONSOFINVT + KAPSTON at sub-conviction size",
+  "day_over_day_change": {
+    "vs_2026_05_08": "weaker \u2014 no name at KENNAMET 0.72/0.82 level",
+    "vs_2026_05_19": "BETTER \u2014 score_5pct calibrator recovered (2 -> 121 non-zero), max s15 doubled 0.32 -> 0.64"
+  },
+  "actionable_picks": [
+    {
+      "symbol": "CONSOFINVT",
+      "close": 227.85,
+      "score_5pct": 0.872,
+      "score_15pct": 0.642,
+      "buy_range_low": 225.57,
+      "buy_range_high": 230.13,
+      "target_5pct": 239.24,
+      "stop_loss_3pct": 220.91,
+      "rsi_14": 62.2,
+      "return_20d": 0.313,
+      "adv_20d_cr": 1.86,
+      "weight_pct_recommended": 1.5,
+      "tier": 2,
+      "notes": "Highest s5 in universe (0.87). Closest profile to KENNAMET. Clean per-name. Micro-liquid 1.86cr/day - scale in slowly."
+    },
+    {
+      "symbol": "KAPSTON",
+      "close": 327.6,
+      "score_5pct": 0.545,
+      "score_15pct": 0.6,
+      "buy_range_low": 324.32,
+      "buy_range_high": 330.88,
+      "target_5pct": 343.98,
+      "stop_loss_3pct": 317.77,
+      "rsi_14": 69.9,
+      "return_20d": 0.493,
+      "adv_20d_cr": 2.06,
+      "weight_pct_recommended": 1.0,
+      "tier": 2,
+      "notes": "RSI 70 creeping into chase zone. Borderline 0.55/0.60 floor."
+    }
+  ],
+  "contaminated_failed": [
+    "ZEEMEDIA",
+    "VIPULLTD",
+    "PRECOT",
+    "BESTAGRO",
+    "DJML"
+  ],
+  "agent_audit_results": {
+    "debugger_sanity": "PARTIAL PASS - score_5pct recovered; monotonicity still 84pct violations; 0 names cross-validated at original 0.70 floor",
+    "per_name_dd": "2 of 15 ACTIONABLE - CONSOFINVT + KAPSTON",
+    "infrastructure_inventory": "NOT SAFE - 2 CRITICAL devils-advocate issues still open + macro RISK_OFF cascade"
+  },
+  "constitution_invoked": [
+    "\u00a71.5 \u2014 macro RISK_OFF -> cash is the default",
+    "\u00a71.4 \u2014 Bonferroni alpha/15 = 0.0033 not cleared by any name",
+    "\u00a71.2 \u2014 leading with the contradiction: 8 May was 0.72/0.82, today max is 0.87/0.64 (asymmetric)"
+  ],
+  "recommendation": "Default Option A (cash). Option B sub-conviction only with explicit risk tolerance.",
+  "ts_committed_utc": "2026-05-21T18:09:56.059487Z"
+}

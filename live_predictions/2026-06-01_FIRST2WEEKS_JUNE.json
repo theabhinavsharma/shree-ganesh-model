@@ -1,0 +1,50 @@
+{
+  "as_of_date": "2026-06-01",
+  "data_through": "2026-06-01",
+  "version": "v13_FINAL_first2weeks_of_june_5engines",
+  "deploy_window": "2026-06-01 to 2026-06-12 (10 trading days)",
+  "weekly_run": true,
+  "regime_gate": "DEPLOY (all 1419 names) - flipped from WAIT last week",
+  "engines_run": [
+    "find_180d_frontier_honest",
+    "find_high_conviction (7d/15d/30d)",
+    "find_multibagger_today",
+    "run_multi_horizon (1d/7d/21d)",
+    "compare_short_horizons"
+  ],
+  "cross_engine_winners": {
+    "4_of_4_engines": ["SILVERTUC"],
+    "3_of_4_engines_clean": ["NIITMTS","IZMO","VENUSREM","SPARC","YASHO","SAKAR","ROSSTECH","COFFEEDAY","BLISSGVS","GOCLCORP"],
+    "2_of_4_engines_clean": ["KERNEX","DSSL"]
+  },
+  "contamination_dropped": ["INDSWFTLAB","MCL","PARACABLES","PASUPTAC","SPORTKING"],
+  "weekly_params": {"target_pct": 10, "stop_loss_pct": -5, "hold_max_days": 10},
+  "basket": [
+    {"symbol":"SILVERTUC","close":176.72,"buy_low":174.95,"buy_high":178.49,"target_10pct":194.39,"sl_5pct":167.88,"weight":3.0,"engines":4,"P_15d":0.601,"rsi":72,"adv":6.5,"rationale":"4-engine UNANIMOUS consensus - highest cross-validation possible"},
+    {"symbol":"VENUSREM","close":1344.10,"buy_low":1330.66,"buy_high":1357.54,"target_10pct":1478.51,"sl_5pct":1276.90,"weight":2.5,"engines":3,"P_15d":0.662,"rsi":59,"adv":6.3,"rationale":"HIGHEST h1_cal in universe (0.80). 3-engine + triangulated"},
+    {"symbol":"IZMO","close":788.40,"buy_low":780.52,"buy_high":796.28,"target_10pct":867.24,"sl_5pct":748.98,"weight":2.5,"engines":3,"P_15d":0.670,"rsi":56,"adv":20.1,"rationale":"Best P(5%/15d)=0.67. Pullback setup, neutral RSI, liquid"},
+    {"symbol":"NIITMTS","close":220.18,"buy_low":217.98,"buy_high":222.38,"target_10pct":242.20,"sl_5pct":209.17,"weight":2.0,"engines":3,"P_15d":0.608,"rsi":31,"adv":15.5,"rationale":"DEEP OVERSOLD (RSI 31, -32% 20d) - highest reversion potential"},
+    {"symbol":"COFFEEDAY","close":38.25,"buy_low":37.87,"buy_high":38.63,"target_10pct":42.08,"sl_5pct":36.34,"weight":2.0,"engines":3,"P_15d":0.676,"rsi":56,"adv":19.7,"rationale":"P(5%/15d)=0.676 #1 in compare engine. Cheap entry, liquid"},
+    {"symbol":"SPARC","close":196.37,"buy_low":194.41,"buy_high":198.33,"target_10pct":216.01,"sl_5pct":186.55,"weight":1.5,"engines":3,"P_15d":0.598,"rsi":57,"adv":276.6,"rationale":"ADV 277cr HIGHEST in universe. Easy enter/exit"},
+    {"symbol":"ROSSTECH","close":998.20,"buy_low":988.22,"buy_high":1008.18,"target_10pct":1098.02,"sl_5pct":948.29,"weight":1.5,"engines":3,"P_15d":0.601,"rsi":56,"adv":21.7,"rationale":"Clean setup RSI 56, liquid, 3-engine triangulated"},
+    {"symbol":"SAKAR","close":835.70,"buy_low":827.34,"buy_high":844.06,"target_10pct":919.27,"sl_5pct":793.92,"weight":1.0,"engines":3,"P_15d":0.601,"rsi":71,"adv":24.7,"rationale":"3-engine, decent liquidity, +28pct 20d momentum"},
+    {"symbol":"BLISSGVS","close":402.45,"buy_low":398.43,"buy_high":406.47,"target_10pct":442.70,"sl_5pct":382.33,"weight":1.0,"engines":3,"P_15d":0.598,"rsi":77.5,"adv":145.8,"rationale":"Carryover (+5.62pct last week), ADV 146cr liquid, RSI 77 caution"}
+  ],
+  "total_basket_pct": 17.0,
+  "rest_in_liquidplus_pct": 83.0,
+  "execution_priority_order": ["SILVERTUC","VENUSREM","IZMO","NIITMTS","COFFEEDAY","SPARC","ROSSTECH","SAKAR","BLISSGVS"],
+  "exit_rules": [
+    "+10pct target hit: book HALF + trail SL on remainder to +5pct",
+    "-5pct SL hit: sell 100pct no exceptions",
+    "Day 10 timeout: sell at market",
+    "Weekly re-evaluation on 2026-06-08 (next run scheduled)"
+  ],
+  "max_loss_basket_pct": 0.85,
+  "expected_return_basket_pct_15d": "1.5 to 2.5 if 5-7 hit target (based on 75-90pct historical hit rate at this band)",
+  "constitution_caveats": [
+    "Regime DEPLOY broad - first time fully green since 8 May",
+    "Wider params (+10pct target -5pct SL) appropriate for 10-day hold vs daily 5/3pct",
+    "Max P_5pct_15d = 0.676 (COFFEEDAY) - sub-conviction vs 0.80+ ultra band",
+    "Calibrated at 0.60+ band -> historical hit rate ~80-87pct (per achievable_frontier audit)"
+  ]
+}

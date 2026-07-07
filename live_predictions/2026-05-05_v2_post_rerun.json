@@ -1,0 +1,121 @@
+{
+  "as_of_date": "2026-05-05",
+  "version": "v2_post_rerun",
+  "horizon_days": 180,
+  "resolution_date": "2026-10-31",
+  "supersedes_for_decision_purposes": "live_predictions/2026-05-05.json (commit 5474cd6) \u2014 stale data; this v2 is the post-rerun snapshot",
+  "constitution_note": "v1 commit 5474cd6 is NOT being deleted or rewritten \u2014 it remains the timestamped record at the moment of call. v2 documents what fresh data shows and is what we trade on going forward today.",
+  "lead_with_contradiction": {
+    "what_changed": "5 days of stale price data; rerun on fresh data dropped the top score from 0.897 (KENNAMET) to 0.179 (KOVAI). Score compression averages -52% across the locked top-5.",
+    "kennamet_high_score_was_fragile": "KENNAMET dropped 84% (0.897 -> 0.141) on 4-5 days of feature drift \u2014 calibrator's high-confidence band is unstable; treat as confirmation that the 0.897 was bin-edge noise, not signal.",
+    "survivors": [
+      "KOVAI",
+      "NOVARTIND",
+      "AUSOMENT"
+    ],
+    "dropped_from_top5": [
+      "KENNAMET",
+      "KIRLFER"
+    ],
+    "new_entrants_in_top5": [
+      "MANAKALUCO",
+      "GRAUWEIL"
+    ]
+  },
+  "model_calibration_diagnostic": {
+    "frontier_5pct_180d_hit_rate": 0.932,
+    "frontier_10pct_180d_hit_rate": 0.89,
+    "frontier_15pct_180d_hit_rate": 0.85,
+    "frontier_20pct_180d_hit_rate": 0.792,
+    "frontier_30pct_180d_hit_rate": 0.566,
+    "frontier_50pct_plus_status": "INSUFFICIENT_SAMPLE",
+    "implication": "2x-at-80%-confidence remains structurally unreachable under this model. Fresh top-5 scores are 0.16-0.18 \u2014 these are RELATIVE rankings, not '18% calibrated probability of doubling'."
+  },
+  "tier1_revised_basket": [
+    {
+      "rank": 1,
+      "symbol": "KOVAI",
+      "close_at_call": 5657.6,
+      "fresh_score_2x_180d": 0.1793,
+      "score_15x_180d": 0.202,
+      "score_13x_180d": 0.3108,
+      "rsi_14": 82.9,
+      "return_20d": 1.1107,
+      "adv_20d_cr": 1.65,
+      "carryover_from_v1": true
+    },
+    {
+      "rank": 2,
+      "symbol": "NOVARTIND",
+      "close_at_call": 1030.5,
+      "fresh_score_2x_180d": 0.1793,
+      "score_15x_180d": 0.293,
+      "score_13x_180d": 0.3579,
+      "rsi_14": 77.6,
+      "return_20d": 0.4385,
+      "adv_20d_cr": 1.05,
+      "carryover_from_v1": true
+    },
+    {
+      "rank": 3,
+      "symbol": "AUSOMENT",
+      "close_at_call": 147.79,
+      "fresh_score_2x_180d": 0.1691,
+      "score_15x_180d": 0.3501,
+      "score_13x_180d": 0.3603,
+      "rsi_14": 59.7,
+      "return_20d": 0.3445,
+      "adv_20d_cr": 3.24,
+      "carryover_from_v1": true
+    }
+  ],
+  "tier2_new_entrants": [
+    {
+      "rank": 1,
+      "symbol": "MANAKALUCO",
+      "close_at_call": 37.32,
+      "fresh_score_2x_180d": 0.1691,
+      "rsi_14": 48.0,
+      "return_20d": 0.2399,
+      "adv_20d_cr": 8.62,
+      "play_type": "fresh_setup"
+    },
+    {
+      "rank": 2,
+      "symbol": "GRAUWEIL",
+      "close_at_call": 69.55,
+      "fresh_score_2x_180d": 0.1628,
+      "rsi_14": 17.1,
+      "return_20d": -0.4313,
+      "adv_20d_cr": 2.33,
+      "play_type": "extreme_oversold_reversion"
+    }
+  ],
+  "demoted_from_v1": [
+    {
+      "symbol": "KENNAMET",
+      "v1_score": 0.897,
+      "v2_score": 0.141,
+      "delta_pct": -84.3,
+      "verdict": "demoted_to_optional_tier3"
+    },
+    {
+      "symbol": "KIRLFER",
+      "v1_score": 0.217,
+      "v2_score": 0.075,
+      "delta_pct": -65.4,
+      "verdict": "demoted_to_drop"
+    }
+  ],
+  "sizing_rule": {
+    "tier1_per_name_pct": 2.5,
+    "tier2_per_name_pct": 1.0,
+    "max_basket_total_pct": 9.5,
+    "hard_sl_per_name_pct": -15,
+    "trail_sl_target_pct": 30,
+    "rest_in_liquidplus_yield_pct": 7,
+    "demoted_kennamet_kirlfer": "if already opened from v1, hold at smaller weight (0.5pct each) but do not add"
+  },
+  "operational_lesson": "Per CONSTITUTION.md \u00a71.7: predictions made on stale data must be re-checked against fresh data before action. The v1 was a directional pointer, the v2 is the actionable basket. The infinite hypothesis loop will continue and may produce v3 if a fetcher delivers a KEEP verdict.",
+  "ts_committed_utc": "2026-05-05T08:20:05.384509Z"
+}

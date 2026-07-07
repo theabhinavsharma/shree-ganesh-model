@@ -1,0 +1,172 @@
+{
+  "as_of_date": "2026-05-04",
+  "horizon_days": 180,
+  "snapshot_source": "data/derived/180d_today_predictions.parquet",
+  "model": "find_180d_frontier_honest.py \u2014 BASE_FEATS only (clean per leakage_audit_20260501.md)",
+  "calibration": "isotonic, fit on 2024 OOF, applied forward",
+  "calibration_validation": {
+    "status": "PARTIAL",
+    "verified_thresholds_at_80_conf": [
+      "5%",
+      "10%",
+      "15%"
+    ],
+    "unverified_thresholds": [
+      "20%",
+      "30%",
+      "50%",
+      "75%",
+      "100%"
+    ],
+    "note": "Score for 100% target is RELATIVE ranking, not validated absolute probability. Sample at high-score band in 2025 OOS = 0."
+  },
+  "corporate_action_adjustment_audit_20260504": {
+    "status": "PARTIAL_CONTAMINATION",
+    "top5_perpame_clean": true,
+    "top5_clean_evidence": "KENNAMET, KOVAI, NOVARTIND, AUSOMENT, KIRLFER each audited: 0 splits/bonuses on record, 0 suspect single-day drops > -20%",
+    "dataset_wide_issue": "Some symbols (e.g. BESTAGRO 2026-01-16 bonus 1:2, multiple gold ETFs) show unadjusted phantom drops in stock_daily_facts_adjusted_2015plus.parquet despite the _adjusted filename suffix. Affects the 8.47% base rate calibrator with unknown upward bias.",
+    "ledger_entry": "logs/calibration_corrections.jsonl entry dated 2026-05-04",
+    "implication_for_this_call": "Per-name forward measurement is clean (top-5 unaffected). Absolute probability scores (e.g. KENNAMET 0.897) carry an unknown upward bias from a contaminated calibrator; treat as STRONG RELATIVE RANKING.",
+    "remediation_planned": "Build src/agentic/apply_adjustments.py to regenerate adjusted prices from raw + corporate_actions.parquet, with a cross-validation against observed ex-date price jumps."
+  },
+  "base_rate_2x_180d_2025_OOS": 0.0847,
+  "universe_size_liquid": 1409,
+  "predictions_top10_2x": [
+    {
+      "rank": 1,
+      "symbol": "KENNAMET",
+      "close_at_call": 2698.9,
+      "p_2x_180d_calibrated": 0.8974,
+      "p_1_5x_180d": 0.5929,
+      "p_1_3x_180d": 0.7113,
+      "p_1_2x_180d": 0.7474,
+      "rsi_14": 57.8,
+      "return_20d": 0.0197,
+      "adv_20d_cr": 2.46
+    },
+    {
+      "rank": 2,
+      "symbol": "KOVAI",
+      "close_at_call": 5693.8,
+      "p_2x_180d_calibrated": 0.4097,
+      "p_1_5x_180d": 0.489,
+      "p_1_3x_180d": 0.4831,
+      "p_1_2x_180d": 0.4465,
+      "rsi_14": 84.1,
+      "return_20d": 1.2253,
+      "adv_20d_cr": 1.8
+    },
+    {
+      "rank": 3,
+      "symbol": "NOVARTIND",
+      "close_at_call": 1033.05,
+      "p_2x_180d_calibrated": 0.2562,
+      "p_1_5x_180d": 0.5178,
+      "p_1_3x_180d": 0.5245,
+      "p_1_2x_180d": 0.5758,
+      "rsi_14": 78.2,
+      "return_20d": 0.4608,
+      "adv_20d_cr": 1.06
+    },
+    {
+      "rank": 4,
+      "symbol": "AUSOMENT",
+      "close_at_call": 142.93,
+      "p_2x_180d_calibrated": 0.2282,
+      "p_1_5x_180d": 0.4646,
+      "p_1_3x_180d": 0.3587,
+      "p_1_2x_180d": 0.6027,
+      "rsi_14": 57.4,
+      "return_20d": 0.2942,
+      "adv_20d_cr": 3.2
+    },
+    {
+      "rank": 5,
+      "symbol": "KIRLFER",
+      "close_at_call": 435.6,
+      "p_2x_180d_calibrated": 0.2167,
+      "p_1_5x_180d": 0.5181,
+      "p_1_3x_180d": 0.6627,
+      "p_1_2x_180d": 0.7074,
+      "rsi_14": 38.5,
+      "return_20d": -0.0678,
+      "adv_20d_cr": 4.1
+    },
+    {
+      "rank": 6,
+      "symbol": "GRAUWEIL",
+      "close_at_call": 70.97,
+      "p_2x_180d_calibrated": 0.2056,
+      "p_1_5x_180d": 0.3819,
+      "p_1_3x_180d": 0.4941,
+      "p_1_2x_180d": 0.3482,
+      "rsi_14": 17.7,
+      "return_20d": -0.4178,
+      "adv_20d_cr": 2.52
+    },
+    {
+      "rank": 7,
+      "symbol": "GOODYEAR",
+      "close_at_call": 789.4,
+      "p_2x_180d_calibrated": 0.1851,
+      "p_1_5x_180d": 0.3821,
+      "p_1_3x_180d": 0.5438,
+      "p_1_2x_180d": 0.3372,
+      "rsi_14": 12.8,
+      "return_20d": -0.3906,
+      "adv_20d_cr": 2.21
+    },
+    {
+      "rank": 8,
+      "symbol": "MANAKALUCO",
+      "close_at_call": 39.15,
+      "p_2x_180d_calibrated": 0.1152,
+      "p_1_5x_180d": 0.4287,
+      "p_1_3x_180d": 0.3123,
+      "p_1_2x_180d": 0.5825,
+      "rsi_14": 49.6,
+      "return_20d": 0.2981,
+      "adv_20d_cr": 8.54
+    },
+    {
+      "rank": 9,
+      "symbol": "BESTAGRO",
+      "close_at_call": 18.21,
+      "p_2x_180d_calibrated": 0.0793,
+      "p_1_5x_180d": 0.3819,
+      "p_1_3x_180d": 0.3123,
+      "p_1_2x_180d": 0.4553,
+      "rsi_14": 13.3,
+      "return_20d": -0.9296,
+      "adv_20d_cr": 27.38
+    },
+    {
+      "rank": 10,
+      "symbol": "SOMATEX",
+      "close_at_call": 109.2,
+      "p_2x_180d_calibrated": 0.068,
+      "p_1_5x_180d": 0.1645,
+      "p_1_3x_180d": 0.2196,
+      "p_1_2x_180d": 0.2824,
+      "rsi_14": 77.4,
+      "return_20d": 1.4989,
+      "adv_20d_cr": 1.75
+    }
+  ],
+  "basket_math_top5": {
+    "mean_p_2x_per_name": 0.402,
+    "p_at_least_one_2x_independence_assumption": 0.973,
+    "real_p_at_least_one_2x_estimate_after_correlation": "~0.70-0.80 (correlation correction not formally measured)",
+    "expected_n_2x": 2.01
+  },
+  "constitution_caveats": [
+    "Calibration at 100% threshold band UNVERIFIED in 2025 OOS \u2014 treat as relative ranking, not absolute probability.",
+    "Independence assumption in basket P(>=1) is overstated; correlated picks reduce the real probability.",
+    "Per CONSTITUTION.md \u00a71.5: -30% drawdown floor binds. Basket exposure max 5-10% of portfolio.",
+    "Per CONSTITUTION.md \u00a71.4: Bonferroni \u2014 8 thresholds tested, alpha = 0.05/8 = 0.00625.",
+    "Per logs/calibration_corrections.jsonl 2026-04-29: prior 90% claims for 2x candidates were in-sample leak. Real per-name was 12.4%. The fixed top-5 mean of 40.2% is honest-protocol output but uncalibrated at high band."
+  ],
+  "resolution_date": "2026-10-28",
+  "sizing_rule": "1-2% per name, equal-weight, 5-10% basket total exposure, hard SL -15%",
+  "ts_committed_utc": "2026-05-04T08:54:02.594924Z"
+}

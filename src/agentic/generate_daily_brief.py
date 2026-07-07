@@ -98,6 +98,39 @@ def main() -> None:
     lines = []
     lines.append(f"# Daily Brief — {as_of}")
     lines.append(f"_generated {datetime.now().isoformat(timespec='seconds')}_\n")
+
+    # === DATA FRESHNESS BLOCK (at top so it's impossible to miss) ===
+    try:
+        from verify_freshness import snapshot as freshness_snapshot
+        fresh_rows = freshness_snapshot()
+    except Exception as e:
+        fresh_rows = []
+        print(f"WARN: freshness snapshot failed: {e}")
+
+    if fresh_rows:
+        any_stale = any(r["is_stale"] for r in fresh_rows)
+        header = "❌ DATA FRESHNESS — STALE INPUTS DETECTED" if any_stale else "✅ DATA FRESHNESS — ALL FRESH"
+        lines.append(f"## {header}\n")
+        lines.append("| Input | File status | Column-level (worst) | Detail |")
+        lines.append("|---|---|---|---|")
+        for r in fresh_rows:
+            file_stat = "❌" if r["file_is_stale"] else "✅"
+            file_str = f"{file_stat} {r['file_stale_bd']}/{r['max_stale_bd']}bd" if r["file_stale_bd"] < 9999 else f"{file_stat} MISSING"
+            if r["col_results"]:
+                worst = max(r["col_results"], key=lambda c: (c["is_stale"], c["stale_bd"]))
+                col_stat = "❌" if worst["is_stale"] else "✅"
+                col_str = f"{col_stat} `{worst['col']}` {worst['stale_bd']}/{worst['limit']}bd"
+            else:
+                col_str = "—"
+            detail = r.get("msg", "")
+            lines.append(f"| **{r['tag']}** | {file_str} | {col_str} | {detail} |")
+        if any_stale:
+            lines.append("\n> ⚠️ **Pipeline blocked** — stale inputs must be refreshed. See freshness_status.md for full column-level breakdown.")
+        else:
+            lines.append(f"\n> All {len(fresh_rows)} inputs pass file-level AND column-level freshness contracts.")
+        lines.append("")
+    # === END FRESHNESS BLOCK ===
+
     lines.append("## Top 20 model picks (v3 ensemble + alt-signal overlay)\n")
     lines.append("| # | Symbol | Sector | Close | Score | Pwin* | Entry lo-hi | Tgt 50/75 | SL | News/RD/YT | Insider₹cr | Catalyst |")
     lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
