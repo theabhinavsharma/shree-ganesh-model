@@ -1362,6 +1362,14 @@ def is_actionable(symbol):
     <h2 class="section-title">The 15D/+5% playbook — earned from a 4,224-trade backtest</h2>
     <p class="section-sub">This is the exact strategy running today. Every parameter below was earned from a 10-year walk-forward backtest (529 weekly baskets, Jan 2016 → Jun 2026), not chosen by intuition. Copy it whole — every number matters.</p>
 
+    <div class="caveat" style="border-color: var(--accent-1);">
+      <div class="caveat-title">📌 THE OUTPUT CONTRACT — read this before you build anything</div>
+      <p>This repo contains TWO generations of system and several diagnostic layers. If you rebuild from this page, the ONE production output you must reproduce is:</p>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; margin: 10px 0;"><strong>live_predictions/YYYY-MM-DD_15d5pct.json</strong> — 8 names × 12.5%, emitted weekly by <code>generate_hybrid_basket.py</code> via <code>run_weekly_pipeline.sh</code>, behind the freshness gate.</p>
+      <p>Everything else — <code>find_achievable_frontier.py</code> (frontier grid), frontier/high-conviction scorers with a ≥0.90 calibrated bar, the multibagger and 180d engines — are <strong>upstream engines and diagnostics</strong>, NOT the tradeable output. A known failure mode: copiers rebuild the older "frontier picks" layer (touch-probability, score ≥0.90, -7% stop) and get completely different picks. That layer answers a different question: <em>"will the intraday high TOUCH +X%?"</em> (58% base rate at 15d/5%, hence 98%+ band hit rates). The production playbook answers <em>"will the trade exit profitably under +5% target / -3% SL-first / 15-day timeout?"</em> (23-27% clean hits). Touch-probability selects high-volatility momentum names — <strong>exactly the names our QC filter excludes</strong>, because the same volatility that touches +5% touches -3% first (44.9% whipsaw rate). If your rebuild's daily output is a <code>frontier_picks_*.md</code> with 0.90-bar picks and a -7% stop, you built the deprecated diagnostic layer.</p>
+      <p><strong>Convergence check</strong>: run <code>verify_freshness.py</code> (must exit 0), then <code>run_weekly_pipeline.sh --skip-fetch --dry-run</code> on the same <code>data_through</code> date and compare your basket JSON's symbols, weights, band_fit and levels (close ×0.99/1.01/1.05/0.97) against a committed one in <code>live_predictions/</code>. Same data + same filter → same 8 names. LightGBM <code>random_state=42</code> everywhere; universe cut ADV ≥ ₹5cr AND close &gt; ₹50 (the older frontier layer used ADV ≥ ₹1cr — another silent divergence source).</p>
+    </div>
+
     <h3 style="color: var(--fg); margin: 32px 0 12px;">The trade spec</h3>
     <pre><code><span class="comment"># One basket per week. 8 names, equal weight, 100% deployed.</span>
 TARGET      = +5%           <span class="comment"># book HALF here, trail rest with SL at +2.5%</span>
@@ -2003,6 +2011,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 trading system called the Shree Ganesh Model. Read the file FIRST, then build
 the system end-to-end in /Users/&lt;me&gt;/Documents/shree-ganesh-model/.
 
+⚠️ OUTPUT CONTRACT (read §Playbook "THE OUTPUT CONTRACT" box first): the ONE
+production deliverable is live_predictions/YYYY-MM-DD_15d5pct.json — 8 names
+× 12.5%, emitted by generate_hybrid_basket.py via run_weekly_pipeline.sh,
+behind the freshness gate. The frontier/achievable-frontier layer (touch-
+probability labels, ≥0.90 calibrated bar, -7% stop, ADV ≥ ₹1cr universe) is
+a DEPRECATED DIAGNOSTIC — do NOT make it the final output. Its "hit rates"
+measure whether the intraday high TOUCHES +X% (58% base rate at 15d/5%), not
+exit-rule P&L. If your daily output is frontier_picks_*.md, you built the
+wrong layer.
+
 Required output, in order:
 
 1. CONSTITUTION.md — copy the 7 binding rules from the §Constitution section.
@@ -2136,10 +2154,20 @@ Critical operating rules (from §Constitution + hard-won corrections):
 - ALWAYS keep live_predictions/ files immutable (no rewriting committed artifacts)
 - ALWAYS treat "Spurt in Volume" notices as volume flags, never business catalysts
 
-When done, run: python3 src/agentic/verify_freshness.py (must exit 0), then
-python3 src/agentic/find_180d_frontier_honest.py and confirm output matches
-the architecture in the HTML. Then commit everything and push to a new
-private GitHub repo.
+When done, run the CONVERGENCE CHECK — all three must pass before you call
+the rebuild complete:
+1. python3 src/agentic/verify_freshness.py            → must exit 0
+2. bash src/agentic/run_weekly_pipeline.sh --skip-fetch --dry-run
+   → must emit live_predictions/YYYY-MM-DD_15d5pct.json with exactly 8 picks,
+     12.5% weights, levels = close ×0.99/1.01 (buy), ×1.05 (target),
+     ×0.97 (SL), and per-pick band_fit/ml_score/engines_count fields
+3. Re-run on the SAME data_through date as a committed basket in
+   live_predictions/ and diff the symbol list — same data + same filter
+   MUST give the same 8 names (LightGBM random_state=42 everywhere;
+   universe = ADV ≥ ₹5cr AND close &gt; ₹50). If your names differ, you
+   diverged on: the label (touch vs exit-rule), the universe cut, the QC
+   bands, or the band_fit ranking — in that order of likelihood.
+Then commit everything and push to a new private GitHub repo.
 
 Reference URL: https://github.com/theabhinavsharma/shree-ganesh-model
 (my existing working version — feel free to fetch any file you need)
