@@ -202,9 +202,48 @@ def check_one(c: Contract) -> dict:
     return snap
 
 
+def check_continuity() -> dict:
+    """CONTINUITY check (added 2026-07-24): a fresh max date can hide interior holes.
+    refresh_prices' fixed 5-day lookback left a 9-session gap (Jul-7..17) that every
+    max-date check passed. Rule: >=3 consecutive missing business days within the
+    trailing 32 business days = FAIL (single/double missing bdays = exchange holidays).
+    """
+    snap = {"tag": "PRICES_CONTINUITY", "path": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+            "kind": "continuity", "max_stale_bd": 0, "file_max_date": None,
+            "file_stale_bd": 0, "file_is_stale": False, "col_results": [], "is_stale": False, "msg": ""}
+    fp = ROOT / snap["path"]
+    if not fp.exists():
+        snap.update(is_stale=True, file_is_stale=True, msg="MISSING FILE")
+        return snap
+    try:
+        df = pd.read_parquet(fp, columns=["trade_date"])
+        dates = pd.to_datetime(df["trade_date"])
+        have = set(dates.dt.date.unique())
+        bdays = pd.bdate_range(end=dates.max(), periods=32)
+        missing = [d.date() for d in bdays if d.date() not in have]
+        runs, run = [], []
+        for d in missing:
+            if run and (d - run[-1]).days <= 3:
+                run.append(d)
+            else:
+                if run: runs.append(run)
+                run = [d]
+        if run: runs.append(run)
+        gaps = [r for r in runs if len(r) >= 3]
+        snap["file_max_date"] = dates.max().date()
+        if gaps:
+            snap.update(is_stale=True, file_is_stale=True,
+                        msg=f"GAP: {len(gaps)} run(s) of >=3 consecutive missing bdays, e.g. {gaps[0][0]}..{gaps[0][-1]}")
+        else:
+            snap["msg"] = f"continuous ({len(missing)} single-day holidays ok)"
+    except Exception as e:
+        snap.update(is_stale=True, file_is_stale=True, msg=f"READ ERROR: {e}")
+    return snap
+
+
 def snapshot() -> list[dict]:
     """Return the full snapshot as a list of dicts — for the dashboard."""
-    return [check_one(c) for c in CONTRACTS]
+    return [check_one(c) for c in CONTRACTS] + [check_continuity()]
 
 
 def _fmt_row_file(s: dict) -> str:

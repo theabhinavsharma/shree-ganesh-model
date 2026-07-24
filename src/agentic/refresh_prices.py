@@ -23,9 +23,30 @@ CA_PATH = Path("data/corporate_actions_full_history/normalized/stock_corporate_a
 LOOKBACK_DAYS = 5
 
 
+MAX_BACKFILL_DAYS = 90     # safety cap for adaptive backfill
+
+
 def main() -> None:
     today = date.today()
-    start = today - timedelta(days=LOOKBACK_DAYS)
+    # Optional explicit backfill start: python3 refresh_prices.py --start 2026-07-07
+    forced_start = None
+    if "--start" in sys.argv:
+        forced_start = date.fromisoformat(sys.argv[sys.argv.index("--start") + 1])
+    # ADAPTIVE lookback (2026-07-24 fix): the fixed 5-day window silently left a
+    # 9-session hole (Jul-7..17) when runs were >5 days apart. Start from the
+    # day after the parquet's actual max date, capped at MAX_BACKFILL_DAYS.
+    start = forced_start or (today - timedelta(days=LOOKBACK_DAYS))
+    if forced_start is None and PARQUET.exists():
+        try:
+            _existing_max = pd.to_datetime(
+                pd.read_parquet(PARQUET, columns=["trade_date"])["trade_date"]
+            ).max().date()
+            gap_start = _existing_max + timedelta(days=1)
+            if gap_start < start:
+                start = max(gap_start, today - timedelta(days=MAX_BACKFILL_DAYS))
+                print(f"adaptive backfill: parquet max={_existing_max}, extending window")
+        except Exception as e:
+            print(f"adaptive lookback check failed ({e}) — using fixed {LOOKBACK_DAYS}d")
     print(f"fetching bhavcopy {start} → {today}")
     fetch_bhavcopy_range(BhavcopyFetchRequest(
         start_date=start, end_date=today, output_dir=RAW, delay_seconds=1.0,
