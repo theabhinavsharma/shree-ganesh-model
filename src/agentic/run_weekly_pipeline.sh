@@ -107,9 +107,13 @@ if [ -n "$FAILED" ]; then
   log "⚠️  Some engines failed:$FAILED — continuing with what completed"
 fi
 
-# ---------------- 3. Miss learner + ML classifier ----------------
+# ---------------- 3. RL LOOP ----------------
 
-step "3. RL LOOP — miss_learner + train classifier"
+step "3. RL LOOP — score own baskets + miss_learner + train classifier"
+
+# 3.4 Self-scoring: our own past baskets' hits/losses + touch-rate goal tracker (90% target)
+/usr/bin/python3 src/agentic/score_basket_outcomes.py 2>&1 | tee -a "$MASTER_LOG" \
+  || log "  ⚠ basket self-scoring failed — non-fatal"
 
 # Miss learner needs entry/exit dates for last week's window
 LAST_MONDAY=$(python3 -c "
