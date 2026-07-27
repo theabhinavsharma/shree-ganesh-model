@@ -52,7 +52,8 @@ def score_basket(basket: dict, px: pd.DataFrame) -> dict | None:
         n_touch += touched
         n_sl += status == "SL"
         picks_out.append({"symbol": p["symbol"], "entry": round(ep, 2), "status": status,
-                          "ret_pct": round(ret, 2), "exit_day": exit_day, "touched_5pct": bool(touched)})
+                          "ret_pct": round(ret, 2), "exit_day": exit_day, "touched_5pct": bool(touched),
+                          "rank": p.get("rank"), "confidence": p.get("confidence")})
     scored = [x for x in picks_out if "ret_pct" in x]
     if not scored: return None
     return {
@@ -102,6 +103,13 @@ def main() -> None:
     if finals:
         tr = sum(r["touch_rate"] for r in finals) / len(finals)
         print(f"  GOAL TRACKER: mean touch rate {tr*100:.0f}% across {len(finals)} completed baskets (target 90%)")
+        # RANK VALIDATION: does confidence rank actually predict outcomes?
+        ranked = [(x["rank"], x["touched_5pct"]) for r in finals for x in r["picks"]
+                  if x.get("rank") is not None and "touched_5pct" in x]
+        if len(ranked) >= 16:
+            top = [t for rk, t in ranked if rk <= 4]; bot = [t for rk, t in ranked if rk >= 5]
+            print(f"  RANK CHECK: ranks 1-4 touch {sum(top)/len(top)*100:.0f}% vs ranks 5-8 {sum(bot)/len(bot)*100:.0f}% "
+                  f"— {'ranking earns its place' if sum(top)/len(top) > sum(bot)/len(bot) else '⚠️ ranking NOT predictive, revisit weights'}")
 
 
 if __name__ == "__main__":
