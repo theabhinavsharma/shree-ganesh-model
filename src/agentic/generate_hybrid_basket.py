@@ -179,7 +179,7 @@ def build_basket(inputs: dict) -> dict:
         (clean["band_fit"] >= 1.5) &                          # at least 1.5/3 bands
         (~clean["symbol"].isin(tier1["symbol"]))
     ].sort_values(["band_fit","ml_score"], ascending=[False, False])
-    tier2 = tier2_pool.head(8)  # cap at 8 — fill toward 100% deploy
+    tier2 = tier2_pool.head(10)  # 8 for the basket + up to 2 reserves (gap-away substitution)
 
     print(f"\nRegime: {regime}")
     print(f"Tier 1 (2+ engines + clean): {len(tier1)} names")
@@ -219,6 +219,17 @@ def build_basket(inputs: dict) -> dict:
         for _, r in tier2.head(remaining).iterrows():
             picks.append(_pick(r, WT_EACH, 2))
 
+    # RESERVES (2026-07-27): when a pick gaps beyond its buy zone at open,
+    # its 12.5% deploys into the highest-ranked reserve that IS inside its zone.
+    # Never chase a gapped name — its +5% is already spent.
+    chosen = {p["symbol"] for p in picks}
+    reserves = []
+    for _, r in tier2.iterrows():
+        if r["symbol"] not in chosen and len(reserves) < 2:
+            rp = _pick(r, 0.0, 2)
+            rp["role"] = "RESERVE"
+            reserves.append(rp)
+
     # ── CONFIDENCE RANKING (standing rule, 2026-07-24) ─────────────────────
     # Every emitted pick is ranked by confidence in the GOAL (+5% touch ≤15d)
     # and carries a plain-language rationale. Basket refuses to emit otherwise.
@@ -254,8 +265,16 @@ def build_basket(inputs: dict) -> dict:
     for i, p in enumerate(picks, 1):
         p["rank"] = i
 
+    # Reserves carry the same contract (ranked R1, R2 by confidence)
+    for p in reserves:
+        p["confidence"] = _confidence(p)
+        p["confidence_rationale"] = _confidence_rationale(p)
+    reserves.sort(key=lambda p: p["confidence"], reverse=True)
+    for i, p in enumerate(reserves, 1):
+        p["rank"] = f"R{i}"
+
     # HARD contract: no basket ships without rank + confidence + rationale per pick
-    for p in picks:
+    for p in picks + reserves:
         assert "rank" in p and "confidence" in p and p.get("confidence_rationale"), \
             f"CONTRACT VIOLATION: pick {p['symbol']} missing confidence ranking/rationale"
     # ────────────────────────────────────────────────────────────────────────
@@ -278,8 +297,15 @@ def build_basket(inputs: dict) -> dict:
             "ml_top100_new": len(tier2),
         },
         "picks": picks,
+        "reserves": reserves,
         "total_exposure_pct": total_wt,
         "rest_in_liquidplus_pct": round(100 - total_wt, 1),
+        "entry_rules": [
+            "Place AMO limit orders over the weekend at buy_high — they enter Monday's 9:00-9:07 pre-open auction; you get the auction price if it opens inside your limit",
+            "If a pick opens ABOVE buy_high: DO NOT CHASE — its +5% is already spent in the gap",
+            "Gapped pick's 12.5% deploys into the highest-ranked RESERVE whose open is inside its own buy zone",
+            "If no reserve qualifies either, that 12.5% stays in cash for the week",
+        ],
         "exit_rules": [
             "+5% target: sell half + trail SL on remainder to +2.5%",
             "-3% SL: sell 100% no exceptions",
