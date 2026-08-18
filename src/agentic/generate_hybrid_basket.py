@@ -29,7 +29,9 @@ INPUTS = {
     "180d_frontier": "data/derived/180d_today_predictions.parquet",
     "multi_horizon": "tmp/from_scratch_7d_run/multi_horizon_top.csv",
     "ml_classifier": "data/derived/missed_winner_classifier.parquet",
-    "corp_actions": "data/corporate_actions_full_history/_incremental/normalized/stock_corporate_actions.parquet",
+    # 2026-08-18 fix: contamination must check the FULL 11-yr CA history, not the
+    # small incremental window (which made ~800 historical splits look "contaminated")
+    "corp_actions": "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet",
 }
 
 

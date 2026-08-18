@@ -99,6 +99,13 @@ CONTRACTS: list[Contract] = [
         path="data/events_full_history/normalized/stock_announcements.parquet",
         date_col="event_date", max_stale_bd=10, tag="ANNOUNCEMENTS",
     ),
+
+    # === CORPORATE ACTIONS (added 2026-08-18 after 113-day silent rot: 21 missing
+    # splits/bonuses corrupted price adjustment for TRENT/LICI/CUB/BRIGADE etc.) ===
+    Contract(
+        path="data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet",
+        date_col="ex_date", max_stale_bd=10, tag="CORP_ACTIONS",
+    ),
 ]
 
 
