@@ -30,7 +30,9 @@ def score_basket(basket: dict, px: pd.DataFrame) -> dict | None:
         if len(g) < 15:
             complete = False
         ep = float(g.iloc[0]["open"])
-        tgt, sl = ep * 1.05, ep * 0.97
+        # C2 contract (2026-08-18+): per-pick vol-scaled sl_pct; older baskets default -3%
+        sl_pct = float(p.get("sl_pct", -3.0)) / 100.0
+        tgt, sl = ep * 1.05, ep * (1 + sl_pct)
         status, ret, exit_day = "OPEN", None, None
         half, trail, touched = False, None, False
         for i in range(len(g)):
@@ -39,7 +41,7 @@ def score_basket(basket: dict, px: pd.DataFrame) -> dict | None:
             if hi >= tgt: touched = True
             if not half:
                 if lo <= sl:
-                    status, ret, exit_day = "SL", -3.0, str(d["trade_date"].date()); break
+                    status, ret, exit_day = "SL", round(sl_pct * 100, 2), str(d["trade_date"].date()); break
                 if hi >= tgt:
                     half, trail = True, ep * 1.025; continue
             else:

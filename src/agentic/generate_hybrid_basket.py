@@ -57,6 +57,9 @@ def build_snapshot(prices: pd.DataFrame) -> pd.DataFrame:
     prices["ret_5d"] = prices.groupby("symbol")["close"].pct_change(5)
     prices["adv_cr"] = prices.groupby("symbol")["total_traded_value"].transform(
         lambda s: s.rolling(20).mean()) / 1e7
+    # C2 exit contract (locked 2026-08-18): per-stock daily vol for vol-scaled stops
+    prices["dvol_20d"] = prices.groupby("symbol")["return_1d"].transform(
+        lambda s: s.rolling(20).std())
     latest = prices["trade_date"].max()
     snap = prices[prices["trade_date"] == latest].copy()
 
@@ -193,7 +196,11 @@ def build_basket(inputs: dict) -> dict:
             "buy_low": round(float(row["close"])*0.99, 2),
             "buy_high": round(float(row["close"])*1.01, 2),
             "target_5pct": round(float(row["close"])*1.05, 2),
-            "sl_3pct": round(float(row["close"])*0.97, 2),
+            # C2 contract: vol-scaled SL = 3x the stock's own 20d daily vol,
+            # floored at -3%, capped at -12% (10-yr tournament: +11.6% CAGR,
+            # -18.6% maxDD, best risk-adjusted of A/B/C1/C2)
+            "sl_pct": round(-min(max(3*float(row.get("dvol_20d") or 0.01), 0.03), 0.12)*100, 2),
+            "sl_3pct": round(float(row["close"]) * (1 - min(max(3*float(row.get("dvol_20d") or 0.01), 0.03), 0.12)), 2),
             "weight_pct": weight,
             "tier": tier,
             "engines_count": int(row["engines"]),
@@ -306,10 +313,11 @@ def build_basket(inputs: dict) -> dict:
             "Gapped pick's 12.5% deploys into the highest-ranked RESERVE whose open is inside its own buy zone",
             "If no reserve qualifies either, that 12.5% stays in cash for the week",
         ],
+        "exit_contract": "C2 (locked 2026-08-18 after 10-yr A/B/C tournament: +11.6% CAGR, -18.6% maxDD, best risk-adjusted)",
         "exit_rules": [
-            "+5% target: sell half + trail SL on remainder to +2.5%",
-            "-3% SL: sell 100% no exceptions",
-            "Day 15: exit at market regardless",
+            "+5% target touch: sell HALF, trail remainder at +2.5%",
+            "VOL-SCALED SL per pick (sl_pct field = 3x stock's own 20d daily vol, floor -3%, cap -12%): sell 100% at sl_3pct price, no exceptions",
+            "Day 15: exit whatever remains at market",
             "Weekly refresh: rerun pipeline next Monday",
         ],
     }
