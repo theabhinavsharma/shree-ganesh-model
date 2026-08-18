@@ -127,3 +127,51 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+# ── FRED FALLBACK (re-applied 2026-08-18; original Jul-7 rewrite was reverted) ──
+# Yahoo 429s constantly. After the Yahoo attempt, ALWAYS top-up us_10y/dxy/us_vix/spx
+# from FRED into global_rates.parquet (what build_macro_panel actually reads).
+def fred_fallback() -> None:
+    import io, time as _t
+    import urllib.request as _rq
+    import pandas as _pd
+    _SERIES = {"DGS10": "us_10y", "DGS2": "us_2y", "DGS3MO": "us_3m",
+               "DTWEXBGS": "dxy", "VIXCLS": "us_vix", "SP500": "spx"}
+    merged = None
+    for sid, col in _SERIES.items():
+        for attempt in range(3):
+            try:
+                req = _rq.Request(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}",
+                                  headers={"User-Agent": UA})
+                with _rq.urlopen(req, timeout=30) as r:
+                    df = _pd.read_csv(io.StringIO(r.read().decode("utf-8", errors="replace")))
+                dc = "observation_date" if "observation_date" in df.columns else "DATE"
+                df = df.rename(columns={dc: "trade_date"})
+                df["trade_date"] = _pd.to_datetime(df["trade_date"])
+                vc = [c for c in df.columns if c != "trade_date"][0]
+                df[vc] = _pd.to_numeric(df[vc], errors="coerce")
+                df = df.dropna(subset=[vc]).rename(columns={vc: col})
+                print(f"  FRED {col}: latest {df.iloc[-1][col]:.2f} on {df['trade_date'].max().date()}")
+                merged = df if merged is None else merged.merge(df, on="trade_date", how="outer")
+                break
+            except Exception as e:
+                print(f"  FRED {sid} attempt {attempt+1}: {e}")
+                _t.sleep(2)
+    if merged is None:
+        print("  ❌ FRED fallback failed entirely — gate will catch stale columns")
+        raise SystemExit(1)
+    gr_path = ROOT / "data/derived/global_rates.parquet"
+    import pandas as pd2
+    gr = pd2.read_parquet(gr_path)
+    gr["trade_date"] = pd2.to_datetime(gr["trade_date"])
+    for c in _SERIES.values():
+        if c in gr.columns:
+            gr = gr.drop(columns=[c])
+    gr = gr.merge(merged.sort_values("trade_date"), on="trade_date", how="outer")
+    gr.sort_values("trade_date").reset_index(drop=True).to_parquet(gr_path, index=False)
+    print(f"  global_rates.parquet topped up from FRED")
+
+
+if __name__ == "__main__":
+    fred_fallback()

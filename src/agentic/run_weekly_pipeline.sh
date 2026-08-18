@@ -173,6 +173,13 @@ for p in d['picks']:
     print(f\"    T{p['tier']} {p['symbol']:12s}  buy {p['buy_low']:.2f}-{p['buy_high']:.2f}  tgt {p['target_5pct']:.2f}  sl {p['sl_3pct']:.2f}  wt {p['weight_pct']}%\")
 " | tee -a "$MASTER_LOG"
 
+# ---------------- 4.4. Lean shadow check ----------------
+# Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.
+
+step "4.4. LEAN SHADOW CHECK"
+/usr/bin/python3 src/agentic/lean_shadow_check.py 2>&1 | tee -a "$MASTER_LOG" \
+  || log "  ⚠ lean shadow check failed — non-fatal"
+
 # ---------------- 4.5. Simplicity audit + recreation kit ----------------
 # Keeps the public showcase inventory CURRENT (never historical) and tracks
 # code size / findings drift per run. Neither step is fatal to the basket.
