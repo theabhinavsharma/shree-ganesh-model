@@ -136,6 +136,10 @@ def fred_fallback() -> None:
     import io, time as _t
     import urllib.request as _rq
     import pandas as _pd
+    # DO NOT use the spoofed-Chrome UA here: FRED's WAF tarpits it (connection
+    # accepted, never answered → timeout). The honest bot UA gets HTTP 200 in 0.3s.
+    # Verified empirically 2026-08-18.
+    _UA = "Mozilla/5.0 (compatible; ZoomFetcher/1.0)"
     _SERIES = {"DGS10": "us_10y", "DGS2": "us_2y", "DGS3MO": "us_3m",
                "DTWEXBGS": "dxy", "VIXCLS": "us_vix", "SP500": "spx"}
     merged = None
@@ -143,7 +147,7 @@ def fred_fallback() -> None:
         for attempt in range(3):
             try:
                 req = _rq.Request(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}",
-                                  headers={"User-Agent": UA})
+                                  headers={"User-Agent": _UA})
                 with _rq.urlopen(req, timeout=30) as r:
                     df = _pd.read_csv(io.StringIO(r.read().decode("utf-8", errors="replace")))
                 dc = "observation_date" if "observation_date" in df.columns else "DATE"
