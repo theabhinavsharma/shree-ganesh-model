@@ -173,6 +173,12 @@ for p in d['picks']:
     print(f\"    T{p['tier']} {p['symbol']:12s}  buy {p['buy_low']:.2f}-{p['buy_high']:.2f}  tgt {p['target_5pct']:.2f}  sl {p['sl_3pct']:.2f}  wt {p['weight_pct']}%\")
 " | tee -a "$MASTER_LOG"
 
+# ---------------- 4.3. Tape forensics (EVERY name, EVERY week) ----------------
+# The RSYSTEMS lesson (2026-08-18): deep scrutiny must be automatic, not question-driven.
+step "4.3. TAPE FORENSICS"
+/usr/bin/python3 src/agentic/tape_forensics.py 2>&1 | tee -a "$MASTER_LOG" \
+  || log "  ⚠ tape forensics failed — non-fatal"
+
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.
 
