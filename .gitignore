@@ -101,3 +101,6 @@ tmp_*.py
 *.swp
 quince_svid_summary.csv
 quince_svids.csv
+
+# full-archive staging + volumes (published as release assets, never in git)
+data_archive/

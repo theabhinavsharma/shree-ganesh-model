@@ -9,11 +9,49 @@
 # Requirements: curl + tar (or `gh` for private forks). No auth needed on the
 # public repo — release assets are plain HTTPS downloads.
 #
-# Usage:  bash bootstrap_data.sh
+# Usage:  bash bootstrap_data.sh          # quick start (~1 GB essential snapshot)
+#         bash bootstrap_data.sh --full   # FULL lossless archive (~all fetched+derived data,
+#                                         # tens of GB — every parquet panel, raw JSON, zip)
 set -euo pipefail
 cd "$(dirname "$0")"
 
 REPO="theabhinavsharma/shree-ganesh-model"
+
+if [ "${1:-}" = "--full" ]; then
+  echo "═══ FULL archive bootstrap ═══"
+  TAG=$(curl -fsSL "https://api.github.com/repos/$REPO/releases" \
+    | grep -o '"tag_name": *"data-full-[0-9-]*"' | head -1 | grep -o 'data-full-[0-9-]*')
+  [ -n "$TAG" ] || { echo "❌ no data-full-* release found"; exit 1; }
+  echo "latest full archive: $TAG — downloading all volumes…"
+  mkdir -p data_archive && cd data_archive
+  gh release download "$TAG" --repo "$REPO" --skip-existing 2>/dev/null \
+    || { echo "gh not available — listing asset URLs for curl:"; \
+         curl -fsSL "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+           | grep browser_download_url | cut -d'"' -f4; exit 1; }
+  cd ..
+  echo "verifying sha256 against full_manifest.json…"
+  python3 - <<'PY'
+import hashlib, json
+from pathlib import Path
+m = json.loads(Path("data_archive/full_manifest.json").read_text())
+bad = 0
+for v in m["volumes"]:
+    p = Path("data_archive") / v["name"]
+    if not p.exists() or hashlib.sha256(p.read_bytes()).hexdigest() != v["sha256"]:
+        print("  ❌", v["name"]); bad += 1
+print(f"{len(m['volumes'])-bad}/{len(m['volumes'])} volumes verified")
+raise SystemExit(1 if bad else 0)
+PY
+  echo "extracting…"
+  for f in data_archive/raw_*.tar.gz; do [ -e "$f" ] && tar -xzf "$f"; done
+  for stem in $(ls data_archive/raw_*.part_aa 2>/dev/null | sed 's/\.part_aa//'); do
+    cat "$stem".part_* > "$stem" && tar -xzf "$stem" && rm "$stem"
+  done
+  for f in data_archive/parquet_vol_*.tar; do [ -e "$f" ] && tar -xf "$f"; done
+  [ -e data_archive/parquet_tree_sidecars.tar.gz ] && tar -xzf data_archive/parquet_tree_sidecars.tar.gz
+  echo "✅ full archive restored (zstd parquets are drop-in identical content)."
+  exit 0
+fi
 
 echo "═══ Shree Ganesh Model — data bootstrap ═══"
 
