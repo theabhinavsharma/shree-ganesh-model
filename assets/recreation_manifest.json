@@ -1,5 +1,5 @@
 {
- "generated": "2026-07-07",
+ "generated": "2026-08-23",
  "inventory": {
   "Other tools": [
    {
@@ -163,6 +163,16 @@
     "purpose": "Joint-signal analyzer."
    },
    {
+    "path": "src/agentic/lean_shadow_check.py",
+    "loc": 102,
+    "purpose": "Lean shadow check \u2014 every weekly run, compute the engine-free basket and diff vs prod."
+   },
+   {
+    "path": "src/agentic/make_data_snapshot.py",
+    "loc": 72,
+    "purpose": "Build the bootstrap data snapshot \u2014 the minimal set a cloner needs to run the system."
+   },
+   {
     "path": "src/agentic/monitor_for_conviction.py",
     "loc": 141,
     "purpose": "Daily conviction monitor \u2014 fires alerts at the 0.95 calibrated band."
@@ -198,6 +208,11 @@
     "purpose": "v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features."
    },
    {
+    "path": "src/agentic/score_basket_outcomes.py",
+    "loc": 119,
+    "purpose": "Score our own past baskets weekly \u2014 the self-scoring half of the RL loop."
+   },
+   {
     "path": "src/agentic/score_sentiment.py",
     "loc": 380,
     "purpose": "Finance-tuned sentiment scorer for news / reddit / youtube text."
@@ -206,6 +221,11 @@
     "path": "src/agentic/sector_weak_shorts.py",
     "loc": 123,
     "purpose": "Sector-weak large-cap short overlay."
+   },
+   {
+    "path": "src/agentic/tape_forensics.py",
+    "loc": 112,
+    "purpose": "Tape forensics \u2014 the deep per-name scrutiny, applied to EVERY basket name, every run."
    },
    {
     "path": "src/agentic/track_multibagger_basket.py",
@@ -218,9 +238,19 @@
     "purpose": "Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs."
    },
    {
+    "path": "src/agentic/final_run_20260818.sh",
+    "loc": 58,
+    "purpose": "FINAL RUN 2026-08-18 \u2014 on today's close, corrected CA adjustments, C2 contract."
+   },
+   {
     "path": "src/agentic/install_schedule.sh",
     "loc": 44,
     "purpose": "Install / reinstall the launchd schedule for the daily pipeline."
+   },
+   {
+    "path": "src/agentic/monday_run_20260824.sh",
+    "loc": 136,
+    "purpose": "MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) \u2014 checklist-by-checklist, data through Fri Aug-21."
    }
   ],
   "Backtests": [
@@ -333,7 +363,7 @@
    },
    {
     "path": "src/agentic/fetch_global_macro.py",
-    "loc": 196,
+    "loc": 182,
     "purpose": "Cross-country macro fetcher \u2014 global signals affecting India."
    },
    {
@@ -418,7 +448,7 @@
    },
    {
     "path": "src/agentic/refresh_prices.py",
-    "loc": 81,
+    "loc": 102,
     "purpose": "Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet."
    }
   ],
@@ -447,7 +477,7 @@
    },
    {
     "path": "src/agentic/generate_hybrid_basket.py",
-    "loc": 279,
+    "loc": 357,
     "purpose": "Generate the WEEKLY 15D/+5% hybrid basket."
    }
   ],
@@ -516,7 +546,7 @@
    },
    {
     "path": "src/agentic/verify_freshness.py",
-    "loc": 264,
+    "loc": 310,
     "purpose": "Freshness gate \u2014 refuses to let the pipeline proceed if any critical input is stale."
    }
   ],
@@ -528,7 +558,7 @@
    },
    {
     "path": "src/agentic/train_missed_winner_classifier.py",
-    "loc": 214,
+    "loc": 237,
     "purpose": "OPTION 2: Supervised ML classifier for missed winners."
    }
   ],
@@ -542,7 +572,7 @@
   "Orchestrators": [
    {
     "path": "src/agentic/daily_pipeline.sh",
-    "loc": 98,
+    "loc": 97,
     "purpose": "Daily agentic pipeline \u2014 fetches alt data, refreshes catalyst features, retrains model, builds brief."
    },
    {
@@ -552,7 +582,7 @@
    },
    {
     "path": "src/agentic/run_weekly_pipeline.sh",
-    "loc": 235,
+    "loc": 252,
     "purpose": "WEEKLY 15D/+5% PIPELINE ORCHESTRATOR"
    }
   ],

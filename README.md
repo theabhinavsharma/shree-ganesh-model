@@ -6,6 +6,22 @@
 
 **For machine recovery** (lost laptop / new account): see [`RECOVERY.md`](RECOVERY.md) — three commands to be back operating.
 
+## Quick start — from clone to runnable in minutes
+
+The repo is ~11 MB of code; the 61 GB data tree is gitignored by design. Don't backfill 15 years from NSE (days) — bootstrap from the published snapshot (~1 GB):
+
+```bash
+git clone https://github.com/theabhinavsharma/shree-ganesh-model.git
+cd shree-ganesh-model
+bash bootstrap_data.sh        # downloads latest data-* release, extracts, verifies sha256
+# then catch up from snapshot date to today (the script prints the exact commands),
+# gate it, and run:
+python3 src/agentic/verify_freshness.py
+bash src/agentic/run_weekly_pipeline.sh --skip-fetch --dry-run
+```
+
+Snapshots are cut by `src/agentic/make_data_snapshot.py` and published as GitHub Release assets (tag `data-YYYY-MM-DD`): the keystone 15-year adjusted price parquet + macro/events/corp-action panels + the trained classifier. Everything else regenerates. *Note: price data derives from NSE bhavcopy archives — snapshot is provided for research reproducibility; NSE data-usage terms apply to redistribution.*
+
 ---
 
 This repository contains a production-style, leak-safe research pipeline skeleton for NSE-listed equities. The implementation prioritizes auditability and truthful historical joins over apparent completeness. The approved v1 market-data path starts from the provided NSE UDiFF bhavcopy archive downloader using `https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_ddmmyyyy.csv`, and now falls back to the older official NSE bhavcopy plus delivery archives for pre-2020 dates so daily market data can be pulled back to 2015.

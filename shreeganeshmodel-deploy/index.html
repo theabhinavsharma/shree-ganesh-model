@@ -2052,6 +2052,12 @@ Required output, in order:
    - NSE corporate filings (announcements with event_category tags)
    - Save as: data/derived/stock_daily_facts_adjusted_2015plus.parquet,
      data/corporate_actions_full_history/*, data/events_full_history/*
+   SHORTCUT — skip the multi-day NSE backfill entirely:
+     bash bootstrap_data.sh
+   downloads the latest published ~1 GB data snapshot (GitHub Release tag
+   data-YYYY-MM-DD: keystone 15-yr adjusted price parquet + macro/events/
+   corp-action panels + trained classifier, sha256-verified), then the
+   incremental fetchers only cover snapshot-date → today (minutes).
 
 3. Feature factory (src/agentic/feature_factory.py) — compute every signal in the
    §Signals tab of the HTML. Categories: price/technical, volume/liquidity,
@@ -2229,7 +2235,7 @@ the rebuild complete:
 Then commit everything and push to a new private GitHub repo.
 
 ═══ CURRENT INVENTORY (auto-generated) ═══
-As of 2026-07-07 · 116 files · 25,436 LOC · regenerated on every
+As of 2026-08-23 · 122 files · 26,205 LOC · regenerated on every
 weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
 
 [Data fetchers]  (28)
@@ -2324,7 +2330,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   prompts/INDEX.md                                     — Agent Prompts — Index
   prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
 
-[Other tools]  (44)
+[Other tools]  (50)
   src/agentic/ab_test_event_features.py                — A/B test: does adding 11.3y of catalyst/event features lift the 5%/15d model?
   src/agentic/ab_test_event_polarity.py                — 4-arm A/B test on the 5%/15d model:
   src/agentic/agent_loop.py                            — Agent loop — one cycle of hypothesis → fetch → compile → evaluate → verdict.
@@ -2357,6 +2363,8 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/infinite_hypothesis_loop.py              — Never-sleeping hypothesis loop.
   src/agentic/inspect_symbol.py                        — Per-symbol inspector — given a ticker, dump everything the system knows.
   src/agentic/joint_signal_analyzer.py                 — Joint-signal analyzer.
+  src/agentic/lean_shadow_check.py                     — Lean shadow check — every weekly run, compute the engine-free basket and diff vs prod.
+  src/agentic/make_data_snapshot.py                    — Build the bootstrap data snapshot — the minimal set a cloner needs to run the system.
   src/agentic/monitor_for_conviction.py                — Daily conviction monitor — fires alerts at the 0.95 calibrated band.
   src/agentic/paper_trading_recorder.py                — Paper-trading recorder: every run, score yesterday's brief picks against
   src/agentic/portfolio_sizer.py                       — Portfolio sizer: given today's long/short candidates, produce a sized,
@@ -2364,11 +2372,15 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/run_model_diversity.py                   — Train 5 diverse model families on the same feature set + label.
   src/agentic/run_short_side.py                        — Short-side model: predict P(stock falls >= 5% in any of next 7 trading days,
   src/agentic/run_v3_with_catalysts.py                 — v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features.
+  src/agentic/score_basket_outcomes.py                 — Score our own past baskets weekly — the self-scoring half of the RL loop.
   src/agentic/score_sentiment.py                       — Finance-tuned sentiment scorer for news / reddit / youtube text.
   src/agentic/sector_weak_shorts.py                    — Sector-weak large-cap short overlay.
+  src/agentic/tape_forensics.py                        — Tape forensics — the deep per-name scrutiny, applied to EVERY basket name, every run.
   src/agentic/track_multibagger_basket.py              — Live tracker for the multibagger basket — proves whether the 90%-conviction
   src/agentic/write_live_prediction.py                 — Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs.
+  src/agentic/final_run_20260818.sh                    — FINAL RUN 2026-08-18 — on today's close, corrected CA adjustments, C2 contract.
   src/agentic/install_schedule.sh                      — Install / reinstall the launchd schedule for the daily pipeline.
+  src/agentic/monday_run_20260824.sh                   — MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) — checklist-by-checklist, data through Fri Aug-21.
 
 ═══ END INVENTORY ═══
 
