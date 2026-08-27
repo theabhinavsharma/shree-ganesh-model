@@ -85,6 +85,62 @@ def main() -> None:
     combined = combined.drop_duplicates(["symbol", "trade_date"], keep="last")
     combined = combined.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
 
+    # --- LATE-CA SELF-HEAL (2026-08-27): a corporate action that reaches the store
+    # AFTER its ex-date rows were built leaves the symbol's history mis-adjusted
+    # (CORDELIA/TDPOWERSYS/GOODLUCK/KIRLPNU; same class as the 113-day rot). Detect:
+    # stored price_adjustment_factor_to_present vs the step function expected from
+    # the CURRENT store; heal: restore raw values and re-apply the production adjuster.
+    if CA_PATH.exists() and "price_adjustment_factor_to_present" in combined.columns:
+        import numpy as np
+        from src.transform.corporate_actions import (
+            PRICE_COLUMNS, QTY_COLUMNS, apply_split_bonus_adjustments,
+        )
+        ca = pd.read_parquet(CA_PATH)
+        ca["ex_date"] = pd.to_datetime(ca["ex_date"], errors="coerce")
+        eff = (
+            ca[ca["adjustment_factor"].notna() & ca["adjustment_factor"].gt(0) & ca["ex_date"].notna()]
+            .groupby(["symbol", "ex_date"])["adjustment_factor"].prod().reset_index()
+        )
+        # scan symbols that have store factors OR carry a non-identity stored factor
+        # (catches symbols whose bogus factor was later nulled but rows stay divided)
+        adjusted_syms = set(
+            combined.loc[combined["price_adjustment_factor_to_present"].fillna(1.0) != 1.0, "symbol"].unique()
+        )
+        scan_syms = set(eff["symbol"].unique()) | adjusted_syms
+        stale_syms = []
+        for sym, g in combined[combined["symbol"].isin(scan_syms)].groupby("symbol"):
+            sa = eff[eff["symbol"] == sym].sort_values("ex_date")
+            td = g["trade_date"].to_numpy(dtype="datetime64[ns]")
+            share = np.ones(len(g))
+            if len(sa):
+                exs = sa["ex_date"].to_numpy(dtype="datetime64[ns]")
+                fs = sa["adjustment_factor"].astype(float).to_numpy()
+                suffix = np.cumprod(fs[::-1])[::-1]
+                idx = np.searchsorted(exs, td, side="right")
+                share[idx < len(exs)] = suffix[idx[idx < len(exs)]]
+            stored = g["price_adjustment_factor_to_present"].fillna(1.0).to_numpy(dtype=float)
+            if (~np.isclose(stored, 1.0 / share, rtol=1e-6)).any():
+                stale_syms.append(sym)
+        if stale_syms:
+            print(f"LATE-CA SELF-HEAL: re-adjusting {len(stale_syms)} symbols: {stale_syms}")
+            mask = combined["symbol"].isin(stale_syms)
+            part = combined[mask].copy()
+            for col in list(PRICE_COLUMNS) + list(QTY_COLUMNS):
+                raw = f"raw_{col}"
+                if col in part.columns and raw in part.columns:
+                    part[col] = part[raw].fillna(part[col])
+            drop = [c for c in part.columns if c.startswith("raw_")] + [
+                "share_adjustment_factor_to_present",
+                "price_adjustment_factor_to_present",
+                "future_split_bonus_action_count",
+            ]
+            part = apply_split_bonus_adjustments(
+                part.drop(columns=[c for c in drop if c in part.columns]),
+                ca[ca["symbol"].isin(stale_syms)],
+            )
+            combined = pd.concat([combined[~mask], part], ignore_index=True)
+            combined = combined.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
+
     # Recompute rolling features so the latest rows have valid sma/rsi/return.
     roll_cols = [c for c in combined.columns if c.startswith(
         ("sma_", "rsi_", "return_", "volume_vs_", "traded_value_vs_", "avg_traded_value_")

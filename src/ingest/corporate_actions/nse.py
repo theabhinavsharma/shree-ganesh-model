@@ -20,12 +20,18 @@ CORPORATE_ACTIONS_REFERER = "https://www.nseindia.com/companies-listing/corporat
 CORPORATE_ACTIONS_URL = "https://www.nseindia.com/api/corporates-corporateActions?{query}"
 
 BONUS_RATIO_RE = re.compile(r"bonus(?:\s+issue)?[^\d]{0,20}(\d+(?:\.\d+)?)\s*:\s*(\d+(?:\.\d+)?)", re.IGNORECASE)
+# 2026-08-27 fix: NSE writes the target face value as "Re 1/-" (singular), which the old
+# "rs"-only pattern missed — 153 split groups went factor-less and left unadjusted cliffs
+# in the prices parquet (TATASTEEL/NESTLEIND/KOTAKBANK class). Accept Rs/Re on both sides.
 SPLIT_RATIO_RE = re.compile(
     r"(?:face\s*value\s*split|stock\s*split|sub-division|subdivision|split)[^\d]{0,40}"
-    r"(?:from)?\s*rs\.?\s*(\d+(?:\.\d+)?)\s*/?-?[^\d]{0,25}"
-    r"(?:to)?\s*rs\.?\s*(\d+(?:\.\d+)?)",
+    r"(?:from)?\s*r(?:s|e)\.?\s*(\d+(?:\.\d+)?)\s*/?-?[^\d]{0,25}"
+    r"(?:to)?\s*r(?:s|e)\.?\s*(\d+(?:\.\d+)?)",
     re.IGNORECASE,
 )
+# Bonus issues of non-equity instruments (preference shares/NCRPS, debentures, warrants)
+# do NOT adjust the equity price — parsing them as bonus ratios corrupted TVSMOTOR/SIYSIL.
+NON_EQUITY_BONUS_RE = re.compile(r"ncrps|preference|debenture|warrant", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -135,6 +141,8 @@ def _normalize_rows(rows: list[dict[str, object]]) -> pd.DataFrame:
 
 def _parse_bonus_factor(subject: str) -> float | None:
     if not isinstance(subject, str):
+        return None
+    if NON_EQUITY_BONUS_RE.search(subject):
         return None
     match = BONUS_RATIO_RE.search(subject)
     if not match:

@@ -70,6 +70,10 @@ log " Master log: $MASTER_LOG"
 
 if [ $SKIP_FETCH -eq 0 ]; then
   step "1. DATA LAYER"
+  # CA store MUST refresh before prices: refresh_prices adjusts with the CA store,
+  # and a late-arriving split corrupts the series (2026-08-27 lesson: CORDELIA/
+  # TDPOWERSYS/GOODLUCK/KIRLPNU cliffs; same class as the 2026-08-18 113-day rot).
+  run_py src/agentic/refresh_corporate_actions.py    "00_corp_actions"
   run_py src/agentic/refresh_prices.py               "01_prices"
   run_py src/agentic/refresh_announcements.py        "02_announcements"     || log "  ⚠ announcements failed — continuing"
   run_py src/agentic/build_news_event_features.py    "03_news_events"
