@@ -60,6 +60,12 @@ def build_snapshot(prices: pd.DataFrame) -> pd.DataFrame:
     prices["adv_cr"] = prices.groupby("symbol")["total_traded_value"].transform(
         lambda s: s.rolling(20).mean()) / 1e7
     # C2 exit contract (locked 2026-08-18): per-stock daily vol for vol-scaled stops
+    # Z-SCORE bands (shipped 2026-08-25 per pre-registered A/B: pool touch 55.9% vs 54.1%
+    # 10-yr, 60.1% vs 55.7% since-April; Z-only cohort 60-69% — best bucket in the test)
+    prices["rsi_mu_252"] = prices.groupby("symbol")["rsi_14_daily"].transform(
+        lambda s: s.rolling(252, min_periods=120).mean())
+    prices["rsi_sd_252"] = prices.groupby("symbol")["rsi_14_daily"].transform(
+        lambda s: s.rolling(252, min_periods=120).std())
     prices["dvol_20d"] = prices.groupby("symbol")["return_1d"].transform(
         lambda s: s.rolling(20).std())
     latest = prices["trade_date"].max()
@@ -102,11 +108,16 @@ def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:
       • ML score [0.5, 0.7]    → 23.9% hit  (BEST)
       • ML score [0.85+]        → 18.9% hit  (WORST — overconfident)
     """
+    # Z-SCORE BANDS (shipped 2026-08-25, pre-registered A/B result — see ledger):
+    # each stock judged against ITS OWN scale, not absolute thresholds.
+    rsi_z = (df["rsi_14_daily"] - df["rsi_mu_252"]) / df["rsi_sd_252"]
+    r20_z = df["return_20d"] / (df["dvol_20d"] * np.sqrt(20))
+    r5_z  = df["ret_5d"] / (df["dvol_20d"] * np.sqrt(5))
     return df[
-        (df["rsi_14_daily"].between(42, 60)) &        # tightened from 40-72
-        (df["return_20d"].between(-0.10, 0.15)) &      # tightened from -15 to +30
-        (df["ret_5d"].between(-0.05, 0.05)) &          # tightened from -5 to +10
-        (df["volume_vs_20d"] < 2) &                    # tightened from <3
+        rsi_z.between(-1.0, 0.25) &                    # own-distribution: neutral-to-washed
+        r20_z.between(-1.0, 0.75) &                    # 20d move within its own vol scale
+        r5_z.between(-1.0, 1.0) &                      # no own-scale parabolic
+        (df["volume_vs_20d"] < 2) &
         (df["close"] > 50) &
         (df["adv_cr"] >= 5) &
         (df["max_uc"].fillna(0) < 2) &
