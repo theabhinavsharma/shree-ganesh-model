@@ -1031,7 +1031,7 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
         <div class="msg msg-claude"      data-step="3">But let's build something that <strong>actually has edge</strong>.</div>
         <div class="msg msg-abhinav"     data-step="4">Show me.</div>
         <div class="msg msg-claude"      data-step="5">5 ML engines · devil's advocate · operator-pump detection · strict walk-forward.</div>
-        <div class="msg msg-claude"      data-step="6">Every mistake logged publicly. <strong>10 so far.</strong></div>
+        <div class="msg msg-claude"      data-step="6">Every mistake logged publicly. <strong>The failure ledger is the product.</strong></div>
         <div class="msg msg-abhinav"     data-step="7">What's the realistic number?</div>
         <div class="msg msg-claude"      data-step="8"><span class="punch">3.2% every 15 days.</span> Last 3 months. Consistently.</div>
         <div class="msg msg-abhinav"     data-step="9">Bhaai. Let's open-source it. 🤝</div>
@@ -1310,7 +1310,7 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
         <rect class="output" x="880" y="120" width="200" height="120" rx="8"/>
         <text class="output-text" x="905" y="165">FINAL BASKET</text>
         <text class="label-small" x="905" y="190">QC'd · cross-validated</text>
-        <text class="label-small" x="905" y="210">7-9 names</text>
+        <text class="label-small" x="905" y="210">8 names + 2 reserves</text>
         <text class="label-small" x="905" y="228">14-17% exposure</text>
 
         <!-- Arrows from data → engines -->
@@ -1358,106 +1358,87 @@ def is_actionable(symbol):
 <!-- 15D/+5% PLAYBOOK — THE CURRENT PRODUCTION STRATEGY -->
 <section id="playbook">
   <div class="container">
-    <div class="section-tag" style="color: var(--good)">The Production Strategy (July 2026)</div>
-    <h2 class="section-title">The 15D/+5% playbook — earned from a 4,224-trade backtest</h2>
-    <p class="section-sub">This is the exact strategy running today. Every parameter below was earned from a 10-year walk-forward backtest (529 weekly baskets, Jan 2016 → Jun 2026), not chosen by intuition. Copy it whole — every number matters.</p>
+    <div class="section-tag" style="color: var(--good)">The Production Strategy (current)</div>
+    <h2 class="section-title">The 15D/+5% playbook — every rule earned in a 4,200-trade tournament</h2>
+    <p class="section-sub">The exact strategy running today. Every parameter was earned from 10-year day-by-day simulations (530 weekly baskets, 2016 → 2026) — never intuition. Copy it whole; superseded versions are preserved in the Archive.</p>
 
     <div class="caveat" style="border-color: var(--accent-1);">
       <div class="caveat-title">📌 THE OUTPUT CONTRACT — read this before you build anything</div>
       <p>This repo contains TWO generations of system and several diagnostic layers. If you rebuild from this page, the ONE production output you must reproduce is:</p>
       <p style="font-family: 'JetBrains Mono', monospace; font-size: 13px; margin: 10px 0;"><strong>live_predictions/YYYY-MM-DD_15d5pct.json</strong> — 8 names × 12.5%, emitted weekly by <code>generate_hybrid_basket.py</code> via <code>run_weekly_pipeline.sh</code>, behind the freshness gate.</p>
-      <p>Everything else — <code>find_achievable_frontier.py</code> (frontier grid), frontier/high-conviction scorers with a ≥0.90 calibrated bar, the multibagger and 180d engines — are <strong>upstream engines and diagnostics</strong>, NOT the tradeable output. A known failure mode: copiers rebuild the older "frontier picks" layer (touch-probability, score ≥0.90, -7% stop) and get completely different picks. That layer answers a different question: <em>"will the intraday high TOUCH +X%?"</em> (58% base rate at 15d/5%, hence 98%+ band hit rates). The production playbook answers <em>"will the trade exit profitably under +5% target / -3% SL-first / 15-day timeout?"</em> (23-27% clean hits). Touch-probability selects high-volatility momentum names — <strong>exactly the names our QC filter excludes</strong>, because the same volatility that touches +5% touches -3% first (44.9% whipsaw rate). If your rebuild's daily output is a <code>frontier_picks_*.md</code> with 0.90-bar picks and a -7% stop, you built the deprecated diagnostic layer.</p>
-      <p><strong>Convergence check</strong>: run <code>verify_freshness.py</code> (must exit 0), then <code>run_weekly_pipeline.sh --skip-fetch --dry-run</code> on the same <code>data_through</code> date and compare your basket JSON's symbols, weights, band_fit and levels (close ×0.99/1.01/1.05/0.97) against a committed one in <code>live_predictions/</code>. Same data + same filter → same 8 names. LightGBM <code>random_state=42</code> everywhere; universe cut ADV ≥ ₹5cr AND close &gt; ₹50 (the older frontier layer used ADV ≥ ₹1cr — another silent divergence source).</p>
+      <p>Everything else — <code>find_achievable_frontier.py</code> (frontier grid), scorers with a ≥0.90 calibrated bar, the multibagger and 180d engines — are <strong>upstream engines and diagnostics</strong>, NOT the tradeable output. A known failure mode: copiers rebuild the older "frontier picks" layer (touch-probability, score ≥0.90, -7% stop) and get completely different picks — that layer answers <em>"will the intraday high TOUCH +X%?"</em> (a 58% base-rate question), not <em>"what does the trade earn under the C2 exit contract?"</em>. If your rebuild's daily output is a <code>frontier_picks_*.md</code>, you built the deprecated diagnostic (see Archive).</p>
+      <p><strong>Convergence check</strong>: run <code>verify_freshness.py</code> (must exit 0), then re-emit on the same <code>data_through</code> date as a committed basket and diff — same data must reproduce the same 8 names, ranks, scores and per-pick vol-scaled SLs (as_of_date and input mtimes naturally differ; we verify the picks/scores reproduce exactly, live; LightGBM <code>random_state=42</code>; universe ADV ≥ ₹5cr AND close &gt; ₹50).</p>
     </div>
 
-    <h3 style="color: var(--fg); margin: 32px 0 12px;">The trade spec</h3>
-    <pre><code><span class="comment"># One basket per week. 8 names, equal weight, 100% deployed.</span>
-TARGET      = +5%           <span class="comment"># book HALF here, trail rest with SL at +2.5%</span>
-STOP_LOSS   = -3%           <span class="comment"># sell 100%, no exceptions.</span>
-                            <span class="comment"># ⚠️ UNDER REVIEW per 2026-07-07 correction below:</span>
-                            <span class="comment"># day-by-day sim says -3% is inside small-cap noise</span>
-                            <span class="comment"># (fires on 63.5% of trades → negative after costs)</span>
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The trade spec (C2 contract — locked 2026-08-18 by tournament, see table below)</h3>
+    <pre><code><span class="comment"># One basket per week. 8 names, equal weight, 100% deployed. Plus 2 ranked RESERVES.</span>
+TARGET      = +5% touch     <span class="comment"># book HALF, trail the rest at +2.5% from entry</span>
+STOP_LOSS   = vol-scaled    <span class="comment"># per pick: 3 × the stock's OWN 20d daily vol,</span>
+                            <span class="comment"># floor -3%, cap -12% (emitted as sl_pct / sl_3pct)</span>
 TIMEOUT     = 15 trading days   <span class="comment"># exit whatever remains at market</span>
-NAMES       = 8 × 12.5%     <span class="comment"># equal weight, no cash drag</span>
-REFRESH     = weekly (Monday), full pipeline re-run
+NAMES       = 8 × 12.5% + reserves R1/R2 at 0% (see entry rules)
+REFRESH     = weekly — scan often, NEVER churn holdings (returns are back-loaded:
+              only 45% of eventual +5% touches happen by day 5)
 
-<span class="comment"># Level construction (generate_hybrid_basket.py _pick):</span>
-BUY_ZONE    = close × [0.99, 1.01]   <span class="comment"># limit orders only, never chase a gap</span>
+<span class="comment"># Levels (generate_hybrid_basket.py _pick):</span>
+BUY_ZONE    = close × [0.99, 1.01]
 TARGET_PX   = close × 1.05
-SL_PX       = close × 0.97
-<span class="comment"># Basket file: live_predictions/YYYY-MM-DD_15d5pct.json (immutable, git-committed).
-# Each basket also records a regime_gate verdict (DEPLOY/WAIT) from the multibagger engine —
-# all-Tier-2 baskets in regime WAIT carry expected hit ≈24%, below the 27.5% band-fit optimum.</span></code></pre>
+SL_PX       = close × (1 + sl_pct)   <span class="comment"># per-pick, printed in the basket JSON</span>
 
-    <h3 style="color: var(--fg); margin: 32px 0 12px;">The 10-year backtest that earned these numbers</h3>
-    <p style="color: var(--fg-dim); font-size: 14px;">Walk-forward LightGBM: train on all history before each week, retrain every 13 weeks (raw scores, no calibration layer — a known simplification vs the isotonic-calibrated engines). Simulated the exact exit rule (target/SL/whipsaw/timeout). Script: <code>src/agentic/backtest_10yr_15d5pct.py</code></p>
+<span class="comment"># ENTRY PROTOCOL (learned the hard way — picks gapped +4.8% before we could buy):
+#  1. Weekend AMO limit orders at buy_high → they enter NSE's 9:00-9:07 pre-open
+#     auction and fill AT THE AUCTION PRICE if it opens inside your limit.
+#  2. A pick opening above buy_high is NEVER chased — its +5% is spent in the gap.
+#  3. Gapped pick's 12.5% → highest-ranked RESERVE that IS inside its zone, else cash.</span>
+
+<span class="comment"># EVERY pick ships RANKED by confidence with a plain-language rationale —
+# the generator hard-asserts this; an unranked basket cannot emit.
+# confidence = min(engines,3)×1.5 + band_fit + honest-zone-ML proximity×2 + cs×0.5
+# (band_fit is a 0-3 legacy score still computed on ABSOLUTE bands — kept as a
+#  ranking ingredient under live probation via the weekly RANK CHECK)
+# Live validation ("RANK CHECK", printed weekly): ranks 1-4 touch 75% vs ranks 5-8 50%.</span></code></pre>
+
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">Why these exit rules — the A/B/C tournament (4,222 trades, day-by-day, entry next-open, 0.30% costs)</h3>
     <table class="results-table">
-      <thead><tr><th>Metric</th><th>Baseline (all 4,224 trades)</th><th>With band-fit filter (n=699)</th></tr></thead>
+      <thead><tr><th>Exit contract</th><th>Net/trade</th><th>Median</th><th>CAGR</th><th>Max drawdown</th></tr></thead>
       <tbody>
-        <tr><td>Target +5% hit rate</td><td>23.3%</td><td><strong style="color: var(--good)">27.2%</strong></td></tr>
-        <tr><td>SL -3% rate</td><td>30.9%</td><td>28.2%</td></tr>
-        <tr><td>Whipsaw (both intraday)</td><td>44.9%</td><td>43.8%</td></tr>
-        <tr><td>Mean return / trade</td><td>+1.77%</td><td><strong style="color: var(--good)">+2.29%</strong></td></tr>
-        <tr><td>Weeks positive (8-name basket)</td><td colspan="2">64.8% · mean +1.76%/15d · worst -3.0% · best +14.6% · ≈34.6% CAGR compounded</td></tr>
+        <tr><td>A: hold 15d, no stop, no target</td><td>+0.985%</td><td>-0.64% ⚠️</td><td>+20.9%</td><td style="color: var(--bad)">-58.5%</td></tr>
+        <tr><td>B: half @+5%, rest to day-15, no stop</td><td>+0.493%</td><td>+1.65%</td><td>+12.5%</td><td>-48.6%</td></tr>
+        <tr><td>C1: flat -3% SL (our old rule)</td><td>-0.074%</td><td>-3.30%</td><td>+1.8%</td><td>-27.2%</td></tr>
+        <tr><td><strong style="color: var(--good)">C2: vol-scaled SL + half @+5% + trail (SHIPPED)</strong></td><td>+0.220%</td><td><strong>+3.45%</strong></td><td>+11.6%</td><td><strong style="color: var(--good)">-18.6%</strong></td></tr>
       </tbody>
     </table>
+    <p style="color: var(--fg-dim); font-size: 14px;">A has the best mean but a negative median and a ruinous drawdown — a lottery portfolio you'd abandon at the bottom. C2 keeps ~all of B's return at a third of the drawdown, with the only strongly positive median. The old flat -3% SL is dead: day-by-day it fired on 63.5% of trades (a 3% stop is inside ordinary small-cap noise) and went negative after costs. Full history of how we got here: see the Archive at the bottom.</p>
 
-    <div class="caveat" style="border-color: var(--bad);">
-      <div class="caveat-title">🚨 CORRECTION 2026-07-07 — day-by-day sequencing collapses the headline P&L</div>
-      <p>The table above uses a <strong>window-level approximation</strong>: both-touch ("whipsaw") trades booked at an assumed +1.0%, entry assumed at signal-day close, days never sequenced. Re-simulating the SAME 4,221 trades <strong>day-by-day</strong> (walk the path in order, conservative SL-first on same-day both-touch, entry at next-day open — the only executable entry since baskets are emitted after close):</p>
-      <table class="results-table" style="margin: 12px 0;">
-        <thead><tr><th>Geometry (entry = next-day open)</th><th>Tgt hit</th><th>SL hit</th><th>Mean/trade</th><th>After 0.30% costs</th><th>CAGR after costs</th></tr></thead>
-        <tbody>
-          <tr><td><strong>SL -3% + book-half/trail-2.5 (CURRENT spec)</strong></td><td>36.0%</td><td><strong style="color: var(--bad)">63.5%</strong></td><td>+0.225%</td><td>-0.075%</td><td><strong style="color: var(--bad)">-1.3% ❌</strong></td></tr>
-          <tr><td>SL -5% + book-half/trail-2.5</td><td>49.7%</td><td>48.7%</td><td>+0.422%</td><td>+0.122%</td><td>+2.1%</td></tr>
-          <tr><td>SL -7% + book-half/trail-2.5</td><td>57.0%</td><td>38.9%</td><td>+0.458%</td><td>+0.158%</td><td>+2.7%</td></tr>
-          <tr><td>NO SL, day-15 timeout + book-half/trail</td><td>66.5%</td><td>0%</td><td>+0.771%</td><td>+0.471%</td><td><strong style="color: var(--good)">+8.3%</strong></td></tr>
-        </tbody>
-      </table>
-      <p>Where the coarse +1.77% came from: (1) the +1.0% whipsaw assumption — in reality the stop fires FIRST in most both-touch windows (day-by-day, the -3% SL fires on 63.5% of trades); (2) signal-close entry isn't executable — next-open entry costs ~0.39%/trade in gap-up drift. Same-day both-touch ambiguity affects only 1.9% of trades, so this correction is robust to sequencing assumptions. <strong>The +5% target is fine (66.5% touch it in 15d unstopped); the -3% stop is inside small-cap noise on a 15-day horizon and is the value-destroyer.</strong> Also tested: the ±1% "never chase" buy zone LOWERED mean per trade (+0.615% → +0.295%) — the gapped-up names were disproportionately the winners.</p>
-      <p>Tail-risk price of dropping the SL: 5th-percentile trade -16.7%, worst trade -56%, worst 8-name basket week -26.6%. The stop decision is a risk-tolerance decision, not a free lunch. The band-fit ≥ 2 subset has NOT yet been re-run day-by-day (the +2.29% above will also compress; run pending).</p>
-      <p><strong>Standing rule from this correction: no window-level exit approximations. Every exit-rule claim must come from day-by-day sequenced simulation, entered at next-day open, net of ≥0.30% round-trip costs.</strong></p>
-    </div>
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The selection filter — every stock judged on its own scale (z-bands, shipped 2026-08-25)</h3>
+    <p style="color: var(--fg-dim); font-size: 14px;">Absolute thresholds (RSI 42–60 for everyone) treat a sleepy pharma and a high-beta smallcap identically. We replaced them with each stock's <em>own</em> distribution — same rule, per-stock calibration. Shipped after a pre-registered A/B: pool touch rate 55.9% vs 54.1% (10-yr) and 60.1% vs 55.7% (since April); the names z-bands add that absolute bands missed were the best bucket in the test (60–69% touch).</p>
+    <pre><code><span class="comment"># QC filter (apply_qc_filter, generate_hybrid_basket.py)</span>
+rsi_z         in [-1.0, +0.25]   <span class="comment"># RSI vs the stock's OWN 252d mean/std: neutral-to-washed</span>
+ret20d_z      in [-1.0, +0.75]   <span class="comment"># 20d move in units of the stock's OWN vol (×√20)</span>
+ret5d_z       in [-1.0, +1.0]    <span class="comment"># no own-scale parabolic</span>
+volume_vs_20d &lt; 2                <span class="comment"># no distribution days</span>
+close &gt; ₹50 · adv_20d ≥ ₹5cr     <span class="comment"># no pennies, real exit liquidity</span>
+max_uc_streak &lt; 2                <span class="comment"># operator-pump kill (UC day = +4.98–10.05%, trailing 45 cal-days)</span>
+contamination = NONE             <span class="comment"># no -30% single-day drop lacking a corp-action within ±5d</span>
 
-    <h3 style="color: var(--fg); margin: 32px 0 12px;">The band-fit score — where the edge actually lives</h3>
-    <p style="color: var(--fg-dim); font-size: 14px;">The backtest's single most important finding: <strong style="color: var(--bad)">the ML classifier is OVERCONFIDENT above 0.85</strong> — those "safest" picks hit only 18.9% vs 23.9% for the honest 0.5–0.7 band. Consolidation beats momentum. Moderate RSI beats extended RSI. We score every candidate 0–3:</p>
-    <pre><code>def band_fit_score(row):
-    <span class="comment"># Earned bands (10-yr hit rates in comments)</span>
-    s = 0.0
-    if -0.05 &lt;= row.return_20d &lt;= 0.00: s += 1.0   <span class="comment"># 27.5% hit — BEST band (consolidation)</span>
-    elif -0.10 &lt;= row.return_20d &lt;= 0.02: s += 0.5 <span class="comment"># -15..-5 band: 26.3% (2nd best)</span>
-    if 45 &lt;= row.rsi_14 &lt;= 55: s += 1.0            <span class="comment"># 25.5% hit — moderate RSI wins</span>
-    elif 42 &lt;= row.rsi_14 &lt;= 58: s += 0.5
-    if 0.50 &lt;= row.ml_score &lt;= 0.70: s += 1.0      <span class="comment"># 23.9% hit — the HONEST zone</span>
-    elif 0.45 &lt;= row.ml_score &lt;= 0.75: s += 0.5
-    elif row.ml_score &gt;= 0.85: s -= 0.5            <span class="comment"># 18.9% hit — PENALTY, overconfident.</span>
-                                                   <span class="comment"># NOTE: interim fix — the classifier itself</span>
-                                                   <span class="comment"># has NOT been recalibrated yet; the penalty</span>
-                                                   <span class="comment"># routes around the flaw, it doesn't cure it.</span>
-    return s
-<span class="comment"># Selection: Tier-1 = 2+ engine consensus, ranked by band_fit then cs_score.
-# Tier-2 backfill = ML 0.50-0.75 AND band_fit >= 1.5. Total always 8 names.</span></code></pre>
+<span class="comment"># ML layer: LightGBM classifier (rolling train/test windows, retrained weekly).
+# Only the HONEST zone is trusted: picks need ml_score in [0.50, 0.75].
+# The classifier's MOST confident band (≥0.85) historically UNDERPERFORMED —
+# high raw scores get less credit, not more.
+# Tier-1 = 2+ engine consensus (rare, strongest signal) · Tier-2 = ML + bands. Always 8 + 2 reserves.</span></code></pre>
 
-    <h3 style="color: var(--fg); margin: 32px 0 12px;">The QC filter (tightened from backtest evidence)</h3>
-    <pre><code>rsi_14        in [42, 60]      <span class="comment"># was 40-72 — extended names underperform</span>
-return_20d    in [-10%, +15%]  <span class="comment"># was -15/+30 — chase mode (20-30%) hits only 19.5%</span>
-return_5d     in [-5%, +5%]    <span class="comment"># was -5/+10 — no parabolics</span>
-volume_vs_20d &lt; 2              <span class="comment"># was &lt;3 — no distribution days</span>
-close         &gt; ₹50            <span class="comment"># no penny stocks</span>
-adv_20d       ≥ ₹5cr           <span class="comment"># exit liquidity</span>
-max_uc_streak &lt; 2              <span class="comment"># operator-pump kill — a "UC day" is</span>
-                               <span class="comment">#   return_1d ∈ [+4.98%, +10.05%], and the streak is the max</span>
-                               <span class="comment">#   consecutive run over the TRAILING 45 CALENDAR DAYS</span>
-contamination = NONE           <span class="comment"># no -30%+ single-day drop lacking a corp-action within ±5d</span></code></pre>
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">Tape forensics — every pick interrogated before entry, automatically</h3>
+    <p style="color: var(--fg-dim); font-size: 14px;">Born when a user eyeballed one sinking pick and asked "why aren't we looking closely at everything?" Now a pipeline step (<code>tape_forensics.py</code>): every pick and reserve is scanned for <strong>distribution days</strong> (≤-3% on &gt;1.5× volume = institutional selling), <strong>post-results dumps on high volume</strong> (informed selling we can't read), broken structure, and delivery quality — graded severity 0–3. Severity-3 names become swap candidates — an analyst panel + adversarial consistency check recommends, a human confirms (the scan itself never auto-trades). Low-volume dips are drift, not distribution — volume separates noise from information. Mid-trade monitoring rule (currently manual, backtested to improve the worst trade from -56% to -48%): a holding printing a fresh distribution day is exited next open.</p>
 
-    <h3 style="color: var(--fg); margin: 32px 0 12px;">Other findings a copier must not miss</h3>
+    <h3 style="color: var(--fg); margin: 32px 0 12px;">The weekly learning loop — the system scores itself before it picks again</h3>
     <ul style="color: var(--fg-dim); font-size: 14px; line-height: 2;">
-      <li>🐻 <strong style="color: var(--fg);">BEAR regime (breadth &lt;30% above 200DMA) is the BEST regime</strong> — +2.17% mean/trade, lowest SL rate (26.3%). Value shows up when the crowd panics. Don't sit out bear tapes.</li>
-      <li>⚡ <strong style="color: var(--fg);">44.9% of trades touch BOTH target and SL intraday</strong> (whipsaw). The backtest assumes SL-fills-first — conservative. Your real fills decide half the P&L; use limit orders inside the buy zone, never chase.</li>
-      <li>🔁 <strong style="color: var(--fg);">RL miss loop</strong>: every week, <code>miss_learner.py</code> diagnoses last week's missed winners into 5 buckets — UNIVERSE_MISS (not in data) / MODEL_COVERAGE_MISS (score &lt;0.50) / THRESHOLD_MISS (score OK but ranked outside top-30) / CAUGHT (in an engine top-30) / CORRECTLY_FILTERED (QC killed it for cause) — appended to <code>logs/miss_learnings.jsonl</code>. Separately, <code>train_missed_winner_classifier.py</code> retrains a supervised LightGBM on historical price-feature windows labeled <code>peak_return_forward_15d ≥ +15% AND passes today's QC filter</code> — the ledger diagnoses WHERE misses happen; the classifier trains on the underlying price history, not the ledger itself.</li>
-      <li>📰 <strong style="color: var(--fg);">"Spurt in Volume" trap</strong>: NSE announcement taggers mislabel exchange surveillance notices as order wins. Only "Bagging/Receiving of orders/contracts" is a real order win. Treat volume-spurt notices as accumulation hints, never as business catalysts.</li>
-      <li>🧪 <strong style="color: var(--fg);">Rationale is adversarially verified</strong>: every per-pick rationale is written by one analyst agent and fact-checked by a paired independent skeptic agent against the raw data blob (2026-07-07 basket: 16 agents, 5/8 clean first pass, 3 numeric errors caught before shipping). Hard-won detail: <strong>give the verifier every source document the analyst had</strong> — our PNBGILTS verifier flagged correct backtest numbers as "fabricated" because the backtest table wasn't in its context.</li>
-      <li>📉 <strong style="color: var(--fg);">32 trades is an anecdote, not a backtest.</strong> Our first "backtest" was 4 weeks / 32 trades and it nearly shipped a bad filter. Minimum bar: full market cycle, thousands of trades, walk-forward retraining.</li>
+      <li>📊 <strong style="color: var(--fg);">Self-scoring first</strong>: <code>score_basket_outcomes.py</code> replays every past basket day-by-day under the published rules and prints two numbers before any new pick: the <strong>goal tracker</strong> (share of picks touching +5% — the target is 90%, we're at ~42-62%) and the <strong>RANK CHECK</strong> (do ranks 1-4 beat 5-8? currently 75% vs 50% — the day that flips, the ranking weights get rebuilt).</li>
+      <li>🔁 <strong style="color: var(--fg);">Miss diagnosis + retrain</strong>: <code>miss_learner.py</code> buckets last window's missed winners (universe / model / threshold / caught / correctly-filtered); the classifier retrains weekly on rolling windows (its dates used to be frozen — mistake #13).</li>
+      <li>⚖️ <strong style="color: var(--fg);">Nothing ships on a hunch</strong>: every filter/model change must beat the incumbent on a full walk-forward (13+ weekly windows minimum). Two features and one "obviously good" sub-cohort died at this bar — all in the ledger.</li>
+      <li>⏳ <strong style="color: var(--fg);">Scan weekly, never churn holdings</strong>: refresh-frequency test showed re-picking every 3-5 days is net-negative (-10%/yr) — a trade's returns are back-loaded (only 45% of eventual +5% touches happen by day 5). Positions leave only via target, stop, day-15, or the (manual) distribution-day eviction rule.</li>
+      <li>📰 <strong style="color: var(--fg);">"Spurt in Volume" trap</strong>: NSE taggers mislabel exchange surveillance notices as order wins. Only "Bagging/Receiving of orders/contracts" is real. Treat volume-spurt notices as attention flags, never business catalysts.</li>
+      <li>🧪 <strong style="color: var(--fg);">Rationale is adversarially verified</strong>: every per-pick rationale is fact-checked by an independent skeptic agent against the raw data before publication (typical run: 3 numeric errors caught pre-ship). Give the verifier every source the analyst had, or it flags true numbers as fabricated.</li>
+      <li>📉 <strong style="color: var(--fg);">32 trades is an anecdote, not a backtest.</strong> Minimum bar: full market cycle, thousands of trades, day-by-day exit simulation, entry at next-day open, ≥0.30% costs. Window-level shortcuts once inflated our CAGR by ~36 points (see Archive).</li>
     </ul>
   </div>
 </section>
@@ -1473,38 +1454,37 @@ contamination = NONE           <span class="comment"># no -30%+ single-day drop 
 # macro_panel.parquet: trade_date max = 2026-06-30  ✓ "fresh"
 # but dxy/brent/us_10y last NON-NULL value = 2026-05-07  ✗ 55 days stale (forward-filled)</span>
 
-<span class="comment"># The fix: TWO levels of contract, verified before ANY basket can emit</span>
-FILE-LEVEL  : max(date_col) or mtime vs business-day limit    <span class="comment"># 11 contracts</span>
-COLUMN-LEVEL: last non-null date PER CRITICAL COLUMN vs limit <span class="comment"># 14 contracts</span>
+<span class="comment"># The fix: THREE kinds of check, verified before ANY basket can emit — 27 total</span>
+FILE-LEVEL  : max(date_col) or mtime vs business-day limit      <span class="comment"># 12 contracts</span>
+COLUMN-LEVEL: last NON-NULL date per critical column vs limit   <span class="comment"># 14 contracts</span>
+CONTINUITY  : no run of ≥3 consecutive missing trading days     <span class="comment"># 1 check — a fresh</span>
+                                                                <span class="comment"># max-date can hide interior holes (we shipped a 9-session gap once)</span>
 
-<span class="comment"># Contracts (verify_freshness.py) — limits in business days. 25 checks total.</span>
-PRICES        3bd   cols: close, rsi_14_daily, return_20d, volume_vs_20d (3bd each)
-CS_ENGINE     3bd   (mtime)   <span class="comment"># compare_short_horizons — primary 15D/5% engine</span>
-HC_ENGINE     3bd   (mtime)   <span class="comment"># high conviction</span>
-MB_ENGINE     3bd   (mtime)   <span class="comment"># multibagger (also emits the regime gate)</span>
-F180_ENGINE   3bd   (mtime)   <span class="comment"># 180d honest frontier</span>
-MH_ENGINE     3bd   (mtime)   <span class="comment"># multi_horizon CSV — was UNGATED until 2026-07-07;</span>
-                              <span class="comment"># the completeness audit for this page caught it</span>
-ML_CLASSIFIER 3bd   (mtime)
+<span class="comment"># Contracts (verify_freshness.py) — limits in business days</span>
+PRICES        3bd   cols: close, rsi_14_daily, return_20d, volume_vs_20d + continuity
+5 ENGINES     3bd   (mtime — incl. the multi_horizon CSV, once silently ungated)
+ML_CLASSIFIER 3bd
 MACRO_PANEL   3bd   cols: usdinr 3bd · brent/wti/us_10y/dxy/us_vix/spx 5bd each
-INDUSTRY      3bd   cols: sector_5d_ret, sector_20d_ret, rs_20d (3bd each)
+INDUSTRY      3bd   cols: sector_5d_ret, sector_20d_ret, rs_20d
 NEWS_EVENTS   5bd
 ANNOUNCEMENTS 10bd
+CORP_ACTIONS  10bd  <span class="comment"># added after a 113-day silent rot: 21 missing splits/bonuses</span>
+                    <span class="comment"># (TRENT, LICI, CUB…) were corrupting price adjustment itself</span>
 
 <span class="comment"># Enforcement — NO bypass path:</span>
 generate_hybrid_basket.py  → verify_or_die() on entry; refuses to emit if ANY check fails
-run_weekly_pipeline.sh     → step 3.5 hard-fails the whole run (exit 1)
-emit_freshness_status.py   → reports/freshness_status.md dashboard, every run
-daily brief                → freshness table at the TOP, impossible to miss</code></pre>
+run_weekly_pipeline.sh     → hard-fails the whole run (exit 1)
+emit_freshness_status.py   → reports/freshness_status.md dashboard, every run</code></pre>
 
-    <pre><code><span class="comment"># And because sources DO fail: FRED fallback for Yahoo 429s (fetch_global_macro.py)</span>
-^TNX → DGS10 · DX-Y.NYB → DTWEXBGS · ^VIX → VIXCLS · ^GSPC → SP500
-<span class="comment"># Daily brent/wti do NOT come from Yahoo at all — they come from FRED directly
-# via fetch_commodity_prices.py (DCOILBRENTEU / DCOILWTICO). Brent was one of the
-# stale-incident columns, so know your actual source chain.
-# 3 retries + exponential backoff on both sources.
-# If ALL sources fail → exit non-zero → the gate catches the stale column downstream.
-# A fetcher that fails silently is worse than one that crashes loudly.</span></code></pre>
+    <pre><code><span class="comment"># Hard-won sourcing rules (each cost us a real incident):</span>
+<span class="comment"># 1. FRED fallback for Yahoo 429s: ^TNX→DGS10 · DX-Y.NYB→DTWEXBGS · ^VIX→VIXCLS · ^GSPC→SP500.
+#    Daily brent/wti come from FRED directly (DCOILBRENTEU/DCOILWTICO), never Yahoo.
+# 2. Use an HONEST bot User-Agent ("ZoomFetcher"). FRED's WAF tarpits spoofed-Chrome UAs
+#    (connection accepted, never answered → 6-minute timeouts). Honest UA: 200 in 0.3s.
+# 3. Price refresh backfills ADAPTIVELY from the parquet's real max date — a fixed
+#    5-day lookback once left a silent 9-session hole that fed the models garbage.
+# 4. A fetcher that fails silently is worse than one that crashes loudly:
+#    exit non-zero on total failure so the gate catches it downstream.</span></code></pre>
   </div>
 </section>
 
@@ -1698,7 +1678,7 @@ const SIGNALS = {
   vol: [
     { name: "adv_20d_cr", display: "ADV 20-day (₹cr)", icon: "💰",
       hover: "how much volume in ₹cr daily — is it tradeable?",
-      desc: "Average Daily traded VALUE over 20 days, in ₹crores. Our PRIMARY liquidity filter — we require ≥2cr/day for any trade. <1cr = excluded universe. ≥50cr = mega-liquid.",
+      desc: "Average Daily traded VALUE over 20 days, in ₹crores. Our PRIMARY liquidity filter — production requires ≥5cr/day (older diagnostic layers used lower cuts; that mismatch once caused divergent rebuilds). ≥50cr = mega-liquid.",
       formula: "mean(close × volume / 1e7, window=20)",
       source: "NSE bhavcopy total_traded_value field, rolling 20-day mean.",
       code: "df['adv_20d_cr'] = df.groupby('symbol')['total_traded_value'].rolling(20).mean().values / 1e7" },
@@ -1873,7 +1853,7 @@ const SIGNALS = {
       desc: "Max number of consecutive upper-circuit days (+5% or +10% lock) in trailing 30 days. ≥3 = OPERATOR PUMP suspect. This is the QC rule that killed SILVERTUC.",
       formula: "max streak of consecutive UC closes",
       source: "QC computed inline from return_1d series.",
-      code: "p['is_uc'] = (p['return_1d']>=0.0498)&(p['return_1d']<=0.05005)\nmax_streak = consecutive_true_count(p['is_uc'])" },
+      code: "p['is_uc'] = (p['return_1d']>=0.0498)&(p['return_1d']<=0.1005)  # 5%/10% circuit bands\nmax_streak = consecutive_true_count(p['is_uc'])" },
     { name: "contamination_flag", display: "Contamination Check", icon: "☢️",
       hover: "unrecorded split/bonus → fake price drops in training",
       desc: "Flag for any single-day drop worse than -30% in price history that has NO matching corporate-action record within ±5 days. 399 of 424 severe drops in our dataset are unrecorded — these contaminate training. Any flagged symbol is DROPPED from basket.",
@@ -1920,7 +1900,7 @@ const SIGNALS = {
   targets: [
     { name: "score_5pct_15d", display: "P(+5% in 15 days)", icon: "🎯",
       hover: "the user's question — calibrated probability of +5% within 15 trading days",
-      desc: "Calibrated probability that the stock hits +5% within 15 trading days. THE primary trading signal. Empirically validated: at score 0.95+, hit rate is 97.9% (n=578). Target +5% / SL -3% / 15d → ~+52% ann EV at top decile.",
+      desc: "Calibrated probability that the stock TOUCHES +5% within 15 trading days (cs_score) — one input to the confidence ranking, weighted 0.5×. Touch-probability is NOT exit-rule P&L: the old claim of '97.9% at score 0.95+' belongs to the retired frontier layer (see Archive). Under the C2 contract this score is a probability field per pick, never a standalone signal.",
       formula: "isotonic_calibrator(ensemble_predict(features), fit_on=year-1, tested_on=year)",
       source: "src/agentic/compare_short_horizons.py output → data/derived/compare_short_horizons.parquet",
       code: "lgb + xgb ensemble → mean prob → isotonic regression calibrated on prior year OOF" },
@@ -1950,7 +1930,7 @@ const SIGNALS = {
       code: "label_h21 = (close_{t+21} > close_t * threshold).astype(int)" },
     { name: "consensus_engine_count", display: "Cross-Engine Vote", icon: "🤝",
       hover: "how many of 5 engines agree on this name",
-      desc: "Number of ML engines (of 5) that have this symbol in their top-20. We require ≥2 for any name to enter the basket. SILVERTUC was 4/4 once — taught us cross-engine count ≠ risk-adjusted quality.",
+      desc: "Number of ML engines (of 5) with this symbol in their top-30. Consensus (≥2) creates rare Tier-1 picks and earns the biggest confidence weight (×1.5); most weeks the basket is Tier-2 (ML honest zone + bands) with zero consensus. SILVERTUC was 4/4 once — cross-engine count on a manipulated tape is correlated noise, not quality.",
       formula: "sum(symbol in top_20(engine) for engine in [180d, hc, mb, mh, csh])",
       source: "Composed across all 5 engine outputs.",
       code: "engine_count[sym] = sum(sym in top20(e) for e in ENGINES)" }
@@ -2082,19 +2062,21 @@ Required output, in order:
    - Contamination filter: any -30%+ single-day drop with no corp_action ±5d → DROP
    - RSI &gt; 80 chase filter, ADV &lt; 2cr illiquid filter, close &lt; ₹30 penny filter
 
-6. Cross-engine consensus logic:
-   - Name in top-15 of ≥2 engines → tier 2
-   - Name in top-15 of ≥3 engines → tier 1
-   - Name in 4/5 engines → tier "unanimous" (BUT also check for operator pump —
-     cross-engine agreement on micro-cap UC-pumpers is correlated noise,
-     not 4 independent signals)
+6. Cross-engine consensus logic (top-30 sets per engine):
+   - Tier-1 = symbol in the top-30 of ≥2 engines AND passes QC (rare, strongest)
+   - Tier-2 = ML honest zone (0.50-0.75) + band_fit ≥ 1.5, no consensus needed
+     — most weekly baskets are all Tier-2
+   - Consensus on a manipulated tape is correlated noise, not 4 independent
+     signals (SILVERTUC lesson) — the operator-pump kill runs regardless
 
 7. Forward record (live_predictions/):
-   - Every weekday after market close (18:30 IST) run scheduled task to:
-     a) refresh prices, b) re-run all 5 engines, c) apply QC,
-     d) write live_predictions/YYYY-MM-DD_15d5pct.json with: picks, buy zones
-        (close ×0.99-1.01), targets (×1.05), SLs (×0.97), weights, tier,
-        band_fit, ml_score, engines_count, regime_gate, input mtimes, caveats
+   - WEEKLY, after Friday close (run_weekly_pipeline.sh):
+     a) refresh all data, b) re-run 5 engines + classifier, c) gate + QC,
+     d) write live_predictions/YYYY-MM-DD_15d5pct.json with: 8 picks + 2
+        reserves, buy zones (close ×0.99-1.01), targets (×1.05), PER-PICK
+        vol-scaled sl_pct/sl_3pct, rank + confidence + confidence_rationale,
+        tier, band_fit, ml_score, engines_count, regime_gate, entry_rules,
+        exit_contract, input mtimes
      e) git commit + push as immutable timestamped artifact
 
 8. Realized outcomes (realized_outcomes/):
@@ -2115,11 +2097,14 @@ Required output, in order:
 11. RECOVERY.md — copy the 3-command restore sequence from §Build section
 
 12. FRESHNESS GATE (src/agentic/verify_freshness.py) — build this BEFORE any
-    basket generator. Two levels, per §Freshness section of the HTML.
-    11 file-level + 14 column-level = 25 checks:
+    basket generator. THREE kinds of check, per §Freshness section:
+    12 file-level + 14 column-level + 1 continuity = 27 checks:
     - FILE-level: max(date_col) or mtime vs business-day limits
       (prices + ALL FIVE engines incl. the multi_horizon CSV + ml_classifier +
-       macro + industry = 3bd, news 5bd, announcements 10bd)
+       macro + industry = 3bd, news 5bd, announcements 10bd,
+       CORP_ACTIONS 10bd — added after a 113-day silent rot)
+    - CONTINUITY: no run of ≥3 consecutive missing trading days within the
+      trailing 32 business days (a fresh max-date can hide interior holes)
     - COLUMN-level: last NON-NULL date per critical column
       (PRICES: close/rsi_14_daily/return_20d/volume_vs_20d 3bd each;
        MACRO: usdinr 3bd, brent/wti/us_10y/dxy/us_vix/spx 5bd each;
@@ -2134,16 +2119,39 @@ Required output, in order:
 
 13. THE 15D/+5% PLAYBOOK (src/agentic/generate_hybrid_basket.py) — the
     production strategy. Copy §Playbook section EXACTLY:
-    - 8 names × 12.5% = 100% deploy · target +5% (book half, trail +2.5%) ·
-      SL -3% hard · timeout day 15 · weekly refresh
-    - QC: RSI 42-60, ret20d -10..+15%, ret5d -5..+5%, vol/20d &lt; 2, close &gt; 50,
-      ADV ≥ 5cr, max UC streak &lt; 2, zero contamination
-    - band_fit_score with the ML ≥ 0.85 PENALTY (overconfident band hits 18.9%
-      vs 23.9% for 0.5-0.7 — rank by band_fit FIRST, ml_score second)
+    - 8 names × 12.5% = 100% deploy + 2 ranked RESERVES at 0% · weekly refresh
+    - EXIT = C2 contract (tournament-locked 2026-08-18): +5% touch → book half,
+      trail rest at +2.5% · per-pick VOL-SCALED SL = 3× the stock's own 20d
+      daily vol, floor -3% cap -12% (sl_pct/sl_3pct fields) · day-15 timeout
+    - QC = Z-SCORE bands (shipped 2026-08-25): rsi_z in [-1.0,+0.25] vs own
+      252d dist · ret20d_z in [-1.0,+0.75] and ret5d_z in [-1.0,+1.0] in own-vol
+      units · vol/20d &lt; 2 · close &gt; 50 · ADV ≥ 5cr · max UC streak &lt; 2 ·
+      zero contamination (vs the FULL 11-yr corp-actions store)
+    - ML honest zone: picks need ml_score in [0.50, 0.75] — the ≥0.85 band
+      underperforms (18.9% vs 23.9%); high raw scores get LESS credit
+    - CONFIDENCE RANKING contract: every pick + reserve ships with rank,
+      confidence (= min(engines,3)×1.5 + band_fit + honest-zone-ML-proximity×2
+      + cs×0.5) and a plain-language rationale — hard assert, no bypass
+    - ENTRY protocol: weekend AMO limits at buy_high into the 9:00-9:07
+      pre-open auction · never chase above zone · gapped weight → best reserve
     - Tier-1 = 2+ engine consensus; Tier-2 backfill = ML 0.50-0.75 + band_fit ≥ 1.5
 
+13b. TAPE FORENSICS (src/agentic/tape_forensics.py, pipeline step 4.3) —
+    every pick + reserve scanned pre-entry: distribution days (≤-3% on &gt;1.5×
+    vol), post-results dumps on HIGH volume, structure, delivery quality →
+    severity 0-3. Sev-3 → swap CANDIDATE (analyst panel + adversarial
+    consistency check recommend; a human confirms — the scan is
+    informational, exit code always 0). Mid-trade eviction on a fresh
+    distribution day is a manual monitoring rule, not yet automated.
+
+13c. SELF-SCORING (src/agentic/score_basket_outcomes.py, step 3.4) — replays
+    every past basket day-by-day under the published rules BEFORE new picks:
+    goal tracker (touch-rate vs the 90% target) + RANK CHECK (ranks 1-4 vs
+    5-8 realized touch). Plus lean_shadow_check.py: an engine-free basket
+    diffed against prod weekly — proof of what the engine layer adds.
+
 14. 10-YEAR BACKTEST (src/agentic/backtest_10yr_15d5pct.py) — before trusting
-    ANY filter change, re-run: 529 weekly baskets 2016-2026, walk-forward
+    ANY filter change, re-run: 530 weekly baskets 2016-2026, walk-forward
     LightGBM retrained every 13 weeks. 32 trades is an anecdote. Bands are
     only valid if earned here.
     ⚠️ EXIT SIMULATION MUST BE DAY-BY-DAY (2026-07-07 correction): walk each
@@ -2151,9 +2159,12 @@ Required output, in order:
     not executable — baskets are emitted after close), resolve same-day
     both-touch as SL-first, subtract ≥0.30% round-trip costs. NEVER book
     both-touch windows at an assumed value — that approximation turned a
-    -1.3%-CAGR geometry into a +34.6% mirage. Relative band rankings
-    (consolidation &gt; chase, ML 0.5-0.7 &gt; 0.85+) survived the correction;
-    absolute P&L claims did not.
+    -1.3%-CAGR geometry into a +34.6% mirage.
+    ⚠️ AND RE-VALIDATE AFTER EVERY DATA CORRECTION (2026-08-25): the absolute
+    band spreads (consolidation &gt; chase) did NOT survive corrected data on the
+    touch metric — they were exit-geometry artifacts. Only the ML honest-zone
+    finding (0.5-0.7 &gt; 0.85+) and the z-band A/B survived. Claims expire;
+    re-earn them.
 
 15. RL MISS LOOP (src/agentic/miss_learner.py +
     train_missed_winner_classifier.py) — weekly, two SEPARATE artifacts:
@@ -2202,11 +2213,20 @@ Critical operating rules (from §Constitution + hard-won corrections):
 - NEVER claim 80%+ confidence on a threshold where 2025 OOS sample is empty
 - NEVER disable the contamination filter
 - NEVER let operator-pump names ship (consecutive UCs = drop)
-- NEVER emit a basket without the freshness gate passing (file AND column level)
-- NEVER rank picks by raw ML score — the ≥0.85 band underperforms; use band_fit
+- NEVER emit a basket without the freshness gate passing (file + column + continuity)
+- NEVER rank picks by raw ML score — the ≥0.85 band underperforms; honest zone only
+- NEVER resurrect the flat -3% SL — it fires on 63.5% of trades and is net-negative;
+  the C2 vol-scaled contract replaced it via tournament, and only a new tournament
+  (day-by-day, costs, drawdown reported) may change the exit contract
 - NEVER trust a backtest under a full market cycle / thousands of trades
 - NEVER use window-level exit approximations — day-by-day sequencing only,
   next-open entry, ≥0.30% costs (the coarse version overstated CAGR by ~36pp)
+- NEVER accept row-level significance on clustered panels — the investable unit
+  is the WEEK (a 12/12-years row-stat "alpha" collapsed to -89% maxDD as a portfolio)
+- NEVER keep two stores of the same dataset — one canonical path, gate-protected
+  (dual announcement + corp-action stores each rotted for months, silently)
+- NEVER churn holdings on a re-scan — returns are back-loaded; positions exit only
+  via target, stop, day-15 timeout, or the manual distribution-day eviction rule
 - NEVER add a third-party dependency without proof the stdlib equivalent was
   tried and is insufficient (heavy data libs pre-approved: pandas/numpy/
   pyarrow/lightgbm/sklearn/shap)
@@ -2221,17 +2241,21 @@ Critical operating rules (from §Constitution + hard-won corrections):
 
 When done, run the CONVERGENCE CHECK — all three must pass before you call
 the rebuild complete:
-1. python3 src/agentic/verify_freshness.py            → must exit 0
+1. python3 src/agentic/verify_freshness.py            → must exit 0 (27 checks)
 2. bash src/agentic/run_weekly_pipeline.sh --skip-fetch --dry-run
-   → must emit live_predictions/YYYY-MM-DD_15d5pct.json with exactly 8 picks,
-     12.5% weights, levels = close ×0.99/1.01 (buy), ×1.05 (target),
-     ×0.97 (SL), and per-pick band_fit/ml_score/engines_count fields
+   → must emit live_predictions/YYYY-MM-DD_15d5pct.json with exactly 8 picks
+     at 12.5% + reserves, buy zone close ×0.99/1.01, target ×1.05,
+     PER-PICK vol-scaled sl_pct/sl_3pct, and rank/confidence/
+     confidence_rationale on every pick and reserve (the generator
+     hard-asserts these — if it emits without them, you built it wrong)
 3. Re-run on the SAME data_through date as a committed basket in
-   live_predictions/ and diff the symbol list — same data + same filter
-   MUST give the same 8 names (LightGBM random_state=42 everywhere;
-   universe = ADV ≥ ₹5cr AND close &gt; ₹50). If your names differ, you
-   diverged on: the label (touch vs exit-rule), the universe cut, the QC
-   bands, or the band_fit ranking — in that order of likelihood.
+   live_predictions/ and diff — same data + same filter MUST give the same
+   8 names, same order, same scores (LightGBM random_state=42 everywhere;
+   universe = ADV ≥ ₹5cr AND close &gt; ₹50; as_of_date/mtime fields naturally
+   differ). We verify this live: a full rerun including model retraining
+   reproduced a committed basket’s picks, ranks and scores exactly. If your names differ, you diverged on: the label
+   (touch vs exit-rule), the universe cut, the z-band QC, or the ranking —
+   in that order of likelihood.
 Then commit everything and push to a new private GitHub repo.
 
 ═══ CURRENT INVENTORY (auto-generated) ═══
@@ -2515,87 +2539,81 @@ function copyPrompt() {
 <section id="ledger">
   <div class="container">
     <div class="section-tag" style="color: var(--bad)">The Honesty</div>
-    <h2 class="section-title">13 mistakes we documented & fixed</h2>
-    <p class="section-sub">Most "AI picks stocks" content hides its failures. We publish them. The credibility moat is the FAILURE LOG, not the wins.</p>
+    <h2 class="section-title">The mistakes that built the system</h2>
+    <p class="section-sub">Most "AI picks stocks" content hides its failures. We publish them — the credibility moat is the failure log, not the wins. The 12 most instructive below; the machine-readable ledger (<code>logs/calibration_corrections.jsonl</code>) plus the git history of reports and commits carry the full record; older entries are in the Archive at the bottom.</p>
 
     <div class="ledger">
       <div class="ledger-item">
-        <span class="date">2026-04-28</span>
-        <h5>Path B microcap basket disaster</h5>
-        <div class="what-wrong">❌ Surfaced 8 microcap trades despite filter_cascade returning 0 actionable names. User lost ~5%.</div>
-        <div class="fix">✓ Hard rule encoded: NO long picks when cascade=0. Discipline gate binding.</div>
-      </div>
-      <div class="ledger-item">
-        <span class="date">2026-04-29</span>
-        <h5>Multibagger 90% claim was overfit</h5>
-        <div class="what-wrong">❌ Calibration was in-sample. Real prospective hit rate: 12.4% per name, not 90%.</div>
-        <div class="fix">✓ Built find_180d_frontier_honest.py with strict prospective protocol (calibrate on 2024 only, test on 2025 only).</div>
-      </div>
-      <div class="ledger-item">
-        <span class="date">2026-04-29</span>
-        <h5>Joint signal stacking → 80% confidence</h5>
-        <div class="what-wrong">❌ Falsified empirically: 3-signal stocks have 40.4% hit rate vs 42.8% baseline. Signals correlate.</div>
-        <div class="fix">✓ Removed stacking thesis. Test independence empirically before claiming it.</div>
-      </div>
-      <div class="ledger-item">
-        <span class="date">2026-04-29</span>
-        <h5>Agent prompts were docs only</h5>
-        <div class="what-wrong">❌ prompts/*.md existed but were never programmatically invoked. Devil's advocate fired AFTER claims, not before.</div>
-        <div class="fix">✓ Built run_agent.py to invoke prompts as Claude API system messages. Material claims must run devils_advocate FIRST.</div>
-      </div>
-      <div class="ledger-item">
         <span class="date">2026-05-01</span>
         <h5>47-feature look-ahead leak</h5>
-        <div class="what-wrong">❌ Screener (18) + QVM (20) + Academic (9) features broadcast TODAY's snapshot as constants across all historical training rows.</div>
-        <div class="fix">✓ Quarantined in source. Added pytest CI gate against per-symbol-constant features. Cannot recur.</div>
-      </div>
-      <div class="ledger-item">
-        <span class="date">2026-05-04</span>
-        <h5>Stock split adjustment incomplete</h5>
-        <div class="what-wrong">❌ 424 single-day drops worse than -50% in dataset, 399 with NO corporate-action record. Filename "_adjusted" was a label, not a contract.</div>
-        <div class="fix">✓ Per-name contamination filter added. Dataset-wide rebuild planned. Top picks individually audited.</div>
+        <div class="what-wrong">❌ 47 fundamentals features broadcast TODAY's snapshot as constants across all historical training rows.</div>
+        <div class="fix">✓ Quarantined; pytest CI gate blocks any per-symbol-constant feature. Cannot recur.</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-06-08</span>
-        <h5>SILVERTUC "4/4 engines" framing</h5>
-        <div class="what-wrong">❌ Sold a micro-cap with 3 consecutive UCs as "highest cross-validation." Cross-engine consensus on operator pumps is CORRELATED NOISE, not 4 independent signals.</div>
-        <div class="fix">✓ Added operator-pump detection to QC gate: consecutive UCs, UC+LC volatility, low delivery, extreme 20d returns.</div>
-      </div>
-      <div class="ledger-item">
-        <span class="date">2026-06-17</span>
-        <h5>Names gap up before retail can buy</h5>
-        <div class="what-wrong">❌ EOD models pick names market also notices → smart money absorbs overnight → retail gets gapped-up entries.</div>
-        <div class="fix">✓ Added "stealth signal" filter: high P + no recent UC + low recent momentum. Bias picks toward pullback names.</div>
+        <h5>Operator pumps looked like "4/4 engine consensus"</h5>
+        <div class="what-wrong">❌ A micro-cap on 3 consecutive upper circuits was sold as "highest cross-validation." Consensus on manipulated tape is correlated noise, not independent signals.</div>
+        <div class="fix">✓ Operator-pump kill in QC: max UC streak &lt; 2 (UC = +4.98–10.05% day, trailing 45 days).</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-06-24</span>
         <h5>"32 trades" sold as a backtest</h5>
-        <div class="what-wrong">❌ First 15D/5% validation was 4 weeks / 32 trades — an anecdote dressed as evidence. It nearly shipped a bad filter, and 2 picks hit SL on day one.</div>
-        <div class="fix">✓ Built backtest_10yr_15d5pct.py: 529 weekly baskets, 4,224 trades, 2016-2026, walk-forward retraining every 13 weeks, exact exit-rule simulation. Every filter parameter now cites this run.</div>
+        <div class="what-wrong">❌ A 4-week / 32-trade validation nearly shipped a bad filter; 2 picks hit SL day one.</div>
+        <div class="fix">✓ Minimum bar since: full market cycle, thousands of trades, walk-forward. Every parameter cites a 4,200+-trade run.</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-07-01</span>
         <h5>ML classifier overconfident above 0.85</h5>
-        <div class="what-wrong">❌ The classifier's MOST confident picks (score ≥0.85) hit the +5% target only 18.9% of the time — WORSE than the 0.5-0.7 band (23.9%). We had been ranking by raw ML score, systematically favoring the worst band.</div>
-        <div class="fix">✓ band_fit_score now PENALIZES ml_score ≥ 0.85 by -0.5 and rewards the honest 0.5-0.7 zone. Selection ranks band_fit first, ML score second.</div>
+        <div class="what-wrong">❌ The model's MOST confident picks hit least often (18.9% vs 23.9% for scores 0.5-0.7). We were ranking by raw score — systematically favoring the worst band.</div>
+        <div class="fix">✓ Only the honest zone (0.50-0.75) is investable; high raw scores get less credit, not more.</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-07-01</span>
         <h5>Green tick on 55-day-stale macro data</h5>
-        <div class="what-wrong">❌ Emitted a basket while brent/DXY/US-10Y/VIX were forward-filled from 2026-05-07 and announcements were 65 days old. Yahoo silently 429'd, the fetcher wrote nothing, and every check passed because file DATES looked fresh while COLUMNS were rotten.</div>
-        <div class="fix">✓ verify_freshness.py: 10 file-level + 14 column-level contracts (last non-null date per critical column). Wired into the basket generator with verify_or_die() — no bypass path. FRED fallback for Yahoo. Freshness dashboard at the top of every brief.</div>
+        <div class="what-wrong">❌ Yahoo silently 429'd for weeks; the panel forward-filled old values; every check passed because file dates looked fresh while columns were rotten.</div>
+        <div class="fix">✓ The 27-check freshness gate (file + per-column + continuity), no-bypass, wired into the generator itself.</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-07-07</span>
-        <h5>Window-level exit math inflated the 10-yr backtest</h5>
-        <div class="what-wrong">❌ The 4,224-trade backtest booked both-touch ("whipsaw") windows at an assumed +1.0% and entered at signal-day close (not executable — baskets are emitted after close). Day-by-day resequencing of the SAME trades at next-open entry: the -3% SL fires on 63.5% of trades, and the CURRENT geometry is -1.3% CAGR after 0.30% costs — not +34.6%.</div>
-        <div class="fix">✓ Standing rule: no window-level exit approximations — every exit-rule claim must come from day-by-day sequenced simulation, next-open entry, net of ≥0.30% costs. Finding: +5% target is fine (66.5% touch unstopped); the -3% stop is inside small-cap noise and is the value-destroyer. SL geometry under review (no-SL + day-15 timeout = +8.3% CAGR after costs, at the price of a -56% worst-trade tail).</div>
+        <h5>Window-level exit math inflated CAGR by ~36 points</h5>
+        <div class="what-wrong">❌ The backtest booked "both-touched" windows at an assumed +1% and entered at an unexecutable price. Day-by-day resequencing: the flat -3% SL fired on 63.5% of trades and the strategy was NEGATIVE after costs.</div>
+        <div class="fix">✓ Standing rule: exits must be simulated day-by-day, entered at next-day open, net of ≥0.30% costs. Led directly to the C2 contract.</div>
       </div>
       <div class="ledger-item">
         <span class="date">2026-07-07</span>
         <h5>"Spurt in Volume" mislabeled as order wins</h5>
-        <div class="what-wrong">❌ The announcement tagger pattern-matches "order" and tags exchange SURVEILLANCE notices ("Spurt in Volume") as order_win — rationales were citing fake business catalysts.</div>
-        <div class="fix">✓ Rationale rules now treat volume-spurt notices as accumulation hints only. Every per-pick rationale is fact-checked by an adversarial verifier agent against raw data before publication (caught 3 numeric errors in the 2026-07-07 basket alone).</div>
+        <div class="what-wrong">❌ The tagger pattern-matched "order" on exchange SURVEILLANCE notices — rationales cited fake business catalysts.</div>
+        <div class="fix">✓ Volume-spurt notices = attention flags only. Every rationale is adversarially fact-checked against raw data before it ships.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-07-27</span>
+        <h5>Picks gapped +4.8% before anyone could buy</h5>
+        <div class="what-wrong">❌ Friday-night analysis, Monday-open entry: the model's best picks opened +4.8% — the gain went to whoever was already in.</div>
+        <div class="fix">✓ Entry protocol: weekend AMO limits into the 9:00-9:07 pre-open auction; never chase above the zone; gapped weight flows to ranked reserves.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-08-18</span>
+        <h5>Two copies of the truth, both rotting</h5>
+        <div class="what-wrong">❌ Announcements AND corporate actions each had two stores — the pipeline refreshed one, production read the other. CA data rotted 113 days: 21 missing splits/bonuses (TRENT, LICI, CUB…) corrupted price adjustment itself, and the contamination filter was judging 10 years of drops against 4 months of records.</div>
+        <div class="fix">✓ One canonical store per dataset, gate-protected (CORP_ACTIONS contract). Affected price history re-derived and verified.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-08-18</span>
+        <h5>The trainer's dates were frozen in May</h5>
+        <div class="what-wrong">❌ Train/test dates were hardcoded — the "weekly retrained" classifier had not actually learned from a new week in months.</div>
+        <div class="fix">✓ Dynamic rolling windows (last ~5 months, test = freshest 2 labeled weeks). AUC-PR 0.061 → 0.23.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-08-25</span>
+        <h5>The "consolidation beats momentum" bands were a geometry artifact</h5>
+        <div class="what-wrong">❌ Our proudest backtest finding (20d -5..0% band = best) vanished on corrected data measured by touch rate — the spread had come from the flat-bracket exit geometry conflating volatility with edge.</div>
+        <div class="fix">✓ Bands re-earned as z-scores per stock (pre-registered A/B passed); every band claim now re-validated after any data correction.</div>
+      </div>
+      <div class="ledger-item">
+        <span class="date">2026-08-25</span>
+        <h5>A 12/12-years "alpha" that would have lost 89%</h5>
+        <div class="what-wrong">❌ Mining found a sub-cohort (crashed high-vol + washed) with +2.98%/15d, t=10, positive 12/12 years — and it collapsed to +0.04%/trade with -89% max drawdown as an investable weekly portfolio. The rows clustered in crisis weeks; row-level t-stats treated correlated names as independent evidence.</div>
+        <div class="fix">✓ Killed pre-deployment. Rule: the investable unit is the WEEK — cluster-robust stats or it doesn't count.</div>
       </div>
     </div>
   </div>
@@ -2709,7 +2727,22 @@ git push origin main</code></pre>
   <div class="container">
     <div class="section-tag">The Numbers</div>
     <h2 class="section-title">What we have so far</h2>
-    <p class="section-sub">No projections. Just what we've measured and verified.</p>
+    <p class="section-sub">No projections. Measured, day-by-day simulated, and the live record from git. Superseded historical claims live in the Archive below.</p>
+
+    <h3 style="color: var(--fg); margin: 24px 0 12px;">The live record — every basket, scored under its published rules</h3>
+    <p style="color: var(--fg-dim); font-size: 14px;">Machine-scored from <code>logs/basket_outcomes.jsonl</code> (in git, append-only). Each basket is entered at the next session's opening auction and scored day-by-day under the exit contract that was published with it — no retroactive rule changes.</p>
+    <table class="results-table">
+      <thead><tr><th>Basket</th><th>Status</th><th>P&L</th><th>Touch +5%</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>2026-07-01</td><td>Final</td><td>+0.20%</td><td>38%</td><td>First basket of the record; -3% SL era</td></tr>
+        <tr><td>2026-07-02</td><td>Final</td><td>+1.83%</td><td>50%</td><td>Best week of the -3% SL era</td></tr>
+        <tr><td>2026-07-07</td><td>Final</td><td><span style="color: var(--bad)">-3.00%</span></td><td>0%</td><td>Market gap-down; all 8 stopped in 2 sessions — the week that killed the flat -3% SL (one stopped name then rallied +12.8%)</td></tr>
+        <tr><td>2026-07-24/27</td><td>Final</td><td>+0.38%</td><td>62%</td><td>First basket under confidence ranking (emitted 07-24, re-emitted 07-27 pre-entry; double-logged in the ledger) — ranks 1-2 both hit target</td></tr>
+        <tr><td>2026-08-18</td><td>In flight</td><td>+0.1%*</td><td>25%*</td><td>First C2-contract basket; rank-1 banked +3.75% on day 3, one runner peaked +20%</td></tr>
+        <tr><td>2026-08-23</td><td>In flight</td><td>-0.8%*</td><td>25%*</td><td>First tape-forensics basket — the panel flagged one sev-3 pick and recommended a swap; the committed record holds the original picks (swap was pending user confirmation). Z-bands shipped after this basket (08-25)</td></tr>
+      </tbody>
+    </table>
+    <p style="color: var(--fg-dim); font-size: 13px;">*In-flight = mid-window mark-to-market under the contract; final numbers land at each basket's day-15. Compounded across the four completed baskets: <strong>-0.6%</strong> — the honest cost of the -3% SL era; the contract that produced 3 of those 4 results is retired (see Archive). The record continues under C2, in public, every week.</p>
 
     <table class="results-table">
       <thead>
@@ -2717,102 +2750,55 @@ git push origin main</code></pre>
       </thead>
       <tbody>
         <tr>
-          <td>180d / +15% target hit rate</td>
+          <td><strong>C2 exit contract (production)</strong> — 10-yr, day-by-day, next-open entry, 0.30% costs</td>
           <td><span class="tag-good">VERIFIED</span></td>
-          <td>~85% prospective</td>
-          <td>find_180d_frontier_honest 2025 OOS</td>
+          <td>+0.22%/trade · <strong>+11.6% CAGR · -18.6% maxDD</strong> · median trade +3.45%</td>
+          <td>A/B/C tournament, 4,222 trades</td>
         </tr>
         <tr>
-          <td>9-year dynamic-gated median ann ROI</td>
+          <td>Pool touch rate (+5% within 15d) with z-score bands</td>
           <td><span class="tag-good">VERIFIED</span></td>
-          <td>+8%</td>
-          <td>backtest_dynamic_gated.py walk-forward</td>
+          <td>55.9% (10-yr) · 60.1% (since April) — vs 54.1%/55.7% for absolute bands</td>
+          <td>Pre-registered A/B, ab_zscore_bands.py</td>
         </tr>
         <tr>
-          <td>5d/5pct band hit rate at score ≥ 0.95</td>
-          <td><span class="tag-neutral">SUPERSEDED</span></td>
-          <td>98.3% (n=230) — see caveat*</td>
-          <td>achievable_frontier.py</td>
+          <td>Confidence ranking predictiveness (live)</td>
+          <td><span class="tag-good">REALIZED</span></td>
+          <td>Ranks 1-4 touch 75% vs ranks 5-8 50% — one unique ranked basket completed so far; the weekly RANK CHECK keeps score as the sample grows</td>
+          <td>RANK CHECK, logs/basket_outcomes.jsonl</td>
         </tr>
         <tr>
-          <td>15d/5pct band hit rate at score ≥ 0.95</td>
-          <td><span class="tag-neutral">SUPERSEDED</span></td>
-          <td>97.9% (n=578) — see caveat*</td>
-          <td>achievable_frontier.py</td>
+          <td>Live forward record (every basket, immutable)</td>
+          <td><span class="tag-good">REALIZED</span></td>
+          <td>e.g. Jul-27 basket +0.38% (all-picks scored); goal-tracker touch 37.5% across deduped completed baskets (best single basket 62%) vs 90% target</td>
+          <td>live_predictions/ + basket_outcomes.jsonl in git</td>
         </tr>
         <tr>
-          <td>10-yr 15D/+5% backtest — baseline hit rate</td>
+          <td>Hold-length curve (why day-15, not faster refresh)</td>
           <td><span class="tag-good">VERIFIED</span></td>
-          <td>23.3% (4,224 trades, 529 baskets)</td>
-          <td>backtest_10yr_15d5pct.py walk-forward 2016-2026</td>
-        </tr>
-        <tr>
-          <td>10-yr 15D/+5% — with band-fit filter</td>
-          <td><span class="tag-good">VERIFIED</span></td>
-          <td>27.2% hit, +2.29%/trade (n=699)</td>
-          <td>Same run, band_fit ≥ 2/3 subset</td>
-        </tr>
-        <tr>
-          <td>8-name 100%-deploy basket, 15d return</td>
-          <td><span class="tag-neutral">SUPERSEDED</span></td>
-          <td>mean +1.76% · ≈34.6% CAGR — window-level approximation; see day-by-day row below<br><span style="font-size:12px; color: var(--fg-dim);">Tail-dependent: best basket +117% is 1 of 529; excluding the top 5% of baskets the mean basket sum drops to ~+10%</span></td>
-          <td>Same run, top-8-per-week portfolio sim</td>
-        </tr>
-        <tr>
-          <td>Day-by-day resequenced, CURRENT geometry (SL -3%, next-open entry, 0.30% costs)</td>
-          <td><span class="tag-bad">NEGATIVE</span></td>
-          <td>-0.075%/trade · <strong>-1.3% CAGR</strong> — the -3% stop fires on 63.5% of trades</td>
-          <td>2026-07-07 correction, same 4,221 trades</td>
-        </tr>
-        <tr>
-          <td>Day-by-day, NO SL + day-15 timeout + book-half/trail</td>
-          <td><span class="tag-good">VERIFIED</span></td>
-          <td>+0.471%/trade after costs · <strong>+8.3% CAGR</strong> · tail: worst trade -56%</td>
-          <td>2026-07-07 correction, same 4,221 trades</td>
+          <td>Re-picking every 3-5d = net NEGATIVE; returns are back-loaded (45% of touches by day 5, 100% by 15)</td>
+          <td>Refresh-frequency test, 4,222 paths</td>
         </tr>
         <tr>
           <td>ML score ≥0.85 band ("most confident")</td>
           <td><span class="tag-bad">UNDERPERFORMS</span></td>
-          <td>18.9% hit vs 23.9% for 0.5-0.7 band</td>
-          <td>Same run — overconfidence penalty now in filter</td>
+          <td>18.9% hit vs 23.9% for the honest 0.5-0.7 zone</td>
+          <td>10-yr backtest — only the honest zone is investable</td>
         </tr>
         <tr>
-          <td>KENNAMET realized return</td>
-          <td><span class="tag-good">REALIZED</span></td>
-          <td>+18.1% in 1 day</td>
-          <td>realized_outcomes/kennamet_20260508.json</td>
+          <td>News/catalyst features lift · high-vol "alpha" sub-cohort · ret_60d feature</td>
+          <td><span class="tag-bad">REJECTED</span></td>
+          <td>All three failed walk-forward or investable-portfolio tests — full autopsies in the ledger</td>
+          <td>calibration_corrections.jsonl</td>
         </tr>
         <tr>
-          <td>Weekly basket hit rate (27-May, 7 names)</td>
-          <td><span class="tag-good">REALIZED</span></td>
-          <td>5 of 7 hit target (71%)</td>
-          <td>2-week realized backtest</td>
-        </tr>
-        <tr>
-          <td>2x/180d at 80%+ calibrated</td>
-          <td><span class="tag-bad">NOT ACHIEVABLE</span></td>
-          <td>Sample = 0</td>
-          <td>Honest frontier audit</td>
-        </tr>
-        <tr>
-          <td>News + catalyst features lift</td>
-          <td><span class="tag-bad">NO LIFT</span></td>
-          <td>Top-50 EV regressed -1.7pp</td>
-          <td>A/B test ab_test_event_features.md</td>
-        </tr>
-        <tr>
-          <td>30% min annual target unlevered</td>
+          <td>90% touch-rate goal</td>
           <td><span class="tag-neutral">PENDING</span></td>
-          <td>Needs market-neutral overlay</td>
-          <td>Constitution §3 publishability checklist</td>
+          <td>Best measured cohort ≈69-86% in strong windows; completed-basket portfolio 37.5%. The gap is the weekly RL loop's job</td>
+          <td>Goal tracker, every weekly run</td>
         </tr>
       </tbody>
     </table>
-
-    <div class="caveat">
-      <div class="caveat-title">⚠️ *Caveat on the "97-98% hit rate" rows</div>
-      <p>Those achievable_frontier numbers measure "touched +5% at ANY point in the window" on an in-sample-adjacent band definition — NOT the realized exit-rule P&L. The 10-year exit-rule simulation (target/SL/whipsaw, 4,224 trades) is the honest number: 23-27% clean target hits, because 44.9% of trades touch BOTH the target and the stop intraday. If you copy this system, trust the 10-yr exit-rule numbers, not the frontier band numbers.</p>
-    </div>
 
     <div class="caveat">
       <div class="caveat-title">⚠️ What we DON'T claim</div>
@@ -2837,7 +2823,7 @@ git push origin main</code></pre>
       <tbody>
         <tr>
           <td>Calibrates on test data (leakage)</td>
-          <td>Strict walk-forward, calibrate on prior year ONLY</td>
+          <td>Strict walk-forward; exits simulated day-by-day at executable prices, net of costs</td>
         </tr>
         <tr>
           <td>Shows best-of-N cherry-picks</td>
@@ -2845,7 +2831,7 @@ git push origin main</code></pre>
         </tr>
         <tr>
           <td>Hides failures, shows wins</td>
-          <td>Public failure log: 13 documented mistakes</td>
+          <td>Public failure log: full append-only ledger in git; 12 most instructive on this page</td>
         </tr>
         <tr>
           <td>One model, no cross-validation</td>
@@ -2857,7 +2843,7 @@ git push origin main</code></pre>
         </tr>
         <tr>
           <td>Promotes operator pumps as "high conviction"</td>
-          <td>QC kills 3+ consecutive UC names — manipulation detection</td>
+          <td>QC kills consecutive upper-circuit names; tape forensics interrogates every pick for institutional selling before entry</td>
         </tr>
         <tr>
           <td>Backtested only, no live record</td>
@@ -2865,7 +2851,7 @@ git push origin main</code></pre>
         </tr>
         <tr>
           <td>Trusts whatever data is on disk</td>
-          <td>Freshness gate: 24 contracts (file + per-column last-non-null) — basket physically cannot emit on stale data</td>
+          <td>Freshness gate: 27 checks (file + per-column last-non-null + gap continuity) — basket physically cannot emit on stale data</td>
         </tr>
         <tr>
           <td>Ranks by raw model confidence</td>
@@ -2885,6 +2871,57 @@ git push origin main</code></pre>
         </tr>
       </tbody>
     </table>
+  </div>
+</section>
+
+<!-- ARCHIVE -->
+<section id="archive">
+  <div class="container">
+    <div class="section-tag" style="color: var(--fg-dim)">The Archive</div>
+    <h2 class="section-title">Superseded — kept for honesty, not for use</h2>
+    <p class="section-sub">Everything below was once presented as current on this page and has since been replaced by better evidence. We keep it because deleting your own history is how systems learn to lie. Nothing here should be built or traded.</p>
+
+    <details style="margin: 12px 0;">
+      <summary style="cursor: pointer; color: var(--fg); font-weight: 600; padding: 8px 0;">📉 The flat -3% stop-loss era (retired 2026-08-18)</summary>
+      <div style="color: var(--fg-dim); font-size: 14px; padding: 8px 0 8px 16px;">
+        <p>Original spec: +5% target · flat -3% SL · book half / trail +2.5%. The coarse (window-level) backtest credited it +1.77%/trade and ≈34.6% CAGR. Day-by-day resequencing showed the -3% stop fired on 63.5% of trades (inside ordinary small-cap noise) and the geometry was <strong>-1.3% CAGR after costs</strong> (arithmetic per-cycle method; the later tournament’s geometric method scored the same rule +1.8% — both far below every alternative, and both reported here for method honesty). It also stopped out an entire live basket in two sessions (Jul-7 cohort, -3.00%), including a name that then rallied +12.8%. Replaced by the C2 vol-scaled contract after the A/B/C tournament. Intermediate findings from that review: SL -5% → +2.1% CAGR · SL -7% → +2.7% · no-SL half-trail → +8.3% (worst trade -56%).</p>
+      </div>
+    </details>
+
+    <details style="margin: 12px 0;">
+      <summary style="cursor: pointer; color: var(--fg); font-weight: 600; padding: 8px 0;">📊 The absolute entry bands & band-fit hit-rate tables (retired 2026-08-25)</summary>
+      <div style="color: var(--fg-dim); font-size: 14px; padding: 8px 0 8px 16px;">
+        <p>Original QC: RSI 42-60 · 20d return -10..+15% · 5d ±5% (absolute thresholds for every stock). The celebrated band table — 20d [-5,0] = 27.5% hit vs 20-30% = 19.5%; RSI 45-55 = 25.5%; "consolidation beats momentum" — did not survive the corrected-data re-check when measured by touch rate: the spreads were an artifact of the flat-bracket exit geometry (volatile names whipsawed the ±3/5% bracket; quiet names didn't — the bands were measuring volatility, not edge). Replaced by z-score bands (each stock vs its own 252-day distribution), which passed a pre-registered A/B. The band_fit ranking ingredient survives under live probation via the weekly RANK CHECK.</p>
+      </div>
+    </details>
+
+    <details style="margin: 12px 0;">
+      <summary style="cursor: pointer; color: var(--fg); font-weight: 600;">🔮 The frontier / touch-probability layer (deprecated diagnostic)</summary>
+      <div style="color: var(--fg-dim); font-size: 14px; padding: 8px 0 8px 16px;">
+        <p>achievable_frontier-era claims: "98.3% hit at score ≥0.95 (5d/5%)", "97.9% (15d/5%)", "180d/+15% ~85% prospective", "9-yr dynamic-gated +8% median ROI". These measured whether the intraday high TOUCHES a level (58% base rate makes high bands cheap), not exit-rule P&L, and used a different universe cut (ADV ≥ ₹1cr). Copiers who rebuild this layer get different picks — it is a diagnostic, never the product. The production output is only <code>live_predictions/YYYY-MM-DD_15d5pct.json</code>.</p>
+      </div>
+    </details>
+
+    <details style="margin: 12px 0;">
+      <summary style="cursor: pointer; color: var(--fg); font-weight: 600;">📜 Early ledger entries (Apr-May 2026)</summary>
+      <div style="color: var(--fg-dim); font-size: 14px; padding: 8px 0 8px 16px;">
+        <ul style="line-height: 1.9;">
+          <li><strong>Path B microcap disaster (Apr-28)</strong>: shipped 8 microcap trades when the filter cascade said 0 actionable. Rule since: cascade=0 → no picks.</li>
+          <li><strong>Multibagger "90%" overfit (Apr-29)</strong>: in-sample calibration; true prospective rate was 12.4%. Led to strict calibrate-prior-year / test-next-year protocol.</li>
+          <li><strong>Signal stacking myth (Apr-29)</strong>: 3-signal stocks hit 40.4% vs 42.8% baseline — signals correlate; consensus ≠ independence.</li>
+          <li><strong>Agent prompts as decoration (Apr-29)</strong>: devil's-advocate prompts existed but never ran. Now invoked programmatically before material claims.</li>
+          <li><strong>"Adjusted" prices weren't (May-04)</strong>: 399 unexplained -50% single-day drops. Became the contamination filter, and later the CORP_ACTIONS gate contract.</li>
+        </ul>
+        <p>Complete machine-readable history: <code>logs/calibration_corrections.jsonl</code> in the repo.</p>
+      </div>
+    </details>
+
+    <details style="margin: 12px 0;">
+      <summary style="cursor: pointer; color: var(--fg); font-weight: 600;">🗃 Retired code paths (in repo, not in production)</summary>
+      <div style="color: var(--fg-dim); font-size: 14px; padding: 8px 0 8px 16px;">
+        <p>The daily v3 brief line (<code>daily_pipeline.sh</code>, 44 scripts: sentiment/reddit/youtube/superstar/shorts/confluence), <code>find_quiet_accumulation.py</code> (failed validation 0/52), the frontier trio (<code>find_achievable_frontier/targets, find_multibagger_targets</code>), and one-off study backtests. Kept in git for archaeology; nothing in the weekly production path imports them. The live path is exactly what <code>run_weekly_pipeline.sh</code> calls — if a script isn't in that file or its imports, it is not the system.</p>
+      </div>
+    </details>
   </div>
 </section>
 
