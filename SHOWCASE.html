@@ -1028,6 +1028,17 @@ section pre code { color:#e8e8ee !important; }
   content: ""; position: absolute; top: 100%; left: 50%; margin-left: -7px;
   border: 7px solid transparent; border-top-color: #0F0E17;
 }
+
+/* ===== Architecture SVG: text color matches its immediate (now light) box bg ===== */
+.arch-svg .engine, .arch-svg .agent, .arch-svg .data { fill: #FFFDF4 !important; stroke-width: 2.5 !important; }
+.arch-svg .engine { stroke: #0E6B45 !important; }
+.arch-svg .agent  { stroke: #9A4A00 !important; }
+.arch-svg .data   { stroke: #2E63E8 !important; }
+.arch-svg .output { fill: #FFD23F !important; stroke: #0F0E17 !important; stroke-width: 3 !important; }
+.arch-svg .engine-text, .arch-svg .agent-text, .arch-svg .data-text { fill: #1a1820 !important; }
+.arch-svg .output-text { fill: #0F0E17 !important; }
+.arch-svg .label-small { fill: #52505E !important; }
+.arch-svg .arrow { stroke: #52505E !important; }
 </style>
 
 
@@ -1172,10 +1183,11 @@ section pre code { color:#e8e8ee !important; }
     progress.classList.toggle('show', progressP > 0.04 && progressP < 1 - outroBuffer * 0.5);
     outro.classList.toggle('show', step >= total - 1 && progressP > 1 - outroBuffer);
 
-    // Bottom loader: appears in last 30% of scroll, fills 0→100% as we approach the release
-    const loaderStart = 0.70;
-    if (progressP >= loaderStart) {
-      const lp = Math.min(1, (progressP - loaderStart) / (1 - loaderStart));
+    // Bottom loader: distance-to-main-content meter. Visible from the very top,
+    // hits 100% exactly when the comic chat ends, holds 100% for 20% more scroll, then vanishes.
+    const rawP = scrolled / scrollable;   // unclamped: >1 once past the chat zone
+    if (rawP <= 1.20) {
+      const lp = Math.max(0, Math.min(1, rawP));
       loader.classList.add('show');
       loaderFill.style.width = (lp * 100).toFixed(1) + '%';
       loaderPct.textContent = Math.round(lp * 100) + '%';
@@ -1368,7 +1380,7 @@ section pre code { color:#e8e8ee !important; }
         <text class="output-text" x="905" y="165">FINAL BASKET</text>
         <text class="label-small" x="905" y="190">QC'd · cross-validated</text>
         <text class="label-small" x="905" y="210">8 names + 2 reserves</text>
-        <text class="label-small" x="905" y="228">14-17% exposure</text>
+        <text class="label-small" x="905" y="228">100% deploy · C2 exits</text>
 
         <!-- Arrows from data → engines -->
         <path class="arrow" d="M225,50 L275,50"/>
