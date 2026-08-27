@@ -1,0 +1,52 @@
+loading…
+high-vol universe rows: 116,520 · baseline end15 +0.90% · touch 65.5%
+
+CONDITION                                            |  disc n    mean     t |  conf n    mean     t |  yrs+ verdict
+vol_asym>1.3 (up-day vol dominates)                  |  38,585  +0.61%   8.9 |  39,566  +0.86%  13.3 |   58% 
+vol_asym>1.6                                         |  29,519  +0.59%   7.4 |  31,435  +0.74%  10.2 |   58% 
+hv_up>=2 & hv_dn==0 (only institutional BUY prints)  |  17,436  +0.78%   7.5 |  16,791  +1.25%  11.2 |   58% 
+hv_up>=1 & hv_dn==0                                  |  29,350  +0.72%   9.2 |  29,995  +1.11%  14.1 |   50% 
+dlv5/dlv20>1.2 (delivery accelerating)               |   7,258  +0.57%   3.5 |   6,362  +0.54%   3.4 |   67% ✅ SURVIVES
+dlv>1.2 level                                        |  11,191  +0.68%   5.3 |  10,203  +0.97%   7.3 |   67% ✅ SURVIVES
+coil: dvol5/dvol20<0.6 (quiet after loud)            |  17,320  +0.73%   7.4 |  17,928  +1.09%  11.5 |   67% ✅ SURVIVES
+near 52wH (>-10%)                                    |  22,413  +1.29%  13.7 |  22,681  +1.72%  17.8 |   58% 
+above 200DMA                                         |  35,928  +0.98%  13.9 |  37,823  +1.18%  16.9 |   50% 
+r60>+20%                                             |  24,759  +1.20%  13.4 |  23,538  +1.56%  16.1 |   50% 
+r60<-20% (crashed)                                   |   6,031  +1.15%   5.7 |   5,120  +2.47%  13.0 |   92% ✅ SURVIVES
+rsi_z<-1 (own-scale washed)                          |   7,210  +0.54%   3.3 |   7,044  +1.76%  11.1 |   75% ✅ SURVIVES
+rsi_z in [-1,0.25]                                   |  19,305  +0.65%   7.0 |  20,147  +0.86%   9.9 |   67% ✅ SURVIVES
+20d flat own-scale (|r20z|<0.5)                      |  18,618  +0.47%   5.2 |  20,912  +0.86%  10.1 |   58% 
+
+PAIR SCAN (top singles × top singles):
+  [vol_asym>1.3 (up-day vol dominates)] AND [vol_asym>1.6]
+    disc n=29,519 +0.59% t=7.4 | conf n=31,435 +0.74% t=10.2 | yrs+ 58% 
+  [vol_asym>1.3 (up-day vol dominates)] AND [hv_up>=2 & hv_dn==0 (only institutional BUY prints)]
+    disc n=16,178 +0.73% t=6.8 | conf n=15,738 +1.10% t=10.5 | yrs+ 50% 
+  [vol_asym>1.3 (up-day vol dominates)] AND [hv_up>=1 & hv_dn==0]
+    disc n=25,509 +0.65% t=7.8 | conf n=26,710 +0.94% t=12.0 | yrs+ 50% 
+  [vol_asym>1.3 (up-day vol dominates)] AND [dlv5/dlv20>1.2 (delivery accelerating)]
+    disc n=4,905 +0.60% t=3.1 | conf n=4,646 +0.37% t=2.0 | yrs+ 67% ✅ SURVIVES
+  [vol_asym>1.3 (up-day vol dominates)] AND [dlv>1.2 level]
+    disc n=7,102 +0.56% t=3.5 | conf n=6,725 +0.62% t=3.9 | yrs+ 58% 
+  [vol_asym>1.6] AND [hv_up>=2 & hv_dn==0 (only institutional BUY prints)]
+    disc n=14,333 +0.69% t=6.0 | conf n=14,284 +1.05% t=9.6 | yrs+ 50% 
+  [vol_asym>1.6] AND [hv_up>=1 & hv_dn==0]
+    disc n=21,221 +0.64% t=6.9 | conf n=22,986 +0.85% t=10.1 | yrs+ 50% 
+  [vol_asym>1.6] AND [dlv>1.2 level]
+    disc n=5,341 +0.62% t=3.4 | conf n=5,290 +0.54% t=3.1 | yrs+ 58% 
+  [hv_up>=2 & hv_dn==0 (only institutional BUY prints)] AND [hv_up>=1 & hv_dn==0]
+    disc n=17,436 +0.78% t=7.5 | conf n=16,791 +1.25% t=11.2 | yrs+ 58% 
+  [hv_up>=2 & hv_dn==0 (only institutional BUY prints)] AND [dlv5/dlv20>1.2 (delivery accelerating)]
+    disc n=1,906 +1.23% t=4.0 | conf n=1,730 +0.65% t=2.0 | yrs+ 67% ✅ SURVIVES
+  [hv_up>=2 & hv_dn==0 (only institutional BUY prints)] AND [dlv>1.2 level]
+    disc n=2,703 +0.95% t=3.7 | conf n=2,342 +1.24% t=4.4 | yrs+ 67% ✅ SURVIVES
+  [hv_up>=1 & hv_dn==0] AND [dlv5/dlv20>1.2 (delivery accelerating)]
+    disc n=3,550 +0.74% t=3.3 | conf n=3,269 +0.36% t=1.6 | yrs+ 67% 
+  [hv_up>=1 & hv_dn==0] AND [dlv>1.2 level]
+    disc n=5,209 +0.82% t=4.4 | conf n=4,758 +0.86% t=4.4 | yrs+ 67% ✅ SURVIVES
+  [dlv5/dlv20>1.2 (delivery accelerating)] AND [dlv>1.2 level]
+    disc n=3,925 +0.67% t=3.1 | conf n=3,458 +0.59% t=2.7 | yrs+ 67% ✅ SURVIVES
+
+families tested: 14 singles + pairs — Bonferroni context for survivor count
+SURVIVORS: ['dlv5/dlv20>1.2 (delivery accelerating)', 'dlv>1.2 level', 'coil: dvol5/dvol20<0.6 (quiet after loud)', 'r60<-20% (crashed)', 'rsi_z<-1 (own-scale washed)', 'rsi_z in [-1,0.25]', ('vol_asym>1.3 (up-day vol dominates)', 'dlv5/dlv20>1.2 (delivery accelerating)'), ('hv_up>=2 & hv_dn==0 (only institutional BUY prints)', 'dlv5/dlv20>1.2 (delivery accelerating)'), ('hv_up>=2 & hv_dn==0 (only institutional BUY prints)', 'dlv>1.2 level'), ('hv_up>=1 & hv_dn==0', 'dlv>1.2 level'), ('dlv5/dlv20>1.2 (delivery accelerating)', 'dlv>1.2 level')]
+MINER COMPLETE
