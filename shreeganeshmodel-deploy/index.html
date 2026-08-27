@@ -1207,113 +1207,70 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
 </section>
 
 <!-- KENNAMET CASE STUDY -->
+<!-- WINS WALL (replaces the old KENNAMET hero card; KENNAMET is card #1) -->
 <section id="kennamet">
   <div class="container">
-    <div class="section-tag" style="color: var(--good)">The First Real Win</div>
-    <h2 class="section-title">KENNAMET — model said top, market validated +18% in 1 day</h2>
-    <p class="section-sub">A textbook example of the system working. Cross-engine consensus, clean per-name profile, model target +5% — actual outcome: +18% intraday.</p>
+    <div class="section-tag">The Wins</div>
+    <h2 class="section-title">The wins wall — scored under the rules they shipped with</h2>
+    <p class="section-sub">Straight from the outcome ledger in git. The losses live in the same ledger (live record below). Hover to pause.</p>
 
-    <div class="case-study">
-      <div class="case-grid">
-        <div>
-          <div class="case-num">+18.1%<span class="delta"> in 1 day</span></div>
-          <p style="margin-top: 16px; color: var(--fg-dim);">Entry ₹2,833.60 → Exit ₹3,345 in a single trading session. Model's +5% target blown through by 13pp. <strong>Direction right, magnitude exceeded.</strong></p>
-        </div>
-        <div>
-          <table class="case-table">
-            <tr><td>Score (15d horizon)</td><td><code>0.82</code> (#1 conviction)</td></tr>
-            <tr><td>Score (7d horizon)</td><td><code>0.72</code> (#2 conviction)</td></tr>
-            <tr><td>Engines agreeing</td><td>4 of 5 (cross-validated)</td></tr>
-            <tr><td>Contamination check</td><td class="hl-good">CLEAN</td></tr>
-            <tr><td>RSI 14</td><td>64 (no chase)</td></tr>
-            <tr><td>Entry date</td><td><code>2026-05-08</code></td></tr>
-            <tr><td>Exit date</td><td><code>2026-05-08</code> (intraday)</td></tr>
-            <tr><td>Position weight</td><td>5% of portfolio</td></tr>
-            <tr><td>Portfolio impact</td><td class="hl-good">+0.91%</td></tr>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="caveat">
-      <div class="caveat-title">⚠️ Honest caveat</div>
-      <p>One trade is not statistical proof (N=1). The +18% overshoot from a +5% model target could mean (a) the model is conservative on top conviction names (good), or (b) lucky one-off. We need 10+ realized outcomes before claiming the pattern is real. This is what the daily forward record is for.</p>
-    </div>
-  </div>
-</section>
-
-<!-- WINS WALL -->
-<section id="wins">
-  <div class="container">
-    <div class="section-tag" style="color: var(--good)">The Wins Wall</div>
-    <h2 class="section-title">The wins — every card scored under the rules it was published with</h2>
-    <p class="section-sub">Auto-sourced from the outcome ledger in git. The same ledger holds the losses — see the live record below. No cherry-picked entries, no hindsight exits.</p>
-
-    <div class="wins-slider" id="winsSlider" style="position: relative; overflow: hidden; border-radius: 14px;">
-      <div class="wins-track" id="winsTrack" style="display: flex; transition: transform 0.5s ease;">
-        <!-- cards injected by JS -->
-      </div>
-      <button onclick="winsNav(-1)" aria-label="previous win" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.45); color:var(--fg); border:1px solid var(--fg-dim); border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:16px;">‹</button>
-      <button onclick="winsNav(1)" aria-label="next win" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.45); color:var(--fg); border:1px solid var(--fg-dim); border-radius:50%; width:36px; height:36px; cursor:pointer; font-size:16px;">›</button>
-      <div id="winsDots" style="text-align:center; padding: 10px 0;"></div>
+    <div id="winsSlider" style="position:relative; overflow:hidden; border:3px solid var(--comic-black, #0F0E17); border-radius:16px; background:#FFFDF4; box-shadow:8px 8px 0 var(--comic-black, #0F0E17);">
+      <div id="winsTrack" style="display:flex; transition:transform 0.45s ease;"></div>
+      <button onclick="winsNav(-1)" aria-label="previous" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:2px 2px 0 var(--comic-black, #0F0E17); font-size:20px; font-weight:800; color:var(--comic-black, #0F0E17); cursor:pointer;">‹</button>
+      <button onclick="winsNav(1)" aria-label="next" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:2px 2px 0 var(--comic-black, #0F0E17); font-size:20px; font-weight:800; color:var(--comic-black, #0F0E17); cursor:pointer;">›</button>
+      <div id="winsDots" style="text-align:center; padding:12px 0 16px;"></div>
     </div>
   </div>
 </section>
 
 <script>
-const WINS = [
-  {sym:"KENNAMET", ret:"+18.1%", period:"May 8 → May 9, 2026 · 1 day", status:"REALIZED",
-   info:"Cross-validated #1 on 15d and #2 on 7d. Bought 2833, model target 2975 — blown through by 13 points next session; profit taken into the spike at 3345.",
-   src:"realized_outcomes/kennamet_20260508.json"},
-  {sym:"INDOBORAX", ret:"peak +20.0%", period:"Aug 19 → in flight (to Sep 8)", status:"HALF BANKED, RIDING",
-   info:"Boron chemicals. Peaked +20% within 3 sessions of entry; half banked at the +5% touch, runner trailing under the C2 contract (+8.3% contract P&L so far).",
-   src:"live_predictions/2026-08-18_15d5pct.json"},
-  {sym:"POLYPLEX", ret:"+10.0%", period:"Jul 2 → Jul 23, 2026 · held to day-15", status:"BANKED AT TIMEOUT",
-   info:"PET films. Never hit the tight target cleanly — the day-15 timeout captured what the old -3% stop would have thrown away. Evidence for why returns are back-loaded.",
-   src:"logs/basket_outcomes.jsonl"},
-  {sym:"AZAD", ret:"+9.1%", period:"Jul 1 → Jul 22, 2026", status:"BANKED AT TIMEOUT",
-   info:"Defence precision components. Qualified in two consecutive baskets and delivered in both — four genuine order-win filings in the entry window.",
-   src:"logs/basket_outcomes.jsonl"},
-  {sym:"LANDMARK", ret:"+5.1% and trailing", period:"Aug 25 → in flight", status:"RIDING",
-   info:"Auto retail, AUTO-sector tailwind (+6.5% relative strength at entry). Fresh riser from the newest basket, trailing under contract.",
-   src:"live_predictions/2026-08-23_15d5pct.json"},
-  {sym:"UNICHEMLAB", ret:"+5% touched day 2", period:"Aug 24 → in flight", status:"HALF BANKED",
-   info:"Pharma. Rank-2 by confidence; touched +5% on the second session and banked half. Carried a forensic WATCH flag with a defined cut-line — discipline and upside coexisting.",
-   src:"live_predictions/2026-08-23_15d5pct.json"},
-  {sym:"KROSS", ret:"+3.75%", period:"Aug 19 → Aug 21, 2026 · 3 sessions", status:"BANKED (target + trail)",
-   info:"Axles & trailer parts. Rank-1 by confidence — hit +5%, half booked, trail collected. Re-qualified on its own merits the following week.",
-   src:"logs/basket_outcomes.jsonl"},
-  {sym:"HESTERBIO + ORIENTHOT", ret:"+3.75% each", period:"Jul 27 → Jul 31, 2026", status:"BANKED",
-   info:"The only two engine-consensus picks of their era (3 and 2 engines) — ranks 1 and 2 of the first confidence-ranked basket, and both delivered. The seed of the live RANK CHECK.",
-   src:"logs/basket_outcomes.jsonl"}
-];
 (function(){
+  const INK = 'var(--ink, #1a1820)';
+  const WINS = [
+    {sym:"KENNAMET", ret:"+18.1%", period:"May 8 → May 9, 2026 · 1 day", status:"REALIZED",
+     info:"Cross-validated #1 on 15d, #2 on 7d. Bought ~2,833; the model's +5% target was blown through by 13 points the very next session — profit taken into the spike at 3,345."},
+    {sym:"INDOBORAX", ret:"peak +20.0%", period:"Aug 19 → in flight (to Sep 8)", status:"HALF BANKED, RIDING",
+     info:"Boron chemicals. +20% within 3 sessions of entry; half banked at the +5% touch, remainder trailing under the C2 contract."},
+    {sym:"POLYPLEX", ret:"+10.0%", period:"Jul 2 → Jul 23, 2026", status:"BANKED AT DAY-15",
+     info:"PET films. The day-15 timeout captured what a tight stop would have thrown away — the poster child for back-loaded returns."},
+    {sym:"AZAD", ret:"+9.1%", period:"Jul 1 → Jul 22, 2026", status:"BANKED AT DAY-15",
+     info:"Defence precision components. Qualified in two consecutive baskets, delivered in both — four genuine order-win filings in the entry window."},
+    {sym:"LANDMARK", ret:"+5.1%", period:"Aug 25 → in flight", status:"RIDING",
+     info:"Auto retail with the AUTO sector at +6.5% relative strength on entry day. Freshest riser on the wall."},
+    {sym:"UNICHEMLAB", ret:"+5% on day 2", period:"Aug 24 → in flight", status:"HALF BANKED",
+     info:"Pharma, rank-2 by confidence. Touched +5% on its second session. Carried a forensic WATCH flag with a defined cut-line — upside and discipline in one trade."},
+    {sym:"KROSS", ret:"+3.75%", period:"Aug 19 → Aug 21, 2026 · 3 sessions", status:"BANKED",
+     info:"Axles & trailer parts, rank-1 by confidence. Target touched, half booked, trail collected — then re-qualified on merit the following week."},
+    {sym:"HESTERBIO + ORIENTHOT", ret:"+3.75% each", period:"Jul 27 → Jul 31, 2026", status:"BANKED",
+     info:"The only engine-consensus picks of their era (3 and 2 engines) — ranks 1 and 2 of the first confidence-ranked basket. Both delivered."}
+  ];
   const track = document.getElementById('winsTrack');
   const dots = document.getElementById('winsDots');
   WINS.forEach((w, i) => {
     const card = document.createElement('div');
-    card.style.cssText = 'min-width:100%; box-sizing:border-box; padding:28px 64px; background:linear-gradient(135deg, rgba(60,220,130,0.07), rgba(0,0,0,0.15)); border:1px solid rgba(60,220,130,0.25);';
-    card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:26px; font-weight:800; color:var(--fg);">${w.sym}</span>
-        <span style="font-size:30px; font-weight:800; color:var(--good);">${w.ret}</span>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--fg-dim); margin:6px 0;">${w.period} · <span style="color:var(--good);">${w.status}</span></div>
-      <p style="color:var(--fg-dim); font-size:14px; margin:10px 0 6px;">${w.info}</p>
-      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--fg-dim);">source: ${w.src}</div>`;
+    card.style.cssText = 'min-width:100%; box-sizing:border-box; padding:36px 72px 20px;';
+    card.innerHTML =
+      '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">' +
+        '<span style="font-size:30px; font-weight:900; letter-spacing:-0.5px; color:' + INK + ';">' + w.sym + '</span>' +
+        '<span style="font-size:24px; font-weight:900; color:' + INK + '; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:3px 3px 0 var(--comic-black, #0F0E17); padding:4px 16px; border-radius:10px;">' + w.ret + '</span>' +
+      '</div>' +
+      '<div style="font-family:\'JetBrains Mono\',monospace; font-size:13px; color:' + INK + '; opacity:0.75; margin:10px 0 4px;">' + w.period +
+        ' &nbsp;·&nbsp; <strong style="opacity:1; color:var(--comic-blue, #2E63E8);">' + w.status + '</strong></div>' +
+      '<p style="color:' + INK + '; font-size:15px; line-height:1.55; margin:8px 0 0;">' + w.info + '</p>';
     track.appendChild(card);
-    const d = document.createElement('span');
-    d.style.cssText = 'display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--fg-dim); margin:0 4px; cursor:pointer; opacity:0.5;';
+    const d = document.createElement('button');
+    d.setAttribute('aria-label', 'win ' + (i+1));
+    d.style.cssText = 'width:11px; height:11px; border-radius:50%; background:#FFFDF4; border:2px solid var(--comic-black, #0F0E17); margin:0 4px; cursor:pointer; padding:0;';
     d.onclick = () => winsGo(i);
     dots.appendChild(d);
   });
-  window._winsIdx = 0;
+  let idx = 0;
   window.winsGo = function(i){
-    window._winsIdx = (i + WINS.length) % WINS.length;
-    track.style.transform = `translateX(-${window._winsIdx * 100}%)`;
-    [...dots.children].forEach((el, j) => el.style.opacity = j === window._winsIdx ? '1' : '0.5');
+    idx = (i + WINS.length) % WINS.length;
+    track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    [...dots.children].forEach((el, j) => el.style.background = j === idx ? 'var(--comic-yellow, #FFD23F)' : '#FFFDF4');
   };
-  window.winsNav = d => winsGo(window._winsIdx + d);
+  window.winsNav = d => winsGo(idx + d);
   let timer = setInterval(() => winsNav(1), 3000);
   const slider = document.getElementById('winsSlider');
   slider.addEventListener('mouseenter', () => clearInterval(timer));
@@ -1321,6 +1278,7 @@ const WINS = [
   winsGo(0);
 })();
 </script>
+
 
 <!-- ARCHITECTURE -->
 <section id="architecture">
