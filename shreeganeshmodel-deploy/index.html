@@ -1207,60 +1207,47 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
 </section>
 
 <!-- KENNAMET CASE STUDY -->
-<!-- WINS WALL (replaces the old KENNAMET hero card; KENNAMET is card #1) -->
+<!-- WINS WALL (replaces the old KENNAMET hero; KENNAMET is card #1) -->
 <section id="kennamet">
   <div class="container">
     <div class="section-tag">The Wins</div>
-    <h2 class="section-title">The wins wall — scored under the rules they shipped with</h2>
-    <p class="section-sub">Straight from the outcome ledger in git. The losses live in the same ledger (live record below). Hover to pause.</p>
+    <h2 class="section-title">🏆 The wins wall — scored under the rules they shipped with</h2>
+    <p class="section-sub">Real price paths from the data, straight from the outcome ledger in git. The losses live in the same ledger (live record below). Hover to pause.</p>
 
-    <div id="winsSlider" style="position:relative; overflow:hidden; border:3px solid var(--comic-black, #0F0E17); border-radius:16px; background:#FFFDF4; box-shadow:8px 8px 0 var(--comic-black, #0F0E17);">
+    <div id="winsSlider" style="position:relative; overflow:hidden; border:3px solid #0F0E17; border-radius:16px; background:#FFFDF4; box-shadow:8px 8px 0 #0F0E17;">
       <div id="winsTrack" style="display:flex; transition:transform 0.45s ease;"></div>
-      <button onclick="winsNav(-1)" aria-label="previous" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:2px 2px 0 var(--comic-black, #0F0E17); font-size:20px; font-weight:800; color:var(--comic-black, #0F0E17); cursor:pointer;">‹</button>
-      <button onclick="winsNav(1)" aria-label="next" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:2px 2px 0 var(--comic-black, #0F0E17); font-size:20px; font-weight:800; color:var(--comic-black, #0F0E17); cursor:pointer;">›</button>
-      <div id="winsDots" style="text-align:center; padding:12px 0 16px;"></div>
+      <button onclick="winsNav(-1)" aria-label="previous" style="position:absolute; left:12px; top:44%; width:40px; height:40px; border-radius:50%; background:#FFD23F; border:2.5px solid #0F0E17; box-shadow:2px 2px 0 #0F0E17; font-size:20px; font-weight:800; color:#0F0E17; cursor:pointer;">‹</button>
+      <button onclick="winsNav(1)" aria-label="next" style="position:absolute; right:12px; top:44%; width:40px; height:40px; border-radius:50%; background:#FFD23F; border:2.5px solid #0F0E17; box-shadow:2px 2px 0 #0F0E17; font-size:20px; font-weight:800; color:#0F0E17; cursor:pointer;">›</button>
+      <div id="winsDots" style="text-align:center; padding:10px 0 16px;"></div>
     </div>
   </div>
 </section>
 
 <script>
 (function(){
-  const INK = 'var(--ink, #1a1820)';
-  const WINS = [
-    {sym:"KENNAMET", ret:"+18.1%", period:"May 8 → May 9, 2026 · 1 day", status:"REALIZED",
-     info:"Cross-validated #1 on 15d, #2 on 7d. Bought ~2,833; the model's +5% target was blown through by 13 points the very next session — profit taken into the spike at 3,345."},
-    {sym:"INDOBORAX", ret:"peak +20.0%", period:"Aug 19 → in flight (to Sep 8)", status:"HALF BANKED, RIDING",
-     info:"Boron chemicals. +20% within 3 sessions of entry; half banked at the +5% touch, remainder trailing under the C2 contract."},
-    {sym:"POLYPLEX", ret:"+10.0%", period:"Jul 2 → Jul 23, 2026", status:"BANKED AT DAY-15",
-     info:"PET films. The day-15 timeout captured what a tight stop would have thrown away — the poster child for back-loaded returns."},
-    {sym:"AZAD", ret:"+9.1%", period:"Jul 1 → Jul 22, 2026", status:"BANKED AT DAY-15",
-     info:"Defence precision components. Qualified in two consecutive baskets, delivered in both — four genuine order-win filings in the entry window."},
-    {sym:"LANDMARK", ret:"+5.1%", period:"Aug 25 → in flight", status:"RIDING",
-     info:"Auto retail with the AUTO sector at +6.5% relative strength on entry day. Freshest riser on the wall."},
-    {sym:"UNICHEMLAB", ret:"+5% on day 2", period:"Aug 24 → in flight", status:"HALF BANKED",
-     info:"Pharma, rank-2 by confidence. Touched +5% on its second session. Carried a forensic WATCH flag with a defined cut-line — upside and discipline in one trade."},
-    {sym:"KROSS", ret:"+3.75%", period:"Aug 19 → Aug 21, 2026 · 3 sessions", status:"BANKED",
-     info:"Axles & trailer parts, rank-1 by confidence. Target touched, half booked, trail collected — then re-qualified on merit the following week."},
-    {sym:"HESTERBIO + ORIENTHOT", ret:"+3.75% each", period:"Jul 27 → Jul 31, 2026", status:"BANKED",
-     info:"The only engine-consensus picks of their era (3 and 2 engines) — ranks 1 and 2 of the first confidence-ranked basket. Both delivered."}
-  ];
+  const WINS = [{"sym": "KENNAMET", "mono": "KM", "emoji": "\ud83c\udfc6", "ret": "+18.1%", "period": "May 8 \u2192 May 9, 2026 \u00b7 1 day", "status": "REALIZED", "scolor": "#E63946", "info": "Cross-validated #1 on 15d. The model's +5% target was blown through by 13 points the next session \u2014 profit taken into the spike at 3,345.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,89.0 46.9,102.0 85.7,87.0 124.6,82.2 163.4,82.2 202.3,82.9 241.1,67.7 280.0,77.0 318.9,62.2 357.7,8.0 396.6,11.7 435.4,36.4 474.3,17.4 513.1,31.4 552.0,46.7\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"357.7\" cy=\"8.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"357.7\" cy=\"8.0\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b93,375 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b93,400 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#FFD23F", "badge_fg": "#0F0E17"}, {"sym": "INDOBORAX", "mono": "IB", "emoji": "\ud83d\ude80", "ret": "peak +20.0%", "period": "Aug 19 \u2192 in flight (to Sep 8)", "status": "HALF BANKED, RIDING", "scolor": "#2E63E8", "info": "Boron chemicals. +20% within 3 sessions; half banked at the +5% touch, remainder trailing under the C2 contract.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,72.4 68.4,83.5 128.9,96.8 189.3,102.0 249.8,88.8 310.2,88.0 370.7,22.1 431.1,8.0 491.6,17.7 552.0,33.1\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"310.2\" cy=\"88.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"431.1\" cy=\"8.0\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b9437 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b9525 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#2E63E8", "badge_fg": "#FFFDF4"}, {"sym": "POLYPLEX", "mono": "PP", "emoji": "\ud83c\udfc6", "ret": "+10.0%", "period": "Jul 2 \u2192 Jul 23, 2026", "status": "BANKED AT DAY-15", "scolor": "#E63946", "info": "PET films. The day-15 timeout captured what a tight stop would have thrown away \u2014 returns are back-loaded.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,93.2 38.2,102.0 68.4,98.0 98.7,82.5 128.9,69.7 159.1,70.8 189.3,65.8 219.6,68.7 249.8,63.6 280.0,48.3 310.2,32.4 340.4,47.2 370.7,43.8 400.9,46.7 431.1,39.9 461.3,41.0 491.6,42.6 521.8,21.4 552.0,8.0\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"98.7\" cy=\"82.5\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"552.0\" cy=\"8.0\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b9969 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b91,162 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#E63946", "badge_fg": "#FFFDF4"}, {"sym": "AZAD", "mono": "AZ", "emoji": "\ud83c\udfc6", "ret": "+9.1%", "period": "Jul 1 \u2192 Jul 22, 2026", "status": "BANKED AT DAY-15", "scolor": "#E63946", "info": "Defence precision. Qualified in two consecutive baskets, delivered in both \u2014 four real order-win filings in the window.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,95.2 38.2,102.0 68.4,88.5 98.7,89.7 128.9,84.9 159.1,70.7 189.3,52.2 219.6,46.7 249.8,55.4 280.0,8.6 310.2,8.0 340.4,27.2 370.7,24.5 400.9,32.2 431.1,21.5 461.3,36.4 491.6,33.4 521.8,27.1 552.0,37.0\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"98.7\" cy=\"89.7\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"340.4\" cy=\"27.2\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b92,064 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b92,530 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#FFD23F", "badge_fg": "#0F0E17"}, {"sym": "LANDMARK", "mono": "LM", "emoji": "\ud83d\ude80", "ret": "+5.1%", "period": "Aug 25 \u2192 in flight", "status": "RIDING", "scolor": "#2E63E8", "info": "Auto retail with the AUTO sector at +6.5% relative strength on entry day. Freshest riser on the wall.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,84.9 85.7,86.5 163.4,80.7 241.1,88.5 318.9,91.1 396.6,102.0 474.3,8.0 552.0,42.0\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"552.0\" cy=\"42.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"474.3\" cy=\"8.0\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b9536 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b9554 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#2E63E8", "badge_fg": "#FFFDF4"}, {"sym": "UNICHEMLAB", "mono": "UC", "emoji": "\ud83c\udfc6", "ret": "+5% day 2", "period": "Aug 24 \u2192 in flight", "status": "HALF BANKED", "scolor": "#2E63E8", "info": "Pharma, rank-2 by confidence. Touched +5% on its second session \u2014 carried a forensic WATCH flag with a defined cut-line.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,16.7 85.7,8.0 163.4,46.4 241.1,93.3 318.9,83.1 396.6,56.1 474.3,102.0 552.0,56.4\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"474.3\" cy=\"102.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"552.0\" cy=\"56.4\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b9522 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b9556 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#E63946", "badge_fg": "#FFFDF4"}, {"sym": "KROSS", "mono": "KR", "emoji": "\ud83c\udfc6", "ret": "+3.75%", "period": "Aug 19 \u2192 Aug 21, 2026 \u00b7 3 sessions", "status": "BANKED", "scolor": "#E63946", "info": "Axles & trailer parts, rank-1 by confidence. Target, half booked, trail collected \u2014 re-qualified the next week on merit.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,51.5 68.4,64.8 128.9,9.2 189.3,48.1 249.8,69.1 310.2,102.0 370.7,8.0 431.1,35.4 491.6,13.9 552.0,17.7\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"310.2\" cy=\"102.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"552.0\" cy=\"17.7\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b9202 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b9215 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#FFD23F", "badge_fg": "#0F0E17"}, {"sym": "HESTERBIO", "mono": "HB", "emoji": "\ud83c\udfc6", "ret": "+3.75% each", "period": "Jul 27 \u2192 Jul 31, 2026", "status": "BANKED (with ORIENTHOT)", "scolor": "#E63946", "info": "The engine-consensus pair (3 and 2 engines) \u2014 ranks 1 & 2 of the first confidence-ranked basket. Both delivered.", "svg": "<svg viewBox=\"0 0 560 110\" style=\"width:100%; height:96px; display:block;\" preserveAspectRatio=\"none\"><polyline points=\"8.0,64.0 40.0,102.0 72.0,100.6 104.0,8.0 136.0,12.6 168.0,26.1 200.0,36.9 232.0,37.2 264.0,57.5 296.0,34.8 328.0,62.7 360.0,48.2 392.0,71.6 424.0,27.9 456.0,31.4 488.0,44.3 520.0,46.9 552.0,73.6\" fill=\"none\" stroke=\"#1a1820\" stroke-width=\"3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"104.0\" cy=\"8.0\" r=\"6\" fill=\"#2E63E8\" stroke=\"#0F0E17\" stroke-width=\"2\"/><circle cx=\"200.0\" cy=\"36.9\" r=\"6\" fill=\"#FFD23F\" stroke=\"#0F0E17\" stroke-width=\"2\"/></svg>", "legend": "entry \u20b92,376 <span style=\"color:#2E63E8;\">\u25cf</span> &nbsp;\u00b7&nbsp; peak \u20b92,684 (intraday) <span style=\"color:#d4a900;\">\u25cf</span>", "badge_bg": "#2E63E8", "badge_fg": "#FFFDF4"}];
   const track = document.getElementById('winsTrack');
   const dots = document.getElementById('winsDots');
   WINS.forEach((w, i) => {
     const card = document.createElement('div');
-    card.style.cssText = 'min-width:100%; box-sizing:border-box; padding:36px 72px 20px;';
+    card.style.cssText = 'min-width:100%; box-sizing:border-box; padding:28px 68px 12px;';
     card.innerHTML =
       '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">' +
-        '<span style="font-size:30px; font-weight:900; letter-spacing:-0.5px; color:' + INK + ';">' + w.sym + '</span>' +
-        '<span style="font-size:24px; font-weight:900; color:' + INK + '; background:var(--comic-yellow, #FFD23F); border:2.5px solid var(--comic-black, #0F0E17); box-shadow:3px 3px 0 var(--comic-black, #0F0E17); padding:4px 16px; border-radius:10px;">' + w.ret + '</span>' +
+        '<span style="display:flex; align-items:center; gap:14px;">' +
+          '<span style="display:inline-flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:50%; background:' + w.badge_bg + '; color:' + w.badge_fg + '; border:2.5px solid #0F0E17; box-shadow:3px 3px 0 #0F0E17; font-weight:900; font-size:19px;">' + w.mono + '</span>' +
+          '<span style="font-size:28px; font-weight:900; letter-spacing:-0.5px; color:#1a1820;">' + w.sym + ' ' + w.emoji + '</span>' +
+        '</span>' +
+        '<span style="font-size:23px; font-weight:900; color:#0F0E17; background:#FFD23F; border:2.5px solid #0F0E17; box-shadow:3px 3px 0 #0F0E17; padding:4px 16px; border-radius:10px;">' + w.ret + '</span>' +
       '</div>' +
-      '<div style="font-family:\'JetBrains Mono\',monospace; font-size:13px; color:' + INK + '; opacity:0.75; margin:10px 0 4px;">' + w.period +
-        ' &nbsp;·&nbsp; <strong style="opacity:1; color:var(--comic-blue, #2E63E8);">' + w.status + '</strong></div>' +
-      '<p style="color:' + INK + '; font-size:15px; line-height:1.55; margin:8px 0 0;">' + w.info + '</p>';
+      '<div style="margin:16px 0 4px; border:2px solid #0F0E17; border-radius:10px; background:#fff; padding:8px 8px 2px;">' + w.svg +
+        '<div style="font-family:\'JetBrains Mono\',monospace; font-size:11px; color:#1a1820; opacity:0.8; padding:2px 6px 6px;">' + w.legend + '</div></div>' +
+      '<div style="font-family:\'JetBrains Mono\',monospace; font-size:13px; color:#1a1820; opacity:0.8; margin:8px 0 2px;">' + w.period +
+        ' &nbsp;·&nbsp; <strong style="color:' + w.scolor + ';">' + w.status + '</strong></div>' +
+      '<p style="color:#1a1820; font-size:14.5px; line-height:1.5; margin:6px 0 0;">' + w.info + '</p>';
     track.appendChild(card);
     const d = document.createElement('button');
     d.setAttribute('aria-label', 'win ' + (i+1));
-    d.style.cssText = 'width:11px; height:11px; border-radius:50%; background:#FFFDF4; border:2px solid var(--comic-black, #0F0E17); margin:0 4px; cursor:pointer; padding:0;';
+    d.style.cssText = 'width:11px; height:11px; border-radius:50%; background:#FFFDF4; border:2px solid #0F0E17; margin:0 4px; cursor:pointer; padding:0;';
     d.onclick = () => winsGo(i);
     dots.appendChild(d);
   });
@@ -1268,7 +1255,7 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
   window.winsGo = function(i){
     idx = (i + WINS.length) % WINS.length;
     track.style.transform = 'translateX(-' + (idx * 100) + '%)';
-    [...dots.children].forEach((el, j) => el.style.background = j === idx ? 'var(--comic-yellow, #FFD23F)' : '#FFFDF4');
+    [...dots.children].forEach((el, j) => el.style.background = j === idx ? '#FFD23F' : '#FFFDF4');
   };
   window.winsNav = d => winsGo(idx + d);
   let timer = setInterval(() => winsNav(1), 3000);
@@ -1279,12 +1266,12 @@ footer .repo { background: var(--comic-red) !important; color: white !important;
 })();
 </script>
 
-
 <!-- ARCHITECTURE -->
 <section id="architecture">
   <div class="container">
     <div class="section-tag">The Architecture</div>
-    <h2 class="section-title">5 ML engines, parallel + cross-validated</h2>
+    <h2 class="section-title">5 ML engines — consensus voters, honestly accounted</h2>
+    <p class="section-sub">What each engine contributes TODAY: all five vote into a top-30 consensus that creates rare Tier-1 picks (it has fired once in the live record — HESTERBIO/ORIENTHOT, both hit target). The multibagger engine additionally provides the regime gate; its original 2x-in-180-days TARGETS are retired to the Archive — that was the origin-story goal, not the shipped product. A weekly shadow A/B (logs/lean_shadow.jsonl) publishes whether the engine layer changed the basket at all — the week it first did, both consensus picks won.</p>
     <p class="section-sub">A name only ships if it appears in ≥2 engines' top-15 AND survives contamination QC AND operator-pump detection AND RSI &lt; 80 filter. Most names die in the cascade.</p>
 
     <div class="arch">
@@ -1969,7 +1956,7 @@ const SIGNALS = {
     { name: "consensus_engine_count", display: "Cross-Engine Vote", icon: "🤝",
       hover: "how many of 5 engines agree on this name",
       desc: "Number of ML engines (of 5) with this symbol in their top-30. Consensus (≥2) creates rare Tier-1 picks and earns the biggest confidence weight (×1.5); most weeks the basket is Tier-2 (ML honest zone + bands) with zero consensus. SILVERTUC was 4/4 once — cross-engine count on a manipulated tape is correlated noise, not quality.",
-      formula: "sum(symbol in top_20(engine) for engine in [180d, hc, mb, mh, csh])",
+      formula: "sum(symbol in top_30(engine) for engine in [180d, hc, mb, mh, csh])",
       source: "Composed across all 5 engine outputs.",
       code: "engine_count[sym] = sum(sym in top20(e) for e in ENGINES)" }
   ]
