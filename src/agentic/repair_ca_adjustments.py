@@ -58,6 +58,16 @@ BONUS_RE = re.compile(
 )
 NON_EQUITY_RE = re.compile(r"ncrps|preference|debenture|warrant", re.IGNORECASE)
 
+# Human-verified factors the tape cannot confirm (suspensions, no post-ex prints).
+# These are exempt from null/normalize verdicts. Source: NSE records checked by
+# Abhinav 2026-08-28 — KOTYARK 10:1 bonus ex 2026-06-24 (no NSE prints since
+# 2026-06-23); SUMEETINDS 1:5 split ex 2025-10-03 (3-month halt; tape ratio 3.06
+# = factor 5 × real +63% relist move).
+CONFIRMED = {
+    ("KOTYARK", "2026-06-24"): 11.0,
+    ("SUMEETINDS", "2025-10-03"): 5.0,
+}
+
 
 def parse_factor(subject: str) -> float | None:
     if not isinstance(subject, str):
@@ -145,6 +155,14 @@ def main() -> None:
             if pd.isna(stored_prod) and parsed_prod:
                 unconfirmed.append((sym, ex, parsed_prod, "no traded history at ex-date (future/unlisted)"))
             continue
+        conf = CONFIRMED.get((sym, str(ex.date())))
+        if conf is not None:
+            if pd.isna(stored_prod):
+                to_fill.append((sym, ex, conf))
+            elif abs(stored_prod / conf - 1) > 0.01:
+                to_norm.append((sym, ex, stored_prod, conf))
+            continue  # human-verified: exempt from tape verdicts
+
         emp = empirical_ratios(g, ex)
         max_ratio = max((r for r, _ in emp), default=None)
 
@@ -319,6 +337,9 @@ def main() -> None:
     # D1: every filled cliff must be gone; every nulled group must have no fake jump
     for kind, triples in (("FILL", to_fill), ("NULL", to_null)):
         for sym, ex, f in triples:
+            if (sym, str(ex.date())) in CONFIRMED:
+                print(f"  ⏭  {kind} {sym:12s} {ex.date()}  human-verified — cliff check skipped (real move may exceed 30%)")
+                continue
             g = v[(v["symbol"] == sym) & (v["trade_date"].between(ex - pd.Timedelta(days=15), ex + pd.Timedelta(days=10)))]
             worst = g["return_1d"].abs().max()
             ok = pd.isna(worst) or worst < 0.30
