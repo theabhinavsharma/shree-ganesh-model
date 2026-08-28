@@ -1,0 +1,961 @@
+{
+ "dossiers": [
+  {
+   "symbol": "QUESS",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Post-demerger pure-play staffing entity swung to profit: Q4 FY26 PAT of Rs 64 cr vs Rs 95 cr loss YoY (FY26 PAT +384%) announced 2026-05-04 with a Rs 6/share dividend, then Q1 FY27 PAT +61% on 2026-07-30/31 kept the re-rating going to 2x on 2026-08-26.",
+   "knowable_pre_run": "Stock sat 45% off its 52-week high at a single-digit-EBITDA-multiple after the 2025 three-way demerger simplification, 9M FY26 filings already showed the profit recovery underway, and the Q4 board-meeting/results date was public before the May 4 gap. The April leg off the trough (Apr 1 to Apr 30, +12%) preceded any announcement and was a broad small-cap rebound.",
+   "ignition_signature": "Flat low-volume grind off the April 1 trough, then a results-day gap: +7.1% close (intraday +10.6%) on 4.6x volume 2026-05-04 and +5.6% on 16.4x volume 2026-05-05; a second 16x-volume +9.6% thrust on 2026-06-05 with no same-day disclosure, and a +7.4% on 13.5x post-Q1-results thrust 2026-07-31. Post-results thrust, delivery percentage collapsed to ~10% on the biggest days.",
+   "theme": "staffing-services-turnaround"
+  },
+  {
+   "symbol": "RAIN",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Q1 CY26 results (announced ~2026-05-08) flipped to Rs 158 cr net profit vs Rs 115 cr loss YoY on carbon (CPC/CTP) margin recovery \u2014 revenue +20%, adjusted EBITDA +65%, margin 14.5% vs 7.4% \u2014 and the stock ran to successive 52-week highs through May-July.",
+   "knowable_pre_run": "CPC/CTP price recovery and aluminium-cycle data were public commodity prints before the results; the stock traded ~36% off its high at distressed multiples; the Q1 CY26 results board-meeting date was disclosed in advance. The April leg (Apr 8 +7.0%) was a market-wide rebound day, not stock-specific news.",
+   "ignition_signature": "Rebound grind through April on normal volume, then a results ladder: +6.8% on 3.1x volume 2026-05-08 (results day), +13.9% on 11.7x 2026-05-11, and a second +14.5% thrust to a 52-week high 2026-05-25. Post-results thrust with delivery dropping to ~10-20% on the burst days.",
+   "theme": "carbon-materials-commodity-turnaround"
+  },
+  {
+   "symbol": "RAMCOSYS",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Perennially weak ERP vendor printed a step-change Q4 FY26 on 2026-05-21/22: PAT +372% to Rs 25 cr, EBITDA margin 24% vs 14%, recurring revenue +15%, $51.7M order bookings \u2014 stock locked a 20% upper circuit on results day and added a second +18% burst on 2026-06-05.",
+   "knowable_pre_run": "Q3 FY26 filings had already shown the recurring-revenue and margin inflection, and the Q4 results board-meeting date (May 21) was public. Nothing stock-specific accompanied the first leg: the +17% five-session bounce off the Apr 1 trough (RSI 34, 45% off high) was oversold mean-reversion visible only on the tape.",
+   "ignition_signature": "Oversold V-bounce off the trough (+5.6%, +5.4%, +6.4% on rising 1-3x volume, Apr 1-8), a six-week pause, then a 20% upper circuit on 15.1x volume on results day 2026-05-22 (delivery ~15%), and a second +18% on 10.75x thrust 2026-06-05 with no same-day announcement \u2014 circuit-chase momentum on top of a real results catalyst.",
+   "theme": "IT-software-turnaround"
+  },
+  {
+   "symbol": "RATEGAIN",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 (2026-05-21/22) delivered highest-ever quarterly revenue of Rs 716 cr, +174.5% YoY on consolidation of its large acquisition, with Sundaram MF buying 0.8% of equity in the open market the same day; Q1 FY27 later confirmed with PAT +102%. Stock rose 92% from the March low to a 52-week high by mid-June, hitting 2x on 2026-07-03.",
+   "knowable_pre_run": "The acquisition whose consolidation drove the ~175% revenue jump was announced well before the run, so the revenue step-up was forecastable from public filings; the Q4 results date was scheduled and public. The trough-day +9.5% reversal (Apr 1) and +8.8% Apr 8 came with no stock-specific news \u2014 a beaten-down travel-SaaS name (34% off high) bouncing with the market.",
+   "ignition_signature": "Sharp +9.5% trough-day reversal on light volume, a steady higher-lows grind through April-May (occasional 2-3x volume up-days), then the confirming thrust: +9.5% on 10.1x volume on results day 2026-05-22 with disclosed MF accumulation, followed by a persistent grind to new highs.",
+   "theme": "travel-tech-SaaS"
+  },
+  {
+   "symbol": "RATNAVEER",
+   "catalyst_type": "operator_or_unknown",
+   "catalyst_summary": "No fundamental step-change matched the move: Q1 FY27 grew PAT only 22% and Q4 FY26 was unremarkable, yet the stock laddered 2.15x in 102 sessions on chronically low (10-30%) delivery, with the final leg running straight into the board's Rs 330 cr rights-issue announcement (~2026-08-20, priced at Rs 264) \u2014 a flow/promotion-driven small-cap ramp with periodic news pegs.",
+   "knowable_pre_run": "Nothing stock-specific before ignition \u2014 the Apr 13 first thrust had no disclosed trigger; a reader knew only that it was a small (~Rs 700 cr) stainless-steel washer exporter with a steel/exports narrative. Results dates (mid-May Q4, Jul 24 Q1 board meeting) became public as the run progressed; the rights issue was disclosed only in the final week before the 2x print.",
+   "ignition_signature": "Low-delivery momentum ladder rather than one gap: +7.8% on 3.8x volume 2026-04-13, +8.4% on 4.3x 2026-04-27, +9.7% on 8.0x 2026-06-17, +11.8% on 13.8x 2026-07-27 (post-Q1 results, delivery ~10%), +13.5% on 5.4x 2026-08-03, then a daily grind Aug 13-20 into the rights-issue news and the 2x date.",
+   "theme": "stainless-steel-smallcap"
+  },
+  {
+   "symbol": "RRKABEL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results on 2026-05-04: highest-ever quarterly and annual revenue (Rs 2,960 cr, +33.7% YoY), PAT +30%, FY26 exports +24% \u2014 landing on an already-hot wires-and-cables sector tape; the stock zoomed 46% in a month to successive all-time highs and 2x'd on 2026-07-28.",
+   "knowable_pre_run": "Wires-and-cables sector strength was fully public before ignition \u2014 peer results and channel demand/capex data \u2014 and RR Kabel's own results board-meeting date was disclosed ahead of May 4. The April accumulation (Apr 8 +5.9% on 2.2x, Apr 16 +4.5% on 2.9x, ~50% delivery) was visible on the tape 2-3 weeks before the results gap.",
+   "ignition_signature": "Grinding accumulation through April on repeated 2-3x volume up-days with healthy delivery, a +6.7% on 5.9x pre-results pop 2026-04-28, then the results-day gap: +13.0% on 7.55x volume 2026-05-04, followed by +7.2% (May 7), +5.4% (May 29) and +6.5% (Jun 3) continuation thrusts.",
+   "theme": "wires-cables-capex"
+  },
+  {
+   "symbol": "RUBICON",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Recently listed (Oct 2025) US-generics formulator printed Q4 FY26 on 2026-05-29: revenue +43.5% to Rs 514 cr, PAT +112% to Rs 77 cr, maiden Rs 1.5 dividend and a strong USFDA pipeline \u2014 the stock rose ~29% in two sessions to a 52-week high and kept re-rating (P/E 37x to 45x per analysts) to 2x on 2026-07-24, helped by the July InvaTech NJ facility acquisition.",
+   "knowable_pre_run": "The IPO prospectus (6 months old) laid out the 40%+ growth and US ANDA pipeline publicly; the Q4 results board-meeting date was disclosed before May 29. Ahead of results, the tape showed accumulation: +7.2% on 3.4x volume 2026-04-09 and +6.0% on 4.3x 2026-04-16 with no announcements, i.e. the grind began ~7 weeks before the catalyst.",
+   "ignition_signature": "Grinding accumulation April-May off the post-IPO trough, then a two-day post-results thrust: +16.5% on 11.0x volume 2026-06-01 and +11.2% on 10.8x 2026-06-02 (delivery ~10%), a +8.2% follow-on 2026-06-11, and a slower grind to 2x with a +5.0% acquisition-news day 2026-07-20.",
+   "theme": "pharma-US-generics"
+  },
+  {
+   "symbol": "AVALON",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "FY26 Q4 results (May 6) repriced the EMS story: +9.1% and +10.5% back-to-back on ~7x volume in the two sessions after the print, and the 2x was completed by a second post-results thrust after Q1 FY27 results (Aug 4 -> Aug 7 +10.8% on 4.4x volume).",
+   "knowable_pre_run": "Nothing company-specific before the ignition leg \u2014 the 45-day window shows only routine filings (ESOP allotment, trading-window closure). Knowable: the results date was flagged (con-call schedule filed Apr 28), and the EMS/electronics-manufacturing theme was already re-rating peers. The April grind off the market-wide Apr 1-7 trough (+13% into results on normal volume) carried no announcements.",
+   "ignition_signature": "Quiet low-volume grind for 3 weeks off the broad-market bottom, then a post-results thrust: two ~+10% days on 7x volume (May 7-8) with delivery collapsing to 10-20% \u2014 momentum money piling in after the print; repeated at Q1 results in August.",
+   "theme": "electronics-EMS"
+  },
+  {
+   "symbol": "AYE",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Recently-listed MSME lender delivered a strong FY26: a quarterly business update (Apr 5) and press release 'Aye Finance Delivers Strong FY26 Performance' (Apr 6) preceded the +12% ignition gap on Apr 8, and Q4 results on Apr 27 (PAT Rs 86cr, +110% YoY, 16% quarterly ROE post-IPO) added +10% on 8.7x volume; an IND A+ rating upgrade (Jun 24) powered the final leg to 2x.",
+   "knowable_pre_run": "Fully knowable: the FY26 business update was filed Apr 5 and the 'Strong FY26 Performance' press release Apr 6 \u2014 one to two sessions BEFORE the +12% Apr 8 gap (which also rode a +4.1% cross-sectional market bounce day). The Apr 27 results date was public via the Apr 23 con-call schedule.",
+   "ignition_signature": "Gap on announcement: +11.99% gap on Apr 8 right after the FY26 business update, then a stair-step of +4-8% days culminating in a +10% 8.7x-volume day on Q4 results; choppy (-5/-6% shakeouts) but announcement-anchored throughout.",
+   "theme": "NBFC-MSME-credit"
+  },
+  {
+   "symbol": "BALAMINES",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Chemicals-cycle bottom reversal: at trough the stock was 47% off its 52-wk high; FY26 Q4 results plus a Rs 11 final dividend (May 13) triggered a +20% upper circuit on 7x volume, followed by commissioning of the new DME plant (May 20) and a +15% spurt on Jun 2 (which drew an NSE spurt-in-volume query) to seal 2x in 44 trading days.",
+   "knowable_pre_run": "No company-specific news before ignition \u2014 April announcements were housekeeping (a senior-management resignation, committee reconstitution). Knowable: the DME plant project was long public, the results date was intimated in advance, and the amines/specialty-chemicals pricing recovery was a visible sector theme. The tape tell was the May 4 +9.1% on 4.5x volume \u2014 accumulation nine days BEFORE results.",
+   "ignition_signature": "Grinding accumulation into results (quiet +6% April, then rising-volume +4-9% days from Apr 21), detonating in a post-results thrust: +20% UC on 7x volume (May 14) with delivery dropping to ~10-30%, then a second 4x-volume +15% circuit day (Jun 2).",
+   "theme": "specialty-chemicals-cycle"
+  },
+  {
+   "symbol": "BBOX",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "AI data-center capex theme chased Black Box's publicly-known ~$800M order backlog and $1B revenue target: the decisive +10.4% day on 10.8x volume (Apr 28) came with NO new company announcement \u2014 the exchange issued a spurt-in-volume query and the company's clarification cited nothing material; a Brazil acquisition completion (2S Inovacoes, May 13) landed near the 2x date. Fastest doubler in this batch (29td).",
+   "knowable_pre_run": "Knowable: the Rs 386cr warrant-conversion fundraise completed Mar 30 (press release, one week pre-trough), preferential allotments through Feb-Mar, and the $800M backlog / $1B FY26 revenue guidance from the Q3 FY26 call \u2014 all public. What was NOT knowable: any specific trigger for the vertical Apr 28 leg; the company itself confirmed no undisclosed news.",
+   "ignition_signature": "Beta bounce off the Apr 7 market trough (+6% and +7.3% on modest volume Apr 8-10), then a vertical no-news 10.8x-volume +10.4% day (Apr 28) with delivery collapsing to ~15%, followed by exchange price/volume queries and 5-6% days on 6x volume \u2014 theme-momentum tape, not announcement-anchored.",
+   "theme": "AI-datacenter-network-capex"
+  },
+  {
+   "symbol": "BLISSGVS",
+   "catalyst_type": "stake_or_MnA",
+   "catalyst_summary": "Anupam Rasayan agreed to buy the promoters' 43.3% stake (Agreements filed May 23) triggering a Rs 299/share, Rs 829cr open offer for 26% (PA May 25 via SBI Capital Markets); the stock hit +20% upper circuit on May 26 and blew straight through the offer price to reach 2x (~Rs 434) by Jun 4 \u2014 the market pricing the acquirer's plans, not the offer arithmetic.",
+   "knowable_pre_run": "The deal itself was not public before May 23. But the trough carried corporate-activity tells: two new non-executive directors appointed Apr 3, a fresh ICRA credit rating Apr 8, a postal ballot for the appointments Apr 9 \u2014 governance refresh ahead of a control transaction \u2014 and the launchpad features show vol_asym 2.49 (highest in this batch: up-day volume dwarfing down-day volume, a visible accumulation footprint at the trough).",
+   "ignition_signature": "Two-phase: a gentle announcement-light April grind (+6% days on ~1x volume, likely accumulation), then a gap-and-circuit on the deal \u2014 +5.7% on 4.3x volume the day of the PA (May 25) and a +20% UC on 5.3x the next day.",
+   "theme": "pharma-MnA"
+  },
+  {
+   "symbol": "BLSE",
+   "catalyst_type": "stake_or_MnA",
+   "catalyst_summary": "Acquisition-driven re-rating: the 100% buyout of Atyati Technologies (banking-tech/AI for financial institutions) was the thread \u2014 progress updates Mar 31 and Apr 30, FY26 results + maiden dividend May 18, and 'Successful Completion' announced Jul 2; the decisive +9.5% day on 8.4x volume printed Jul 1, one session BEFORE the completion announcement. Slowest doubler here (86td to a bare 2.01x).",
+   "knowable_pre_run": "Fully knowable thesis: the Atyati acquisition and its progress were public from Mar 31 \u2014 a week before the trough \u2014 with another update Apr 30 (a +7.3% 3.3x-volume day). Results date public via board-meeting intimation. The specific timing of the Jul 1 ignition leg, however, front-ran the Jul 2 completion filing \u2014 informed buying, not readable from disclosures.",
+   "ignition_signature": "Slow announcement-tied grind (+6-8.6% days on 1.6-3.3x volume near each acquisition update), then an information-leak thrust: +9.5% on 8.4x volume the day BEFORE the completion announcement, +4.9% on 10.3x the day after, delivery dropping to ~10%.",
+   "theme": "fintech-banking-correspondent"
+  },
+  {
+   "symbol": "BLUESTONE",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Post-IPO washout (RSI 31, 44% off high at the Apr 7 trough) repriced almost entirely on one event: Q1 FY27 results plus management commentary (Jul 20) delivered +19.4% on 14.8x volume and +6.5% on 9.8x over the next two sessions \u2014 the whole 2x crossed on that thrust; the intervening three months were sideways-to-down (back to 474 in May).",
+   "knowable_pre_run": "At the trough: only the scheduled Q4 FY26 results (con-call schedule filed Apr 17, results Apr 23) and the broad-market bounce \u2014 the +8.4%/+6.9% Apr 8-9 days were beta (Apr 8 was a +4.1% cross-sectional day). For the decisive July leg: the results/con-call date was public (schedule filed Jul 14), and the 2026 gold-price rally was a known jewellery-sector tailwind. Nothing else preceded the +19% day.",
+   "ignition_signature": "False-start beta bounce at the trough, months of base-building with episodic 7-10x volume days (Apr 24, May 29, Jun 4) that went nowhere, then a single post-results thrust: +19.4% on 14.8x volume with ~10% delivery \u2014 an event-day repricing, not a campaign.",
+   "theme": "jewellery-newage-consumer"
+  },
+  {
+   "symbol": "NEOGEN",
+   "catalyst_type": "capacity_expansion",
+   "catalyst_summary": "Battery-materials build-out re-rating: Dahej electrolyte plant commissioned and selling, gigascale-customer PPAP approval for lithium salts, Rs 100cr rights infusion into Neogen Morita announced Apr 28, and mid-May Q4 FY26 results confirming the battery-chemicals ramp toward the Rs 2,400-2,900cr FY29 revenue guidance.",
+   "knowable_pre_run": "Almost the whole thesis was public pre-trough: the MU Ionic electrolyte technology license, the commissioned 2,000 MT Dahej plant, the Morita JV, and the FY29 battery-revenue guidance were all in prior filings/concalls. Stock was ~32% off its 52-week high with RSI 40. Nothing new dropped in the first 1-3 sessions - announcement file is empty around Apr 1, and the first conviction print (Apr 22, +10% on 7.6x volume, days after Apr 18-20 filings) came 3 weeks in.",
+   "ignition_signature": "No gap, no announcement at ignition - a +6.3% V-reversal on the market-wide smallcap capitulation low of Apr 1, then a low-volume grind (+9.1% Apr 8 on 1.7x) until the Apr 22 +10%/7.6x volume thrust; 76 trading days of stair-step grind with results-day pops (May 20 +7.3% on 4.1x, Jun 30 +7.6% on 6.1x).",
+   "theme": "EV-battery-materials / specialty-chemicals"
+  },
+  {
+   "symbol": "NIBE",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Serial defence order-win announcer (Rs 293cr Indian Army universal-rocket-launcher contract in Jan 2026, armour plates, later a Rs 563cr loitering-munition order) whose decisive leg was a 3-day May 20-22 explosion around order filings dated May 19-21 - stock-specific, since the A&D sector fell 2.74% on May 20 while NIBE rose 7%.",
+   "knowable_pre_run": "Fully public pre-run: the Rs 293cr Indian Army contract (early Jan 2026), the 2025 Israel $17.5M rocket-launcher export order, and a visible cadence of order press releases established the order-flow trajectory. At the Apr 1 trough itself nothing new was filed; the specific May 19-21 order announcements that ignited the vertical leg were public on day 1 of that leg and buyable in the 5% band the next morning.",
+   "ignition_signature": "Two-stage: quiet V-reversal off the Apr 1 smallcap low (+9.5%) with 6 weeks of drift, then an announcement-driven circuit ladder May 20-22 (+5.9%, +9.9% incl. upper-circuit lock, +12.4%) on 4.4x/11.4x/7.1x volume - textbook post-announcement thrust.",
+   "theme": "defence"
+  },
+  {
+   "symbol": "NRBBEARING",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 blowout announced May 7-8: record quarterly revenue of Rs 372cr (+13% YoY) and net profit up roughly 700% YoY / +45% QoQ, followed by a bulk deal on Jun 8 that drove a +11% day to a 52-week high; a strong Q1 FY27 print in early August carried it across 2x on Aug 10.",
+   "knowable_pre_run": "Pre-run a reader knew only that a cheap auto-comp bearing maker was 24% off its high with a Q4 board meeting scheduled (meeting-intimation filings Apr 21-30); the earnings surprise itself landed 5 weeks into the run. The April drift (+5.8% Apr 16 on 4.9x volume) preceded any public number - the tape front-ran the beat.",
+   "ignition_signature": "Slow grinding accumulation off the Apr 2 low for 5 weeks, then a results-day thrust May 8 (+5.9% on 12.4x volume) and a bulk-deal spike Jun 8 (+11.1% on 11.3x); slowest doubler of the set at 92 trading days with a long June-July consolidation.",
+   "theme": "auto-components / bearings"
+  },
+  {
+   "symbol": "OMNI",
+   "catalyst_type": "relist",
+   "catalyst_summary": "Omnitech Engineering, a precision safety-critical components maker that listed Mar 5, 2026 at Rs 227 IPO price, went through a classic fresh-float post-IPO momentum re-rating; the only hard fundamentals during the run (Q4 EBITDA Rs 498M vs 430M YoY, Infomerics upgrade to IVR A) arrived late May after the stock had already nearly doubled.",
+   "knowable_pre_run": "Only the RHP/IPO fundamentals (Feb 2026) and the strong 2026 new-listing regime (21 of 29 IPOs above offer price) were public. The ignition days - Apr 1 +11.2% and Apr 8 +15.5% - had no corresponding filings; the announcement file shows routine post-listing items only. A skeptic could know it was a sub-30-day-old float with no analyst coverage and no earnings history as a listed entity - i.e., a momentum trade, not an information trade.",
+   "ignition_signature": "Fresh-float momentum thrust beginning at the Apr 1 trough: repeated 8-15% up-days (+11.2%, +15.5%, +8.4%, +8.3%, +10.0%, +14.4%) with volume confirmation early (4x on Apr 2-3) and at the May 29 finale (4.8x) - fastest and biggest of the set (2.8x peak in 46 trading days).",
+   "theme": "precision-engineering / IPO-momentum"
+  },
+  {
+   "symbol": "OPTIEMUS",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "EMS/electronics-manufacturing plus drone-theme re-rating: Optiemus rode the India EMS wave and its Optiemus Unmanned Systems drone story (Avix Technology partnership), with record-but-modest Q4 FY26 numbers on May 30 (revenue Rs 485cr +7.9%, profit up marginally) - no single large order was disclosed during the run.",
+   "knowable_pre_run": "The drone subsidiary, the Avix components partnership, and the EMS/PLI positioning were all public well before April; the stock was 55% off its 52-week high with RSI 35 (the most washed-out in this cohort). Nothing stock-specific was filed at ignition - the +11.3% Apr 8 day has no matching announcement - so the pre-run knowable was theme plus valuation reset, not an event.",
+   "ignition_signature": "V-reversal off the Apr 1 smallcap low (+5.4%), then a +11.3% thrust Apr 8 on only 1.3x volume - a low-volume theme grind; real volume arrived mid-run (Jun 4 +9.7% on 7.2x) and it took 78 trading days to print 2x.",
+   "theme": "EMS / electronics-manufacturing / drones"
+  },
+  {
+   "symbol": "ORCHPHARMA",
+   "catalyst_type": "capacity_expansion",
+   "catalyst_summary": "Antibiotics self-reliance story compounding: cefiderocol GARDP sublicense (facility due year-end for mid-2027 launch), reacquired enmetazobactam traction, and the 7ACA/Pen-G backward-integration plant on track for Q1 2027 commissioning, with in-line Q4 results (~May 26) mid-run; press attribution for the June 52-week highs was explicitly momentum, not a discrete event.",
+   "knowable_pre_run": "The entire pipeline - GARDP cefiderocol deal, enmetazobactam rights, 7ACA/Pen-G PLI capex timeline - was public before the Apr 7 trough, and the stock sat 40% off its high with a 5cr/day float (thin). No filing coincides with the ignition or with the June 12-16 acceleration; a reader knew the story but had no event to time the move with in the first sessions.",
+   "ignition_signature": "The cleanest accumulation grind in the set: no gap, no day over 10%, volume mostly below 2x for six weeks, then a controlled acceleration into the 2x print (Jun 12 +8.4% on 3.8x, Jun 16 +9.1% on 4.4x) - looks like informed/patient accumulation front-running the FY27 capacity story rather than a news chase.",
+   "theme": "pharma-antibiotics / API-backward-integration"
+  },
+  {
+   "symbol": "PARAS",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Defence-pack melt-up: record FY26 indigenous defence production, the Rs 30,000cr / 87-unit MALE drone programme headlines, and small confirming orders (Rs 52.8cr BEL electro-optics, Rs 46cr MoD anti-drone systems) plus Q4 results drove a June blow-off in which the whole sector rallied; the orders themselves were too small relative to market cap to explain the 2.48x.",
+   "knowable_pre_run": "Defence-indigenisation was the most telegraphed theme in the market - record production data, order-pipeline commentary, and Paras' known electro-optics/anti-drone niche were all public pre-trough. But at the Apr 2 trough and in the first sessions nothing stock-specific was filed; the BEL order, Q4 numbers, and drone-tender headlines all landed 8-10 weeks in (early-to-mid June).",
+   "ignition_signature": "Market-wide Apr 1-2 reversal, then a steady volume-building grind (+6.9% Apr 15 on 3.5x, +8.0% May 7 on 2.9x) that flipped into a June sector blow-off ladder: +6.5%, +7.4%, +7.7%, +10.9%, then +18% on the Jun 17 2x day as the entire defence pack ran - momentum climax, not an announcement gap.",
+   "theme": "defence"
+  },
+  {
+   "symbol": "CARTRADE",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (May 7): PAT +54% YoY, FY26 PAT +68% to Rs 244 cr with EBITDA +70%, plus a stated Rs 1,000 cr PAT long-term target; a second leg in June came on heavy institutional buying (Rs 5,900 cr traded value on Jun 10), OLX India Elite Buyer traction updates and Kotak/UBS buy calls.",
+   "knowable_pre_run": "Board-meeting intimation for Q4 results was public before the move (the stock rose ~10% on May 6, the day BEFORE results, in anticipation), and Q2/Q3 FY26 had already printed the OLX-driven profit inflection. The Apr 30 trough was a drawdown in an already-known compounding story, not an information vacuum.",
+   "ignition_signature": "Gap on announcement: +9.8% on 4.8x volume May 6 (results eve) and +6.3% on 7.5x on results day May 7; then a month of digestion, then a second thrust Jun 3-17 (+9.3%, +12.1% on 6.9x, +9.7% on 5x) \u2014 two distinct news-driven gap clusters, not a circuit ladder.",
+   "theme": "internet-platform / auto classifieds"
+  },
+  {
+   "symbol": "CEMPRO",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Cemindia Projects (ex-ITD Cementation, Adani-owned EPC): Q4 FY26 results announced Apr 29-30 showed PAT +114% QoQ to Rs 242 cr (FY26 PAT +59% to Rs 594 cr), triggering a 20% upper circuit on 14.8x volume on Apr 30 and +17.3% on May 4; infra-EPC re-rating under Adani parentage carried it to 3.1x.",
+   "knowable_pre_run": "Adani group control and the rename were public since 2025, quarterly profits had been climbing all FY26 ('a re-rating years in the making' per DSIJ), and the Apr 29 board-meeting date for results was intimated in advance. The Apr 30 +20% circuit WAS the public results day \u2014 anyone reading the filing that morning caught the run at 1.0x.",
+   "ignition_signature": "Post-results thrust: a month of quiet basing off the Apr 1 trough, then a violent gap \u2014 +20% UC on 14.8x volume the day results hit, followed by +17% two sessions later, then a low-volume markup.",
+   "theme": "infra-EPC / Adani group"
+  },
+  {
+   "symbol": "CPPLUS",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Aditya Infotech (CP Plus, India's #1 CCTV brand, Aug 2025 IPO): steady April re-rating in the surveillance/electronics-manufacturing theme culminated in Q4 FY26 results in late May (management guiding 25-30% revenue growth, PAT growth ~46%+), driving +10% on May 29 and +7.7% on 4.3x volume Jun 1 to cross 2x on Jun 5.",
+   "knowable_pre_run": "Public before the run: category-leader position, the STQC certification regime pushing government/enterprise demand to domestic CCTV makers, and management's 25-30% growth guidance from earlier calls; the late-May results board meeting was intimated in advance. The April leg itself had no single announcement \u2014 it was theme-driven accumulation.",
+   "ignition_signature": "Grinding accumulation: a two-month stair-step (+5.8%, +7.9% days on 1-3x volume through April) with no gap, then a post-results thrust May 29-Jun 4 (+10%, +7.7%, +4.8%, +5.0%) that delivered the 2x.",
+   "theme": "surveillance electronics / Make-in-India"
+  },
+  {
+   "symbol": "CUPID",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "New-promoter (Halwasiya) transformation story: Q4 FY26 PAT +215% YoY to Rs 36 cr (results May 15) plus an April-announced Rs 331.5 cr strategic investment in Baazar Style Retail giving its FMCG portfolio a 260+ store distribution network with a claimed Rs 500 cr incremental revenue ambition; the stock ran to 3.44x and +763% over a year. Real earnings inflection, but a heavily promoter-narrated one.",
+   "knowable_pre_run": "The Style Baazar warrant investment and FMCG-distribution pivot were public via April filings (matching the Apr 17-20 announcement cluster) right as the first big up-days hit (+7.9% on 2.4x on Apr 17), and the May 15 results board meeting was intimated in advance; the WHO/UNFPA dual pre-qualification was long public.",
+   "ignition_signature": "Grinding accumulation, no gap: +6.4% Apr 8, +7.9% on 2.4x Apr 17, then an unusually metronomic ~3%/day grind on 1-2x volume through June to the 2x (Jun 19) \u2014 a controlled-looking tape more than an event tape.",
+   "theme": "consumer / FMCG-pivot smallcap"
+  },
+  {
+   "symbol": "CYIENTDLM",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (Apr 21-22): PAT roughly doubled QoQ to Rs 22.4 cr with a record Rs 2,417 cr order book, drawing Macquarie/JPMorgan endorsements and a projected FY27 turnaround as BEL-related headwinds normalize; the defence-electronics EMS theme carried it to 2x by Jul 10.",
+   "knowable_pre_run": "The Apr 21 results date was publicly scheduled, the record order book had been building in prior disclosed quarters, and the defence/EMS capex tailwind was fully public; the volume ignition (+4.9% on 5.1x, Apr 22) happened ON the results \u2014 readable in the run's first sessions.",
+   "ignition_signature": "Post-results thrust: a thin low-volume drift off the trough (+7.9% Apr 8 on 0.3x volume), then real volume arriving on results day Apr 22 (5.1x) and +7.3% Apr 27, followed by a steady institutional-looking markup rather than circuits.",
+   "theme": "defence-electronics EMS"
+  },
+  {
+   "symbol": "DEEDEV",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "String of disclosed piping orders: a $10M international piping-fabrication order (~Apr 7-8, stock +4.8% that day), Rs 58 cr first seamless-pipe orders for the new Gujarat plant, and a Rs 207 cr critical-piping-assembly contract, building a Rs 2,429 cr order book on power/oil-and-gas capex demand; BSE data shows +127% in two months with an ATH of Rs 760 on Jun 18. Note: the local parquet is missing all 60 sessions May 19-Aug 10, so the file's '34td / Aug 11 2x' and the +30.8% Aug 11 print are data artifacts \u2014 the real 2x landed around early-to-mid June.",
+   "knowable_pre_run": "The $10M export order was a public filing two sessions BEFORE the Apr 10 ignition, and the subsequent Gujarat-plant and piping-assembly orders were exchange-disclosed during the run's first weeks; the power-capex piping theme was fully public.",
+   "ignition_signature": "Circuit ladder: +10% on 2x volume Apr 10, then a relentless staircase of +5.0% band-limit days (Apr 13-May 11: +6.7, +4.5, +5.0, +5.0, +5.0, +4.9, +5.0, +5.0, +5.0) on modest volume \u2014 classic 5%-band order-flow momentum, not a single gap.",
+   "theme": "power-capex / process piping"
+  },
+  {
+   "symbol": "DIACABS",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Diamond Power Infrastructure (post-NCLT turnaround under GSEC ownership) compounded a stream of disclosed cable orders \u2014 Rs 435 cr Hyderabad data-center cables, Rs 195 cr PGVCL underground-cable POs, Adani Electricity Mumbai supply, discom orders \u2014 on top of FY26 revenue +71% and PAT +358% with a Rs 3,498 cr March-end order book, riding the cables-and-wires/power-capex and data-center wave to 2.73x.",
+   "knowable_pre_run": "Order filings hit the exchange in the run's first sessions (four announcements on Apr 6 alone, matching +2.9% on 1.3x that day), FY26 9M numbers already showed the ~70% revenue run-rate, and the turnaround ownership story plus the cables/data-center capex theme were long public.",
+   "ignition_signature": "Grinding accumulation punctuated by order-day pops: no single gap, but repeated +5-7.5% days on 2-3x volume (Apr 16, Apr 20, May 4-6) and a +10% on 3.7x on May 14 as order announcements stacked \u2014 event-fed momentum on a turnaround base.",
+   "theme": "power-capex / cables & wires / data-center"
+  },
+  {
+   "symbol": "EMIL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Two-step results re-rating: Q4 FY26 (Apr 28) with PAT +49% YoY and margin expansion lifted the base, then Q1 FY27 (early Aug) with PAT +458% YoY to Rs 120.6cr \u2014 billed as its strongest-ever Q1 \u2014 delivered the final ~35% thrust that completed the 2x on Aug 10.",
+   "knowable_pre_run": "At the Apr 1 trough, nothing stock-specific \u2014 the stock was 43% off its 52-week high after a market-wide correction, and the first month of the run was a low-volume beta bounce. The Q4 board-meeting date was on the public calendar; the first hard evidence (Q4 numbers) landed Apr 28, four weeks in, and the decisive Q1 FY27 beat only in August.",
+   "ignition_signature": "Quiet low-volume grind off the market-wide Apr 1 bottom (ignition day +5.3% on just 0.69x volume), first real volume event was the Apr 28 results day (+11.1% on 14.3x volume), months of sideways action, then a post-results circuit ladder Aug 5-12 (+10.8%, +10.7%, +9.0% on 7-10x volume, delivery collapsing) into the 2x.",
+   "theme": "consumer-electronics retail / consumption recovery"
+  },
+  {
+   "symbol": "EPACKPEB",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Rs 165cr order for solar cell/module supply plus PEB works announced Jun 3 (stock +16% intraday, ~10x volume, biggest one-day gain since its Oct 2025 listing) capped a run built on the solar-manufacturing-buildout narrative; 2x hit Jun 18 after a Jun 11-18 momentum thrust.",
+   "knowable_pre_run": "Nothing stock-specific at the Apr 1 trough \u2014 a recent IPO 58% off its high bouncing with the whole market. The Apr 8 +12.3% day had no disclosed catalyst (flagged by trackers as unrelated to any announcement). The Rs 165cr order was only public Jun 3, roughly two-thirds into the run \u2014 a pre-run reader had only the general solar-capex theme.",
+   "ignition_signature": "Circuit-style ladder off the market bottom: ~+5% on each of the first three sessions on thin volume, then +12.3% on 3.3x volume by day 6 with no news; May consolidation; then a news gap Jun 3 (+9.3% close on 10.1x volume) and a Jun 11-15 follow-through (+9.2% on 9.8x, +6.1%, +5.5%) into the 2x day.",
+   "theme": "solar-capex / prefab infrastructure"
+  },
+  {
+   "symbol": "EXICOM",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Q4 FY26 results (May 19) showed the first consolidated EBITDA breakeven since the Tritium acquisition \u2014 revenue +46% YoY, EVSE business +83%, Tritium revenue +157% QoQ \u2014 and the market violently repriced a left-for-dead EV-charger story: +20% and +14.5% on 10-13x volume May 21-22, 2x by May 29.",
+   "knowable_pre_run": "At the trough only the setup was public: stock 60% off its 52-week high, vol_asym 1.77 (highest in cohort) hinting at accumulation. The Apr 1-13 +35% bounce (incl. +9.2% on 3.5x volume Apr 13) had no disclosed driver \u2014 deep-oversold beta bounce. The May 19 results date was publicly scheduled in advance, but the turnaround itself was only knowable on the print.",
+   "ignition_signature": "V-bounce off an oversold trough (+9.9% on day one, +35% in eight sessions on modest volume), a May fade, then a post-results circuit ladder (+20% limit-style day on 10x volume, +14.5% on 12.8x, delivery dropping to ~10%) that did the actual doubling in six sessions.",
+   "theme": "EV-charging / power electronics"
+  },
+  {
+   "symbol": "GREAVESCOT",
+   "catalyst_type": "corporate_action",
+   "catalyst_summary": "Value-unlock trade on subsidiary Greaves Electric Mobility's (Ampere) IPO march, reinforced by FY26 results (May 6, FY26 PAT +83%) and a Dubai-subsidiary international push in June; the 2x day itself (Jul 10, +11.1% on 4.8x volume) came on the board approving up to Rs 331cr participation in GEML's rights issue ahead of listing.",
+   "knowable_pre_run": "Genuinely knowable pre-run: the GEML IPO was fully public long before the trough (DRHP filed, SEBI observations letter received May 2025, Rs 1,000cr fresh issue + OFS including Greaves Cotton shares) \u2014 the holdco value-unlock thesis was on the table at the Apr 1 bottom, plus a scheduled early-May results date.",
+   "ignition_signature": "Grinding accumulation: +8.9% market-rebound day at the trough on average volume, then a steady low-volume uptrend with periodic 5-6% days; volume only showed up late (Jun 22 +7.1% on 5.1x on the international-expansion breakout, Jul 10 +11.1% on 4.8x on the GEML investment approval = the 2x day).",
+   "theme": "EV 2W/3W (Ampere) holdco value-unlock + engines"
+  },
+  {
+   "symbol": "GRWRHITECH",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (May 6): PAT Rs 108cr vs Rs 78cr YoY (+39%), record FY26 revenue Rs 2,120cr / PAT Rs 338cr and a 120% dividend triggered a +12.7% day on 7.7x volume; the stock then re-rated in a sustained trend from ~Rs 5,000 to the 2x at Rs 7,247 by Aug 3 without another comparable volume event.",
+   "knowable_pre_run": "At the Apr 1 trough nothing new was public \u2014 a specialty-films exporter 22% off its high in the market-wide selloff; features show a plain-vanilla oversold base (RSI 47, r20 z -0.53). The results date was public by late April; the actual catalyst was only knowable on the May 6 print, five weeks into the recovery.",
+   "ignition_signature": "Market-rebound day at the trough (+7.1% on 1.2x volume), quiet April grind, then a decisive post-results thrust May 4-7 (+6.8%, +4.8%, +12.7% on 7.7x, +8.1%) followed by a three-month institutional-style grind to 2x on unremarkable volume.",
+   "theme": "specialty films / premium-auto PPF consumption"
+  },
+  {
+   "symbol": "HFCL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Fastest doubler (25 sessions): record Q4 FY26 on Apr 30 \u2014 revenue +128% YoY to Rs 1,824cr, highest-ever PAT Rs 184cr, order book tripled to Rs 21,206cr with defence emerging as a growth engine \u2014 on top of an April Rs 1,366cr HTL optical-fibre order; the June 17 Rs 2,666cr RVNL BharatNet Phase-III order then extended the move to the 3.41x peak.",
+   "knowable_pre_run": "The most knowable name in the cohort: the Rs 8,100cr BharatNet Phase-III consortium wins and the multi-year order-book expansion were public before April, the Apr 30 results board meeting was publicly scheduled mid-April, and the Rs 1,366cr HTL order landed inside the run's first half \u2014 a filings reader had concrete public revenue-visibility evidence before and during ignition.",
+   "ignition_signature": "Grinding accumulation ignition Apr 8-10 (+3.5%, +5.9%, +6.0% on ~3x volume) rather than a single gap, steady 2-5% days through April, then a post-results thrust Apr 30-May 7 (+8.3% on 4.5x volume, +8.6%, +9.9%) completing the 2x in 25 sessions.",
+   "theme": "telecom-capex (BharatNet) / defence electronics"
+  },
+  {
+   "symbol": "HIRECT",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Final leg to 2x was driven by a flurry of Indian Railways orders \u2014 Rs 101cr (Jun 27) and Rs 127cr (Jun 28) supply orders, then maiden MEMU/Vande Metro propulsion orders in July \u2014 culminating in +19.9% on 9x volume Jul 15. But be skeptical of the ignition: the Apr 10 +19% day on 9.9x volume had NO catalyst, and the company formally told exchanges on Apr 13 it had no unpublished price-sensitive information.",
+   "knowable_pre_run": "Public at ignition: the 1:1 bonus had just completed (record date Mar 27, bonus shares trading Mar 31), the record railway-capex budget theme was live, and an analyst/institutional investor meeting was publicly scheduled for Apr 10 \u2014 the day of the +19% no-news spike. The actual orders that justified the price only became public Jun 27-28 and mid-July; Q4 results came May 18-19.",
+   "ignition_signature": "Single-day explosion: Apr 10 +19% close on 9.9x volume with delivery collapsing to ~10%, around a scheduled analyst meet and fresh bonus, explicitly denied as news-driven by the company; a month-long plateau; post-results thrust May 19-27 (+9.1% on 5.5x, +15.3% on 3.6x); then order-driven spikes Jul 15-16 (+19.9% on 9x, then 12x volume) into the 2x.",
+   "theme": "railway-capex / power electronics"
+  },
+  {
+   "symbol": "KSHINTL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4FY26 blowout on May 25 (revenue ~2x YoY, PAT +87% YoY to Rs 35cr; FY26 revenue Rs 3,107cr +61%) re-rated this fresh Dec-2025 IPO winding-wire exporter toward Polycab/KEI-class multiples; +11.6% on 4.7x volume the day after results, 2x completed Jun 16 (54td).",
+   "knowable_pre_run": "CARE Ratings upgrade A- to A filed Feb 24; dense analyst/investor-meet schedule filed Feb 27 and Apr 4 (meet Apr 8); recent IPO in magnet winding wires with the power-capex/transformer supercycle already a public theme; earnings-call date (May 26) filed May 7 well before the results leg. About half the move (444->~620) happened before results on this public setup.",
+   "ignition_signature": "No gap, no circuit ladder: grinding accumulation off the Apr 1 market-wide V-bottom \u2014 +9.25% Apr 6 on 1.9x volume, then repeated +7% days on 1-1.7x volume, capped by a post-results thrust (+11.6% May 27 on 4.7x).",
+   "theme": "power-capex / winding wires (transformer-motor magnet wire exports)"
+  },
+  {
+   "symbol": "LUXIND",
+   "catalyst_type": "corporate_action",
+   "catalyst_summary": "Three-way demerger of the innerwear business per a Todi-family settlement agreement (FSA signed Apr 22, board in-principle approval Apr 23) \u2014 but the 2x-in-17-sessions was mostly printed BEFORE that news, with the tape exploding Apr 6-8 on no disclosure; classic front-run, followed by sell-the-news (-5.3% on the Apr 24 2x day, -8.9% Apr 28).",
+   "knowable_pre_run": "Effectively nothing. No filings between Feb credit-rating routine and the ignition; NSE volume-spurt queries Apr 6-7 and price-movement queries Apr 8 drew no material disclosure; the 'global expansion / athleisure pivot' media narrative (Whalesbook et al.) appeared only after the move started. A filings-and-tape reader could know the stock was beaten down (-40% off 52w high) and that huge informed volume arrived Apr 6-7 \u2014 the news itself was unknowable until Apr 22-23.",
+   "ignition_signature": "Explosive out-of-nowhere thrust bordering on a circuit ladder: +18.7% on 7.8x volume (Apr 6), +11.6% on 14.6x (Apr 7), +8.4% (Apr 8), with exchange queries unanswered by any disclosure; second +8.6%/+10% thrust Apr 22-23 on the actual demerger news.",
+   "theme": "innerwear/textiles \u2014 demerger & promoter family settlement"
+  },
+  {
+   "symbol": "MANINDS",
+   "catalyst_type": "stake_or_MnA",
+   "catalyst_summary": "Transformative $102M acquisition of National Pipe Company (Saudi Arabia, API-certified 430k MTPA, Saudi Aramco relationship) announced May 21 via subsidiary MISIC, stacked on ~Rs 1,000cr fresh orders Jun 18 (unexecuted order book to ~Rs 4,100cr) and a Q1FY27 beat with FY27 guidance of Rs 5,000-5,500cr revenue (Aug 11) that finished the 2x on Aug 20 (101td).",
+   "knowable_pre_run": "Large public order book (~Rs 3,000cr+) from repeated FY26 order-win filings; the SAW-pipe sector rally was broad and public (Welspun Corp ran in tandem \u2014 sector pieces flagged both). The early Apr 8 +14.9% day on 4.7x volume had no company filing (sector move); NSE price-movement queries Apr 20-21 preceded the Apr 22 board meeting. The NPC deal itself was not knowable pre-announcement.",
+   "ignition_signature": "V-bounce off the Apr 1 market-wide low (+9.05%), then a sector thrust +14.9% on 4.7x volume Apr 8 with no filing; thereafter a grinding, catalyst-stepped advance (May 21 M&A, Jun 18 orders +9.9% on 5.5x, Aug 12 results +7.1% on 14.8x).",
+   "theme": "SAW pipes / oil-gas-water pipeline capex (Saudi-Aramco expansion)"
+  },
+  {
+   "symbol": "MARINE",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "A continuous drumbeat of 'Bagging/Receiving of orders' filings (Feb through Jul \u2014 at least 15 in the window) in defence-shipbuilding electricals and LV/MV systems, plus FY26 results May 27 (+8.5% on 6.9x volume two days later), ground the stock to 2x on Aug 7 (92td); NSE price queries only arrived Aug 10-11, at the top.",
+   "knowable_pre_run": "Highly knowable: seven order-win filings in the 45 days BEFORE the trough (Feb 16, 17, 27, Mar 10, 16, 23, 24) plus a Q3 results press release Feb 16 and a warrant preferential allotment Feb 25 \u2014 the order momentum and promoter/investor funding were fully public before the run ignited.",
+   "ignition_signature": "Slow grind, no gap: +12% on the Apr 1 market-wide bounce day, then 1-4% days on ~1x volume for weeks, punctuated by occasional 8-9% surges on 4-7x volume (Apr 23, May 29 post-results, Aug 3).",
+   "theme": "defence-shipbuilding electricals / naval & industrial electrical systems"
+  },
+  {
+   "symbol": "MARKSANS",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Two results step-functions did the work: FY26 'Historic Triple' (record revenue/EBITDA/PAT, Rs 3,000cr guidance delivered) on May 26 (+15.7% on 9.3x volume) and a Q1FY27 beat on Aug 12 (+12.1% on 13.1x), completing the 2x Aug 14 (94td); EU bolt-on acquisitions (QliniQ B.V. Jun 1, ABCnow GmbH Jul 8) and a credit-outlook upgrade kept the narrative fed between prints.",
+   "knowable_pre_run": "USFDA approval for Benzonatate Capsules press-released Apr 1 \u2014 the trough week itself; earnings con-call for audited FY26 results scheduled via filing May 19 (a week before the first big thrust); consistent prior-quarter delivery made the results dates the obvious public catalysts.",
+   "ignition_signature": "Post-results thrust pattern, not accumulation: two quiet weeks after the trough, a +7.6% day on 5.1x volume Apr 23, then the move concentrated in results-day gaps (May 26, Aug 12-14) on 9-13x volume.",
+   "theme": "pharma \u2014 US/UK/EU OTC generics (CDMO-adjacent consumer pharma)"
+  },
+  {
+   "symbol": "MTARTECH",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "AI-datacenter power theme via key client Bloom Energy: Bloom's Q1-2026 blowout (revenue +130%, guidance raised) on Apr 30 sent MTAR +14.2% on 3.9x volume, on top of the public Oracle-Bloom 2.8GW expansion (Rs 1,400-1,700cr potential MTAR orders); own FY26 results May 12 and a May 14 order-win filing completed the 2.42x in just 30td.",
+   "knowable_pre_run": "Order-win filing Apr 1 (Rs 35.6cr data-centre energy orders) landed exactly at the trough; Bloom Energy's order momentum and the Oracle fuel-cell deal were public US news; the stock was already +42% over the trailing 60 days (r60 +0.42 at trough) \u2014 an established, publicly visible uptrend re-igniting, with FY26 results date ahead.",
+   "ignition_signature": "Post-bounce momentum thrust re-igniting an existing trend: +8.3% on 2.7x volume Apr 7, +5.5% Apr 8, +12.4% on 4.1x Apr 15, +14.2% on Bloom's results Apr 30, +8.2%/+12.2% on own results May 13-14 \u2014 repeated 5-14% days on 2-4x volume, no single announcement gap.",
+   "theme": "AI-datacenter power (Bloom Energy fuel-cell supply chain) / precision engineering-defence-nuclear"
+  },
+  {
+   "symbol": "NELCO",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Beaten-down Tata satcom proxy (-50% off 52w high at trough) rode the satellite direct-to-device wave: FY26 results + dividend Apr 20, a +17.2% theme spike on 14.5x volume Jun 18 with no filing, and the $20M CCD investment in Lunar Holdco plus the Elveo S-band NGSO D2D/IoT partnership announced Aug 17 \u2014 the exact 2x date (98td); press noted the stock zoomed 108% from its March low.",
+   "knowable_pre_run": "At the Apr 1 trough: nothing company-specific, only the public satcom/D2D policy theme and Tata-group positioning. Before the June leg, the May 14 postal-ballot notice publicly flagged the enabling resolutions (approved per Jun 13 scrutinizer report) ahead of the strategic-investment announcement \u2014 a filings reader had the breadcrumb two weeks before the Jun 18 spike.",
+   "ignition_signature": "Market-wide V-bounce +9.6% Apr 1, +8.6% on 3.6x volume Apr 6, a post-results volume burst (+6.2% on 13.6x Apr 21), then huge-volume theme spikes without filings (Jun 18 +17.2% on 14.5x, Jul 31 +9.2% on 6x) before the deal-day 2x print.",
+   "theme": "satcom / satellite direct-to-device & IoT connectivity (Tata group)"
+  },
+  {
+   "symbol": "SKYGOLD",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "B2B gold-jewellery manufacturer compounding on hyper-growth results: FY26 revenue +77% YoY to Rs 6,295cr with EBITDA +121% (announced 27-May), followed by Q1 FY27 PAT +137% in August \u2014 all riding record gold prices and the 'Sky Gold 3.0' capacity expansion. The 80td run to 2x was earnings-driven re-rating, not a pump: it even absorbed a statutory-auditor resignation air pocket (-19% over 11-13 May) and resumed once MSKA was appointed and FY26 numbers printed.",
+   "knowable_pre_run": "Plenty was public before the 1-Apr trough: India Ratings upgrade IND A-/A2+ to IND A/A1 (16-Feb filing), 'Strategic Shift in Capacity Expansion Plan under Sky Gold 3.0' press release (27-Feb), a string of analyst/institutional-meet intimations through Feb-Mar signaling institutional interest, and the gold-price bull tape. FY26 results date and the 77% revenue print only landed 27-May, mid-run.",
+   "ignition_signature": "Grinding accumulation \u2014 no gap, no circuit ladder: +6.1% at the trough on normal volume, then repeated +5-8% days (+6.2% 6-Apr, +7.7% 15-Apr, +5.1% on 3.5x vol 29-Apr) on 1-3x volume over 80 trading days, punctuated by the May auditor-resignation drawdown and a post-results reacceleration.",
+   "theme": "gold-price bull / jewellery manufacturing"
+  },
+  {
+   "symbol": "SPARC",
+   "catalyst_type": "corporate_action",
+   "catalyst_summary": "Cash-burning Sun Pharma R&D spin-off got a balance-sheet rescue: 30-Apr definitive agreement to sell its Rare Paediatric Disease Priority Review Voucher (from Sezaby's FDA approval) for US$195M, followed by a 3.85cr-warrant preferential allotment (promoter infusion, 19-May) and a PDP-716 NDA update the same day. The decisive 2x leg (+12.2% on 5.8x vol 6-May; +10.8%, +16.3%, +11.1% on 4-7x vol 19-25 May) came directly on these announcements.",
+   "knowable_pre_run": "The PRV asset itself was public (Sezaby approval had earned it), Shanghvi/Sun Pharma parentage was known, and the tape flagged interest pre-trough: a +17.5% day on 8.7x volume on 25-Mar drew back-to-back 'Spurt in Volume' exchange queries \u2014 all before the 1-Apr trough. The PRV sale price and warrant infusion were NOT knowable pre-run; they landed mid-run (30-Apr, 19-May) and drove the final doubling.",
+   "ignition_signature": "Low-volume drift then gap-on-announcement thrusts: trough exit was quiet (+4.7% on 0.4x vol), first thrust 8-9 Apr (+7.7%, +7.4% on 3.1x), then step-change gaps after the PRV sale and again after results/warrants \u2014 the 39td 2x completed with three double-digit up days in the final four sessions.",
+   "theme": "pharma-pipeline / asset monetization (Sun Pharma group)"
+  },
+  {
+   "symbol": "STALLION",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Pure-play refrigerant-gas SME (Jan-2025 IPO) riding the global HFC price upcycle \u2014 China quota tightness plus US distributor price hikes lifted the whole fluorochem complex \u2014 layered with its own capex story: HFO plant land allotment in Rajasthan (23-Feb PR) and R-32 backward-integration plant on track for Oct-2026, plus FY26 PAT +35.6% announced 13-May. No single order or event explains the move; it is theme beta with capacity optionality.",
+   "knowable_pre_run": "Public before ignition: the 23-Feb land-allotment press release for the HFO plant, R-32 project detail from IPO/DRHP disclosures, and widely covered refrigerant price-hike/quota-tightness news lifting SRF and Navin Fluorine. The 20-Apr board-meeting outcome and 13-May results were in the first weeks of the run; the exchange price query of 23-Apr got the standard 'no undisclosed information' response.",
+   "ignition_signature": "Circuit-style ladder from day one: four consecutive +4.4-4.5% closes off the 1-Apr trough on thin volume, exploding into +11.3% on 4.0x volume on session six (8-Apr), +8.8% on 17-Apr, later +15.8% on 5.3x (19-May) and +12.5% on 7.1x (10-Jul) to complete 2x in 75td.",
+   "theme": "fluorochemicals / refrigerant-gas price upcycle"
+  },
+  {
+   "symbol": "STLTECH",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "AI data-centre optical-fibre re-rating: STL repositioned from cyclical telecom-capex play to AI-infrastructure supplier via a drumbeat of product news (India's first hollow-core fibre for DC networks 25-Mar, 'Neuralis' US data-centre portfolio launch 20-Apr) plus turnaround Q4 FY26 results on 29-Apr. Note the $1.11bn hyperscaler Product Award came 25-May \u2014 AFTER the 7-May 2x date \u2014 so the doubling itself was theme momentum and squeeze, validated only later by the order.",
+   "knowable_pre_run": "The stock was already +84% over the prior 60 days at the 2-Apr trough (r60=0.84 in the feature row) \u2014 the data-centre pivot was fully public: hollow-core fibre PR (25-Mar), preferential-issue allotment (30-Mar), Vedanta promoter disclosure (10-Apr), and the 29-Apr results date. A reader of the tape plus these filings had the whole thesis; the billion-dollar order was not knowable.",
+   "ignition_signature": "Circuit ladder \u2014 the cleanest in the set: ~+5% band-limit closes stacked through April (+5.9, +5.6, +10.0, +4.8, +5.0, +5.0) on only 1-2x volume, then five straight ~+5.0% closes 4-8 May on volume drying to 0.1-0.7x of 20d \u2014 a locked float melting up to 2x in just 25td.",
+   "theme": "AI data-centre / optical connectivity capex"
+  },
+  {
+   "symbol": "SUVEN",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Pre-revenue CNS biotech (Suven Life, promoter-funded) doubling on Alzheimer's-pipeline speculation: the 2x was sealed by the 12-May press release '76% enrollment milestone in global Phase 3 masupirdine (SUVN-502) trial' plus FY26 results next day, triggering +19.6% on 13.9x volume (18-May) and +6.7% on 8.0x (19-May). Be skeptical of the first leg though: the +11.9% ignition day (1-Apr) had NO accompanying disclosure and drew exchange price queries on 7-8 Apr.",
+   "knowable_pre_run": "Public pre-trough: the 6-Mar preferential allotment of 3.18cr equity shares (promoter cash infusion keeping the Phase 3 funded) and the long-disclosed Phase 3 timeline (completion expected end-CY2026). Not knowable: any specific trigger for the 1-Apr +11.9% thrust \u2014 the only tape tell was 4x volume on flat price on 30-31 Mar, i.e. someone accumulated two sessions before ignition. The enrollment-milestone PR arrived six weeks into the run.",
+   "ignition_signature": "Stealth accumulation then unexplained thrust: 4x/3.5x volume with 0% price change 30-31 Mar, +11.9% ignition 1-Apr on no news, +7.1%/+6.3%/+9.9% follow-through, exchange query, two-month grind \u2014 then a second-stage post-announcement explosion (+19.6% on 13.9x vol) that completed 2x in 39td.",
+   "theme": "pharma-CNS / Alzheimer's Phase 3 pipeline"
+  },
+  {
+   "symbol": "TFCILTD",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Tourism/hotel-capex NBFC re-rated over 99td on two successive results prints: Q4 FY26 PAT +48% YoY with dividend (13-May) drove the first leg, and Q1 FY27 (PAT Rs 61cr, GNPA 0.4%, CRAR 57%, announced 20-Jul alongside an AOA/MOA amendment) drove the late-July acceleration on 3-4x volume; a Brickwork upgrade to AA and hotel-capex upcycle underpinned the re-rating. Slowest and least speculative doubler in the set.",
+   "knowable_pre_run": "Public pre-trough: the Jan-2026 strategic AIF commitments (Holystone Hospitality Fund, Certus Real Estate Fund) that had already produced a 20% upper-circuit day, credit-rating disclosures (24-Mar filing), LIC's presence on the register (Reg 31(4) disclosure 5-Jun confirmed it mid-run), and the tourism/hotel-capex macro story. Results dates were scheduled and both prints were the observable accelerants.",
+   "ignition_signature": "Slow delivery-backed grind, no gap: nothing over +4.2% for the first five weeks, a pre-results leg 4-7 May (+6.9, +5.9, +4.2), flat June, then a post-results thrust 24-29 Jul (+6.3 on 2.9x, +8.6 on 4.1x, +3.6 on 3.1x) and a final +6.2% on the 19-Aug 2x day.",
+   "theme": "tourism / hotel-capex NBFC"
+  },
+  {
+   "symbol": "THANGAMAYL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Tamil Nadu jewellery retailer whose blowout Q4 FY26 (PAT Rs 143cr vs Rs 31.4cr YoY, revenue ~2x to Rs 2,839cr, FY26 revenue +73% to ~Rs 8,502cr, announced 15-May) combined with record gold prices and Chennai store expansion (Neelankarai + Pallavaram branches, 4-Jun) to produce a 52%-in-June melt-up; up 2x in 70td by 9-Jul. Genuine earnings, amplified by the gold tape.",
+   "knowable_pre_run": "Public pre/early-run: record gold prices (the macro driver, visible to everyone) and gold-jewellery peer strength; the April leg (+5.9% on 2.4x vol 6-Apr) tracked gold with no company news. Results date (15-May) was scheduled; the Q4 magnitude, dividend/record date, branch openings (4-Jun) and rating update (29-Jun) all landed mid-run. The 4-Jun exchange price query got only the branch-opening disclosure.",
+   "ignition_signature": "Gold-tracking grind then post-results melt-up: choppy April/May including a -14% gold-correction drawdown 11-12 May right before results, then a June thrust \u2014 +7.2% (29-May), +7.2% (2-Jun), +4.5%, and +15.1% on 4.8x volume to a record high on 4-Jun \u2014 carrying to 2x on 9-Jul.",
+   "theme": "gold-price bull / jewellery retail"
+  },
+  {
+   "symbol": "AEGISLOG",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "LPG supply-shock recovery trade: April 2026 supply shortages (~50%) eased to ~30% by May, and the market rerated Aegis's gas terminal capacity story (incl. listed Aegis Vopak) on the normalization; Q4FY26 results (May 29, +4.8% on 7.7x vol) and a foreign-brokerage Overweight with target raised to Rs 1,150 poured fuel on it, with the decisive June 11 day (+15.6%, 13x volume) driven by the supply-recovery/growth narrative rather than a new filing.",
+   "knowable_pre_run": "At the Apr 7 trough the stock was -33% off its 52-week high with RSI 37; the LPG supply disruption and its easing were public macro data, and the Aegis Vopak terminal-expansion story was fully public. But the mid-April ignition bursts (Apr 10/15/17, 3-5x volume, delivery dropping to 14-18%) map to NO company announcement \u2014 the first hard public catalysts (Q4 results, brokerage target hikes) came 6+ weeks into the run. A filings reader had the theme, not the timing.",
+   "ignition_signature": "Episodic low-delivery volume bursts off the trough (Apr 10/15/17: +4.4%/+6.6%/+7.5% on 3-5x vol), a May consolidation, post-results pop May 29 on 7.7x, then the vertical leg: Jun 11 +15.6% on 13x volume and a near-daily +5-7% ladder through the Jun 29 2x.",
+   "theme": "gas-LPG-logistics"
+  },
+  {
+   "symbol": "AEQUS",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Aerospace supply-chain rerating of a fresh Dec-2025 IPO: India's only vertically integrated aerospace SEZ (Airbus/Boeing/Safran supplier, ~Rs 84,750 cr order book = 7.4x revenue) got repriced through Apr-Jun, validated mid-run by record Q4FY26 results (revenue +47% YoY, announced ~May 26) and post-2x by Nuvama/IIFL Buy initiations (TP 444/320) in early July.",
+   "knowable_pre_run": "The order book, OEM client roster, and sole-SEZ positioning were all public from the Dec 2025 IPO prospectus, and the stock sat near issue price at the Apr 1 trough. But the actual ignition day (Apr 10, +15.2% on 5.6x volume, delivery collapsing to 22%) matches no announcement in the file and no news I could find \u2014 the first hard company catalyst (record Q4) came 6 weeks later. The fundamental case was knowable; the Apr 10 trigger was not.",
+   "ignition_signature": "Dead-quiet base (0.1-0.7x volume) then an abrupt circuit-style ladder: +15.2% (5.6x vol), +5.1%, +7.3%, +6.8%, +13.8% (5.1x), +11.2% inside three weeks at 19-25% delivery \u2014 momentum-chase tape, not accumulation \u2014 followed by a choppy May and a second 7x-volume thrust Jun 15-22 into the Jun 30 2x.",
+   "theme": "aerospace-manufacturing"
+  },
+  {
+   "symbol": "AEROFLEX",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4FY26 blowout announced May 5-6: revenue +37% YoY, EBITDA +59% (record FY26, margin +326bps), PAT +57% to Rs 17.6 cr versus street expectations of only ~8-12% PAT growth \u2014 the stock ran +8.4% then +20% (4.9x volume) on May 6-7.",
+   "knowable_pre_run": "Plenty: the strong Q3FY26 print was public since January (stock had already zoomed 43% in 8 days on it), the Q4 board-meeting date was filed in advance, and at the Apr 7 trough the launchpad row shows unusually healthy momentum (r20 +11%, r60 +37%, only -3.7% off 52-week high, RSI 55) \u2014 this was a going concern in an uptrend heading into a scheduled results date, not a dead stock.",
+   "ignition_signature": "Immediate steady grind off the trough (+6.5%/+4.9%/+5.3% Apr 8-10 on ~1-1.8x volume, no announcement), then the defining post-results thrust: May 6-8 +8.4%/+20.0%/+6.2% on 3.4-4.9x volume, a -17% two-day shakeout, and a second grind to the Jun 16 2x.",
+   "theme": "industrial-flow-solutions-exports"
+  },
+  {
+   "symbol": "AMAGI",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Maiden-profitability rerating of the Jan-2026 IPO: first post-listing results (~May 20-21) showed Q4FY26 swinging to Rs 34.3 cr PAT (vs Rs 10.6 cr loss YoY) with FY26 profit of Rs 71.7 cr reversing a Rs 68.7 cr loss; the steepest leg came Jun 17 (+14.6% on 13x volume) around an analyst/institutional meet, and Rs 587 cr Accel/AVP lock-in block deals in late June were absorbed by five mutual funds at only a 3% discount, confirming institutional demand into the Jul 23 2x.",
+   "knowable_pre_run": "The trough (Apr 6, RSI 31, r20 z-score -2.25 \u2014 a genuinely washed-out recent IPO) preceded any results; through April-May the only public material was the IPO prospectus. The maiden-profit Q4 print (~May 20) WAS public a month before the Jun 17 ignition of the main leg, so the fundamental turnaround was on the record before the steep phase; the Jun 17 trigger itself (analyst meet day) had no hard filing attached.",
+   "ignition_signature": "Slow accumulation grind Apr-May (+4-6% days on 1-4x volume with high 47-85% delivery \u2014 real buying, not churn), then a step-change thrust Jun 17: +14.6% on 13x volume at 20% delivery, +8.7% follow-through, block-deal absorption bump Jun 29 (+7.9% on 5.7x), grinding to 2x Jul 23.",
+   "theme": "media-tech-SaaS-IPO"
+  },
+  {
+   "symbol": "APOLLO",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "A drumbeat of defence order wins and a structural unlock: order announcement on Apr 9 (+11.8% on 6.2x volume, filing same day), a lifetime government licence to manufacture and proof-test missiles/torpedoes/munitions around Apr 17-20 (+16.8% on 4.5x), Rs 51 cr MoD/DPSU orders May 8, then Q4FY26 results May 18-19 (+9.5% on 7.25x) and a +15% surge to the 2x on May 25 \u2014 fastest doubler of the seven at 38 trading days.",
+   "knowable_pre_run": "Genuinely knowable in the first sessions: the Apr 9 order filing hit the exchanges on the ignition day itself, and Apollo's pattern of serial MoD/DRDO order disclosures was established public behavior. At the Apr 1 trough the stock was -43% off its 52-week high (deepest drawdown in this cohort) after a broad sell-off, so a filings reader saw a habitual order-winner at a washed-out price with orders resuming within days.",
+   "ignition_signature": "Gap-on-announcement ladder: quiet drift off the trough, then discrete news gaps \u2014 Apr 9 +11.8% (6.2x vol, 13% delivery), Apr 17 +16.8% (licence), each followed by digestion, closing with a post-results thrust May 19-25 (+9.5% on 7.25x, +4.7%, +15.0%) into the 2x.",
+   "theme": "defence-electronics"
+  },
+  {
+   "symbol": "ASTRAMICRO",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Record Q4FY26 announced May 26: highest quarterly revenue in company history (Rs 488 cr, +87.6% QoQ), PAT +44-45% YoY to Rs 106 cr, dividend declared, plus a strategic demerger approval \u2014 stock hit a 52-week high +11% on 11x volume that day; the preceding April-May leg was the broader defence-sector rerating off the early-April market trough.",
+   "knowable_pre_run": "Public before ignition: defence-sector order-execution momentum and Astra's order book were on record, the Q4 board-meeting/results date was filed in advance (announcements May 12/18), and the April recovery leg itself was visible sector beta. The Apr 1-7 grind (+4.8%/+6.2%/+5.6% on 1-2x volume with 40-50% delivery \u2014 patient accumulation) carried no company-specific filing; the results date was the knowable scheduled catalyst.",
+   "ignition_signature": "Grinding accumulation: two months of +4-7% days on modest 1-2.5x volume and healthy delivery from the Apr 1 trough, then a post-results thrust May 26-28 (+9.8% on 11x volume, then 4.3x/3.6x follow-through days) and a final +6% pair Jun 17-18 into the Jul 2 2x.",
+   "theme": "defence-electronics"
+  },
+  {
+   "symbol": "ATHERENERG",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Loss-to-profitability trajectory in a policy-tailwind sector: April ignition on the government's EV Policy 2.0 proposal plus Ather's Apr 9 FY26 business update (Experience Centres doubled to 700+, net loss cut 57% to Rs 84.6 cr on record revenue); the slowest 2x here (90 trading days) was sealed by Q1FY27 results Aug 3-4 \u2014 revenue +87% YoY, deliveries +80.5%, loss narrowed 71%, first-ever positive consolidated EBITDA \u2014 driving +14% (4.2x volume) toward the Aug 11 2x.",
+   "knowable_pre_run": "Almost everything: the EV Policy 2.0 proposal was public news in the ignition window (Apr 9-13), Ather's own Apr 9 press release on EC-doubling and loss reduction landed on the ignition day, monthly VAHAN EV registration data made the volume ramp trackable all run long, and the Q1 results date was scheduled. This is the most 'readable' doubler of the seven \u2014 public policy + public monthly volumes + a disclosed results calendar.",
+   "ignition_signature": "Post-news thrust then long grind: Apr 9-13 +6.4%/+5.2%/+5.2% on 2.3-5.5x volume (delivery thinning to 12% \u2014 momentum money), a four-month staircase of 4-8% days on 2-3x volume with regular pullbacks, and a final post-results thrust Aug 4 (+14.0% on 4.2x) into the Aug 11 2x.",
+   "theme": "EV-two-wheelers"
+  },
+  {
+   "symbol": "SASKEN",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (May 8): revenue Rs 334 cr, +33.5% QoQ / +125.7% YoY, PAT +217% QoQ to Rs 29 cr, Rs 13/share dividend, plus an 'AI-first delivery' narrative (77% of engagements AI-infused) \u2014 the tape gapped 20% UC on 12.6x volume May 11 and +12.6% on 17.4x May 12, completing 2x by Jun 1.",
+   "knowable_pre_run": "At the Apr 1 trough there was no fresh filing (announcement subjects blank, no volume signature). What was public: Q3 FY26 (Jan 2026) had already shown the steep revenue ramp from inorganic consolidation, and the May 8 board-meeting/results date was filed in late April \u2014 so the +43% pre-results grind was accumulation into a known results date, but the magnitude of the Q4 beat was not knowable.",
+   "ignition_signature": "Quiet low-volume grind (+66% Apr 1 to May 8 on 0.2-0.7x 20d volume, +2-4% days), then a post-results thrust: 20% upper circuit on 12.6x volume (May 11) and +12.6% on 17.4x (May 12), followed by 5-8% momentum days to the 2x mark.",
+   "theme": "IT-smallcap / AI-services re-rating"
+  },
+  {
+   "symbol": "SBCL",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Electrification-components compounder (shunt resistors for smart meters/EV BMS, bimetal strips): steady FY26 delivery, then Q1 FY27 (Aug 6) PAT +44.9% YoY to Rs 33 cr with 33% revenue growth plus Pune Phase-I plant Consent-to-Operate \u2014 triggering back-to-back 20% upper circuits Aug 7 and Aug 10 that completed the 2x.",
+   "knowable_pre_run": "Smart-meter rollout under RDSS and EV shunt demand were widely covered public themes; insider/promoter purchases of ~Rs 6.8 cr were disclosed in April 2026 during the run's first weeks; Pune capacity expansion was public. The Apr 24 +13% day on 10.5x volume had no matching filing \u2014 the early leg ran ahead of any announced number.",
+   "ignition_signature": "Staircase from day one: discrete +7-9% days on 1-1.7x volume (Apr 1, Apr 8, Apr 15), a pre-results spike Apr 24 +13% on 10.5x volume, months of 5-7% steps, then a post-Q1-results circuit ladder (two consecutive 20% UCs on ~11x volume) to finish the double.",
+   "theme": "power-capex / smart-meter & EV electrification components"
+  },
+  {
+   "symbol": "SENORES",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "US-generics roll-up delivering: Q4 FY26 results (May 14) showed profit and margin growth on an ANDA portfolio expanded from 12 to 46 via acquisitions (14 ANDAs from Dr Reddy's, 2 from Teva, Apnar Pharma manufacturing) \u2014 stock thrust +10% (May 15) and +7.5% on 7.5x volume (May 18), then ground to 2x by Aug 17.",
+   "knowable_pre_run": "The acquisition-led ANDA strategy was fully public before the trough (Dr Reddy's and Teva deals, Q3 FY26 profit more than doubling, all reported by Jan-Mar 2026); board-meeting/results filings landed Apr 3-7 right at the Apr 7 trough. A reader of filings knew the growth machine and the results date; the run began as low-drama accumulation into it.",
+   "ignition_signature": "Grinding accumulation \u2014 five weeks of +1-2.8% days on 1-1.7x volume off the trough, then a post-results thrust (+10% May 15, +7.5% on 7.5x volume May 18), a second thrust +11% Jun 12, and a slow tape to 2x in 94 trading days.",
+   "theme": "pharma - US generics ANDA roll-up"
+  },
+  {
+   "symbol": "SETL",
+   "catalyst_type": "stake_or_MnA",
+   "catalyst_summary": "Diversification re-rating capped by M&A: renamed from Standard Glass Lining to Standard Engineering Technology (Jan 2026) with scope widened to nuclear/power/semiconductor, posted record FY26 (income +41.5% YoY), then announced a Rs 190 cr Phase-I acquisition of 51% of GScale Energy (Jun 25) for AI-datacenter engineering \u2014 the late-June circuit ladder around that news completed the 2x on Jun 30.",
+   "knowable_pre_run": "The rename and expanded engineering scope (nuclear, power, semiconductor) were completed and filed by Jan 2026, i.e., the story was public at the trough; a Mar 30 filing preceded the Apr 1 +14.9% ignition day. FY26 results (May 14 cluster) and the GScale deal were not knowable at ignition, but the pivot narrative and the post-capitulation reversal (Mar 27-31 flush on 5-6x volume) were on the tape in the first sessions.",
+   "ignition_signature": "Reversal thrust at the trough itself: +14.9% on Apr 1 straight after a 3-day capitulation on 5-6x volume; then a quiet grind, a +12.6% day on 8.6x volume Jun 5, and a closing circuit ladder Jun 22-Jul 2 (+8.7%, +8.6%, +9.1%, +10%, +10%, +5%) around the GScale AI-datacenter announcement.",
+   "theme": "capital goods pivot - AI datacenter / nuclear / precision engineering"
+  },
+  {
+   "symbol": "SHADOWFAX",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Broken Jan-2026 IPO (priced Rs 124, listed at a 9% discount) re-rated on a profitability inflection: FY26 results (May 14) confirmed the turn and Q1 FY27 later showed PAT up ~8x to Rs 65.4 cr on +65% revenue; quick-commerce/dark-store 3PL positioning did the narrative work. 2x from the Rs 117 base by Jul 1.",
+   "knowable_pre_run": "IPO price Rs 124 was a public anchor and the stock was basing below it; RHP financials showed improving unit economics into profitability; the Shadowfax 360 SME-logistics launch was filed Apr 21, within the run's first two weeks. The Apr 8-10 volume ignition (3.4-4.7x) itself had no matching filing \u2014 accumulation preceded the first post-IPO results by five weeks.",
+   "ignition_signature": "Grinding accumulation off a post-IPO base: +5.1% on 3.4x volume (Apr 8) and +6.7% on 4.7x (Apr 10), steady +4-6% days through April, then a post-FY26-results thrust +14.7% on 7.9x volume (May 15) and a grind to 2x by Jul 1.",
+   "theme": "logistics / quick-commerce 3PL (new listing re-rating)"
+  },
+  {
+   "symbol": "SHILPAMED",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Novel-products/CDMO re-rating culminating in Q1 FY27 (Aug 5): PAT +115% YoY to Rs 101 cr on +45% revenue with 29% EBITDA margin \u2014 stock jumped ~12% on 12x volume to a record high, completing the 2x that same day; Unicycive milestone income, albumin, and a European oncology supply partnership fed the story through the run.",
+   "knowable_pre_run": "Plenty: the Unicycive contract (orders through Jun 30, 2026 plus $10M milestone ladder) and the novel-products pipeline were public; Q4 FY26 results date (May 22) was scheduled; and at the Apr 1 'trough' the stock was already +19% over 20 days with RSI ~71 and volume-asymmetry 2.5 \u2014 the accumulation was visible on the tape before ignition.",
+   "ignition_signature": "Momentum continuation, not a bottom reversal: +7.4% on the trough day itself, a steady grind with swelling volume (3-5.7x on +3-6% days through May), a +7.9% day Jun 23, then a final post-results gap +12% on 12x volume Aug 5 that sealed the 2x.",
+   "theme": "pharma-CDMO / novel products & biologics"
+  },
+  {
+   "symbol": "SHREEJISPG",
+   "catalyst_type": "capacity_expansion",
+   "catalyst_summary": "Sept-2025 IPO dry-bulk port-logistics operator compounding on fleet expansion: vessel purchase agreements for two mini bulk carriers (Rs 55.66 cr, filed Apr 28), Tonnage Tax Scheme approval (effective FY26, valid to FY35) cutting the tax rate, and solid FY26 results (PAT Rs 141 cr, filed ~May 18). No single bang \u2014 87 trading days of accretion to 2x on Aug 3.",
+   "knowable_pre_run": "At the Apr 2 trough: IPO prospectus financials (FY25 revenue/profit base) and the post-listing derating to RSI ~39 were the only public facts \u2014 no fresh filing at ignition. The first concrete catalyst a filings-reader could act on came Apr 28 (vessel acquisitions), about three weeks into the run; tonnage-tax approval and FY26 results followed.",
+   "ignition_signature": "Pure grinding accumulation from an oversold post-IPO base: scattered +4-6% days on 2-4x volume (Apr 17, Apr 27, May 4, Jun 12), never a circuit ladder, delivery-backed buying, slowest cohort member at 87 trading days to 2x.",
+   "theme": "shipping / dry-bulk port logistics (new listing)"
+  },
+  {
+   "symbol": "WELCORP",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Serial line-pipe order wins compounding into a record order book: a ~Rs 1,000 cr US pipe order filed 2026-03-30 (two sessions before the trough), a 'Receipt of Large Order' (~Rs 700 cr US LSAW) on 2026-05-15, FY26 results with Rs 5 dividend on 2026-05-21, and another order win on the 2x date itself (2026-07-14) \u2014 all riding the US energy-infrastructure/LNG pipe demand and Saudi water-pipeline theme (order book later hit a record ~$4.4bn with the Aug 21 $1.8bn US order, driving peak to 2.94x).",
+   "knowable_pre_run": "The 2026-03-30 NSE filing 'Bagging/Receiving of orders/contracts' (~Rs 1,000 cr specialized pipes from the US facility) was public two sessions BEFORE the 2026-04-01 trough. Welspun's US/Saudi order-pipeline narrative was established in prior investor communications (analyst-meet filings Mar 4), and a board-meeting outcome plus group restructuring filings (Mar 19-25) preceded the trough. The first volume thrust (Apr 8, +6.6% on 2.6x volume) came a full week after the order filing \u2014 a filings reader had the catalyst in hand before ignition.",
+   "ignition_signature": "Grinding accumulation, no gap and no circuit ladder: steady +1.9-2.3% sessions Apr 2-7 off the trough, first thrust Apr 8 (+6.6% on 2.6x 20d volume, 48% delivery), then repeated 3-6% thrust days on 2.5-4x volume (Apr 13, Apr 15, Apr 22-23) with delivery consistently 40-60% \u2014 institutional-style absorption over 74 trading days to 2x, punctuated by order-win and results filings.",
+   "theme": "steel line-pipes / US energy-infra & LNG capex",
+   "cohort_note": null
+  },
+  {
+   "symbol": "IDEAFORGE",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "Q4 FY26 swing to ~Rs 60cr PAT from a Rs 26cr year-ago loss on sales up 594% YoY (announced early May), riding an April defence-drone sector rally; first US order (Lamar Police Dept) and NATO training milestones fed the narrative.",
+   "knowable_pre_run": "Public before/early in the run: US Lamar PD order and NATO test-pilot-school milestones already announced; Q4 results board date scheduled; defence-drone procurement theme running sector-wide. The Apr-22 ignition day (+12.8% on 11.7x volume) was a sector-wide drone-stock day, not a company filing \u2014 filings cluster only Apr-23 and Apr-30.",
+   "ignition_signature": "Three weeks of quiet low-volume drift off the Apr-1 trough, then a +12.8% day on 11.7x 20d volume (Apr 22, delivery ~10% \u2014 speculative churn), followed by a post-results circuit ladder: +20% (May 4) and +10% (May 5) on 3.6-4.3x volume into the 2x.",
+   "theme": "defence-drones"
+  },
+  {
+   "symbol": "INDSWFTLAB",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (May 29-30) re-rated the deleveraged API maker; the 2x was sealed Aug 11 by Q1 FY27 PAT +201% to Rs 24.4cr with EBITDA margin jumping 5.8%->17.5% \u2014 a 20% circuit on 10.5x volume on results day.",
+   "knowable_pre_run": "Only the board-meeting intimation for Q4 results (filings May 28) and the margin recovery already visible in prior published quarters. The stock did nothing at the trough until results hit \u2014 ignition was same-week-as-results, so effectively the results calendar was the tell.",
+   "ignition_signature": "Post-results thrust from a dead-flat base: +12.8% on 8.1x volume the session after Q4 results, +7.9% on 5.2x next day; pattern repeated at the 2x with a 20% upper circuit on 10.5x volume on Q1 FY27 numbers.",
+   "theme": "pharma-API"
+  },
+  {
+   "symbol": "IOLCP",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Record Q4 FY26 (May 20): PAT +69% YoY to Rs 53cr on highest-ever quarterly revenue (~Rs 619cr); the run extended on FII accumulation (+3.15pp in the June-quarter pattern) and NMPA China approval for clopidogrel API, with the final +19% day on ~7x volume hitting 2x on Jul 7.",
+   "knowable_pre_run": "Promoter holding jumped 52.6%->57.5% in the March-2026 shareholding pattern \u2014 public by mid/late April, during the early grind \u2014 a concrete accumulation signal. Results calendar was known; ibuprofen/API cycle was the running theme. Early tape itself showed nothing dramatic.",
+   "ignition_signature": "Grinding accumulation: six weeks of 1-3% days off the Apr-2 trough, first real thrust +12.3% on 7.5x volume (May 11) ahead of results, results-day +8.6% on 4.9x, then a second thrust (+14.2% on 7.1x) at the 2x on the shareholding/China-approval reveal.",
+   "theme": "pharma-API"
+  },
+  {
+   "symbol": "IRMENERGY",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "Crude spiking past $100 in April 2026 lit the CGD/CNG-substitution trade (GUJGASLTD +21%, ATGL +11% in the same window); low-float 2023-IPO IRM went vertical ~+91% in five sessions with NO company filing in the window \u2014 squeeze mechanics (sellers absent, delivery near zero) did most of the work beyond the sector story. Closest to an operator/momentum blowoff wearing a sector narrative.",
+   "knowable_pre_run": "The oil shock and CNG-economics narrative were public macro, and CGD peers were already moving \u2014 that is all. No IRM-specific announcement between Apr 13 and Apr 28; media on the circuit days cited only 'buying momentum'. Nothing company-level existed to front-run.",
+   "ignition_signature": "Circuit ladder from a cold start: 20% locked upper circuit on 10x volume (Apr 22) after two quiet weeks, then +13.4% on 16.9x, +16.8% on 7.1x, +4.9% on 3.9x \u2014 with delivery collapsing from ~50% pre-run to 0-10% (pure intraday churn/squeeze). Hit 1.98x in just 17 sessions and stalled.",
+   "theme": "city-gas / oil-shock CNG"
+  },
+  {
+   "symbol": "JNKINDIA",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "2x sealed Jun 9 by a large export order \u2014 incinerator package for ADNOC's TA'ZIZ salt project via CC7 Emirates Engineering (+13-16% on 13.4x volume); mid-run supported by Q4 FY26 results (May 20-21) showing Rs 33cr quarterly PAT and a Rs 1,961cr order book (~4x annual revenue).",
+   "knowable_pre_run": "Order book scale and refinery/process-heater capex cycle were disclosed in filings; Q4 results date was scheduled. The Apr-1 ignition itself was a market-wide reversal day (+9.4% on 2.4x) with no company news \u2014 though Mar 30-31 printed 7-11x volume churn at the low (delivery ~20%), a possible accumulation footprint.",
+   "ignition_signature": "V-reversal off the trough (+9.4%, +7.8% back-to-back), then a grind of repeated 4-10% days on modest volume, a results thrust May 20-21 (+5.4%/+9.8% on 4.3-4.4x), and a climax gap +15.7% on 13.4x volume on the order announcement.",
+   "theme": "oil&gas process equipment / refinery capex"
+  },
+  {
+   "symbol": "KERNEX",
+   "catalyst_type": "order_win",
+   "catalyst_summary": "Rs 475cr onboard-Kavach order from Chittaranjan Locomotive Works (May 27) \u2014 roughly 2x annual revenue \u2014 followed two days later by Q4 FY26 results (PAT Rs 68cr vs Rs 33cr, revenue 3x YoY to Rs 255cr), producing the +13.8%/+8.7% final leg into the Jun-2 2x.",
+   "knowable_pre_run": "Indian Railways' Kavach procurement ramp was public policy with a visible tender pipeline; Kernex's existing Kavach order book and revenue ramp were in prior filings; exchange announcements on Apr 3/10/13 accompanied the early thrust, and the May-29 results board date was intimated in advance.",
+   "ignition_signature": "+11.5% reversal on the trough day itself (Apr 1), an early-April thrust (+7.3% on 3.1x, +8.6% next day), a mid-run +11.3% on 4.7x (May 7), then an order+results ladder May 29-Jun 1 (+13.8% on 5.3x, +8.7% on 3.5x).",
+   "theme": "railways-Kavach"
+  },
+  {
+   "symbol": "KIRLPNU",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 (Apr 27): PAT +79% with a dividend hike and record FY26 order inflow above Rs 2,000cr (book Rs 1,863cr, +15% YoY) \u2014 stock +13% over two sessions on ~10x volume; a second, filing-free momentum leg (Jun 17-22, ~+27% on 3-6x volume, five straight all-time highs) completed the 2x.",
+   "knowable_pre_run": "Order-inflow/book trajectory was disclosed quarterly and already at record levels; the Q4 results board date was public; its CNG-compression exposure tied it to the same gas-capex theme lifting CGD names. Pre-results drift (+7.9% on 4.3x on Apr 20, a week before results) shows positioning ahead of a known results date was feasible.",
+   "ignition_signature": "Quiet 2-3% grind for three weeks off the Apr-1 trough, pre-results volume build (Apr 20), post-results thrust +8.3% on 10.4x (Apr 27) + 5.3% follow-through, long consolidation, then a mid-June momentum breakout ladder (+11.3% on 6.3x, +6.7%, +7.3% on 6.1x) with no fresh announcement.",
+   "theme": "capital goods / gas-compression capex"
+  },
+  {
+   "symbol": "UNIMECH",
+   "catalyst_type": "stake_or_MnA",
+   "catalyst_summary": "Board approval (Apr 22) and completion (Apr 27) of the Rs 450cr all-cash acquisition of Hobel Bellows (~Rs 129cr revenue at >50% EBITDA margin) repriced the stock mid-run; the double completed on the June 'order book triples to Rs 314cr' disclosure + Jun 10 analyst meet and the early-Aug Q1 FY27 beat (revenue +71% YoY) with a Rs 750cr QIP plan.",
+   "knowable_pre_run": "Plenty: Jan 7 NPCIL Rs 72.2cr order was public, the tariff-hit FY26 derating (-47% off 52w high at trough) was visible, and Q4 gross margins ~73% were disclosed with results. But the first ignition days (Apr 8-13) had no filing \u2014 the Hobel deal only landed 3 weeks into the run, so a filings reader got the deal news with the stock ~+40% off trough, still well below 2x.",
+   "ignition_signature": "Oversold drift-up that turned into a +10% thrust day (Apr 10) on modest volume, then news-gaps around the Apr 22-28 acquisition (+5.3%, +8.4% on 2.5x vol); a 5% circuit ladder in early June (+10% day Jun 9 on 2.8x) and a results gap in early Aug finished the 2x.",
+   "theme": "aerospace-defence precision manufacturing / nuclear"
+  },
+  {
+   "symbol": "UNIVCABLES",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 blowout approved at the May 23 board meeting \u2014 PAT +103% QoQ (Rs 55.3cr), FY26 PAT +172% YoY, Rs 4.5 dividend and Rs 73cr EHV-cable modernization capex \u2014 sent it +15.2% on 5.6x volume (May 25) to all-time highs and on to 2x by Jun 22. An earlier unexplained two-day burst (May 4-5: +15.6% and +9.8% on 6-7x volume, no filing found) rode the M.P. Birla cable-cluster and sector rally.",
+   "knowable_pre_run": "Sector, not stock: wires & cables had been in a documented bull run since Feb 2026 (Polycab/KEI at lifetime highs, sector +34% in a month per Feb 27 press), and the results board-meeting intimation was filed before May 23. Nothing stock-specific was public at the Apr 2 trough; the April leg was pure sector beta.",
+   "ignition_signature": "Two-stage: quiet April sector-beta grind (+9.2% day Apr 8 on 2.5x), then a violent two-day +15.6%/+9.8% volume burst May 4-5 with no disclosure, followed by the post-results gap May 25 (+15.2% on 5.6x) and a June 2 +13.3% follow-through.",
+   "theme": "power-capex / wires & cables"
+  },
+  {
+   "symbol": "VADILALIND",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 results (May 28): consolidated PAT +149% YoY to Rs 54.9cr on revenue +52% YoY \u2014 the stock gapped +8.4% on 11.4x volume the next session and +8.6% again, never looking back; a Q1 FY27 follow-up beat (Jul 29, +7.8% on 3.3x) completed the double by Aug 13.",
+   "knowable_pre_run": "Results date was intimated (~May 12 filing) before the May 18 trough, peak summer ice-cream season was underway, the 2025-26 Vadilal family-settlement/group-restructuring narrative was public, and prior quarters already showed the margin inflection. A reader knew a scheduled binary event was days away; the trough was a routine pre-results pullback.",
+   "ignition_signature": "Textbook post-results thrust: flat drift into the event, then +8.4% gap on 11.4x volume (May 29) and +8.6% (Jun 1), settling into a steady institutional-looking uptrend with sparse volume rather than circuits.",
+   "theme": "consumer / FMCG (ice cream, summer demand)"
+  },
+  {
+   "symbol": "VENUSREM",
+   "catalyst_type": "results_beat",
+   "catalyst_summary": "Q4 FY26 margin explosion \u2014 EBITDA Rs 63.4cr vs Rs 29cr YoY, margin 24.4% vs 14.9%, FY26 EPS +127% \u2014 announced May 26 turned an already-running momentum stock vertical; note the 'trough' was only a dip in a name already +90% over the prior 60 days.",
+   "knowable_pre_run": "The earnings inflection was visible in prior FY26 quarters, the stock's r60 of +90% at trough was on the tape, delivery percentages were persistently high (real accumulation), and the company's steady stream of drug-approval filings (EU/GCC marketing nods, DSIR R&D renewal, QIDP-designated VRP-034) plus the results date were all public before the May circuit ladder began.",
+   "ignition_signature": "Grinding accumulation graduating into a 5% upper-circuit ladder: sporadic +5% days from Apr 1, ladder locking daily from ~May 18 into the May 26 results, then ~11 near-consecutive 5% circuits on high delivery through early June.",
+   "theme": "pharma \u2014 specialty antibiotics / AMR"
+  },
+  {
+   "symbol": "VIDYAWIRES",
+   "catalyst_type": "sector_theme",
+   "catalyst_summary": "A Dec 2025 flat-debut IPO (winding/copper wires) sitting at its Rs 52 issue price got discovered during the 2026 wires-and-cables bull market: +78% in a month before its maiden Q4 results (May 12, revenue +24% YoY, PAT Rs 19.6cr) confirmed the story; it hit 2.24x on May 27 then round-tripped through -5% lower circuits in June \u2014 hot-money footprint, not a durable re-rating.",
+   "knowable_pre_run": "Sector rally was public since Feb 2026 (cable stocks +34%/month, peers at highs); company-specific: IPO prospectus expansion story, ALCU subsidiary manufacturing start (Feb 7, 2026), and in the run's first days an investor-meet intimation (Baring PE one-on-one, Apr 10) \u2014 the only filings near ignition. No order or results news preceded the Apr 9 breakout.",
+   "ignition_signature": "+10.6% on 5.7x volume Apr 9 with no material filing, then a momentum staircase (+5.4% on 4.3x Apr 13, +7.8% on 8.1x Apr 24, +5.8% on 3.8x Apr 27), a final circuit push into May 27, and a full -5%-ladder retracement in June.",
+   "theme": "wires & cables / copper winding wire (power capex)"
+  },
+  {
+   "symbol": "WALCHANNAG",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "FY26 audited results (May 20) confirmed a genuine turnaround \u2014 EBITDA swung to +Rs 35.5cr from -Rs 35.6cr, Q4 PAT Rs 3cr vs a Rs 56cr loss \u2014 atop a Rs 670cr nuclear-led order book and a defence/nuclear/aerospace multi-decade-capex narrative; but the stock was already +80% before results on no identifiable filing, and the marquee VSSC Gaganyaan order (Rs 30.5cr) only arrived Aug 20, after the Jun 18 2x date.",
+   "knowable_pre_run": "The turnaround ingredients were public: known DRDO/NPCIL/BARC/ISRO supplier, Rs 670cr order book with nuclear as lead contributor, improving 9M FY26 prints, and India's nuclear-energy policy push. What was NOT public was any trigger for the April ignition itself \u2014 the Apr 1 +8.9% and Apr 22 +12.6%/4.6x days match no disclosure I could find; results were only intimated for May 20.",
+   "ignition_signature": "Sharp +8.9% off the Apr 1 low, then a near-daily 3-6% grind on ~2x volume through April with one +12.6% no-news thrust (Apr 22, 4.6x), a second +8.3%/4.3x leg after the May 20 results, and a +9.2% day Jun 12 to seal 2x.",
+   "theme": "defence / nuclear-capex heavy engineering"
+  },
+  {
+   "symbol": "WEL",
+   "catalyst_type": "turnaround",
+   "catalyst_summary": "This 2x is measured off a crash: the fan-EMS maker fell ~45% in four late-March sessions (FY26 PAT halved, tariff/smallcap risk-off), so most of the 'double' was dead-cat recovery, later validated by the Aug 3 PCB-manufacturing (backward-integration) start and Q1 FY27 PAT +265% YoY to a still-tiny Rs 4cr (~Aug 12). The 2x print itself is suspect: +16.3% on 6.5x volume at only 7% delivery on Aug 26, reversed by a -20% lower circuit on 14.3x volume the very next day \u2014 operator-style blowoff on the final leg.",
+   "knowable_pre_run": "The crash and its causes (earnings deceleration, FY26 profit halving trajectory, tariff-driven FII selling) were public; RSI ~10 and -44% 20d return made mean-reversion the visible setup. Nothing stock-specific accompanied the first recovery sessions in April; the real news (PCB subsidiary, Q1 turnaround) came only in August, 4 months into the recovery and days before the spike.",
+   "ignition_signature": "No ignition event \u2014 a drift up off a -45% four-session crash, a four-month 92-107 sideways range, then an August volume ramp (Aug 10: 15x volume at 13% delivery) and a low-delivery +16% spike that touched 2x for one day before a -20% circuit down.",
+   "theme": "consumer electricals EMS (fans)"
+  }
+ ],
+ "synthesis": {
+  "catalyst_freq": {
+   "results_beat": 31,
+   "sector_theme": 12,
+   "turnaround": 12,
+   "order_win": 10,
+   "stake_or_MnA": 5,
+   "corporate_action": 3,
+   "capacity_expansion": 3,
+   "relist": 1,
+   "operator_or_unknown": 1,
+   "_total": 78,
+   "_note": "results_beat alone is 40% of the cohort; results_beat + order_win + turnaround (all anchored to a disclosable filing) = 53/78 = 68%. Pure sector_theme (no adequate company event) = 15%, and several of those (IRMENERGY, BBOX, STLTECH) doubled BEFORE any validating news."
+  },
+  "themes": [
+   {
+    "theme": "defence-aerospace-nuclear complex",
+    "count": 10,
+    "names": [
+     "APOLLO",
+     "ASTRAMICRO",
+     "CYIENTDLM",
+     "IDEAFORGE",
+     "NIBE",
+     "PARAS",
+     "MARINE",
+     "WALCHANNAG",
+     "AEQUS",
+     "UNIMECH"
+    ]
+   },
+   {
+    "theme": "pharma-biotech (API, US generics, CDMO, pipeline)",
+    "count": 11,
+    "names": [
+     "BLISSGVS",
+     "INDSWFTLAB",
+     "IOLCP",
+     "MARKSANS",
+     "ORCHPHARMA",
+     "RUBICON",
+     "SENORES",
+     "SHILPAMED",
+     "SPARC",
+     "SUVEN",
+     "VENUSREM"
+    ]
+   },
+   {
+    "theme": "power-grid capex: wires-cables-electrification-solar",
+    "count": 8,
+    "names": [
+     "DIACABS",
+     "KSHINTL",
+     "RRKABEL",
+     "UNIVCABLES",
+     "VIDYAWIRES",
+     "SBCL",
+     "DEEDEV",
+     "EPACKPEB"
+    ]
+   },
+   {
+    "theme": "IT-SaaS-platform-services re-rating",
+    "count": 8,
+    "names": [
+     "AMAGI",
+     "CARTRADE",
+     "RATEGAIN",
+     "RAMCOSYS",
+     "SASKEN",
+     "BLSE",
+     "QUESS",
+     "SHADOWFAX"
+    ]
+   },
+   {
+    "theme": "oil-gas-LPG-CNG energy capex",
+    "count": 6,
+    "names": [
+     "AEGISLOG",
+     "IRMENERGY",
+     "JNKINDIA",
+     "KIRLPNU",
+     "WELCORP",
+     "MANINDS"
+    ]
+   },
+   {
+    "theme": "EV-battery chain (2W, chargers, materials, holdco)",
+    "count": 4,
+    "names": [
+     "ATHERENERG",
+     "EXICOM",
+     "GREAVESCOT",
+     "NEOGEN"
+    ]
+   },
+   {
+    "theme": "AI-datacenter infrastructure (network, power, fibre, engineering)",
+    "count": 4,
+    "names": [
+     "BBOX",
+     "MTARTECH",
+     "STLTECH",
+     "SETL"
+    ]
+   },
+   {
+    "theme": "electronics-EMS-surveillance",
+    "count": 4,
+    "names": [
+     "AVALON",
+     "CPPLUS",
+     "OPTIEMUS",
+     "WEL"
+    ]
+   },
+   {
+    "theme": "consumer-FMCG-textiles",
+    "count": 4,
+    "names": [
+     "CUPID",
+     "VADILALIND",
+     "EMIL",
+     "LUXIND"
+    ]
+   },
+   {
+    "theme": "chemicals-materials cycle (amines, fluorochem, films, carbon)",
+    "count": 4,
+    "names": [
+     "BALAMINES",
+     "STALLION",
+     "GRWRHITECH",
+     "RAIN"
+    ]
+   },
+   {
+    "theme": "gold-price bull / jewellery",
+    "count": 3,
+    "names": [
+     "BLUESTONE",
+     "SKYGOLD",
+     "THANGAMAYL"
+    ]
+   },
+   {
+    "theme": "railway capex (Kavach, propulsion)",
+    "count": 2,
+    "names": [
+     "HIRECT",
+     "KERNEX"
+    ]
+   },
+   {
+    "theme": "NBFC lenders (MSME, tourism)",
+    "count": 2,
+    "names": [
+     "AYE",
+     "TFCILTD"
+    ]
+   },
+   {
+    "theme": "other singletons: telecom-BharatNet, satcom, infra-EPC, shipping, auto-comp, steel smallcap, precision-engg IPO, industrial flow",
+    "count": 8,
+    "names": [
+     "HFCL",
+     "NELCO",
+     "CEMPRO",
+     "SHREEJISPG",
+     "NRBBEARING",
+     "RATNAVEER",
+     "OMNI",
+     "AEROFLEX"
+    ]
+   }
+  ],
+  "ignition_signatures": [
+   {
+    "signature": "GRIND-THEN-DETONATE: weeks of +3-8% days on 1-3x volume with healthy delivery (35-60%) off the trough, then a scheduled-event detonation (results/order day, 5-15x volume, delivery collapsing to 10-25%). The modal doubler pattern.",
+    "count": 28
+   },
+   {
+    "signature": "NO-NEWS VOLUME BURST: a +8-19% day on 3-15x volume with delivery collapsing to ~10-25% and NO matching filing (often drawing an unanswered exchange query); hard news arrives 3-8 weeks later. Informed-money / front-run footprint.",
+    "count": 15
+   },
+   {
+    "signature": "SINGLE EVENT-DAY REPRICING: dead or sideways base (sometimes months), then one post-results gap (+8-20%, 5-17x volume) does most of the double; run continues as post-thrust momentum.",
+    "count": 14
+   },
+   {
+    "signature": "GAP-ON-ANNOUNCEMENT LADDER: discrete disclosed-news gaps (order wins, M&A, licences) each followed by digestion \u2014 filings hit the exchange on or 1-2 sessions before each leg; chaseable at next open.",
+    "count": 10
+   },
+   {
+    "signature": "CIRCUIT LADDER / LOW-FLOAT MELT-UP: stacked ~5% band-limit or 20% UC closes, often on THIN or drying volume (STLTECH melted to 2x on 0.1-0.7x volume) with near-zero delivery \u2014 squeeze mechanics, weakest fundamental anchoring, sharpest round-trips (VIDYAWIRES, IRMENERGY, WEL).",
+    "count": 9
+   }
+  ],
+  "knowability": "Honest split of 78: (a) ~28 names (~36%) were genuinely knowable pre-ignition \u2014 a dated public catalyst existed at or before the trough: filed order wins (WELCORP's Rs1,000cr order 2 sessions pre-trough, MARINE's 7 filings in 45 pre-trough days, APOLLO, HFCL, KERNEX, DIACABS, NIBE, DEEDEV), scheduled results dates on top of already-published accelerating quarters (KSHINTL, SENORES, VADILALIND, CEMPRO, CYIENTDLM, SASKEN-partially, RATEGAIN, CARTRADE), or a fully public structural thesis with a calendar (GREAVESCOT IPO unlock, ATHERENERG policy+monthly VAHAN data, MTARTECH via Bloom's US print, STLTECH pivot, SKYGOLD, NEOGEN, STALLION, TFCILTD, SHILPAMED, VENUSREM, AYE). (b) ~20 names (~26%) had a knowable THESIS but unknowable TIMING \u2014 theme + washed-out price public, but the actual ignition day matched no filing and the first hard catalyst came 3-8 weeks in (AEGISLOG, AEQUS, BBOX, OPTIEMUS, PARAS, ORCHPHARMA, CPPLUS, KIRLPNU, IOLCP, WALCHANNAG, UNIMECH, MANINDS, NELCO, SHADOWFAX, SHREEJISPG, AMAGI, VIDYAWIRES, SUVEN, IRMENERGY, EMIL). (c) ~30 names (~38%) were effectively unknowable at ignition \u2014 event-day repricings where the catalyst WAS the surprise (BLUESTONE, EXICOM, RAMCOSYS, INDSWFTLAB, GRWRHITECH, AVALON, NRBBEARING, QUESS, RAIN, MARKSANS, THANGAMAYL) or outright front-run/operator tape (LUXIND, HIRECT, BLISSGVS deal, BLSE Jul-1 leg, EPACKPEB, OMNI, RATNAVEER, WEL, UNIVCABLES May burst, SBCL Apr-24, SPARC price). The launchpad CSV kills trough-snapshot prediction: 78 doublers vs 400 controls were near-identical at the trough (median RSI 46.4 vs 45.1, delivery ratio 1.01 vs 1.01, off-52wk -31% vs -28%); the only separators were vol_asym (median 1.10 vs 1.01) and smaller size (median ADV 13.9cr vs 28.8cr). CONCLUSION: you cannot predict the doubler at the trough; you CAN (1) pre-position around a mechanical announcement calendar (results intimations + order-win cadence) and (2) detect ignition in sessions 1-5 of the run and still capture most of the move, since the median run took 70-100 trading days and even the fast ones (HFCL 25td, STLTECH 25td, BBOX 29td) gave multi-session entry windows after the first unambiguous tape signal.",
+  "candidate_conditions": [
+   {
+    "condition": "IGNITION-BURST TRIGGER (rank 1): first day with return >= +8% AND volume >= 4x 20d-avg AND delivery% <= 25% (or <= half its own 20d mean), in a stock >= 25% off 52w-high with ADV < 25cr; enter next open, hold <= 100td. Computable point-in-time from price/volume/delivery alone \u2014 requires NO news.",
+    "rationale": "Catches both the knowable and the unknowable cohorts on day 1-2 of the run: the no-news informed bursts and the event-day repricings share the identical tape fingerprint (big up-day, volume explosion, delivery collapse), and with median runs of 70-100td the burst day still left 60-90% of the double on the table. This is the only condition that monetizes cohort (c).",
+    "motivating_names": [
+     "AEQUS",
+     "BBOX",
+     "LUXIND",
+     "HIRECT",
+     "SUVEN",
+     "EPACKPEB",
+     "IDEAFORGE",
+     "UNIVCABLES",
+     "AEGISLOG",
+     "SASKEN",
+     "EXICOM",
+     "IRMENERGY"
+    ]
+   },
+   {
+    "condition": "POST-RESULTS THRUST CHASE (rank 2): announcement-store subject matches results/outcome-of-board-meeting on day T, and T or T+1 prints >= +8% on >= 5x volume; enter T+1/T+2 open, hold <= 60td. Filter: stock was >= 20% off 52w-high pre-print.",
+    "rationale": "In at least 14 dossiers the majority of the 2x occurred AFTER the first observable results-day thrust (CEMPRO added +17% two sessions after its 20% UC; EXICOM doubled in 6 sessions post-print; SASKEN, RAMCOSYS, INDSWFTLAB, RAIN, BLUESTONE, MARKSANS all continued). The catalyst is unknowable pre-print, but the reaction is mechanically chaseable and the announcements store timestamps it.",
+    "motivating_names": [
+     "CEMPRO",
+     "EXICOM",
+     "SASKEN",
+     "RAMCOSYS",
+     "INDSWFTLAB",
+     "RAIN",
+     "BLUESTONE",
+     "MARKSANS",
+     "VADILALIND",
+     "EMIL",
+     "QUESS",
+     "AVALON"
+    ]
+   },
+   {
+    "condition": "ORDER-WIN CADENCE x DRAWDOWN (rank 3): >= 2 announcements with subject matching 'Bagging/Receiving of orders/contracts' (or award-of-order variants) in trailing 90 days AND price 25-60% off 52w-high AND ADV < 30cr; enter on next order filing or first +5%/2x-volume day.",
+    "rationale": "The purest pre-run edge in the cohort: MARINE had SEVEN order filings in the 45 days before its trough, WELCORP's Rs 1,000cr order was filed two sessions pre-trough, and APOLLO/DIACABS/KERNEX/NIBE/HFCL/DEEDEV all had established, subject-line-matchable order cadence before or in week 1 of their runs. Serial order-winners at washed-out prices re-rate when the next order lands \u2014 and the next order is statistically likely given the cadence.",
+    "motivating_names": [
+     "MARINE",
+     "WELCORP",
+     "APOLLO",
+     "DIACABS",
+     "KERNEX",
+     "NIBE",
+     "HFCL",
+     "DEEDEV",
+     "JNKINDIA"
+    ]
+   },
+   {
+    "condition": "SCHEDULED-RESULTS PROXIMITY + POSITIVE DRIFT (rank 4): board-meeting/results intimation (subject match) dated <= 15 sessions ahead, AND trailing-10-session return > +5% on up-day volume asymmetry > 1.3, AND prior quarter's results-day reaction was positive (>+3%). Enter pre-event, size small, exit if results-day reaction < 0.",
+    "rationale": "The modal grind-then-detonate pattern: accumulation into a KNOWN date. BALAMINES printed +9.1% on 4.5x nine days before results; KIRLPNU +7.9% on 4.3x a week before; CARTRADE rose 10% the day BEFORE results; IOLCP, RRKABEL, RUBICON, NRBBEARING all showed the same pre-event drift. The intimation subject is in our announcements store, the drift is pure tape \u2014 both point-in-time.",
+    "motivating_names": [
+     "BALAMINES",
+     "KIRLPNU",
+     "CARTRADE",
+     "IOLCP",
+     "RRKABEL",
+     "RUBICON",
+     "NRBBEARING",
+     "KSHINTL",
+     "SASKEN",
+     "AEROFLEX"
+    ]
+   },
+   {
+    "condition": "GRINDING-ACCUMULATION DETECTOR (rank 5): over trailing 15 sessions: >= 5 up-days of >= +3.5% each on 1-3x volume with delivery >= 35%, cumulative +15-35%, NO single day > +10% (excludes blowoffs), and up-day/down-day volume asymmetry >= 1.5. Enter on session 16.",
+    "rationale": "The 'institutional absorption' tape that preceded detonation in ~28 names, and the ONE feature that separated doublers from controls at the trough (vol_asym 1.10 vs 1.01 median; BLISSGVS 2.49, EXICOM 1.77 \u2014 both doubled). High-delivery patient grinds (ORCHPHARMA, WELCORP, SKYGOLD, SHREEJISPG, CUPID) doubled without ever printing a chaseable gap \u2014 this condition is the only way in.",
+    "motivating_names": [
+     "ORCHPHARMA",
+     "WELCORP",
+     "SKYGOLD",
+     "SHREEJISPG",
+     "CUPID",
+     "BLISSGVS",
+     "IOLCP",
+     "SBCL",
+     "MARINE",
+     "SENORES",
+     "VENUSREM"
+    ]
+   },
+   {
+    "condition": "THEME-CONTAGION LAGGARD (rank 6): industry-group peer set (from our industry panel) shows a leader +25% over trailing 60d or group index at 52w-high, candidate is same-group, >= 30% off its 52w-high, ADV < 25cr; trigger on candidate's first >= +5% day on >= 2x volume.",
+    "rationale": "Sector moved first, laggard caught up, in every theme cluster: cables rally (public since Feb) preceded UNIVCABLES/VIDYAWIRES; CGD peers (GUJGASLTD +21%) preceded IRMENERGY; Bloom Energy's US print preceded MTARTECH's +14.2%; the defence pack melt-up carried PARAS/OPTIEMUS. Peer returns and group membership are fully point-in-time in our panel data.",
+    "motivating_names": [
+     "UNIVCABLES",
+     "VIDYAWIRES",
+     "IRMENERGY",
+     "MTARTECH",
+     "PARAS",
+     "OPTIEMUS",
+     "STLTECH",
+     "CPPLUS"
+    ]
+   },
+   {
+    "condition": "FRESH-IPO BASE BREAKOUT (rank 7): listed <= 12 months, price within -20%/+15% of issue price (broken or flat debut), RSI < 45 or 20d z-score <= -1, then first day >= +8% on >= 3x volume; enter next open.",
+    "rationale": "14 of 78 doublers (18%) were sub-12-month listings \u2014 a massive overweight vs the universe. Broken IPOs (SHADOWFAX below issue, AMAGI z=-2.25, BLUESTONE -44% off high, VIDYAWIRES at issue price, OMNI 30 days old) re-rated violently once the first burst printed. Listing date and issue price are static public data; the trigger is pure tape.",
+    "motivating_names": [
+     "AEQUS",
+     "AMAGI",
+     "OMNI",
+     "SHADOWFAX",
+     "VIDYAWIRES",
+     "KSHINTL",
+     "RUBICON",
+     "BLUESTONE",
+     "SHREEJISPG",
+     "STALLION",
+     "EPACKPEB",
+     "CPPLUS"
+    ]
+   },
+   {
+    "condition": "UNIVERSE SCREEN, not a signal (rank 8): restrict all above conditions to ADV between 2-25cr, market-wide-drawdown regime (index -5%+ off high within 60d), stock 20-60% off 52w-high. Standalone predictive power ~zero.",
+    "rationale": "The CSV verdict: doublers' median ADV 13.9cr vs controls' 28.8cr, off-high -31% vs -28% \u2014 small and washed-out is WHERE doublers live but does not identify them (RSI/delivery/momentum identical to 400 controls). Honest role: prior/universe filter that roughly doubles base rates, layered under conditions 1-7, never traded alone. Also note the cohort troughs cluster on Apr 1-7 2026 \u2014 a market-wide capitulation was the common launchpad, so a regime flag (smallcap index z-score) is a legitimate point-in-time conditioning variable.",
+    "motivating_names": [
+     "ALL_78",
+     "EMIL",
+     "GRWRHITECH",
+     "OPTIEMUS",
+     "EXICOM",
+     "RAMCOSYS"
+    ]
+   }
+  ]
+ }
+}
