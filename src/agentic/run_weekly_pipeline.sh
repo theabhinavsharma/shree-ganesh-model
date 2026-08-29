@@ -190,6 +190,18 @@ step "4.4. LEAN SHADOW CHECK"
 /usr/bin/python3 src/agentic/lean_shadow_check.py 2>&1 | tee -a "$MASTER_LOG" \
   || log "  ⚠ lean shadow check failed — non-fatal"
 
+# ---------------- 4.45. Paper sleeve + engine attribution ----------------
+# Sleeve shipped 2026-08-29 after pre-registered walk-forward A/B (UNION×HOLD100:
+# +4.59%/trade disc, +9.57%/trade conf, 75% yrs+; trailing stops KILLED by same test).
+# PAPER ONLY until the forward record earns sizing. Attribution archives every
+# engine's top-N and scores aged snapshots — no engine runs unmeasured again.
+
+step "4.45. PAPER SLEEVE + ENGINE ATTRIBUTION"
+/usr/bin/python3 src/agentic/paper_sleeve.py 2>&1 | tee -a "$MASTER_LOG" \
+  || log "  ⚠ paper sleeve failed — non-fatal"
+/usr/bin/python3 src/agentic/score_engine_attribution.py 2>&1 | tee -a "$MASTER_LOG" \
+  || log "  ⚠ engine attribution failed — non-fatal"
+
 # ---------------- 4.5. Simplicity audit + recreation kit ----------------
 # Keeps the public showcase inventory CURRENT (never historical) and tracks
 # code size / findings drift per run. Neither step is fatal to the basket.
