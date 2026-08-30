@@ -100,6 +100,34 @@ def main() -> None:
     for s in ign["symbol"].unique():
         new.append((s, "C6_IPO_IGNITION", None))
 
+    # CONFIRMED IGNITION leg (added 2026-08-31 after the fizzle autopsy + band study):
+    # thrust (+8% on 3x vol) whose day-5 confirmation (price above thrust close AND
+    # mean vol d+1..5 >= 1.5x) completed within the last 5 sessions. Universe expanded
+    # to ADV>=1.5cr & >Rs25 — SLEEVE ONLY, the 15d contract universe is unchanged.
+    # Band events tagged separately so their live record stands on its own.
+    # Sizing law for the band: position <= 2% of the name's ADV (Rs2-3L tickets).
+    recent_days = sorted(px["trade_date"].unique())[-20:]
+    win = px[px["trade_date"].isin(recent_days)].sort_values(["symbol", "trade_date"])
+    for sym, gg in win.groupby("symbol"):
+        gg = gg.reset_index(drop=True)
+        for i in range(len(gg) - 5):
+            r = gg.iloc[i]
+            if not (r["return_1d"] >= 0.08 and r["volume_vs_20d"] >= 3):
+                continue
+            advl = r["avg_traded_value_20d"] / 1e7
+            if advl < 1.5 or r["close"] <= 25:
+                continue
+            conf_row = gg.iloc[i + 5]
+            if conf_row["close"] <= r["close"]:
+                continue
+            if gg.iloc[i + 1:i + 6]["volume_vs_20d"].mean() < 1.5:
+                continue
+            if (today - conf_row["trade_date"]).days > 7:
+                continue                       # confirmation must be fresh
+            src = "IGN_CONF_CORE" if (advl >= 5 and r["close"] > 50) else "IGN_CONF_BAND"
+            new.append((sym, src, round(float(advl), 2)))
+            break
+
     n_new = 0
     for sym, src, score in new:
         if sym in open_syms or sym in recent:

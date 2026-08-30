@@ -1,0 +1,3 @@
+confidence decile → predicted vs realized P(+50%/100td) · mean end-100td ret
+  D 1: n=3264  pred   0.5%  real  23.2%  end100  +10.1%
+  D 2: n= 794  pred  90.4%  real  25.6%  end100   +7.5%
