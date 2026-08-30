@@ -41,8 +41,9 @@ run pib_releases /usr/bin/python3 src/agentic/fetch_pib_releases.py --start "$(d
 
 # --- weekly (Mondays): fundamentals + holdings + recos ---
 if [ "$DOW" = "1" ]; then
-  run fundamentals /usr/bin/python3 src/agentic/fetch_fundamentals.py
-  run screener_fundamentals /usr/bin/python3 src/agentic/fetch_screener_fundamentals.py
+  # fetch_fundamentals.py (NSE quote API) is 403-blocked as of 2026-08-30 — 2,625/2,625
+  # symbols rate-limited over 7h with ok=0. Screener.in path works; use it wide.
+  run screener_fundamentals /usr/bin/python3 -c "import sys; sys.path.insert(0,'src/agentic'); import fetch_screener_fundamentals as m; m.main(1200)"
   run amfi_mf /usr/bin/python3 src/agentic/fetch_amfi_mf_holdings.py
   run superstar /usr/bin/python3 src/agentic/fetch_superstar_holdings.py
   run broker_recos /usr/bin/python3 src/agentic/fetch_broker_recos.py
