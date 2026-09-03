@@ -1,2 +1,3 @@
 {"run_date": "2026-08-29", "data_through": "2026-08-28", "new_signals": 13, "closed_this_run": 0, "open": 0, "closed_total": 0, "closed_mean_ret": null, "closed_touch25": null, "open_mtm_mean": null}
 {"run_date": "2026-08-31", "data_through": "2026-08-28", "new_signals": 18, "closed_this_run": 0, "open": 0, "closed_total": 0, "closed_mean_ret": null, "closed_touch25": null, "open_mtm_mean": null}
+{"run_date": "2026-09-03", "data_through": "2026-09-03", "new_signals": 14, "closed_this_run": 0, "open": 31, "closed_total": 0, "closed_mean_ret": null, "closed_touch25": null, "open_mtm_mean": 0.61}
