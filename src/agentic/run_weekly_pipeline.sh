@@ -83,23 +83,17 @@ else
   log "▸ SKIPPING data refresh (--skip-fetch)"
 fi
 
-# ---------------- 2. ML engines (parallel) ----------------
+# ---------------- 2. ML engines (SERIAL — memory law) ----------------
+# 2026-09-03: five parallel engines each load the 5M-row panel and together eat
+# 90-100GB, freezing the machine. Serial costs ~30 min more and stays under ~20GB.
+# Abhinav's directive: never compromise output/process, only time. Do NOT re-parallelize.
 
-step "2. ML ENGINES (5 in parallel)"
-
-/usr/bin/python3 src/agentic/compare_short_horizons.py    > "$LOG_DIR/${TS}_e_cs.log"    2>&1 & PID_CS=$!
-/usr/bin/python3 src/agentic/find_high_conviction.py      > "$LOG_DIR/${TS}_e_hc.log"    2>&1 & PID_HC=$!
-/usr/bin/python3 src/agentic/find_multibagger_today.py    > "$LOG_DIR/${TS}_e_mb.log"    2>&1 & PID_MB=$!
-/usr/bin/python3 src/agentic/run_multi_horizon.py         > "$LOG_DIR/${TS}_e_mh.log"    2>&1 & PID_MH=$!
-/usr/bin/python3 src/agentic/find_180d_frontier_honest.py > "$LOG_DIR/${TS}_e_180d.log"  2>&1 & PID_180=$!
-
-log "  launched: cs=$PID_CS hc=$PID_HC mb=$PID_MB mh=$PID_MH 180d=$PID_180"
-log "  waiting for all 5 to complete…"
+step "2. ML ENGINES (serial, nice -n 10)"
 
 FAILED=""
-for name_pid in "cs:$PID_CS" "hc:$PID_HC" "mb:$PID_MB" "mh:$PID_MH" "180d:$PID_180"; do
-  name=${name_pid%%:*}; pid=${name_pid##*:}
-  if wait $pid; then
+for name_script in "cs:compare_short_horizons" "hc:find_high_conviction" "mb:find_multibagger_today" "mh:run_multi_horizon" "180d:find_180d_frontier_honest"; do
+  name=${name_script%%:*}; script=${name_script##*:}
+  if nice -n 10 /usr/bin/python3 "src/agentic/${script}.py" > "$LOG_DIR/${TS}_e_${name}.log" 2>&1; then
     log "  ✅ $name completed"
   else
     log "  ❌ $name failed"
