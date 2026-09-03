@@ -31,6 +31,7 @@ run global_macro /usr/bin/python3 src/agentic/fetch_global_macro.py
 run fii_dii /usr/bin/python3 src/agentic/fetch_fii_dii.py
 run block_deals /usr/bin/python3 src/agentic/fetch_block_deals.py
 run breadth /usr/bin/python3 src/agentic/fetch_market_breadth.py
+run india_vix /usr/bin/python3 src/agentic/fetch_india_vix.py
 run industry /usr/bin/python3 src/agentic/fetch_industry_indicators.py
 
 # --- daily news / narrative ---
