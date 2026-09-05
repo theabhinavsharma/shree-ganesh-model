@@ -1314,101 +1314,175 @@ section pre code { color:#e8e8ee !important; }
 <section id="architecture">
   <div class="container">
     <div class="section-tag">The Architecture</div>
-    <h2 class="section-title">5 ML engines — consensus voters, honestly accounted</h2>
-    <p class="section-sub">What each engine contributes TODAY: all five vote into a top-30 consensus that creates rare Tier-1 picks (it has fired once in the live record — HESTERBIO/ORIENTHOT, both hit target). The multibagger engine additionally provides the regime gate; its original 2x-in-180-days TARGETS are retired to the Archive — that was the origin-story goal, not the shipped product. A weekly shadow A/B (logs/lean_shadow.jsonl) publishes whether the engine layer changed the basket at all — the week it first did, both consensus picks won.</p>
+    <h2 class="section-title">The living funnel — a loop, not a line</h2>
+    <p class="section-sub">The whole machine in one moving picture: data pours in every evening, gets distilled to 8 confidence-ranked picks, the market grades them for 15 days, and every verdict flows back to retune the gates. The purple loop is new variables joining the ocean; the lab pre-registers every idea before it can ship. <b>Hover (or tap) any tile for the plain-English version.</b></p>
     <p class="section-sub">A name only ships if it appears in ≥2 engines' top-15 AND survives contamination QC AND operator-pump detection AND RSI &lt; 80 filter. Most names die in the cascade.</p>
 
-    <div class="arch">
-      <svg class="arch-svg" viewBox="0 0 1100 440">
-        <defs>
-          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0,0 L10,5 L0,10 z" fill="var(--fg-dim)"/>
-          </marker>
-        </defs>
+    <div class="lf-wrap">
+<style>
+.lf-wrap{--lfp:#FFFDF4;--lfi:#171123;position:relative}
+.lf-legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 18px;font-size:13px;color:var(--fg-dim)}
+.lf-legend span{display:inline-flex;align-items:center;gap:7px}
+.lf-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);display:inline-block}
+.lf-scroller{overflow-x:auto;margin:0 -8px;padding:4px 8px}
+.lf-stage{position:relative;width:940px;height:1450px;margin:0 auto}
+.lf-stage svg.lf-flows{position:absolute;inset:0;width:940px;height:1450px;pointer-events:none}
+.lf-panel{position:absolute;background:var(--lfp);border:3px solid var(--lfi);border-radius:8px;
+  box-shadow:6px 6px 0 rgba(0,0,0,.55);padding:10px 14px;color:var(--lfi);cursor:help}
+.lf-panel h3{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;margin:0 0 4px;color:var(--lfi)}
+.lf-panel p{margin:0;font-size:12.5px;line-height:1.4;color:#3a3450}
+.lf-tl{transform:rotate(-.8deg)}.lf-tr{transform:rotate(.7deg)}
+.lf-panel:hover,.lf-panel:focus-within{z-index:30}
+.lf-panel:before{content:"?";position:absolute;top:-12px;right:-12px;width:25px;height:25px;
+  background:var(--accent-3);border:3px solid var(--lfi);border-radius:50%;display:grid;place-items:center;
+  font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--lfi);z-index:2}
+.lf-tip{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 18px);width:310px;
+  background:#fff;border:3px solid var(--lfi);border-radius:14px;box-shadow:5px 5px 0 rgba(0,0,0,.55);
+  padding:10px 14px;font-size:13px;font-weight:400;line-height:1.45;text-align:left;color:var(--lfi);
+  opacity:0;visibility:hidden;transition:opacity .15s ease;z-index:40;pointer-events:none}
+.lf-tip b{color:#d5325c}
+.lf-tip:after{content:"";position:absolute;left:50%;margin-left:-11px;bottom:-22px;border:11px solid transparent;border-top-color:var(--lfi)}
+.lf-panel:hover .lf-tip,.lf-panel:focus-within .lf-tip{opacity:1;visibility:visible}
+.lf-tip.lf-below{bottom:auto;top:calc(100% + 18px)}
+.lf-tip.lf-below:after{bottom:auto;top:-22px;border-top-color:transparent;border-bottom-color:var(--lfi)}
+.lf-tip.lf-side{left:auto;right:calc(100% + 18px);bottom:auto;top:6px;transform:none}
+.lf-tip.lf-side:after{left:auto;right:-22px;top:22px;margin:0;border:11px solid transparent;border-left-color:var(--lfi)}
+.lf-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.lf-chip{border:2px solid var(--lfi);background:#fff6e0;padding:1px 8px;font-size:11.5px;border-radius:999px;color:var(--lfi)}
+.lf-chip.lf-hot{background:var(--warn)}
+.lf-chip.lf-new{background:#d5325c;color:#fff;animation:lf-wiggle 1.4s ease-in-out infinite}
+.lf-chip.lf-pass{background:#3ec97a}
+.lf-chip.lf-fail{background:var(--lfi);color:#fff;text-decoration:line-through #ff5577 2px}
+.lf-chip.lf-run{background:#6fd2f2}
+.lf-io{position:absolute;font-size:12px;font-family:'JetBrains Mono',monospace;background:var(--warn);color:var(--lfi);
+  border:2px solid var(--lfi);padding:2px 10px;transform:rotate(-1.5deg);white-space:nowrap;z-index:3}
+.lf-io.lf-out{background:var(--accent-3);color:#fff}
+.lf-io.lf-up{background:var(--accent-4);color:#fff}
+.lf-io.lf-var{background:#b48cff;color:var(--lfi)}
+.lf-rl{position:absolute;width:74px;height:74px;display:grid;place-items:center;z-index:5;
+  background:var(--warn);color:#d5325c;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;text-align:center;line-height:.95;
+  clip-path:polygon(50% 0%,61% 12%,77% 6%,80% 23%,97% 26%,89% 41%,100% 52%,86% 61%,91% 78%,74% 77%,68% 94%,53% 83%,38% 95%,32% 78%,14% 81%,20% 63%,3% 55%,17% 44%,7% 27%,25% 26%,28% 8%,42% 14%);
+  animation:lf-pulse 1.6s ease-in-out infinite;filter:drop-shadow(3px 3px 0 rgba(0,0,0,.6))}
+@keyframes lf-pulse{0%,100%{transform:scale(1) rotate(-6deg)}50%{transform:scale(1.12) rotate(4deg)}}
+@keyframes lf-wiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.lf-bubble{position:absolute;background:#fff;border:3px solid var(--lfi);border-radius:18px;
+  box-shadow:6px 6px 0 rgba(0,0,0,.55);padding:10px 16px;font-family:'JetBrains Mono',monospace;
+  font-weight:800;font-size:17px;transform:rotate(-2deg);z-index:6;color:var(--lfi)}
+.lf-bubble:after{content:"";position:absolute;left:34px;bottom:-20px;border:12px solid transparent;border-top-color:var(--lfi)}
+.lf-bubble em{color:#d5325c;font-style:normal}
+@media (prefers-reduced-motion: reduce){.lf-rl,.lf-chip.lf-new{animation:none}}
+</style>
+<div class="lf-legend">
+  <span><span class="lf-dot" style="background:var(--accent-1)"></span> data flowing down the funnel</span>
+  <span><span class="lf-dot" style="background:var(--accent-4)"></span> day-15 verdicts flowing back up (relearn)</span>
+  <span><span class="lf-dot" style="background:#b48cff"></span> new-variable loop</span>
+  <span><span class="lf-dot" style="background:var(--warn);border-radius:0"></span> starburst = AI/RL applied here</span>
+</div>
+<div class="lf-scroller"><div class="lf-stage" id="lfStage">
+  <svg class="lf-flows" viewBox="0 0 940 1450" aria-hidden="true">
+    <defs><marker id="lfah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9090a0"/></marker></defs>
+    <path id="lfspine" d="M470,185 L470,1075" fill="none" stroke="#9090a0" stroke-width="4" marker-end="url(#lfah)"/>
+    <path id="lfrelearn" d="M258,1105 C60,1040 34,420 148,112" fill="none" stroke="var(--accent-4)" stroke-width="4" stroke-dasharray="14 10" marker-end="url(#lfah)"/>
+    <path d="M120,640 C180,620 240,608 296,600" fill="none" stroke="var(--accent-4)" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#lfah)"/>
+    <path id="lftolab" d="M792,182 C880,240 858,320 812,392" fill="none" stroke="#9090a0" stroke-width="3" marker-end="url(#lfah)"/>
+    <path id="lfship" d="M698,660 C670,648 660,640 646,628" fill="none" stroke="var(--accent-1)" stroke-width="4" marker-end="url(#lfah)"/>
+    <path d="M800,948 C830,1010 760,1072 686,1092" fill="none" stroke="#9090a0" stroke-width="3" stroke-dasharray="4 7" marker-end="url(#lfah)"/>
+    <path id="lfnewvar" d="M908,430 C948,300 900,200 806,150" fill="none" stroke="#b48cff" stroke-width="4" stroke-dasharray="14 10" marker-end="url(#lfah)"/>
+    <g>
+      <circle r="7" fill="var(--accent-1)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="6s" repeatCount="indefinite" begin="0s"><mpath href="#lfspine"/></animateMotion></circle>
+      <circle r="7" fill="var(--accent-1)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="6s" repeatCount="indefinite" begin="-2s"><mpath href="#lfspine"/></animateMotion></circle>
+      <circle r="7" fill="var(--warn)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="6s" repeatCount="indefinite" begin="-4s"><mpath href="#lfspine"/></animateMotion></circle>
+      <circle r="8" fill="var(--accent-4)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="7s" repeatCount="indefinite" begin="0s"><mpath href="#lfrelearn"/></animateMotion></circle>
+      <circle r="8" fill="var(--accent-4)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="7s" repeatCount="indefinite" begin="-3.5s"><mpath href="#lfrelearn"/></animateMotion></circle>
+      <circle r="6" fill="var(--accent-1)" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="3s" repeatCount="indefinite"><mpath href="#lfship"/></animateMotion></circle>
+      <circle r="6" fill="#b48cff" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#lfnewvar"/></animateMotion></circle>
+      <circle r="6" fill="#9090a0" stroke="#0a0a0f" stroke-width="2"><animateMotion dur="4s" repeatCount="indefinite"><mpath href="#lftolab"/></animateMotion></circle>
+    </g>
+  </svg>
 
-        <!-- Data layer -->
-        <rect class="data" x="20" y="20" width="200" height="60" rx="8"/>
-        <text class="data-text" x="40" y="50">NSE Bhavcopy</text>
-        <text class="label-small" x="40" y="68">price + delivery</text>
+  <div class="lf-io" style="left:330px;top:2px">IN: the whole tape + the whole news wire, 18:45 IST daily</div>
 
-        <rect class="data" x="20" y="100" width="200" height="60" rx="8"/>
-        <text class="data-text" x="40" y="130">Corp Actions</text>
-        <text class="label-small" x="40" y="148">splits + bonuses</text>
+  <div class="lf-panel lf-tl" tabindex="0" style="left:150px;top:28px;width:620px">
+    <h3>🌊 THE DATA OCEAN</h3>
+    <span class="lf-tip lf-below">Every evening the system drinks the whole market: prices, volumes, company announcements, big-investor deals, news mood, even the market's <b>fear meter</b>. Better ingredients, better cooking — and new ingredients keep joining (the purple loop) whenever the lab finds one worth testing.</span>
+    <div class="lf-chips">
+      <span class="lf-chip">prices</span><span class="lf-chip">corp actions</span><span class="lf-chip">announcements</span>
+      <span class="lf-chip">news + sentiment</span><span class="lf-chip lf-hot">India VIX</span><span class="lf-chip">FII/DII</span>
+      <span class="lf-chip">block deals</span><span class="lf-chip">breadth</span><span class="lf-chip">forex · macro</span>
+      <span class="lf-chip">commodities</span><span class="lf-chip">PIB</span><span class="lf-chip">fundamentals</span>
+      <span class="lf-chip">MF holdings</span><span class="lf-chip lf-new">P&amp;L history — joining now!</span>
+    </div>
+  </div>
 
-        <rect class="data" x="20" y="180" width="200" height="60" rx="8"/>
-        <text class="data-text" x="40" y="210">NSE Filings</text>
-        <text class="label-small" x="40" y="228">37k+ events</text>
+  <div class="lf-io lf-out" style="left:492px;top:205px">OUT: 5-million-row panel, rebuilt nightly</div>
 
-        <rect class="data" x="20" y="260" width="200" height="60" rx="8"/>
-        <text class="data-text" x="40" y="290">Macro Panel</text>
-        <text class="label-small" x="40" y="308">145 features</text>
+  <div class="lf-panel lf-tr" tabindex="0" style="left:212px;top:252px;width:516px">
+    <h3>🚧 QC GATE — FRESH OR FAIL</h3>
+    <span class="lf-tip lf-below">Garbage in = confident garbage out. Before anything runs, we check the data is fresh and honest. Example: when a stock splits 1-into-5, its price drops 80% but nobody lost money — miss that, and the model sees a <b>fake crash</b>. Stale or fishy data stops the whole line.</span>
+    <p>Freshness hard-fails. Corporate-actions-before-prices law. Suspicious splits get human-verified.</p>
+  </div>
 
-        <!-- Engines -->
-        <rect class="engine" x="280" y="20" width="280" height="40" rx="6"/>
-        <text class="engine-text" x="295" y="46">find_180d_frontier_honest</text>
+  <div class="lf-panel lf-tl" tabindex="0" style="left:258px;top:398px;width:424px">
+    <h3>🎯 Z-BAND POOL <span style="font-size:12px">(~2,100 → ~120/wk)</span></h3>
+    <span class="lf-tip">Forget the jargon — "z-band" just means judging each stock against <b>its own normal</b>. We keep the calm ones sitting slightly below their usual level (coiled springs) and reject anything already spiking. You can't buy well what the crowd is already chasing.</span>
+    <p>Quiet-tape bands: RSI-z, 20d-z, 5d-z inside range · vol &lt; 2× · ADV ≥ ₹5cr. No chasing, ever.</p>
+  </div>
 
-        <rect class="engine" x="280" y="80" width="280" height="40" rx="6"/>
-        <text class="engine-text" x="295" y="106">find_high_conviction</text>
+  <div class="lf-panel lf-tr" tabindex="0" style="left:300px;top:552px;width:340px">
+    <h3>🧠 RANK + RULES <span style="font-size:12px">(120 → 24)</span></h3>
+    <span class="lf-tip">The ~120 calm stocks get graded like students. Bonus marks when patient long-term buyers are quietly absorbing shares, or results just impressed. Instant disqualification for red flags like big insider selling. A weekly report card, <b>re-tuned by every past mistake</b>.</span>
+    <p>Delivery ranking · veto bad prints &amp; block deals · boost good prints · tape forensics sev-1/2/3.</p>
+  </div>
+  <div class="lf-rl" style="left:250px;top:556px">RL ⭐</div>
 
-        <rect class="engine" x="280" y="140" width="280" height="40" rx="6"/>
-        <text class="engine-text" x="295" y="166">find_multibagger_today</text>
+  <div class="lf-panel lf-tl" tabindex="0" style="left:344px;top:712px;width:252px">
+    <h3>🧺 TOP 8 BASKET</h3>
+    <span class="lf-tip">The top 8 get published with plain-English reasons, ordered by how confident the model is in each one. If a stock jumps before Monday's open, a ranked reserve takes its place — the system <b>never pays a panic price</b>.</span>
+    <p>Confidence-ranked, micro+macro rationale, reserves R1/R2 absorb gaps.</p>
+  </div>
+  <div class="lf-io lf-out" style="left:494px;top:830px">OUT: Monday 9:00 AMO — never chase a gap</div>
 
-        <rect class="engine" x="280" y="200" width="280" height="40" rx="6"/>
-        <text class="engine-text" x="295" y="226">run_multi_horizon</text>
+  <div class="lf-panel lf-tr" tabindex="0" style="left:300px;top:868px;width:340px">
+    <h3>🏟️ THE MARKET · 15 DAYS</h3>
+    <span class="lf-tip">Now the market grades our homework — and rules, not feelings, drive the exits: bank half the moment a pick rises 5%, safety-nets sized to each stock's own wobble, everything closed by day 15. <b>No hoping, no "one more week".</b></span>
+    <p>C2 exits do the driving: vol-scaled SL, half off at +5%, trail +2.5%, day-15 timeout.</p>
+  </div>
 
-        <rect class="engine" x="280" y="260" width="280" height="40" rx="6"/>
-        <text class="engine-text" x="295" y="286">compare_short_horizons</text>
+  <div class="lf-panel lf-tl" tabindex="0" style="left:258px;top:1024px;width:424px">
+    <h3>📜 DAY-15 VERDICT</h3>
+    <span class="lf-tip">Fifteen days later, every pick gets marked: did it touch +5% or not? Hits AND misses go into a permanent notebook. The misses are the treasure — each one is studied and becomes a new rule, so the <b>same mistake can't repeat</b>.</span>
+    <p>Touch / miss / SL — every trade graded → <b>outcomes + miss-learnings + corrections ledgers</b>. Nothing gets forgotten.</p>
+  </div>
+  <div class="lf-rl" style="left:196px;top:1032px">RL ⭐</div>
 
-        <!-- Agents -->
-        <rect class="agent" x="620" y="50" width="200" height="40" rx="6"/>
-        <text class="agent-text" x="635" y="76">devil's advocate (10v)</text>
+  <div class="lf-io lf-up" style="left:30px;top:560px;transform:rotate(-90deg);transform-origin:left top">RELEARN! misses → gate tuning → next basket</div>
 
-        <rect class="agent" x="620" y="110" width="200" height="40" rx="6"/>
-        <text class="agent-text" x="635" y="136">debugger (per-name DD)</text>
+  <div class="lf-panel lf-tr" tabindex="0" style="left:704px;top:392px;width:216px;height:560px">
+    <h3>🧪 THE A/B LAB</h3>
+    <span class="lf-tip lf-side">Every new idea — "does the fear index help? do earnings matter?" — is replayed against <b>10 years of history</b> as if it were live, with the pass bar declared before seeing results (no cheating). Winners get wired into the machine; losers are recorded so we never fall for them twice.</span>
+    <p style="margin-bottom:6px">Every new variable fights for its life: <b>pre-registered walk-forward A/B</b>, 2016→today. Rules ship. Features that flop get ledgered.</p>
+    <div class="lf-chips">
+      <span class="lf-chip lf-pass">veto+boost ✓</span><span class="lf-chip lf-pass">z-bands ✓</span>
+      <span class="lf-chip lf-pass">C2 exits ✓</span><span class="lf-chip lf-fail">event features</span>
+      <span class="lf-chip lf-fail">vol gates</span><span class="lf-chip lf-fail">catalyst combos</span>
+      <span class="lf-chip lf-fail">hot laggards</span><span class="lf-chip lf-run">valuation 3-horizon — running</span>
+    </div>
+    <p style="margin-top:8px;font-size:11.5px">PASS → ships into RANK ➜<br>FAIL → ledger (still a lesson)<br>either way → <b>go fetch the next variable</b> ⤴</p>
+  </div>
+  <div class="lf-rl" style="left:664px;top:352px">RL ⭐</div>
+  <div class="lf-io lf-var" style="left:760px;top:168px">NEW VARIABLE LOOP</div>
 
-        <rect class="agent" x="620" y="170" width="200" height="40" rx="6"/>
-        <text class="agent-text" x="635" y="196">supervisor (orchestrate)</text>
-
-        <rect class="agent" x="620" y="230" width="200" height="40" rx="6"/>
-        <text class="agent-text" x="635" y="256">code-reviewer</text>
-
-        <rect class="agent" x="620" y="290" width="200" height="40" rx="6"/>
-        <text class="agent-text" x="635" y="316">contamination filter</text>
-
-        <!-- Output -->
-        <rect class="output" x="880" y="120" width="200" height="120" rx="8"/>
-        <text class="output-text" x="905" y="165">FINAL BASKET</text>
-        <text class="label-small" x="905" y="190">QC'd · cross-validated</text>
-        <text class="label-small" x="905" y="210">8 names + 2 reserves</text>
-        <text class="label-small" x="905" y="228">100% deploy · C2 exits</text>
-
-        <!-- Arrows from data → engines -->
-        <path class="arrow" d="M225,50 L275,50"/>
-        <path class="arrow" d="M225,130 L275,110"/>
-        <path class="arrow" d="M225,210 L275,170"/>
-        <path class="arrow" d="M225,290 L275,230"/>
-        <path class="arrow" d="M225,290 L275,290"/>
-
-        <!-- Arrows from engines → agents -->
-        <path class="arrow" d="M565,40 L615,70"/>
-        <path class="arrow" d="M565,100 L615,130"/>
-        <path class="arrow" d="M565,160 L615,190"/>
-        <path class="arrow" d="M565,220 L615,250"/>
-        <path class="arrow" d="M565,280 L615,310"/>
-
-        <!-- Arrows from agents → output -->
-        <path class="arrow" d="M825,70 L875,150"/>
-        <path class="arrow" d="M825,130 L875,170"/>
-        <path class="arrow" d="M825,190 L875,180"/>
-        <path class="arrow" d="M825,250 L875,200"/>
-        <path class="arrow" d="M825,310 L875,220"/>
-
-        <!-- Labels -->
-        <text class="label-small" x="20" y="380">DATA LAYER</text>
-        <text class="label-small" x="280" y="380">ML ENGINES (run in parallel)</text>
-        <text class="label-small" x="620" y="380">QC AGENTS &amp; FILTERS</text>
-        <text class="label-small" x="880" y="380">FORWARD RECORD</text>
-      </svg>
+  <div class="lf-bubble" style="left:250px;top:1250px">IT'S A <em>LOOP</em>, NOT A LINE — THE MODEL THAT GRADES ITSELF EVERY 15 DAYS!</div>
+</div></div>
+<script>
+(function(){
+  var svg=document.querySelector("svg.lf-flows");
+  if(!svg)return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){svg.pauseAnimations();return;}
+  new IntersectionObserver(function(es){es[0].isIntersecting?svg.unpauseAnimations():svg.pauseAnimations();}).observe(document.getElementById("lfStage"));
+})();
+</script>
     </div>
 
     <pre><code><span class="comment"># How the cross-engine vote works</span>
