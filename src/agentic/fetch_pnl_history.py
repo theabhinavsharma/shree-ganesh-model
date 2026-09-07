@@ -123,19 +123,27 @@ def details_worklist() -> pd.DataFrame:
     return cal
 
 
-def stage_details():
-    wl = details_worklist()
+def load_done(prefix: str) -> set:
     done = set()
-    if DET_OUT.exists():
-        with open(DET_OUT) as f:
-            done = {json.loads(l)["_key"] for l in f if l.strip()}
-    todo = [r for _, r in wl.iterrows()
-            if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done]
-    print(f"details: worklist {len(wl):,}, done {len(done):,}, todo {len(todo):,} "
-          f"(~{len(todo)*SLEEP/3600:.1f}h)", flush=True)
+    for p in OUTDIR.glob(f"{prefix}*.jsonl"):
+        with open(p) as f:
+            for l in f:
+                if l.strip():
+                    done.add(json.loads(l)["_key"])
+    return done
+
+
+def stage_details(n: int = 0, k: int = 1):
+    wl = details_worklist()
+    done = load_done("details")
+    out = DET_OUT if k == 1 else OUTDIR / f"details_w{n}.jsonl"
+    todo = [r for i, (_, r) in enumerate(wl.iterrows())
+            if i % k == n and f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done]
+    print(f"details w{n}/{k}: worklist {len(wl):,}, done {len(done):,}, todo {len(todo):,} "
+          f"(~{len(todo)*(SLEEP+0.5)/3600:.1f}h)", flush=True)
     s = build_session()
     nofetch = 0
-    with open(DET_OUT, "a") as f:
+    with open(out, "a") as f:
         for i, r in enumerate(todo):
             key = f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}"
             u = ("https://www.nseindia.com/api/corporates-financial-results-data?index=equities"
@@ -158,75 +166,101 @@ def stage_details():
 
 
 # ---------------- stage C: integrated XBRL (2025+) ----------------
+# v2 2026-09-07: context-DATE-verified parsing (quarter ctx = ends at quarter_end,
+# duration 75-100d — ctx NAMES like "OneI" lie); governance/insurance files excluded
+# (they carry no P&L and were poisoning dedup); bank EPS tags added.
+import re as _re
+
 XTAGS = {
-    "eps_basic": ["BasicEarningsLossPerShareFromContinuingOperations",
-                  "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
-                  "BasicEarningsLossPerShare"],
-    "eps_diluted": ["DilutedEarningsLossPerShareFromContinuingOperations",
-                    "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations"],
-    "net_sales": ["RevenueFromOperations", "Income", "InterestEarned"],
+    "eps_basic": ["BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+                  "BasicEarningsLossPerShareFromContinuingOperations",
+                  "BasicEarningsLossPerShare",
+                  "BasicEarningsPerShareAfterExtraordinaryItems",
+                  "BasicEarningsPerShareBeforeExtraordinaryItems"],
+    "eps_diluted": ["DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+                    "DilutedEarningsLossPerShareFromContinuingOperations",
+                    "DilutedEarningsPerShareAfterExtraordinaryItems"],
+    "net_sales": ["RevenueFromOperations", "InterestEarned", "Income"],
     "total_income": ["Income", "TotalIncome"],
     "pbt": ["ProfitBeforeTax", "ProfitLossBeforeTax"],
-    "pat": ["ProfitLossForPeriod", "NetProfitLoss"],
+    "pat": ["ProfitLossForPeriod", "NetProfitLoss", "ProfitLossForThePeriod"],
     "face_value": ["FaceValueOfEquityShareCapital", "FaceValuePerShare"],
 }
+FIN_FILE = _re.compile(r"INTEGRATED_FILING_(INDAS|NBFC_INDAS|BANKING|NONINDAS)_|INTEGRATED_FILING_\d")
 
 
-def parse_xbrl(text: str) -> dict:
-    try:
-        root = ET.fromstring(text)
-    except ET.ParseError:
+def parse_xbrl(text: str, qe) -> dict:
+    """Extract quarter-period facts: context must END at qe with 75-100d duration."""
+    ctxs = {}
+    for cid, sd, ed in _re.findall(
+            r'<xbrli:context id="([^"]+)">.*?<xbrli:startDate>([^<]+)</xbrli:startDate>'
+            r'\s*<xbrli:endDate>([^<]+)</xbrli:endDate>.*?</xbrli:context>', text, _re.S):
+        ctxs[cid] = (sd.strip(), ed.strip())
+    qs = str(qe.date()) if hasattr(qe, "date") else str(qe)[:10]
+    valid = set()
+    for cid, (sd, ed) in ctxs.items():
+        if ed != qs:
+            continue
+        try:
+            dur = (pd.Timestamp(ed) - pd.Timestamp(sd)).days
+        except Exception:
+            continue
+        if 75 <= dur <= 100:
+            valid.add(cid)
+    if not valid:
         return {}
-    # index by localname; keep first occurrence per tag (main-period context wins in
-    # these filings; QC vs detail-API overlap validates this assumption)
-    vals: dict[str, str] = {}
-    for el in root.iter():
-        ln = el.tag.split("}")[-1]
-        if ln not in vals and el.text and el.text.strip():
-            vals[ln] = el.text.strip()
+    facts = {}
+    for pre_tag, ctx, val in _re.findall(
+            r'<([a-z-]+:[A-Za-z0-9]+)\s+contextRef="([^"]+)"[^>]*>([^<]+)<', text):
+        tag = pre_tag.split(":")[1]
+        if ctx in valid and tag not in facts:
+            facts[tag] = val.strip()
+        elif tag not in facts and XTAGS["face_value"][0] == tag:
+            facts[tag] = val.strip()  # face value: any context acceptable
     out = {}
     for k, cands in XTAGS.items():
         for c in cands:
-            if c in vals:
+            if c in facts:
                 try:
-                    out[k] = float(vals[c])
+                    out[k] = float(facts[c])
                 except ValueError:
                     pass
                 break
     return out
 
 
-def stage_integrated():
+def stage_integrated(n: int = 0, k: int = 1):
     ic = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet")
     ic["qe"] = pd.to_datetime(ic["period_to"], format="%d-%b-%Y", errors="coerce")
     ic["bd"] = pd.to_datetime(ic["broadcast"], format="%d-%b-%Y %H:%M:%S", errors="coerce")
     ic = ic.dropna(subset=["qe", "detail_link"])
+    ic = ic[ic["detail_link"].str.contains(FIN_FILE, na=False)]  # financial files only
     ic["is_con"] = (ic["consolidated"] == "Consolidated").astype(int)
     ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
-    done = set()
-    if INT_OUT.exists():
-        with open(INT_OUT) as f:
-            done = {json.loads(l)["_key"] for l in f if l.strip()}
-    todo = [r for _, r in ic.iterrows()
-            if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done]
-    print(f"integrated: worklist {len(ic):,}, done {len(done):,}, todo {len(todo):,}", flush=True)
+    done = load_done("integrated2")
+    out = OUTDIR / (f"integrated2_w{n}.jsonl" if k > 1 else "integrated2.jsonl")
+    todo = [r for i, (_, r) in enumerate(ic.iterrows())
+            if i % k == n and f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done]
+    print(f"integrated2 w{n}/{k}: worklist {len(ic):,}, done {len(done):,}, todo {len(todo):,}", flush=True)
     s = build_session()
-    with open(INT_OUT, "a") as f:
+    okc = 0
+    with open(out, "a") as f:
         for i, r in enumerate(todo):
             key = f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}"
             try:
                 resp = s.get(r["detail_link"], timeout=30)
-                d = parse_xbrl(resp.text) if resp.status_code == 200 else {}
+                d = parse_xbrl(resp.text, r["qe"]) if resp.status_code == 200 else {}
             except Exception:
                 s = build_session()
                 continue
+            okc += bool(d.get("eps_basic") is not None)
             f.write(json.dumps({"_key": key, "_sym": r["symbol"], "_qe": str(r["qe"].date()),
                                 "_con": int(r["is_con"]), "_fd": str(r["bd"]), "d": d}) + "\n")
             f.flush()
             if i % 200 == 0:
-                print(f"  [{i}/{len(todo)}] {key} ok={bool(d)}", flush=True)
+                print(f"  [{i}/{len(todo)}] {key} eps_ok={okc}", flush=True)
             time.sleep(SLEEP)
-    print("integrated done", flush=True)
+    print("integrated2 done", flush=True)
 
 
 # ---------------- stage D: normalize ----------------
@@ -235,9 +269,12 @@ NUM = lambda d, *ks: next((float(d[k]) for k in ks if d.get(k) not in (None, "",
 
 def stage_normalize():
     rows = []
-    if DET_OUT.exists():
-        with open(DET_OUT) as f:
-            for l in f:
+    det_lines = []
+    for p in sorted(OUTDIR.glob("details*.jsonl")):
+        det_lines += [l for l in open(p) if l.strip()]
+    if True:
+        if True:
+            for l in det_lines:
                 r = json.loads(l)
                 d = r.get("d") or {}
                 if not d:
@@ -253,9 +290,12 @@ def stage_normalize():
                     pat=NUM(d, "re_con_pro_loss", "re_proloss_ord_act", "re_net_prft"),
                     face_value=NUM(d, "re_face_val"),
                 ))
-    if INT_OUT.exists():
-        with open(INT_OUT) as f:
-            for l in f:
+    int_lines = []
+    for p in sorted(OUTDIR.glob("integrated2*.jsonl")):
+        int_lines += [l for l in open(p) if l.strip()]
+    if True:
+        if True:
+            for l in int_lines:
                 r = json.loads(l)
                 d = r.get("d") or {}
                 if not d:
@@ -267,7 +307,8 @@ def stage_normalize():
     df = pd.DataFrame(rows)
     df["quarter_end"] = pd.to_datetime(df["quarter_end"])
     df["filing_dt"] = pd.to_datetime(df["filing_dt"], errors="coerce")
-    df = df.sort_values(["symbol", "quarter_end", "filing_dt"])
+    df = (df.sort_values(["symbol", "quarter_end", "filing_dt"])
+            .drop_duplicates(["symbol", "quarter_end", "basis", "source"], keep="last"))
     df.to_parquet(NORM_OUT, index=False)
     print(f"pnl_quarterly: {len(df):,} rows, {df['symbol'].nunique()} symbols, "
           f"{df['quarter_end'].min().date()} -> {df['quarter_end'].max().date()}", flush=True)
@@ -277,12 +318,14 @@ def stage_normalize():
 
 if __name__ == "__main__":
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
+    n = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    k = int(sys.argv[3]) if len(sys.argv) > 3 else 1
     if which in ("calendar", "all"):
         stage_calendar()
     if which in ("details", "all"):
-        stage_details()
+        stage_details(n, k)
     if which in ("integrated", "all"):
-        stage_integrated()
+        stage_integrated(n, k)
     if which in ("normalize", "all"):
         stage_normalize()
     print("PNL HISTORY CRAWL COMPLETE", flush=True)
