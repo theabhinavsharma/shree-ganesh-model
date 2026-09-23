@@ -23,9 +23,13 @@ BONUS_RATIO_RE = re.compile(r"bonus(?:\s+issue)?[^\d]{0,20}(\d+(?:\.\d+)?)\s*:\s
 # 2026-08-27 fix: NSE writes the target face value as "Re 1/-" (singular), which the old
 # "rs"-only pattern missed — 153 split groups went factor-less and left unadjusted cliffs
 # in the prices parquet (TATASTEEL/NESTLEIND/KOTAKBANK class). Accept Rs/Re on both sides.
+# 2026-09-19 fix: pre-2018 NSE rows abbreviate to "Fv Splt Frm Rs 10 To Re 1" — no
+# "split"/"sub-division" token, so 14 splits (JSWSTEEL/KARURVYSYA/ICIL class) stayed
+# factor-less and their adjusted series still carried -80..-90% ex-date cliffs. Accept
+# "splt" and "frm". Caught by tests/test_no_unadjusted_corporate_actions.py.
 SPLIT_RATIO_RE = re.compile(
-    r"(?:face\s*value\s*split|stock\s*split|sub-division|subdivision|split)[^\d]{0,40}"
-    r"(?:from)?\s*r(?:s|e)\.?\s*(\d+(?:\.\d+)?)\s*/?-?[^\d]{0,25}"
+    r"(?:face\s*value\s*split|stock\s*split|sub-division|subdivision|split|fv\s*splt|splt)[^\d]{0,40}"
+    r"(?:fro?m)?\s*r(?:s|e)\.?\s*(\d+(?:\.\d+)?)\s*/?-?[^\d]{0,25}"
     r"(?:to)?\s*r(?:s|e)\.?\s*(\d+(?:\.\d+)?)",
     re.IGNORECASE,
 )

@@ -69,7 +69,12 @@ SAFE_EXTRA_PREFIXES = (
 # constant per-symbol value across all historical training rows. Re-enabling
 # any of these without first shipping the time-series fundamentals layer
 # (Phase 2 of the remediation plan) violates CONSTITUTION.md §1.2.
-LEAKING_EXTRA_PREFIXES = ("scr_", "qvm_", "acad_")
+# 2026-09-19: macro_sent__* (16 cols) are ONE headline-sentiment snapshot broadcast
+# to every (symbol, date) row — nunique == 1 over the whole 1.56M-row extras file.
+# Same class as the 2026-05-01 leak; caught by tests/test_no_per_symbol_constants.py.
+# Zero information to a tree model (never splittable), so removal cannot move a
+# prediction — but a snapshot column must not sit in the training matrix.
+LEAKING_EXTRA_PREFIXES = ("scr_", "qvm_", "acad_", "macro_sent")
 
 # What we actually load:
 EXTRA_PREFIXES = SAFE_EXTRA_PREFIXES   # leaking prefixes deliberately excluded
@@ -88,6 +93,7 @@ def build_panel_with_extras() -> tuple[pd.DataFrame, list[str]]:
                        if c not in ("symbol", "trade_date")
                        and (c.startswith(EXTRA_PREFIXES)
                             or c in ("amihud_20d", "turnover_skew_20d", "vol_max_63d"))
+                       and not c.startswith(LEAKING_EXTRA_PREFIXES)
                        and pd.api.types.is_numeric_dtype(ex[c])]
         if extra_cols:
             df = df.merge(ex[["symbol", "trade_date"] + extra_cols],

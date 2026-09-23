@@ -21,6 +21,8 @@ ROOT = Path("/Users/abhinavs./Documents/Zoom")
 sys.path.insert(0, str(ROOT))
 from src.ingest.corporate_actions.nse import (  # noqa: E402
     NseCorporateActionsFetchConfig,
+    _parse_bonus_factor,
+    _parse_split_factor,
     load_corporate_actions_from_nse,
 )
 
@@ -45,13 +47,44 @@ def main() -> None:
         .sort_values(["ex_date", "symbol"])
         .reset_index(drop=True)
     )
+    healed = _reparse_factorless(merged)
     merged.to_parquet(STORE, index=False)
+    if healed:
+        print(f"STORE SELF-HEAL: {healed} historical rows gained a split/bonus factor "
+              f"from the current parser (refresh_prices.py re-adjusts their symbols next)")
     fresh = new[new["adjustment_factor"].notna()]
     print(f"store: {len(merged):,} rows · max ex_date {merged['ex_date'].max().date()} · "
           f"fetched {len(new)} rows ({len(fresh)} with factors) since {start}")
     if len(fresh):
         print(fresh[["symbol", "ex_date", "subject", "adjustment_factor"]].to_string(index=False))
 
+
+def _reparse_factorless(store: pd.DataFrame) -> int:
+    """Re-run the CURRENT subject parser over the whole store; return rows whose
+    factor changed.
+
+    2026-09-19: the 2026-08-27 regex fix only ever touched newly fetched rows, so
+    59 historical splits (JSWSTEEL/KARURVYSYA/TTL/DBEIL class) stayed factor-less
+    and 13 same-day bonus+split pairs carried a half factor (CUPID 2 vs raw 12.6x,
+    SBC 2 vs 29.6x) for three weeks after the parser could read them. Verified
+    against raw ex-date close ratios: 23/24 changed rows move CLOSER to the tape.
+    The store is a pure function of (NSE subject text, current parser) — nothing
+    is hand-edited (source_note is uniform) — so re-parsing everything is safe and
+    idempotent. refresh_prices.py's LATE-CA SELF-HEAL re-adjusts any symbol whose
+    per-ex_date product changed.
+    """
+    bonus = store["subject"].map(_parse_bonus_factor)
+    split = store["subject"].map(_parse_split_factor)
+    factor = (bonus.fillna(1.0) * split.fillna(1.0)).where(bonus.notna() | split.notna())
+    changed = factor.fillna(-1.0) != store["adjustment_factor"].astype(float).fillna(-1.0)
+    if not changed.any():
+        return 0
+    store["bonus_factor"] = bonus
+    store["split_factor"] = split
+    store["is_bonus"] = bonus.notna()
+    store["is_split"] = split.notna()
+    store["adjustment_factor"] = factor
+    return int(changed.sum())
 
 if __name__ == "__main__":
     main()

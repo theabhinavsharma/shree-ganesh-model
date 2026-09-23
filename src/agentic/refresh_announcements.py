@@ -1,6 +1,16 @@
 """
-Incrementally extend the corp_announcements parquet by fetching the last 14 days
-from NSE on every run. Dedupes on (symbol, dt, desc).
+Incrementally extend the corporate-announcements stores from NSE on every run.
+
+2026-09-19 fix (the 2026-08-18 "two copies of the truth" class, recurring): this script
+used to write ONLY a side store under tmp/ (catalyst_tagger's input) while the gate,
+build_news_event_features and tape_forensics read the CANONICAL store
+  data/events_full_history/normalized/stock_announcements.parquet
+which was only ever advanced by hand-written heredocs in dated run scripts
+(friday_run_20260828.sh f3_ann). It rotted to 16 bd stale and blocked the 09-19 basket.
+Now: the canonical store is refreshed FIRST via the production ingester
+(src.ingest.events.nse, dedup on sequence_id+symbol, keep last) — the same call the
+run scripts made — and the legacy tmp/ raw store is kept for catalyst_tagger.
+Exit non-zero if the canonical refresh fails (silent failure is the worst bug class).
 """
 from __future__ import annotations
 from datetime import date, timedelta
@@ -11,6 +21,11 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.ingest.nse.session import build_session
 from src.ingest.nse.api import get_json
+from src.ingest.events.nse import NseAnnouncementFetchConfig, load_announcements_from_nse
+from src.utils.io import write_parquet
+
+CANON = Path("data/events_full_history/normalized/stock_announcements.parquet")
+CANON_INCR = Path("data/events_full_history/_incremental")
 
 OUT = Path("tmp/from_scratch_7d_run/alt/corp_announcements.parquet")
 PIT_OUT = Path("tmp/from_scratch_7d_run/alt/insider_trading_pit.parquet")
@@ -38,9 +53,29 @@ def fetch_window(api: str, ref: str, frm: date, to: date) -> list[dict]:
     return rows
 
 
+def refresh_canonical(start: date, today: date) -> None:
+    """Advance the canonical store the gate + features read. Raises on failure."""
+    print("== refresh CANONICAL announcements store ==")
+    new = load_announcements_from_nse(NseAnnouncementFetchConfig(
+        output_dir=CANON_INCR, start_date=start, end_date=today))
+    if new is None or len(new) == 0:
+        raise RuntimeError("NSE returned 0 announcements for the window — refusing to touch the store")
+    old = pd.read_parquet(CANON)
+    old["event_date"] = pd.to_datetime(old["event_date"], errors="coerce")
+    new["event_date"] = pd.to_datetime(new["event_date"], errors="coerce")
+    m = (pd.concat([old, new], ignore_index=True)
+           .sort_values(["event_date", "symbol", "sequence_id"])
+           .drop_duplicates(subset=["sequence_id", "symbol"], keep="last")
+           .reset_index(drop=True))
+    write_parquet(m, CANON)
+    print(f"  canonical: {len(old):,} → {len(m):,} rows (delta {len(m)-len(old):,}) · max event_date {m['event_date'].max().date()}")
+
+
 def main() -> None:
     today = date.today()
     start = today - timedelta(days=14)
+
+    refresh_canonical(start, today)          # the store production reads — must succeed
 
     # announcements
     print("== refresh announcements ==")

@@ -1,0 +1,308 @@
+{
+ "ts": "2026-09-23T19:17:29",
+ "latest_session": "2026-09-23",
+ "status": "PASS",
+ "fails": [],
+ "watch_missing": {},
+ "sessions": [
+  {
+   "date": "2026-09-07",
+   "raw": 2927,
+   "panel": 2927,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2652,
+    "BE": 240,
+    "BZ": 35
+   },
+   "series_panel": {
+    "EQ": 2652,
+    "BE": 240,
+    "BZ": 35
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-08",
+   "raw": 2916,
+   "panel": 2916,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2650,
+    "BE": 238,
+    "BZ": 28
+   },
+   "series_panel": {
+    "EQ": 2650,
+    "BE": 238,
+    "BZ": 28
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-09",
+   "raw": 2914,
+   "panel": 2914,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2644,
+    "BE": 242,
+    "BZ": 28
+   },
+   "series_panel": {
+    "EQ": 2644,
+    "BE": 242,
+    "BZ": 28
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-10",
+   "raw": 2910,
+   "panel": 2910,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2638,
+    "BE": 245,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2638,
+    "BE": 245,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-11",
+   "raw": 2912,
+   "panel": 2912,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2637,
+    "BE": 248,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2637,
+    "BE": 248,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-14",
+   "raw": 2912,
+   "panel": 2912,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2637,
+    "BE": 248,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2637,
+    "BE": 248,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-15",
+   "raw": 2929,
+   "panel": 2929,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2652,
+    "BE": 241,
+    "BZ": 36
+   },
+   "series_panel": {
+    "EQ": 2652,
+    "BE": 241,
+    "BZ": 36
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-16",
+   "raw": 2913,
+   "panel": 2913,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2650,
+    "BE": 236,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2650,
+    "BE": 236,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-17",
+   "raw": 2915,
+   "panel": 2915,
+   "coverage": 1.0,
+   "missing_n": 0,
+   "missing_sample": [],
+   "series_raw": {
+    "EQ": 2649,
+    "BE": 239,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2649,
+    "BE": 239,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-18",
+   "raw": 2922,
+   "panel": 2921,
+   "coverage": 0.9997,
+   "missing_n": 1,
+   "missing_sample": [
+    "VEEGALAND"
+   ],
+   "series_raw": {
+    "EQ": 2647,
+    "BE": 248,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2647,
+    "BE": 247,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-21",
+   "raw": 2942,
+   "panel": 2940,
+   "coverage": 0.9993,
+   "missing_n": 2,
+   "missing_sample": [
+    "MANIKA",
+    "VEEGALAND"
+   ],
+   "series_raw": {
+    "EQ": 2665,
+    "BE": 241,
+    "BZ": 36
+   },
+   "series_panel": {
+    "EQ": 2665,
+    "BE": 239,
+    "BZ": 36
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-22",
+   "raw": 2921,
+   "panel": 2919,
+   "coverage": 0.9993,
+   "missing_n": 2,
+   "missing_sample": [
+    "MANIKA",
+    "VEEGALAND"
+   ],
+   "series_raw": {
+    "EQ": 2662,
+    "BE": 232,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2662,
+    "BE": 230,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  },
+  {
+   "date": "2026-09-23",
+   "raw": 2928,
+   "panel": 2924,
+   "coverage": 0.9986,
+   "missing_n": 4,
+   "missing_sample": [
+    "CENTEXT-RE",
+    "JSIPL",
+    "MANIKA",
+    "VEEGALAND"
+   ],
+   "series_raw": {
+    "EQ": 2668,
+    "BE": 233,
+    "BZ": 27
+   },
+   "series_panel": {
+    "EQ": 2668,
+    "BE": 229,
+    "BZ": 27
+   },
+   "silent_dropoffs": [],
+   "silent_dropoffs_n": 0,
+   "price_mismatch_n": 0,
+   "price_mismatch_sample": []
+  }
+ ]
+}

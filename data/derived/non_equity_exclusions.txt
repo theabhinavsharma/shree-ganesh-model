@@ -1,0 +1,16 @@
+# Symbols that trade in the EQ series but are NOT operating companies (ETFs / index funds / commodity units).
+# Read by generate_hybrid_basket.py. 2026-09-23: MASPTOP50 (S&P 500 Top-50 ETF, premium-to-NAV blowout
+# +20%/-9%/-13% in 3 sessions) reached rank 1 with a 4-engine "consensus" — the SILVERTUC lesson on an ETF.
+# One symbol per line. Regex fallback in the generator: IETF|BEES|ETF|NIFTY|TOP50|MASP|MAFANG|MONQ|PSUBANK|SILVERAG|GOLD
+ALPHA
+HDFCNIFTY
+ICICIB22
+INFRAIETF
+MAFANG
+MASPTOP50
+MONQ50
+MOREALTY
+NEXT50IETF
+NIFTY1
+PSUBANK
+SILVERAG

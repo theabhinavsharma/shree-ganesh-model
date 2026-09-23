@@ -14,6 +14,7 @@ Every input parquet's mtime is recorded so a future reader can verify.
 """
 from __future__ import annotations
 import json
+import re
 from datetime import date, datetime
 from pathlib import Path
 import pandas as pd
@@ -98,6 +99,19 @@ def find_contaminated(prices: pd.DataFrame, ca: pd.DataFrame) -> set:
     return contam
 
 
+NON_EQUITY_FILE = ROOT / "data/derived/non_equity_exclusions.txt"
+NON_EQUITY_RE = re.compile(r"IETF|BEES|ETF$|^NIFTY|TOP50|^MASP|MAFANG|^MONQ|^PSUBANK|SILVERAG|GOLD(?!IAM|EN)", re.I)
+
+
+def non_equity(symbols: pd.Series) -> pd.Series:
+    """ETFs/index units trade in series EQ but are not companies. 2026-09-23: MASPTOP50
+    (S&P500 ETF in a premium-to-NAV blowout) reached rank 1 on a 4-engine 'consensus'."""
+    listed = set()
+    if NON_EQUITY_FILE.exists():
+        listed = {l.strip().upper() for l in NON_EQUITY_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
+    return symbols.isin(listed) | symbols.str.contains(NON_EQUITY_RE)
+
+
 def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:
     """The 15D/+5% QC filter — data-earned from 10-yr backtest (4,224 trades).
     Findings (target hit rate baseline 23.3%):
@@ -121,7 +135,8 @@ def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:
         (df["close"] > 50) &
         (df["adv_cr"] >= 5) &
         (df["max_uc"].fillna(0) < 2) &
-        (~df["symbol"].isin(contam))
+        (~df["symbol"].isin(contam)) &
+        (~non_equity(df["symbol"]))                    # ETFs/index units are not companies
     ].copy()
 
 

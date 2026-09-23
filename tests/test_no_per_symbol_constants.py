@@ -27,7 +27,7 @@ EXTRA = ROOT / "data/derived/extra_features.parquet"
 
 # Prefixes that are KNOWN-LEAKING and must never be loaded into the model
 # without first shipping per-date inputs. Mirrors find_high_conviction.py.
-LEAKING_PREFIXES = ("scr_", "qvm_", "acad_")
+LEAKING_PREFIXES = ("scr_", "qvm_", "acad_", "macro_sent")  # 2026-09-19: + macro_sent
 
 # Threshold: every active feature must have median-per-symbol-nunique > 1.
 # We use median (not min) because a brand-new symbol with only 1 row is
@@ -60,15 +60,26 @@ def test_extra_features_safe_columns_vary_per_symbol():
     # Drop non-feature cols
     feat_cols = [c for c in df.columns
                  if c not in ("symbol", "trade_date")
-                 and c.startswith(SAFE_EXTRA_PREFIXES)]
+                 and c.startswith(SAFE_EXTRA_PREFIXES)
+                 and not c.startswith(LEAKING_PREFIXES)]  # mirrors the engine's loader
 
     if not feat_cols:
         pytest.skip("no safe-prefix columns present in extra_features yet")
 
     failed = []
     for c in feat_cols:
-        # nunique per symbol; require median > 1 (most symbols vary)
-        nuniq = df.groupby("symbol")[c].nunique()
+        # 2026-09-19: judge variation among symbols the feature actually COVERS.
+        # sec_*/wiki_* are null for ~2/3 of symbols (no sector map / no page);
+        # a coverage gap is not a snapshot broadcast and must not mask one.
+        # A column that is constant across the WHOLE file (nunique == 1) is the
+        # broadcast signature (macro_sent__*, caught today) and always fails.
+        if df[c].nunique(dropna=True) <= 1:
+            failed.append((c, 0.0, 0))
+            continue
+        covered = df.loc[df[c].notna(), ["symbol", c]]
+        if covered.empty:
+            continue  # useless, not leaking — LightGBM sees all-NaN as no split
+        nuniq = covered.groupby("symbol")[c].nunique()
         if nuniq.median() < MIN_MEDIAN_NUNIQUE:
             failed.append((c, float(nuniq.median()), int(nuniq.min())))
 
@@ -87,15 +98,19 @@ def test_leaking_prefixes_documented_if_present_in_parquet():
     """If leaked features are still in the parquet (we haven't dropped
     them from the dataset), they must NOT be safelisted. This is a
     belt-and-braces check."""
-    from src.agentic.find_high_conviction import EXTRA_PREFIXES
+    from src.agentic.find_high_conviction import EXTRA_PREFIXES, LEAKING_EXTRA_PREFIXES
 
     df = pd.read_parquet(EXTRA)
     leaked_in_data = [c for c in df.columns if c.startswith(LEAKING_PREFIXES)]
     if not leaked_in_data:
         pytest.skip("No leaked-prefix columns in extra_features (clean dataset)")
 
+    # A column is "safelisted" only if the engine's loader would actually take it:
+    # inside EXTRA_PREFIXES AND not excluded by the engine's own quarantine list
+    # (macro_sent__* sits under the safe "macro_" prefix and is excluded that way).
     safelisted_leaked = [c for c in leaked_in_data
-                          if c.startswith(EXTRA_PREFIXES)]
+                          if c.startswith(EXTRA_PREFIXES)
+                          and not c.startswith(LEAKING_EXTRA_PREFIXES)]
     assert not safelisted_leaked, (
         f"Leaked-prefix columns present in extra_features AND safelisted "
         f"for model loading: {safelisted_leaked[:10]}. "

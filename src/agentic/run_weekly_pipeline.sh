@@ -69,16 +69,17 @@ log " Master log: $MASTER_LOG"
 # ---------------- 1. Data layer ----------------
 
 if [ $SKIP_FETCH -eq 0 ]; then
-  step "1. DATA LAYER"
-  # CA store MUST refresh before prices: refresh_prices adjusts with the CA store,
-  # and a late-arriving split corrupts the series (2026-08-27 lesson: CORDELIA/
-  # TDPOWERSYS/GOODLUCK/KIRLPNU cliffs; same class as the 2026-08-18 113-day rot).
-  run_py src/agentic/refresh_corporate_actions.py    "00_corp_actions"
-  run_py src/agentic/refresh_prices.py               "01_prices"
-  run_py src/agentic/refresh_announcements.py        "02_announcements"     || log "  ⚠ announcements failed — continuing"
-  run_py src/agentic/build_news_event_features.py    "03_news_events"
-  run_py src/agentic/build_macro_panel.py            "04_macro"
-  run_py src/agentic/fetch_industry_indicators.py    "05_industry"
+  step "1. DATA LAYER (canonical: daily_data_layer.sh)"
+  # 2026-09-19: this step used to call 6 scripts of its own — build_macro_panel.py
+  # CONSOLIDATES derived files but never fetched them, so when the daily layer had not
+  # run (last 09-08) the panel carried 09-18 dates over 09-07 breadth and 09-04 dxy and
+  # the gate blocked the basket. One data layer, one place to fix: the daily script
+  # (CA before prices, all macro/breadth/VIX fetchers, panel rebuilt last, loud status).
+  if bash src/agentic/daily_data_layer.sh > "$LOG_DIR/${TS}_01_data_layer.log" 2>&1; then
+    log "  ✅ data layer ($(grep -c '✅' "$LOG_DIR/${TS}_01_data_layer.log") feeds ok)"
+  else
+    log "  ⚠ data layer reported failures — see $LOG_DIR/${TS}_01_data_layer.log and logs/daily_data_layer_status.json; the freshness gate decides"
+  fi
 else
   log "▸ SKIPPING data refresh (--skip-fetch)"
 fi
@@ -139,6 +140,8 @@ run_py src/agentic/train_missed_winner_classifier.py "06_ml_classifier"
 # This is here because on 2026-07-01 the pipeline emitted a basket on 55-day-stale macro data.
 step "3.5. FRESHNESS GATE"
 
+# Coverage eval (2026-09-24) feeds the PANEL_COVERAGE contract below.
+/usr/bin/python3 src/agentic/eval_panel_coverage.py --sessions 5 > "$LOG_DIR/${TS}_coverage.log" 2>&1 || log "  ❌ panel coverage eval FAILED — gate will block; see $LOG_DIR/${TS}_coverage.log"
 # Always emit the dashboard first — it never fails, so we get a report even when the gate blocks.
 /usr/bin/python3 src/agentic/emit_freshness_status.py 2>&1 | tee -a "$MASTER_LOG"
 
@@ -152,7 +155,14 @@ step "4. HYBRID BASKET (15D/+5%)"
 
 run_py src/agentic/generate_hybrid_basket.py "07_hybrid_basket"
 
-BASKET_FILE="live_predictions/${DATE}_15d5pct.json"
+# 2026-09-21: the generator names the file by ITS as_of_date (date.today() at emit),
+# which differs from $DATE when a run crosses midnight or resumes after sleep — the
+# 09-19 run emitted 2026-09-21_15d5pct.json and this check then failed a good basket.
+BASKET_FILE=$(ls -t live_predictions/*_15d5pct.json 2>/dev/null | head -1)
+if [ -z "$BASKET_FILE" ] || [ ! -f "$BASKET_FILE" ] || [ "$(find "$BASKET_FILE" -mmin -120)" = "" ]; then
+  fail "No basket emitted in the last 2h (newest: ${BASKET_FILE:-none})"
+fi
+DATE=$(basename "$BASKET_FILE" _15d5pct.json)
 if [ ! -f "$BASKET_FILE" ]; then
   fail "Expected basket file not found: $BASKET_FILE"
 fi
@@ -176,6 +186,16 @@ for p in d['picks']:
 step "4.3. TAPE FORENSICS"
 /usr/bin/python3 src/agentic/tape_forensics.py 2>&1 | tee -a "$MASTER_LOG" \
   || log "  ⚠ tape forensics failed — non-fatal"
+
+# ---------------- 4.35. Human-facing reports ----------------
+# Basket report (buy range / target / confidence / micro / macro / ETA) once per window,
+# daily-actions report (BUY / HOLD / SELL PART / SELL / SKIP) every session. Derived from
+# the committed JSON + price panel only — never a second source of truth.
+
+step "4.35. BASKET + DAILY-ACTION REPORTS"
+/usr/bin/python3 src/agentic/render_basket_report.py > "$LOG_DIR/${TS}_reports.log" 2>&1 \
+  && log "  ✅ reports/basket_report_${DATE}.md + reports/daily_actions_*.md" \
+  || log "  ⚠ report render failed — see $LOG_DIR/${TS}_reports.log"
 
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.
@@ -222,7 +242,7 @@ step "5. GIT COMMIT + PUSH"
 if [ $DRY_RUN -eq 1 ]; then
   log "▸ DRY RUN — skipping git operations"
 else
-  git add "$BASKET_FILE" logs/miss_learnings.jsonl logs/coverage_backtest_since_april.json data/derived/missed_winner_classifier.parquet \
+  git add "$BASKET_FILE" reports/basket_report_${DATE}.md reports/daily_actions_*.md logs/miss_learnings.jsonl logs/coverage_backtest_since_april.json data/derived/missed_winner_classifier.parquet \
           SHOWCASE.html shreeganeshmodel-deploy/index.html assets/recreation_manifest.json \
           reports/simplicity_audit.md reports/freshness_status.md \
           logs/simplicity_metrics.jsonl logs/debt_ledger.jsonl 2>/dev/null || true

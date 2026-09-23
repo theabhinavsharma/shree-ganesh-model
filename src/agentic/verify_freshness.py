@@ -248,9 +248,38 @@ def check_continuity() -> dict:
     return snap
 
 
+def check_coverage() -> dict:
+    """COVERAGE check (added 2026-09-24): freshness asks "is the newest row new";
+    coverage asks "is every row that should exist there". From 09-08 to 09-23 the panel
+    silently lost every BE/BZ-series symbol (~270/day, incl. live sleeve names) while all
+    27 checks stayed green. Reads the latest logs/evals/panel_coverage_<date>.json written
+    by eval_panel_coverage.py; FAIL if missing, stale (not for the panel's max date) or
+    its status is FAIL."""
+    import json, glob
+    snap = {"tag": "PANEL_COVERAGE", "path": "logs/evals/panel_coverage_<latest>.json",
+            "kind": "coverage", "max_stale_bd": 0, "file_max_date": None,
+            "file_stale_bd": 0, "file_is_stale": False, "col_results": [], "is_stale": False, "msg": ""}
+    try:
+        pmax = pd.to_datetime(pd.read_parquet(ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+                                              columns=["trade_date"])["trade_date"]).max().date()
+        files = sorted(glob.glob(str(ROOT / "logs/evals/panel_coverage_*.json")))
+        if not files:
+            snap.update(is_stale=True, file_is_stale=True, msg="no coverage eval on disk — run eval_panel_coverage.py"); return snap
+        v = json.load(open(files[-1])); ev_date = pd.Timestamp(v["latest_session"]).date()
+        snap["file_max_date"] = ev_date
+        if ev_date != pmax:
+            snap.update(is_stale=True, file_is_stale=True, msg=f"eval covers {ev_date}, panel is at {pmax} — rerun eval"); return snap
+        if v.get("status") != "PASS":
+            snap.update(is_stale=True, file_is_stale=True, msg=f"coverage FAIL: {v['fails'][0] if v.get('fails') else '?'}"); return snap
+        snap["msg"] = f"eval {ev_date} PASS ({len(v.get('sessions', []))} sessions checked)"
+    except Exception as e:  # noqa: BLE001
+        snap.update(is_stale=True, file_is_stale=True, msg=f"coverage eval unreadable: {e}")
+    return snap
+
+
 def snapshot() -> list[dict]:
     """Return the full snapshot as a list of dicts — for the dashboard."""
-    return [check_one(c) for c in CONTRACTS] + [check_continuity()]
+    return [check_one(c) for c in CONTRACTS] + [check_continuity(), check_coverage()]
 
 
 def _fmt_row_file(s: dict) -> str:

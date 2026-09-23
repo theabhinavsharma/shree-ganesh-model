@@ -1,0 +1,21 @@
+{
+ "_note": "One-line business descriptions for the QUAL column. Source: analyst note (general knowledge), NOT from the data pipeline — flagged as such in the report. Extend as names appear; never let this drive a score.",
+ "DEEDEV": "DEE Development Engineers — process piping systems & pipe spools for power/oil-gas/chemical plants; order-book-driven engineering exporter (Faridabad).",
+ "OMAXE": "Omaxe — north-India real-estate developer (Lucknow/Delhi-NCR townships, commercial); loss-making, debt-heavy turnaround story; SM resignations flagged.",
+ "DYCL": "Dynamic Cables — power & control cables (LT/HT, aluminium/copper) for discoms and EPC; capex/T&D beneficiary; small-cap, KMP resignation flagged.",
+ "PGIL": "Pearl Global Industries — apparel manufacturer/exporter for global brands (Bangladesh/Vietnam/India plants); bonus issue just allotted (record 11-Sep).",
+ "SKYGOLD": "Sky Gold & Diamonds — B2B gold jewellery manufacturer (Mumbai) supplying retailers; hyper-growth, board approved Purvi Gems acquisition 18-Sep.",
+ "AZAD": "Azad Engineering — precision-machined aerospace/defence & energy turbine components (Hyderabad); premium-valuation growth name, results season done.",
+ "ARMANFIN": "Arman Financial Services — microfinance + MSME/two-wheeler NBFC (Gujarat); cheap vs sector PE, profit recovery from a weak FY, thin liquidity.",
+ "SAREGAMA": "Saregama India — music IP/licensing (RPSG group), films & Carvaan; steady royalty business, stock 40% off 52w high.",
+ "TINNARUBR": "Tinna Rubber & Infrastructure — end-of-life tyre recycling into crumb rubber/steel; small-cap, thin ADV.",
+ "APCOTEXIND": "Apcotex Industries — synthetic rubber & latex (NBR, VP latex) for tyres/gloves/paper; high PE vs sector, quiet tape.",
+ "AETHER": "Aether Industries — speciality chemicals / advanced intermediates & CRAMS (Surat); premium multiple, capex-heavy growth.",
+ "JINDALSAW": "Jindal SAW — large-diameter pipes (SAW/DI/seamless) for oil-gas, water and infra; order-book cyclical, cheap PE.",
+ "POLYPLEX": "Polyplex — PET/BOPP packaging films (India, Thailand, Turkey, US); film-spread cyclical; won +10% for the record on 2-Jul basket.",
+ "SHAILY": "Shaily Engineering Plastics — precision plastic components, auto-injector pens for pharma (semaglutide cycle) and IKEA furniture; premium growth small-cap.",
+ "MIDHANI": "Mishra Dhatu Nigam — PSU maker of superalloys/titanium/special steels for defence, space, aerospace; order-driven, thin float.",
+ "WABAG": "VA Tech Wabag — water & wastewater treatment EPC/O&M; large order book, working-capital-heavy.",
+ "FEDFINA": "Fedbank Financial Services — gold-loan + MSME/mortgage NBFC (Federal Bank subsidiary).",
+ "HNDFDS": "Hindustan Foods — contract manufacturer of FMCG (soaps, beverages, shoes) for Unilever/Reckitt etc.; volume-growth compounder."
+}

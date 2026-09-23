@@ -47,3 +47,11 @@ def test_apply_split_bonus_adjustments_uses_future_ex_dates_only() -> None:
     assert on_first_ex_date["close"] == 12.0
     assert on_second_ex_date["price_adjustment_factor_to_present"] == 1.0
     assert on_second_ex_date["close"] == 80.0
+
+
+def test_parse_split_factor_abbreviated_pre2018_format():
+    """2026-09-19: NSE's old 'Fv Splt Frm Rs 10 To Re 1' wording has no 'split' token."""
+    assert _parse_split_factor("Fv Splt Frm Rs 10 To Re 1") == 10.0
+    assert _parse_split_factor("Fv Splt Frm Rs 10 To Rs 2") == 5.0
+    assert _parse_split_factor("Fv Splt Frm Rs 5 To Re 1") == 5.0
+    assert _parse_split_factor("Face Value Split From Rs 10 To Re 1") == 10.0
