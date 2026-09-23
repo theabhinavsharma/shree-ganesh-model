@@ -1,0 +1,48 @@
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+/Users/abhinavs./Documents/Zoom/src/agentic/autopsy_leader_paths.py:82: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  f"{S['turn'].fillna(False).astype(bool).mean()*100:>11.1f}%")
+leader-cell rows 4,605  ·  panel through 2026-09-23
+
+=== MEDIAN PATH BY OUTCOME (126td) ===
+era      outcome      n      d5    d10    d20    d40  trough40  peers fwd126  print EPS up  loss→profit
+disc<=22 2x         147   +3.8% +10.0% +18.4% +38.9%     -4.8%        +36.7%           74%        18.4%
+disc<=22 50-100     385   +1.0%  +1.5%  +6.6% +13.1%     -8.3%        +19.1%           72%        12.5%
+disc<=22 rest      2210   -0.6%  -0.9%  -1.8%  -3.1%    -12.6%         -0.5%           72%         6.4%
+conf>=23 2x         152   +1.4%  +4.3% +10.6% +27.7%     -5.9%        +30.3%           65%         8.6%
+conf>=23 50-100     334   +1.7%  +4.1%  +8.9% +18.3%     -5.2%        +21.4%           70%        10.5%
+conf>=23 rest      1377   -0.5%  -0.8%  -1.8%  -3.1%    -13.0%         +4.3%           67%         4.9%
+
+=== P(outcome) BY DAY-20 RETURN (observable in-trade) ===
+bucket        era            n    P2x    P50  mean 126td
+<-10%         disc<=22     508   1.8%   8.3%      -10.0%
+-10..0        disc<=22     910   1.5%  10.4%       +0.4%
+0..+10        disc<=22     765   3.0%  17.1%       +9.0%
++10..+25      disc<=22     408  11.0%  34.6%      +23.9%
+>+25%         disc<=22     151  37.1%  81.5%      +68.0%
+<-10%         conf>=23     321   0.6%   8.1%      -10.7%
+-10..0        conf>=23     572   5.2%  13.8%       +3.3%
+0..+10        conf>=23     538   7.6%  28.3%      +16.8%
++10..+25      conf>=23     309  13.6%  41.7%      +30.4%
+>+25%         conf>=23     123  30.1%  81.3%      +54.5%
+
+=== P(outcome) BY INDUSTRY PEERS' FWD 126td (hindsight only) ===
+bucket        era            n    P2x    P50  mean 126td
+peers<0       disc<=22    1229   1.1%   7.7%      -10.0%
+0..15%        disc<=22     691   2.3%  14.2%       +6.5%
+15..40%       disc<=22     566   8.8%  33.6%      +27.7%
+>40%          disc<=22     256  26.2%  58.2%      +55.8%
+peers<0       conf>=23     653   2.6%  12.9%       -9.8%
+0..15%        conf>=23     475   4.6%  16.6%      +11.6%
+15..40%       conf>=23     562  13.5%  41.6%      +29.5%
+>40%          conf>=23     173  21.4%  51.4%      +45.6%
+
+AUTOPSY PATHS COMPLETE
