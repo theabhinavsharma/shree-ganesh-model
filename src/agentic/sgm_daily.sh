@@ -3,6 +3,7 @@
 #   1. daily_data_layer.sh    every feed, CA before prices, panel rebuilt, loud status
 #   2. render_basket_report   reports/daily_actions_<session>.md for the live basket
 #      (BUY / HOLD / SELL PART / SELL / SELL? / SKIP / CLOSED / STANDBY) + basket report
+#   2b. leader sleeve        score_leader_sleeve + render_leader_report (PAPER, non-fatal)
 #   3. freshness dashboard    reports/freshness_status.md (never fails)
 # Engines and baskets stay on run_weekly_pipeline.sh (Friday) — RL protocol, no churn.
 # Log: logs/sgm_daily/<TS>.log     Status: logs/daily_data_layer_status.json
@@ -17,6 +18,11 @@ bash src/agentic/daily_data_layer.sh; RC=$?
 /usr/bin/python3 src/agentic/render_basket_report.py > logs/sgm_daily/${TS}_reports.log 2>&1 \
   && echo "✅ daily actions: $(ls -t reports/daily_actions_*.md | head -1)" \
   || echo "❌ report render failed — see logs/sgm_daily/${TS}_reports.log"
+# Leader sleeve (PAPER): score every immutable screen day by day, then render its report
+/usr/bin/python3 src/agentic/score_leader_sleeve.py > logs/sgm_daily/${TS}_leader.log 2>&1 \
+  && /usr/bin/python3 src/agentic/render_leader_report.py >> logs/sgm_daily/${TS}_leader.log 2>&1 \
+  && echo "✅ leader sleeve: $(ls -t reports/leader_sleeve_*.md | head -1)" \
+  || echo "⚠ leader sleeve score/render failed (paper, non-fatal) — see logs/sgm_daily/${TS}_leader.log"
 /usr/bin/python3 src/agentic/emit_freshness_status.py > /dev/null 2>&1 && echo "✅ freshness dashboard"
 echo "═══ DONE data_layer_rc=$RC ═══"
 exit $RC

@@ -197,6 +197,18 @@ step "4.35. BASKET + DAILY-ACTION REPORTS"
   && log "  ✅ reports/basket_report_${DATE}.md + reports/daily_actions_*.md" \
   || log "  ⚠ report render failed — see $LOG_DIR/${TS}_reports.log"
 
+# ---------------- 4.36. Leader sleeve screen (PAPER) ----------------
+# The only both-era 2x survivor: hot industry x top-3 leaders, EXTENDED-only (EXP 2026-09-23),
+# hold 126td, time exit. One immutable screen per ISO week (logs/leader_sleeve/screen_<asof>.json);
+# scored daily by sgm_daily.sh. Paper only until >= 13 weekly cohorts. Never blocks the basket.
+
+step "4.36. LEADER SLEEVE SCREEN (paper)"
+{ nice -n 10 /usr/bin/python3 src/agentic/screen_theme_leaders.py \
+  && /usr/bin/python3 src/agentic/score_leader_sleeve.py \
+  && /usr/bin/python3 src/agentic/render_leader_report.py; } > "$LOG_DIR/${TS}_leader.log" 2>&1 \
+  && log "  ✅ leader screen + reports/leader_sleeve_*.md" \
+  || log "  ⚠ leader sleeve failed — non-fatal, see $LOG_DIR/${TS}_leader.log"
+
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.
 

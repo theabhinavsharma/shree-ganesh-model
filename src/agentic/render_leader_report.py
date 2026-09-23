@@ -1,0 +1,133 @@
+"""LEADER SLEEVE report — reports/leader_sleeve_<session>.md, every session.
+
+Sibling of render_basket_report.py (which sits at the 400-LOC line): same QUANT /
+QUAL / MACRO columns, reusing its _qual / _macro / _sector_map helpers so filings,
+insider, block-deal and holder data come from exactly the same sources. Adds the
+sleeve's own facts: hot-industry group return, own 60d/252d run (fresh vs extended),
+cheap-vs-industry PE, days held / 126, peak, trough, and the P(2x) prior of the sim
+cell the name sits in. Derived from logs/leader_sleeve/{screen_*.json,outcomes.jsonl}
+only — never a second source of truth. PAPER sizing until >= 13 weekly cohorts.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+ROOT = Path("/Users/abhinavs./Documents/Zoom")
+sys.path.insert(0, str(ROOT / "src/agentic"))
+from render_basket_report import (ANN, BLOCK, CA, INDUSTRY, MACRO, NEWS, PIT, PRICES,  # noqa: E402
+                                  SUPERSTAR, _latest_basket, _macro, _qual, _sector_map)
+
+DIR = ROOT / "logs/leader_sleeve"
+HOLD_TD, PAPER_MIN_COHORTS = 126, 13
+# P(touched 2x within 126td) by sim cell and era — logs/leader_sleeve/exp_extended_20260923.log
+# (sim_leader_sleeve.py on the repaired panel, core band, weekly cohorts 2016-06..2026).
+PRIOR_2X = {"LEADER & cheap": (6.4, 12.3), "EXTENDED": (7.2, 8.9), "FRESH": (2.1, 6.9)}
+
+
+def _cell(n: dict) -> str:
+    if n.get("pe_ind") is not None and n["pe_ind"] < 1:
+        return "LEADER & cheap"
+    return "EXTENDED" if n.get("run") == "extended" else "FRESH"
+
+
+def _pct(v, nd=1):
+    return "n/a" if v is None else f"{v*100:+.{nd}f}%"
+
+
+def _quant(n: dict, o: dict | None) -> str:
+    cell = _cell(n); disc, conf = PRIOR_2X[cell]
+    bits = [f"hot industry grp60 {_pct(n['grp60'])} · own 60d {_pct(n['own60'])} / 252d {_pct(n.get('own252'))} "
+            f"({n.get('run', '?').upper()})",
+            f"PE {n['pe']:.1f} → {n['pe_ind']:.2f}× industry median ({'cheap' if n['pe_ind'] < 1 else 'not cheap'})"
+            if n.get("pe") is not None and n.get("pe_ind") is not None else "PE n/a (loss or unmapped)",
+            f"RTW {n['rtw']} · band {n['band']} · {'above' if n.get('above200') else 'BELOW'} 200DMA",
+            f"P(2x/126td) prior {conf:.1f}% conf / {disc:.1f}% disc ({cell} cell)"]
+    if o and o.get("status") != "PENDING":
+        bits.append(f"day {o['days']}/{HOLD_TD} · peak {o['peak']:+.1f}% · trough {o['trough']:+.1f}%")
+    return " · ".join(bits)
+
+
+def main() -> None:
+    screens = [json.loads(p.read_text()) for p in sorted(DIR.glob("screen_*.json"))]
+    if not screens:
+        raise SystemExit("no leader screens")
+    outs = {}
+    if (DIR / "outcomes.jsonl").exists():
+        for l in (DIR / "outcomes.jsonl").read_text().splitlines():
+            if l.strip():
+                d = json.loads(l); outs[d["screen_id"]] = d          # last line per screen wins
+    live = [s for s in screens if outs.get(s["screen_id"], {}).get("status") != "CLOSED"]
+    names = sorted({n["symbol"] for s in live for n in s["names"]})
+
+    def _opt(path, **kw):
+        try:
+            return pd.read_parquet(path, **kw) if path.exists() else pd.DataFrame()
+        except Exception:
+            return pd.DataFrame()
+    last = pd.to_datetime(_opt(PRICES, columns=["trade_date"], filters=[("symbol", "in", names)])["trade_date"]).max()
+    ann = _opt(ANN, filters=[("symbol", "in", names)])
+    if not ann.empty:
+        ann["event_date"] = pd.to_datetime(ann["event_date"], errors="coerce")
+    pit = _opt(PIT, columns=["symbol", "intimDt", "personCategory", "tdpTransactionType"])
+    if not pit.empty:
+        pit = pit[pit["symbol"].isin(names)].copy(); pit["d"] = pd.to_datetime(pit["intimDt"], errors="coerce")
+    blk = _opt(BLOCK)
+    if not blk.empty:
+        blk = blk[blk["BD_SYMBOL"].isin(names)].copy()
+        blk["dt"] = pd.to_datetime(blk["BD_DT_DATE"], format="mixed", errors="coerce")
+    st = _opt(SUPERSTAR, columns=["symbol", "investor_name"])
+    stars = {s: sorted(set(g["investor_name"])) for s, g in st.groupby("symbol")} if not st.empty else {}
+    ca = _opt(CA, columns=["symbol", "company_name"])
+    company = dict(ca.drop_duplicates("symbol").values) if not ca.empty else {}
+    sec_map = _sector_map()
+    ind = _opt(INDUSTRY)
+    mac = _opt(MACRO)
+    mac = mac.sort_values("trade_date").iloc[-1] if not mac.empty else None
+    try:
+        regime = json.loads(_latest_basket().read_text())["regime_gate"] + " (15d gate — sleeve is not regime-gated)"
+    except SystemExit:
+        regime = "n/a"
+
+    sections = []
+    for s in sorted(live, key=lambda s: s["screen_id"], reverse=True):
+        o = outs.get(s["screen_id"], {})
+        by = {r["symbol"]: r for r in o.get("names", [])}
+        rows = []
+        for n in s["names"]:
+            sym, r = n["symbol"], by.get(n["symbol"])
+            sub = lambda df, col="symbol": df[df[col] == sym] if not df.empty else None
+            qual = _qual(sym, company.get(sym), n["industry"], sub(ann), sub(pit), sub(blk, "BD_SYMBOL"),
+                         stars.get(sym, []), last)
+            macro = _macro(sym, regime, sec_map, ind, mac)
+            if r and r["status"] != "PENDING":
+                pos = f"{r['status']} d{r['days']} | {r['entry']:.2f} ({r['entry_date']}) | {r['last']:.2f} | {r['ret_net']:+.1f}%"
+            else:
+                pos = "PENDING | next open | — | —"
+            rows.append(f"| {sym} (#{n['rank']}) | {pos} | {_quant(n, r)} | {qual} | {macro} |")
+        summ = (f"EW-{o['n_entered']} {o['ew_net']:+.2f}% net ({o['ew_gross']:+.2f}% gross) · top-4 RTW {o['top4_net']:+.2f}% net · "
+                f"winners {o['winners']}/{o['n_entered']} · P(touched 2x) {o['p_2x']:.0%} · P(+50%) {o['p_50']:.0%} · "
+                f"worst trough {o['worst_trough']:+.1f}%" if o.get("n_entered") else "not yet entered")
+        sections.append(
+            f"## Cohort {s['screen_id']} — data {s['data_through']} · day {o.get('days_held', 0)}/{HOLD_TD}"
+            f"{' · EXTENDED-only' if s.get('extended_only') else ''}\n\n{summ}\n\n"
+            "| Stock | Status | Entry | Last | Net | Rationale — QUANT | Rationale — QUAL (filings, insiders, holders) | Rationale — MACRO |\n"
+            "|---|---|---|---|---|---|---|---|\n" + "\n".join(rows))
+    n_coh = len(screens)
+    md = (f"# Leader sleeve — session {last.date()}\n\n"
+          f"_PAPER ONLY · {n_coh} weekly cohort(s) on record, sizing needs >= {PAPER_MIN_COHORTS} · entry next open after "
+          f"screen · hold {HOLD_TD}td, exit at close (TIME exit, no stops) · 0.5% round-trip in Net_\n\n"
+          + "\n\n".join(sections) +
+          "\n\n_Cell = hot industry (grp ret60 top decile) × top-3 own ret60 leaders. Backtest: LEADER & cheap +11.1/+19.3%/trade "
+          "net by era, ~maxDD -10%, median troughs -14..-19% — drawdowns inside the hold are the base case, not a signal. "
+          "Company one-liners marked [analyst note] are general knowledge, not pipeline data._\n")
+    out = ROOT / f"reports/leader_sleeve_{last.date()}.md"
+    out.write_text(md)
+    print(f"wrote {out.relative_to(ROOT)}")
+
+
+if __name__ == "__main__":
+    main()
