@@ -16,6 +16,8 @@ from __future__ import annotations
 import json
 import re
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
+import subprocess
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -101,6 +103,10 @@ def find_contaminated(prices: pd.DataFrame, ca: pd.DataFrame) -> set:
 
 NON_EQUITY_FILE = ROOT / "data/derived/non_equity_exclusions.txt"
 NON_EQUITY_RE = re.compile(r"IETF|BEES|ETF$|^NIFTY|TOP50|^MASP|MAFANG|^MONQ|^PSUBANK|SILVERAG|GOLD(?!IAM|EN)", re.I)
+# Operating companies whose symbols match NON_EQUITY_RE — they file quarterly results in the
+# canonical announcements store (2026-09-23 audit of all 127 regex hits): jewellers SKYGOLD and
+# SHANTIGOLD, software GOLDTECH. Without this they were silently dropped from every universe.
+EQUITY_DESPITE_RE = {"SKYGOLD", "SHANTIGOLD", "GOLDTECH"}
 
 
 def non_equity(symbols: pd.Series) -> pd.Series:
@@ -109,7 +115,7 @@ def non_equity(symbols: pd.Series) -> pd.Series:
     listed = set()
     if NON_EQUITY_FILE.exists():
         listed = {l.strip().upper() for l in NON_EQUITY_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
-    return symbols.isin(listed) | symbols.str.contains(NON_EQUITY_RE)
+    return symbols.isin(listed) | (symbols.str.contains(NON_EQUITY_RE) & ~symbols.str.upper().isin(EQUITY_DESPITE_RE))
 
 
 def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:
@@ -316,7 +322,7 @@ def build_basket(inputs: dict) -> dict:
     total_wt = sum(p["weight_pct"] for p in picks)
 
     basket = {
-        "as_of_date": str(date.today()),
+        "as_of_date": str(datetime.now(ZoneInfo("Asia/Kolkata")).date()),   # NSE date, not the laptop clock (EDT ran a day behind IST, 2026-09-24)
         "data_through": str(latest.date()),
         "version": "v_hybrid_15d5pct",
         "horizon_days": 15,
@@ -366,6 +372,12 @@ def main():
 
     out = ROOT / f"live_predictions/{basket['as_of_date']}_15d5pct.json"
     out.parent.mkdir(parents=True, exist_ok=True)
+    # Immutable forward record: never rewrite a basket that is already in git. On
+    # 2026-09-24 an off-cadence run overwrote the committed 09-23 basket because the
+    # file date came from an EDT clock still on the 23rd.
+    if out.exists() and subprocess.run(["git", "-C", str(ROOT), "ls-files", "--error-unmatch", str(out)],
+                                       capture_output=True).returncode == 0:
+        raise SystemExit(f"REFUSING to overwrite committed {out.relative_to(ROOT)} — live_predictions/ is append-only")
     out.write_text(json.dumps(basket, indent=2, default=str))
     print(f"\nwrote {out.relative_to(ROOT)}")
     print(f"\n=== BASKET SUMMARY ===")

@@ -121,12 +121,11 @@ t = date.today()
 last_mon = t - timedelta(days=t.weekday() + 7)
 print(last_mon)
 ")
+# Friday of the SAME week as LAST_MONDAY. The old weekday formula returned the Friday
+# BEFORE that Monday on any Mon-Thu run (2026-09-23: entry 09-14, exit 09-11).
 LAST_FRIDAY=$(python3 -c "
 from datetime import date, timedelta
-t = date.today()
-# 4 = Friday, iso weekday-1
-last_fri = t - timedelta(days=(t.weekday() + 3) % 7 + 7)
-print(last_fri)
+print(date.fromisoformat('$LAST_MONDAY') + timedelta(days=4))
 ")
 
 /usr/bin/python3 src/agentic/miss_learner.py --entry "$LAST_MONDAY" --exit "$LAST_FRIDAY" --top-n 20 > "$LOG_DIR/${TS}_miss_learner.log" 2>&1 \

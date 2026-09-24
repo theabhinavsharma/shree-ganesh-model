@@ -1,8 +1,8 @@
-# Multibagger picks — today (2026-05-01)
+# Multibagger picks — today (2026-09-23)
 
 ## 🔴 REGIME GATE: WAIT
 
-_market_20d=+8.70% (NOT ≤-2%); breadth_50=80% (OUT of [50,75])_
+_market_20d=-4.45% (≤-2%, OK); breadth_50=46% (OUT of [50,75])_
 
 Gate v1 backtest (2024): ALL-IN 41% success → GATED 64% success (+23pp). Regime gate identifies a meaningful subset of weeks when the strategy works.
 **TODAY: WAIT.** Even though names below pass the score bar, the regime doesn't match the historical success pattern. Deploy when market_20d ≤ -2% AND breadth_50 is 50-75%.

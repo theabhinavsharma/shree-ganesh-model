@@ -1,9 +1,9 @@
 # Data Freshness Status — 2026-09-23
-_generated 2026-09-23T18:34:13_
+_generated 2026-09-23T20:04:09_
 
 ## ✅ ALL FRESH — Pipeline may proceed
 
-- All **13** inputs pass file-level contracts
+- All **14** inputs pass file-level contracts
 - All **14** column-level checks pass
 
 ## Summary
@@ -11,18 +11,19 @@ _generated 2026-09-23T18:34:13_
 | Input | File | Cols passing | Worst column | Fix |
 |---|---|---|---|---|
 | **PRICES** | ✅ 0/3bd | 4/4 | ✅ `close` 0/3bd |  |
-| **CS_ENGINE** | ✅ 3/3bd | — | — |  |
-| **HC_ENGINE** | ✅ 3/3bd | — | — |  |
-| **MB_ENGINE** | ✅ 2/3bd | — | — |  |
-| **F180_ENGINE** | ✅ 2/3bd | — | — |  |
-| **MH_ENGINE** | ✅ 2/3bd | — | — |  |
-| **ML_CLASSIFIER** | ✅ 2/3bd | — | — |  |
+| **CS_ENGINE** | ✅ 0/3bd | — | — |  |
+| **HC_ENGINE** | ✅ 0/3bd | — | — |  |
+| **MB_ENGINE** | ✅ 0/3bd | — | — |  |
+| **F180_ENGINE** | ✅ 0/3bd | — | — |  |
+| **MH_ENGINE** | ✅ 0/3bd | — | — |  |
+| **ML_CLASSIFIER** | ✅ 0/3bd | — | — |  |
 | **MACRO_PANEL** | ✅ 0/3bd | 7/7 | ✅ `usdinr` 0/3bd |  |
 | **INDUSTRY** | ✅ 0/3bd | 3/3 | ✅ `sector_5d_ret` 0/3bd |  |
 | **NEWS_EVENTS** | ✅ 0/5bd | — | — |  |
 | **ANNOUNCEMENTS** | ✅ 0/10bd | — | — |  |
 | **CORP_ACTIONS** | ✅ 0/10bd | — | — |  |
 | **PRICES_CONTINUITY** | ✅ 0/0bd | — | — |  |
+| **PANEL_COVERAGE** | ✅ 0/0bd | — | — |  |
 
 ## Full detail — every check
 
@@ -39,32 +40,32 @@ _generated 2026-09-23T18:34:13_
 ### ✅ CS_ENGINE
 
 - **Path**: `data/derived/compare_short_horizons.parquet`
-- **File-level**: max=2026-09-20  ·  stale=3bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ HC_ENGINE
 
 - **Path**: `data/derived/high_conviction_predictions.parquet`
-- **File-level**: max=2026-09-20  ·  stale=3bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ MB_ENGINE
 
 - **Path**: `data/derived/multibagger_today_predictions.parquet`
-- **File-level**: max=2026-09-21  ·  stale=2bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ F180_ENGINE
 
 - **Path**: `data/derived/180d_today_predictions.parquet`
-- **File-level**: max=2026-09-21  ·  stale=2bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ MH_ENGINE
 
 - **Path**: `tmp/from_scratch_7d_run/multi_horizon_top.csv`
-- **File-level**: max=2026-09-21  ·  stale=2bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ ML_CLASSIFIER
 
 - **Path**: `data/derived/missed_winner_classifier.parquet`
-- **File-level**: max=2026-09-21  ·  stale=2bd  ·  limit=3bd  ·  ✅ OK
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=3bd  ·  ✅ OK
 
 ### ✅ MACRO_PANEL
 
@@ -106,6 +107,11 @@ _generated 2026-09-23T18:34:13_
 ### ✅ PRICES_CONTINUITY
 
 - **Path**: `data/derived/stock_daily_facts_adjusted_2015plus.parquet`
+- **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=0bd  ·  ✅ OK
+
+### ✅ PANEL_COVERAGE
+
+- **Path**: `logs/evals/panel_coverage_<latest>.json`
 - **File-level**: max=2026-09-23  ·  stale=0bd  ·  limit=0bd  ·  ✅ OK
 
 ---

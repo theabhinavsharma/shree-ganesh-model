@@ -1,7 +1,37 @@
 {
- "generated": "2026-08-23",
+ "generated": "2026-09-23",
  "inventory": {
   "Other tools": [
+   {
+    "path": "src/agentic/ab_deepcheap_leader_bands.py",
+    "loc": 92,
+    "purpose": "Deep-cheap leader bands (registered 2026-09-08): leader sleeve restricted to"
+   },
+   {
+    "path": "src/agentic/ab_event_features_15d.py",
+    "loc": 195,
+    "purpose": "A/B \u2014 do the new event-history features improve the 15D/+5% prediction?"
+   },
+   {
+    "path": "src/agentic/ab_event_rules_15d.py",
+    "loc": 162,
+    "purpose": "A/B round 2 \u2014 reaction-signed print feature + veto/boost RULES on the 15d basket."
+   },
+   {
+    "path": "src/agentic/ab_fresh_leader.py",
+    "loc": 102,
+    "purpose": "FRESH vs EXTENDED leaders (registered 2026-09-08) + live yet-to-run screen."
+   },
+   {
+    "path": "src/agentic/ab_m4_exits_boost_upgrade.py",
+    "loc": 175,
+    "purpose": "M4 (valuation-shaped exits) + BOOST-UPGRADE (SUE-confirmed good print)."
+   },
+   {
+    "path": "src/agentic/ab_quiet_good_print_15d.py",
+    "loc": 134,
+    "purpose": "M1 \u2014 QUIET GOOD PRINT overlay on the 15d z-band pool. Registered 2026-09-07"
+   },
    {
     "path": "src/agentic/ab_test_event_features.py",
     "loc": 350,
@@ -11,6 +41,31 @@
     "path": "src/agentic/ab_test_event_polarity.py",
     "loc": 292,
     "purpose": "4-arm A/B test on the 5%/15d model:"
+   },
+   {
+    "path": "src/agentic/ab_text_15d_m2m3.py",
+    "loc": 187,
+    "purpose": "M2 (landmine veto) + M3 (tone-of-quiet) at 15d \u2014 universe-wide per the"
+   },
+   {
+    "path": "src/agentic/ab_turnaround_inflection.py",
+    "loc": 101,
+    "purpose": "TURNAROUND INFLECTION \u2014 registered 2026-09-08 (follow-up to 2x-by-PE study)."
+   },
+   {
+    "path": "src/agentic/ab_valuation_3h.py",
+    "loc": 304,
+    "purpose": "VALUATION-DEVIATION A/B \u2014 3 horizons. Pre-registered 2026-09-05 (see ledger"
+   },
+   {
+    "path": "src/agentic/ab_vol_gate.py",
+    "loc": 119,
+    "purpose": "A/B \u2014 market-VOLATILITY exposure gates on the 15d contract. Pre-registered 2026-09-03."
+   },
+   {
+    "path": "src/agentic/ab_zscore_bands.py",
+    "loc": 94,
+    "purpose": "A/B: ABSOLUTE entry bands (current prod) vs Z-SCORE bands (each stock's own scale)."
    },
    {
     "path": "src/agentic/agent_loop.py",
@@ -31,6 +86,16 @@
     "path": "src/agentic/analyze_superstar_horizons.py",
     "loc": 146,
     "purpose": "Multi-horizon superstar-confluence analysis."
+   },
+   {
+    "path": "src/agentic/autopsy_leader_paths.py",
+    "loc": 100,
+    "purpose": "HINDSIGHT autopsy of the hot-industry leader cell (2026-09-23). DESCRIPTIVE \u2014 no ship bar."
+   },
+   {
+    "path": "src/agentic/autopsy_leader_winners.py",
+    "loc": 148,
+    "purpose": "Winners autopsy INSIDE the hot-industry leader cell (reg. 2026-09-08)."
    },
    {
     "path": "src/agentic/build_academic_alphas.py",
@@ -58,9 +123,19 @@
     "purpose": "Public dashboard \u2014 built around Jobs-To-Be-Done."
    },
    {
+    "path": "src/agentic/build_data_inventory_report.py",
+    "loc": 96,
+    "purpose": "Assemble reports/data_inventory_20260830.md \u2014 deep-history acquisition QC."
+   },
+   {
     "path": "src/agentic/build_derived_ratios.py",
     "loc": 149,
     "purpose": "Compute derived ratios from existing fundamentals \u2014 50+ new factors"
+   },
+   {
+    "path": "src/agentic/build_doubler_audit_report.py",
+    "loc": 77,
+    "purpose": "Assemble reports/doubler_audit_20260828.md from the audit artifacts."
    },
    {
     "path": "src/agentic/build_event_polarity.py",
@@ -91,6 +166,11 @@
     "path": "src/agentic/compute_feature_importance.py",
     "loc": 294,
     "purpose": "Compute feature-importance for the v3 long ensemble + tag each feature"
+   },
+   {
+    "path": "src/agentic/eval_panel_coverage.py",
+    "loc": 164,
+    "purpose": "DAILY EVAL \u2014 is every stock that traded actually in the panel, at today's date?"
    },
    {
     "path": "src/agentic/factor_evaluator.py",
@@ -173,9 +253,44 @@
     "purpose": "Build the bootstrap data snapshot \u2014 the minimal set a cloner needs to run the system."
    },
    {
+    "path": "src/agentic/make_full_archive.py",
+    "loc": 221,
+    "purpose": "Full lossless data archive \u2014 every byte of fetched + derived data, compressed and volumed."
+   },
+   {
+    "path": "src/agentic/mine_doubler_ignition.py",
+    "loc": 90,
+    "purpose": "DOUBLER IGNITION MINER \u2014 walk-forward test of pre-registered 2x-ignition cells."
+   },
+   {
+    "path": "src/agentic/mine_fast_double_conditional.py",
+    "loc": 143,
+    "purpose": "CONDITIONAL FAST-DOUBLE MINER \u2014 pre-registered 2026-08-31."
+   },
+   {
+    "path": "src/agentic/mine_highvol_subcohorts.py",
+    "loc": 125,
+    "purpose": "HIGH-VOL SUB-COHORT MINER \u2014 find the conditional structure inside the 'scary' cohort."
+   },
+   {
+    "path": "src/agentic/mine_industry_contagion.py",
+    "loc": 117,
+    "purpose": "INDUSTRY-CONTAGION MINER \u2014 pre-registered 2026-09-03 (user hypothesis)."
+   },
+   {
+    "path": "src/agentic/model_2x_walkforward.py",
+    "loc": 241,
+    "purpose": "THE 2X MODEL \u2014 P(touch 2x within x td | everything knowable at T), walk-forward 2016\u21922026."
+   },
+   {
     "path": "src/agentic/monitor_for_conviction.py",
     "loc": 141,
     "purpose": "Daily conviction monitor \u2014 fires alerts at the 0.95 calibrated band."
+   },
+   {
+    "path": "src/agentic/paper_sleeve.py",
+    "loc": 157,
+    "purpose": "PAPER SLEEVE \u2014 100td-hold momentum/ignition sleeve, paper-tracked weekly."
    },
    {
     "path": "src/agentic/paper_trading_recorder.py",
@@ -188,9 +303,44 @@
     "purpose": "Portfolio sizer: given today's long/short candidates, produce a sized,"
    },
    {
+    "path": "src/agentic/qc_eps_vs_screener_table.py",
+    "loc": 83,
+    "purpose": "QC v2 (amended referee, ledgered 2026-09-07): our last-4 quarterly EPS vs the"
+   },
+   {
+    "path": "src/agentic/render_basket_report.py",
+    "loc": 398,
+    "purpose": "Render the two human-facing basket reports from the committed basket JSON."
+   },
+   {
+    "path": "src/agentic/render_leader_report.py",
+    "loc": 134,
+    "purpose": "LEADER SLEEVE report \u2014 reports/leader_sleeve_<session>.md, every session."
+   },
+   {
+    "path": "src/agentic/repair_be_series_gaps.py",
+    "loc": 141,
+    "purpose": "Backfill BE/BZ-series gap rows (2025-01-01 onward) into stock_daily_facts."
+   },
+   {
+    "path": "src/agentic/repair_ca_adjustments.py",
+    "loc": 390,
+    "purpose": "REPAIR CA ADJUSTMENTS \u2014 fix unadjusted split/bonus cliffs in the prices parquet."
+   },
+   {
+    "path": "src/agentic/replay_engines_asof_20260401.py",
+    "loc": 121,
+    "purpose": "APRIL-1 ENGINE REPLAY \u2014 what would mb / 180d / hc have flagged on 2026-04-01?"
+   },
+   {
     "path": "src/agentic/risk_envelope.py",
     "loc": 247,
     "purpose": "Risk envelope \u2014 codify the user's stated bounds:"
+   },
+   {
+    "path": "src/agentic/run_daily_layer.py",
+    "loc": 14,
+    "purpose": "Cron wrapper for daily_data_layer.sh."
    },
    {
     "path": "src/agentic/run_model_diversity.py",
@@ -213,14 +363,44 @@
     "purpose": "Score our own past baskets weekly \u2014 the self-scoring half of the RL loop."
    },
    {
+    "path": "src/agentic/score_engine_attribution.py",
+    "loc": 106,
+    "purpose": "ENGINE ATTRIBUTION \u2014 archive every engine's flags weekly, score them against reality."
+   },
+   {
+    "path": "src/agentic/score_filings_finbert.py",
+    "loc": 105,
+    "purpose": "UNIVERSE-WIDE filing scorer (law 2026-09-08: ALL stocks, ALL variables)."
+   },
+   {
+    "path": "src/agentic/score_leader_sleeve.py",
+    "loc": 118,
+    "purpose": "LEADER SLEEVE forward scorer \u2014 replays every immutable screen day by day."
+   },
+   {
     "path": "src/agentic/score_sentiment.py",
     "loc": 380,
     "purpose": "Finance-tuned sentiment scorer for news / reddit / youtube text."
    },
    {
+    "path": "src/agentic/screen_theme_leaders.py",
+    "loc": 191,
+    "purpose": "LIVE SCREEN \u2014 winner theme > hot industry > right-to-win names (2026-09-08)."
+   },
+   {
     "path": "src/agentic/sector_weak_shorts.py",
     "loc": 123,
     "purpose": "Sector-weak large-cap short overlay."
+   },
+   {
+    "path": "src/agentic/sim_leader_sleeve.py",
+    "loc": 109,
+    "purpose": "STRATEGY-LEVEL walk-forward sim of theme>industry>leader (reg. 2026-09-08)."
+   },
+   {
+    "path": "src/agentic/study_2x_by_pe_windows.py",
+    "loc": 125,
+    "purpose": "2x-ers x starting valuation x window (21/42/63/126 td ~ 30/60/90/180 days)."
    },
    {
     "path": "src/agentic/tape_forensics.py",
@@ -233,14 +413,29 @@
     "purpose": "Live tracker for the multibagger basket \u2014 proves whether the 90%-conviction"
    },
    {
+    "path": "src/agentic/train_150_confidence.py",
+    "loc": 203,
+    "purpose": "1.5x CONFIDENCE MODEL \u2014 P(+50% within 100td from ENTRY) for confirmed ignitions."
+   },
+   {
     "path": "src/agentic/write_live_prediction.py",
     "loc": 146,
     "purpose": "Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs."
    },
    {
+    "path": "src/agentic/daily_data_layer.sh",
+    "loc": 65,
+    "purpose": "DAILY DATA LAYER \u2014 every data feed, every trading day. Cron-scheduled (launchd is"
+   },
+   {
     "path": "src/agentic/final_run_20260818.sh",
     "loc": 58,
     "purpose": "FINAL RUN 2026-08-18 \u2014 on today's close, corrected CA adjustments, C2 contract."
+   },
+   {
+    "path": "src/agentic/friday_run_20260828.sh",
+    "loc": 148,
+    "purpose": "FRIDAY-ENTRY RUN (entry 2026-08-28 pre-open AMO) \u2014 checklist-by-checklist, data through Thu Aug-27 close."
    },
    {
     "path": "src/agentic/install_schedule.sh",
@@ -251,6 +446,56 @@
     "path": "src/agentic/monday_run_20260824.sh",
     "loc": 136,
     "purpose": "MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) \u2014 checklist-by-checklist, data through Fri Aug-21."
+   },
+   {
+    "path": "src/agentic/rerun_post_repair_20260827.sh",
+    "loc": 36,
+    "purpose": "POST-REPAIR RERUN (2026-08-27 ~23:55): classifier + engines + gate + basket + forensics"
+   },
+   {
+    "path": "src/agentic/resume_20260903_serial.sh",
+    "loc": 36,
+    "purpose": "Serial resume of the Sep-3 run \u2014 ONE process at a time (memory law 2026-09-03:"
+   },
+   {
+    "path": "src/agentic/resume_monday_20260824.sh",
+    "loc": 52,
+    "purpose": "Resume Monday run after macOS TCC blackout \u2014 items 9(partial)\u219212."
+   },
+   {
+    "path": "src/agentic/run_20260903.sh",
+    "loc": 36,
+    "purpose": "Sep-3 evening run \u2014 entry Sep-4 pre-open. Data layer already fresh (manual 20:00 run)."
+   },
+   {
+    "path": "src/agentic/run_basket_20260908.sh",
+    "loc": 17,
+    "purpose": "Sep-8 pre-open basket: waits for tonight's data layer, then SERIAL engines"
+   },
+   {
+    "path": "src/agentic/run_basket_20260908_par.sh",
+    "loc": 22,
+    "purpose": "Sep-8 basket, USER-AUTHORIZED max-memory mode (this run only): engines in"
+   },
+   {
+    "path": "src/agentic/run_pnl_fix_chain.sh",
+    "loc": 16,
+    "purpose": "Stage-C v2 refetch (context-date XBRL parse, financial files only) -> normalize"
+   },
+   {
+    "path": "src/agentic/run_pnl_parallel.sh",
+    "loc": 21,
+    "purpose": "Parallel P&L crawl driver (user-approved 2026-09-05: \"run parallel fetchers\")."
+   },
+   {
+    "path": "src/agentic/sgm_daily.sh",
+    "loc": 29,
+    "purpose": "SGM DAILY \u2014 post-close, every trading day (cron; launchd is TCC-blocked on this Mac)."
+   },
+   {
+    "path": "src/agentic/sgm_schedule.sh",
+    "loc": 20,
+    "purpose": "Install the SGM cron schedule (idempotent \u2014 replaces only lines tagged # SGM)."
    }
   ],
   "Backtests": [
@@ -308,6 +553,11 @@
     "path": "src/agentic/backtest_regime_gated.py",
     "loc": 119,
     "purpose": "Test if a regime gate improves the multibagger strategy. Compare:"
+   },
+   {
+    "path": "src/agentic/backtest_sleeve_walkforward.py",
+    "loc": 133,
+    "purpose": "SLEEVE WALK-FORWARD A/B \u2014 pre-registered 2026-08-29, run BEFORE any sleeve ships."
    }
   ],
   "Data fetchers": [
@@ -347,6 +597,11 @@
     "purpose": "Fetch commodity prices via FRED (Federal Reserve Economic Data) \u2014 free, no auth."
    },
    {
+    "path": "src/agentic/fetch_event_history_fleet.py",
+    "loc": 178,
+    "purpose": "EVENT-HISTORY FLEET \u2014 the deep-history feeds for 10-year event studies."
+   },
+   {
     "path": "src/agentic/fetch_fii_dii.py",
     "loc": 140,
     "purpose": "Fetch FII / DII daily provisional flows from NSE."
@@ -377,6 +632,11 @@
     "purpose": "Fetch global rates / risk indices via FRED \u2014 free, no auth."
    },
    {
+    "path": "src/agentic/fetch_india_vix.py",
+    "loc": 74,
+    "purpose": "Fetch India VIX history from NSE (historicalOR/vixhistory), windowed + checkpointed."
+   },
+   {
     "path": "src/agentic/fetch_industry_indicators.py",
     "loc": 138,
     "purpose": "Compute INDUSTRY/SECTOR aggregate indicators from existing prices parquet."
@@ -405,6 +665,11 @@
     "path": "src/agentic/fetch_pib_releases.py",
     "loc": 278,
     "purpose": "Fetch Press Information Bureau (PIB) press releases from 2016-present."
+   },
+   {
+    "path": "src/agentic/fetch_pnl_history.py",
+    "loc": 332,
+    "purpose": "P&L HISTORY CRAWL \u2014 quarterly results figures for the fair-value program (2026-09-05)."
    },
    {
     "path": "src/agentic/fetch_reddit.py",
@@ -442,13 +707,23 @@
     "purpose": "Pull recent videos from Indian-finance YouTube channels (RSS, no API key needed) and"
    },
    {
+    "path": "src/agentic/refetch_screener_qc.py",
+    "loc": 26,
+    "purpose": "One-off: fresh screener PE for the QC symbol set (reference for the valuation"
+   },
+   {
     "path": "src/agentic/refresh_announcements.py",
-    "loc": 94,
-    "purpose": "Incrementally extend the corp_announcements parquet by fetching the last 14 days"
+    "loc": 129,
+    "purpose": "Incrementally extend the corporate-announcements stores from NSE on every run."
+   },
+   {
+    "path": "src/agentic/refresh_corporate_actions.py",
+    "loc": 91,
+    "purpose": "Refresh the corporate-actions store (splits/bonuses) from NSE."
    },
    {
     "path": "src/agentic/refresh_prices.py",
-    "loc": 102,
+    "loc": 158,
     "purpose": "Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet."
    }
   ],
@@ -477,7 +752,7 @@
    },
    {
     "path": "src/agentic/generate_hybrid_basket.py",
-    "loc": 357,
+    "loc": 383,
     "purpose": "Generate the WEEKLY 15D/+5% hybrid basket."
    }
   ],
@@ -504,7 +779,7 @@
    },
    {
     "path": "src/agentic/find_high_conviction.py",
-    "loc": 325,
+    "loc": 331,
     "purpose": "Train 3 horizon\u00d7threshold models, calibrate to TRUE probability, then find"
    },
    {
@@ -546,7 +821,7 @@
    },
    {
     "path": "src/agentic/verify_freshness.py",
-    "loc": 310,
+    "loc": 339,
     "purpose": "Freshness gate \u2014 refuses to let the pipeline proceed if any critical input is stale."
    }
   ],
@@ -582,7 +857,7 @@
    },
    {
     "path": "src/agentic/run_weekly_pipeline.sh",
-    "loc": 252,
+    "loc": 294,
     "purpose": "WEEKLY 15D/+5% PIPELINE ORCHESTRATOR"
    }
   ],

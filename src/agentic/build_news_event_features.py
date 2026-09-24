@@ -41,7 +41,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import pandas as pd
-import numpy as np
 
 ROOT = Path("/Users/abhinavs./Documents/Zoom")
 NEWS_FEED = ROOT / "data/derived/news_feed.parquet"
@@ -200,6 +199,14 @@ def main() -> None:
         if not industry_panel.empty:
             stock_panel = stock_panel.merge(
                 industry_panel, on=["industry_hint", "trade_date"], how="left")
+
+    # The +30d padding in the panel builders wrote rows dated up to a month AHEAD of today
+    # (found 2026-09-24: max trade_date 2026-10-23), which kept the NEWS_EVENTS freshness
+    # contract green no matter how stale the event store was. A trailing window can only
+    # end on a day that has happened.
+    if not stock_panel.empty:
+        today_ist = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None)
+        stock_panel = stock_panel[pd.to_datetime(stock_panel["trade_date"]) <= today_ist]
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     stock_panel.to_parquet(OUT, index=False)

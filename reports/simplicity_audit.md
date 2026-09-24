@@ -1,12 +1,13 @@
-# Simplicity Audit — 2026-07-07T18:35:36
+# Simplicity Audit — 2026-09-23T20:04:32
 
-**Scanned**: 191 files · 45,159 LOC · **162 findings**
+**Scanned**: 238 files · 52,318 LOC · **185 findings**
 
 Policy: stdlib-first, simplest correct solution, no speculative abstraction.
 Findings are candidates for deletion/simplification — audit never auto-rewrites.
 
-## Dead functions (defined, never referenced anywhere) — 9
+## Dead functions (defined, never referenced anywhere) — 10
 
+- `src/agentic/build_data_inventory_report.py` **year_counts** — line 9
 - `src/agentic/build_news_event_features.py` **load_news** — line 76
 - `src/agentic/fetch_forex_macro.py` **stooq_csv** — line 51
 - `src/ingest/fundamentals/interface.py` **load_fundamentals** — line 24
@@ -20,8 +21,13 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Dead classes — 0
 
 
-## Unused imports — 76
+## Unused imports — 89
 
+- `src/agentic/ab_event_features_15d.py` **sys** — from sys
+- `src/agentic/ab_event_rules_15d.py` **re** — from re
+- `src/agentic/ab_event_rules_15d.py` **sys** — from sys
+- `src/agentic/ab_fresh_leader.py` **np** — from numpy
+- `src/agentic/ab_vol_gate.py` **sys** — from sys
 - `src/agentic/analyze_superstar_alpha.py` **np** — from numpy
 - `src/agentic/analyze_superstar_horizons.py` **np** — from numpy
 - `src/agentic/backtest_10yr.py` **np** — from numpy
@@ -56,6 +62,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/fetch_global_macro.py` **timedelta** — from datetime
 - `src/agentic/fetch_news_per_symbol.py` **re** — from re
 - `src/agentic/fetch_pib_releases.py` **sys** — from sys
+- `src/agentic/fetch_pnl_history.py` **ET** — from xml
 - `src/agentic/fetch_reddit.py` **hashlib** — from hashlib
 - `src/agentic/fetch_screener_fundamentals.py` **timezone** — from datetime
 - `src/agentic/fetch_screener_screens.py` **timezone** — from datetime
@@ -69,33 +76,35 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/find_multibagger_today.py` **np** — from numpy
 - `src/agentic/generate_event_driven_today.py` **timedelta** — from datetime
 - `src/agentic/generate_event_driven_today.py` **np** — from numpy
-- `src/agentic/generate_hybrid_basket.py` **np** — from numpy
 - `src/agentic/generate_pro_brief.py` **np** — from numpy
 - `src/agentic/generate_trade_plan.py` **np** — from numpy
 - `src/agentic/hypothesis_agent.py` **pd** — from pandas
 - `src/agentic/inspect_symbol.py` **sys** — from sys
 - `src/agentic/joint_signal_analyzer.py` **np** — from numpy
-- `src/agentic/miss_learner.py` **timedelta** — from datetime
-- `src/agentic/miss_learner.py` **np** — from numpy
-- `src/agentic/paper_trading_recorder.py` **json** — from json
-- `src/agentic/portfolio_sizer.py` **np** — from numpy
-- `src/agentic/risk_envelope.py` **np** — from numpy
-- `src/agentic/run_multi_horizon.py` **json** — from json
-- `src/agentic/run_multi_horizon.py` **np** — from numpy
-- … and 16 more
+- `src/agentic/mine_doubler_ignition.py` **np** — from numpy
+- `src/agentic/mine_fast_double_conditional.py` **sys** — from sys
+- … and 29 more
 
 ## Single-method stateless classes (should be functions) — 0
 
 
-## Trivial wrappers (single-call bodies) — 24
+## Trivial wrappers (single-call bodies) — 32
 
+- `src/agentic/ab_event_features_15d.py` **had** — line 138
+- `src/agentic/ab_valuation_3h.py` **fwd** — line 135
 - `src/agentic/agent_loop.py` **load_registry** — line 52
+- `src/agentic/autopsy_leader_winners.py` **B** — line 111
 - `src/agentic/backtest_10yr_15d5pct.py` **qc** — line 124
 - `src/agentic/backtest_hybrid_15d5pct.py` **qc** — line 118
+- `src/agentic/backtest_sleeve_walkforward.py` **fwd_max** — line 38
 - `src/agentic/build_dashboard.py` **extract_mermaid** — line 65
 - `src/agentic/build_html_viewer.py` **extract_mermaid_blocks** — line 23
 - `src/agentic/fetch_announcements_historical.py` **has_chunk** — line 65
 - `src/agentic/fetch_pib_releases.py` **has_shard** — line 120
+- `src/agentic/mine_doubler_ignition.py` **fwd** — line 40
+- `src/agentic/mine_fast_double_conditional.py` **fwd** — line 52
+- `src/agentic/mine_highvol_subcohorts.py` **fend** — line 51
+- `src/agentic/mine_industry_contagion.py` **fwd** — line 37
 - `src/analysis/week7_15pct_cluster_rerank_compare.py` **_make_relaxed_rule** — line 83
 - `src/analysis/week7_15pct_random_forest_allnames.py` **_combine_focus_score** — line 55
 - `src/analysis/week7_universe_contextual_bandit.py` **_bool_to_float** — line 60
@@ -117,10 +126,10 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Duplicated function bodies (shape-identical) — 32
 
 - `2 copies` **build_panel** — src/agentic/ab_test_event_features.py:build_panel, src/agentic/ab_test_event_polarity.py:build_panel
+- `2 copies` **c2** — src/agentic/ab_vol_gate.py:c2, src/agentic/ab_zscore_bands.py:c2
 - `2 copies` **build_panel** — src/agentic/backtest_10yr.py:build_panel, src/agentic/backtest_10yr_macro.py:build_panel
 - `2 copies` **snap_features** — src/agentic/backtest_10yr_15d5pct.py:snap_features, src/agentic/backtest_hybrid_15d5pct.py:snap_features
 - `2 copies` **load_oof** — src/agentic/backtest_event_driven.py:load_oof, src/agentic/backtest_event_window.py:load_oof
-- `2 copies` **load_prices** — src/agentic/backtest_hybrid_15d5pct.py:load_prices, src/agentic/train_missed_winner_classifier.py:load_prices
 - `4 copies` **build_panel** — src/agentic/backtest_multibagger_strategy.py:build_panel, src/agentic/find_achievable_targets.py:build_panel, src/agentic/find_multibagger_targets.py:build_panel, src/agentic/find_multibagger_today.py:build_panel
 - `3 copies` **build_target** — src/agentic/backtest_multibagger_strategy.py:build_target, src/agentic/find_multibagger_targets.py:build_target, src/agentic/find_multibagger_today.py:build_target
 - `2 copies` **fred_csv** — src/agentic/fetch_commodity_prices.py:fred_csv, src/agentic/fetch_global_rates.py:fred_csv
@@ -173,14 +182,23 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/analysis/week7_5pct_gbm_allnames_macro_veto.py` **** — 1054 LOC
 - `src/report/production_weekly_run.py` **** — 989 LOC
 
-## Functions nested > 5 deep — 3
+## Functions nested > 5 deep — 4
 
 - `src/agentic/miss_learner.py` **analyze_misses** — depth>5
+- `src/agentic/repair_ca_adjustments.py` **main** — depth>5
 - `src/agentic/simplicity_auditor.py` **audit** — depth>5
 - `src/analysis/week7_15pct_meta_rerank_compare.py` **_run_single_model** — depth>5
 
-## Debt ledger — 3 open / 4 total
+## Debt ledger — 11 open / 12 total
 
 - 2026-07-07 `src/agentic/generate_hybrid_basket.py` — ML>=0.85 penalty (-0.5 band_fit) routes around classifier overconfidence instead of recalibrating the classifier (why: ship corrected basket same day as the 10-yr backtest finding; loc 8; speed none)
 - 2026-07-07 `src/agentic/backtest_10yr_15d5pct.py` — band-fit>=2 subset not yet re-run under day-by-day sequenced exits (why: day-by-day correction landed 2026-07-07; full rerun takes hours; loc 0; speed unknown until rerun)
 - 2026-07-07 `src/agentic/fetch_global_macro.py` — nifty_50/bank_nifty/shcomp/gold have NO fallback source when Yahoo 429s (why: FRED has no NSE index series; alternates need research; loc 0; speed none)
+- 2026-09-19 `reconcile_20260919.sh / generate_hybrid_basket.py` — Convergence check 3 tests generator determinism on identical live inputs, not a full engine-retrain reproduce of an OLD committed basket (why: engines and generator take no --data-through arg; truncating the 5M-row panel to a past date is a multi-hour serial run; loc 40; speed none)
+- 2026-09-19 `src/agentic/find_high_conviction.py / run_weekly_pipeline.sh step 1 / verify_freshness.py` — extra_features.parquet (HC engine join, 123 cols) is 3 months stale and ungated; left as-is this run (why: feature_factory.py loads the full 5M-row panel plus 8 side inputs — unprofiled under the 55GB memory law; and fresh vs median-filled extras is a model change that needs a pre-registered walk-forward A/B, not a hot swap on basket night; loc 15; speed +? min/week (unprofiled))
+- 2026-09-19 `src/agentic/verify_freshness.py MACRO_PANEL contract` — breadth_50/adv_decl_ratio (price-derived) not column-checked; 7 FRED spread columns dead since Apr-30 with no contract (why: found during 09-19 reconcile; adding contracts without fixing fetch_global_rates.py would hard-block every basket; loc 6; speed none)
+- 2026-09-19 `src/agentic/render_basket_report.py _eta_days` — ETA is vol-implied median first-passage (0.45*(0.05/vol)^2), not calibrated on realized touch times (why: first report needed today; the 4,222-trade day-by-day backtest has the realized days-to-touch to calibrate against; loc 20; speed none)
+- 2026-09-23 `src/agentic/sim_leader_sleeve.py maxdd_of_cohort_path (used by EXP-2026-09-23-extended-leader)` — maxDD is the sim's smoothed rolling-26 proxy, not a true overlapping-cohort daily NAV (why: 6e had to use the metric the registered +11.1/+19.3% leader result was judged on; changing it mid-experiment would be a second experiment; loc +40; speed +1 min)
+- 2026-09-23 `src/agentic/screen_theme_leaders.py EXTENDED_ONLY filter` — filter validated on the core band (ADV>=5cr, close>50) but the live screen still lists expanded-band names (e.g. RSWM, band exp) (why: spec 6a keeps the band tag as evidence, not a filter; sim has no expanded-band arm; loc +10; speed 0)
+- 2026-09-23 `src/agentic/screen_theme_leaders.py --asof replays` — industry map = modal smIndustry over all announcements (not point-in-time); SHP filtered by quarter_end<=asof without disclosure lag (why: forward screens (asof = panel max) are unaffected; only historical replays can leak; loc +8; speed 0)
+- 2026-09-23 `logs/leader_sleeve/screen_20260908.json` — backfilled from reports/theme_leaders_20260908.md (the committed artifact), industry names truncated to 29 chars as printed; close/own252 recomputed from panel as of 2026-09-07 (why: the 09-08 screen predates the JSON output; re-running --asof 20260907 on today's (repaired, CA-rescaled) panel would not reproduce the issued list exactly; loc 0; speed 0)

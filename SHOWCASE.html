@@ -2403,10 +2403,10 @@ the rebuild complete:
 Then commit everything and push to a new private GitHub repo.
 
 ═══ CURRENT INVENTORY (auto-generated) ═══
-As of 2026-08-23 · 122 files · 26,205 LOC · regenerated on every
+As of 2026-09-23 · 177 files · 33,313 LOC · regenerated on every
 weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
 
-[Data fetchers]  (28)
+[Data fetchers]  (33)
   src/agentic/build_macro_panel.py                     — Consolidate ALL macro/aggregate features into a single daily panel.
   src/agentic/build_news_event_features.py             — News + corporate-event feature builder — 5d and 15d windows, stock + industry.
   src/agentic/fetch_amfi_mf_holdings.py                — Fetch AMFI mutual-fund AUM data — non-conventional ownership signal.
@@ -2414,18 +2414,21 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/fetch_block_deals.py                     — Fetch NSE block deals + bulk deals and turn them into a per-stock smart-money signal.
   src/agentic/fetch_broker_recos.py                    — Aggregate published broker / advisor stock recommendations from free public sources.
   src/agentic/fetch_commodity_prices.py                — Fetch commodity prices via FRED (Federal Reserve Economic Data) — free, no auth.
+  src/agentic/fetch_event_history_fleet.py             — EVENT-HISTORY FLEET — the deep-history feeds for 10-year event studies.
   src/agentic/fetch_fii_dii.py                         — Fetch FII / DII daily provisional flows from NSE.
   src/agentic/fetch_forex_macro.py                     — Fetch macro time-series — USDINR, Brent, India 10y yield, India VIX.
   src/agentic/fetch_fundamentals.py                    — Enrich the universe with fundamentals ratios per stock from NSE.
   src/agentic/fetch_global_macro.py                    — Cross-country macro fetcher — global signals affecting India.
   src/agentic/fetch_global_macro_sentiment.py          — Macro-level sentiment — country, market, commodity, central-bank headlines.
   src/agentic/fetch_global_rates.py                    — Fetch global rates / risk indices via FRED — free, no auth.
+  src/agentic/fetch_india_vix.py                       — Fetch India VIX history from NSE (historicalOR/vixhistory), windowed + checkpointed.
   src/agentic/fetch_industry_indicators.py             — Compute INDUSTRY/SECTOR aggregate indicators from existing prices parquet.
   src/agentic/fetch_market_breadth.py                  — Compute MARKET BREADTH features from existing prices parquet.
   src/agentic/fetch_news_per_symbol.py                 — Per-symbol news enrichment via Google News RSS.
   src/agentic/fetch_news_rss.py                        — Pull RSS feeds for Indian-market news and tag each item with mentioned NSE symbols.
   src/agentic/fetch_options_chain.py                   — Fetch NSE F&O options chain data for each F&O underlying and write per-stock
   src/agentic/fetch_pib_releases.py                    — Fetch Press Information Bureau (PIB) press releases from 2016-present.
+  src/agentic/fetch_pnl_history.py                     — P&L HISTORY CRAWL — quarterly results figures for the fair-value program (2026-09-05).
   src/agentic/fetch_reddit.py                          — Pull recent posts from public Reddit JSON for India-investing subs.
   src/agentic/fetch_screener_fundamentals.py           — Fetch comprehensive fundamentals from Screener.in per-company pages.
   src/agentic/fetch_screener_screens.py                — Pull curated Screener.in stock screens — FII/DII buying, promoter buying, etc.
@@ -2433,7 +2436,9 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/fetch_superstar_holdings.py              — Fetch publicly disclosed 'Superstar' investor holdings from Tickertape.
   src/agentic/fetch_wiki_pageviews.py                  — Fetch Wikipedia page-view counts as a retail-attention proxy.
   src/agentic/fetch_youtube.py                         — Pull recent videos from Indian-finance YouTube channels (RSS, no API key needed) and
-  src/agentic/refresh_announcements.py                 — Incrementally extend the corp_announcements parquet by fetching the last 14 days
+  src/agentic/refetch_screener_qc.py                   — One-off: fresh screener PE for the QC symbol set (reference for the valuation
+  src/agentic/refresh_announcements.py                 — Incrementally extend the corporate-announcements stores from NSE on every run.
+  src/agentic/refresh_corporate_actions.py             — Refresh the corporate-actions store (splits/bonuses) from NSE.
   src/agentic/refresh_prices.py                        — Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet.
 
 [ML engines]  (8)
@@ -2446,7 +2451,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/find_multibagger_today.py                — Pick today's stocks that hit ≥ 90% calibrated probability of doubling
   src/agentic/run_multi_horizon.py                     — Multi-horizon ensemble: 1d, 7d, 21d models stacked.
 
-[Backtests]  (11)
+[Backtests]  (12)
   src/agentic/backtest_10yr.py                         — 10-year walk-forward backtest of the v3 ensemble (2016 → 2025).
   src/agentic/backtest_10yr_15d5pct.py                 — PROPER 10-YEAR BACKTEST — 15D/+5% hybrid pipeline.
   src/agentic/backtest_10yr_macro.py                   — 9-year walk-forward backtest WITH macro-enriched feature set.
@@ -2458,6 +2463,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/backtest_multibagger_strategy.py         — Backtest the multibagger strategy: every week in 2024-2025, pick the
   src/agentic/backtest_news_features.py                — News-feature A/B backtest.
   src/agentic/backtest_regime_gated.py                 — Test if a regime gate improves the multibagger strategy. Compare:
+  src/agentic/backtest_sleeve_walkforward.py           — SLEEVE WALK-FORWARD A/B — pre-registered 2026-08-29, run BEFORE any sleeve ships.
 
 [QC / gates]  (5)
   src/agentic/data_completeness.py                     — Data completeness audit — runs daily, fails LOUDLY if any stock in the
@@ -2498,25 +2504,41 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   prompts/INDEX.md                                     — Agent Prompts — Index
   prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
 
-[Other tools]  (50)
+[Other tools]  (99)
+  src/agentic/ab_deepcheap_leader_bands.py             — Deep-cheap leader bands (registered 2026-09-08): leader sleeve restricted to
+  src/agentic/ab_event_features_15d.py                 — A/B — do the new event-history features improve the 15D/+5% prediction?
+  src/agentic/ab_event_rules_15d.py                    — A/B round 2 — reaction-signed print feature + veto/boost RULES on the 15d basket.
+  src/agentic/ab_fresh_leader.py                       — FRESH vs EXTENDED leaders (registered 2026-09-08) + live yet-to-run screen.
+  src/agentic/ab_m4_exits_boost_upgrade.py             — M4 (valuation-shaped exits) + BOOST-UPGRADE (SUE-confirmed good print).
+  src/agentic/ab_quiet_good_print_15d.py               — M1 — QUIET GOOD PRINT overlay on the 15d z-band pool. Registered 2026-09-07
   src/agentic/ab_test_event_features.py                — A/B test: does adding 11.3y of catalyst/event features lift the 5%/15d model?
   src/agentic/ab_test_event_polarity.py                — 4-arm A/B test on the 5%/15d model:
+  src/agentic/ab_text_15d_m2m3.py                      — M2 (landmine veto) + M3 (tone-of-quiet) at 15d — universe-wide per the
+  src/agentic/ab_turnaround_inflection.py              — TURNAROUND INFLECTION — registered 2026-09-08 (follow-up to 2x-by-PE study).
+  src/agentic/ab_valuation_3h.py                       — VALUATION-DEVIATION A/B — 3 horizons. Pre-registered 2026-09-05 (see ledger
+  src/agentic/ab_vol_gate.py                           — A/B — market-VOLATILITY exposure gates on the 15d contract. Pre-registered 2026-09-03.
+  src/agentic/ab_zscore_bands.py                       — A/B: ABSOLUTE entry bands (current prod) vs Z-SCORE bands (each stock's own scale).
   src/agentic/agent_loop.py                            — Agent loop — one cycle of hypothesis → fetch → compile → evaluate → verdict.
   src/agentic/analyze_regime_for_strategy.py           — Analyze WHY the multibagger strategy worked in Feb/Sep 2024 and failed
   src/agentic/analyze_superstar_alpha.py               — Analyze whether superstar-held stocks deliver alpha vs non-held.
   src/agentic/analyze_superstar_horizons.py            — Multi-horizon superstar-confluence analysis.
+  src/agentic/autopsy_leader_paths.py                  — HINDSIGHT autopsy of the hot-industry leader cell (2026-09-23). DESCRIPTIVE — no ship bar.
+  src/agentic/autopsy_leader_winners.py                — Winners autopsy INSIDE the hot-industry leader cell (reg. 2026-09-08).
   src/agentic/build_academic_alphas.py                 — Operationalize alpha factors from academic finance literature.
   src/agentic/build_catalyst_features.py               — Per-(symbol, trade_date) catalyst feature matrix from tagged announcements + insider trades.
   src/agentic/build_chart_signals.py                   — Multi-timeframe chart pattern + technical signal detector.
   src/agentic/build_confluence_picks.py                — Aggregate confluence picker — find stocks where MULTIPLE independent
   src/agentic/build_dashboard.py                       — Public dashboard — built around Jobs-To-Be-Done.
+  src/agentic/build_data_inventory_report.py           — Assemble reports/data_inventory_20260830.md — deep-history acquisition QC.
   src/agentic/build_derived_ratios.py                  — Compute derived ratios from existing fundamentals — 50+ new factors
+  src/agentic/build_doubler_audit_report.py            — Assemble reports/doubler_audit_20260828.md from the audit artifacts.
   src/agentic/build_event_polarity.py                  — Build TWO new sets of polarity-aware event features:
   src/agentic/build_handoff.py                         — Regenerate HANDOFF.md with current state snapshot.
   src/agentic/build_html_viewer.py                     — Build a single self-contained HTML file that renders all the mermaid
   src/agentic/build_workflow_diagram.py                — Auto-generate a Mermaid workflow diagram from daily_pipeline.sh.
   src/agentic/catalyst_tagger.py                       — NLP-tag NSE corporate announcements into catalyst categories.
   src/agentic/compute_feature_importance.py            — Compute feature-importance for the v3 long ensemble + tag each feature
+  src/agentic/eval_panel_coverage.py                   — DAILY EVAL — is every stock that traded actually in the panel, at today's date?
   src/agentic/factor_evaluator.py                      — Factor evaluator — measure each new feature's lift on 7d-forward return.
   src/agentic/factor_evaluator_macro.py                — Macro-aware factor evaluator — for date-level (NOT cross-sectional) features.
   src/agentic/factor_registry.py                       — Factor / data hypothesis registry — the "what to try next" catalog.
@@ -2533,22 +2555,55 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/joint_signal_analyzer.py                 — Joint-signal analyzer.
   src/agentic/lean_shadow_check.py                     — Lean shadow check — every weekly run, compute the engine-free basket and diff vs prod.
   src/agentic/make_data_snapshot.py                    — Build the bootstrap data snapshot — the minimal set a cloner needs to run the system.
+  src/agentic/make_full_archive.py                     — Full lossless data archive — every byte of fetched + derived data, compressed and volumed.
+  src/agentic/mine_doubler_ignition.py                 — DOUBLER IGNITION MINER — walk-forward test of pre-registered 2x-ignition cells.
+  src/agentic/mine_fast_double_conditional.py          — CONDITIONAL FAST-DOUBLE MINER — pre-registered 2026-08-31.
+  src/agentic/mine_highvol_subcohorts.py               — HIGH-VOL SUB-COHORT MINER — find the conditional structure inside the 'scary' cohort.
+  src/agentic/mine_industry_contagion.py               — INDUSTRY-CONTAGION MINER — pre-registered 2026-09-03 (user hypothesis).
+  src/agentic/model_2x_walkforward.py                  — THE 2X MODEL — P(touch 2x within x td | everything knowable at T), walk-forward 2016→2026.
   src/agentic/monitor_for_conviction.py                — Daily conviction monitor — fires alerts at the 0.95 calibrated band.
+  src/agentic/paper_sleeve.py                          — PAPER SLEEVE — 100td-hold momentum/ignition sleeve, paper-tracked weekly.
   src/agentic/paper_trading_recorder.py                — Paper-trading recorder: every run, score yesterday's brief picks against
   src/agentic/portfolio_sizer.py                       — Portfolio sizer: given today's long/short candidates, produce a sized,
+  src/agentic/qc_eps_vs_screener_table.py              — QC v2 (amended referee, ledgered 2026-09-07): our last-4 quarterly EPS vs the
+  src/agentic/render_basket_report.py                  — Render the two human-facing basket reports from the committed basket JSON.
+  src/agentic/render_leader_report.py                  — LEADER SLEEVE report — reports/leader_sleeve_<session>.md, every session.
+  src/agentic/repair_be_series_gaps.py                 — Backfill BE/BZ-series gap rows (2025-01-01 onward) into stock_daily_facts.
+  src/agentic/repair_ca_adjustments.py                 — REPAIR CA ADJUSTMENTS — fix unadjusted split/bonus cliffs in the prices parquet.
+  src/agentic/replay_engines_asof_20260401.py          — APRIL-1 ENGINE REPLAY — what would mb / 180d / hc have flagged on 2026-04-01?
   src/agentic/risk_envelope.py                         — Risk envelope — codify the user's stated bounds:
+  src/agentic/run_daily_layer.py                       — Cron wrapper for daily_data_layer.sh.
   src/agentic/run_model_diversity.py                   — Train 5 diverse model families on the same feature set + label.
   src/agentic/run_short_side.py                        — Short-side model: predict P(stock falls >= 5% in any of next 7 trading days,
   src/agentic/run_v3_with_catalysts.py                 — v3 ensemble: v2 features (40) + catalyst features (~17) = ~57 features.
   src/agentic/score_basket_outcomes.py                 — Score our own past baskets weekly — the self-scoring half of the RL loop.
+  src/agentic/score_engine_attribution.py              — ENGINE ATTRIBUTION — archive every engine's flags weekly, score them against reality.
+  src/agentic/score_filings_finbert.py                 — UNIVERSE-WIDE filing scorer (law 2026-09-08: ALL stocks, ALL variables).
+  src/agentic/score_leader_sleeve.py                   — LEADER SLEEVE forward scorer — replays every immutable screen day by day.
   src/agentic/score_sentiment.py                       — Finance-tuned sentiment scorer for news / reddit / youtube text.
+  src/agentic/screen_theme_leaders.py                  — LIVE SCREEN — winner theme > hot industry > right-to-win names (2026-09-08).
   src/agentic/sector_weak_shorts.py                    — Sector-weak large-cap short overlay.
+  src/agentic/sim_leader_sleeve.py                     — STRATEGY-LEVEL walk-forward sim of theme>industry>leader (reg. 2026-09-08).
+  src/agentic/study_2x_by_pe_windows.py                — 2x-ers x starting valuation x window (21/42/63/126 td ~ 30/60/90/180 days).
   src/agentic/tape_forensics.py                        — Tape forensics — the deep per-name scrutiny, applied to EVERY basket name, every run.
   src/agentic/track_multibagger_basket.py              — Live tracker for the multibagger basket — proves whether the 90%-conviction
+  src/agentic/train_150_confidence.py                  — 1.5x CONFIDENCE MODEL — P(+50% within 100td from ENTRY) for confirmed ignitions.
   src/agentic/write_live_prediction.py                 — Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs.
+  src/agentic/daily_data_layer.sh                      — DAILY DATA LAYER — every data feed, every trading day. Cron-scheduled (launchd is
   src/agentic/final_run_20260818.sh                    — FINAL RUN 2026-08-18 — on today's close, corrected CA adjustments, C2 contract.
+  src/agentic/friday_run_20260828.sh                   — FRIDAY-ENTRY RUN (entry 2026-08-28 pre-open AMO) — checklist-by-checklist, data through Thu Aug-27 close.
   src/agentic/install_schedule.sh                      — Install / reinstall the launchd schedule for the daily pipeline.
   src/agentic/monday_run_20260824.sh                   — MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) — checklist-by-checklist, data through Fri Aug-21.
+  src/agentic/rerun_post_repair_20260827.sh            — POST-REPAIR RERUN (2026-08-27 ~23:55): classifier + engines + gate + basket + forensics
+  src/agentic/resume_20260903_serial.sh                — Serial resume of the Sep-3 run — ONE process at a time (memory law 2026-09-03:
+  src/agentic/resume_monday_20260824.sh                — Resume Monday run after macOS TCC blackout — items 9(partial)→12.
+  src/agentic/run_20260903.sh                          — Sep-3 evening run — entry Sep-4 pre-open. Data layer already fresh (manual 20:00 run).
+  src/agentic/run_basket_20260908.sh                   — Sep-8 pre-open basket: waits for tonight's data layer, then SERIAL engines
+  src/agentic/run_basket_20260908_par.sh               — Sep-8 basket, USER-AUTHORIZED max-memory mode (this run only): engines in
+  src/agentic/run_pnl_fix_chain.sh                     — Stage-C v2 refetch (context-date XBRL parse, financial files only) -> normalize
+  src/agentic/run_pnl_parallel.sh                      — Parallel P&L crawl driver (user-approved 2026-09-05: "run parallel fetchers").
+  src/agentic/sgm_daily.sh                             — SGM DAILY — post-close, every trading day (cron; launchd is TCC-blocked on this Mac).
+  src/agentic/sgm_schedule.sh                          — Install the SGM cron schedule (idempotent — replaces only lines tagged # SGM).
 
 ═══ END INVENTORY ═══
 
