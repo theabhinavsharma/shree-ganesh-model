@@ -1,0 +1,39 @@
+symbol,company_name,analog_symbol,basis,confidence
+ALSTOMT&D,GE T&D India Limited,GVT&D,same company (renamed GET&D then GVT&D; NSE rename chain incomplete),high
+BHARATFIN,Bharat Financial Inclusion Limited,CREDITACC,microfinance NBFC (merged into IndusInd 2019); peer analog,medium
+SKSMICRO,Bharat Financial Inclusion Limited (ex SKS Microfinance),CREDITACC,same company as BHARATFIN; microfinance NBFC peer analog,medium
+BURGERKING,Burger King India Limited,RBA,same company (renamed Restaurant Brands Asia),high
+HITACHIHOM,Johnson Controls - Hitachi Air Conditioning India Limited,BLUESTARCO,room/commercial air-conditioner maker; peer analog,high
+IBULISL,Yaari Digital Integrated Services Limited,YAARI,same company (renamed),high
+SORILHOLD,Yaari Digital Integrated Services Limited,YAARI,same company (renamed),high
+YAARII,Yaari Digital Integrated Services Limited,YAARI,same company (series/symbol variant),high
+KARDA,KBC Global Limited (ex Karda Constructions),KBCGLOBAL,same company (renamed),high
+LTI,LTIMindtree Limited (ex Larsen & Toubro Infotech),LTIM,same company (renamed),high
+PHILIPCARB,Phillips Carbon Black (now PCBL),PCBL,same company (renamed),high
+RDEL,Reliance Naval and Engineering Limited,COCHINSHIP,shipbuilding/defence shipyard; peer analog,medium
+RNAVAL,Reliance Naval and Engineering Limited,COCHINSHIP,same company as RDEL; shipyard peer analog,medium
+RUCHI,Ruchi Soya Industries (now Patanjali Foods),PATANJALI,same company (renamed),high
+SYNDIBANK,Syndicate Bank,CANBK,PSU bank (merged into Canara Bank 2020); peer analog,high
+WABCOINDIA,WABCO India (now ZF Commercial Vehicle Control Systems India),ZFCVINDIA,same company (renamed),high
+ALBK,Allahabad Bank,INDIANB,PSU bank merged into Indian Bank 2020,high
+ANDHRABANK,Andhra Bank,UNIONBANK,PSU bank merged into Union Bank 2020,high
+CORPBANK,Corporation Bank,UNIONBANK,PSU bank merged into Union Bank 2020,high
+ORIENTBANK,Oriental Bank of Commerce,PNB,PSU bank merged into PNB 2020,high
+VIJAYABANK,Vijaya Bank,BANKBARODA,PSU bank merged into Bank of Baroda 2019,high
+MYSOREBANK,State Bank of Mysore,SBIN,SBI associate merged into SBI 2017,high
+SBBJ,State Bank of Bikaner and Jaipur,SBIN,SBI associate merged into SBI 2017,high
+SBT,State Bank of Travancore,SBIN,SBI associate merged into SBI 2017,high
+LAKSHVILAS,Lakshmi Vilas Bank,KARURVYSYA,old private bank (amalgamated into DBS India 2020); peer analog,medium
+CAIRN,Cairn India,OIL,oil and gas E&P (merged into Vedanta 2017); peer analog,high
+DHFL,Dewan Housing Finance,LICHSGFIN,housing finance company; peer analog,high
+GRUH,Gruh Finance,LICHSGFIN,housing finance company (merged into Bandhan Bank 2019); peer analog,high
+EXCELCROP,Excel Crop Care,SUMICHEM,agrochemicals (merged into Sumitomo Chemical India),high
+MONSANTO,Monsanto India,BAYERCROP,agrochemicals/seeds (merged into Bayer CropScience),high
+GEOMETRIC,Geometric Limited,MPHASIS,IT services/engineering software (merged into HCL Tech 2016); peer analog,medium
+INFINITE,Infinite Computer Solutions,MPHASIS,IT services; peer analog,medium
+POLARIS,Polaris Consulting & Services,MPHASIS,IT services (acquired by Virtusa); peer analog,medium
+MANDHANA,Mandhana Industries,RSWM,textile fabrics/garments; peer analog,medium
+SANDESH,Sandesh Limited,JAGRAN,Gujarati newspaper publisher; peer analog,high
+SHILPI,Shilpi Cable Technologies,KEI,wires and cables; peer analog,medium
+TAJGVK,Taj GVK Hotels & Resorts,INDHOTEL,hotels (Taj-managed); peer analog,high
+ZANDUREALT,Zandu Realty,DLF,real estate; peer analog,low

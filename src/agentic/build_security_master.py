@@ -104,6 +104,16 @@ def main() -> None:
     m = span.copy()
     m["isin"] = m.index.map(isin)
     m["is_fund_unit"] = m["isin"].astype(str).str.startswith("INF") | m.index.isin(set(etf["symbol"]))
+    # dead ETFs have no ISIN on record: flag by registered name (announcements / CA / symbolchange)
+    names = pd.concat([refs["symbolchange"].set_index("old")["name"],
+                       pd.read_parquet(ROOT / "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet",
+                                       columns=["symbol", "company_name"]).dropna().drop_duplicates("symbol").set_index("symbol")["company_name"],
+                       pd.read_parquet(ROOT / "data/derived/announcements_historical.parquet", columns=["symbol", "sm_name"])
+                         .dropna().drop_duplicates("symbol").set_index("symbol")["sm_name"]])
+    names = names[~names.index.duplicated(keep="last")]
+    m["company_name"] = m.index.map(names)
+    by_name = m["company_name"].astype(str).str.contains(r"Mutual Fund|\bETF\b|Exchange Traded|Liquid BeES|Index Fund", case=False, regex=True)
+    m["is_fund_unit"] = m["is_fund_unit"] | (by_name & ~m["isin"].astype(str).str.startswith("INE"))
 
     sm = _mode(pd.read_parquet(ROOT / "data/derived/announcements_historical.parquet", columns=["symbol", "smIndustry"]), "smIndustry")
     hint = _mode(pd.read_parquet(ROOT / "data/events_full_history/normalized/stock_announcements.parquet",
@@ -143,7 +153,8 @@ def main() -> None:
         sources=dict(isin="raw cm*bhav.csv.zip 2016-2024 + EQUITY_L.csv + eq_etfseclist.csv (nsearchives)",
                      renames="symbolchange.csv (nsearchives)", industry="announcements_historical.smIndustry > stock_announcements.industry_hint > same-ISIN > rename chain"),
         columns=dict(symbol="NSE symbol as in the price panel", first_trade="first panel session", last_trade="last panel session",
-                     isin="latest ISIN seen (INE = company, INF = MF/ETF unit)", is_fund_unit="ETF/MF unit: ISIN INF* or in NSE ETF list",
+                     isin="latest ISIN seen (INE = company, INF = MF/ETF unit)", is_fund_unit="ETF/MF unit: ISIN INF*, in NSE ETF list, or (no INE ISIN and) registered name says Mutual Fund/ETF",
+                     company_name="registered name (NSE symbolchange / CA store / announcements)",
                      industry="NSE industry label (smIndustry taxonomy); NULL = unknown, never guessed",
                      industry_source="provenance of industry", renamed_to="new symbol(s) per NSE symbolchange.csv"),
         survivorship_note="industry_hint exists only for names filing in 2026 (survivors); backtests must report results with and without hint-sourced labels",

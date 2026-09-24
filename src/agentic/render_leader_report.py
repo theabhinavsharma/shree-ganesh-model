@@ -28,9 +28,10 @@ FULLTEXT = ROOT / "data/derived/filing_fulltext.parquet"     # fetch_filing_text
 TAKEOVER_RE = r"open offer|detailed public statement|draft letter of offer"
 NEWS_DAYS = 30
 HOLD_TD, PAPER_MIN_COHORTS = 126, 13
-# P(touched 2x within 126td) by sim cell and era — logs/leader_sleeve/exp_extended_20260923.log
-# (sim_leader_sleeve.py on the repaired panel, core band, weekly cohorts 2016-06..2026).
-PRIOR_2X = {"LEADER & cheap": (6.4, 12.3), "EXTENDED": (7.2, 8.9), "FRESH": (2.1, 6.9)}
+# P(touched 2x within 126td) by sim cell and era. EXTENDED = production cell on the full nse4
+# universe (sim_leader_cell_v2 --map nse4, survivorship-clean). Cheap/fresh cells: v1 sim on the
+# old smIndustry map (logs/leader_sleeve/exp_extended_20260923.log) — not yet re-run on nse4.
+PRIOR_2X = {"LEADER & cheap": (6.4, 12.3), "EXTENDED": (5.4, 7.5), "FRESH": (2.1, 6.9)}
 # Theme drivers read from macro_panel (industry -> column, label). Gold = build_gold_feed.py.
 DRIVERS = {"Gems Jewellery And Watches": ("gold_inr_idx", "gold INR (NSE gold ETFs)"),
            "Oil Exploration/Production": ("brent", "Brent")}

@@ -6,8 +6,9 @@ What changed vs sim_leader_sleeve.py (2026-09-08), each found on 2026-09-23:
      name at t; a name that stops trading inside 126td exits at its last close.
   2. UNIVERSE: fund units removed by ISIN (security_master INF*), not by symbol regex.
   3. INDUSTRY MAP: v1 used modal smIndustry (covers ~40% of core names). v2 runs on
-     --map nse (security_master NSE labels) and --map nse+screener (adds screener.in
-     NSE 4-level 'Industry', crosswalked; survivor-heavy — sensitivity only).
+     --map nse (same labels), --map nse4 (NSE 4-level 'Industry' via screener.in for
+     every equity — one taxonomy, ~all core names) and --map nse4_full (+ analyst analog
+     labels for the ~14 liquid names no feed labels).
   4. HEAT: v1 = MEAN own ret60 of the group (one takeover stock made jewellery 'hot').
      v2 reports MEAN and MEDIAN heat.
   5. TAKEOVERS: names with an open-offer / detailed-public-statement filing in the prior
@@ -31,33 +32,38 @@ COST, HOLD = 0.5, 126
 OO_RE = r"open offer|detailed public statement"
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--map", choices=["nse", "nse+screener"], default="nse")
+ap.add_argument("--map", choices=["nse", "nse4", "nse4_full"], default="nse")
 args = ap.parse_args()
 
 # ---------- industry map ----------
+# nse       : NSE smIndustry (old 74-industry list; ~1,213 equities — what v1 saw)
+# nse4      : NSE 4-level 'Industry' via screener.in for EVERY equity it covers (one taxonomy)
+# nse4_full : nse4 + analyst analog labels (industry_analyst_labels.csv) for the residual
+import html as _html
 sm = pd.read_parquet(ROOT / "data/derived/security_master.parquet")
 fund = set(sm.loc[sm["is_fund_unit"], "symbol"])
-imap = sm.dropna(subset=["industry"]).set_index("symbol")["industry"]
-if args.map == "nse+screener":
+if args.map == "nse":
+    imap = sm.dropna(subset=["industry"]).set_index("symbol")["industry"]
+else:
     sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet")
-    sc = sc[sc["status"] == "OK"].set_index("symbol")["industry"]
-    norm = lambda x: "".join(ch for ch in str(x).lower().replace("&", "and") if ch.isalnum())
-    both = sc.index.intersection(imap.index)
-    xw = (pd.DataFrame({"s": sc[both], "n": imap[both]}).groupby("s")["n"]
-            .agg(lambda v: v.mode().iloc[0]))                        # screener label -> NSE label
-    exact = (sc[both].map(norm) == imap[both].map(norm)).mean()
-    agree = (sc[both].map(xw) == imap[both]).mean()
-    names_by_norm = {norm(v): v for v in imap.unique()}
-    fill = sc[~sc.index.isin(imap.index)].map(lambda v: xw.get(v) or names_by_norm.get(norm(v)) or v)
-    imap = pd.concat([imap, fill])
-    print(f"map nse+screener: +{len(fill):,} labels · overlap {len(both)} · exact-name agree {exact:.1%} · "
-          f"crosswalk agree {agree:.1%}", flush=True)
-print(f"industry labels: {len(imap):,} symbols ({args.map})", flush=True)
+    sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry"])
+    imap = sc.set_index("symbol")["industry"].map(_html.unescape)
+    if args.map == "nse4_full":
+        al = pd.read_csv(ROOT / "data/derived/industry_analyst_labels.csv")
+        al = al[~al["symbol"].isin(imap.index)]
+        add = al.set_index("symbol")["analog_symbol"].map(imap).dropna()
+        imap = pd.concat([imap, add])
+        print(f"analyst analog labels: +{len(add)} (of {len(al)})", flush=True)
+imap = imap[~imap.index.isin(fund)]
+print(f"industry labels: {len(imap):,} equities, {imap.nunique()} industries ({args.map})", flush=True)
 
 # ---------- panel + forward paths (delisting-aware) ----------
 px = pd.read_parquet(ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
                      columns=["symbol", "trade_date", "high", "low", "close", "avg_traded_value_20d"])
-px = px[~px["symbol"].isin(fund)]
+import sys as _sys
+_sys.path.insert(0, str(ROOT / "src/agentic"))
+from generate_hybrid_basket import non_equity  # noqa: E402  (ISIN master + exclusion file + regex)
+px = px[~px["symbol"].isin(fund) & ~non_equity(px["symbol"])]
 px["trade_date"] = pd.to_datetime(px["trade_date"])
 px = px.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
 g = px.groupby("symbol")
@@ -168,5 +174,5 @@ for name, (D, mask) in ARMS_DF.items():
         print(f"{name:<32s}| {era} | {r['n']:>5,} | {r['tr_yr']:>5.0f} | {r['mean']:>+6.2f}% | {r['med']:>+6.2f}% | {r['win']:>4.1f} | "
               f"{r['p2x']:>4.1f} | {r['p50']:>4.1f} | {r['trough']:>+8.1f}% | {r['worst']:>+8.1f}% | {r['dd']:>+6.1f}% | {r['yrs']:>5s}", flush=True)
 
-Path(ROOT / f"logs/leader_sleeve/sim_v2_{args.map.replace('+', '_')}.json").write_text(json.dumps(out, indent=1, default=float))
+Path(ROOT / f"logs/leader_sleeve/sim_v2_{args.map}.json").write_text(json.dumps(out, indent=1, default=float))
 print("LEADER CELL V2 COMPLETE", flush=True)

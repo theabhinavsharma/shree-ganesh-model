@@ -32,6 +32,7 @@ EXTENDED_ONLY = True   # PASSED 2026-09-23 (logs/experiments.jsonl)
 ap = argparse.ArgumentParser()
 ap.add_argument("--asof", default=None, help="data date YYYYMMDD or YYYY-MM-DD (default: panel max date)")
 ap.add_argument("--force", action="store_true", help="rewrite an existing screen (repairs only; ledger it)")
+ap.add_argument("--preview", action="store_true", help="print the screen, write nothing (ignores cadence/immutability)")
 args = ap.parse_args()
 
 print("panel…", flush=True)
@@ -50,13 +51,13 @@ px["dma200"] = g["close"].transform(lambda s: s.rolling(200, min_periods=120).me
 last_dt = px["trade_date"].max()
 TAG = last_dt.strftime("%Y%m%d")
 OUT_JSON = ROOT / f"logs/leader_sleeve/screen_{TAG}.json"
-if OUT_JSON.exists() and not args.force:
+if OUT_JSON.exists() and not (args.force or args.preview):
     print(f"screen {OUT_JSON.name} already exists — immutable, not rewritten", flush=True)
     sys.exit(0)
 _wk = last_dt.isocalendar()[:2]
 _same = [p.name for p in OUT_JSON.parent.glob("screen_*.json")
          if pd.Timestamp(json.loads(p.read_text())["data_through"]).isocalendar()[:2] == _wk]
-if _same and not args.force:
+if _same and not (args.force or args.preview):
     print(f"weekly cadence: {_same[0]} already covers ISO week {_wk[1]} — no second cohort", flush=True)
     sys.exit(0)
 snap = px[px["trade_date"] == last_dt].copy()
@@ -64,10 +65,16 @@ snap["adv"] = snap["avg_traded_value_20d"] / 1e7
 snap = snap[(snap["adv"] >= 1.5) & (snap["close"] > 25)].dropna(subset=["ret60"])
 print(f"as-of {last_dt.date()} · investable(expanded) {len(snap):,}", flush=True)
 
-ah = pd.read_parquet(ROOT / "data/derived/announcements_historical.parquet",
-                     columns=["symbol", "smIndustry"])
-imap = (ah.dropna(subset=["smIndustry"]).groupby("symbol")["smIndustry"]
-          .agg(lambda s: s.mode().iloc[0] if len(s.mode()) else None).dropna())
+# Industry map = NSE 4-level 'Industry' (via screener.in) for every equity + analyst analog labels
+# for the residual (EXP-2026-09-23b: the old smIndustry map covered ~40% of the universe; on the
+# full map the cell keeps 86%/92% of its net/trade by era -> switched per the registered rule).
+import html as _html
+_sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet")
+_sc = _sc[_sc["status"].str.startswith("OK")].dropna(subset=["industry"])
+imap = _sc.set_index("symbol")["industry"].map(_html.unescape)
+_al = pd.read_csv(ROOT / "data/derived/industry_analyst_labels.csv")
+imap = pd.concat([imap, _al[~_al["symbol"].isin(imap.index)].set_index("symbol")["analog_symbol"].map(imap).dropna()])
+INDUSTRY_MAP = "nse4 (NSE 4-level via screener.in) + analyst analogs"
 snap["ind"] = snap["symbol"].map(imap)
 snap = snap.dropna(subset=["ind"])
 grp = (snap.groupby("ind").agg(grp_ret60=("ret60", "mean"), n=("ret60", "size"))
@@ -171,11 +178,14 @@ names = [dict(rank=i + 1, symbol=r["symbol"], industry=r["ind"], close=_f(r["clo
               prom_d=_f(r["prom_d"]), neg90=int(r["neg90"]), pos90=int(r["pos90"]),
               above200=bool(r["above200"]), band="core" if r["core_band"] else "exp", rtw=int(r["rtw"]))
          for i, (_, r) in enumerate(lead.iterrows())]
+if args.preview:
+    print("\nPREVIEW — nothing written", flush=True)
+    sys.exit(0)
 OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
 OUT_JSON.write_text(json.dumps(dict(
     screen_id=TAG, data_through=str(last_dt.date()), entry="next session open after data_through",
     hold_td=126, cost_rt_pct=0.5, exit="TIME (126td close); no stops — trailing stops killed (sell the trough)",
-    sizing="PAPER", paper_rule=PAPER_RULE, extended_only=EXTENDED_ONLY,
+    sizing="PAPER", paper_rule=PAPER_RULE, extended_only=EXTENDED_ONLY, industry_map=INDUSTRY_MAP,
     hot_industries={i: round(float(r.grp_ret60), 4) for i, r in hot.iterrows()},
     names=names), indent=1))
 
