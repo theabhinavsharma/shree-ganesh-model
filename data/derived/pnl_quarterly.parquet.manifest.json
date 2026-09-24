@@ -1,0 +1,18 @@
+{
+ "dataset": "pnl_quarterly",
+ "path": "data/derived/pnl_quarterly.parquet",
+ "key": [
+  "symbol",
+  "quarter_end",
+  "basis"
+ ],
+ "producer": "src/agentic/fetch_pnl_history.py (normalize stage)",
+ "units": {
+  "net_sales, total_income, pbt, pat": "MIXED BY SOURCE \u2014 source=='detail_api' (quarters to 2024): Rs LAKH; source=='xbrl' (2025+): Rs (rupees). Divide detail_api by 100 and xbrl by 1e7 for Rs crore.",
+  "eps_basic, eps_diluted": "Rs per share (unit-free across sources)",
+  "face_value": "Rs"
+ },
+ "verification": "2026-09-24: for 1,549 companies with both sources, xbrl first-quarter net_sales / (last detail_api net_sales x 1e5): median 1.04, IQR 0.93-1.17, 87.7% within 0.5-2x, 0% near 100x",
+ "caveat": "EPS-only consumers (PE studies 2026-09-05..08) are unaffected; anything using sales/PAT levels across 2024->2025 must normalise",
+ "updated": "2026-09-24T12:49:01"
+}
