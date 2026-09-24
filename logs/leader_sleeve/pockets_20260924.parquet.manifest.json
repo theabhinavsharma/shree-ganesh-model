@@ -1,0 +1,19 @@
+{
+ "dataset": "leader pocket search",
+ "experiment": "EXP-2026-09-24-leader-pockets",
+ "rows": 107,
+ "cells_tested": 107,
+ "producer": "src/agentic/pocket_search_leader.py",
+ "columns": {
+  "pocket": "bucket definition",
+  "d_*/c_*": "disc<=2022 / conf>=2023 stats",
+  "n": "trades",
+  "net": "mean net return per trade, % (126td, 0.5% rt)",
+  "med": "median net %, ",
+  "win": "% trades > 0",
+  "p2x": "% touching 2x within 126td",
+  "worst": "worst weekly-cohort mean net %",
+  "weeks": "weekly cohorts"
+ },
+ "updated": "2026-09-24T12:41:08"
+}

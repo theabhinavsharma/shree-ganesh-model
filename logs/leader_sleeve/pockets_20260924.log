@@ -1,0 +1,84 @@
+panel through 2026-09-23 · leader rows 19,833 (disc 9,715, conf 10,118) · cells tested 107
+
+=== REFERENCE ===
+ALL rows (heat>=0.8, rk<=5)                                | disc n= 9715   +7.4% med   +2.5% | conf n=10118   +9.8% med   +2.8% worst  -25.5% P2x  5.9
+PRODUCTION (heat>=0.9, rk<=3, 252>50%)                     | disc n= 2037   +7.8% med   +1.5% | conf n= 1981  +12.8% med   +3.2% worst  -38.9% P2x  7.5
+
+=== 1-D BUCKETS (sorted by disc net) ===
+pe_ind=LOSS                                                | disc n=  376  +22.3% med  +13.1% | conf n=  522   +3.3% med   -2.6% worst  -72.6% P2x  9.6
+pe_ind=LOSS & adv=adv5-10                                  | disc n=  100  +20.2% med  +11.2% | conf n=   65   +6.9% med   -6.2% worst  -41.4% P2x 15.4
+pe_ind=LOSS & own60=60 60-100                              | disc n=   67  +18.8% med   +7.9% | conf n=  109  +12.7% med   +2.2% worst  -61.0% P2x 15.6
+pe_ind=pe1-1.5x                                            | disc n= 1563  +13.5% med   +4.7% | conf n= 2432   +5.5% med   +1.1% worst  -28.4% P2x  2.8
+own60=60>100%                                              | disc n=  688  +11.8% med   -2.1% | conf n=  608  +18.1% med   +7.1% worst  -47.5% P2x 13.7
+adv=adv5-10                                                | disc n= 2492  +11.8% med   +4.5% | conf n= 1525  +11.7% med   +1.5% worst  -35.6% P2x  9.4
+pe_ind=pe<0.7x                                             | disc n= 1297  +11.5% med   +3.9% | conf n= 2353  +17.1% med   +8.1% worst  -26.2% P2x  9.2
+grp_size=grp16+                                            | disc n= 1030  +11.4% med   +3.2% | conf n= 2255  +15.2% med   +6.1% worst  -32.6% P2x  9.9
+own60=60 60-100                                            | disc n= 1448  +10.7% med   +2.4% | conf n= 1425  +11.9% med   +1.8% worst  -41.9% P2x  8.6
+age=1-3y                                                   | disc n= 2469  +10.3% med   +5.8% | conf n= 1207   +6.7% med   -1.8% worst  -28.1% P2x  5.2
+dvol=vol3-4.5%                                             | disc n= 2869  +10.2% med   +3.7% | conf n= 2919  +12.0% med   +2.7% worst  -28.5% P2x  8.1
+price=px100-300                                            | disc n= 3290   +9.8% med   +3.8% | conf n= 2822  +15.9% med   +7.6% worst  -31.3% P2x  9.2
+price=px<100                                               | disc n= 1571   +9.5% med   +2.6% | conf n=  834  +22.8% med   +8.8% worst  -52.8% P2x 14.0
+pe_ind=pe0.7-1x                                            | disc n= 1028   +9.2% med   +3.9% | conf n= 1552   +7.3% med   -0.5% worst  -28.1% P2x  4.8
+own252=252>200%                                            | disc n= 1258   +9.0% med   -1.9% | conf n= 1037  +13.7% med   +4.8% worst  -47.5% P2x 10.2
+off_high=3-10% off                                         | disc n= 3928   +9.0% med   +4.6% | conf n= 3827  +11.4% med   +3.5% worst  -25.4% P2x  6.4
+adv=adv10-30                                               | disc n= 2994   +8.9% med   +3.8% | conf n= 2774  +11.8% med   +2.9% worst  -31.9% P2x  6.5
+breadth=mkt strong                                         | disc n= 4110   +8.5% med   +1.5% | conf n= 4797  +15.0% med   +7.9% worst  -25.5% P2x  7.7
+own252=252 50-100                                          | disc n= 2123   +8.5% med   +4.0% | conf n= 2223  +11.4% med   +4.0% worst  -38.9% P2x  6.0
+own60=60 30-60                                             | disc n= 3177   +8.4% med   +3.7% | conf n= 3293  +10.5% med   +1.4% worst  -32.7% P2x  6.8
+heat_pct=h95+                                              | disc n= 2930   +7.8% med   +2.5% | conf n= 2785   +7.6% med   -0.0% worst  -28.3% P2x  5.0
+off_high=10-25% off                                        | disc n= 3224   +7.7% med   +1.8% | conf n= 3266   +8.9% med   +0.9% worst  -29.2% P2x  6.0
+grp_size=grp5-7                                            | disc n= 5660   +7.6% med   +3.0% | conf n= 3798   +8.8% med   +4.0% worst  -26.2% P2x  4.1
+old_map=new-only                                           | disc n= 2935   +7.6% med   +1.5% | conf n= 4832  +10.0% med   +1.7% worst  -25.1% P2x  6.5
+rank=r1                                                    | disc n= 1943   +7.6% med   +0.3% | conf n= 2023  +13.6% med   +1.9% worst  -30.3% P2x  9.5
+heat_pct=h80-90                                            | disc n= 4285   +7.6% med   +2.3% | conf n= 4796  +10.7% med   +3.9% worst  -29.4% P2x  6.3
+dvol=vol2-3%                                               | disc n= 3111   +7.5% med   +3.0% | conf n= 3177  +10.7% med   +4.5% worst  -27.8% P2x  5.0
+rank=r2-3                                                  | disc n= 3886   +7.4% med   +2.2% | conf n= 4046   +9.3% med   +3.3% worst  -24.8% P2x  5.4
+old_map=old-map labelled                                   | disc n= 6780   +7.3% med   +2.8% | conf n= 5286   +9.7% med   +3.3% worst  -26.4% P2x  5.3
+rank=r4-5                                                  | disc n= 3886   +7.2% med   +3.5% | conf n= 4049   +8.4% med   +2.7% worst  -26.3% P2x  4.5
+own252=252<50%                                             | disc n= 3943   +7.1% med   +3.6% | conf n= 4289   +6.3% med   +1.1% worst  -26.9% P2x  3.5
+heat_pct=h90-95                                            | disc n= 2220   +6.5% med   +2.8% | conf n= 2397  +10.6% med   +3.5% worst  -29.4% P2x  6.0
+pe_ind=pe1.5x+                                             | disc n= 1070   +6.4% med   +2.0% | conf n= 2106   +6.9% med   +0.8% worst  -30.1% P2x  4.7
+breadth=mkt weak                                           | disc n= 1530   +6.4% med   +3.0% | conf n= 2540  +12.1% med   +5.6% worst  -14.8% P2x  5.4
+age=3y+                                                    | disc n= 6859   +6.4% med   +1.4% | conf n= 8266  +10.2% med   +3.2% worst  -26.9% P2x  5.7
+dvol=vol4.5+%                                              | disc n= 1622   +6.3% med   -2.2% | conf n= 1565   +8.6% med   -2.8% worst  -38.9% P2x  9.1
+age=listed<1y                                              | disc n=  387   +6.1% med   +1.3% | conf n=  645  +11.5% med   +4.2% worst  -43.0% P2x  8.5
+off_high=at-high(<3%)                                      | disc n= 1449   +5.9% med   +1.4% | conf n= 1767  +12.4% med   +6.3% worst  -23.4% P2x  6.0
+price=px300-1k                                             | disc n= 3133   +5.6% med   +1.2% | conf n= 3655   +6.2% med   +1.3% worst  -25.3% P2x  3.5
+grp_size=grp8-15                                           | disc n= 3025   +5.5% med   +1.5% | conf n= 4065   +7.8% med   -0.2% worst  -27.4% P2x  5.3
+adv=adv30-100                                              | disc n= 2389   +5.4% med   +2.4% | conf n= 2761  +10.2% med   +1.6% worst  -29.4% P2x  6.8
+own252=252 100-200                                         | disc n= 1996   +5.4% med   -0.2% | conf n= 1898  +14.2% med   +5.1% worst  -46.6% P2x  7.7
+own60=60<30%                                               | disc n= 4402   +4.8% med   +2.4% | conf n= 4792   +7.7% med   +3.4% worst  -27.9% P2x  3.4
+breadth=mkt mid                                            | disc n= 2140   +4.8% med   +0.2% | conf n= 2781   -1.1% med   -6.4% worst  -24.0% P2x  3.1
+dvol=vol<2%                                                | disc n= 2113   +4.2% med   +3.0% | conf n= 2457   +6.9% med   +3.7% worst  -24.8% P2x  2.2
+price=px1k+                                                | disc n= 1721   +4.0% med   +2.4% | conf n= 2807   +4.6% med   -0.9% worst  -24.5% P2x  3.1
+pe_ind=pe n/a                                              | disc n= 4381   +2.5% med   +0.6% | conf n= 1153  +15.8% med   +7.9% worst  -28.0% P2x  7.5
+off_high=>25% off                                          | disc n=  991   +1.9% med   -2.5% | conf n= 1013   +2.9% med   -2.1% worst  -42.9% P2x  3.0
+adv=adv100+                                                | disc n= 1840   +1.3% med   -0.5% | conf n= 3058   +6.8% med   +3.6% worst  -24.6% P2x  2.6
+
+=== DISCOVERED on disc (n>=150, net>=20%): 9 ===
+fail  own60=60>100% & price=px100-300                            | disc n=  264  +29.6% med   +9.6% | conf n=  268  +20.6% med  +13.4% worst  -52.7% P2x 13.4
+fail  pe_ind=pe1-1.5x & adv=adv5-10                              | disc n=  310  +28.7% med  +12.3% | conf n=  307   +9.2% med   -0.8% worst  -56.2% P2x  8.1
+PASS  pe_ind=pe<0.7x & grp_size=grp16+                           | disc n=  182  +27.9% med   +8.4% | conf n=  475  +21.7% med  +11.1% worst  -39.3% P2x 13.3
+fail  pe_ind=pe1-1.5x & own60=60 60-100                          | disc n=  244  +22.4% med   +7.2% | conf n=  274   +0.5% med   -7.8% worst  -40.2% P2x  1.8
+fail  pe_ind=LOSS                                                | disc n=  376  +22.3% med  +13.1% | conf n=  522   +3.3% med   -2.6% worst  -72.6% P2x  9.6
+PASS  own60=60>100% & adv=adv5-10                                | disc n=  168  +22.3% med   -0.7% | conf n=  129  +35.1% med  +17.2% worst  -37.6% P2x 32.6
+fail  pe_ind=LOSS & price=px100-300                              | disc n=  179  +22.2% med  +11.4% | conf n=  232   +6.1% med   +4.7% worst  -73.4% P2x 12.1
+fail  own60=60>100% & age=1-3y                                   | disc n=  150  +21.6% med   -2.9% | conf n=   88  +11.9% med  -13.5% worst  -55.6% P2x 12.5
+fail  pe_ind=pe1-1.5x & price=px100-300                          | disc n=  530  +21.5% med   +8.5% | conf n=  607  +10.6% med   +3.7% worst  -46.8% P2x  4.0
+
+=== CONF-ONLY >= 20% (n>=100) — unconfirmed, discovery era did not show it: 12 ===
+conf-only pe_ind=pe<0.7x & price=px<100                              | disc n=  264  +16.6% med   +2.3% | conf n=  252  +36.4% med  +27.1% worst  -49.6% P2x 19.0
+conf-only grp_size=grp16+ & price=px<100                             | disc n=  129  +21.3% med   +9.2% | conf n=  171  +36.3% med  +21.1% worst  -51.2% P2x 26.3
+conf-only dvol=vol3-4.5% & price=px<100                              | disc n=  573  +12.3% med   +5.6% | conf n=  282  +32.3% med  +13.2% worst  -50.3% P2x 20.9
+conf-only own60=60 60-100 & price=px<100                             | disc n=  319  +15.8% med   +7.8% | conf n=  126  +31.4% med   +9.0% worst  -44.4% P2x 27.0
+conf-only own60=60>100% & pe_ind=pe<0.7x                             | disc n=  101   +9.6% med   -8.0% | conf n=  167  +28.9% med   +8.8% worst  -44.3% P2x 21.0
+conf-only grp_size=grp16+ & price=px100-300                          | disc n=  316  +14.3% med   +1.7% | conf n=  691  +27.3% med  +18.7% worst  -52.2% P2x 16.2
+conf-only pe_ind=pe<0.7x & price=px100-300                           | disc n=  478  +11.0% med   +1.8% | conf n=  799  +23.9% med  +14.8% worst  -41.3% P2x 11.9
+conf-only own60=60>100% & dvol=vol3-4.5%                             | disc n=  268  +15.9% med   -2.5% | conf n=  226  +23.6% med   +7.8% worst  -47.5% P2x 12.8
+conf-only price=px<100                                               | disc n= 1571   +9.5% med   +2.6% | conf n=  834  +22.8% med   +8.8% worst  -52.8% P2x 14.0
+conf-only adv=adv5-10 & grp_size=grp16+                              | disc n=  249  +15.7% med   +4.3% | conf n=  400  +22.3% med   +9.5% worst  -40.5% P2x 18.2
+conf-only pe_ind=pe<0.7x & dvol=vol3-4.5%                            | disc n=  441  +12.3% med   +3.3% | conf n=  736  +22.0% med  +11.0% worst  -42.2% P2x 12.6
+conf-only pe_ind=pe1-1.5x & price=px<100                             | disc n=  171  +12.6% med   +3.8% | conf n=  123  +21.0% med  +12.1% worst  -47.1% P2x  8.9
+
+PASSED (disc-discovered, conf-confirmed): 2 of 107 cells tested
+POCKET SEARCH COMPLETE
