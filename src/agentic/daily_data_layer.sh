@@ -49,6 +49,10 @@ if [ "$DOW" = "1" ]; then
   run amfi_mf /usr/bin/python3 src/agentic/fetch_amfi_mf_holdings.py
   run superstar /usr/bin/python3 src/agentic/fetch_superstar_holdings.py
   run broker_recos /usr/bin/python3 src/agentic/fetch_broker_recos.py
+  # security master (ISIN, fund units, renames, industry provenance) + screener industry for
+  # names NSE no longer labels (checkpointed: only new unmapped symbols are fetched)
+  run security_master /usr/bin/python3 src/agentic/build_security_master.py
+  run screener_industry /usr/bin/python3 src/agentic/fetch_screener_industry.py
 fi
 
 # --- rebuild the panel last so everything above folds in ---

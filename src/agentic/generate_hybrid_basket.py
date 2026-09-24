@@ -109,13 +109,35 @@ NON_EQUITY_RE = re.compile(r"IETF|BEES|ETF$|^NIFTY|TOP50|^MASP|MAFANG|^MONQ|^PSU
 EQUITY_DESPITE_RE = {"SKYGOLD", "SHANTIGOLD", "GOLDTECH"}
 
 
+SECURITY_MASTER = ROOT / "data/derived/security_master.parquet"
+_MASTER_CACHE: dict = {}
+
+
+def _master() -> tuple[set, set]:
+    """(fund units, companies) from the ISIN-based security master (INF* = MF/ETF unit,
+    INE* = company). Empty sets if the master is absent — then the regex decides."""
+    if "v" not in _MASTER_CACHE:
+        fu, co = set(), set()
+        if SECURITY_MASTER.exists():
+            m = pd.read_parquet(SECURITY_MASTER, columns=["symbol", "isin", "is_fund_unit"])
+            fu = set(m.loc[m["is_fund_unit"], "symbol"])
+            co = set(m.loc[~m["is_fund_unit"] & m["isin"].astype(str).str.startswith("INE"), "symbol"])
+        _MASTER_CACHE["v"] = (fu, co)
+    return _MASTER_CACHE["v"]
+
+
 def non_equity(symbols: pd.Series) -> pd.Series:
     """ETFs/index units trade in series EQ but are not companies. 2026-09-23: MASPTOP50
-    (S&P500 ETF in a premium-to-NAV blowout) reached rank 1 on a 4-engine 'consensus'."""
+    (S&P500 ETF in a premium-to-NAV blowout) reached rank 1 on a 4-engine 'consensus'.
+    Decided by ISIN first (security_master: INF = fund unit, INE = company); the name
+    regex only covers symbols the master has no ISIN for. The regex alone had dropped
+    SKYGOLD/SHANTIGOLD/GOLDTECH and let LIQUID, SILVER, SETFNIF50, EBBETF* etc. through."""
     listed = set()
     if NON_EQUITY_FILE.exists():
         listed = {l.strip().upper() for l in NON_EQUITY_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
-    return symbols.isin(listed) | (symbols.str.contains(NON_EQUITY_RE) & ~symbols.str.upper().isin(EQUITY_DESPITE_RE))
+    fund, company = _master()
+    by_re = symbols.str.contains(NON_EQUITY_RE) & ~symbols.str.upper().isin(EQUITY_DESPITE_RE)
+    return symbols.isin(listed) | symbols.isin(fund) | (by_re & ~symbols.isin(company))
 
 
 def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:

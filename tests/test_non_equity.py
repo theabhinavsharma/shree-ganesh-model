@@ -8,7 +8,8 @@ from generate_hybrid_basket import non_equity  # noqa: E402
 
 
 def test_etfs_excluded():
-    s = pd.Series(["GOLDBEES", "SETFGOLD", "GOLDIETF", "MASPTOP50", "NIFTYBEES", "HDFCGOLD"])
+    s = pd.Series(["GOLDBEES", "SETFGOLD", "GOLDIETF", "MASPTOP50", "NIFTYBEES", "HDFCGOLD",
+                   "LIQUID", "SILVER", "SETFNIF50", "EBBETF0433", "N100", "TOP10ADD"])
     assert non_equity(s).all()
 
 
