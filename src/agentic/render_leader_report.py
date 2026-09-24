@@ -26,6 +26,25 @@ HOLD_TD, PAPER_MIN_COHORTS = 126, 13
 # P(touched 2x within 126td) by sim cell and era — logs/leader_sleeve/exp_extended_20260923.log
 # (sim_leader_sleeve.py on the repaired panel, core band, weekly cohorts 2016-06..2026).
 PRIOR_2X = {"LEADER & cheap": (6.4, 12.3), "EXTENDED": (7.2, 8.9), "FRESH": (2.1, 6.9)}
+# Theme drivers read from macro_panel (industry -> column, label). Gold = build_gold_feed.py.
+DRIVERS = {"Gems Jewellery And Watches": ("gold_inr_idx", "gold INR (NSE gold ETFs)"),
+           "Oil Exploration/Production": ("brent", "Brent")}
+
+
+def _driver(industry: str, macp: pd.DataFrame, since: str | None) -> str | None:
+    col, lab = DRIVERS.get(industry, (None, None))
+    if col is None or macp.empty or col not in macp:
+        return None
+    s = macp.set_index("trade_date")[col].dropna()
+    if len(s) < 61:
+        return None
+    ch = lambda k: (s.iloc[-1] / s.iloc[-1 - k] - 1) * 100
+    out = f"driver {lab}: 20d {ch(20):+.1f}%, 60d {ch(60):+.1f}%"
+    if since:
+        base = s[s.index <= pd.Timestamp(since)]
+        if len(base):
+            out += f", since screen {(s.iloc[-1] / base.iloc[-1] - 1) * 100:+.1f}%"
+    return out + f" (thru {s.index[-1].date()})"
 
 
 def _cell(n: dict) -> str:
@@ -85,8 +104,10 @@ def main() -> None:
     company = dict(ca.drop_duplicates("symbol").values) if not ca.empty else {}
     sec_map = _sector_map()
     ind = _opt(INDUSTRY)
-    mac = _opt(MACRO)
-    mac = mac.sort_values("trade_date").iloc[-1] if not mac.empty else None
+    macp = _opt(MACRO)
+    if not macp.empty:
+        macp["trade_date"] = pd.to_datetime(macp["trade_date"]); macp = macp.sort_values("trade_date")
+    mac = macp.iloc[-1] if not macp.empty else None
     try:
         regime = json.loads(_latest_basket().read_text())["regime_gate"] + " (15d gate — sleeve is not regime-gated)"
     except SystemExit:
@@ -103,6 +124,9 @@ def main() -> None:
             qual = _qual(sym, company.get(sym), n["industry"], sub(ann), sub(pit), sub(blk, "BD_SYMBOL"),
                          stars.get(sym, []), last)
             macro = _macro(sym, regime, sec_map, ind, mac)
+            drv = _driver(n["industry"], macp, s["data_through"])
+            if drv:
+                macro = drv + " · " + macro
             if r and r["status"] != "PENDING":
                 pos = f"{r['status']} d{r['days']} | {r['entry']:.2f} ({r['entry_date']}) | {r['last']:.2f} | {r['ret_net']:+.1f}%"
             else:

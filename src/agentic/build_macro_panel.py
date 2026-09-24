@@ -129,6 +129,13 @@ def main() -> None:
             panel["macro_sent_avg"] = panel[sent_cols].mean(axis=1)
         print(f"  + macro sentiment: {len(snt_latest)} topics broadcast")
 
+    # 8b. domestic gold (INR) from NSE gold ETFs — build_gold_feed.py; index + windowed changes
+    gld = safe_read(DERIVED / "gold_inr_etf.parquet")
+    if not gld.empty:
+        keep = ["trade_date", "gold_inr_idx", "gold_inr_ret1d", "gold_inr_5d_pct", "gold_inr_20d_pct", "gold_inr_60d_pct"]
+        panel = panel.merge(gld[keep], on="trade_date", how="left")
+        print(f"  + gold INR (NSE ETFs): {len(gld)} sessions")
+
     # 9. derived features
     panel = panel.sort_values("trade_date")
     if "brent" in panel.columns:
