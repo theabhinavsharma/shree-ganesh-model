@@ -1,0 +1,49 @@
+panel through 2026-09-23 · universe stock-days 4,196,228 · events 50,229
+BASE RATES (all universe stock-days): {'conf': {'p50_20': np.float64(1.5), 'p50_60': np.float64(8.67), 'p50c_60': np.float64(8.9), 'p2x': np.float64(5.4), 'n': 1765448}, 'disc': {'p50_20': np.float64(2.78), 'p50_60': np.float64(12.03), 'p50c_60': np.float64(12.37), 'p2x': np.float64(7.75), 'n': 2430780}}
+
+=== A. EVENT TYPE (abnormal %, entry = next open) ===
+open_offer_target                 | disc n=  385 ab5  +2.0 ab20  +4.1 ab60  +9.1 ab126   +6.1 P50/60d  6.8(0.6x) P2x  4.7(0.6x) | conf n=  388 ab5  +1.2 ab20  +3.4 ab60  +4.6 ab126   +4.4 P50/60d 10.6(1.2x) P2x  5.9(1.1x)
+tender_L1                         | disc n=  197 ab5  +0.2 ab20  +1.5 ab60  +2.8 ab126   +4.3 P50/60d  8.1(0.7x) P2x  7.1(0.9x) | conf n=  226 ab5  +0.6 ab20  +2.2 ab60 +11.5 ab126  +18.7 P50/60d 19.5(2.2x) P2x 17.3(3.2x)
+order                             | disc n= 1533 ab5  -0.1 ab20  +0.5 ab60  +2.3 ab126   +5.1 P50/60d  9.7(0.8x) P2x  5.6(0.7x) | conf n= 3241 ab5  +0.2 ab20  +1.3 ab60  +3.9 ab126  +10.0 P50/60d 10.1(1.2x) P2x  6.3(1.2x)
+client_partner                    | disc n= 1750 ab5  +0.5 ab20  +1.3 ab60  +2.9 ab126   +5.7 P50/60d  7.1(0.6x) P2x  4.1(0.5x) | conf n= 2148 ab5  +0.6 ab20  +1.4 ab60  +5.0 ab126   +9.8 P50/60d  7.1(0.8x) P2x  5.1(0.9x)
+acquisition                       | disc n=10668 ab5  +0.7 ab20  +1.3 ab60  +2.3 ab126   +7.4 P50/60d 10.1(0.8x) P2x  7.1(0.9x) | conf n=12944 ab5  +0.7 ab20  +2.0 ab60  +4.9 ab126   +8.0 P50/60d 10.4(1.2x) P2x  5.8(1.1x)
+approval_launch                   | disc n= 3910 ab5  +0.8 ab20  +1.5 ab60  +3.2 ab126   +5.8 P50/60d  6.4(0.5x) P2x  4.1(0.5x) | conf n= 3833 ab5  +0.7 ab20  +2.1 ab60  +4.3 ab126   +7.8 P50/60d  5.5(0.6x) P2x  3.3(0.6x)
+capex                             | disc n=  146 ab5  +0.8 ab20  +1.3 ab60  +3.3 ab126   +8.3 P50/60d  9.6(0.8x) P2x  6.8(0.9x) | conf n=  167 ab5  +1.2 ab20  +2.6 ab60  +5.7 ab126  +10.0 P50/60d  7.2(0.8x) P2x  3.6(0.7x)
+fundraise_pref                    | disc n= 1517 ab5  +0.2 ab20  +1.9 ab60  +3.0 ab126   +7.9 P50/60d 12.7(1.1x) P2x  8.4(1.1x) | conf n= 1902 ab5  +0.9 ab20  +2.3 ab60  +5.4 ab126  +10.2 P50/60d 11.8(1.4x) P2x  7.9(1.5x)
+fundraise_qip                     | disc n=  292 ab5  +0.0 ab20  -0.0 ab60  -1.8 ab126   -2.5 P50/60d  4.1(0.3x) P2x  0.3(0.0x) | conf n=  365 ab5  +0.2 ab20  +2.2 ab60  +7.8 ab126  +10.9 P50/60d  6.6(0.8x) P2x  3.3(0.6x)
+buyback                           | disc n= 1512 ab5  +0.4 ab20  +0.1 ab60  +1.6 ab126   +7.1 P50/60d  5.5(0.5x) P2x  4.4(0.6x) | conf n=  638 ab5  +0.4 ab20  -0.6 ab60  -1.2 ab126   -1.8 P50/60d  2.8(0.3x) P2x  1.1(0.2x)
+rating_up                         | disc n=  360 ab5  +1.2 ab20  +2.0 ab60  +5.5 ab126   +9.6 P50/60d  9.2(0.8x) P2x  6.9(0.9x) | conf n=  113 ab5  +0.8 ab20  +3.9 ab60  +8.4 ab126  +14.4 P50/60d  8.0(0.9x) P2x  3.5(0.7x)
+bonus_split                       | disc n= 1054 ab5  +0.8 ab20  +1.5 ab60  +1.4 ab126   +2.8 P50/60d 10.5(0.9x) P2x  4.6(0.6x) | conf n=  940 ab5  +0.7 ab20  +0.6 ab60  +1.6 ab126   +4.5 P50/60d 13.2(1.5x) P2x  6.9(1.3x)
+
+=== B. ORDER MATERIALITY: order value / PIT TTM revenue (orders + L1 with a parsed amount) ===
+orders with amount & revenue: 727
+order <5% of revenue              | disc n=   54 ab5  +0.4 ab20  +2.1 ab60  +2.5 ab126   +5.9 P50/60d  7.4(0.6x) P2x  1.9(0.2x) | conf n=  211 ab5  +0.6 ab20  +3.5 ab60  +6.1 ab126  +13.7 P50/60d 13.7(1.6x) P2x 10.0(1.8x)
+order 5-15%                       | disc n=   69 ab5  -0.7 ab20  -1.0 ab60  -0.5 ab126   +5.2 P50/60d  8.7(0.7x) P2x  5.8(0.7x) | conf n=  128 ab5  -0.3 ab20  +1.1 ab60  +3.8 ab126   +9.3 P50/60d  5.5(0.6x) P2x  3.9(0.7x)
+order 15-40%                      | disc n=   73 ab5  -1.4 ab20  -0.2 ab60  -1.6 ab126   -2.8 P50/60d  9.6(0.8x) P2x  1.4(0.2x) | conf n=   80 ab5  -0.0 ab20  +3.3 ab60 +18.6 ab126  +43.8 P50/60d 18.8(2.2x) P2x 21.2(3.9x)
+order 40-100%                     | disc n=   29                                              — | conf n=   34 ab5  +0.0 ab20  +2.9 ab60 +10.3 ab126  +27.5 P50/60d 11.8(1.4x) P2x 20.6(3.8x)
+order >100% of revenue            | disc n=   17                                              — | conf n=   32 ab5  +1.2 ab20  +2.2 ab60  +8.7 ab126  +18.5 P50/60d 18.8(2.2x) P2x 12.5(2.3x)
+  ...by order / market cap:
+order <5% of mcap                 | disc n=   49 ab5  -0.5 ab20  +1.2 ab60  +2.4 ab126   +4.9 P50/60d  2.0(0.2x) P2x  0.0(0.0x) | conf n=  285 ab5  +0.8 ab20  +2.9 ab60  +6.7 ab126  +16.6 P50/60d 12.6(1.5x) P2x 10.5(2.0x)
+order 5-20%                       | disc n=   59 ab5  +0.8 ab20  +1.1 ab60  +0.3 ab126   +7.4 P50/60d 10.2(0.8x) P2x  6.8(0.9x) | conf n=  111 ab5  -0.3 ab20  +0.8 ab60  +0.4 ab126   +1.3 P50/60d  4.5(0.5x) P2x  2.7(0.5x)
+order >20% of mcap                | disc n=  127 ab5  -0.8 ab20  +0.1 ab60  +1.9 ab126   +1.3 P50/60d 13.4(1.1x) P2x  3.9(0.5x) | conf n=   86 ab5  -0.9 ab20  +4.3 ab60 +20.7 ab126  +47.6 P50/60d 20.9(2.4x) P2x 23.3(4.3x)
+
+=== C. THE MARKET'S VOTE: entry-session reaction, returns measured AFTER it (from that close) ===
+react < 0                         | disc n=11267 post-vote ab20  +1.1 ab60  +2.2 P50/60d  8.4(0.7x) | conf n=12920 post-vote ab20  +1.5 ab60  +3.8 P50/60d  8.9(1.0x)
+react 0-5%                        | disc n=10698 post-vote ab20  +1.6 ab60  +3.1 P50/60d  9.2(0.7x) | conf n=12407 post-vote ab20  +2.2 ab60  +5.3 P50/60d  9.4(1.1x)
+react 5-10%                       | disc n= 1036 post-vote ab20  +1.3 ab60  +3.0 P50/60d 14.7(1.2x) | conf n= 1219 post-vote ab20  +3.0 ab60  +6.9 P50/60d 13.9(1.6x)
+react >= 10%                      | disc n=  323 post-vote ab20  -1.1 ab60  -0.9 P50/60d 17.6(1.4x) | conf n=  358 post-vote ab20  +1.9 ab60  +2.4 P50/60d 15.4(1.7x)
+react>=5% & vol>=3x               | disc n=  700 post-vote ab20  +0.2 ab60  +2.2 P50/60d 14.7(1.2x) | conf n=  846 post-vote ab20  +3.2 ab60  +5.8 P50/60d 14.1(1.6x)
+  ...material orders (>=15% of revenue) by the vote:
+material order & react<5%         | disc n=  100 post-vote ab20  +1.3 ab60  +2.0 P50/60d 13.0(1.1x) | conf n=  127 post-vote ab20  +1.5 ab60 +12.2 P50/60d 14.2(1.6x)
+material order & react>=5%        | disc n=   19                              — | conf n=   19                              —
+
+=== D. SIZE: every event by market cap ===
+mcap <500cr                       | disc n= 1868 ab5  +1.1 ab20  +2.6 ab60  +5.9 ab126  +18.6 P50/60d 22.9(1.9x) P2x 16.2(2.1x) | conf n= 1896 ab5  +0.8 ab20  +6.0 ab60 +13.2 ab126  +29.5 P50/60d 18.6(2.1x) P2x 16.6(3.1x)
+500-2,000cr                       | disc n= 2351 ab5  +0.6 ab20  +1.4 ab60  +4.5 ab126  +10.5 P50/60d 12.9(1.1x) P2x  8.1(1.0x) | conf n= 4226 ab5  +0.8 ab20  +2.4 ab60  +6.3 ab126   +9.7 P50/60d 14.1(1.6x) P2x  7.9(1.5x)
+2k-10k cr                         | disc n= 2934 ab5  +0.6 ab20  +1.2 ab60  +3.1 ab126   +7.2 P50/60d  7.7(0.6x) P2x  5.3(0.7x) | conf n= 6864 ab5  +0.6 ab20  +1.6 ab60  +4.4 ab126   +7.5 P50/60d  8.6(1.0x) P2x  4.8(0.9x)
+>10k cr                           | disc n= 3472 ab5  +0.6 ab20  +1.4 ab60  +2.6 ab126   +4.2 P50/60d  3.5(0.3x) P2x  1.7(0.2x) | conf n= 8283 ab5  +0.7 ab20  +1.8 ab60  +3.6 ab126   +7.1 P50/60d  4.7(0.5x) P2x  2.5(0.5x)
+  ...material orders by size:
+material order & mcap<2k          | disc n=   65 ab5  +0.2 ab20  +2.9 ab60  +4.0 ab126   +6.7 P50/60d 13.8(1.2x) P2x  6.2(0.8x) | conf n=   52 ab5  -0.4 ab20  +4.3 ab60 +25.1 ab126  +62.0 P50/60d 25.0(2.9x) P2x 25.0(4.6x)
+material order & mcap>=2k         | disc n=   48 ab5  -1.4 ab20  -2.1 ab60  +0.3 ab126   -5.6 P50/60d 10.4(0.9x) P2x  0.0(0.0x) | conf n=   93 ab5  +0.6 ab20  +2.1 ab60  +7.8 ab126  +18.3 P50/60d 11.8(1.4x) P2x 15.1(2.8x)
+
+EVENT STUDY COMPLETE

@@ -81,7 +81,12 @@ def main() -> None:
     px["pkc60"] = g["high"].transform(lambda s: s.shift(-1)[::-1].rolling(60, min_periods=1).max()[::-1]) / px["close"] - 1
     px["react0"] = px["close"] / px["prev_close"] - 1
     px["adv"] = px["avg_traded_value_20d"] / 1e7
-    uni = px[(px["close"] > 25) & (px["adv"] >= 1)].copy()
+    if "--mcap50" in sys.argv:          # PIT market cap >= Rs 50cr, no liquidity floor
+        mc = pd.read_parquet(ROOT / "data/derived/mcap_pit.parquet"); mc["trade_date"] = pd.to_datetime(mc["trade_date"])
+        px = px.merge(mc[["symbol", "trade_date", "mcap_cr"]], on=["symbol", "trade_date"], how="left")
+        uni = px[px["mcap_cr"] >= 50].drop(columns=["mcap_cr"]).copy()
+    else:
+        uni = px[(px["close"] > 25) & (px["adv"] >= 1)].copy()
     med = uni.groupby("trade_date")[[f"r{k}" for k in H] + ["c20", "c60"]].median().add_prefix("m_")
     uni = uni.join(med, on="trade_date")
     for k in H:
@@ -191,7 +196,8 @@ def main() -> None:
 
     keep = ["symbol", "d", "cat", "entry", "era", "amount_cr", "rev_ttm_cr", "mcap_cr", "order_to_rev", "amt_to_mcap",
             "react0", "volume_vs_20d", "adv"] + [f"ab{k}" for k in H] + ["pk20", "pk60", "pk126", "abc20", "abc60", "pkc60", "txt"]
-    out = ROOT / "logs/leader_sleeve/event_rows_20260924.parquet"
+    out = ROOT / ("logs/leader_sleeve/event_rows_mcap50_20260924.parquet" if "--mcap50" in sys.argv
+                  else "logs/leader_sleeve/event_rows_20260924.parquet")
     ev[keep].to_parquet(out, index=False)
     out.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="event rows", experiment="EXP-2026-09-24-event-materiality", rows=len(ev), producer="src/agentic/event_materiality_study.py",

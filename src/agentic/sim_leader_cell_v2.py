@@ -33,6 +33,8 @@ OO_RE = r"open offer|detailed public statement"
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--map", choices=["nse", "nse4", "nse4_full"], default="nse")
+ap.add_argument("--universe", choices=["core", "mcap50"], default="core",
+                help="core = ADV>=5cr & close>50 (validated); mcap50 = PIT market cap >= Rs 50cr, no liquidity floor")
 args = ap.parse_args()
 
 # ---------- industry map ----------
@@ -86,7 +88,13 @@ px["adv"] = px["avg_traded_value_20d"] / 1e7
 px["ind"] = px["symbol"].map(imap)
 
 days = sorted(px["trade_date"].unique())
-wk = px[(px["adv"] >= 5) & (px["close"] > 50) & px["trade_date"].isin(set(days[::5]))
+if args.universe == "mcap50":
+    mc = pd.read_parquet(ROOT / "data/derived/mcap_pit.parquet"); mc["trade_date"] = pd.to_datetime(mc["trade_date"])
+    px = px.merge(mc[["symbol", "trade_date", "mcap_cr"]], on=["symbol", "trade_date"], how="left")
+    in_uni = px["mcap_cr"] >= 50
+else:
+    in_uni = (px["adv"] >= 5) & (px["close"] > 50)
+wk = px[in_uni & px["trade_date"].isin(set(days[::5]))
         & (px["trade_date"] >= "2016-06-01") & px["ind"].notna() & px["ret60"].notna()].copy()
 
 # ---------- takeover targets (point-in-time, 180d) ----------
@@ -134,6 +142,9 @@ ARMS = {
     "  A1 + no-takeover only": wk["hot_mean"] & top3 & wk["ext"] & ~wk["takeover"],
     "B PRIMARY (median+EXT+no-TO)": wk["hot_median"] & top3 & wk["ext"] & ~wk["takeover"],
     "  B without EXT": wk["hot_median"] & top3 & ~wk["takeover"],
+    "  A1 & ADV<1cr": wk["hot_mean"] & top3 & wk["ext"] & (wk["adv"] < 1),
+    "  A1 & ADV 1-5cr": wk["hot_mean"] & top3 & wk["ext"] & (wk["adv"] >= 1) & (wk["adv"] < 5),
+    "  A1 & ADV>=5cr": wk["hot_mean"] & top3 & wk["ext"] & (wk["adv"] >= 5),
 }
 
 
@@ -174,5 +185,5 @@ for name, (D, mask) in ARMS_DF.items():
         print(f"{name:<32s}| {era} | {r['n']:>5,} | {r['tr_yr']:>5.0f} | {r['mean']:>+6.2f}% | {r['med']:>+6.2f}% | {r['win']:>4.1f} | "
               f"{r['p2x']:>4.1f} | {r['p50']:>4.1f} | {r['trough']:>+8.1f}% | {r['worst']:>+8.1f}% | {r['dd']:>+6.1f}% | {r['yrs']:>5s}", flush=True)
 
-Path(ROOT / f"logs/leader_sleeve/sim_v2_{args.map}.json").write_text(json.dumps(out, indent=1, default=float))
+Path(ROOT / f"logs/leader_sleeve/sim_v2_{args.map}_{args.universe}.json").write_text(json.dumps(out, indent=1, default=float))
 print("LEADER CELL V2 COMPLETE", flush=True)
