@@ -143,6 +143,11 @@
     "purpose": "Build TWO new sets of polarity-aware event features:"
    },
    {
+    "path": "src/agentic/build_gold_feed.py",
+    "loc": 71,
+    "purpose": "Domestic gold price (INR) from NSE-listed gold ETFs \u2014 data/derived/gold_inr_etf.parquet."
+   },
+   {
     "path": "src/agentic/build_handoff.py",
     "loc": 84,
     "purpose": "Regenerate HANDOFF.md with current state snapshot."
@@ -314,7 +319,7 @@
    },
    {
     "path": "src/agentic/render_leader_report.py",
-    "loc": 134,
+    "loc": 158,
     "purpose": "LEADER SLEEVE report \u2014 reports/leader_sleeve_<session>.md, every session."
    },
    {
@@ -424,7 +429,7 @@
    },
    {
     "path": "src/agentic/daily_data_layer.sh",
-    "loc": 65,
+    "loc": 66,
     "purpose": "DAILY DATA LAYER \u2014 every data feed, every trading day. Cron-scheduled (launchd is"
    },
    {
@@ -563,12 +568,12 @@
   "Data fetchers": [
    {
     "path": "src/agentic/build_macro_panel.py",
-    "loc": 201,
+    "loc": 208,
     "purpose": "Consolidate ALL macro/aggregate features into a single daily panel."
    },
    {
     "path": "src/agentic/build_news_event_features.py",
-    "loc": 220,
+    "loc": 227,
     "purpose": "News + corporate-event feature builder \u2014 5d and 15d windows, stock + industry."
    },
    {
@@ -605,6 +610,11 @@
     "path": "src/agentic/fetch_fii_dii.py",
     "loc": 140,
     "purpose": "Fetch FII / DII daily provisional flows from NSE."
+   },
+   {
+    "path": "src/agentic/fetch_filing_text.py",
+    "loc": 130,
+    "purpose": "Full text of specific NSE corporate filings (the attachment, not the headline)."
    },
    {
     "path": "src/agentic/fetch_forex_macro.py",
@@ -752,7 +762,7 @@
    },
    {
     "path": "src/agentic/generate_hybrid_basket.py",
-    "loc": 383,
+    "loc": 395,
     "purpose": "Generate the WEEKLY 15D/+5% hybrid basket."
    }
   ],
@@ -857,7 +867,7 @@
    },
    {
     "path": "src/agentic/run_weekly_pipeline.sh",
-    "loc": 294,
+    "loc": 293,
     "purpose": "WEEKLY 15D/+5% PIPELINE ORCHESTRATOR"
    }
   ],

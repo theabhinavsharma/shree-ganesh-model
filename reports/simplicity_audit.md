@@ -1,6 +1,6 @@
-# Simplicity Audit — 2026-09-23T20:04:32
+# Simplicity Audit — 2026-09-23T20:09:58
 
-**Scanned**: 238 files · 52,318 LOC · **185 findings**
+**Scanned**: 240 files · 52,569 LOC · **184 findings**
 
 Policy: stdlib-first, simplest correct solution, no speculative abstraction.
 Findings are candidates for deletion/simplification — audit never auto-rewrites.
@@ -8,7 +8,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Dead functions (defined, never referenced anywhere) — 10
 
 - `src/agentic/build_data_inventory_report.py` **year_counts** — line 9
-- `src/agentic/build_news_event_features.py` **load_news** — line 76
+- `src/agentic/build_news_event_features.py` **load_news** — line 75
 - `src/agentic/fetch_forex_macro.py` **stooq_csv** — line 51
 - `src/ingest/fundamentals/interface.py` **load_fundamentals** — line 24
 - `src/ingest/nse/normalize.py` **read_bhavcopy_csv_text** — line 57
@@ -21,7 +21,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Dead classes — 0
 
 
-## Unused imports — 89
+## Unused imports — 88
 
 - `src/agentic/ab_event_features_15d.py` **sys** — from sys
 - `src/agentic/ab_event_rules_15d.py` **re** — from re
@@ -41,7 +41,6 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/build_confluence_picks.py` **np** — from numpy
 - `src/agentic/build_event_polarity.py` **np** — from numpy
 - `src/agentic/build_handoff.py` **json** — from json
-- `src/agentic/build_news_event_features.py` **np** — from numpy
 - `src/agentic/build_status_dashboard.py` **subprocess** — from subprocess
 - `src/agentic/compute_feature_importance.py` **np** — from numpy
 - `src/agentic/data_completeness.py` **np** — from numpy
@@ -83,7 +82,8 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/joint_signal_analyzer.py` **np** — from numpy
 - `src/agentic/mine_doubler_ignition.py` **np** — from numpy
 - `src/agentic/mine_fast_double_conditional.py` **sys** — from sys
-- … and 29 more
+- `src/agentic/mine_industry_contagion.py` **sys** — from sys
+- … and 28 more
 
 ## Single-method stateless classes (should be functions) — 0
 
@@ -189,7 +189,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/simplicity_auditor.py` **audit** — depth>5
 - `src/analysis/week7_15pct_meta_rerank_compare.py` **_run_single_model** — depth>5
 
-## Debt ledger — 11 open / 12 total
+## Debt ledger — 18 open / 19 total
 
 - 2026-07-07 `src/agentic/generate_hybrid_basket.py` — ML>=0.85 penalty (-0.5 band_fit) routes around classifier overconfidence instead of recalibrating the classifier (why: ship corrected basket same day as the 10-yr backtest finding; loc 8; speed none)
 - 2026-07-07 `src/agentic/backtest_10yr_15d5pct.py` — band-fit>=2 subset not yet re-run under day-by-day sequenced exits (why: day-by-day correction landed 2026-07-07; full rerun takes hours; loc 0; speed unknown until rerun)
@@ -202,3 +202,10 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - 2026-09-23 `src/agentic/screen_theme_leaders.py EXTENDED_ONLY filter` — filter validated on the core band (ADV>=5cr, close>50) but the live screen still lists expanded-band names (e.g. RSWM, band exp) (why: spec 6a keeps the band tag as evidence, not a filter; sim has no expanded-band arm; loc +10; speed 0)
 - 2026-09-23 `src/agentic/screen_theme_leaders.py --asof replays` — industry map = modal smIndustry over all announcements (not point-in-time); SHP filtered by quarter_end<=asof without disclosure lag (why: forward screens (asof = panel max) are unaffected; only historical replays can leak; loc +8; speed 0)
 - 2026-09-23 `logs/leader_sleeve/screen_20260908.json` — backfilled from reports/theme_leaders_20260908.md (the committed artifact), industry names truncated to 29 chars as printed; close/own252 recomputed from panel as of 2026-09-07 (why: the 09-08 screen predates the JSON output; re-running --asof 20260907 on today's (repaired, CA-rescaled) panel would not reproduce the issued list exactly; loc 0; speed 0)
+- 2026-09-23 `announcements_historical.parquet smIndustry -> screen_theme_leaders/sim_leader_sleeve industry map` — symbols without an smIndustry row (e.g. SKYGOLD, SHANTIGOLD) are dropped from the leader cell entirely (why: industry map is the modal smIndustry of historical announcements; newer listings have none; loc +15; speed 0)
+- 2026-09-23 `src/agentic/build_macro_panel.py step 8 (macro_sent__*)` — latest macro-sentiment snapshot is broadcast to EVERY historical row — constant columns, lookahead if any model trains on them (why: pre-existing; surfaced 2026-09-23 when the gold/crude sentiment columns looked 'frozen' (they are a broadcast, not stale); loc +10; speed 0)
+- 2026-09-23 `CA store / adjusted panel for ETFs` — ETF unit splits are absent from the CA store (GOLDBEES adjusted close shows -94.5% 2016->2026) (why: CA ingest covers equities; build_gold_feed.py survives it via cross-ETF median + |r|>15% drop; loc +20; speed 0)
+- 2026-09-23 `src/agentic/fetch_filing_text.py` — manual: run with SYMBOL:seq_id pairs; not scheduled (why: first use was 4 flagged filings on request; loc +25; speed +1 min/day)
+- 2026-09-23 `src/agentic/backtest_10yr_15d5pct.py (EXP-2026-09-24-engines-count-sizing)` — engines_count A/B registered but not run; no engines_count in the 10y trade table (why: The five engines take no as-of date: each trains LGBM+XGB on the full panel and scores only the latest day (31 min serial for one as-of on 2026-09-23). A walk-forward engines_count needs a replay harness that refits all 5 engines at each cutoff and scores every weekly Monday since 2016 (~540 windows). Even with yearly refits and no OOF-CV that is ~10 refits x ~12 model pairs, an est. 2-4 h serial on a 24 GB Mac, plus porting each engine's panel/targets into cutoff-aware functions. Fidelity limits: extras exist only from 2023-06 (median-filled before, so pre-2023 hc/cs are different models from live); mh reads catalyst_features/sector_index_members, which may not be point-in-time. The backtest itself still uses the flat -3% SL (banned) and the non-canonical CA store (_incremental/normalized), so C2 (ab_vol_gate.c2) and the canonical CA path must go in first; loc +~350; speed one-off 2-4 h serial)
+- 2026-09-23 `data/derived/extra_features.parquet / feature_factory.py / verify_freshness.py` — profiled but NOT wired into daily_data_layer.sh or the gate (update to 2026-09-19 entry) (why: Profile 2026-09-24 on the repaired panel: peak RSS 13.5 GB (14,475,296,768 B), 44 s wall, 1,862,326 rows x 184 cols, 2023-06-01..2026-09-23, so memory is fine. But cs AND hc both join this file, so refreshing it in place changes both engines immediately, and a 3-bd Contract blocks every basket until it is refreshed. The registered A/B (fresh vs incumbent median-filled extras, >=13 weekly windows) differs only after 2026-06-17; windows with a matured 15d label run 2026-06-22..2026-09-01 = 11 Mondays, so the >=13 bar can't be met before data through ~2026-10-13. Fresh file also adds 5 macro_gold_inr_* cols that pass the macro_ SAFE prefix: a feature-set change too; loc +5; speed +44 s per data-layer run)
+- 2026-09-23 `reports/simplicity_audit.md` — audit 185 findings vs 162 at the 2026-07-07 baseline (+13 unused imports, +8 trivial wrappers, +1 dead func, +1 deep nesting), not zero (why: the delta sits in the 47 research scripts added since July (ab_*/mine_*/autopsy_*), not in the production files touched this session (only the unused numpy import in build_news_event_features.py, removed). Cleaning ~20 untracked research scripts is out of scope for a data-integrity session; loc -25; speed 0)

@@ -2403,10 +2403,10 @@ the rebuild complete:
 Then commit everything and push to a new private GitHub repo.
 
 ═══ CURRENT INVENTORY (auto-generated) ═══
-As of 2026-09-23 · 177 files · 33,313 LOC · regenerated on every
+As of 2026-09-23 · 179 files · 33,564 LOC · regenerated on every
 weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
 
-[Data fetchers]  (33)
+[Data fetchers]  (34)
   src/agentic/build_macro_panel.py                     — Consolidate ALL macro/aggregate features into a single daily panel.
   src/agentic/build_news_event_features.py             — News + corporate-event feature builder — 5d and 15d windows, stock + industry.
   src/agentic/fetch_amfi_mf_holdings.py                — Fetch AMFI mutual-fund AUM data — non-conventional ownership signal.
@@ -2416,6 +2416,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/fetch_commodity_prices.py                — Fetch commodity prices via FRED (Federal Reserve Economic Data) — free, no auth.
   src/agentic/fetch_event_history_fleet.py             — EVENT-HISTORY FLEET — the deep-history feeds for 10-year event studies.
   src/agentic/fetch_fii_dii.py                         — Fetch FII / DII daily provisional flows from NSE.
+  src/agentic/fetch_filing_text.py                     — Full text of specific NSE corporate filings (the attachment, not the headline).
   src/agentic/fetch_forex_macro.py                     — Fetch macro time-series — USDINR, Brent, India 10y yield, India VIX.
   src/agentic/fetch_fundamentals.py                    — Enrich the universe with fundamentals ratios per stock from NSE.
   src/agentic/fetch_global_macro.py                    — Cross-country macro fetcher — global signals affecting India.
@@ -2504,7 +2505,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   prompts/INDEX.md                                     — Agent Prompts — Index
   prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
 
-[Other tools]  (99)
+[Other tools]  (100)
   src/agentic/ab_deepcheap_leader_bands.py             — Deep-cheap leader bands (registered 2026-09-08): leader sleeve restricted to
   src/agentic/ab_event_features_15d.py                 — A/B — do the new event-history features improve the 15D/+5% prediction?
   src/agentic/ab_event_rules_15d.py                    — A/B round 2 — reaction-signed print feature + veto/boost RULES on the 15d basket.
@@ -2533,6 +2534,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/build_derived_ratios.py                  — Compute derived ratios from existing fundamentals — 50+ new factors
   src/agentic/build_doubler_audit_report.py            — Assemble reports/doubler_audit_20260828.md from the audit artifacts.
   src/agentic/build_event_polarity.py                  — Build TWO new sets of polarity-aware event features:
+  src/agentic/build_gold_feed.py                       — Domestic gold price (INR) from NSE-listed gold ETFs — data/derived/gold_inr_etf.parquet.
   src/agentic/build_handoff.py                         — Regenerate HANDOFF.md with current state snapshot.
   src/agentic/build_html_viewer.py                     — Build a single self-contained HTML file that renders all the mermaid
   src/agentic/build_workflow_diagram.py                — Auto-generate a Mermaid workflow diagram from daily_pipeline.sh.
