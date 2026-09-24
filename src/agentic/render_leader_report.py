@@ -22,6 +22,11 @@ from render_basket_report import (ANN, BLOCK, CA, INDUSTRY, MACRO, NEWS, PIT, PR
                                   SUPERSTAR, _latest_basket, _macro, _qual, _sector_map)
 
 DIR = ROOT / "logs/leader_sleeve"
+NEWS_FEED = ROOT / "data/derived/news_feed.parquet"          # RSS headlines, Apr-2026+ only
+FULLTEXT = ROOT / "data/derived/filing_fulltext.parquet"     # fetch_filing_text.py
+# Only a change-of-control offer — NOT routine SAST Reg 29/31 holding/pledge disclosures.
+TAKEOVER_RE = r"open offer|detailed public statement|draft letter of offer"
+NEWS_DAYS = 30
 HOLD_TD, PAPER_MIN_COHORTS = 126, 13
 # P(touched 2x within 126td) by sim cell and era — logs/leader_sleeve/exp_extended_20260923.log
 # (sim_leader_sleeve.py on the repaired panel, core band, weekly cohorts 2016-06..2026).
@@ -31,7 +36,7 @@ DRIVERS = {"Gems Jewellery And Watches": ("gold_inr_idx", "gold INR (NSE gold ET
            "Oil Exploration/Production": ("brent", "Brent")}
 
 
-def _driver(industry: str, macp: pd.DataFrame, since: str | None) -> str | None:
+def _driver(industry: str, macp: pd.DataFrame, since: str | None, ret: pd.Series | None = None) -> str | None:
     col, lab = DRIVERS.get(industry, (None, None))
     if col is None or macp.empty or col not in macp:
         return None
@@ -44,7 +49,54 @@ def _driver(industry: str, macp: pd.DataFrame, since: str | None) -> str | None:
         base = s[s.index <= pd.Timestamp(since)]
         if len(base):
             out += f", since screen {(s.iloc[-1] / base.iloc[-1] - 1) * 100:+.1f}%"
+    if ret is not None and since:
+        d = s.pct_change()
+        t0 = pd.Timestamp(since)
+        out += (f"; stock-vs-driver daily corr 60d pre-screen {_corr(ret, d, t0 - pd.Timedelta(days=90), t0)}, "
+                f"since {_corr(ret, d, t0 + pd.Timedelta(days=1), s.index[-1])}")
     return out + f" (thru {s.index[-1].date()})"
+
+
+def _name_hit(txt: pd.Series, sym: str, company: str | None) -> pd.Series:
+    """Headline mentions a name: the symbol as an UPPER-CASE word (so OIL != 'oil'), or the first
+    two words of the registered name, any case (the RSS tagger matches symbols only and missed
+    'GRT Jewellers to acquire ... TBZ (Tribhovandas Bhimji Zaveri)')."""
+    hit = txt.str.contains(rf"\b{sym}\b", case=True, regex=True)
+    if company:
+        w = [x for x in company.replace("(India)", "").split() if x.lower() not in {"limited", "ltd", "ltd.", "the"}]
+        if len(w) >= 2 and len(" ".join(w[:2])) >= 8:
+            hit |= txt.str.contains(" ".join(w[:2]), case=False, regex=False)
+    return hit
+
+
+def _news(sym: str, company: str | None, news: pd.DataFrame, thru: pd.Timestamp) -> str | None:
+    if news.empty:
+        return None
+    k = news[(news["d"] > thru - pd.Timedelta(days=NEWS_DAYS)) & (news["d"] <= thru + pd.Timedelta(days=1))]
+    k = k[_name_hit(k["txt"], sym, company)]
+    if k.empty:
+        return f"news {NEWS_DAYS}d: none in RSS store"
+    top = "; ".join(f"{r.d:%d-%b} {r.title[:95]}" for r in k.sort_values("d").tail(2).itertuples())
+    return f"news {NEWS_DAYS}d ({len(k)}): {top}"
+
+
+def _takeover(sym: str, ann: pd.DataFrame | None, ft: pd.DataFrame, thru: pd.Timestamp) -> str | None:
+    if ann is None or ann.empty:
+        return None
+    a = ann[(ann["event_date"] >= thru - pd.Timedelta(days=120))]
+    txt = a["description"].fillna("") + " " + a["attachment_text"].fillna("")
+    if not txt.str.contains(TAKEOVER_RE, case=False, regex=True).any():
+        return None
+    px = None
+    if not ft.empty:
+        t = ft[ft["symbol"] == sym]["text"].str.extract(r"offer price o\S* INR ([\d,]+\.\d+)", expand=False).dropna()
+        px = t.iloc[0] if len(t) else None
+    return "⚠ TAKEOVER TARGET (SAST open offer" + (f" at ₹{px}" if px else "") + ") — event-driven, not a theme leader"
+
+
+def _corr(r: pd.Series, drv: pd.Series, a, b) -> str:
+    j = pd.concat([r, drv], axis=1).loc[a:b].dropna()
+    return f"{j.corr().iloc[0, 1]:+.2f} (n={len(j)})" if len(j) >= 8 else "n/a"
 
 
 def _cell(n: dict) -> str:
@@ -108,6 +160,15 @@ def main() -> None:
     if not macp.empty:
         macp["trade_date"] = pd.to_datetime(macp["trade_date"]); macp = macp.sort_values("trade_date")
     mac = macp.iloc[-1] if not macp.empty else None
+    news = _opt(NEWS_FEED, columns=["title", "desc", "pub_ts"])
+    if not news.empty:
+        news["d"] = pd.to_datetime(news["pub_ts"], errors="coerce", utc=True).dt.tz_convert("Asia/Kolkata").dt.tz_localize(None)
+        news = news.drop_duplicates("title"); news["txt"] = news["title"].fillna("") + " " + news["desc"].fillna("")
+    ft = _opt(FULLTEXT, columns=["symbol", "text"])
+    rets = _opt(PRICES, columns=["symbol", "trade_date", "close"], filters=[("symbol", "in", names)])
+    if not rets.empty:
+        rets["trade_date"] = pd.to_datetime(rets["trade_date"])
+        rets = rets.pivot(index="trade_date", columns="symbol", values="close").sort_index().pct_change(fill_method=None)
     try:
         regime = json.loads(_latest_basket().read_text())["regime_gate"] + " (15d gate — sleeve is not regime-gated)"
     except SystemExit:
@@ -123,8 +184,12 @@ def main() -> None:
             sub = lambda df, col="symbol": df[df[col] == sym] if not df.empty else None
             qual = _qual(sym, company.get(sym), n["industry"], sub(ann), sub(pit), sub(blk, "BD_SYMBOL"),
                          stars.get(sym, []), last)
+            extra = [x for x in (_takeover(sym, sub(ann), ft, last), _news(sym, company.get(sym), news, last)) if x]
+            if extra:
+                qual = " · ".join(extra) + " · " + qual
             macro = _macro(sym, regime, sec_map, ind, mac)
-            drv = _driver(n["industry"], macp, s["data_through"])
+            drv = _driver(n["industry"], macp, s["data_through"],
+                          rets[sym] if not rets.empty and sym in rets else None)
             if drv:
                 macro = drv + " · " + macro
             if r and r["status"] != "PENDING":
