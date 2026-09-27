@@ -1,0 +1,34 @@
+panel 2015-01-01..2026-09-23 · weekly cohorts 525 from 2016-06-03 · breadth>=0.50 on 67% of cohort dates
+
+BASELINE  CAGR  +20.6% (disc  +20.2 / conf  +21.1) · maxDD  -39.1% · Sharpe 0.94 · x6.9 · names/cohort 8.6 · invested 94% | clip±40%: CAGR +21.2 DD -38.9
+G         CAGR  +14.4% (disc  +13.7 / conf  +15.4) · maxDD  -37.3% · Sharpe 0.89 · x4.0 · names/cohort 9.2 · invested 63% | clip±40%: CAGR +14.9 DD -37.1
+B         CAGR  +20.7% (disc  +19.4 / conf  +23.0) · maxDD  -38.6% · Sharpe 0.98 · x7.0 · names/cohort 16.9 · invested 95% | clip±40%: CAGR +21.4 DD -38.0
+H         CAGR  +26.6% (disc  +30.1 / conf  +20.4) · maxDD  -49.0% · Sharpe 1.15 · x11.4 · names/cohort 8.3 · invested 95% | clip±40%: CAGR +27.2 DD -49.0
+G+B       CAGR  +14.8% (disc  +12.8 / conf  +18.2) · maxDD  -39.0% · Sharpe 0.96 · x4.1 · names/cohort 18.7 · invested 63% | clip±40%: CAGR +15.3 DD -38.5
+G+H       CAGR  +22.3% (disc  +26.3 / conf  +15.3) · maxDD  -38.7% · Sharpe 1.27 · x8.0 · names/cohort 8.7 · invested 65% | clip±40%: CAGR +22.7 DD -38.7
+B+H       CAGR  +23.5% (disc  +22.0 / conf  +26.0) · maxDD  -49.5% · Sharpe 1.08 · x8.8 · names/cohort 17.4 · invested 96% | clip±40%: CAGR +24.7 DD -49.3
+G+B+H     CAGR  +20.2% (disc  +20.3 / conf  +19.8) · maxDD  -39.8% · Sharpe 1.22 · x6.7 · names/cohort 18.9 · invested 65% | clip±40%: CAGR +21.0 DD -39.6
+BENCH EW  CAGR  +18.2% (disc  +16.1 / conf  +21.9) · maxDD  -52.5% · Sharpe 0.97
+
+CALENDAR-YEAR RETURNS (%)
+            2016   2017   2018   2019   2020   2021   2022   2023   2024   2025   2026
+BASELINE    -9.5   52.3  -19.1   10.1   87.6   49.7   -8.3   59.5   21.9  -16.8   23.0
+G           -9.2   42.9  -16.5    4.8   40.8   45.7   -4.6   37.8   21.2  -10.1   11.3
+B           -6.3   48.8  -16.7    8.7   66.9   54.2   -7.0   62.7   26.8  -17.8   24.6
+H           -3.2  122.2  -11.2  -11.9  125.4   58.4  -12.4   72.2   21.8  -16.3   10.6
+G+B         -6.3   41.3  -15.9    2.8   28.0   51.0   -5.0   40.4   24.6   -9.4   15.6
+G+H         -2.8  111.5   -8.1   -2.9   73.1   48.7   -7.0   38.6   19.4   -9.9   11.8
+B+H         -3.0   89.5  -12.2  -11.9   67.4   54.7   -5.5   74.0   31.6  -14.5   17.7
+G+B+H       -2.8   81.3   -8.3   -3.6   42.3   49.3   -2.9   43.8   27.3   -7.3   13.6
+BENCH EW     7.6   56.3  -19.1   -2.4   23.7   53.0    1.6   49.3   28.9   -5.0   12.1
+
+VERDICT vs BASELINE (registered: CAGR higher in BOTH eras AND maxDD not worse by >2pp)
+  G       no    · disc -6.5pp · conf -5.7pp · maxDD +1.8pp
+  B       no    · disc -0.8pp · conf +1.9pp · maxDD +0.4pp
+  H       no    · disc +9.9pp · conf -0.7pp · maxDD -10.0pp
+  G+B     no    · disc -7.4pp · conf -2.9pp · maxDD +0.1pp
+  G+H     no    · disc +6.2pp · conf -5.8pp · maxDD +0.3pp
+  B+H     no    · disc +1.9pp · conf +4.9pp · maxDD -10.5pp
+  G+B+H   no    · disc +0.2pp · conf -1.3pp · maxDD -0.7pp
+
+PORTFOLIO 7X COMPLETE
