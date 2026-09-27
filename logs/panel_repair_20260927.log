@@ -1,0 +1,110 @@
+[17:07:03] backup
+[17:07:04] step 1: BE/BZ backfill from 2015-01-01
+/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+loading existing parquet ...
+existing: 5,150,143 rows, 3,807 symbols
+normalizing 2973 raw partitions ...
+  100/2973
+  200/2973
+  300/2973
+  400/2973
+  500/2973
+  600/2973
+  700/2973
+  800/2973
+  900/2973
+  1000/2973
+  1100/2973
+  1200/2973
+  1300/2973
+  1400/2973
+  1500/2973
+  1600/2973
+  1700/2973
+  1800/2973
+  1900/2973
+  2000/2973
+  2100/2973
+  2200/2973
+  2300/2973
+  2400/2973
+  2500/2973
+  2600/2973
+  2700/2973
+  2800/2973
+  2900/2973
+missing rows to insert: 415,596 across 1,495 symbols
+series
+BE    363882
+BZ     51714
+inserted rows carrying a CA adjustment: 61,530
+recomputing features for 1495 symbols (2,834,454 rows) ...
+final rows: 5,565,739
+wrote /Users/abhinavs./Documents/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet
+DEEDEV rows 2026-05-15..2026-08-12: 64
+trade_date series  close  return_1d  delivery_pct  volume_vs_20d
+2026-05-15     EQ 501.40   0.006019        0.4940       0.335419
+2026-05-18     EQ 476.35  -0.049960        0.5378       0.308446
+2026-05-19     BE 452.55  -0.049963        1.0000       0.132605
+2026-05-20     BE 475.15   0.049939        1.0000       0.813187
+2026-05-21     BE 498.90   0.049984        1.0000       1.410837
+2026-05-22     BE 523.80   0.049910        1.0000       0.312125
+trade_date series  close  return_1d  delivery_pct  volume_vs_20d
+2026-08-10     BE  626.2  -0.005558        1.0000       2.176042
+2026-08-11     EQ  623.2  -0.004791        0.5768       1.122223
+2026-08-12     EQ  638.7   0.024872        0.5771       1.578022
+[17:08:27] step 2: price-only CA factors (rebuild on repaired panel) + apply
+price-only CA candidates: 781 · {'special_dividend': 344, 'rights': 286, 'demerger': 101, 'scheme': 44, 'capital_reduction': 4, 'consolidation': 2}
+                   rows  applied
+kind                            
+capital_reduction     4        0
+consolidation         2        1
+demerger            101       77
+rights              286      238
+scheme               44       17
+special_dividend    344      316
+    symbol    ex_date     kind  price_factor                          method
+KESORAMIND 2025-03-10 demerger      0.049971 empirical ex-open / prior close
+     SUVEN 2020-01-21 demerger      0.050423 empirical ex-open / prior close
+GFLLIMITED 2019-08-06 demerger      0.114662 empirical ex-open / prior close
+  MIRZAINT 2023-03-29 demerger      0.130512 empirical ex-open / prior close
+    SINTEX 2017-05-25   scheme      0.171950 empirical ex-open / prior close
+INDIAGLYCO 2026-09-02 demerger      0.202393 empirical ex-open / prior close
+   NIITLTD 2023-06-08 demerger      0.227306 empirical ex-open / prior close
+      OCCL 2024-07-01 demerger      0.245740 empirical ex-open / prior close
+loading panel for apply ...
+re-adjusting 457 symbols
+CROMPGREAV check:
+trade_date  close  return_1d
+2016-03-11 146.40  -0.027566
+2016-03-14 155.30   0.060792
+2016-03-15  44.00  -0.716677
+2016-03-16  46.85   0.064773
+wrote /Users/abhinavs./Documents/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet (5,565,739 rows)
+[17:08:49] step 3: full-history coverage eval
+Traceback (most recent call last):
+  File "/Users/abhinavs./Documents/Zoom/src/agentic/eval_panel_coverage.py", line 163, in <module>
+    raise SystemExit(main())
+  File "/Users/abhinavs./Documents/Zoom/src/agentic/eval_panel_coverage.py", line 101, in main
+    raw = _raw_day(d)
+  File "/Users/abhinavs./Documents/Zoom/src/agentic/eval_panel_coverage.py", line 48, in _raw_day
+    r = pd.read_csv(files[0], low_memory=False)
+  File "/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1898, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "pandas/_libs/parsers.pyx", line 574, in pandas._libs.parsers.TextReader.__cinit__
+  File "pandas/_libs/parsers.pyx", line 663, in pandas._libs.parsers.TextReader._get_header
+  File "pandas/_libs/parsers.pyx", line 874, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "pandas/_libs/parsers.pyx", line 891, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "pandas/_libs/parsers.pyx", line 2053, in pandas._libs.parsers.raise_parser_error
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x90 in position 22: invalid start byte
+coverage eval reported FAIL (see above)
+[17:09:06] REPAIR CHAIN DONE

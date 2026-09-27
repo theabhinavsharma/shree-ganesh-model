@@ -1,0 +1,50 @@
+{
+ "dataset": "price_only_ca_factors",
+ "path": "data/corporate_actions_full_history/normalized/price_only_ca_factors.parquet",
+ "key": [
+  "symbol",
+  "ex_date",
+  "kind"
+ ],
+ "producer": "src/agentic/build_price_only_ca_factors.py",
+ "consumers": [
+  "src/transform/corporate_actions.py (auto-loaded)",
+  "src/agentic/refresh_prices.py self-heal"
+ ],
+ "columns": {
+  "price_factor": "multiplier applied to every PRICE before ex_date (quantities untouched); <1 = value left the stock",
+  "applied": "True rows are used by the adjuster",
+  "method": "how the factor was derived",
+  "reason": "why a row was not applied",
+  "raw_prev_close": "raw close of last session before ex_date (Rs)",
+  "raw_ex_open": "raw open of first session on/after ex_date (Rs)",
+  "gap_days": "calendar days between those sessions"
+ },
+ "summary": {
+  "capital_reduction": {
+   "rows": 4,
+   "applied": 0
+  },
+  "consolidation": {
+   "rows": 2,
+   "applied": 1
+  },
+  "demerger": {
+   "rows": 101,
+   "applied": 77
+  },
+  "rights": {
+   "rows": 286,
+   "applied": 238
+  },
+  "scheme": {
+   "rows": 44,
+   "applied": 17
+  },
+  "special_dividend": {
+   "rows": 344,
+   "applied": 316
+  }
+ },
+ "updated": "2026-09-27T17:08:27"
+}

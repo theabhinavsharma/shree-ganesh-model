@@ -70,6 +70,22 @@ def main() -> None:
         panel = panel.merge(fx, on="trade_date", how="left")
         print(f"  + FX: {len(fx)} rows ({list(c for c in fx.columns if c != 'trade_date')})")
 
+    # 2b. usdinr history (FRED DEXINUS) fills dates the FX feed lacks (it starts 2024-02-19). 2026-09-27 audit:
+    # USD amounts before then were converted at a fabricated 83.0. Source recorded per row.
+    uh = safe_read(DERIVED / "usdinr_history.parquet")
+    if not uh.empty:
+        uh["trade_date"] = pd.to_datetime(uh["trade_date"])
+        if "usdinr" not in panel.columns:
+            panel["usdinr"] = np.nan
+        panel["usdinr_source"] = np.where(panel["usdinr"].notna(), "fx_feed", None)
+        filled = pd.merge_asof(panel[["trade_date"]].sort_values("trade_date"), uh.rename(columns={"usdinr": "usdinr_fred"}).sort_values("trade_date"),
+                               on="trade_date", direction="backward", tolerance=pd.Timedelta(days=5))
+        panel = panel.sort_values("trade_date").reset_index(drop=True)
+        gap = panel["usdinr"].isna() & filled["usdinr_fred"].notna().values
+        panel.loc[gap, "usdinr"] = filled.loc[gap.values, "usdinr_fred"].values
+        panel.loc[gap, "usdinr_source"] = "fred_dexinus"
+        print(f"  + usdinr history: filled {int(gap.sum())} dates from FRED DEXINUS")
+
     # 3. commodities
     com = safe_read(DERIVED / "commodity_prices.parquet")
     if not com.empty:

@@ -94,6 +94,7 @@ def main() -> None:
         import numpy as np
         from src.transform.corporate_actions import (
             PRICE_COLUMNS, QTY_COLUMNS, apply_split_bonus_adjustments,
+            expected_price_factor, load_price_only_factors,
         )
         ca = pd.read_parquet(CA_PATH)
         ca["ex_date"] = pd.to_datetime(ca["ex_date"], errors="coerce")
@@ -101,25 +102,21 @@ def main() -> None:
             ca[ca["adjustment_factor"].notna() & ca["adjustment_factor"].gt(0) & ca["ex_date"].notna()]
             .groupby(["symbol", "ex_date"])["adjustment_factor"].prod().reset_index()
         )
+        # 2026-09-27: price-only factors (demerger/rights/special dividend/...) are part of the
+        # expected step function; without them this heal would undo those adjustments nightly.
+        po = load_price_only_factors()
         # scan symbols that have store factors OR carry a non-identity stored factor
         # (catches symbols whose bogus factor was later nulled but rows stay divided)
         adjusted_syms = set(
             combined.loc[combined["price_adjustment_factor_to_present"].fillna(1.0) != 1.0, "symbol"].unique()
         )
-        scan_syms = set(eff["symbol"].unique()) | adjusted_syms
+        scan_syms = set(eff["symbol"].unique()) | set(po["symbol"].unique()) | adjusted_syms
         stale_syms = []
         for sym, g in combined[combined["symbol"].isin(scan_syms)].groupby("symbol"):
-            sa = eff[eff["symbol"] == sym].sort_values("ex_date")
             td = g["trade_date"].to_numpy(dtype="datetime64[ns]")
-            share = np.ones(len(g))
-            if len(sa):
-                exs = sa["ex_date"].to_numpy(dtype="datetime64[ns]")
-                fs = sa["adjustment_factor"].astype(float).to_numpy()
-                suffix = np.cumprod(fs[::-1])[::-1]
-                idx = np.searchsorted(exs, td, side="right")
-                share[idx < len(exs)] = suffix[idx[idx < len(exs)]]
+            expected = expected_price_factor(td, eff[eff["symbol"] == sym], po[po["symbol"] == sym])
             stored = g["price_adjustment_factor_to_present"].fillna(1.0).to_numpy(dtype=float)
-            if (~np.isclose(stored, 1.0 / share, rtol=1e-6)).any():
+            if (~np.isclose(stored, expected, rtol=1e-6)).any():
                 stale_syms.append(sym)
         if stale_syms:
             print(f"LATE-CA SELF-HEAL: re-adjusting {len(stale_syms)} symbols: {stale_syms}")

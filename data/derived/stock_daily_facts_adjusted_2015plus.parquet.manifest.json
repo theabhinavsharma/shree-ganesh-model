@@ -1,0 +1,42 @@
+{
+ "dataset": "stock_daily_facts_adjusted_2015plus",
+ "path": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+ "rows": 5565739,
+ "key": [
+  "symbol",
+  "trade_date"
+ ],
+ "date_range": [
+  "2015-01-01",
+  "2026-09-23"
+ ],
+ "symbols": 3807,
+ "series_counts": {
+  "EQ": 5046920,
+  "BE": 453656,
+  "BZ": 65163
+ },
+ "producer": "src/transform/build_daily_facts.py (full build) \u00b7 src/agentic/refresh_prices.py (daily) \u00b7 repairs: repair_be_series_gaps.py (2026-08-28 for 2025+, 2026-09-27 for 2015+), build_price_only_ca_factors.py --apply (2026-09-27)",
+ "source": "NSE official bhavcopies (data/raw/nse_full_history_official): old format cm*bhav.csv.zip to 2019, sec_bhavdata_full csv 2020+",
+ "series_scope": "EQ + BE + BZ (trade-for-trade) for every symbol that ever traded EQ. Symbols that only ever traded BE/BZ are NOT in the panel (2015-16 coverage 98-99.5% of raw EQ/BE/BZ symbols; 2017+ >= 99.57%; full eval logs/evals/panel_coverage_2026-09-23.json).",
+ "adjustment": {
+  "price_adjustment_factor_to_present": "multiplier applied to raw prices: (1 / split-bonus share factor) x price-only factor (demerger, scheme, rights at TERP, special dividend, consolidation); see data/corporate_actions_full_history/normalized/price_only_ca_factors.parquet",
+  "share_adjustment_factor_to_present": "split/bonus share multiplier applied to quantities",
+  "raw_columns": "raw_* hold the as-traded values where an adjustment was applied; NaN where no adjustment ever applied (then raw == adjusted)",
+  "price_levels": "for LEVEL filters use close / price_adjustment_factor_to_present (research_panel.raw_price), never the adjusted close"
+ },
+ "units": {
+  "prices": "Rs per share",
+  "total_traded_value": "Rs",
+  "turnover_lacs": "Rs lakh",
+  "avg_traded_value_20d": "Rs (20-row mean)",
+  "delivery_pct": "fraction 0-1 (BE/BZ imputed 1.0: trade-for-trade is compulsory delivery)",
+  "return_1d": "fraction"
+ },
+ "known_limitations": [
+  "rolling features (sma/ema/rsi/avg_traded_value/return_20d) roll over ROWS; with BE/BZ now present, remaining gaps are real suspensions",
+  "corporate actions missing from the CA store stay unadjusted (e.g. CROMPGREAV demerger 2016-03-15 -71.7%)",
+  "2022-08-08 raw sec_bhavdata file is malformed (eval reports it unreadable)"
+ ],
+ "updated": "2026-09-27T17:13:27"
+}

@@ -27,6 +27,7 @@ run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 
 # --- daily macro + flows ---
 run forex /usr/bin/python3 src/agentic/fetch_forex_macro.py
+run usdinr_history /usr/bin/python3 src/agentic/fetch_usdinr_history.py   # FRED DEXINUS (pre-2024 FX for USD amounts)
 run commodity /usr/bin/python3 src/agentic/fetch_commodity_prices.py
 run global_macro /usr/bin/python3 src/agentic/fetch_global_macro.py
 run fii_dii /usr/bin/python3 src/agentic/fetch_fii_dii.py

@@ -1,0 +1,20 @@
+{
+ "dataset": "usdinr_history",
+ "path": "data/derived/usdinr_history.parquet",
+ "rows": 13463,
+ "key": [
+  "trade_date"
+ ],
+ "date_range": [
+  "1973-01-02",
+  "2026-09-18"
+ ],
+ "producer": "src/agentic/fetch_usdinr_history.py",
+ "source": "FRED DEXINUS (https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXINUS) \u2014 Federal Reserve H.10",
+ "columns": {
+  "trade_date": "US business day",
+  "usdinr": "Indian rupees per 1 US dollar (noon buying rate, New York)"
+ },
+ "use": "convert USD amounts to Rs with the rate on or before the event date (merge_asof backward)",
+ "updated": "2026-09-27T17:21:20"
+}

@@ -41,16 +41,35 @@ EQUITY = {"EQ", "BE", "BZ"}
 MIN_COVERAGE = 0.995
 
 
+BAD_RAW: list[str] = []   # raw files that could not be parsed (reported, never silently skipped)
+
+
 def _raw_day(d: pd.Timestamp) -> pd.DataFrame | None:
-    files = glob.glob(str(RAW / f"trade_date={d.date()}" / "sec_bhavdata_full_*.csv"))
-    if not files:
+    """Raw NSE equity rows for one session. New format sec_bhavdata_full_*.csv (2020+) or old
+    cm*bhav.csv.zip (2015-2019; 2026-09-27: needed for the full-history eval after the 2015+ backfill)."""
+    day = RAW / f"trade_date={d.date()}"
+    new = glob.glob(str(day / "sec_bhavdata_full_*.csv"))
+    old = glob.glob(str(day / "cm*bhav.csv.zip"))
+    try:
+        if new:
+            r = pd.read_csv(new[0], low_memory=False, encoding_errors="replace")
+            close_col = "CLOSE_PRICE"
+        elif old:
+            r = pd.read_csv(old[0], low_memory=False, compression="zip", encoding_errors="replace")
+            close_col = "CLOSE"
+        else:
+            return None
+    except Exception as e:
+        BAD_RAW.append(f"{d.date()}: {type(e).__name__}: {str(e)[:80]}")
         return None
-    r = pd.read_csv(files[0], low_memory=False)
     r.columns = [c.strip() for c in r.columns]
+    if not {"SYMBOL", "SERIES", close_col} <= set(r.columns):
+        BAD_RAW.append(f"{d.date()}: unexpected columns {list(r.columns)[:6]}")
+        return None
     r["SYMBOL"] = r["SYMBOL"].astype(str).str.strip()
     r["SERIES"] = r["SERIES"].astype(str).str.strip()
     r = r[r["SERIES"].isin(EQUITY)]
-    r["CLOSE_PRICE"] = pd.to_numeric(r["CLOSE_PRICE"], errors="coerce")
+    r["CLOSE_PRICE"] = pd.to_numeric(r[close_col], errors="coerce")
     return r[["SYMBOL", "SERIES", "CLOSE_PRICE"]]
 
 
@@ -140,6 +159,7 @@ def main() -> int:
 
     verdict = {"ts": datetime.now().isoformat(timespec="seconds"), "latest_session": str(latest.date()),
                "status": "PASS" if not fails else "FAIL", "fails": fails, "watch_missing": watch_missing,
+               "raw_unparseable": BAD_RAW,
                "sessions": results}
     (OUT_DIR / f"panel_coverage_{latest.date()}.json").write_text(json.dumps(verdict, indent=1))
     with open(OUT_DIR / "panel_coverage.jsonl", "a") as f:
@@ -154,6 +174,8 @@ def main() -> int:
               f"drop-offs {r['silent_dropoffs_n']}  px-mismatch {r['price_mismatch_n']}")
     for f_ in fails:
         print("  ❌", f_)
+    for b_ in BAD_RAW:
+        print("  ⚠ raw file unreadable (not scored):", b_)
     if not fails:
         print("  ✅ every traded symbol is in the panel; all watched names present; closes match raw")
     return 1 if fails else 0
