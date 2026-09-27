@@ -1,0 +1,16 @@
+{
+ "dataset": "all-in hold matrix",
+ "experiment": "EXP-2026-09-27-allin-hold-matrix",
+ "producer": "src/agentic/sim_allin_matrix.py",
+ "columns": {
+  "window": "evaluation window start",
+  "approach": "pick rule",
+  "hold": "sessions held per rotation",
+  "cagr_med": "median CAGR % across phase offsets",
+  "cagr_worst": "worst-phase CAGR %",
+  "dd_med": "median max drawdown %",
+  "dd_worst": "worst-phase max drawdown %",
+  "phases": "number of start offsets"
+ },
+ "updated": "2026-09-27T12:39:45"
+}

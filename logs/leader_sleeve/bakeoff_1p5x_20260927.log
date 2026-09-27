@@ -1,0 +1,24 @@
+rows 752,132 · features 63
+  fold 2019: train 130,414 test 62,238 done
+  fold 2020: train 193,838 test 64,792 done
+  fold 2021: train 255,354 test 71,530 done
+  fold 2022: train 324,000 test 81,083 done
+  fold 2023: train 402,776 test 81,960 done
+  fold 2024: train 486,058 test 84,736 done
+  fold 2025: train 568,397 test 100,218 done
+  fold 2026: train 660,194 test 49,004 done
+
+MODEL         era   AUC    top1%   lift  | weekly top-10 tradable: hit%  lift vs tradable base
+logit         disc  0.536   15.9%   0.7x  |   26.9%   1.9x
+logit         conf  0.624   32.9%   1.9x  |   30.2%   2.2x
+lgbm          disc  0.580   28.8%   1.3x  |   26.5%   1.9x
+lgbm          conf  0.640   39.8%   2.3x  |   28.7%   2.1x
+xgb           disc  0.586   28.8%   1.3x  |   25.9%   1.9x
+xgb           conf  0.642   38.3%   2.2x  |   28.8%   2.1x
+mlp           disc  0.537   24.0%   1.0x  |   19.9%   1.4x
+mlp           conf  0.549   22.9%   1.3x  |   22.7%   1.7x
+lgbm_rank     disc  0.687   40.8%   1.8x  |   24.5%   1.8x
+lgbm_rank     conf  0.643   33.0%   1.9x  |   25.0%   1.9x
+ensemble      disc  0.573   29.0%   1.3x  |   25.0%   1.8x
+ensemble      conf  0.622   33.0%   1.9x  |   27.5%   2.1x
+BAKEOFF COMPLETE

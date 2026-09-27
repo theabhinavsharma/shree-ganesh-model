@@ -1,0 +1,76 @@
+[   9s] panel 4,780,973 rows · 3302 symbols
+[  15s] weekly sample 792,698 rows
+[  16s] fundamentals merged
+/Users/abhinavs./Documents/Zoom/src/agentic/anatomy_1p5x.py:172: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.
+  shp["qe"] = pd.to_datetime(shp["quarter_end"], errors="coerce"); shp["promoter_pct"] = pd.to_numeric(shp["promoter_pct"], errors="coerce")
+[  99s] events/insiders/blocks/promoter merged
+[  99s] labelled rows 752,132 · features 63
+
+BASE RATES (%):
+        y95    y63   s95
+era                     
+conf  17.03  10.13  8.23
+disc  20.12  13.16  9.45
+
+=== PART 1: buckets with lift >= 1.5x in BOTH eras (n >= 300 each), strongest first ===
+off_low                  d10     [     1.52 ..       210]  disc  35.2% (1.7x, n50,859)  conf  27.0% (1.6x, n22,949)  — distance above 52-week low
+px_sma200                d10     [    0.367 ..      27.7]  disc  31.9% (1.6x, n44,577)  conf  26.4% (1.6x, n25,784)  — price vs 200DMA
+uc20                     yes/>0  [        1 ..        20]  disc  35.0% (1.7x, n47,913)  conf  26.3% (1.5x, n26,620)  — upper-circuit closes in last 20d
+pe                       d1      [  0.00935 ..      5.01]  disc  30.9% (1.5x, n26,087)  conf  27.5% (1.6x, n11,369)  — PE (TTM)
+ret126                   d10     [    0.588 ..      56.9]  disc  33.2% (1.6x, n46,103)  conf  26.2% (1.5x, n26,038)  — 6-month return
+log_px                   d1      [       -1 ..      1.31]  disc  36.1% (1.8x, n53,234)  conf  26.1% (1.5x, n21,980)  — log10 price
+ret252                   d10     [     1.08 ..       161]  disc  30.5% (1.5x, n44,140)  conf  25.7% (1.5x, n24,879)  — 12-month return
+
+=== buckets that SUPPRESS 1.5x (<= 0.5x in both eras) ===
+dvol60                   d1      [ 2.58e-05 ..    0.0157]  disc 0.27x  conf 0.39x  — 60d daily volatility
+log_mcap                 d10     [     4.52 ..      6.39]  disc 0.29x  conf 0.40x  — log10 market cap (Rs cr)
+
+=== ERA-FLIPPERS (>=1.5x in one era, <=1.0x in the other) — not trustworthy ===
+up20                     d7      disc 0.95x  conf 1.55x
+
+=== PART 2: walk-forward LightGBM (train years < Y, windows closed; predict Y) ===
+  2019: train 130,414 · test 62,238 · base  9.1% · AUC 0.666 · top1% 26.7% (2.9x) · top5% 22.8% (2.5x)
+  2020: train 193,838 · test 64,792 · base 38.1% · AUC 0.686 · top1% 72.8% (1.9x) · top5% 69.3% (1.8x)
+  2021: train 255,354 · test 71,530 · base 32.5% · AUC 0.673 · top1% 51.2% (1.6x) · top5% 51.0% (1.6x)
+  2022: train 324,000 · test 81,083 · base 13.2% · AUC 0.650 · top1% 29.8% (2.3x) · top5% 27.2% (2.1x)
+  2023: train 402,776 · test 81,960 · base 27.1% · AUC 0.685 · top1% 62.6% (2.3x) · top5% 55.5% (2.0x)
+  2024: train 486,058 · test 84,736 · base 15.7% · AUC 0.632 · top1% 44.4% (2.8x) · top5% 30.9% (2.0x)
+  2025: train 568,397 · test 100,218 · base  9.2% · AUC 0.688 · top1% 29.1% (3.2x) · top5% 24.8% (2.7x)
+  2026: train 660,194 · test 49,004 · base 18.5% · AUC 0.653 · top1% 40.0% (2.2x) · top5% 36.6% (2.0x)
+  ERA disc: AUC 0.580 · base 23.0% · top1% 28.8% (1.3x)
+  ERA conf: AUC 0.640 · base 17.0% · top1% 39.8% (2.3x)
+
+TOP FEATURES — out-of-sample permutation AUC drop (2023+) and share of model gain:
+  log_mcap                 AUC drop +0.0328 · gain  9.2% — log10 market cap (Rs cr)
+  off_low                  AUC drop +0.0158 · gain  5.3% — distance above 52-week low
+  mkt_ew_ret60             AUC drop +0.0153 · gain 11.2% — equal-weight market 60d return
+  log_px                   AUC drop +0.0138 · gain  9.9% — log10 price
+  dvol60                   AUC drop +0.0082 · gain  6.1% — 60d daily volatility
+  promoter_pct             AUC drop +0.0074 · gain  2.0% — promoter holding %
+  eps_yoy                  AUC drop +0.0051 · gain  1.8% — latest quarter EPS YoY
+  sales_yoy                AUC drop +0.0051 · gain  2.2% — latest quarter sales YoY
+  mkt_breadth              AUC drop +0.0048 · gain  3.2% — share of liquid stocks above 50DMA
+  off_high                 AUC drop +0.0043 · gain  2.1% — distance below 52-week high (0 = at high)
+  prom_delta               AUC drop +0.0036 · gain  0.6% — promoter holding change last quarter (pp)
+  mkt_med_ret20            AUC drop +0.0022 · gain  2.0% — median stock 20d return
+  ind_heat_pct             AUC drop +0.0019 · gain  1.2% — industry 60d-return heat percentile
+  age_yrs                  AUC drop +0.0019 · gain 17.5% — years listed (panel, 2015 floor)
+  uc20                     AUC drop +0.0011 · gain  0.1% — upper-circuit closes in last 20d
+  ret126                   AUC drop +0.0011 · gain  1.3% — 6-month return
+  ret60                    AUC drop +0.0011 · gain  0.8% — 3-month return
+  px_sma200                AUC drop +0.0010 · gain  1.1% — price vs 200DMA
+  filings30_all            AUC drop +0.0009 · gain  0.3% — all filings last 30d
+  pe                       AUC drop +0.0006 · gain  1.3% — PE (TTM)
+  rsi_14_monthly           AUC drop +0.0005 · gain  2.4% — RSI monthly
+  traded_value_vs_60d      AUC drop +0.0004 · gain  0.1% — today's traded value / 60d avg
+  log_adv                  AUC drop +0.0004 · gain  3.0% — log10 20d avg traded value (Rs cr)
+  ret252                   AUC drop +0.0004 · gain  1.4% — 12-month return
+  dvol20                   AUC drop +0.0003 · gain  0.3% — 20d daily volatility
+
+=== PART 3: ALL-IN, 100% capital, hold 95 sessions, full rotation, 19 phase offsets (2019-01 .. end; model is out-of-sample) ===
+  MODEL top-10       CAGR median  +29.2% (worst phase +12.9, best +35.0) · maxDD median -54.0% (worst -64.5%)
+  MODEL top-20       CAGR median  +24.9% (worst phase +14.0, best +35.6) · maxDD median -51.1% (worst -58.8%)
+  BASELINE rule      CAGR median  +23.7% (worst phase +4.8, best +44.8) · maxDD median -44.0% (worst -74.1%)
+  G+H rule           CAGR median  +26.8% (worst phase -0.7, best +42.3) · maxDD median -43.3% (worst -55.5%)
+  EW liquid market   CAGR median  +16.5% (worst phase +15.1, best +17.5) · maxDD median -41.8% (worst -43.6%)
+[ 238s] ANATOMY COMPLETE
