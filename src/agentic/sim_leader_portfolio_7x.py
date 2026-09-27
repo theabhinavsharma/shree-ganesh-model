@@ -29,7 +29,11 @@ ROOT = Path("/Users/abhinavs./Documents/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 from generate_hybrid_basket import non_equity  # noqa: E402
 
-HOLD, SLOTS, COST, START = 126, 26, 0.005, "2016-06-01"
+import argparse
+_ap = argparse.ArgumentParser(); _ap.add_argument("--hold", type=int, default=126)
+HOLD = _ap.parse_args().hold
+SLOTS = max(1, round(HOLD / 5))                  # weekly ladder: one slot per week of the hold
+COST, START = 0.005, "2016-06-01"
 ERA_SPLIT = pd.Timestamp("2023-01-01")
 
 # ---------------- data ----------------
@@ -137,7 +141,7 @@ for k in range(1, 4):
 pick_cache = {}
 out_rows, navs = [], {}
 Rclip = R.clip(-0.4, 0.4)
-print(f"panel {days[0].date()}..{days[-1].date()} · weekly cohorts {len(weekly)} from {weekly[0].date()} · "
+print(f"HOLD {HOLD} sessions · {SLOTS} weekly slots · panel {days[0].date()}..{days[-1].date()} · weekly cohorts {len(weekly)} from {weekly[0].date()} · "
       f"breadth>=0.50 on {(breadth_prev.reindex(weekly) >= 0.5).mean()*100:.0f}% of cohort dates\n", flush=True)
 for name, lev in EXPS.items():
     key = ("broad" if "H" in lev else "core", 10 if "B" in lev else 3)
@@ -172,7 +176,7 @@ for r in out_rows[1:]:
     print(f"  {r['exp']:<7} {'BEATS' if ok else 'no   '} · disc {r['cagr_disc']-base['cagr_disc']:+.1f}pp · conf {r['cagr_conf']-base['cagr_conf']:+.1f}pp · "
           f"maxDD {r['maxdd']-base['maxdd']:+.1f}pp", flush=True)
 
-out = ROOT / "logs/leader_sleeve/portfolio_7x_nav.parquet"
+out = ROOT / f"logs/leader_sleeve/portfolio_7x_nav{'' if HOLD == 126 else f'_h{HOLD}'}.parquet"
 pd.DataFrame(navs).assign(BENCH_EW=bnav.reindex(next(iter(navs.values())).index)).to_parquet(out)
 out.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
     dataset="leader sleeve 7x factorial NAVs", experiment="EXP-2026-09-27-leader-7x-factorial", producer="src/agentic/sim_leader_portfolio_7x.py",
