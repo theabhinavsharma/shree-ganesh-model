@@ -129,13 +129,42 @@ def normalize_trade_date_directory(
     if len(delivery_files) > 1:
         raise ValueError(f"Multiple delivery artifacts found in {trade_dir}")
     delivery_path = delivery_files[0] if delivery_files else None
-    return normalize_bhavcopy_csv(
+    frame = normalize_bhavcopy_csv(
         market_files[0],
         trade_date,
         market_source_url,
         delivery_path=delivery_path,
         delivery_source_url=delivery_source_url,
     )
+    return _reconcile_file_date(frame, trade_dir, trade_date)
+
+
+def _reconcile_file_date(frame: pd.DataFrame, trade_dir: Path, requested: date) -> pd.DataFrame:
+    """Date rows by the bhavcopy's OWN date column, not the folder name (2026-09-27).
+
+    On NSE holidays the archive serves the previous session's file under the holiday's name
+    (sec_bhavdata_full_21022020.csv holds 20-Feb-2020). Trusting the folder date put ~154k copied rows
+    on 75 holiday dates (2020-2026), each repeating the prior session's OHLC and volume.
+      * file date != folder date and the file date has its own partition -> holiday copy -> empty frame
+      * file date != folder date and no partition exists for it -> special session filed under the next
+        working day (Muhurat 2020-11-14, 2024-01-20, 2024-05-18) -> rows re-dated to the file date
+    """
+    if frame.empty or "trade_date_source" not in frame.columns:
+        return frame
+    txt = frame["trade_date_source"].astype(str).str.strip()
+    src = pd.to_datetime(txt, format="%d-%b-%Y", errors="coerce")
+    if src.isna().all():
+        src = pd.to_datetime(txt, errors="coerce", dayfirst=True)
+    if src.isna().all():
+        return frame
+    file_date = src.mode().iloc[0].normalize()
+    if file_date == pd.Timestamp(requested):
+        return frame
+    if (trade_dir.parent / f"trade_date={file_date.date()}").exists():
+        return frame.iloc[0:0].copy()
+    frame = frame.copy()
+    frame["trade_date"] = file_date
+    return frame
 
 
 def normalize_delivery_file(path: Path) -> pd.DataFrame:

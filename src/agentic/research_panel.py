@@ -121,14 +121,23 @@ def stitch_renames(ret_wide: pd.DataFrame, close_wide: pd.DataFrame) -> pd.DataF
     """After an old symbol's last row, continue its return series with its successor's returns when the
     successor starts trading within 10 days — a rename is not a delisting."""
     out = ret_wide.copy()
-    for old, new in rename_map().items():
+    rm = rename_map()
+
+    def depth(sym: str, seen: frozenset = frozenset()) -> int:
+        nxt = rm.get(sym)
+        return 0 if nxt is None or nxt in seen else 1 + depth(nxt, seen | {sym})
+
+    # 2026-09-27: follow rename CHAINS (ALSTOMT&D -> GET&D -> GVT&D): stitch the latest links first so an
+    # earlier symbol inherits a successor series that is itself already continued.
+    for old in sorted(rm, key=depth):
+        new = rm[old]
         if old not in out.columns or new not in out.columns:
             continue
         lo_ = close_wide[old].last_valid_index(); fn = close_wide[new].first_valid_index()
         if lo_ is None or fn is None or (fn - lo_).days > 10 or fn < lo_:
             continue
         after = out.index > lo_
-        out.loc[after, old] = ret_wide.loc[after, new].fillna(0)
+        out.loc[after, old] = out.loc[after, new].fillna(0)
     return out
 
 

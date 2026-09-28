@@ -1,7 +1,7 @@
 {
  "dataset": "stock_daily_facts_adjusted_2015plus",
  "path": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
- "rows": 5565739,
+ "rows": 5409740,
  "key": [
   "symbol",
   "trade_date"
@@ -16,7 +16,7 @@
   "BE": 453656,
   "BZ": 65163
  },
- "producer": "src/transform/build_daily_facts.py (full build) \u00b7 src/agentic/refresh_prices.py (daily) \u00b7 repairs: repair_be_series_gaps.py (2026-08-28 for 2025+, 2026-09-27 for 2015+), build_price_only_ca_factors.py --apply (2026-09-27)",
+ "producer": "src/transform/build_daily_facts.py (full build) \u00b7 src/agentic/refresh_prices.py (daily) \u00b7 repairs: repair_be_series_gaps.py (2026-08-28 for 2025+, 2026-09-27 for 2015+), build_price_only_ca_factors.py --apply (2026-09-27) \u00b7 repair_holiday_copies.py (2026-09-27: 155,999 NSE holiday-copy rows dropped, 4 special sessions re-dated to their true Saturday/Muhurat date)",
  "source": "NSE official bhavcopies (data/raw/nse_full_history_official): old format cm*bhav.csv.zip to 2019, sec_bhavdata_full csv 2020+",
  "series_scope": "EQ + BE + BZ (trade-for-trade) for every symbol that ever traded EQ. Symbols that only ever traded BE/BZ are NOT in the panel (2015-16 coverage 98-99.5% of raw EQ/BE/BZ symbols; 2017+ >= 99.57%; full eval logs/evals/panel_coverage_2026-09-23.json).",
  "adjustment": {
@@ -38,5 +38,6 @@
   "corporate actions missing from the CA store stay unadjusted (e.g. CROMPGREAV demerger 2016-03-15 -71.7%)",
   "2022-08-08 raw sec_bhavdata file is malformed (eval reports it unreadable)"
  ],
- "updated": "2026-09-27T17:13:27"
+ "updated": "2026-09-27T22:09:19",
+ "date_semantics": "trade_date = the bhavcopy's own date column (trade_date_source); holiday copies served by NSE under a holiday's file name are never ingested (src/ingest/nse/normalize._reconcile_file_date)"
 }
