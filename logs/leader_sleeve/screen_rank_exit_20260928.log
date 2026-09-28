@@ -1,0 +1,28 @@
+loaded 2900 sessions, 3301 symbols · 20s
+
+=== EXP-2026-09-28-screen-rank-exit: weekly cohorts 2019-01-01.. (disc 2019-2022, conf 2023+), 126-session ladder, close entry ===
+arm      exit                           cagr  cagr_disc  cagr_conf      maxdd     sharpe  avg_names pct_touche pct_half_s pct_sold_e   beats  phases  PASS
+S0-E0    TIME 126                       23.2       24.3       21.9      -33.7        1.0        9.7       29.5        0.0        0.0   None           None
+S0-E1    HALF@+50%                      20.0       20.6       19.3      -31.2        1.0        9.7       29.5       29.5        0.0   False          False
+S0-E2    TRAIL 25%                      13.7       11.0       16.7      -29.6        0.9        9.7       29.5        0.0       58.8   False          False
+S0-E3    BELOW 200DMA                   18.3       18.5       18.1      -34.9        1.0        9.7       29.5        0.0       44.2   False          False
+S0-E4    HALF@+50% + TRAIL 25%          11.9        9.5       14.6      -25.6        0.9        9.7       29.5       15.1       58.8   False          False
+S1R-E0   TIME 126                       31.0       23.3       39.7      -37.2        1.3        8.5       32.6        0.0        0.0   False          False
+S1R-E1   HALF@+50%                      26.4       21.0       32.4      -35.0        1.2        8.5       32.6       32.6        0.0   False          False
+S1R-E2   TRAIL 25%                      20.2       14.4       26.8      -33.5        1.2        8.5       32.6        0.0       60.5   False          False
+S1R-E3   BELOW 200DMA                   26.3       17.6       36.3      -37.6        1.3        8.5       32.6        0.0       39.5   False          False
+S1R-E4   HALF@+50% + TRAIL 25%          17.5       14.2       21.1      -29.0        1.2        8.5       32.6       16.0       60.5   False          False
+S1M-E0   TIME 126                       33.8       31.8       35.9      -38.8        1.3        8.5       36.5        0.0        0.0   False          False
+S1M-E1   HALF@+50%                      29.2       27.5       31.1      -35.6        1.3        8.5       36.5       36.5        0.0   True   3/5     False
+S1M-E2   TRAIL 25%                      23.4       22.2       24.8      -26.1        1.4        8.5       36.5        0.0       59.7   False          False
+S1M-E3   BELOW 200DMA                   27.5       24.0       31.5      -31.3        1.4        8.5       36.5        0.0       47.0   False          False
+S1M-E4   HALF@+50% + TRAIL 25%          20.8       20.2       21.5      -23.4        1.4        8.5       36.5       18.4       59.7   False          False
+
+--- secondary: production selection S0 from 2016-06-01 (full history) ---
+S0-E0    TIME 126                       19.9       18.2       22.9      -38.0        0.9        8.8       28.4        0.0        0.0
+S0-E1    HALF@+50%                      17.7       16.3       20.0      -36.0        0.9        8.8       28.4       28.4        0.0
+S0-E2    TRAIL 25%                      10.6        7.2       16.9      -36.0        0.7        8.8       28.4        0.0       59.7
+S0-E3    BELOW 200DMA                   15.7       13.7       19.2      -32.9        0.9        8.8       28.4        0.0       45.3
+S0-E4    HALF@+50% + TRAIL 25%           9.9        7.2       14.7      -33.6        0.7        8.8       28.4       14.7       59.7
+
+VERDICT: no arm beats S0-E0 by the registered rule  (25s)

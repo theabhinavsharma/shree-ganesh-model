@@ -1,0 +1,24 @@
+{
+ "dataset": "screen_rank_exit results",
+ "path": "logs/leader_sleeve/screen_rank_exit/results.csv",
+ "experiment": "EXP-2026-09-28-screen-rank-exit",
+ "producer": "src/agentic/sim_screen_rank_exit.py",
+ "definitions": "SCREEN x RANK x EXIT for the leader sleeve (EXP-2026-09-28-screen-rank-exit; registered in logs/experiments.jsonl\nbefore any run).\n\nUser 2026-09-28: \"1. Screen for trend plus a hot or warming industry. 2. Let the model rank within that pool.\n3. Test the exit rules on top of it.\"\n\nPortfolio engine: sim_leader_portfolio_7x.run's registered ladder (26 overlapping weekly slots, 126-session hold, entry\nat the signal-day close, 0.5% round trip at entry, delisted names frozen at the last close, a name with no row on its\nexit session held to its next row). The one change: a per-name exit rule may end a position, or half of it, before\nsession t+126. Exited money is cash in its slot until the slot's next cohort. The 0.5% round trip already covers the\nsale, so an early or split exit costs nothing extra.\n\nSelections (core band in every arm: 20-day ADV >= Rs5cr and then-traded close > Rs50):\n  S0   PRODUCTION     sp.select: industries in the top decile of heat (mean own ret60 of their core names, >= 5 names),\n                      top 3 by own ret60 in each, ret252 > 50% (screen_theme_leaders / BASELINE of the 7x factorial).\n  S1R  SCREEN + MOM   trend screen: close >= 1.5x its 252-row low, ret252 >= 30%, close > SMA200, SMA50 > SMA200;\n                      industry heat percentile >= 0.70 (hot OR warming; same heat as S0). Top 9 by own ret60.\n  S1M  SCREEN + MODEL same pool, top 9 by the bake-off ensemble score (model_bakeoff_1p5x walk-forward out-of-sample\n                      scores, bakeoff_preds.parquet): the symbol's latest weekly score dated on or before the cohort date\n                      and at most 7 days old; names without one rank last.\n  9 = S0's average names per cohort (8.8).\nExits (every selection):\n  E0 TIME          hold 126 sessions (production).\n  E1 HALF50        sell half when the day's high reaches 1.5x entry, filled at 1.5x (at the open if it opens above);\n                   the rest is held to session 126.\n  E2 TRAIL25       sell everything at the next open after a close more than 25% below the highest close since entry\n                   (entry close included).\n  E3 DMA200        sell everything at the next open after a close below the 200-day average (panel sma_200).\n  E4 HALF50+TRAIL  E2's rule on the whole position until the +50% touch; then half is sold as in E1 and the other half\n                   stays on E2's rule.\n  A trigger on the last held session is the time exit at that close. Intraday triggers use the symbol's own open/high\n  relative to its prior close; sessions without a row cannot trigger.\nWindow: weekly cohorts from 2019-01-01 to the panel end for every arm (model scores start in 2019); eras disc\n2019-2022, conf 2023+ (sp.metrics).\nRegistered rule: an arm beats S0-E0 if (sp.beats) CAGR is higher in BOTH eras and the full-period max drawdown is no\nworse by more than 2 points, AND it also does so in >= 4 of the 5 weekly-grid phases (offset 0..4). 14 arms are\ncompared with S0-E0, so a pass without the phase check is weak evidence.\nSecondary (not part of the rule): S0 x E0..E4 from 2016-06-01, the production cell's full history.\n",
+ "units": {
+  "cagr": "percent a year, sleeve NAV",
+  "maxdd": "percent, worst peak-to-trough of the daily NAV",
+  "pct_touched50": "percent of positions whose high reached 1.5x entry within the hold",
+  "pct_half_sold": "percent of positions where half was sold at +50% and half held to the end",
+  "pct_sold_early": "percent of positions fully sold before session 126",
+  "avg_names": "names per cohort"
+ },
+ "inputs": [
+  "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+  "logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet",
+  "data/derived/mcap_pit.parquet",
+  "data/derived/screener_industry.parquet",
+  "data/derived/industry_analyst_labels.csv"
+ ],
+ "verdict": "no arm passes",
+ "updated": "2026-09-28T09:38:24"
+}
