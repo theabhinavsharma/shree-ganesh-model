@@ -234,6 +234,29 @@ def parse_xbrl(text: str, qe) -> dict:
     return out
 
 
+def _xbrl_fallback_fd(ic: pd.DataFrame) -> pd.Series:
+    """Filing time for integrated-filing rows with no broadcast time (2026-09-28: 4,710 of 32,273 calendar rows; they left
+    1,679 pnl_quarterly xbrl rows with NaT filing_dt and broke PIT TTMs in 2025-26). Fallback = the upload time in the XBRL
+    filename (_DDMMYYYYhhmmss_WEB.xml). Its clock is 12-hour with no AM/PM (hours 1..12; broadcast - filename is 0 or
+    720 min), so read hours 1-11 as PM and add 20 minutes. On the 27,563 rows that have both, that reading is never on an
+    earlier day than the broadcast and at most 19.8 min earlier on the same day, so +20 min cannot leak a result early."""
+    ft = pd.to_datetime(ic["detail_link"].str.extract(r"_(\d{14})_WEB", expand=False), format="%d%m%Y%H%M%S", errors="coerce")
+    late = ft + pd.to_timedelta(ft.dt.hour.lt(12).astype(int) * 12, unit="h") + pd.Timedelta(minutes=20)
+    return ic["bd"].fillna(late)
+
+
+def integrated_filing_times() -> pd.DataFrame:
+    """(symbol, qe, is_con) -> filing time of the XBRL that stage_integrated fetched (same selection and dedupe)."""
+    ic = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet")
+    ic["qe"] = pd.to_datetime(ic["period_to"], format="%d-%b-%Y", errors="coerce")
+    ic["bd"] = pd.to_datetime(ic["broadcast"], format="%d-%b-%Y %H:%M:%S", errors="coerce")
+    ic = ic.dropna(subset=["qe", "detail_link"])
+    ic = ic[ic["detail_link"].str.contains(FIN_FILE, na=False)]
+    ic["is_con"] = (ic["consolidated"] == "Consolidated").astype(int)
+    ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
+    return ic.assign(fd=_xbrl_fallback_fd(ic))[["symbol", "qe", "is_con", "fd"]]
+
+
 def stage_integrated(n: int = 0, k: int = 1):
     ic = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet")
     ic["qe"] = pd.to_datetime(ic["period_to"], format="%d-%b-%Y", errors="coerce")
@@ -242,6 +265,7 @@ def stage_integrated(n: int = 0, k: int = 1):
     ic = ic[ic["detail_link"].str.contains(FIN_FILE, na=False)]  # financial files only
     ic["is_con"] = (ic["consolidated"] == "Consolidated").astype(int)
     ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
+    ic["bd"] = _xbrl_fallback_fd(ic)          # after the dedupe, so the same file is fetched as before
     done = load_done("integrated2")
     out = OUTDIR / (f"integrated2_w{n}.jsonl" if k > 1 else "integrated2.jsonl")
     todo = [r for i, (_, r) in enumerate(ic.iterrows())
@@ -312,6 +336,14 @@ def stage_normalize():
     df = pd.DataFrame(rows)
     df["quarter_end"] = pd.to_datetime(df["quarter_end"])
     df["filing_dt"] = pd.to_datetime(df["filing_dt"], errors="coerce")
+    x = df["source"].eq("xbrl") & df["filing_dt"].isna()
+    if x.any():                                # records fetched before the fallback existed carry "NaT"
+        it = integrated_filing_times()
+        fk = it["symbol"] + "|" + it["qe"].dt.strftime("%Y-%m-%d") + "|" + it["is_con"].astype(str)
+        key = (df.loc[x, "symbol"] + "|" + df.loc[x, "quarter_end"].dt.strftime("%Y-%m-%d") + "|"
+               + df.loc[x, "basis"].eq("con").astype(int).astype(str))
+        df.loc[x, "filing_dt"] = key.map(pd.Series(it["fd"].values, index=fk.values))
+        print(f"xbrl filing_dt from the XBRL filename time: {int(df.loc[x, 'filing_dt'].notna().sum())} of {int(x.sum())} filled", flush=True)
     df = (df.sort_values(["symbol", "quarter_end", "filing_dt"])
             .drop_duplicates(["symbol", "quarter_end", "basis", "source"], keep="last"))
     df.to_parquet(NORM_OUT, index=False)
