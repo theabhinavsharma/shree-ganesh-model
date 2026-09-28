@@ -42,8 +42,8 @@ import pandas as pd
 ROOT = Path("/Users/abhinavs./Documents/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
-from test_hot_order_combo import (COV_MIN, CUTOFF_MIN, ERA_SPLIT, ROWS, asof_ttm, boot_means, build_ttm, ci,  # noqa: E402
-                                  effective_session, panel_labels)
+from test_hot_order_combo import (COV_MIN, CUTOFF_MIN, ERA_SPLIT, PNL, PNL_UNIT_TO_CR, ROWS, asof_ttm, boot_means,  # noqa: E402
+                                  build_ttm, ci, effective_session, panel_labels)
 
 EXP_ID = "EXP-2026-09-28-order-backlog"
 BOOK = ROOT / "data/derived/order_book_filings.parquet"
@@ -52,6 +52,7 @@ MIN_CR, LOOK_D, STALE_D, RATIO_MAX = 1.0, 45, 120, 20.0
 GROW_LO_D, GROW_HI_D = 300, 430
 HI, LO, LIFT_MIN, NSYM_MIN = 2.0, 1.0, 1.3, 30
 BUCKETS = [0, 0.5, 1, 2, 3, np.inf]
+BOOK_IN = BOOK
 H_KEY, L_KEY = "HIGH = ratio >= 2 & >200DMA", "LOW = ratio < 1 & >200DMA"
 
 
@@ -69,9 +70,38 @@ def boot_diff(yA: np.ndarray, gA: np.ndarray, yB: np.ndarray, gB: np.ndarray, rn
         return (W @ sA) / (W @ nA) - (W @ sB) / (W @ nB)
 
 
-def statements(cal: pd.DatetimeIndex, T: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def build_ttm_by_basis() -> pd.DataFrame:
+    """NOT REGISTERED - sensitivity added 2026-09-28 after the pre-run review: build_ttm keeps one basis per symbol by quarter
+    count, so ~1/3 of ratios used standalone revenue against decks that state a consolidated book. Same rules as build_ttm
+    (as-filed values, 4 consecutive quarters, available at the last filing, stale late filings never replace a newer TTM),
+    kept per (symbol, basis); ttm_con_first() then takes the consolidated TTM when one is known, else standalone."""
+    q = pd.read_parquet(PNL, columns=["symbol", "quarter_end", "filing_dt", "basis", "source", "net_sales"])
+    q = q.dropna(subset=["filing_dt", "net_sales"])
+    q["sales_cr"] = q["net_sales"] * q["source"].map(PNL_UNIT_TO_CR)
+    q = q.sort_values("filing_dt", kind="mergesort").drop_duplicates(["symbol", "quarter_end", "basis"], keep="first")
+    q = q.sort_values(["symbol", "basis", "quarter_end"]).reset_index(drop=True)
+    key = [q["symbol"], q["basis"]]
+    qn = q["quarter_end"].dt.year * 4 + q["quarter_end"].dt.quarter
+    consec = (qn - qn.groupby(key).shift(3)) == 3
+    q["rev_ttm_cr"] = q.groupby(key)["sales_cr"].transform(lambda x: x.rolling(4).sum()).where(consec)
+    fsec = (q["filing_dt"].astype("datetime64[ns]").astype("int64") // 10**9).astype(float)
+    with np.errstate(all="ignore"):   # seconds * 1e9 cannot overflow; macOS Accelerate leaves spurious FP flags (see boot_means)
+        q["avail"] = pd.to_datetime(fsec.groupby(key).transform(lambda x: x.rolling(4).max()), unit="s").astype("datetime64[ns]")
+    T = q.loc[q["rev_ttm_cr"] > 0, ["symbol", "basis", "quarter_end", "avail", "rev_ttm_cr"]].dropna()
+    T = T.sort_values(["symbol", "basis", "avail", "quarter_end"], kind="mergesort")
+    T = T[T["quarter_end"] >= T.groupby(["symbol", "basis"])["quarter_end"].cummax()]
+    return T.sort_values(["avail", "quarter_end"], kind="mergesort").reset_index(drop=True)
+
+
+def ttm_con_first(TB: pd.DataFrame):
+    con = TB[TB["basis"] == "con"].reset_index(drop=True)
+    sa = TB[TB["basis"] == "sa"].reset_index(drop=True)
+    return lambda left, when: asof_ttm(left, when, con).fillna(asof_ttm(left, when, sa))
+
+
+def statements(cal: pd.DatetimeIndex, ttm_at) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Backlog statements -> PIT consensus book, ratio to PIT TTM revenue, growth. Returns (events, coverage table)."""
-    O = pd.read_parquet(BOOK)
+    O = pd.read_parquet(BOOK_IN)
     O["filed"] = pd.to_datetime(O["filed"], errors="coerce")
     fy = O["filed"].dt.year
     cov = pd.DataFrame({"filings_read": O.groupby(fy).size(), "backlog_stated": O["backlog_cr"].notna().groupby(fy).sum()})
@@ -86,7 +116,7 @@ def statements(cal: pd.DatetimeIndex, T: pd.DataFrame) -> tuple[pd.DataFrame, pd
         hi = np.searchsorted(e, e, side="right")                   # every statement usable at that same close
         bp[idx] = [np.median(v[l:h]) for l, h in zip(lo, hi)]
     O["book_pit"] = bp
-    O["rev_ttm_cr"] = asof_ttm(O, "filed", T)
+    O["rev_ttm_cr"] = ttm_at(O, "filed")
     O["ratio"] = O["book_pit"] / O["rev_ttm_cr"]
     y = O["eff"].dt.year
     cov["with_ttm"] = O["ratio"].notna().groupby(y).sum()
@@ -117,7 +147,13 @@ def main() -> None:
     ap.add_argument("--boot", type=int, default=2000)
     ap.add_argument("--out", default=str(OUT))
     ap.add_argument("--dry", action="store_true", help="smoke run: do not append the result to logs/experiments.jsonl")
+    ap.add_argument("--ttm", choices=["registered", "con-first"], default="registered",
+                    help="con-first = NOT REGISTERED sensitivity: consolidated TTM when known, else standalone")
+    ap.add_argument("--book", default=str(BOOK), help="order_book_filings parquet (default: the current producer output)")
+    ap.add_argument("--tag", default="", help="label for a non-registered rerun: RESULT id suffix and default output name")
     args = ap.parse_args()
+    global BOOK_IN
+    BOOK_IN = Path(args.book) if Path(args.book).is_absolute() else ROOT / args.book
     t0 = time.time()
     rng = np.random.default_rng(20260928)
 
@@ -125,8 +161,12 @@ def main() -> None:
     cal = rp.session_calendar(px)
     close_w, high_w, low_w = (rp.wide(px, c, cal) for c in ("close", "high", "low"))
     del px
-    T, _ = build_ttm(None)
-    E, cov = statements(cal, T)
+    if args.ttm == "registered":
+        T, _ = build_ttm(None)
+        ttm_at = lambda left, when: asof_ttm(left, when, T)  # noqa: E731
+    else:
+        ttm_at = ttm_con_first(build_ttm_by_basis())
+    E, cov = statements(cal, ttm_at)
     print(f"panel {len(cal)} sessions {cal[0].date()}..{cal[-1].date()} · {time.time() - t0:.0f}s\n"
           f"backlog statements by year (effective session):\n{cov.T.to_string()}")
     top = E.nlargest(8, "ratio")[["symbol", "eff", "book_pit", "rev_ttm_cr", "ratio"]]
@@ -138,7 +178,7 @@ def main() -> None:
     S[["y95", "s95", "fc95"]] = lab
     del close_w, high_w, low_w
     S["asof"] = S["trade_date"] + pd.Timedelta(minutes=CUTOFF_MIN - 1)
-    S["covered"] = asof_ttm(S, "asof", T).notna()
+    S["covered"] = ttm_at(S, "asof").notna()
     Lft = S[["symbol", "trade_date"]].reset_index().sort_values("trade_date", kind="mergesort")
     R = E[["symbol", "eff", "ratio", "growth"]].rename(columns={"eff": "bl_eff"}).sort_values("bl_eff", kind="mergesort")
     m = pd.merge_asof(Lft, R, left_on="trade_date", right_on="bl_eff", by="symbol", direction="backward",
@@ -163,7 +203,7 @@ def main() -> None:
     for lo_, hi_ in zip(BUCKETS[:-1], BUCKETS[1:]):
         cells[f"ratio [{lo_}, {hi_})"] = c_ & (r >= lo_) & (r < hi_)
     windows = {"disc": f"{cov_start.date()} .. 2022-12-31", "conf": f"2023-01-01 .. {L['trade_date'].max().date()}"}
-    res: dict = dict(id=EXP_ID, windows=windows, label_end=str(label_end.date()), coverage_by_year=cov.to_dict(orient="index"),
+    res: dict = dict(id=EXP_ID + (f"-{args.tag}" if args.tag else ""), ttm=args.ttm, book=str(BOOK_IN.relative_to(ROOT)), windows=windows, label_end=str(label_end.date()), coverage_by_year=cov.to_dict(orient="index"),
                      cells={}, h1={})
     print(f"\neras: disc {windows['disc']} · conf {windows['conf']} (labels through {label_end.date()})")
     base = {}
@@ -208,12 +248,12 @@ def main() -> None:
     res["verdict"] = "PASS" if ok_all else "FAIL"
     print(f"\nVERDICT H1: {res['verdict']}  ({time.time() - t0:.0f}s)")
 
-    out = Path(args.out)
+    out = Path(args.out) if args.out != str(OUT) or not args.tag else OUT.with_name(f"{OUT.stem}_{args.tag}.json")
     out.write_text(json.dumps(res, indent=1, default=str))
     out.with_name(out.name + ".manifest.json").write_text(json.dumps(dict(
         dataset="order_backlog_test", path=str(out.relative_to(ROOT)) if out.is_relative_to(ROOT) else str(out),
         producer="src/agentic/test_order_backlog.py", experiment=EXP_ID,
-        inputs=[str(BOOK.relative_to(ROOT)), "data/derived/pnl_quarterly.parquet", str(ROWS.relative_to(ROOT)), str(rp.PANEL.relative_to(ROOT))],
+        inputs=[str(BOOK_IN.relative_to(ROOT)), "data/derived/pnl_quarterly.parquet", str(ROWS.relative_to(ROOT)), str(rp.PANEL.relative_to(ROOT))],
         units=dict(p="percent of weekly rows whose max high over the next 95 sessions reached 1.5x the close",
                    sus="percent whose close at +95 sessions was >= 1.5x", ret="mean close-to-close return over 95 sessions, percent",
                    lift="P(cell) / P(base) in the same era", ratio="stated order book / PIT TTM revenue, years",
@@ -221,7 +261,8 @@ def main() -> None:
         definitions=__doc__, updated=datetime.now().isoformat(timespec="seconds")), indent=1))
     if not args.dry:
         with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-            fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=EXP_ID + "-RESULT", verdict=res["verdict"],
+            fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=EXP_ID + "-RESULT" + (f"-{args.tag}" if args.tag else ""), registered=not args.tag,
+                                     ttm=args.ttm, verdict=res["verdict"],
                                      h1=res["h1"], windows=windows, out=str(out)), default=str) + "\n")
 
 

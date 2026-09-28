@@ -49,11 +49,15 @@ OUT = ROOT / "data/derived/order_book_filings.parquet"
 REF = "https://www.nseindia.com/companies-listing/corporate-filings-announcements"
 DOC_RE = re.compile(r"investor presentation|analyst presentation|press release|media release|financial result|outcome of board meeting|"
                     r"earnings call|conference call transcript|transcript of|analysts? meet|investor meet", re.I)
-CUE_BACKLOG = re.compile(r"order\s*book|order\s*backlog|unexecuted\s+orders?|orders?\s+in\s+hand|outstanding\s+orders?|pending\s+orders?|"
+# 2026-09-28 pre-run review (confirmed): 'order booking(s)' = orders booked (intake), not the book -> inflow cue
+CUE_BACKLOG = re.compile(r"order\s*book(?!ings?)|order\s*backlog|unexecuted\s+orders?|orders?\s+in\s+hand|outstanding\s+orders?|pending\s+orders?|"
                          r"order\s+position", re.I)
-CUE_INFLOW = re.compile(r"order\s+inflows?|new\s+orders?\s+(?:received|won|bagged)|order\s+intake", re.I)
+CUE_INFLOW = re.compile(r"order\s+inflows?|new\s+orders?\s+(?:received|won|bagged)|order\s+intake|order\s*bookings?", re.I)
+_CUE_V1 = re.compile(r"order\s*book|order\s*backlog|unexecuted\s+orders?|orders?\s+in\s+hand|outstanding\s+orders?|pending\s+orders?|"
+                     r"order\s+position|order\s+inflows?|new\s+orders?\s+(?:received|won|bagged)|order\s+intake", re.I)  # crawl-time cues
 NOISE = re.compile(r"revenue|turnover|profit|ebitda|pat\b|income|sales", re.I)
-AMT = re.compile(r"(?:(?:Rs\.?|INR|₹|&#8377;|Rupees)\s*|(USD|US\$)\s*)([\d,]+(?:\.\d+)?)\s*(crores?|crs?\.?|cr\b|lakhs?|lacs?|millions?|mn\b|billions?|bn\b)", re.I)
+AMT = re.compile(r"(?:(?:Rs\.?|INR|₹|&#8377;|Rupees)\s*|(USD|US\$)\s*)([\d,]+(?:\.\d+)?)\s*((?:lakhs?|lacs?)\s*(?:crores?|crs?\.?|cr\b)|thousand\s*crores?|crores?|crs?\.?|cr\b|lakhs?|lacs?|millions?|mn\b|billions?|bn\b)", re.I)
+# 2026-09-28 pre-run review (confirmed): 'Rs 1.2 lakh crore' was read as 1.2 lakh (0.012 cr) -> compound units first
 DELAY = 0.3
 PER_QUARTER = 5          # documents per company-quarter (priority deck > transcript > results press release)
 
@@ -64,7 +68,12 @@ def to_cr(num: str, unit: str, usd: bool, fx: float) -> float | None:
     except ValueError:
         return None
     u = unit.lower()
-    mult = 0.01 if u.startswith(("l",)) else 0.1 if u.startswith("m") else 100.0 if u.startswith("b") else 1.0
+    if re.match(r"(lakhs?|lacs?)\s*cr", u):
+        mult = 1e5
+    elif u.startswith("thousand"):
+        mult = 1e3
+    else:
+            mult = 0.01 if u.startswith(("l",)) else 0.1 if u.startswith("m") else 100.0 if u.startswith("b") else 1.0
     cr = v * mult
     if usd:
         if not fx or np.isnan(fx):
@@ -143,14 +152,15 @@ def worklist() -> pd.DataFrame:
 WORKLIST = OUTDIR / "worklist.parquet"   # cache so 40 parallel workers do not each load announcements_historical
 
 
-def crawl(n: int, k: int, min_rank: int = 0, max_rank: int = 99) -> None:
+def crawl(n: int, k: int, min_rank: int = 0, max_rank: int = 99, by_doc: bool = False) -> None:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     ck = OUTDIR / f"mentions_{n}of{k}.jsonl"
     W = pd.read_parquet(WORKLIST) if WORKLIST.exists() else worklist()
     W = W.sort_values(["rank", "symbol", "cq"], kind="mergesort") if "rank" in W else W   # every quarter's best document first
     if "rank" in W:                                       # worker groups split by rank so big decks and small PRs download in parallel
         W = W[W["rank"].between(min_rank, max_rank)]
-    W = W[W["symbol"].map(lambda s: zlib.crc32(s.encode()) % k) == n] if k > 1 else W   # stable across processes
+    key = W["seq_id"].astype(str) if by_doc else W["symbol"]      # --by-doc: even tail split when a few companies are left
+    W = W[key.map(lambda s: zlib.crc32(s.encode()) % k) == n] if k > 1 else W   # stable across processes
     done = set()
     for f in OUTDIR.glob("mentions_*of*.jsonl"):          # every shard's output, so re-sharding never refetches
         recs = (json.loads(l) for l in f.read_text().splitlines() if l.strip())
@@ -185,29 +195,87 @@ def crawl(n: int, k: int, min_rank: int = 0, max_rank: int = 99) -> None:
             time.sleep(DELAY)
 
 
+def reextract(m: dict, fx: float) -> dict | None:
+    """Re-run the CURRENT cue/amount rules on one stored mention without refetching. The snippet is
+    text[cue.start - 80 : cue.end + 160] of the whitespace-normalised document, so the 140-char amount window after the cue
+    and the 60-char NOISE context both lie inside it. The generating cue sits at offset 80 (or at the first crawl-time cue
+    when the document began less than 80 chars before it). Returns the updated mention, or None when the cue no longer
+    qualifies or no amount is found."""
+    sn = m.get("snippet") or ""
+    c = _CUE_V1.match(sn, 80) if len(sn) > 80 else None
+    c = c or _CUE_V1.search(sn)
+    if c is None:
+        return None
+    p = c.start()
+    cm, kind = CUE_BACKLOG.match(sn, p), "backlog"
+    if cm is None:
+        cm, kind = CUE_INFLOW.match(sn, p), "inflow"
+    if cm is None:
+        return None
+    win = sn[cm.end(): cm.end() + 140]
+    for a in AMT.finditer(win):
+        if NOISE.search(win[max(0, a.start() - 60): a.start()]):
+            continue
+        cr = to_cr(a.group(2), a.group(3), bool(a.group(1)), fx)
+        return dict(m, kind=kind, amount_cr=round(cr, 3)) if cr and cr > 0 else None
+    return None
+
+
+def book_amount(vals: list[float]) -> float:
+    """One number per filing. Mentions within 2% of each other are one figure; the figure stated most often wins, ties go
+    to the larger (a deck repeats its total book; one-off mentions are segments, inflows or prior years). Replaces the
+    2026-09-28 median, which averaged the total with an inflow or segment when a filing had an even number of mentions
+    (731 of 4,948 filings; 60% of a 60-filing hand-checked sample was the stated total book)."""
+    cl: list[list[float]] = []
+    for x in sorted(vals):
+        if cl and x <= cl[-1][0] * 1.02:
+            cl[-1].append(x)
+        else:
+            cl.append([x])
+    best = max(cl, key=lambda c: (len(c), c[-1]))
+    return float(np.median(best))
+
+
 def consolidate() -> None:
     recs = []
     for f in sorted(OUTDIR.glob("mentions_*of*.jsonl")):
         recs += [json.loads(l) for l in f.read_text().splitlines() if l.strip()]
-    D = pd.DataFrame(recs).drop_duplicates(["symbol", "seq_id"], keep="last")
-    rows = []
+    D = pd.DataFrame(recs)
+    D["_ok"] = ~D["status"].astype(str).str.startswith(("HTTP_", "ERR_"))
+    D = D.sort_values("_ok", kind="mergesort").drop_duplicates(["symbol", "seq_id"], keep="last")   # a later success beats a stale error
+    fxs = pd.read_parquet(ROOT / "data/derived/usdinr_history.parquet").set_index("trade_date")["usdinr"].sort_index()
+    rows, changed = [], dict(mentions=0, rescaled_lakh_crore=0, reclassified=0, dropped=0)
     for r in D.itertuples():
-        ms = r.mentions if isinstance(r.mentions, list) else []
+        d = pd.to_datetime(r.sort_date, errors="coerce")
+        fx = float(fxs.asof(d)) if pd.notna(d) else float("nan")
+        ms = []
+        for m in (r.mentions if isinstance(r.mentions, list) else []):
+            n = reextract(m, fx)
+            changed["mentions"] += 1
+            if n is None:
+                changed["dropped"] += 1
+                continue
+            changed["reclassified"] += n["kind"] != m["kind"]
+            changed["rescaled_lakh_crore"] += n["amount_cr"] >= 1000 * max(m["amount_cr"], 1e-9)
+            ms.append(n)
         b = [m["amount_cr"] for m in ms if m["kind"] == "backlog"]
         f_ = [m["amount_cr"] for m in ms if m["kind"] == "inflow"]
         rows.append(dict(symbol=r.symbol, seq_id=r.seq_id, filed=pd.to_datetime(r.sort_date, errors="coerce"), desc=r.desc, status=r.status,
-                         backlog_cr=float(np.median(b)) if b else np.nan, inflow_cr=float(np.median(f_)) if f_ else np.nan,
+                         backlog_cr=book_amount(b) if b else np.nan, inflow_cr=book_amount(f_) if f_ else np.nan,
+                         backlog_median_cr=float(np.median(b)) if b else np.nan, backlog_all_cr=json.dumps(b),
                          n_backlog=len(b), n_inflow=len(f_), snippet=(next((m["snippet"] for m in ms if m["kind"] == "backlog"), None))))
+    print(f"mention repair: {changed}", flush=True)
     O = pd.DataFrame(rows).sort_values(["symbol", "filed"])
     O.to_parquet(OUT, index=False)
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="order_book_filings", path=str(OUT.relative_to(ROOT)), rows=len(O), key=["symbol", "seq_id"], producer="src/agentic/fetch_order_book.py",
         source="NSE corporate-announcement attachments (investor presentations, press releases, results, transcripts) of companies that ever filed an order",
-        columns=dict(filed="filing timestamp (IST, from announcements_historical.sort_date)", backlog_cr="median order-book/backlog amount stated in the filing, Rs crore (NaN = none stated)",
-                     inflow_cr="median order-inflow amount stated, Rs crore", n_backlog="backlog mentions found", n_inflow="inflow mentions found",
+        columns=dict(filed="filing timestamp (IST, from announcements_historical.sort_date)", backlog_cr="order-book amount stated in the filing, Rs crore (NaN = none stated): the figure stated most often, mentions within 2% grouped, ties to the larger (book_amount)",
+                     inflow_cr="order-inflow amount stated (same rule as backlog_cr), Rs crore", backlog_median_cr="median of all backlog mentions (the pre-2026-09-28-fix rule, kept for comparison)",
+                     backlog_all_cr="JSON list of every backlog mention amount in the filing, Rs crore", n_backlog="backlog mentions found", n_inflow="inflow mentions found",
                      snippet="text around the first backlog mention (for audit)", status="OK | NO_MENTION | NO_TEXT | HTTP_<code> | ERR_<type>"),
         use="backlog / PIT TTM revenue (pnl_quarterly, manifest units) known at the filing time = revenue visibility in years; USE filed, not a quarter end, for point-in-time joins",
-        caveats=["up to PER_QUARTER (5) documents per company-quarter; one quarter can restate the same book several times — take a PIT consensus, not a sum", "regex extraction: a deck may state segment or group backlog; check snippet for outliers", "no OCR (scanned decks yield NO_TEXT)"],
+        repairs=changed, caveats=["2026-09-28 fixes applied at consolidation from stored snippets (no refetch): lakh-crore units, 'order booking' = inflow, per-filing figure rule; 'thousand crore'-only mentions skipped at crawl time are not recoverable without a refetch", "up to PER_QUARTER (5) documents per company-quarter; one quarter can restate the same book several times — take a PIT consensus, not a sum", "regex extraction: a deck may state segment or group backlog; check snippet for outliers", "no OCR (scanned decks yield NO_TEXT)"],
         coverage=dict(filings=len(O), with_backlog=int(O["backlog_cr"].notna().sum()), companies_with_backlog=int(O.loc[O["backlog_cr"].notna(), "symbol"].nunique())),
         updated=datetime.now().isoformat(timespec="seconds")), indent=1, default=str))
     print(f"order_book_filings: {len(O):,} filings · backlog stated in {int(O['backlog_cr'].notna().sum()):,} · companies {O.loc[O['backlog_cr'].notna(), 'symbol'].nunique()}", flush=True)
@@ -217,6 +285,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--shard", type=int, default=0); ap.add_argument("--of", type=int, default=1)
     ap.add_argument("--consolidate", action="store_true"); ap.add_argument("--count", action="store_true")
+    ap.add_argument("--by-doc", action="store_true", help="shard by document instead of company")
     ap.add_argument("--min-rank", type=int, default=0); ap.add_argument("--max-rank", type=int, default=99)
     ap.add_argument("--build-worklist", action="store_true", help=f"write the worklist cache the crawl workers read")
     a = ap.parse_args()
@@ -228,4 +297,4 @@ if __name__ == "__main__":
     elif a.consolidate:
         consolidate()
     else:
-        crawl(a.shard, a.of, a.min_rank, a.max_rank)
+        crawl(a.shard, a.of, a.min_rank, a.max_rank, a.by_doc)

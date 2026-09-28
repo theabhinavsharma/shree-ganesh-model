@@ -1,0 +1,22 @@
+{
+ "dataset": "order_backlog_test",
+ "path": "logs/leader_sleeve/order_backlog_test.json",
+ "producer": "src/agentic/test_order_backlog.py",
+ "experiment": "EXP-2026-09-28-order-backlog",
+ "inputs": [
+  "data/derived/order_book_filings.parquet",
+  "data/derived/pnl_quarterly.parquet",
+  "logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+  "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
+ ],
+ "units": {
+  "p": "percent of weekly rows whose max high over the next 95 sessions reached 1.5x the close",
+  "sus": "percent whose close at +95 sessions was >= 1.5x",
+  "ret": "mean close-to-close return over 95 sessions, percent",
+  "lift": "P(cell) / P(base) in the same era",
+  "ratio": "stated order book / PIT TTM revenue, years",
+  "diff_ci": "95% symbol-clustered bootstrap CI, percentage points"
+ },
+ "definitions": "ORDER BACKLOG / PIT TTM REVENUE (EXP-2026-09-28-order-backlog; registered in logs/experiments.jsonl before any run).\n\nQuestion: does a large stated order book (backlog, in years of revenue) raise the chance that a stock touches +50%\nwithin 95 sessions? The earlier order tests sized individual order filings (amount / revenue). Decks, transcripts and\nresults press releases state the whole book, which is the better measure of revenue visibility.\n\nInputs\n  data/derived/order_book_filings.parquet       fetch_order_book.py: backlog_cr per filing, up to 5 documents per company-quarter\n  data/derived/pnl_quarterly.parquet            PIT TTM revenue via test_hot_order_combo.build_ttm (manifest units)\n  logs/leader_sleeve/anatomy_1p5x/rows.parquet  weekly rows (ind_heat_pct, px_sma200); labels recomputed on the price panel\n\nRegistered definitions\n  statement  a filing with backlog_cr >= 1 cr, usable from its effective session (filed before 15:30 IST on a session ->\n             that session, else the next one).\n  book_pit   median of the symbol's statements with effective session in (eff - 45 days, eff]: a deck, its transcript and\n             the press release restate one book; the median of what was public by then, never a later filing.\n  ratio      book_pit / PIT TTM revenue known at the filing time = years of revenue in hand. ratio > 20 is treated as an\n             extraction error (group or segment book, unit mix-up): excluded and counted.\n  row value  the latest statement with effective session within the 120 days up to weekly row t; else unknown.\n  growth     book_pit / the symbol's latest book_pit with effective session 300-430 days earlier.\n  outcome    y95 = max high over the next 95 sessions >= 1.5x the close at t; also s95 (close at +95 >= 1.5x) and fc95.\n  eras       disc = first week with >= 50% PIT TTM coverage .. 2022-12-31; conf = 2023-01-01 .. last labelled week.\n  base       P(y95) of rows with a PIT TTM revenue in that era.\nH1 (primary) HIGH = ratio >= 2 & close > SMA200 vs LOW = ratio < 1 & close > SMA200.\n             PASS iff in BOTH eras: P(HIGH) / base >= 1.3, the 95% symbol-clustered bootstrap CI of P(HIGH) - P(LOW) has a\n             lower bound > 0, and HIGH spans >= 30 symbols. Otherwise FAIL. Reported as is, no retuning.\nSecondary (descriptive, no pass rule): ratio buckets; hot (ind_heat_pct >= 0.9) & >200DMA split by ratio; book growth\n             >= 1.25 vs < 1; episode view (first weekly row after each statement, one per statement).\n",
+ "updated": "2026-09-28T08:29:32"
+}
