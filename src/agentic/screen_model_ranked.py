@@ -75,6 +75,8 @@ def main() -> None:
     R = R[R["trade_date"] <= d].sort_values("trade_date").groupby("symbol").tail(1).set_index("symbol")
 
     names = ranked
+    HOLD_TD = 126
+    sub_ann = lambda sym: ann[ann["symbol"] == sym] if not ann.empty else None  # noqa: E731
     ann = _opt(ANN, filters=[("symbol", "in", names)])
     if not ann.empty:
         ann["event_date"] = pd.to_datetime(ann["event_date"], errors="coerce")
@@ -129,6 +131,24 @@ def main() -> None:
         tag = f"#{i + 1}" if i < 9 else f"R{i - 8}"
         out += [f"## {tag} {sym}" + (" (also in production)" if sym in prod else ""), "",
                 f"- **QUANT:** {quant}", f"- **QUAL:** {qual}", f"- **MACRO:** {macro}", ""]
+    # deployment table under the TESTED rule: equal weight inside the batch, entry at the next session's open (a name
+    # upper-circuit locked at that open is skipped), 126-session time exit, no stop and no target (exits lowered returns).
+    # The AMO limit (last close +5%) only approximates "buy at the open": an open at/above the 4.9% UC-lock threshold
+    # does not fill. The exit date counts weekdays only; NSE holidays push it a few sessions later.
+    entry = pd.bdate_range(d + pd.Timedelta(days=1), periods=1)[0]
+    exit_est = pd.bdate_range(entry, periods=HOLD_TD)[-1]
+    top = [s_ for s_ in ranked][:9]
+    plan = ["## Deployment plan (paper, tested rule)", "",
+            f"Entry: open of {entry.date()} (AMO before the 09:00-09:07 IST pre-open). Each name = 1/{len(top)} of the batch; "
+            f"in the tested ladder a weekly batch is 1/26 of the sleeve. Exit: close of session 126, about {exit_est.date()} "
+            "(plus NSE holidays). No stop-loss, no profit target.", "",
+            "| Rank | Stock | Weight | Last close | AMO buy limit (+5%) | +50% level | Flags |", "|---|---|---|---|---|---|---|"]
+    for i, sym in enumerate(ranked):
+        c = float(F.loc[sym, "close"])
+        fl = "⚠ takeover target" if _takeover(sym, sub_ann(sym), ft, d) else ""
+        w = f"{100 / len(top):.1f}%" if i < 9 else "reserve"
+        plan.append(f"| {'#' + str(i + 1) if i < 9 else 'R' + str(i - 8)} | {sym} | {w} | {c:,.2f} | {c * 1.05:,.2f} | {c * 1.5:,.2f} | {fl} |")
+    out += plan
     rep = ROOT / f"reports/model_screen_{d.strftime('%Y%m%d')}.md"
     rep.write_text("\n".join(out) + "\n")
     print("\n".join(out))
