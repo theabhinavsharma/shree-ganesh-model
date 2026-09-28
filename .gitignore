@@ -105,3 +105,6 @@ quince_svids.csv
 # full-archive staging + volumes (published as release assets, never in git)
 data_archive/
 research/doubler_audit/replay/prices_asof_20260401.parquet
+
+# Drive backup volumes (uploaded to Google Drive; manifest committed separately if needed)
+backups/
