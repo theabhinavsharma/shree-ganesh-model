@@ -143,11 +143,13 @@ def worklist() -> pd.DataFrame:
 WORKLIST = OUTDIR / "worklist.parquet"   # cache so 40 parallel workers do not each load announcements_historical
 
 
-def crawl(n: int, k: int) -> None:
+def crawl(n: int, k: int, min_rank: int = 0, max_rank: int = 99) -> None:
     OUTDIR.mkdir(parents=True, exist_ok=True)
     ck = OUTDIR / f"mentions_{n}of{k}.jsonl"
     W = pd.read_parquet(WORKLIST) if WORKLIST.exists() else worklist()
     W = W.sort_values(["rank", "symbol", "cq"], kind="mergesort") if "rank" in W else W   # every quarter's best document first
+    if "rank" in W:                                       # worker groups split by rank so big decks and small PRs download in parallel
+        W = W[W["rank"].between(min_rank, max_rank)]
     W = W[W["symbol"].map(lambda s: zlib.crc32(s.encode()) % k) == n] if k > 1 else W   # stable across processes
     done = set()
     for f in OUTDIR.glob("mentions_*of*.jsonl"):          # every shard's output, so re-sharding never refetches
@@ -215,6 +217,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--shard", type=int, default=0); ap.add_argument("--of", type=int, default=1)
     ap.add_argument("--consolidate", action="store_true"); ap.add_argument("--count", action="store_true")
+    ap.add_argument("--min-rank", type=int, default=0); ap.add_argument("--max-rank", type=int, default=99)
     ap.add_argument("--build-worklist", action="store_true", help=f"write the worklist cache the crawl workers read")
     a = ap.parse_args()
     if a.build_worklist:
@@ -225,4 +228,4 @@ if __name__ == "__main__":
     elif a.consolidate:
         consolidate()
     else:
-        crawl(a.shard, a.of)
+        crawl(a.shard, a.of, a.min_rank, a.max_rank)

@@ -9,8 +9,10 @@ set -u
 cd /Users/abhinavs./Documents/Zoom
 L=logs/backfill_20260928; P=/usr/bin/python3
 log() { echo "[$(date +%T) ET] $*" | tee -a $L/main.log; }
-log "orderbook v3 start: 40 workers"
-for n in $(seq 0 39); do nice -n 10 $P src/agentic/fetch_order_book.py --shard $n --of 40 >> $L/ob40_$n.log 2>&1 & sleep 2; done
+# 01:15 ET: decks average ~8 MB, so split by rank: 48 workers on each quarter's best document (mostly decks), 16 on the rest
+log "orderbook v3 start: 48 workers rank 0 + 32 workers rank 1-4 (balanced: decks ~0.9 docs/min/worker, others ~1.5)"
+for n in $(seq 0 47); do nice -n 10 $P src/agentic/fetch_order_book.py --shard $n --of 48 --max-rank 0 >> $L/ob48_$n.log 2>&1 & sleep 1; done
+for n in $(seq 0 31); do nice -n 10 $P src/agentic/fetch_order_book.py --shard $n --of 32 --min-rank 1 >> $L/ob32_$n.log 2>&1 & sleep 1; done
 wait
 log "orderbook v3: main pass done; retrying HTTP_/ERR_"
 for n in 0 1 2 3 4 5 6 7; do nice -n 10 $P src/agentic/fetch_order_book.py --shard $n --of 8 >> $L/ob_retry_$n.log 2>&1 & done
