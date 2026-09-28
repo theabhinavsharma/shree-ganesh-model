@@ -58,6 +58,14 @@ _CUE_V1 = re.compile(r"order\s*book|order\s*backlog|unexecuted\s+orders?|orders?
 NOISE = re.compile(r"revenue|turnover|profit|ebitda|pat\b|income|sales", re.I)
 AMT = re.compile(r"(?:(?:Rs\.?|INR|₹|&#8377;|Rupees)\s*|(USD|US\$)\s*)([\d,]+(?:\.\d+)?)\s*((?:lakhs?|lacs?)\s*(?:crores?|crs?\.?|cr\b)|thousand\s*crores?|crores?|crs?\.?|cr\b|lakhs?|lacs?|millions?|mn\b|billions?|bn\b)", re.I)
 # 2026-09-28 pre-run review (confirmed): 'Rs 1.2 lakh crore' was read as 1.2 lakh (0.012 cr) -> compound units first
+# 2026-09-28 follow-up review (confirmed): after the lakh-crore unit fix, 22 of 38 such figures were market size, budget, pipeline
+# or target figures ("Rs 12.2 lakh crore in Union Budget"). A >= 1 lakh crore amount with this context is not a company's book.
+# Checked on the text BEFORE the amount (a trailing 'sector'/'opportunities' also follows real books: BHEL, NBCC, MOTHERSON), plus
+# 'by FY' / 'in the Budget' straight after it. Of the 16 lakh-crore drops under the first, wider rule, 5 were real books.
+MACRO_PRE = re.compile(r"pipeline|opportunit|capex|budget|industry|sector|guid|target|potential|allocation|outlay|NHAI|government|"
+                       r"their\s+order|in\s+front\s+of\s+us", re.I)
+MACRO_POST = re.compile(r"^\W*(?:\w+\W+){0,2}(?:by\s+FY|in\s+(?:the\s+)?(?:union\s+)?budget)", re.I)
+L1_PIPE = re.compile(r"\bL1\b|pipeline", re.I)   # 'order book + L1 of Rs X', 'bid pipeline of Rs X' between cue and amount
 DELAY = 0.3
 PER_QUARTER = 5          # documents per company-quarter (priority deck > transcript > results press release)
 
@@ -82,19 +90,32 @@ def to_cr(num: str, unit: str, usd: bool, fx: float) -> float | None:
     return cr
 
 
+def first_amount(post: str, fx: float) -> float | None:
+    """post = the 160 characters after a cue. The first amount in its first 140 characters that is not preceded (within 60)
+    by revenue/profit wording; None if that amount follows 'L1'/'pipeline' after the cue, or is >= 1 lakh crore with
+    market/budget/pipeline/target wording in the 80 characters before it (or 'by FY'/'in the Budget' right after). Only the first qualifying amount is considered."""
+    win = post[:140]
+    for a in AMT.finditer(win):
+        if NOISE.search(win[max(0, a.start() - 60): a.start()]):
+            continue
+        if L1_PIPE.search(win[:a.start()]):
+            return None
+        cr = to_cr(a.group(2), a.group(3), bool(a.group(1)), fx)
+        if not cr or cr <= 0:
+            return None
+        if cr >= 1e5 and (MACRO_PRE.search(post[max(0, a.start() - 80): a.start()]) or MACRO_POST.search(post[a.end(): a.end() + 40])):
+            return None
+        return cr
+    return None
+
+
 def extract(text: str, fx: float) -> list[dict]:
     out = []
     for kind, cue in (("backlog", CUE_BACKLOG), ("inflow", CUE_INFLOW)):
         for m in cue.finditer(text):
-            win = text[m.end(): m.end() + 140]
-            for a in AMT.finditer(win):
-                ctx = win[max(0, a.start() - 60): a.start()]
-                if NOISE.search(ctx):
-                    continue
-                cr = to_cr(a.group(2), a.group(3), bool(a.group(1)), fx)
-                if cr and cr > 0:
-                    out.append(dict(kind=kind, amount_cr=round(cr, 3), snippet=text[max(0, m.start() - 80): m.end() + 160]))
-                break                                            # first amount after the cue only
+            cr = first_amount(text[m.end(): m.end() + 160], fx)
+            if cr:
+                out.append(dict(kind=kind, amount_cr=round(cr, 3), snippet=text[max(0, m.start() - 80): m.end() + 160]))
     return out
 
 
@@ -212,13 +233,8 @@ def reextract(m: dict, fx: float) -> dict | None:
         cm, kind = CUE_INFLOW.match(sn, p), "inflow"
     if cm is None:
         return None
-    win = sn[cm.end(): cm.end() + 140]
-    for a in AMT.finditer(win):
-        if NOISE.search(win[max(0, a.start() - 60): a.start()]):
-            continue
-        cr = to_cr(a.group(2), a.group(3), bool(a.group(1)), fx)
-        return dict(m, kind=kind, amount_cr=round(cr, 3)) if cr and cr > 0 else None
-    return None
+    cr = first_amount(sn[cm.end(): cm.end() + 160], fx)
+    return dict(m, kind=kind, amount_cr=round(cr, 3)) if cr else None
 
 
 def book_amount(vals: list[float]) -> float:
@@ -226,14 +242,18 @@ def book_amount(vals: list[float]) -> float:
     to the larger (a deck repeats its total book; one-off mentions are segments, inflows or prior years). Replaces the
     2026-09-28 median, which averaged the total with an inflow or segment when a filing had an even number of mentions
     (731 of 4,948 filings; 60% of a 60-filing hand-checked sample was the stated total book)."""
+    if len(vals) > 1:                          # a figure > 20x the median of the filing's other mentions is not its book
+        vals = [x for i, x in enumerate(vals) if x <= 20 * float(np.median(vals[:i] + vals[i + 1:]))] or vals
     cl: list[list[float]] = []
     for x in sorted(vals):
         if cl and x <= cl[-1][0] * 1.02:
             cl[-1].append(x)
         else:
             cl.append([x])
-    best = max(cl, key=lambda c: (len(c), c[-1]))
-    return float(np.median(best))
+    top = sorted((c for c in cl if len(c) == max(map(len, cl))), key=lambda c: c[-1], reverse=True)
+    while len(top) > 1 and top[0][-1] > 5 * top[1][-1]:   # ties go to the larger only within 5x (a total is ~1.5-5x a segment; headline figures 10x+)
+        top = top[1:]
+    return float(np.median(top[0]))
 
 
 def consolidate() -> None:
@@ -245,6 +265,7 @@ def consolidate() -> None:
     D = D.sort_values("_ok", kind="mergesort").drop_duplicates(["symbol", "seq_id"], keep="last")   # a later success beats a stale error
     fxs = pd.read_parquet(ROOT / "data/derived/usdinr_history.parquet").set_index("trade_date")["usdinr"].sort_index()
     rows, changed = [], dict(mentions=0, rescaled_lakh_crore=0, reclassified=0, dropped=0)
+    dropped_log = []
     for r in D.itertuples():
         d = pd.to_datetime(r.sort_date, errors="coerce")
         fx = float(fxs.asof(d)) if pd.notna(d) else float("nan")
@@ -254,6 +275,7 @@ def consolidate() -> None:
             changed["mentions"] += 1
             if n is None:
                 changed["dropped"] += 1
+                dropped_log.append(dict(symbol=r.symbol, seq_id=r.seq_id, kind=m["kind"], amount_cr=m["amount_cr"], snippet=m.get("snippet")))
                 continue
             changed["reclassified"] += n["kind"] != m["kind"]
             changed["rescaled_lakh_crore"] += n["amount_cr"] >= 1000 * max(m["amount_cr"], 1e-9)
@@ -265,6 +287,7 @@ def consolidate() -> None:
                          backlog_median_cr=float(np.median(b)) if b else np.nan, backlog_all_cr=json.dumps(b),
                          n_backlog=len(b), n_inflow=len(f_), snippet=(next((m["snippet"] for m in ms if m["kind"] == "backlog"), None))))
     print(f"mention repair: {changed}", flush=True)
+    pd.DataFrame(dropped_log).to_csv(OUTDIR / "dropped_mentions.csv", index=False)   # audit trail for the MACRO / L1 rules
     O = pd.DataFrame(rows).sort_values(["symbol", "filed"])
     O.to_parquet(OUT, index=False)
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(

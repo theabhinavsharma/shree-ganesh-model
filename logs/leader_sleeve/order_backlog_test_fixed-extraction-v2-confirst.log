@@ -1,0 +1,63 @@
+panel 2900 sessions 2015-01-01..2026-09-25 · 8s
+backlog statements by year (effective session):
+filed                 2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
+filings_read           854   970  1232  1308  1281  1609  2838  3115  3717  4280  3505
+backlog_stated         110   149   202   255   293   353   620   642   823  1082   966
+with_ttm                 0     0     0   186   276   327   555   575   760   875   763
+ratio_gt_20_excluded     0     0     0     0     0     1     0     3    10     3     4
+events_used              0     0     0   168   242   271   478   503   666   763   658
+companies                0     0     0    62    73    78   123   130   160   183   199
+largest ratios kept (eyeball for group/segment books):
+    symbol        eff  book_pit  rev_ttm_cr     ratio
+      SEPC 2026-05-26   10000.0    547.7546 18.256351
+GENUSPOWER 2024-05-31   21000.0   1198.4664 17.522394
+GENUSPOWER 2024-06-07   20500.0   1198.4664 17.105194
+     AWHCL 2026-06-05   18000.0   1053.1929 17.090886
+GENUSPOWER 2025-02-11   31302.0   1925.3572 16.257762
+      NBCC 2025-08-18  200000.0  12319.4169 16.234535
+GENUSPOWER 2024-07-31   21458.0   1351.5129 15.877022
+GENUSPOWER 2024-08-07   20229.0   1351.5129 14.967671
+
+eras: disc 2019-02-22 .. 2022-12-31 · conf 2023-01-01 .. 2026-05-06 (labels through 2026-05-12)
+  base disc: P(+50% in 95) 24.3% n=224,879 · rows with a stated book 4.5%
+  base conf: P(+50% in 95) 18.4% n=249,214 · rows with a stated book 7.4%
+
+cell                               era        n  syms   P+50  lift    sus  ret95
+HIGH = ratio >= 2 & >200DMA        disc   1,703    52   23.0  0.95    9.7    8.0
+HIGH = ratio >= 2 & >200DMA        conf   3,509    96   31.3  1.70   18.7   18.9
+LOW = ratio < 1 & >200DMA          disc   2,790    83   28.0  1.15   15.2   17.4
+LOW = ratio < 1 & >200DMA          conf   5,031   151   21.3  1.16   12.4   14.2
+stated book, any ratio             disc  10,047   136   26.1  1.08   13.2   13.9
+stated book, any ratio             conf  18,376   232   23.0  1.25   13.2   13.4
+>200DMA, no stated book            disc 114,907  1490   27.1  1.11   13.7   14.4
+>200DMA, no stated book            conf 122,641  1888   20.2  1.10    9.6    9.1
+hot & >200DMA & ratio >= 2         disc     139    25   10.1  0.41    2.9    2.3
+hot & >200DMA & ratio >= 2         conf     495    52   35.8  1.95   20.0   25.3
+hot & >200DMA & ratio < 1          disc     225    43   26.2  1.08   14.7   19.7
+hot & >200DMA & ratio < 1          conf     740    78   27.8  1.51   15.5   18.8
+hot & >200DMA & no stated book     disc  13,579  1030   28.7  1.18   15.2   15.6
+hot & >200DMA & no stated book     conf  11,715  1191   22.4  1.22   11.5    9.0
+growth >= 1.25 & >200DMA           disc   1,034    49   25.6  1.06   13.9   17.0
+growth >= 1.25 & >200DMA           conf   2,915   105   28.2  1.53   17.3   19.7
+growth < 1 & >200DMA               disc   1,560    52   34.4  1.42   15.7   18.6
+growth < 1 & >200DMA               conf   2,362   100   22.7  1.24   12.4   12.1
+ratio [0, 0.5)                     disc   2,642    77   23.0  0.95   12.8   13.0
+ratio [0, 0.5)                     conf   5,252   137   19.3  1.05   10.0   10.4
+ratio [0.5, 1)                     disc   1,934    59   28.3  1.17   15.8   18.0
+ratio [0.5, 1)                     conf   3,134    90   18.7  1.02   11.3   13.6
+ratio [1, 2)                       disc   2,154    51   30.5  1.26   14.6   19.4
+ratio [1, 2)                       conf   4,027   101   26.5  1.44   14.9   15.1
+ratio [2, 3)                       disc   1,448    43   19.1  0.79    8.1    4.9
+ratio [2, 3)                       conf   2,538    78   23.0  1.25   12.6   11.8
+ratio [3, inf)                     disc   1,869    40   28.6  1.18   13.6   11.4
+ratio [3, inf)                     conf   3,425    68   28.6  1.56   18.3   17.3
+episodes: HIGH = ratio >= 2 & >200 disc     187    44   19.8  0.82    8.0    5.0
+episodes: HIGH = ratio >= 2 & >200 conf     386    83   30.3  1.65   17.9   19.9
+episodes: LOW = ratio < 1 & >200DM disc     267    73   24.7  1.02   15.0   14.6
+episodes: LOW = ratio < 1 & >200DM conf     477   130   23.9  1.30   14.3   16.6
+
+H1 (registered): P(HIGH)/base >= 1.3, clustered CI of P(HIGH) - P(LOW) above 0, HIGH >= 30 symbols, both eras
+  disc: HIGH 23.0% (CI 16.7-29.9, 52 syms) vs LOW 28.0% (83 syms) · diff -5.0 pts CI -13.9..+4.3 · lift 0.95 -> fail
+  conf: HIGH 31.3% (CI 25.9-36.0, 96 syms) vs LOW 21.3% (151 syms) · diff +10.0 pts CI +3.9..+16.1 · lift 1.70 -> pass
+
+VERDICT H1: FAIL  (9s)

@@ -1,0 +1,20 @@
+{
+ "dataset": "h1_by_half.csv",
+ "path": "logs/leader_sleeve/order_backlog_periods/h1_by_half.csv",
+ "description": "EXP-2026-09-28-order-backlog H1 cells by entry half-year: HIGH = stated book / PIT TTM revenue >= 2 & close > SMA200, LOW = ratio < 1 & close > SMA200",
+ "producer": "pre-run/follow-up review workflow 2026-09-28 (scratch scripts halves.py / build_L.py), reproducing src/agentic/test_order_backlog.py's weekly frame exactly",
+ "inputs": [
+  "data/derived/order_book_filings.parquet (fixed extraction v1, commit 981ac3f)",
+  "build_ttm (registered TTM)",
+  "logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+  "panel labels"
+ ],
+ "status": "DESCRIPTIVE ONLY - not a test; weekly rows overlap across 95-session windows so half-year P values are autocorrelated; use symbol counts as the effective sample",
+ "units": {
+  "P": "percent of weekly rows whose max high over the next 95 sessions reached 1.5x the close",
+  "n": "weekly rows",
+  "syms": "distinct symbols",
+  "diff": "HIGH P minus LOW P, percentage points"
+ },
+ "updated": "2026-09-28T08:53:23"
+}

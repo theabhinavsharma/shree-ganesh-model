@@ -46,7 +46,8 @@ from test_hot_order_combo import (COV_MIN, CUTOFF_MIN, ERA_SPLIT, PNL, PNL_UNIT_
                                   build_ttm, ci, effective_session, panel_labels)
 
 EXP_ID = "EXP-2026-09-28-order-backlog"
-BOOK = ROOT / "data/derived/order_book_filings.parquet"
+BOOK = ROOT / "data/derived/order_book_filings.parquet"                             # producer's live output (fixed extraction)
+REG_BOOK = ROOT / "data/derived/order_book_filings_registered_run_20260928.parquet"  # input of the registered 08:29 ET run
 OUT = ROOT / "logs/leader_sleeve/order_backlog_test.json"
 MIN_CR, LOOK_D, STALE_D, RATIO_MAX = 1.0, 45, 120, 20.0
 GROW_LO_D, GROW_HI_D = 300, 430
@@ -149,11 +150,14 @@ def main() -> None:
     ap.add_argument("--dry", action="store_true", help="smoke run: do not append the result to logs/experiments.jsonl")
     ap.add_argument("--ttm", choices=["registered", "con-first"], default="registered",
                     help="con-first = NOT REGISTERED sensitivity: consolidated TTM when known, else standalone")
-    ap.add_argument("--book", default=str(BOOK), help="order_book_filings parquet (default: the current producer output)")
+    ap.add_argument("--book", default=str(REG_BOOK), help="order_book_filings parquet (default: the registered run's input; "
+                    f"the fixed producer output is {BOOK.relative_to(ROOT)} and needs --tag)")
     ap.add_argument("--tag", default="", help="label for a non-registered rerun: RESULT id suffix and default output name")
     args = ap.parse_args()
     global BOOK_IN
     BOOK_IN = Path(args.book) if Path(args.book).is_absolute() else ROOT / args.book
+    if not args.tag and (args.ttm != "registered" or BOOK_IN.resolve() != REG_BOOK.resolve()):
+        raise SystemExit("non-registered --ttm/--book needs --tag (the registered result must stay reproducible)")
     t0 = time.time()
     rng = np.random.default_rng(20260928)
 
@@ -203,7 +207,7 @@ def main() -> None:
     for lo_, hi_ in zip(BUCKETS[:-1], BUCKETS[1:]):
         cells[f"ratio [{lo_}, {hi_})"] = c_ & (r >= lo_) & (r < hi_)
     windows = {"disc": f"{cov_start.date()} .. 2022-12-31", "conf": f"2023-01-01 .. {L['trade_date'].max().date()}"}
-    res: dict = dict(id=EXP_ID + (f"-{args.tag}" if args.tag else ""), ttm=args.ttm, book=str(BOOK_IN.relative_to(ROOT)), windows=windows, label_end=str(label_end.date()), coverage_by_year=cov.to_dict(orient="index"),
+    res: dict = dict(id=EXP_ID + (f"-{args.tag}" if args.tag else ""), ttm=args.ttm, book=str(BOOK_IN.relative_to(ROOT)) if BOOK_IN.is_relative_to(ROOT) else str(BOOK_IN), windows=windows, label_end=str(label_end.date()), coverage_by_year=cov.to_dict(orient="index"),
                      cells={}, h1={})
     print(f"\neras: disc {windows['disc']} · conf {windows['conf']} (labels through {label_end.date()})")
     base = {}
@@ -248,12 +252,14 @@ def main() -> None:
     res["verdict"] = "PASS" if ok_all else "FAIL"
     print(f"\nVERDICT H1: {res['verdict']}  ({time.time() - t0:.0f}s)")
 
-    out = Path(args.out) if args.out != str(OUT) or not args.tag else OUT.with_name(f"{OUT.stem}_{args.tag}.json")
+    out = Path(args.out) if Path(args.out).is_absolute() else ROOT / args.out
+    if args.tag and out.resolve() == OUT.resolve():
+        out = OUT.with_name(f"{OUT.stem}_{args.tag}.json")                  # a labelled rerun never overwrites the registered output
     out.write_text(json.dumps(res, indent=1, default=str))
     out.with_name(out.name + ".manifest.json").write_text(json.dumps(dict(
-        dataset="order_backlog_test", path=str(out.relative_to(ROOT)) if out.is_relative_to(ROOT) else str(out),
+        dataset="order_backlog_test", path=str(out.relative_to(ROOT)) if out.is_relative_to(ROOT) else str(out), book=str(BOOK_IN),
         producer="src/agentic/test_order_backlog.py", experiment=EXP_ID,
-        inputs=[str(BOOK_IN.relative_to(ROOT)), "data/derived/pnl_quarterly.parquet", str(ROWS.relative_to(ROOT)), str(rp.PANEL.relative_to(ROOT))],
+        inputs=[str(BOOK_IN.relative_to(ROOT)) if BOOK_IN.is_relative_to(ROOT) else str(BOOK_IN), "data/derived/pnl_quarterly.parquet", str(ROWS.relative_to(ROOT)), str(rp.PANEL.relative_to(ROOT))],
         units=dict(p="percent of weekly rows whose max high over the next 95 sessions reached 1.5x the close",
                    sus="percent whose close at +95 sessions was >= 1.5x", ret="mean close-to-close return over 95 sessions, percent",
                    lift="P(cell) / P(base) in the same era", ratio="stated order book / PIT TTM revenue, years",
