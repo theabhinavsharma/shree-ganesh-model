@@ -1,0 +1,23 @@
+{
+ "dataset": "summary.csv",
+ "path": "logs/leader_sleeve/order_book_events/summary.csv",
+ "producer": "src/agentic/study_order_book_events.py",
+ "status": "DESCRIPTIVE - not pre-registered",
+ "description": "mean / median by era x ratio group; BASE = every covered weekly anatomy row",
+ "definitions": "Order-book announcement event study (DESCRIPTIVE, not pre-registered; 2026-09-28, follow-up to EXP-2026-09-28-order-backlog).\n\nQuestion from the user after the backlog test failed: does the announcement itself move the stock, and short of +50%, what\naverage / median return did these stocks give? The registered test used weekly rows; this looks at each announcement once.\n\nEvent   the first order-book statement of a company after >= 45 days without one (a results deck / press release / transcript\n        cluster counts once), from data/derived/order_book_filings.parquet (fixed extraction) via test_order_backlog.statements\n        (PIT consensus book, ratio = book / PIT TTM revenue with the registered build_ttm). t0 = effective session (filed\n        before 15:30 IST on a session -> that session, else the next one).\nPrices  adjusted panel (research_panel), session calendar. Closes are carried forward over non-trading sessions.\nWindows (all relative to the session calendar)\n  pre20      close(t0-1) / close(t0-21) - 1              run-up into the announcement\n  ann1       close(t0) / close(t0-1) - 1                  announcement-session move (not tradeable: the filing lands during/after it)\n  ann5       close(t0+4) / close(t0-1) - 1                first five sessions incl. t0 (not tradeable)\n  peak95     max high over t0+1..t0+95 / close(t0) - 1    best point within 95 sessions after buying at the t0 close\n  end95      close(t0+95) / close(t0) - 1                 (frozen at the final close if the stock stopped trading)\n  hit50      peak95 >= +50%;  days_to_peak = sessions from t0 to that max high\n  peak95_pre max high over t0..t0+95 / close(t0-1) - 1    same, but counting the announcement move (holder before the filing)\nBase    every weekly anatomy row with a PIT TTM revenue in the era: peak95 / end95 from its close (the average stock).\nGroups  ratio >= 2 (HIGH), 1-2, < 1 (LOW) (statements without a PIT TTM or with ratio > 20 are not events); eras disc 2019-02-22..2022-12-31, conf 2023-01-01..; also > SMA200 at t0-1.\nOnly events whose 95-session window lies inside the panel are used.\n",
+ "units": {
+  "pre20": "fraction in events.parquet; percent in summary.csv (_mean / _median)",
+  "ann1": "fraction in events.parquet; percent in summary.csv (_mean / _median)",
+  "ann5": "fraction in events.parquet; percent in summary.csv (_mean / _median)",
+  "peak95": "fraction in events.parquet; percent in summary.csv (_mean / _median)",
+  "end95": "fraction in events.parquet; percent in summary.csv (_mean / _median)",
+  "peak95_pre": "fraction in events.parquet; percent in summary.csv (_mean / _median)"
+ },
+ "inputs": [
+  "data/derived/order_book_filings.parquet",
+  "data/derived/pnl_quarterly.parquet",
+  "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+  "logs/leader_sleeve/anatomy_1p5x/rows.parquet"
+ ],
+ "updated": "2026-09-28T09:07:55"
+}
