@@ -51,7 +51,12 @@ SLEEP = 1.3
 def symbols() -> list[str]:
     a = pd.read_parquet(ROOT / "data/derived/results_calendar_history.parquet")["symbol"]
     b = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet")["symbol"]
-    return sorted(set(a) | set(b))
+    # 2026-09-28: the two calendars above cover ~1,550 companies, so pnl_quarterly held only 58-75% of
+    # results filers (17-19% for 2016-17). Add every equity in the security master that traded since 2016.
+    sm = pd.read_parquet(ROOT / "data/derived/security_master.parquet")
+    ne_col = "is_non_equity" if "is_non_equity" in sm.columns else "is_fund_unit"
+    eq = sm[~sm[ne_col].astype(bool) & (pd.to_datetime(sm["last_trade"]) >= "2016-01-01")]["symbol"]
+    return sorted(set(a) | set(b) | set(eq))
 
 
 def jget(s, url, retries=3):

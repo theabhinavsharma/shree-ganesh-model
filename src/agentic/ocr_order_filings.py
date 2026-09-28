@@ -58,6 +58,10 @@ def ocr_pdf(blob: bytes) -> str:
 
 
 def main() -> None:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--since", default=None, help="only OCR filings dated on/after this date (e.g. 2018-10-01)")
+    args = ap.parse_args()
     for tool in ("tesseract", "pdftoppm"):
         if not shutil.which(tool):
             raise SystemExit(f"{tool} not on PATH — install first (brew install tesseract poppler)")
@@ -66,6 +70,8 @@ def main() -> None:
     for r in recs:
         latest[(r["symbol"], str(r["seq_id"]))] = r
     todo = [r for r in latest.values() if r.get("status") == "NEEDS_OCR" or (r.get("ocr") and str(r.get("status", "")).startswith(("HTTP_", "ERR_")))]
+    if args.since:
+        todo = [r for r in todo if (r.get("d") or "") >= args.since]
     fx = load_usdinr().set_index("fx_date")["usdinr"]                   # historical series only, never a fixed rate
     print(f"{len(todo):,} scanned filings to OCR", flush=True)
     s = build_session(warm=True, referer=REF)
