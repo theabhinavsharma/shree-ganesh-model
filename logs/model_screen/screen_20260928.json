@@ -1,0 +1,135 @@
+{
+ "screen_id": "20260928",
+ "data_through": "2026-09-28",
+ "entry": "next session open after data_through",
+ "hold_td": 126,
+ "cost_rt_pct": 0.5,
+ "exit": "TIME (126 sessions, close); no stops",
+ "sizing": "PAPER",
+ "status": "NOT VALIDATED: S1M of EXP-2026-09-28-screen-rank-exit failed the registered drawdown rule",
+ "rule": "core band; close >= 1.5x 252-row low, ret252 >= 30%, close > SMA200, SMA50 > SMA200; industry heat pct >= 0.70; top 9 by bake-off ensemble score",
+ "names": [
+  {
+   "rank": 1,
+   "symbol": "DEEDEV",
+   "rtw": 9,
+   "industry": "Industrial Products",
+   "close": 655.5,
+   "model_score": 0.9539,
+   "heat_pct": 0.958,
+   "own60": -0.0694,
+   "own252": 1.2472,
+   "takeover": false
+  },
+  {
+   "rank": 2,
+   "symbol": "TBZ",
+   "rtw": 8,
+   "industry": "Gems, Jewellery And Watches",
+   "close": 630.75,
+   "model_score": 0.9499,
+   "heat_pct": 0.986,
+   "own60": 2.2744,
+   "own252": 2.3194,
+   "takeover": true
+  },
+  {
+   "rank": 3,
+   "symbol": "ARROWGREEN",
+   "rtw": 7,
+   "industry": "Packaging",
+   "close": 891.85,
+   "model_score": 0.9391,
+   "heat_pct": 0.847,
+   "own60": 0.4319,
+   "own252": 0.5627,
+   "takeover": false
+  },
+  {
+   "rank": 4,
+   "symbol": "BODALCHEM",
+   "rtw": 6,
+   "industry": "Dyes And Pigments",
+   "close": 201.93,
+   "model_score": 0.9204,
+   "heat_pct": 1.0,
+   "own60": 2.2134,
+   "own252": 2.0247,
+   "takeover": false
+  },
+  {
+   "rank": 5,
+   "symbol": "CORDSCABLE",
+   "rtw": 5,
+   "industry": "Cables - Electricals",
+   "close": 331.4,
+   "model_score": 0.9196,
+   "heat_pct": 0.792,
+   "own60": 0.574,
+   "own252": 0.8522,
+   "takeover": false
+  },
+  {
+   "rank": 6,
+   "symbol": "BHAGERIA",
+   "rtw": 4,
+   "industry": "Dyes And Pigments",
+   "close": 380.85,
+   "model_score": 0.904,
+   "heat_pct": 1.0,
+   "own60": 0.7315,
+   "own252": 1.0028,
+   "takeover": false
+  },
+  {
+   "rank": 7,
+   "symbol": "GANDHAR",
+   "rtw": 3,
+   "industry": "Lubricants",
+   "close": 262.05,
+   "model_score": 0.795,
+   "heat_pct": 0.944,
+   "own60": 0.4034,
+   "own252": 0.7551,
+   "takeover": false
+  },
+  {
+   "rank": 8,
+   "symbol": "MMP",
+   "rtw": 2,
+   "industry": "Aluminium",
+   "close": 452.25,
+   "model_score": 0.795,
+   "heat_pct": 0.764,
+   "own60": 0.6318,
+   "own252": 0.6227,
+   "takeover": false
+  },
+  {
+   "rank": 9,
+   "symbol": "BLSE",
+   "rtw": 1,
+   "industry": "IT Enabled Services",
+   "close": 320.65,
+   "model_score": 0.7738,
+   "heat_pct": 0.708,
+   "own60": 0.2095,
+   "own252": 0.6197,
+   "takeover": false
+  }
+ ],
+ "reserves": [
+  {
+   "rank": 1,
+   "symbol": "SBCL"
+  },
+  {
+   "rank": 2,
+   "symbol": "BLISSGVS"
+  },
+  {
+   "rank": 3,
+   "symbol": "KABRAEXTRU"
+  }
+ ]
+}

@@ -208,6 +208,14 @@ step "4.36. LEADER SLEEVE SCREEN (paper)"
   && log "  ✅ leader screen + reports/leader_sleeve_*.md" \
   || log "  ⚠ leader sleeve failed — non-fatal, see $LOG_DIR/${TS}_leader.log"
 
+step "4.37. MODEL-RANKED SCREEN (paper, not validated)"
+# EXP-2026-09-28-screen-rank-exit S1M: trend screen x hot/warming industry, top 9 by the bake-off ensemble.
+# One immutable cohort per ISO week in logs/model_screen/; scored daily by sgm_daily.sh. Never blocks the basket.
+{ nice -n 10 /usr/bin/python3 src/agentic/screen_model_ranked.py \
+  && /usr/bin/python3 src/agentic/score_model_screen.py; } > "$LOG_DIR/${TS}_model_screen.log" 2>&1 \
+  && log "  ✅ model-ranked screen + reports/model_screen_*.md" \
+  || log "  ⚠ model-ranked screen failed — non-fatal, see $LOG_DIR/${TS}_model_screen.log"
+
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.
 

@@ -23,6 +23,10 @@ bash src/agentic/daily_data_layer.sh; RC=$?
   && /usr/bin/python3 src/agentic/render_leader_report.py >> logs/sgm_daily/${TS}_leader.log 2>&1 \
   && echo "✅ leader sleeve: $(ls -t reports/leader_sleeve_*.md | head -1)" \
   || echo "⚠ leader sleeve score/render failed (paper, non-fatal) — see logs/sgm_daily/${TS}_leader.log"
+# Model-ranked screen (PAPER, not validated — EXP-2026-09-28-screen-rank-exit S1M): score its weekly cohorts
+/usr/bin/python3 src/agentic/score_model_screen.py > logs/sgm_daily/${TS}_model_screen.log 2>&1 \
+  && echo "✅ model screen scored (paper)" \
+  || echo "⚠ model screen scoring failed (paper, non-fatal) — see logs/sgm_daily/${TS}_model_screen.log"
 /usr/bin/python3 src/agentic/emit_freshness_status.py > /dev/null 2>&1 && echo "✅ freshness dashboard"
 echo "═══ DONE data_layer_rc=$RC ═══"
 exit $RC

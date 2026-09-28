@@ -59,6 +59,10 @@ fi
 # --- rebuild the panel last so everything above folds in ---
 run macro_panel /usr/bin/python3 src/agentic/build_macro_panel.py
 
+# --- daily orders + industry heat digest (2026-09-28): monitoring, not a feed and not a signal ---
+if /usr/bin/python3 src/agentic/daily_orders_industry.py > "$LOG_DIR/${TS}_orders_industry.log" 2>&1; then log "✅ orders_industry digest (not a feed)"
+else log "⚠ orders_industry digest failed (not a feed) — see $LOG_DIR/${TS}_orders_industry.log"; fi
+
 # --- mirror the live working set to Google Drive (My Drive/SGM backups/day_to_day; 2026-09-28) ---
 # Not a data feed: logged here but never added to PASS/FAIL, so it cannot change the status file or the exit code.
 if /bin/bash src/agentic/sync_drive_mirror.sh > "$LOG_DIR/${TS}_drive_mirror.log" 2>&1; then log "✅ drive_mirror (not a feed)"

@@ -13,6 +13,7 @@ Output: stdout + reports/model_screen_<date>.md. Nothing else is written.
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -149,6 +150,33 @@ def main() -> None:
         w = f"{100 / len(top):.1f}%" if i < 9 else "reserve"
         plan.append(f"| {'#' + str(i + 1) if i < 9 else 'R' + str(i - 8)} | {sym} | {w} | {c:,.2f} | {c * 1.05:,.2f} | {c * 1.5:,.2f} | {fl} |")
     out += plan
+    # 2026-09-28 (user: "you gave a new batch — what about it?"): the top 9 become an immutable PAPER cohort in
+    # logs/model_screen/, one per ISO week like the production sleeve, scored daily by score_model_screen.py with the
+    # sleeve's contract (next open, 126 sessions, 0.5% round trip). Kept apart from logs/leader_sleeve so the registered
+    # sleeve's record stays clean. rtw is display-only in the scorer; set to 10 - rank.
+    cdir = ROOT / "logs/model_screen"
+    cdir.mkdir(parents=True, exist_ok=True)
+    wk = d.isocalendar()[:2]
+    have = [p for p in cdir.glob("screen_*.json")
+            if tuple(pd.Timestamp(json.loads(p.read_text())["data_through"]).isocalendar()[:2]) == tuple(wk)]
+    if have:
+        print(f"weekly cadence: {have[0].name} already covers ISO week {wk[1]} — no second cohort")
+    else:
+        names_out = [dict(rank=i + 1, symbol=sym, rtw=10 - (i + 1), industry=str(F.loc[sym, "ind"]),
+                          close=round(float(F.loc[sym, "close"]), 2),
+                          model_score=None if pd.isna(Ps["ensemble"].get(sym)) else round(float(Ps["ensemble"].get(sym)), 4),
+                          heat_pct=round(float(grp["hp"].get(F.loc[sym, "ind"])), 3),
+                          own60=round(float(F.loc[sym, "ret60"]), 4), own252=round(float(F.loc[sym, "ret252"]), 4),
+                          takeover=bool(_takeover(sym, sub_ann(sym), ft, d)))
+                     for i, sym in enumerate(ranked[:9])]
+        (cdir / f"screen_{d.strftime('%Y%m%d')}.json").write_text(json.dumps(dict(
+            screen_id=d.strftime("%Y%m%d"), data_through=str(d.date()), entry="next session open after data_through",
+            hold_td=HOLD_TD, cost_rt_pct=0.5, exit="TIME (126 sessions, close); no stops", sizing="PAPER",
+            status="NOT VALIDATED: S1M of EXP-2026-09-28-screen-rank-exit failed the registered drawdown rule",
+            rule="core band; close >= 1.5x 252-row low, ret252 >= 30%, close > SMA200, SMA50 > SMA200; industry heat pct "
+                 ">= 0.70; top 9 by bake-off ensemble score", names=names_out,
+            reserves=[dict(rank=i + 1, symbol=sym) for i, sym in enumerate(ranked[9:])]), indent=1))
+        print(f"saved paper cohort logs/model_screen/screen_{d.strftime('%Y%m%d')}.json ({len(names_out)} names)")
     rep = ROOT / f"reports/model_screen_{d.strftime('%Y%m%d')}.md"
     rep.write_text("\n".join(out) + "\n")
     print("\n".join(out))
