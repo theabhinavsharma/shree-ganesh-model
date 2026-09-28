@@ -1,0 +1,76 @@
+core (raw-price, panel ADV) vs rows.parquet core (adjusted close): 0 of 812752 rows differ (raw only 0, anatomy only 0)
+panel stock_daily_facts_adjusted_2015plus.parquet: 2900 sessions 2015-01-01..2026-09-25, 3301 symbols · anatomy rows 812752 · 8s
+crawl status {'OK': 5259, 'NO_AMOUNT': 3062, 'OCR_SKIPPED_NON_PDF': 882, 'OCR_OK': 157, 'NO_ATTACHMENT': 108, 'OCR_NO_AMOUNT': 51, 'HTTP_404': 7, 'ERR_PdfReadError': 2, 'ERR_BadZipFile': 1, 'ERR_PdfStreamError': 1, 'ERR_EmptyFileError': 1} · no full text (never retried upstream: ocr_order_filings audit): {'HTTP_404': 7, 'ERR_PdfReadError': 2, 'ERR_BadZipFile': 1, 'ERR_PdfStreamError': 1, 'ERR_EmptyFileError': 1}
+current CATS re-classified announcements in 135s (last filing scanned 2026-08-30 18:12:25); 0 crawled filings are not in announcements_historical.parquet (crawl-time category kept, no timestamp)
+amounts file: order_amounts.parquet:order_amount_cr — manifest says: order-attached amount, Rs crore; NaN when none found, USD without a historical rate, other currency, or the filing is no longer order|tender_L1 under the current CATS
+amounts file covers 9531/9531 crawled filings (100.0%); filings 2016-01-01..2026-08-29; 0 amount rows not in order_fulltext.parquet are ignored (left join)
+dropped 420 crawled filings whose current category is not order/tender_L1: {'none': 404, 'approval_launch': 11, 'client_partner': 4, 'capex': 1}
+order/L1 filings under the current CATS that are NOT crawled: {'inside_crawl_dates': {'disc': 0, 'conf': 0}, 'outside_crawl_dates': 0, 'no_timestamp_dropped': 0} (no amount: never material; they count as order filings for control 2)
+orders: 9111 filings · no timestamp (treated as after close): 0 · filed at/after 15:30: 41.3%
+pnl_quarterly gaps that stop a TTM (by quarter_end year): sales rows with no filing_dt {} {} · quarter breaks {2016: 9, 2017: 49, 2018: 870, 2019: 99, 2020: 136, 2021: 177, 2022: 366, 2023: 111, 2024: 29, 2025: 280, 2026: 3}  (TODO(data): backfill in fetch_pnl_history.py)
+orders by year (crawled filings / with amount / with PIT TTM / with ratio / material / amount but no TTM; order filings under the current CATS not crawled):
+eff            2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
+filings         481   438   603   445   388   514   779   843  1216  1870  1534
+amount          288   276   451   302   237   316   520   585   870  1477  1186
+ttm               0     0     0   329   347   412   630   691  1069  1356   996
+ratio             0     0     0   208   202   260   426   479   769  1062   758
+material          0     0     0    92   112   137   199   178   232   274   194
+amount_no_ttm   288   276   451    94    35    56    94   106   101   415   428
+uncrawled         0     0     0     0     0     0     0     0     0     0     0
+largest material ratios (eyeball for boilerplate amounts):
+    symbol        eff    amount_cr  rev_ttm_cr        ratio
+   KRYSTAL 2026-08-11 7.400630e+09   1314.9040 5.628266e+06
+    DHARAN 2025-09-01 3.117121e+04     29.1677 1.068689e+03
+JYOTISTRUC 2022-03-28 3.820000e+02      2.2232 1.718244e+02
+      BRNL 2020-09-01 1.034650e+03      6.6746 1.550130e+02
+    DHARAN 2025-09-09 3.262100e+03     29.1677 1.118395e+02
+  TERASOFT 2025-01-23 5.049000e+03     94.0579 5.367970e+01
+    KERNEX 2022-09-02 2.552200e+02      4.8129 5.302832e+01
+    KERNEX 2022-10-03 2.548600e+02      4.8129 5.295352e+01
+PIT TTM coverage of anatomy rows by year (%): {2016: 0.0, 2017: 0.0, 2018: 0.1, 2019: 70.9, 2020: 81.5, 2021: 77.6, 2022: 78.8, 2023: 74.6, 2024: 86.2, 2025: 77.5, 2026: 63.6} · COV_START 2019-02-22
+panel labels: entries through 2026-05-12 (last date whose 95-session window is inside the panel); labelled rows 769388 of 812752
+PIT TTM coverage inside the measured window 2019-02-22..2026-05-12: mean by era {'disc': 79.6, 'conf': 77.4} · weeks below 50%: 0 of 356 {}
+
+=== PART A === disc window 2019-02-22 .. 2022-12-31 (COV_START: first week with >= 50% PIT TTM coverage) · conf window 2023-01-01 .. 2026-05-06 · population = rows with a PIT TTM revenue at t
+  base disc: covered P(+50%)  24.3% (n=221399) · all rows  24.3% (n=279136) · excluded hot&>200DMA rows with no TTM: n=2423 P(+50%) 24.3%
+  base conf: covered P(+50%)  18.3% (n=244736) · all rows  18.1% (n=316991) · excluded hot&>200DMA rows with no TTM: n=2973 P(+50%) 24.4%
+  C = hot & material order & >200DMA          | disc n=   86 ( 27 sym) P(+50%)  34.9% (1.44x) sus 14.0% mean95 +14.6% | episodes   37 (27 sym) P  24.3% (1.00x) | conf n=  467 ( 72 sym) P(+50%)  34.3% (1.87x) sus 21.4% mean95 +23.8% | episodes  132 (72 sym) P  31.1% (1.70x)
+  control = hot & >200DMA & no material order | disc n=13762 (1052 sym) P(+50%)  28.6% (1.18x) sus 15.2% mean95 +15.8% | conf n=12699 (1246 sym) P(+50%)  23.0% (1.25x) sus 11.7% mean95  +9.9%
+  control2 = hot & >200DMA & no order filing  | disc n=13531 (1040 sym) P(+50%)  28.4% (1.17x) sus 15.1% mean95 +15.6% | conf n=12058 (1216 sym) P(+50%)  22.7% (1.24x) sus 11.5% mean95  +9.5%
+  material order alone                        | disc n= 2798 (117 sym) P(+50%)  25.2% (1.04x) sus 11.0% mean95  +8.8% | episodes  439 (117 sym) P  24.4% (1.00x) | conf n= 4559 (214 sym) P(+50%)  26.2% (1.43x) sus 14.4% mean95 +14.5% | episodes  712 (214 sym) P  24.6% (1.34x)
+  material order & >200DMA                    | disc n= 1623 ( 99 sym) P(+50%)  27.3% (1.12x) sus 11.5% mean95 +11.7% | episodes  305 (99 sym) P  25.9% (1.07x) | conf n= 2729 (172 sym) P(+50%)  28.8% (1.57x) sus 16.0% mean95 +16.7% | episodes  503 (172 sym) P  25.6% (1.40x)
+  hot & material order                        | disc n=  140 ( 31 sym) P(+50%)  27.1% (1.12x) sus 11.4% mean95  +8.4% | episodes   51 (31 sym) P  23.5% (0.97x) | conf n=  555 ( 84 sym) P(+50%)  33.0% (1.80x) sus 20.9% mean95 +22.1% | episodes  163 (84 sym) P  31.3% (1.71x)
+  control disc: 140 of 13762 rows carry an order of unknown size (P(+50%) 35.7%; control without them 28.5%) · 0 of those had an amount but no PIT TTM (P nan%)
+  control conf: 339 of 12699 rows carry an order of unknown size (P(+50%) 32.4%; control without them 22.7%) · 15 of those had an amount but no PIT TTM (P 0.0%)
+  C disc episode bootstrap (B=2000, symbol clusters): P(+50%) 95% CI 10.5..40.0% · lift vs base 0.44..1.64x · vs control 0.38..1.43x · vs control2 0.38..1.40x
+  C conf episode bootstrap (B=2000, symbol clusters): P(+50%) 95% CI 22.9..39.4% · lift vs base 1.25..2.16x · vs control 0.99..1.75x · vs control2 1.00..1.76x
+
+REGISTERED VERDICT (stock-weeks, same window + population): FAIL (C >= 1.5x base and >= 1.2x control, both eras, n >= 50)
+CLUSTERED CHECK (one row per order episode, n_ep >= 50): FAIL
+COVERED-WEEKS CHECK (weeks with >= 50% PIT TTM coverage only): FAIL · disc: 191 weeks (0 dropped) n=86 P 34.9% (1.44x base, 1.22x control) · conf: 165 weeks (0 dropped) n=467 P 34.3% (1.87x base, 1.49x control)
+
+=== PART B: B+H all-in, 90-session hold, 18 phases · windows 2016-06-01, 2019-01-01, 2019-02-22 (last = COV_START) · entry close/open ===
+  asis 2016-06-01+ close CAGR med  +21.1% (worst  +10.0) · maxDD med  -53.9% (worst  -71.7) · Sharpe 0.86 · disc CAGR +19.3% DD -71.7 · conf CAGR +28.6% DD -52.4 · names 17.3 · weeks w/ picks 97% · late exits 79 (47 never back)
+        largest late exits (no print at the exit session; sold at the first print back): FORCEMOT 2023-10-27->2024-02-14 +31.9%, FORCEMOT 2023-11-03->2024-02-14 +31.9%, FORCEMOT 2023-11-10->2024-02-14 +31.9%, FORCEMOT 2023-11-20->2024-02-14 +31.9%, FORCEMOT 2023-11-28->2024-02-14 +31.9%
+  asis 2016-06-01+ open  CAGR med  +20.3% (worst  +10.5) · maxDD med  -53.6% (worst  -72.4) · Sharpe 0.82 · disc CAGR +18.2% DD -72.4 · conf CAGR +28.3% DD -52.0 · names 17.2 · weeks w/ picks 97% · skipped 0.4% · late exits 57 (46 never back)
+        largest late exits (no print at the exit session; sold at the first print back): FORCEMOT 2023-10-30->2024-02-14 +31.3%, FORCEMOT 2023-11-06->2024-02-14 +31.3%, FORCEMOT 2023-11-13->2024-02-14 +31.3%, FORCEMOT 2023-11-21->2024-02-14 +31.3%, FORCEMOT 2023-11-29->2024-02-14 +31.3%
+  asis 2019-01-01+ close CAGR med  +23.9% (worst  +13.6) · maxDD med  -42.7% (worst  -52.4) · Sharpe 0.95 · disc CAGR +19.6% DD -50.4 · conf CAGR +28.6% DD -52.4 · names 18.7 · weeks w/ picks 96% · late exits 59 (27 never back)
+  asis 2019-01-01+ open  CAGR med  +23.0% (worst  +12.4) · maxDD med  -42.9% (worst  -52.0) · Sharpe 0.91 · disc CAGR +18.4% DD -50.9 · conf CAGR +28.3% DD -52.0 · names 18.7 · weeks w/ picks 96% · skipped 0.5% · late exits 37 (26 never back)
+  asis 2019-02-22+ close CAGR med  +23.3% (worst  +14.3) · maxDD med  -42.7% (worst  -52.4) · Sharpe 0.93 · disc CAGR +19.6% DD -50.4 · conf CAGR +28.6% DD -52.4 · names 19.1 · weeks w/ picks 98% · late exits 59 (27 never back)
+  asis 2019-02-22+ open  CAGR med  +22.6% (worst  +13.0) · maxDD med  -42.9% (worst  -52.0) · Sharpe 0.91 · disc CAGR +18.4% DD -50.9 · conf CAGR +28.3% DD -52.0 · names 19.0 · weeks w/ picks 98% · skipped 0.5% · late exits 37 (26 never back)
+  hard 2016-06-01+ close CAGR med   +5.6% (worst  -16.4) · maxDD med  -47.1% (worst  -90.0) · Sharpe 0.37 · disc CAGR -3.0% DD -76.5 · conf CAGR +20.4% DD -77.9 · names 0.5 · weeks w/ picks 27% · late exits 0 (0 never back)  [PRE-COVERAGE: not a test]
+  hard 2016-06-01+ open  CAGR med   +4.4% (worst  -16.2) · maxDD med  -46.7% (worst  -90.2) · Sharpe 0.32 · disc CAGR -2.8% DD -77.7 · conf CAGR +20.1% DD -78.3 · names 0.5 · weeks w/ picks 27% · skipped 0.8% · late exits 0 (0 never back)  [PRE-COVERAGE: not a test]
+  hard 2019-01-01+ close CAGR med   +7.6% (worst  -21.3) · maxDD med  -47.1% (worst  -90.0) · Sharpe 0.43 · disc CAGR -4.9% DD -76.5 · conf CAGR +20.4% DD -77.9 · names 0.7 · weeks w/ picks 36% · late exits 0 (0 never back)  [PRE-COVERAGE: not a test]
+  hard 2019-01-01+ open  CAGR med   +6.0% (worst  -21.0) · maxDD med  -46.7% (worst  -90.2) · Sharpe 0.37 · disc CAGR -4.6% DD -77.7 · conf CAGR +20.1% DD -78.3 · names 0.7 · weeks w/ picks 36% · skipped 0.8% · late exits 0 (0 never back)  [PRE-COVERAGE: not a test]
+  hard 2019-02-22+ close CAGR med   +7.8% (worst  -21.3) · maxDD med  -47.1% (worst  -90.0) · Sharpe 0.43 · disc CAGR -4.9% DD -76.5 · conf CAGR +20.4% DD -77.9 · names 0.7 · weeks w/ picks 37% · late exits 0 (0 never back)
+  hard 2019-02-22+ open  CAGR med   +6.2% (worst  -21.0) · maxDD med  -46.7% (worst  -90.2) · Sharpe 0.37 · disc CAGR -4.6% DD -77.7 · conf CAGR +20.1% DD -78.3 · names 0.7 · weeks w/ picks 37% · skipped 0.8% · late exits 0 (0 never back)
+  tie  2016-06-01+ close CAGR med  +20.8% (worst   +9.5) · maxDD med  -53.9% (worst  -71.7) · Sharpe 0.85 · disc CAGR +19.3% DD -71.7 · conf CAGR +27.6% DD -52.8 · names 17.2 · weeks w/ picks 97% · late exits 79 (47 never back)  [PRE-COVERAGE: not a test]
+        largest late exits (no print at the exit session; sold at the first print back): FORCEMOT 2023-10-27->2024-02-14 +31.9%, FORCEMOT 2023-11-03->2024-02-14 +31.9%, FORCEMOT 2023-11-10->2024-02-14 +31.9%, FORCEMOT 2023-11-20->2024-02-14 +31.9%, FORCEMOT 2023-11-28->2024-02-14 +31.9%
+  tie  2016-06-01+ open  CAGR med  +19.9% (worst  +10.0) · maxDD med  -53.6% (worst  -72.4) · Sharpe 0.81 · disc CAGR +18.2% DD -72.4 · conf CAGR +27.1% DD -52.4 · names 17.1 · weeks w/ picks 97% · skipped 0.4% · late exits 57 (46 never back)  [PRE-COVERAGE: not a test]
+        largest late exits (no print at the exit session; sold at the first print back): FORCEMOT 2023-10-30->2024-02-14 +31.3%, FORCEMOT 2023-11-06->2024-02-14 +31.3%, FORCEMOT 2023-11-13->2024-02-14 +31.3%, FORCEMOT 2023-11-21->2024-02-14 +31.3%, FORCEMOT 2023-11-29->2024-02-14 +31.3%
+  tie  2019-01-01+ close CAGR med  +23.2% (worst  +13.2) · maxDD med  -42.5% (worst  -52.8) · Sharpe 0.92 · disc CAGR +19.5% DD -50.4 · conf CAGR +27.6% DD -52.8 · names 18.6 · weeks w/ picks 96% · late exits 59 (27 never back)  [PRE-COVERAGE: not a test]
+  tie  2019-01-01+ open  CAGR med  +22.5% (worst  +11.9) · maxDD med  -42.7% (worst  -52.4) · Sharpe 0.90 · disc CAGR +18.5% DD -50.9 · conf CAGR +27.1% DD -52.4 · names 18.5 · weeks w/ picks 96% · skipped 0.5% · late exits 37 (26 never back)  [PRE-COVERAGE: not a test]
+  tie  2019-02-22+ close CAGR med  +22.8% (worst  +13.9) · maxDD med  -42.5% (worst  -52.8) · Sharpe 0.91 · disc CAGR +19.5% DD -50.4 · conf CAGR +27.6% DD -52.8 · names 18.9 · weeks w/ picks 98% · late exits 59 (27 never back)
+  tie  2019-02-22+ open  CAGR med  +22.1% (worst  +12.5) · maxDD med  -42.7% (worst  -52.4) · Sharpe 0.89 · disc CAGR +18.5% DD -50.9 · conf CAGR +27.1% DD -52.4 · names 18.8 · weeks w/ picks 98% · skipped 0.5% · late exits 37 (26 never back)
+wrote /Users/abhinavs./Documents/Zoom/logs/leader_sleeve/hot_order_combo.json
+HOT ORDER COMBO COMPLETE · 148s
