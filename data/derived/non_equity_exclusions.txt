@@ -16,3 +16,10 @@ PSUBANK
 SILVERAG
 EBBETF0423
 EBBETF0425
+# 2026-09-27 audit (logs/audits/audit_20260927_research_code.json): dead ETFs with no ISIN on disk and no
+# fund-like registered name, so the ISIN master and the name regex both missed them.
+#   NETFIT    Nippon ETF Nifty IT; renamed to ITBEES (INF) 10-MAY-2022 per NSE symbolchange.csv
+#   NAVINIFTY no ISIN/name on disk; close/NIFTYBEES mean 0.932, std 0.057 over 307 sessions (2023-09..2024-11)
+# Rights entitlements (<SYM>-RE, -RE1, ...) are handled by a symbol rule in non_equity(), not listed here.
+NETFIT
+NAVINIFTY

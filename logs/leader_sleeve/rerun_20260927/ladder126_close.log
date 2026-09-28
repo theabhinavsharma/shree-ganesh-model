@@ -1,0 +1,119 @@
+HOLD 126 sessions · 26 weekly slots · entry close · rebalance never · labels analogs · gap exit next_row
+panel stock_daily_facts_adjusted_2015plus.parquet 2015-01-01..2026-09-23 · 2898 sessions after dropping 0 non-session dates (0 loaded rows; see DATA GAPS) · weekly cohorts 510 from 2016-06-03 · breadth>=0.50 on 67% of cohort dates
+
+BASELINE  CAGR  +19.9% (disc  +18.2 / conf  +23.0) · maxDD  -38.0% (disc  -38.0 / conf  -32.7) · Sharpe 0.93 (disc 0.87 / conf 1.04) · x6.5 · names/cohort 8.8 · invested 94% | clip±40%: CAGR +22.0 DD -37.8
+G         CAGR  +13.9% (disc  +12.4 / conf  +16.8) · maxDD  -36.8% (disc  -36.8 / conf  -20.6) · Sharpe 0.87 (disc 0.77 / conf 1.07) · x3.8 · names/cohort 9.6 · invested 63% | clip±40%: CAGR +15.6 DD -36.6
+B         CAGR  +19.7% (disc  +17.3 / conf  +24.1) · maxDD  -39.9% (disc  -39.9 / conf  -31.9) · Sharpe 0.95 (disc 0.87 / conf 1.10) · x6.4 · names/cohort 18.0 · invested 95% | clip±40%: CAGR +21.3 DD -39.2
+H         CAGR  +23.5% (disc  +21.5 / conf  +27.2) · maxDD  -52.3% (disc  -52.3 / conf  -32.5) · Sharpe 1.03 (disc 0.94 / conf 1.19) · x8.8 · names/cohort 8.5 · invested 96% | clip±40%: CAGR +24.4 DD -52.4
+G+B       CAGR  +14.1% (disc  +11.7 / conf  +18.5) · maxDD  -38.8% (disc  -38.8 / conf  -18.2) · Sharpe 0.92 (disc 0.77 / conf 1.20) · x3.9 · names/cohort 19.7 · invested 64% | clip±40%: CAGR +15.4 DD -38.3
+G+H       CAGR  +19.1% (disc  +19.7 / conf  +18.1) · maxDD  -43.7% (disc  -43.7 / conf  -18.8) · Sharpe 1.11 (disc 1.09 / conf 1.16) · x6.1 · names/cohort 9.0 · invested 65% | clip±40%: CAGR +19.4 DD -43.9
+B+H       CAGR  +22.0% (disc  +18.5 / conf  +28.6) · maxDD  -49.2% (disc  -49.2 / conf  -30.7) · Sharpe 1.02 (disc 0.88 / conf 1.27) · x7.8 · names/cohort 17.8 · invested 97% | clip±40%: CAGR +23.1 DD -49.3
+G+B+H     CAGR  +17.8% (disc  +17.0 / conf  +19.2) · maxDD  -43.7% (disc  -43.7 / conf  -19.5) · Sharpe 1.09 (disc 1.02 / conf 1.25) · x5.4 · names/cohort 19.5 · invested 66% | clip±40%: CAGR +18.6 DD -43.5
+BENCH EW  CAGR  +16.3% (disc  +13.9 / conf  +20.7) · maxDD  -54.9% (disc  -54.9 / conf  -24.8) · Sharpe 0.89 (disc 0.76 / conf 1.14)
+eras: disc 2016-06-03..2022-12-30 close · conf based at the 2022-12-30 close · research_panel.nav_metrics would give BASELINE conf +24.63 (vs +23.02): its conf base is the first session >= 2022-12-25 (primitive defect, not used)
+
+CALENDAR-YEAR RETURNS (%, prior year-end to year-end)
+            2016   2017   2018   2019   2020   2021   2022   2023   2024   2025   2026
+BASELINE    -7.0   57.9  -18.9    9.3   62.4   53.9   -7.8   52.1   37.8  -10.6   15.6
+G           -6.7   48.7  -16.6    4.8   29.6   44.0   -4.8   38.5   34.5  -10.7    7.2
+B           -4.5   54.8  -18.5    7.7   52.4   52.3   -5.0   61.0   38.8  -12.1   13.9
+H           -3.3  116.9   -7.5  -11.1   64.3   58.7  -20.1   74.7   31.2  -10.3   19.3
+G+B         -4.6   46.0  -16.2    2.7   25.2   43.4   -3.9   42.4   35.9   -9.6    7.7
+G+H         -3.0  105.0   -8.2   -9.0   49.9   48.7  -12.0   47.8   26.6   -8.8    9.0
+B+H         -2.7   89.9   -5.9   -9.2   41.2   60.4  -14.9   71.9   38.2   -9.5   18.8
+G+B+H       -2.7   81.1   -8.2   -8.4   34.6   54.3   -8.8   47.0   33.3   -9.7    8.7
+BENCH EW     6.7   56.2  -20.8   -4.4   21.4   51.5    1.2   48.1   27.7   -4.4   11.6
+
+VERDICT vs BASELINE (registered: CAGR higher in BOTH eras AND maxDD not worse by >2pp)
+  G       no    · disc -5.8pp · conf -6.3pp · maxDD +1.2pp
+  B       no    · disc -0.8pp · conf +1.1pp · maxDD -1.9pp
+  H       no    · disc +3.3pp · conf +4.2pp · maxDD -14.3pp
+  G+B     no    · disc -6.5pp · conf -4.5pp · maxDD -0.8pp
+  G+H     no    · disc +1.5pp · conf -4.9pp · maxDD -5.8pp
+  B+H     no    · disc +0.3pp · conf +5.6pp · maxDD -11.3pp
+  G+B+H   no    · disc -1.2pp · conf -3.8pp · maxDD -5.7pp
+
+EXECUTION / LADDER DIAGNOSTICS
+  BASELINE picks 4233 bought 4233 · close-entry at probable UC lock 203 · exit LC-locked 15 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 31 · NaN returns in holds 0 · slot end max/min x14.1 · top-3 slots 26% of NAV
+  G       picks 3085 bought 3085 · close-entry at probable UC lock 143 · exit LC-locked 13 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 24 · NaN returns in holds 0 · slot end max/min x9.1 · top-3 slots 21% of NAV
+  B       picks 8711 bought 8711 · close-entry at probable UC lock 243 · exit LC-locked 20 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 72 · NaN returns in holds 0 · slot end max/min x8.9 · top-3 slots 22% of NAV
+  H       picks 4129 bought 4129 · close-entry at probable UC lock 210 · exit LC-locked 14 · exit in gap 11 (+24.3 sessions avg, sold at next row) · exit after final row 19 · NaN returns in holds 0 · slot end max/min x9.0 · top-3 slots 27% of NAV
+  G+B     picks 6378 bought 6378 · close-entry at probable UC lock 178 · exit LC-locked 16 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 53 · NaN returns in holds 0 · slot end max/min x9.1 · top-3 slots 22% of NAV
+  G+H     picks 2985 bought 2985 · close-entry at probable UC lock 161 · exit LC-locked 10 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 15 · NaN returns in holds 0 · slot end max/min x9.1 · top-3 slots 23% of NAV
+  B+H     picks 8832 bought 8832 · close-entry at probable UC lock 270 · exit LC-locked 17 · exit in gap 11 (+24.3 sessions avg, sold at next row) · exit after final row 73 · NaN returns in holds 0 · slot end max/min x5.5 · top-3 slots 21% of NAV
+  G+B+H   picks 6523 bought 6523 · close-entry at probable UC lock 206 · exit LC-locked 12 · exit in gap 10 (+25.5 sessions avg, sold at next row) · exit after final row 54 · NaN returns in holds 0 · slot end max/min x6.8 · top-3 slots 20% of NAV
+
+DATA GAPS (what is missing from the inputs, with example rows)
+  1) non-session dates dropped: 0 (per year ; min repeat share nan; 0 loaded rows)
+  2) core-band rows on cohort dates with NULL mcap (outside the H universe; H cannot buy them), and the BASELINE top-3 picks among them:
+     ..2018-06         BE/BZ  core rows     134 · NULL mcap     37 ( 27.6%) · BASELINE picks     7, NULL mcap    3
+     ..2018-06         EQ     core rows   42296 · NULL mcap   5687 ( 13.4%) · BASELINE picks   699, NULL mcap  132
+     2018-07..2022-12  BE/BZ  core rows    1060 · NULL mcap     24 (  2.3%) · BASELINE picks    81, NULL mcap    3
+     2018-07..2022-12  EQ     core rows  107022 · NULL mcap    688 (  0.6%) · BASELINE picks  1303, NULL mcap    9
+     2023-2024         BE/BZ  core rows    1595 · NULL mcap      0 (  0.0%) · BASELINE picks   201, NULL mcap    0
+     2023-2024         EQ     core rows   87166 · NULL mcap     42 (  0.1%) · BASELINE picks  1318, NULL mcap    0
+     2025+             BE/BZ  core rows    1095 · NULL mcap     12 (  1.1%) · BASELINE picks    64, NULL mcap    0
+     2025+             EQ     core rows   83873 · NULL mcap    136 (  0.2%) · BASELINE picks   560, NULL mcap    0
+     e.g. BASELINE pick RAMASTEEL    2018-01-29 series BE ret60 +43% · mcap NULL
+     e.g. BASELINE pick RAMASTEEL    2018-02-05 series BE ret60 +27% · mcap NULL
+     e.g. BASELINE pick SUPPETRO     2021-06-11 series BE ret60 +75% · mcap NULL
+     e.g. BASELINE pick SUPPETRO     2021-06-18 series BE ret60 +75% · mcap NULL
+     e.g. BASELINE pick GHCL         2016-06-03 series EQ ret60 +56% · mcap NULL
+     e.g. BASELINE pick GHCL         2016-06-10 series EQ ret60 +51% · mcap NULL
+  3) exits whose scheduled session has no row for the name (distinct symbol/cohort, headline arms): 11; largest moves after the scheduled exit:
+     FORCEMOT     cohort 2023-06-02 · scheduled exit 2023-12-06 · next row 2024-02-14 (+48 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-06-09 · scheduled exit 2023-12-13 · next row 2024-02-14 (+43 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-06-16 · scheduled exit 2023-12-20 · next row 2024-02-14 (+38 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-06-23 · scheduled exit 2023-12-28 · next row 2024-02-14 (+33 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-07-03 · scheduled exit 2024-01-04 · next row 2024-02-14 (+28 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-07-10 · scheduled exit 2024-01-11 · next row 2024-02-14 (+23 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-07-17 · scheduled exit 2024-01-18 · next row 2024-02-14 (+18 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+     FORCEMOT     cohort 2023-07-24 · scheduled exit 2024-01-25 · next row 2024-02-14 (+13 sessions) · move +31.9% · arms B,B+H,BASELINE,G,G+B,G+B+H,G+H,H
+
+SLOT-PHASE SPREAD (weekly grid offset 0..4 sessions, same slots/options; offset 0 = registered)
+  BASELINE disc  +16.3/ +17.6/ +19.1 · conf  +21.9/ +22.8/ +24.1 · maxDD  -44.1.. -37.2
+  G        disc  +11.3/ +12.2/ +13.7 · conf  +15.2/ +16.2/ +16.9 · maxDD  -43.8.. -36.8 · vs BASE disc -5.8..-5.0 conf -8.1..-6.0 · BEATS at 0/5
+  B        disc  +16.1/ +16.8/ +17.4 · conf  +24.1/ +24.7/ +25.7 · maxDD  -43.3.. -39.2 · vs BASE disc -1.7..-0.2 conf +1.1..+2.5 · BEATS at 0/5
+  H        disc  +20.0/ +20.8/ +21.5 · conf  +21.9/ +24.7/ +27.2 · maxDD  -54.2.. -52.3 · vs BASE disc +1.8..+4.3 conf -0.0..+4.2 · BEATS at 0/5
+  G+B      disc  +10.6/ +11.5/ +12.2 · conf  +17.6/ +18.3/ +18.6 · maxDD  -42.4.. -37.1 · vs BASE disc -6.9..-4.8 conf -5.8..-3.9 · BEATS at 0/5
+  G+H      disc  +19.5/ +20.5/ +21.3 · conf  +15.7/ +17.1/ +18.1 · maxDD  -43.7.. -38.7 · vs BASE disc +1.5..+4.7 conf -7.7..-4.7 · BEATS at 0/5
+  B+H      disc  +18.1/ +18.5/ +19.3 · conf  +26.8/ +27.8/ +28.6 · maxDD  -52.6.. -49.2 · vs BASE disc -1.0..+2.5 conf +4.3..+5.6 · BEATS at 0/5
+  G+B+H    disc  +17.0/ +18.0/ +18.8 · conf  +17.9/ +18.5/ +19.2 · maxDD  -43.7.. -38.0 · vs BASE disc -1.2..+2.4 conf -5.7..-3.8 · BEATS at 0/5
+  (min/mean/max CAGR %; margins vs BASELINE at the same offset)
+
+LABEL SENSITIVITY — same factorial with labels=nse4 (README: report with and without analyst analogs)
+  BASELINE CAGR  +19.6% (disc  +17.8 / conf  +22.7) · maxDD  -39.1% (disc  -39.1 / conf  -34.1) · Sharpe 0.92 (disc 0.85 / conf 1.03) · Δ vs analogs: disc -0.4 conf -0.3
+  G        CAGR  +13.9% (disc  +12.1 / conf  +17.2) · maxDD  -36.9% (disc  -36.9 / conf  -20.2) · Sharpe 0.87 (disc 0.76 / conf 1.10) · Δ vs analogs: disc -0.3 conf +0.5 · no
+  B        CAGR  +19.6% (disc  +17.2 / conf  +24.0) · maxDD  -40.2% (disc  -40.2 / conf  -32.3) · Sharpe 0.95 (disc 0.86 / conf 1.10) · Δ vs analogs: disc -0.1 conf -0.1 · no
+  H        CAGR  +24.6% (disc  +22.9 / conf  +27.6) · maxDD  -50.2% (disc  -50.2 / conf  -32.0) · Sharpe 1.05 (disc 0.98 / conf 1.20) · Δ vs analogs: disc +1.5 conf +0.4 · no
+  G+B      CAGR  +14.1% (disc  +11.6 / conf  +18.7) · maxDD  -39.1% (disc  -39.1 / conf  -18.0) · Sharpe 0.92 (disc 0.77 / conf 1.21) · Δ vs analogs: disc -0.1 conf +0.2 · no
+  G+H      CAGR  +19.8% (disc  +20.8 / conf  +18.1) · maxDD  -41.9% (disc  -41.9 / conf  -18.6) · Sharpe 1.13 (disc 1.13 / conf 1.17) · Δ vs analogs: disc +1.1 conf +0.0 · no
+  B+H      CAGR  +22.6% (disc  +19.2 / conf  +29.0) · maxDD  -49.1% (disc  -49.1 / conf  -30.5) · Sharpe 1.03 (disc 0.90 / conf 1.28) · Δ vs analogs: disc +0.7 conf +0.4 · no
+  G+B+H    CAGR  +18.2% (disc  +17.7 / conf  +19.2) · maxDD  -42.8% (disc  -42.8 / conf  -19.3) · Sharpe 1.11 (disc 1.04 / conf 1.25) · Δ vs analogs: disc +0.7 conf +0.0 · no
+
+MCAP-SOURCE SENSITIVITY (H lever). mcap_pit has 0 pnl_implied rows before 2018-04; earlier sized rows use present-day shares x adjusted close (not PIT)
+  broad (mcap>=50cr) heat-universe rows on cohort dates, % by mcap_source (NULL-mcap core rows: DATA GAPS 2):
+    ..2018-06         pnl_implied 3.3 · screener_backcast 53.2 · screener_backfill 43.5
+    2018-07..2022-12  pnl_implied 73.7 · screener_backcast 1.7 · screener_backfill 24.6
+    2023+             pnl_implied 75.8 · screener_backcast 1.2 · screener_backfill 23.1
+  H top-3 picks, % by mcap_source:
+    ..2018-06         pnl_implied 4.8 · screener_backcast 73.6 · screener_backfill 21.5
+    2018-07..2022-12  pnl_implied 93.5 · screener_backcast 1.1 · screener_backfill 5.4
+    2023+             pnl_implied 94.5 · screener_backcast 2.5 · screener_backfill 3.0
+  every arm below is a FRESH run on cohorts from 2018-07-02 (equal slots, no pre-window picks; not the headline NAVs), measured from 2019-01-11 (one slot cycle later) · disc-pit 2019-01-11..2022-12-30 close · conf 2023+ · maxDD/Sharpe from 2019-01-11 · [pnl] = heat universe restricted to pnl_implied rows · rule as registered, on this window
+  BASELINE      disc-pit  +24.6 · conf  +21.9 · maxDD  -33.7 · Sharpe 1.05
+  H             disc-pit  +17.4 · conf  +26.1 · maxDD  -40.2 · Sharpe 0.96 · vs BASE disc-pit -7.3 conf +4.2 maxDD -6.5 · no · ungated picks 3208
+  H[pnl]        disc-pit  +21.3 · conf  +27.6 · maxDD  -38.0 · Sharpe 1.06 · vs BASE disc-pit -3.3 conf +5.6 maxDD -4.3 · no · ungated picks 3287 (69% also all-source picks)
+  G+H           disc-pit  +17.2 · conf  +16.3 · maxDD  -31.3 · Sharpe 1.02 · vs BASE disc-pit -7.5 conf -5.6 maxDD +2.3 · no · ungated picks 3208
+  G+H[pnl]      disc-pit  +19.6 · conf  +16.7 · maxDD  -28.1 · Sharpe 1.08 · vs BASE disc-pit -5.1 conf -5.3 maxDD +5.5 · no · ungated picks 3287 (69% also all-source picks)
+  B+H           disc-pit  +15.3 · conf  +29.0 · maxDD  -39.1 · Sharpe 0.99 · vs BASE disc-pit -9.4 conf +7.0 maxDD -5.5 · no · ungated picks 7159
+  B+H[pnl]      disc-pit  +20.7 · conf  +28.9 · maxDD  -39.1 · Sharpe 1.09 · vs BASE disc-pit -3.9 conf +7.0 maxDD -5.4 · no · ungated picks 6989 (73% also all-source picks)
+  G+B+H         disc-pit  +15.1 · conf  +18.6 · maxDD  -32.2 · Sharpe 1.05 · vs BASE disc-pit -9.5 conf -3.4 maxDD +1.5 · no · ungated picks 7159
+  G+B+H[pnl]    disc-pit  +18.5 · conf  +18.2 · maxDD  -29.7 · Sharpe 1.12 · vs BASE disc-pit -6.1 conf -3.8 maxDD +4.0 · no · ungated picks 6989 (73% also all-source picks)
+  (all-source H on this window = same construction mix in both eras; [pnl] also drops every symbol that
+   has no quarterly filings (screener_backfill-only), and still carries the upstream split lag. The
+   pre-2018-07 H stretch cannot be tested point-in-time.)
+
+wrote /Users/abhinavs./Documents/Zoom/logs/leader_sleeve/portfolio_7x_nav_v2.parquet (+manifest)
+
+PORTFOLIO 7X COMPLETE

@@ -11,6 +11,40 @@ Emits:
 
 Per CONSTITUTION.md §1.7 — reproducibility is the publishability test.
 Every input parquet's mtime is recorded so a future reader can verify.
+
+2026-09-27 audit fixes (logs/audits/audit_20260927_research_code.json; non_equity() only, same signature):
+  FIXED  build_security_master.py 106, 115-116, 126-128 + generate_hybrid_basket.py 105, 140: NETFIT,
+         NAVINIFTY (dead ETFs, no ISIN) and rights entitlements (<SYM>-RE / -RE<n>: DUCON-RE1, JAYKAY-RE1,
+         KSHITIJ-RE, RATNA-RE, VHLTD-RE1, and every future one, since BE is in the panel) passed
+         non_equity() as companies. Now: -RE<n> symbols are non-equity by rule (not masked by an INE
+         ISIN, in case a future master carries the entitlement's own ISIN); NETFIT and NAVINIFTY are in
+         data/derived/non_equity_exclusions.txt; the master's is_non_equity column (fund units + rights
+         entitlements) is used when present, else is_fund_unit as before. The QC filter's universe changes
+         only for those symbols. None of the seven appears in any live_predictions/*.json, and none clears
+         the QC liquidity + price floors (NETFIT close <= 40.14; NAVINIFTY median turnover 0.016 cr/day;
+         the -RE lines have 2-7 sessions), so no shipped 15D basket changes.
+  NOT FIXED (critic, other file): backtest_10yr_15d5pct.py has NO non-equity filter at all. Its qc()
+         (lines 126-135) and snap_features() (138-141) keep every symbol with close > 50 and 20d ADV
+         >= 5 cr, and ab_engines_count.py builds its A/B candidate universe with the same
+         B.qc(B.snap_features(...)). So the gap to the live QC universe is every fund unit that clears
+         those floors, not the 322 symbols 4f6c34f flipped when non_equity() moved to the ISIN master:
+         the backtest also keeps ETFs the pre-4f6c34f regex already dropped (LIQUIDBEES, MAFANG,
+         SILVERIETF). DECNGOLD / GOLDINFRA (INE, equity under both versions) are not part of the gap.
+         Read-only count on data/derived/backtest_10yr_15d5pct.parquet (the A/B trade table, file
+         dated 2026-09-23): 11 of 4,316 trades are fund units, all is_fund_unit in the current master:
+         AXISILVER 3, ESILVER 2, LIQUIDBEES 2, MAFANG 1, SBISILVER 1, SILVER 1, SILVERIETF 1.
+           disc 2016-2022: 2 of 2,782 (LIQUIDBEES 2020-03-16, 2020-03-23). Mean realized_pct -0.077
+                           with or without them; touched_5pct 0.6017 all vs 0.6022 companies only.
+           conf 2023+:     9 of 1,534 (2025-01-27..2026-04-20). Mean realized_pct 0.372 all vs 0.380
+                           companies only (the 9 fund trades average -1.077); touched_5pct 0.6402 vs 0.6407.
+         (realized_pct is net of the registered 0.30% RT.) The QC bands above were fitted on an
+         ETF-inclusive trade table. Not counted: how many ETF rows sit in ab_engines_count's candidate
+         universe, because that needs a full panel run. The fix belongs in backtest_10yr_15d5pct.qc()
+         and snap_features() (drop non_equity(snap["symbol"])). It is not in this change, and the
+         trade table was not regenerated.
+         Live side: of the symbols 4f6c34f flipped, only MIDCAP (INF, an ETF) appears in
+         live_predictions/*.json, as a tier-2 extension in 2026-05-05.json. The v3 re-issue dropped it
+         for contamination, not for being an ETF.
 """
 from __future__ import annotations
 import json
@@ -109,19 +143,27 @@ NON_EQUITY_RE = re.compile(r"IETF|BEES|ETF$|^NIFTY|TOP50|^MASP|MAFANG|^MONQ|^PSU
 EQUITY_DESPITE_RE = {"SKYGOLD", "SHANTIGOLD", "GOLDTECH"}
 
 
+# NSE rights-entitlement symbols <SYM>-RE, <SYM>-RE1, -RE2 ... trade in series BE/ST for a few sessions
+# of a rights issue: tradeable entitlements, not company shares (audit 2026-09-27). No equity symbol in
+# the panel ends in -RE<digits>. Keep in sync with build_security_master.RIGHTS_ENT_RE (tested).
+RIGHTS_ENTITLEMENT_RE = re.compile(r"-RE\d*$", re.I)
+
 SECURITY_MASTER = ROOT / "data/derived/security_master.parquet"
 _MASTER_CACHE: dict = {}
 
 
 def _master() -> tuple[set, set]:
-    """(fund units, companies) from the ISIN-based security master (INF* = MF/ETF unit,
-    INE* = company). Empty sets if the master is absent — then the regex decides."""
+    """(non-equities, companies) from the ISIN-based security master. Non-equities = is_non_equity
+    (fund units + rights entitlements) when the master has that column (builds from 2026-09-27),
+    else is_fund_unit (INF* ISIN / ETF list / fund name). Companies = INE* ISIN and not non-equity.
+    Empty sets if the master is absent — then the regex decides."""
     if "v" not in _MASTER_CACHE:
         fu, co = set(), set()
         if SECURITY_MASTER.exists():
-            m = pd.read_parquet(SECURITY_MASTER, columns=["symbol", "isin", "is_fund_unit"])
-            fu = set(m.loc[m["is_fund_unit"], "symbol"])
-            co = set(m.loc[~m["is_fund_unit"] & m["isin"].astype(str).str.startswith("INE"), "symbol"])
+            m = pd.read_parquet(SECURITY_MASTER)
+            ne = (m["is_non_equity"] if "is_non_equity" in m.columns else m["is_fund_unit"]).fillna(False).astype(bool)
+            fu = set(m.loc[ne, "symbol"])
+            co = set(m.loc[~ne & m["isin"].astype(str).str.startswith("INE"), "symbol"])
         _MASTER_CACHE["v"] = (fu, co)
     return _MASTER_CACHE["v"]
 
@@ -131,13 +173,17 @@ def non_equity(symbols: pd.Series) -> pd.Series:
     (S&P500 ETF in a premium-to-NAV blowout) reached rank 1 on a 4-engine 'consensus'.
     Decided by ISIN first (security_master: INF = fund unit, INE = company); the name
     regex only covers symbols the master has no ISIN for. The regex alone had dropped
-    SKYGOLD/SHANTIGOLD/GOLDTECH and let LIQUID, SILVER, SETFNIF50, EBBETF* etc. through."""
+    SKYGOLD/SHANTIGOLD/GOLDTECH and let LIQUID, SILVER, SETFNIF50, EBBETF* etc. through.
+    2026-09-27: rights entitlements (<SYM>-RE / -RE<n>) are non-equity by symbol rule, not
+    masked by an INE ISIN; dead no-ISIN ETFs NETFIT / NAVINIFTY come from the exclusions file.
+    Returns a boolean Series aligned to `symbols` (True = drop from company universes)."""
     listed = set()
     if NON_EQUITY_FILE.exists():
         listed = {l.strip().upper() for l in NON_EQUITY_FILE.read_text().splitlines() if l.strip() and not l.startswith("#")}
     fund, company = _master()
     by_re = symbols.str.contains(NON_EQUITY_RE) & ~symbols.str.upper().isin(EQUITY_DESPITE_RE)
-    return symbols.isin(listed) | symbols.isin(fund) | (by_re & ~symbols.isin(company))
+    rights = symbols.str.contains(RIGHTS_ENTITLEMENT_RE, na=False)
+    return symbols.isin(listed) | symbols.isin(fund) | rights | (by_re & ~symbols.isin(company))
 
 
 def apply_qc_filter(df: pd.DataFrame, contam: set) -> pd.DataFrame:

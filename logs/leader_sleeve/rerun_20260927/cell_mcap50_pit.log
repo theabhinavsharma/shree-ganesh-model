@@ -1,0 +1,45 @@
+industry labels: 3,145 equities, 189 industries (nse4)
+panel stock_daily_facts_adjusted_2015plus.parquet: 5,052,682 equity rows, 3,295 symbols, 2015-01-01..2026-09-23 (2,898 sessions)
+renames: {'rename_pairs': 385, 'not_in_panel': 132, 'successor_before_old_end': 0, 'gap_over_10d': 7, 'ambiguous': 0, 'chained_pairs': 246, 'chains': 226, 'labels_filled_from_chain': 16}
+label coverage of universe rows (nse4): {'rows': 509896, 'labeled': 0.9992017980137126, 'labeled_still_trading': 0.9991955218039287, 'labeled_stopped': 1.0, 'unlabeled_rows_stopped': 0}
+open-offer filings: {'filings': 1396, 'symbols': 197, 'by_side': {'target': 1247, 'unclear': 137, 'acquirer': 12}, 'after_close': 733, 'weekly_rows': 509489, 'flagged_rows': 4127, 'flagged_rows_prefix_rule': 4761}
+
+entry=close cost=flat hold=126 sessions · NAV = 26 overlapping weekly slots, daily mark-to-market
+
+ARM                             | era      |     n | tr/yr | mean/tr | med/tr | win% | P2x  | P50  | medTrough | worst coh | navDD  | navCAGR | yrs+ 
+A0 mean-heat top3               | disc<=22 | 4,956 |  1048 | +16.15% |  +2.40% | 53.5 | 11.7 | 31.8 |    -19.9% |    -38.6% |  -46.7% |  +16.8% |   3/5
+A0 mean-heat top3               | conf>=23 | 4,335 |  1354 | +16.99% |  +4.40% | 55.2 | 10.7 | 29.3 |    -17.4% |    -23.6% |  -29.3% |  +33.2% |   4/4
+A1 PRODUCTION (A0+EXT)          | disc<=22 | 2,492 |   531 | +21.22% |  +4.37% | 55.5 | 14.8 | 37.3 |    -20.4% |    -59.6% |  -53.2% |  +16.1% |   3/5
+A1 PRODUCTION (A0+EXT)          | conf>=23 | 2,406 |   752 | +19.14% |  +5.88% | 56.6 | 13.3 | 33.2 |    -18.3% |    -28.5% |  -31.2% |  +31.9% |   3/4
+  A1 + median heat only         | disc<=22 | 2,375 |   504 | +20.87% |  +5.39% | 56.4 | 13.3 | 36.0 |    -19.3% |    -55.6% |  -48.2% |  +16.5% |   3/5
+  A1 + median heat only         | conf>=23 | 2,240 |   700 | +18.47% |  +5.77% | 56.7 | 11.8 | 32.0 |    -17.6% |    -36.4% |  -29.2% |  +29.4% |   3/4
+  A1 + no-takeover only         | disc<=22 | 2,470 |   527 | +21.32% |  +4.33% | 55.3 | 15.0 | 37.4 |    -20.4% |    -59.6% |  -53.2% |  +16.2% |   3/5
+  A1 + no-takeover only         | conf>=23 | 2,374 |   742 | +19.57% |  +6.21% | 56.9 | 13.5 | 33.2 |    -18.3% |    -29.8% |  -30.1% |  +32.2% |   3/4
+B PRIMARY (median+EXT+no-TO)    | disc<=22 | 2,357 |   501 | +20.96% |  +5.39% | 56.3 | 13.4 | 36.1 |    -19.2% |    -55.6% |  -48.2% |  +16.6% |   3/5
+B PRIMARY (median+EXT+no-TO)    | conf>=23 | 2,207 |   690 | +18.77% |  +6.07% | 56.9 | 11.9 | 32.0 |    -17.5% |    -36.4% |  -27.7% |  +29.5% |   3/4
+  B without EXT                 | disc<=22 | 4,914 |  1039 | +16.08% |  +3.16% | 54.6 | 11.0 | 30.6 |    -18.7% |    -38.6% |  -46.1% |  +16.9% |   3/5
+  B without EXT                 | conf>=23 | 4,293 |  1341 | +14.77% |  +4.00% | 55.5 |  8.9 | 27.5 |    -16.5% |    -25.8% |  -24.3% |  +27.6% |   4/4
+  A1 & ADV<1cr                  | disc<=22 |   350 |    76 | +59.81% | +28.57% | 68.3 | 38.6 | 63.7 |    -18.3% |    -55.4% |  -36.8% |  +35.8% |   4/5
+  A1 & ADV<1cr                  | conf>=23 |   134 |    44 | +24.95% |  +2.89% | 52.2 | 18.7 | 37.3 |    -22.1% |    -59.3% |  -31.5% |  +26.5% |   2/4
+  A1 & ADV 1-5cr                | disc<=22 |   588 |   127 | +24.28% | +11.57% | 61.9 | 17.7 | 46.3 |    -21.1% |    -63.5% |  -42.5% |  +12.4% |   3/5
+  A1 & ADV 1-5cr                | conf>=23 |   287 |    90 | +22.27% | +11.45% | 62.7 | 16.7 | 39.0 |    -17.4% |    -48.9% |  -25.8% |  +25.0% |   3/4
+  A1 & ADV>=5cr                 | disc<=22 | 1,552 |   331 | +11.42% |  +0.24% | 50.2 |  8.4 | 27.9 |    -20.6% |    -56.6% |  -48.1% |  +10.8% |   3/5
+  A1 & ADV>=5cr                 | conf>=23 | 1,985 |   620 | +18.30% |  +5.54% | 56.0 | 12.5 | 32.0 |    -18.1% |    -31.0% |  -32.6% |  +28.5% |   3/4
+A1 as v1 (survivorship ref)     | disc<=22 | 2,492 |   531 | +21.22% |  +4.37% | 55.5 | 14.8 | 37.3 |    -20.4% |    -59.6% |  -53.2% |  +16.1% |   3/5  *
+A1 as v1 (survivorship ref)     | conf>=23 | 2,402 |   750 | +19.11% |  +5.77% | 56.4 | 13.4 | 33.2 |    -18.3% |    -28.5% |  -30.0% |  +21.5% |   3/4  *
+* A1 as v1 (survivorship ref): NAV columns end at 2026-03-19 (session n-1-126); after it no signal has a full future, so v1 would sit in cash. Per-trade columns in every arm exclude signals whose hold runs past the panel end.
+
+LIKE-FOR-LIKE NAV, every arm through 2026-03-19  (disc / conf)
+ARM                             | CAGR disc | maxDD disc | Sharpe d | CAGR conf | maxDD conf | Sharpe c
+A0 mean-heat top3               |    +16.8% |     -46.7% |     0.96 |    +26.7% |     -29.3% |     1.28
+A1 PRODUCTION (A0+EXT)          |    +16.1% |     -53.2% |     0.91 |    +21.9% |     -29.3% |     1.02
+  A1 + median heat only         |    +16.5% |     -48.2% |     0.91 |    +22.2% |     -27.3% |     1.03
+  A1 + no-takeover only         |    +16.2% |     -53.2% |     0.91 |    +22.5% |     -28.2% |     1.04
+B PRIMARY (median+EXT+no-TO)    |    +16.6% |     -48.2% |     0.92 |    +22.7% |     -25.9% |     1.04
+  B without EXT                 |    +16.9% |     -46.1% |     0.96 |    +22.2% |     -24.3% |     1.09
+  A1 & ADV<1cr                  |    +35.8% |     -36.8% |     1.82 |    +28.9% |     -31.5% |     1.38
+  A1 & ADV 1-5cr                |    +12.4% |     -42.5% |     0.78 |    +29.9% |     -25.8% |     1.50
+  A1 & ADV>=5cr                 |    +10.8% |     -48.1% |     0.64 |    +17.4% |     -30.8% |     0.80
+A1 as v1 (survivorship ref)     |    +16.1% |     -53.2% |     0.91 |    +21.5% |     -30.0% |     1.01
+wrote /Users/abhinavs./Documents/Zoom/logs/leader_sleeve/sim_v2_nse4_mcap50_pit_close_flat.json and sim_v2_nse4_mcap50_pit_close_flat_nav.parquet (+ manifest)
+LEADER CELL V2 COMPLETE

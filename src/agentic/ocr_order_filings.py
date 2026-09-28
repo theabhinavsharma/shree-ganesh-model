@@ -1,12 +1,25 @@
 """OCR pass for scanned order/L1 filings (companion to fetch_order_fulltext.py).
 
-Takes every record in data/derived/order_fulltext.jsonl whose status is NEEDS_OCR (image-only PDF),
+Takes every record in data/derived/order_fulltext_v2.jsonl whose latest status is NEEDS_OCR (image-only PDF),
 re-downloads the attachment through the NSE session, renders the first MAX_PAGES pages at 200 dpi
-(pdftoppm) and OCRs them with tesseract (eng), then parses the largest Rs/USD amount exactly as the
-text pass does (event_materiality_study.parse_amount_cr). Appends an updated record (status OCR_OK |
-OCR_NO_AMOUNT | OCR_EMPTY | HTTP_<code> | ERR_<type>, ocr=True); the latest record per (symbol, seq_id)
-wins when fetch_order_fulltext.py consolidates. Nothing else is touched.
+(pdftoppm) and OCRs them with tesseract (eng), then stores the text and the order-attached amount from
+parse_order_amounts.extract_order_amount. Appends an updated record (status OCR_OK = the OCR text contains
+at least one currency amount | OCR_NO_AMOUNT | OCR_EMPTY | OCR_SKIPPED_NON_PDF | HTTP_<code> | ERR_<type>,
+ocr=True); the latest record per (symbol, seq_id) wins when fetch_order_fulltext.py consolidates (run
+`fetch_order_fulltext.py --consolidate-only` afterwards). Records whose latest OCR attempt failed with
+HTTP_/ERR_ are retried on the next run. Nothing else is touched.
 Requires: tesseract + pdftoppm on PATH (brew install tesseract poppler).
+
+2026-09-27 audit fixes (logs/audits/audit_20260927_research_code.json):
+  FIXED  :57,62,70 USD converted at a fixed 83.0 whenever macro_panel had no USDINR (all dates before
+         2024-02-19). Now as-of the filing date (7-day tolerance) from data/derived only: macro_panel.usdinr,
+         else usdinr_history.parquet (FRED DEXINUS); no rate -> the USD amount stays NaN. fulltext_amount_cr
+         is the ORDER-ATTACHED amount, not the largest one; the consolidation step re-parses the stored text
+         anyway, so this field is informational.
+  FIXED  :52-55,75-78 a transient HTTP_/ERR_ in the OCR pass was permanent. The todo filter (already patched in
+         the committed file) also takes records whose latest status is an OCR-pass HTTP_/ERR_; verified here.
+         Non-PDF attachments are now skipped before downloading (same OCR_SKIPPED_NON_PDF status, no request).
+  FIXED  OCR_* statuses were missing from the fetch manifest -> fetch_order_fulltext.STATUSES lists them.
 """
 from __future__ import annotations
 
@@ -25,7 +38,7 @@ ROOT = Path("/Users/abhinavs./Documents/Zoom")
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "src/agentic"))
 from src.ingest.nse.api import _request_headers, _request_with_retries  # noqa: E402
 from src.ingest.nse.session import build_session  # noqa: E402
-from event_materiality_study import AMT, parse_amount_cr  # noqa: E402
+from parse_order_amounts import AMT, extract_order_amount, load_usdinr, FX_TOL  # noqa: E402
 
 CKPT = ROOT / "data/derived/order_fulltext_v2.jsonl"
 REF = "https://www.nseindia.com/companies-listing/corporate-filings-announcements"
@@ -53,25 +66,28 @@ def main() -> None:
     for r in recs:
         latest[(r["symbol"], str(r["seq_id"]))] = r
     todo = [r for r in latest.values() if r.get("status") == "NEEDS_OCR" or (r.get("ocr") and str(r.get("status", "")).startswith(("HTTP_", "ERR_")))]
-    mac = pd.read_parquet(ROOT / "data/derived/macro_panel.parquet", columns=["trade_date", "usdinr"])
-    mac["trade_date"] = pd.to_datetime(mac["trade_date"]); fx = mac.set_index("trade_date")["usdinr"].sort_index()
+    fx = load_usdinr().set_index("fx_date")["usdinr"]                   # historical series only, never a fixed rate
     print(f"{len(todo):,} scanned filings to OCR", flush=True)
     s = build_session(warm=True, referer=REF)
     with CKPT.open("a") as fh:
         for i, r in enumerate(todo):
-            u = fx.asof(pd.Timestamp(r["d"])) if r.get("d") else 83.0
+            u = float("nan")
+            if r.get("d"):
+                d = pd.Timestamp(r["d"]); w = fx.loc[d - FX_TOL:d]
+                u = float(w.iloc[-1]) if len(w) else float("nan")
             rec = dict(r, ocr=True)
             try:
-                resp = _request_with_retries(s, r["url"], request_headers=_request_headers(s, referer=REF), referer=REF, timeout=60)
-                if not r["url"].lower().endswith(".pdf"):
+                if not str(r.get("url", "")).lower().endswith(".pdf"):
                     rec["status"] = "OCR_SKIPPED_NON_PDF"
                 else:
+                    resp = _request_with_retries(s, r["url"], request_headers=_request_headers(s, referer=REF), referer=REF, timeout=60)
                     txt = ocr_pdf(resp.content)
-                    amt = parse_amount_cr(txt, u if pd.notna(u) else 83.0) if txt else None
+                    amt = extract_order_amount(None, txt, u)["order_amount_cr"] if txt else None
+                    amt = None if amt is None or amt != amt else float(amt)
                     m = AMT.search(txt) if txt else None
                     lo = max(0, m.start() - 1500) if m else 0
                     rec.update(text_chars=len(txt), fulltext_amount_cr=amt, excerpt=txt[lo:lo + 4000], text=txt,
-                               status="OCR_OK" if amt else ("OCR_NO_AMOUNT" if txt else "OCR_EMPTY"))
+                               status="OCR_OK" if m else ("OCR_NO_AMOUNT" if txt else "OCR_EMPTY"))
             except Exception as e:
                 code = getattr(getattr(e, "response", None), "status_code", None)
                 rec["status"] = f"HTTP_{code}" if code else f"ERR_{type(e).__name__}"

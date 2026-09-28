@@ -1,0 +1,23 @@
+[22:14:26] start anatomy
+[22:19:38] end anatomy rc=0
+[22:19:38] start bakeoff
+[22:23:16] end bakeoff rc=0
+[22:23:16] start allin_close
+[22:23:33] end allin_close rc=0
+[22:23:33] start allin_nextopen
+[22:24:00] end allin_nextopen rc=0
+[22:24:00] start ladder126_close
+[22:24:21] end ladder126_close rc=0
+[22:24:21] start ladder63_close
+[22:24:42] end ladder63_close rc=0
+[22:24:42] start ladder63_nextopen
+[22:25:05] end ladder63_nextopen rc=0
+[22:25:05] start cell_core
+[22:25:19] end cell_core rc=0
+[22:25:19] start cell_mcap50
+[22:25:34] end cell_mcap50 rc=0
+[22:25:34] start cell_mcap50_pit
+[22:25:49] end cell_mcap50_pit rc=0
+[22:25:49] start cell_core_nextopen
+[22:26:04] end cell_core_nextopen rc=0
+[22:26:04] RERUN CHAIN DONE

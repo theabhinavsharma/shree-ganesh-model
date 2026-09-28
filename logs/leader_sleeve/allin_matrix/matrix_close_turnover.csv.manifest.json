@@ -1,0 +1,155 @@
+{
+ "dataset": "all-in hold matrix summary",
+ "file": "matrix_close_turnover.csv",
+ "rows": 360,
+ "units": "CAGR, drawdown in percent (15.0 = 15%); trade_frac, invested are fractions of NAV",
+ "experiment": "EXP-2026-09-27-allin-hold-matrix",
+ "producer": "src/agentic/sim_allin_matrix.py",
+ "entry": "close",
+ "cost": "turnover",
+ "panel": "/Users/abhinavs./Documents/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+ "rows_input": "/Users/abhinavs./Documents/Zoom/logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+ "symbols_subset": null,
+ "holds": [
+  30,
+  60,
+  90,
+  100,
+  180,
+  250
+ ],
+ "windows": {
+  "2019+": "2019-01-01",
+  "2016+": "2016-06-01"
+ },
+ "era_split": "2023-01-01",
+ "model_arms": "included (pred point-in-time)",
+ "pred_pit_check": "log_px median |diff| vs log10(adjusted close) 0.3077, vs log10(raw price) 0.0000 on 102017 scored rows with a later split/bonus",
+ "audit": "logs/audits/audit_20260927_research_code.json (fixes listed in the producer docstring)",
+ "caveats": [
+  "industry labels are a static 2026 map (not point-in-time)",
+  "universe excludes securities with no PIT mcap (mostly delisted/renamed, 2016-2018 heavy)",
+  "names that never print again are frozen at their last close (no delisting mark-down)",
+  "unadjusted corporate actions in the panel appear as real moves across gaps",
+  "ret60/ret252 from rows.parquet are row-based (anatomy_1p5x)",
+  "lower-circuit-locked exits not modelled"
+ ],
+ "extreme_moves_on_picks": {
+  "count": 25,
+  "largest": [
+   {
+    "symbol": "MAJESCO",
+    "date": "2020-12-23",
+    "ret": -0.988,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "LANCER",
+    "date": "2026-08-17",
+    "ret": -0.926,
+    "gap_sessions": 815
+   },
+   {
+    "symbol": "TIPSINDLTD",
+    "date": "2023-04-21",
+    "ret": -0.904,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "INFIBEAM",
+    "date": "2017-08-31",
+    "ret": -0.898,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "TRIL",
+    "date": "2017-09-28",
+    "ret": -0.896,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "DAAWAT",
+    "date": "2017-02-07",
+    "ret": -0.892,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "MINDAIND",
+    "date": "2016-09-12",
+    "ret": -0.809,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "MCDOWELL-N",
+    "date": "2018-06-15",
+    "ret": -0.804,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "TIDEWATER",
+    "date": "2021-07-26",
+    "ret": -0.79,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "HSIL",
+    "date": "2019-08-19",
+    "ret": -0.737,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "BOROSIL",
+    "date": "2018-08-02",
+    "ret": -0.71,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "INFIBEAM",
+    "date": "2018-09-28",
+    "ret": -0.708,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "MINDAIND",
+    "date": "2018-07-11",
+    "ret": -0.664,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "8KMILES",
+    "date": "2016-10-10",
+    "ret": -0.592,
+    "gap_sessions": 1
+   },
+   {
+    "symbol": "INFIBEAM",
+    "date": "2021-03-18",
+    "ret": -0.572,
+    "gap_sessions": 1
+   }
+  ]
+ },
+ "updated": "2026-09-27T22:23:33",
+ "columns": {
+  "window": "evaluation window (2019+ from 2019-01-01, 2016+ from 2016-06-01)",
+  "approach": "pick rule",
+  "hold": "sessions held per rotation",
+  "era": "all = whole window; disc = sessions < 2023-01-01; conf = sessions >= 2023-01-01 (cut from the same NAV path)",
+  "cagr_med": "median CAGR % over all phase offsets",
+  "cagr_p10": "10th percentile CAGR % over all phases",
+  "cagr_worst_all": "min CAGR % over all h//5 phases (count differs by hold)",
+  "cagr_worst6": "min CAGR % over the fixed 6 evenly spaced phases (comparable across holds)",
+  "dd_med": "median max drawdown % (daily NAV)",
+  "dd_worst_all": "min max-drawdown % over all phases",
+  "dd_worst6": "min max-drawdown % over the fixed 6 phases",
+  "sharpe_med": "median daily Sharpe (era=all only)",
+  "trade_frac_med": "median over phases of the median per-rotation traded weight sum|dw| (2.0 = full rotation)",
+  "invested_mean": "mean invested fraction after each rotation's trades",
+  "uc_blocked": "picks not bought because upper-circuit locked at the entry open (next_open)",
+  "no_open": "picks with no print at the entry open (next_open)",
+  "catchup_exits": "sales delayed to the first session the name printed again",
+  "phases_all": "number of phase offsets (h//5)",
+  "phases_fixed": "phases in the fixed-6 set",
+  "pred_pit": "MODEL rows: pred passed the point-in-time log_px check"
+ }
+}
