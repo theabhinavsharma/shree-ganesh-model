@@ -1,0 +1,13 @@
+{
+ "dataset": "ic.csv",
+ "experiment": "EXP-2026-09-29-industry-fundamentals",
+ "producer": "src/agentic/test_industry_fundamentals.py",
+ "description": "per-date cross-industry Spearman IC (ic_) and partial IC on heat_pct (pic_)",
+ "definitions": "EXP-2026-09-29-industry-fundamentals (registered in logs/experiments.jsonl before any outcome was computed).\n\nPRIMARY (Q2): the model-ranked screen with a different INDUSTRY filter, same stocks rule and ranking:\n  S1M (reference)  trend rule & mean-heat pct >= 0.70, top 9 by bake-off ensemble (sim_screen_rank_exit.select_s1)\n  F1               trend rule & F_pct >= 0.70 (fundamentals only, no price heat)\n  F2               trend rule & heat_pct >= 0.70 & F_pct >= 0.50\n  H2               trend rule & heatfix_pct >= 0.70 & breadth >= 0.60 (median heat + breadth)\n  Engine sim_screen_rank_exit.run_exit, exit E0 (126 sessions), close entry, 0.5% round trip, weekly cohorts 2019+.\n  PASS = beats S1M by sim_leader_portfolio_7x.beats (CAGR higher in both eras, full-period maxDD not worse by > 2pp) at\n  grid phase 0 AND in >= 4 of 5 phases. Production S0 reported for reference.\n  Wiring check before any result: the custom selector with the S1M filter must reproduce select_s1's picks exactly.\nSECONDARY (Q1, descriptive): weekly cross-industry Spearman IC of F and each pillar with the next 65-session\n  equal-weight industry return (core members at the prior close), raw and partial on heat_pct (rank residuals); mean and\n  t on non-overlapping 65-session samples, per era. D_flows 2022+ only.\nIndustry scores: data/derived/industry_scores.parquet (build_industry_scores.py).\nOutput: logs/leader_sleeve/industry_fundamentals/{results.csv, ic.csv, README.md} + manifests; RESULT line in experiments.jsonl.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "ic": "Spearman correlation"
+ },
+ "updated": "2026-09-29T08:15:57"
+}
