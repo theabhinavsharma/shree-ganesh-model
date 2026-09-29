@@ -21,6 +21,10 @@ data/**/*
 !data/derived/
 data/derived/*
 !data/derived/factor_registry.json
+# hand-curated PIB policy-term -> industry map read by src/agentic/fetch_pib_releases.py (config, not regenerable)
+!data/derived/pib_industry_keywords.csv
+!data/derived/pib_industry_keywords.csv.manifest.json
+!data/derived/pib_industry_keywords.README.md
 
 tmp/
 build/

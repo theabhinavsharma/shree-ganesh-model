@@ -1,0 +1,140 @@
+source,series_type,series_code,series,base_years,industry,link,confidence,rationale
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Packaged Foods,direct_partial,high,Processed/packaged foods are NIC 10 (food products) output
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Sugar,direct,high,"Sugar manufacture is NIC 1072, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Edible Oil,direct,high,"Vegetable and animal oils and fats are NIC 1040, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Dairy Products,direct,high,"Dairy products are NIC 1050, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Tea & Coffee,direct_partial,high,"Tea/coffee processing is NIC 1079 (food products); plantation output is agriculture, not IIP"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Other Food Products,direct,high,"Other food products are NIC 107x, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Seafood,direct_partial,high,"Processing and preserving of fish is NIC 1020, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Meat Products including Poultry,direct_partial,high,"Processing and preserving of meat is NIC 1010, inside division 10"
+iip,nic2,10,Manufacture of food products,2011-12;2022-23,Animal Feed,direct,high,"Prepared animal feeds are NIC 1080, inside division 10"
+iip,nic2,11,Manufacture of beverages,2011-12;2022-23,Breweries & Distilleries,direct,high,"Spirits, wine and malt liquor are NIC 1101-1103 (beverages)"
+iip,nic2,11,Manufacture of beverages,2011-12;2022-23,Other Beverages,direct,high,Soft drinks and mineral water are NIC 1104 (beverages)
+iip,nic2,12,Manufacture of tobacco products,2011-12;2022-23,Cigarettes & Tobacco Products,direct,high,Division 12 is tobacco products
+iip,nic2,13,Manufacture of textiles,2011-12;2022-23,Other Textile Products,direct,high,"Spinning, weaving and finishing of textiles are division 13"
+iip,nic2,13,Manufacture of textiles,2011-12;2022-23,Jute & Jute Products,direct,high,Jute yarn and fabric are textile manufacture (division 13)
+iip,nic2,14,Manufacture of wearing apparel,2011-12;2022-23,Garments & Apparels,direct,high,Division 14 is wearing apparel
+iip,nic2,15,Manufacture of leather and related products,2011-12;2022-23,Leather And Leather Products,direct,high,Division 15 is leather and related products
+iip,nic2,15,Manufacture of leather and related products,2011-12;2022-23,Footwear,direct,high,"Footwear is NIC 1520, inside division 15"
+iip,nic2,16,"Manufacture of wood and products of wood and cork, except furniture",2011-12;2022-23,Plywood Boards/ Laminates,direct,high,"Veneer sheets, plywood and boards are NIC 1621 (wood products)"
+iip,nic2,17,Manufacture of paper and paper products,2011-12;2022-23,Paper & Paper Products,direct,high,Division 17 is paper and paper products
+iip,nic2,17,Manufacture of paper and paper products,2011-12;2022-23,Packaging,direct_partial,medium,Paper/paperboard packaging is NIC 1702; plastic packaging sits in division 22
+iip,nic2,18,Printing and reproduction of recorded media,2011-12;2022-23,Printing & Publication,direct_partial,medium,Printing is NIC 1811 (division 18); publishing itself is a service outside IIP
+iip,nic2,19,Manufacture of coke and refined petroleum products,2011-12;2022-23,Refineries & Marketing,direct,high,Refined petroleum products are NIC 1920 (division 19)
+iip,nic2,19,Manufacture of coke and refined petroleum products,2011-12;2022-23,Lubricants,direct,high,Lubricating oils and greases are refined petroleum products (NIC 1920)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Commodity Chemicals,direct,high,Basic chemicals are NIC 2011 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Specialty Chemicals,direct,high,Specialty/other chemical products are NIC 2029 and related classes (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Petrochemicals,direct,high,Petrochemicals and plastics in primary forms are NIC 2011/2013 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Fertilizers,direct,high,Fertilizers are NIC 2012 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Pesticides & Agrochemicals,direct,high,Pesticides and agrochemicals are NIC 2021 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Dyes And Pigments,direct,high,Dyes and pigments are NIC 2011 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Paints,direct,high,Paints and varnishes are NIC 2022 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Printing Inks,direct,high,Printing ink is NIC 2022 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Industrial Gases,direct,high,Industrial gases are NIC 2011 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Carbon Black,direct,high,"Carbon black is a basic chemical, NIC 2011 (division 20)"
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Explosives,direct,high,Explosives are NIC 2029 (division 20)
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Personal Care,direct_partial,medium,"Soaps, detergents, cosmetics are NIC 2023 (division 20); a small share of the division"
+iip,nic2,20,Manufacture of chemicals and chemical products,2011-12;2022-23,Household Products,direct_partial,medium,Detergents and cleaning preparations are NIC 2023 (division 20); a small share of the division
+iip,nic2,21,"Manufacture of pharmaceuticals, medicinal chemical and botanical products",2011-12;2022-23,Pharmaceuticals,direct,high,Division 21 is pharmaceuticals
+iip,nic2,21,"Manufacture of pharmaceuticals, medicinal chemical and botanical products",2011-12;2022-23,Biotechnology,direct_partial,medium,Biologics/biopharma manufacture is NIC 2100; biotech research services are outside IIP
+iip,nic2,22,Manufacture of rubber and plastics products,2011-12;2022-23,Tyres & Rubber Products,direct,high,Rubber tyres and tubes are NIC 2211 (division 22)
+iip,nic2,22,Manufacture of rubber and plastics products,2011-12;2022-23,Rubber,direct_partial,medium,Rubber products are NIC 221x; natural-rubber plantation output is agriculture
+iip,nic2,22,Manufacture of rubber and plastics products,2011-12;2022-23,Plastic Products - Industrial,direct,high,Plastic products are NIC 2220 (division 22)
+iip,nic2,22,Manufacture of rubber and plastics products,2011-12;2022-23,Plastic Products - Consumer,direct,high,Plastic products are NIC 2220 (division 22)
+iip,nic2,22,Manufacture of rubber and plastics products,2011-12;2022-23,Packaging,direct_partial,medium,Plastic packaging is NIC 2220; paper packaging sits in division 17
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Cement & Cement Products,direct,high,Cement and concrete products are NIC 2394/2395 (division 23)
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Ceramics,direct,high,Ceramic tiles and products are NIC 2392/2393 (division 23)
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Sanitary Ware,direct,high,Ceramic sanitary fixtures are NIC 2393 (division 23)
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Glass - Industrial,direct,high,Glass and glass products are NIC 2310 (division 23)
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Glass - Consumer,direct,high,Glass and glass products are NIC 2310 (division 23)
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Granites & Marbles,direct,high,"Cutting, shaping and finishing of stone is NIC 2396 (division 23)"
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Electrodes & Refractories,direct,high,Refractory products (NIC 2391) and graphite electrodes (NIC 2399) are division 23
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Other Construction Materials,direct,medium,Clay/concrete/other building materials are division 23 classes
+iip,nic2,23,Manufacture of other non-metallic mineral products,2011-12;2022-23,Abrasives & Bearings,direct_partial,medium,Abrasive products are NIC 2399 (division 23); bearings are NIC 2814 (division 28)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Iron & Steel,direct,high,Basic iron and steel is NIC 2410 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Iron & Steel Products,direct_partial,medium,"Steel tubes, wires and other semis are NIC 2410; fabricated steel structures are division 25"
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Ferro & Silica Manganese,direct,high,Ferro-alloys are NIC 2410 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Sponge Iron,direct,high,Direct-reduced (sponge) iron is NIC 2410 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Pig Iron,direct,high,Pig iron is NIC 2410 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Aluminium,direct,high,Aluminium production is NIC 2420 (basic precious and non-ferrous metals)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Copper,direct,high,Copper production is NIC 2420 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Zinc,direct,high,Zinc production is NIC 2420 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,"Aluminium, Copper & Zinc Products",direct,high,Non-ferrous metal semis are NIC 2420 (division 24)
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Precious Metals,direct_partial,medium,Precious-metal refining is NIC 2420; jewellery is division 32
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Diversified Metals,direct_partial,medium,Metal smelting is division 24; the mining arm sits in IIP Mining
+iip,nic2,24,Manufacture of basic metals,2011-12;2022-23,Castings & Forgings,direct_partial,high,Casting of metals is NIC 2431/2432 (division 24); forging is NIC 2591 (division 25)
+iip,nic2,25,"Manufacture of fabricated metal products, except machinery and equipment",2011-12;2022-23,Castings & Forgings,direct_partial,high,"Forging, pressing and stamping of metal is NIC 2591 (division 25)"
+iip,nic2,25,"Manufacture of fabricated metal products, except machinery and equipment",2011-12;2022-23,Aerospace & Defense,direct_partial,medium,Weapons and ammunition are NIC 2520 (division 25); aircraft/military vehicles are division 30
+iip,nic2,26,"Manufacture of computer, electronic and optical products",2011-12;2022-23,Computers Hardware & Equipments,direct,high,Computers and peripherals are NIC 2620 (division 26)
+iip,nic2,26,"Manufacture of computer, electronic and optical products",2011-12;2022-23,Consumer Electronics,direct,high,Consumer electronics are NIC 2640 (division 26)
+iip,nic2,26,"Manufacture of computer, electronic and optical products",2011-12;2022-23,Telecom -  Equipment & Accessories,direct,high,Communication equipment is NIC 2630 (division 26)
+iip,nic2,26,"Manufacture of computer, electronic and optical products",2011-12;2022-23,Medical Equipment & Supplies,direct_partial,medium,Electromedical equipment is NIC 2660 (division 26); instruments and supplies are NIC 3250 (division 32)
+iip,nic2,27,Manufacture of electrical equipment,2011-12;2022-23,Heavy Electrical Equipment,direct,high,"Motors, generators, transformers and switchgear are NIC 2710 (division 27)"
+iip,nic2,27,Manufacture of electrical equipment,2011-12;2022-23,Other Electrical Equipment,direct,high,Division 27 is electrical equipment
+iip,nic2,27,Manufacture of electrical equipment,2011-12;2022-23,Cables - Electricals,direct,high,Wires and cables are NIC 2732 (division 27)
+iip,nic2,27,Manufacture of electrical equipment,2011-12;2022-23,Household Appliances,direct,high,Domestic appliances are NIC 2750 (division 27)
+iip,nic2,28,Manufacture of machinery and equipment n.e.c.,2011-12;2022-23,Industrial Machinery,direct,high,Division 28 is machinery and equipment n.e.c.
+iip,nic2,28,Manufacture of machinery and equipment n.e.c.,2011-12;2022-23,"Compressors, Pumps & Diesel Engines",direct,high,"Engines, pumps and compressors are NIC 2811/2813 (division 28)"
+iip,nic2,28,Manufacture of machinery and equipment n.e.c.,2011-12;2022-23,Abrasives & Bearings,direct_partial,medium,Bearings are NIC 2814 (division 28); abrasives are division 23
+iip,nic2,28,Manufacture of machinery and equipment n.e.c.,2011-12;2022-23,Tractors,direct,high,"Agricultural tractors are NIC 2821 (division 28), not motor vehicles"
+iip,nic2,28,Manufacture of machinery and equipment n.e.c.,2011-12;2022-23,Construction Vehicles,direct,high,Mining and construction machinery is NIC 2824 (division 28)
+iip,nic2,29,"Manufacture of motor vehicles, trailers and semi-trailers",2011-12;2022-23,Passenger Cars & Utility Vehicles,direct,high,Motor vehicles are NIC 2910 (division 29)
+iip,nic2,29,"Manufacture of motor vehicles, trailers and semi-trailers",2011-12;2022-23,Commercial Vehicles,direct,high,Motor vehicles are NIC 2910 (division 29)
+iip,nic2,29,"Manufacture of motor vehicles, trailers and semi-trailers",2011-12;2022-23,Auto Components & Equipments,direct,high,Parts and accessories for motor vehicles are NIC 2930 (division 29)
+iip,nic2,30,Manufacture of other transport equipment,2011-12;2022-23,2/3 Wheelers,direct,high,"Motorcycles are NIC 3091 (division 30, other transport), not division 29"
+iip,nic2,30,Manufacture of other transport equipment,2011-12;2022-23,Cycles,direct,high,Bicycles are NIC 3092 (division 30)
+iip,nic2,30,Manufacture of other transport equipment,2011-12;2022-23,Ship Building & Allied Services,direct,high,Building of ships and boats is NIC 3011/3012 (division 30)
+iip,nic2,30,Manufacture of other transport equipment,2011-12;2022-23,Railway Wagons,direct,high,Railway locomotives and rolling stock are NIC 3020 (division 30)
+iip,nic2,30,Manufacture of other transport equipment,2011-12;2022-23,Aerospace & Defense,direct_partial,medium,Aircraft (NIC 3030) and military fighting vehicles (NIC 3040) are division 30
+iip,nic2,31,Manufacture of furniture,2011-12;2022-23,"Furniture, Home Furnishing",direct_partial,medium,Furniture is division 31; home textiles sit in division 13
+iip,nic2,32,Other manufacturing,2011-12;2022-23,"Gems, Jewellery And Watches",direct,high,"Jewellery is NIC 3211 (division 32, other manufacturing)"
+iip,nic2,32,Other manufacturing,2011-12;2022-23,Medical Equipment & Supplies,direct_partial,medium,Medical and dental instruments and supplies are NIC 3250 (division 32)
+iip,nic2,32,Other manufacturing,2011-12;2022-23,Leisure Products,direct,medium,Sports goods and toys are NIC 3230/3240 (division 32)
+iip,sector,05,Mining,2011-12,Coal,direct_partial,high,Coal output is part of the IIP Mining sector (base 2011-12)
+iip,sector,05,Mining,2011-12,Oil Exploration & Production,direct_partial,high,Crude oil and natural gas output is part of the IIP Mining sector (base 2011-12)
+iip,sector,05,Mining,2011-12,Industrial Minerals,direct_partial,medium,Mineral extraction is part of the IIP Mining sector (base 2011-12)
+iip,sector,05-08,Mining & Quarrying,2022-23,Coal,direct_partial,high,Coal is part of Mining & Quarrying (base 2022-23); see sub-sector Fuel Minerals
+iip,sector,05-08,Mining & Quarrying,2022-23,Oil Exploration & Production,direct_partial,high,Crude oil/gas are part of Mining & Quarrying (base 2022-23); see sub-sector Fuel Minerals
+iip,sub_sector,05-06,Fuel Minerals,2022-23,Coal,direct,high,"Fuel minerals (NIC 05-06) = coal, lignite, crude petroleum, natural gas (base 2022-23 only)"
+iip,sub_sector,05-06,Fuel Minerals,2022-23,Oil Exploration & Production,direct,high,Fuel minerals (NIC 05-06) include crude petroleum and natural gas (base 2022-23 only)
+iip,sub_sector,07,Metallic Minerals,2022-23,Industrial Minerals,direct_partial,medium,"Metal ore mining (NIC 07, e.g. iron ore, manganese) (base 2022-23 only)"
+iip,sub_sector,08,Non-Metallic Minerals,2022-23,Industrial Minerals,direct_partial,medium,Other mining and quarrying (NIC 08) (base 2022-23 only)
+iip,sector,35,Electricity,2011-12;2022-23,Power Generation,direct,high,IIP Electricity (base 2011-12) is electricity generation
+iip,sector,35,Electricity,2011-12;2022-23,Integrated Power Utilities,direct_partial,high,Generation is the output measured; utilities also transmit/distribute
+iip,sub_sector,351,Electricity,2022-23,Power Generation,direct,high,"Electricity generation, NIC 351 (base 2022-23 only)"
+iip,sub_sector,351,Electricity,2022-23,Integrated Power Utilities,direct_partial,high,"Electricity generation, NIC 351 (base 2022-23 only)"
+iip,sub_sector,3511R,Renewable Electricity,2022-23,Power Generation,direct_partial,high,Generation from renewable sources (base 2022-23 only)
+iip,sub_sector,3511N,Non-Renewable Electricity,2022-23,Power Generation,direct_partial,high,Generation from non-renewable sources (base 2022-23 only)
+iip,sub_sector,352,Gas Supply,2022-23,LPG/CNG/PNG/LNG Supplier,direct,high,NIC 352 = distribution of gaseous fuels through mains (city gas) (base 2022-23 only)
+iip,sub_sector,352,Gas Supply,2022-23,Gas Transmission/Marketing,direct_partial,medium,NIC 352 covers gas distribution through mains (base 2022-23 only)
+iip,sub_sector,36,Water Supply,2022-23,Water Supply & Management,direct,high,"NIC 36 = water collection, treatment and supply (base 2022-23 only)"
+iip,sub_sector,37-38,Sewerage & Waste Management,2022-23,Waste Management,direct,high,"NIC 37-38 = sewerage, waste collection and treatment (base 2022-23 only)"
+iip,use_based,U5,Consumer durables,2011-12;2022-23,Consumer Electronics,direct_partial,medium,"TVs, phones and similar are consumer durables in the use-based classification"
+iip,use_based,U5,Consumer durables,2011-12;2022-23,Household Appliances,direct_partial,medium,"Refrigerators, ACs, washing machines are consumer durables"
+iip,use_based,U5,Consumer durables,2011-12;2022-23,2/3 Wheelers,direct_partial,medium,Motorcycles and scooters are consumer durables
+iip,use_based,U5,Consumer durables,2011-12;2022-23,"Gems, Jewellery And Watches",direct_partial,medium,Jewellery is a consumer durable in the use-based classification
+iip,use_based,U6,Consumer non-durables,2011-12;2022-23,Packaged Foods,direct_partial,medium,Processed foods are consumer non-durables
+iip,use_based,U6,Consumer non-durables,2011-12;2022-23,Personal Care,direct_partial,medium,Soaps and cosmetics are consumer non-durables
+iip,use_based,U6,Consumer non-durables,2011-12;2022-23,Cigarettes & Tobacco Products,direct_partial,medium,Cigarettes are consumer non-durables
+iip,use_based,U6,Consumer non-durables,2011-12;2022-23,Diversified FMCG,direct_partial,medium,"FMCG output (foods, toiletries, tobacco) is consumer non-durables"
+iip,use_based,U2,Capital goods,2011-12;2022-23,Heavy Electrical Equipment,direct_partial,medium,"Generators, transformers, boilers are capital goods"
+iip,use_based,U2,Capital goods,2011-12;2022-23,Industrial Machinery,direct_partial,medium,Industrial machinery is capital goods
+iip,use_based,U2,Capital goods,2011-12;2022-23,Construction Vehicles,direct_partial,medium,Earth-moving/construction machinery is capital goods
+iip,use_based,U2,Capital goods,2011-12;2022-23,Railway Wagons,direct_partial,medium,Rolling stock is capital goods
+iip,use_based,U2,Capital goods,2011-12;2022-23,Commercial Vehicles,direct_partial,medium,Commercial vehicles are capital goods
+iip,use_based,U4,Infrastructure/construction goods,2011-12;2022-23,Cement & Cement Products,direct_partial,medium,Cement is an infrastructure/construction good
+iip,use_based,U4,Infrastructure/construction goods,2011-12;2022-23,Other Construction Materials,direct_partial,medium,Building materials are infrastructure/construction goods
+iip,use_based,U1,Primary goods,2011-12;2022-23,Coal,direct_partial,medium,Mining output (coal) is primary goods
+iip,use_based,U1,Primary goods,2011-12;2022-23,Oil Exploration & Production,direct_partial,medium,Crude oil and natural gas are primary goods
+iip,use_based,U1,Primary goods,2011-12;2022-23,Power Generation,direct_partial,medium,Electricity is primary goods
+core_sector,core,COAL,Coal,2004-05;2011-12;2022-23,Coal,direct,high,ICI Coal = coal production (excl. lignite in 2011-12 base)
+core_sector,core,CRUDE,Crude Oil,2004-05;2011-12;2022-23,Oil Exploration & Production,direct,high,ICI Crude Oil = domestic crude production
+core_sector,core,NATGAS,Natural Gas,2004-05;2011-12;2022-23,Oil Exploration & Production,direct,high,ICI Natural Gas = domestic gas production
+core_sector,core,REFINERY,Refinery Products,2004-05;2011-12;2022-23,Refineries & Marketing,direct,high,ICI Refinery Products = refinery throughput/output
+core_sector,core,FERT,Fertilizers,2004-05;2011-12;2022-23,Fertilizers,direct,high,"ICI Fertilizers = urea, DAP and other fertilizer production"
+core_sector,core,STEEL,Steel,2004-05;2011-12;2022-23,Iron & Steel,direct,high,ICI Steel = finished and alloy steel production
+core_sector,core,STEEL,Steel,2004-05;2011-12;2022-23,Iron & Steel Products,direct_partial,medium,"Finished steel volumes drive steel-products makers (pipes, wires) that are part of the ICI steel basket"
+core_sector,core,CEMENT,Cement,2004-05;2011-12;2022-23,Cement & Cement Products,direct,high,ICI Cement = cement production
+core_sector,core,ELEC,Electricity,2004-05;2011-12;2022-23,Power Generation,direct,high,ICI Electricity = electricity generation
+core_sector,core,ELEC,Electricity,2004-05;2011-12;2022-23,Integrated Power Utilities,direct_partial,high,Generation is the measured output
+core_sector,core,IRONORE,Iron Ore,2022-23,Industrial Minerals,direct_partial,medium,Iron ore production (added in base 2022-23 only)

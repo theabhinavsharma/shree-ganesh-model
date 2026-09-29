@@ -1,0 +1,50 @@
+{
+ "dataset": "pib_industry_keywords",
+ "path": "data/derived/pib_industry_keywords.csv",
+ "key": [
+  "pattern",
+  "industry"
+ ],
+ "producer": "hand-curated 2026-09-29 (one row per pattern -> industry); consumed by src/agentic/fetch_pib_releases.py at consolidation",
+ "purpose": "transparent map from government-policy terms in PIB press releases to OUR industry names, producing pib_releases.industries_tagged",
+ "taxonomy": {
+  "source": "data/derived/screener_industry.parquet column industry (screener.in / NSE basic industry, HTML-unescaped)",
+  "validation": "fetch_pib_releases.load_industry_keywords() raises if any industry string is not in that column",
+  "industries_in_taxonomy": 189,
+  "industries_covered": 125
+ },
+ "columns": {
+  "pattern": "Python regex, applied case-insensitively and wrapped in \\b(?: ... )\\b",
+  "industry": "exact industry string from our taxonomy (note 'Telecom -  Equipment & Accessories' has two spaces, 'Road AssetsToll, Annuity, Hybrid-Annuity' has none)",
+  "ministry_regex": "optional; the row only applies when the release's ministry matches (used for Ministry of Defence procurement language)",
+  "note": "why the link is direct, and abbreviations deliberately left out"
+ },
+ "matching_rules": [
+  "text = release title, then the first 600 characters of body_text (body only exists when body_fetched is True)",
+  "ministry / minister / department NAME phrases ('Ministry of Coal', 'Minister for Fisheries, Animal Husbandry and Dairying', 'Coal Ministry') are removed before matching, so a ministry's own name never tags its industry",
+  "each industry is tagged at most once per release; evidence is kept in pib_releases.industry_tag_evidence as '<industry><=<matched text>@title|lead'"
+ ],
+ "excluded_on_review": {
+  "DRI": "Directorate of Revenue Intelligence, not direct-reduced iron",
+  "HAM / TOT": "ToT = training of trainers",
+  "EPR": "also European Pressurised Reactor (Jaitapur)",
+  "MDR": "MDR-TB in health releases",
+  "HFCs": "hydrofluorocarbons in environment releases",
+  "GCC": "Gulf Cooperation Council",
+  "bare 'highway', 'airport', 'spectrum', 'e-waste', 'tea', 'handloom/silk/wool'": "route/location/idiom/office clean-up/cultural uses dominated a 2026-09 sample"
+ },
+ "stats": {
+  "rows": 147,
+  "patterns": 143,
+  "industries": 125
+ },
+ "limitations": [
+  "keyword heuristic, not labels: expect false positives (e.g. a route along an expressway) and misses (policy described without these terms)",
+  "only direct links: second-order effects (e.g. steel demand from rail capex) are deliberately not tagged",
+  "PLI schemes are tagged through the sector noun in the same text ('PLI for bulk drugs' -> Pharmaceuticals), not a separate PLI rule",
+  "EMS makers Kaynes/Syrma sit in 'Industrial Products' in our taxonomy, which is too broad to tag from semiconductor/electronics terms",
+  "64 of our industries have no row; add rows here and rerun --consolidate-only (no refetch needed)"
+ ],
+ "sha256_16": "7c9c17b3adc228a7",
+ "updated": "2026-09-29T18:07:57+05:30"
+}

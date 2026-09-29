@@ -1,0 +1,148 @@
+pattern,industry,ministry_regex,note
+defen[cs]e acquisition council|DAC|acceptance of necessity|AoN,Aerospace & Defense,,DAC capital acquisition approvals (BEL/HAL/BDL-type orders)
+defen[cs]e (procurement|production|manufacturing|exports?|corridors?|industr(y|ial)|equipment|platforms?|capital budget),Aerospace & Defense,,defence industrial policy / procurement
+(positive )?indigeni[sz]ation lists?|iDEX|defen[cs]e start-?ups?|DPSUs?|defen[cs]e PSUs?|ordnance factor(y|ies),Aerospace & Defense,,defence PSU / indigenisation policy
+contracts?|procure\w*|acquisition|indigenous\w*|Make in India,Aerospace & Defense,Defen[cs]e,procurement language inside Ministry of Defence releases only
+fighter (jets?|aircraft)|combat aircraft|LCA|Tejas|missiles?|BrahMos|radars?|howitzers?|artillery guns?|ammunition|armou?red vehicles?|light (utility|combat) helicopters?|ALH|Prachand|loitering munitions?,Aerospace & Defense,Defen[cs]e,defence platforms inside MoD releases only
+drones?|UAVs?|unmanned aerial,Aerospace & Defense,,drone policy/PLI; screener classifies ideaForge/Zen Tech as Aerospace & Defense
+warships?|frigates?|corvettes?|submarines?|destroyers?|(offshore )?patrol vessels?|landing platform docks?|aircraft carriers?,Aerospace & Defense,,naval platforms (GRSE is A&D in our taxonomy)
+warships?|frigates?|corvettes?|submarines?|destroyers?|(offshore )?patrol vessels?|landing platform docks?|aircraft carriers?,Ship Building & Allied Services,,naval platforms (Mazagon Dock/Cochin Shipyard)
+space sector|IN-?SPACe|private space|NSIL|space start-?ups?|satellite manufacturing|small satellite launch vehicles?,Aerospace & Defense,,space-sector opening; A&D suppliers
+Vande Bharat|Amrit Bharat (trains?|express)|Vande Metro|wagons?|rolling stock|locomotives?|LHB coaches|train ?sets?|rail coach\w*|coach (factory|production)|metro (coaches|trains|rolling stock),Railway Wagons,,rolling stock (Titagarh/Jupiter Wagons/Texmaco)
+railway (capex|budget|allocation|investment)|capital expenditure (of|for|on) (the )?(Indian )?railways,Railway Wagons,,rail capex envelope
+new (rail(way)?|broad gauge) lines?|railway lines?|rail lines?|doubling|tripling|multi-?tracking|gauge conversion|rail(way)? electrification|dedicated freight corridors?|DFC|high[- ]speed rail|bullet train|station redevelopment|Amrit Bharat stations?|rail(way)? projects?|rail(way)? infrastructure|railway (capex|budget|allocation|investment),Civil Construction,,rail civil works (RVNL/IRCON/L&T)
+metro (rail|projects?|corridors?|lines?|network)|RRTS|regional rapid transit,Civil Construction,,metro/RRTS civil works
+NHAI|NHIDCL|expressways?|Bharatmala|national highways?|NH-?\d+|highway (projects?|construction|development|stretch(es)?|widening|sector|works|network)|road (projects?|construction|sector)|ring roads?|greenfield corridors?|economic corridors?|access[- ]controlled|(two|four|six|eight)[- ]lan(e|ing)|tunnels?,Civil Construction,,"road EPC (NHAI awards); bare ""highway"" excluded (route mentions)"
+toll (collection|fees?|rates?|revenue|plaza fees)|toll[- ]operate[- ]transfer|FASTag|hybrid annuity|InvITs?,"Road AssetsToll, Annuity, Hybrid-Annuity",,toll/annuity road assets (HAM/TOT abbreviations excluded: ToT = training of trainers)
+irrigation projects?|dam (projects?|rehabilitation)|DRIP|canals?|river[- ]linking|interlinking of rivers|Ken[- ]Betwa,Civil Construction,,irrigation civil works
+industrial corridors?|National Industrial Corridor|NICDC|smart industrial (cities|city),Civil Construction,,industrial-corridor civil works
+Jal Jeevan|water supply|sewerage|sewage|STPs?|desalination|waste ?water|Namami Gange projects?|AMRUT,Water Supply & Management,,water/sewage EPC
+real estate|RERA|affordable housing|housing sector|housing projects?|Pradhan Mantri Awas|PMAY,"Residential, Commercial Projects",,housing/real-estate policy
+cement,Cement & Cement Products,,cement
+major ports?|ports sector|port (capacity|projects?|traffic|development|terminals?|infrastructure|connectivity)|Sagarmala|container terminals?|trans-?shipment|cargo (traffic|handling)|port-led|Vadhavan,Port & Port services,,ports
+ship ?building|shipyards?|ship repair|ship ?breaking|maritime development fund,Ship Building & Allied Services,,shipbuilding policy
+shipping (industry|sector|lines?|compan(y|ies))|merchant (ships|fleet|shipping)|Indian tonnage|tonnage tax|coastal shipping|Indian[- ]flagged (ships|vessels)|freight rates,Shipping,,merchant shipping
+dredging,Dredging,,dredging
+airlines?|air (fares?|traffic|passengers?|connectivity)|domestic air travel|UDAN|regional connectivity scheme|air carriers?|aircraft leasing|aviation turbine fuel|ATF,Airline,,airlines (ATF = main cost)
+"airport (projects?|development|capacity|expansion|privati[sz]ation|terminals?|infrastructure|operators?|traffic|concessions?)|greenfield airports?|new airports?|Airports Authority|AAI|terminal buildings?|(inaugurat\w*|foundation stone|develop\w*|expan\w*|upgrad\w*|operationali[sz]\w*) .{0,60}airports?",Airport & Airport services,,"airport capex (bare ""airport"" excluded: seizure/visit locations)"
+logistics|multi-?modal|warehous\w*|container freight stations?|inland container depots?|ICDs?|PM Gati ?Shakti|Gati ?Shakti (National Master Plan|cargo terminals?|master plan)|freight (transport|movement|terminals?),Logistics Solution Provider,,logistics
+thermal power|coal-based power|power (plants?|projects?|stations?|generation|generating capacity|capacity)|generation capacity|hydro ?(electric|power)|pumped storage|nuclear (power|reactors?|energy)|small modular reactors?,Power Generation,,generation capacity
+solar (parks?|power|projects?|capacity|energy|tariffs?|auctions?)|renewable energy (capacity|projects?|auctions?|tenders?)|RE capacity|wind (power|energy|capacity|projects?)|hybrid (RE|renewable|power) projects?|round[- ]the[- ]clock power|rooftop solar|PM Surya Ghar|PM-?KUSUM|KUSUM,Power Generation,,RE generation
+solar (modules?|cells?|PV|photovoltaic|manufacturing|panels?|wafers?|ingots?)|ALMM|rooftop solar|PM Surya Ghar|PM-?KUSUM|KUSUM|inverters?,Other Electrical Equipment,,solar module makers (Waaree/Premier are Other Electrical Equipment)
+PM-?KUSUM|KUSUM|solar pumps?|agricultural pumps?|pump ?sets?,"Compressors, Pumps & Diesel Engines",,solar/agri pumps (Shakti Pumps)
+wind turbines?|transformers?|switchgears?|HVDC|power equipment|heavy electrical|boilers?|turbines?|electroly[sz]ers?,Heavy Electrical Equipment,,BHEL/Suzlon/ABB-type equipment
+transmission (lines?|projects?|systems?|network|capacity|schemes?)|inter-?state transmission|ISTS|green energy corridors?|substations?|HVDC,Power - Transmission,,transmission
+discoms?|electricity distribution|power distribution|distribution (companies|utilities)|RDSS|revamped distribution|UDAY scheme|smart (prepaid )?meters?|AT&C losses|Electricity \(Amendment\)|electricity rules,Power Distribution,,distribution utilities
+power exchanges?|power trading|electricity (market|trading)|market coupling|day-ahead market|real[- ]time market|green term[- ]ahead,Power Trading,,power trading
+power exchanges?|market coupling|stock exchanges?|commodity exchanges?|commodity derivatives|IFSC exchanges?|gold exchange,Exchange and Data Platform,,exchanges (IEX/MCX/BSE)
+advanced chemistry cells?|ACC batter(y|ies)|ACC PLI|lithium[- ]ion batter(y|ies)|battery cell manufacturing,Auto Components & Equipments,,cell/battery makers (Exide/Amara Raja are Auto Components)
+coal|lignite,Coal,,coal
+steel(?! frame)|stainless steel|special(i)?ty steel,Iron & Steel,,steel ('steel frame' metaphor excluded)
+iron ore|manganese ore|chrome ore|mineral (blocks?|auctions?)|critical minerals?|rare earths?|lithium (blocks?|reserves?|exploration)|MMDR|mining (leases?|sector|auctions?)|exploration licen[cs]es?,Industrial Minerals,,ore/mineral mining (NMDC/MOIL/GMDC)
+alumini?um|alumina|bauxite,Aluminium,,aluminium
+copper,Copper,,copper
+zinc,Zinc,,zinc
+ferro[- ]?alloys?|silico[- ]?manganese|ferro[- ]?manganese|ferro[- ]?chrome,Ferro & Silica Manganese,,ferro alloys
+sponge iron,Sponge Iron,,sponge iron (abbr. DRI excluded: in PIB it is the Directorate of Revenue Intelligence)
+graphite electrodes?|refractor(y|ies),Electrodes & Refractories,,electrodes
+gold imports?|import duty on gold|gems (and|&) jewell?ery|jewell?ery|hallmarking|diamonds?,"Gems, Jewellery And Watches",,gold/jewellery trade
+silver imports?|import duty on silver|bullion,Precious Metals,,bullion
+castings?|forgings?|foundr(y|ies),Castings & Forgings,,castings
+machine tools|capital goods (sector|scheme|industry)|industrial machinery,Industrial Machinery,,capital goods
+crude oil|oil (and|&) gas|exploration (and|&) production|E&P|OALP|hydrocarbons?|upstream (oil|sector|petroleum)|oil ?fields?|oil (blocks?|discover(y|ies)|production)|discovered small fields|windfall tax|special additional excise duty,Oil Exploration & Production,,upstream (ONGC/Oil India)
+refiner(y|ies)|petrol|diesel|fuel prices?|LPG|kerosene|oil marketing compan(y|ies)|OMCs?|petroleum products|retail (fuel )?outlets?|petrol pumps?|aviation turbine fuel|ATF,Refineries & Marketing,,refining/OMC
+LPG|CNG|PNG|piped natural gas|city gas distribution|CGD|LNG|natural gas (prices?|pricing|allocation|supply)|APM gas|gas pric(e|es|ing)|domestic gas,LPG/CNG/PNG/LNG Supplier,,city gas / LNG / LPG
+gas pipelines?|natural gas pipelines?|gas grid|National Gas Grid|gas transmission|gas trading|unified tariff,Gas Transmission/Marketing,,gas transmission
+petrochemicals?|polymers?|PCPIR,Petrochemicals,,petrochemicals
+lubricants?|lube oil|base oil,Lubricants,,lubricants
+offshore drilling|drilling rigs?,Offshore Support Solution Drilling,,drilling
+strategic petroleum reserves?|SPR|oil storage,Oil Storage & Transportation,,oil storage
+fertili[sz]ers?|urea|DAP|di-?ammonium phosphate|NBS|nutrient based subsidy|potash|phosphatic|nano urea|NPK|neem coated,Fertilizers,,fertiliser subsidy/prices
+pesticides?|agro-?chemicals?|insecticides?|herbicides?|fungicides?|crop protection chemicals?,Pesticides & Agrochemicals,,agrochemicals
+special(i)?ty chemicals?|fine chemicals?,Specialty Chemicals,,specialty chemicals
+caustic soda|soda ash|chlor[- ]alkali|PVC|methanol|acetic acid|chemical (industry|sector|manufacturing),Commodity Chemicals,,commodity chemicals
+dyes?|pigments?,Dyes And Pigments,,dyes
+industrial explosives|commercial explosives|PESO|Petroleum and Explosives Safety,Explosives,,explosives licensing
+medical oxygen|liquid medical oxygen|LMO|oxygen (plants?|concentrators?|cylinders?)|industrial gases|PSA (oxygen )?plants?,Industrial Gases,,oxygen (2021)
+carbon black,Carbon Black,,carbon black
+pharmaceuticals?|pharma|bulk drugs?|active pharmaceutical ingredients?|bulk drug parks?|drug (prices?|pricing|manufacturers?|regulator|exports?)|NPPA|DPCO|generic (drugs|medicines)|USFDA|CDSCO|Schedule M,Pharmaceuticals,,pharma
+medical devices?|medical equipment|medical device parks?|diagnostic (kits|equipment)|stents?|PPE kits?|ventilators?,Medical Equipment & Supplies,,medical devices
+PM-?JAY|Jan Arogya|health benefit packages?|CGHS rates?,Hospital,,hospital reimbursement schemes
+pharmacy|pharmacies|Jan Aushadhi Kendras?|e-pharmacy|online pharmac(y|ies),Pharmacy Retail,,pharmacy retail (Jan Aushadhi competes)
+health insurance|crop insurance|PMFBY|Fasal Bima|general insurance|motor insurance|non-life insurance|reinsurance|insurance (sector|laws?|amendment|companies)|IRDAI|FDI in insurance|composite licen[cs]es?,General Insurance,,non-life insurance
+life insurance|LIC|PMJJBY|Jeevan Jyoti|insurance (sector|laws?|amendment|companies)|IRDAI|FDI in insurance|composite licen[cs]es?,Life Insurance,,life insurance
+"public sector banks?|PSBs?|bank (mergers?|amalgamations?|recapitali[sz]ation|privati[sz]ation)|amalgamation of .{0,40}banks|recapitali[sz]ation bonds?",Public Sector Bank,,PSB policy
+NBFCs?|non-banking financ(e|ial) compan(y|ies),Non Banking Financial Company (NBFC),,NBFCs
+housing finance compan(y|ies)|NHB,Housing Finance Company,,HFCs (abbr. excluded: HFC = hydrofluorocarbon)
+micro-?finance|MFIs?,Microfinance Institutions,,microfinance
+mutual funds?|asset management compan(y|ies),Asset Management Company,,AMCs
+depositor(y|ies)|demat accounts?|clearing corporations?,"Depositories, Clearing Houses and Other Intermediaries",,depositories
+credit rating agenc(y|ies),Ratings,,ratings
+UPI|digital payments?|fintech|payment aggregators?|payment gateways?|merchant discount rate|RuPay|Account Aggregators?|BHIM,Financial Technology (Fintech),,payments
+stock ?brok(ers?|ing)|securities transaction tax|STT|capital gains tax|F&O|futures and options|derivatives trading,Stockbroking & Allied,,brokers
+infrastructure financ(e|ing) compan(y|ies)|NaBFID|IIFCL,Financial Institution,,infra lenders
+semiconductors?|chip (manufacturing|fabs?|design|packaging)|fabs?|fabrication (units?|plants?|facilit(y|ies))|OSAT|ATMP|display fabs?|India Semiconductor Mission|ISM|Semicon India,Computers Hardware & Equipments,,"semiconductors (MosChip is Computers Hardware; Kaynes/Syrma are 'Industrial Products', too broad to tag)"
+IT hardware|laptops?|personal computers|computer hardware,Computers Hardware & Equipments,,IT hardware PLI
+electronics manufacturing|electronic components?|mobile (phones?|handsets?) (manufacturing|production|exports?)|smartphones?|electronics (production|exports?|sector|industry)|large[- ]scale electronics|ECMS|consumer electronics|televisions?|LED (bulbs?|lights?|lighting|TVs?)|UJALA,Consumer Electronics,,electronics manufacturing (Dixon)
+air[- ]conditioners?|white goods|refrigerators?|washing machines?|room ACs?|ceiling fans?,Household Appliances,,white goods PLI (Amber/Voltas)
+telecom (sector|services|operators?|tariffs?|reforms?|licen[cs]es?|subscribers?|subscription)|spectrum (auctions?|allocation|pricing|charges|usage|assignment|sharing|trading)|(5G|satellite|mobile) spectrum|AGR|adjusted gross revenue|5G (services|roll-?out|launch)|mobile subscribers|tele-?density|satcom,Telecom - Cellular & Fixed line services,,"telecom operators (bare ""spectrum"" excluded: ""wide spectrum of"")"
+BharatNet|optical fib(re|er)|OFC|mobile towers?|telecom towers?|telecom infrastructure|4G saturation|RoW rules|right of way rules,Telecom - Infrastructure,,telecom infra
+telecom (equipment|manufacturing|gear)|networking equipment|indigenous 4G|4G stack|5G stack|trusted (sources?|telecom),Telecom -  Equipment & Accessories,,telecom equipment PLI
+IT[- ]BPM|IT services|software (exports?|services)|IT exports?|IT industry|IT sector|global capability cent(er|re)s?,Computers - Software & Consulting,,IT services
+software products?|SaaS,Software Products,,software products policy
+BPOs?|business process outsourcing|KPOs?,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),,BPO
+ITES|IT[- ]enabled services,IT Enabled Services,,ITES
+e-?commerce|online retail|quick commerce,E-Retail/ E-Commerce,,e-commerce rules
+online gaming|e-?sports|real[- ]money gaming|fantasy sports|gaming industry|AVGC,Digital Entertainment,,online gaming
+broadcast(ing)? (sector|policy|services|regulations?|bill)|DTH|TV channels?|cable TV|television channels|uplinking|downlinking|private FM|FM radio,TV Broadcasting & Software Production,,broadcasting
+cinema halls?|film (industry|production|shooting|certification|piracy)|cinematograph|single[- ]screens?|multiplexes|box office,"Film Production, Distribution & Exhibition",,film
+print media|newsprint|newspaper (industry|registration|publishers?)|Registration of Periodicals|Registrar of Newspapers,Print Media,,print
+music (industry|copyright|royalt(y|ies))|copyright (amendment|societies),Media & Entertainment,,music/copyright
+advertis(ing|ement) (rates?|policy|industry)|outdoor advertising,Advertising & Media Agencies,,advertising
+edtech|e-learning|online education,E-Learning,,edtech
+automobiles?|automotive (sector|industry)|auto (sector|industry)|vehicle (sales|production|registrations?)|BS-?VI|Bharat Stage|CAFE norms|fuel efficiency norms|vehicle scrappage|scrappage policy|vehicle scrapping,Passenger Cars & Utility Vehicles,,auto sector-wide policy
+automobiles?|automotive (sector|industry)|auto (sector|industry)|vehicle (sales|production|registrations?)|BS-?VI|Bharat Stage|CAFE norms|fuel efficiency norms|vehicle scrappage|scrappage policy|vehicle scrapping,2/3 Wheelers,,auto sector-wide policy
+automobiles?|automotive (sector|industry)|auto (sector|industry)|vehicle (sales|production|registrations?)|BS-?VI|Bharat Stage|CAFE norms|fuel efficiency norms|vehicle scrappage|scrappage policy|vehicle scrapping,Commercial Vehicles,,auto sector-wide policy
+automobiles?|automotive (sector|industry)|auto (sector|industry)|vehicle (sales|production|registrations?)|BS-?VI|Bharat Stage|CAFE norms|fuel efficiency norms|vehicle scrappage|scrappage policy|vehicle scrapping,Auto Components & Equipments,,auto sector-wide policy
+auto (components?|parts)|automotive components?,Auto Components & Equipments,,auto components
+electric vehicles?|EVs?|e-mobility|electric mobility|FAME|PM E-?DRIVE|electric (two|three)[- ]wheelers?|e-rickshaws?,2/3 Wheelers,,EV subsidy (2W/3W)
+electric vehicles?|EVs?|electric cars?|SPMEPCI|electric passenger cars?,Passenger Cars & Utility Vehicles,,EV (cars)
+electric (buses|trucks)|e-?buses|PM e-?Bus Sewa|FAME|PM E-?DRIVE|commercial vehicles?|trucking|truck (drivers|manufacturers),Commercial Vehicles,,CV/e-bus
+two[- ]wheelers?|three[- ]wheelers?|motorcycles?|scooters?,2/3 Wheelers,,2/3W
+passenger (vehicles?|cars?)|car (manufacturers|sales|makers)|SUVs?,Passenger Cars & Utility Vehicles,,PV
+tractors?|farm machinery|agricultural machinery|farm mechani[sz]ation,Tractors,,tractors
+tyres?|tires?,Tyres & Rubber Products,,tyres
+natural rubber|rubber (board|plantations?|prices?|sector|growers),Rubber,,rubber
+construction equipment|earth ?moving|mining equipment,Construction Vehicles,,construction equipment
+bicycles?|cycle industry,Cycles,,cycles
+sugar|sugarcane|cane (price|arrears|farmers|dues)|FRP|fair and remunerative price|ethanol,Sugar,,sugar + ethanol blending (sugar mills are the ethanol suppliers)
+MSP|minimum support price|paddy|basmati|rice exports?|non-basmati|seed (industry|sector|certification|varieties|companies)|hybrid seeds|Seeds Bill,Other Agricultural Products,,rice/seed names (KRBL/LT Foods/Kaveri)
+edible oils?|palm oil|oil ?seeds|mustard oil|soya(bean)? oil|sunflower oil|NMEO|National Mission on Edible Oils|crude palm,Edible Oil,,edible oil
+tea (board|exports?|production|industry|gardens?|estates?|plantations?|auctions?|prices?)|coffee|plantation crops?,Tea & Coffee,,tea/coffee
+dairy|milk (production|procurement|prices?|cooperatives?|processing)|NDDB|White Revolution,Dairy Products,,dairy
+poultry|broilers?|egg (production|prices)|avian influenza|bird flu|meat (exports?|processing)|buffalo meat,Meat Products including Poultry,,poultry/meat
+fisheries|fish (production|exports?|farming)|shrimps?|seafood|aquaculture|marine (products|exports)|PMMSY|Matsya Sampada|MPEDA,Seafood,,seafood
+animal feed|cattle feed|fodder|feed (industry|mills?)|livestock feed|aqua feed|shrimp feed,Animal Feed,,feed
+food processing|processed foods?|Kisan Sampada|mega food parks?|PLISFPI|packaged foods?|FSSAI,Packaged Foods,,food processing
+jute|gunny bags?,Jute & Jute Products,,jute
+tobacco|cigarettes?|gutka|bidis?,Cigarettes & Tobacco Products,,tobacco
+liquor|alcohol(ic)? (beverages?|drinks?)|distiller(y|ies)|brewer(y|ies)|potable alcohol,Breweries & Distilleries,,alcohol
+soft drinks|aerated (drinks|beverages)|carbonated (drinks|beverages)|fruit juices?|packaged drinking water|bottled water,Other Beverages,,beverages
+textiles?|MMF|man-?made fib(re|er)s?|technical textiles?|PM MITRA|yarn|cotton|spinning mills?|powerlooms?,Other Textile Products,,textiles (handloom/silk/wool excluded: mostly cultural)
+garments?|apparels?|readymade garments|RMG|textile exports,Garments & Apparels,,garments
+leather,Leather And Leather Products,,leather
+footwear|shoe (manufacturing|industry|exports),Footwear,,footwear
+tourism|tourist (visas?|arrivals|footfalls?)|foreign tourist arrivals|hotels?|hospitality (sector|industry)|e-?tourist visas?|e-?visas?,Hotels & Resorts,,tourism/hotels
+tourism|tourist (visas?|arrivals|footfalls?)|foreign tourist arrivals|e-?tourist visas?|e-?visas?|tour operators?|travel agents?,"Tour, Travel Related Services",,travel services
+toys?,Leisure Products,,toys (QCO/import duty)
+single[- ]use plastics?|plastic (ban|waste|packaging|products)|extended producer responsibility,Plastic Products - Consumer,,plastics regulation (EPR abbr. excluded: European Pressurised Reactor)
+single[- ]use plastics?|plastic packaging|packaging (industry|materials?)|extended producer responsibility,Packaging,,packaging regulation
+paper (industry|mills?|imports?|products)|newsprint|pulp,Paper & Paper Products,,paper
+waste[- ]to[- ]energy|solid waste management|e-?waste (management )?rules|e-?waste recycl\w*|legacy waste|bio-?mining|waste processing (plants?|facilit(y|ies)),Waste Management,,"waste management (bare ""e-waste"" excluded: Special Campaign office clean-ups)"
+ceramics?|vitrified tiles|ceramic tiles,Ceramics,,ceramics
+glass (industry|manufacturing|imports?)|solar glass|float glass,Glass - Industrial,,glass
+furniture,"Furniture, Home Furnishing",,furniture
+granite|marble,Granites & Marbles,,stone
+plywood|timber|wood-based industr(y|ies)|panel products,Plywood Boards/ Laminates,,wood panels
+single[- ]brand retail,Speciality Retail,,FDI retail
+multi[- ]brand retail,Diversified Retail,,FDI retail

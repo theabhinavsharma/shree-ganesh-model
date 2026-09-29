@@ -1,0 +1,25 @@
+{
+ "dataset": "budget_industry_map",
+ "path": "data/derived/budget_industry_map.csv",
+ "rows": 44,
+ "key": [
+  "ministry_key",
+  "industry"
+ ],
+ "producer": "src/agentic/fetch_budget_capex.py",
+ "source": "hand-curated in the producer (INDUSTRY_MAP); industry names validated against data/derived/screener_industry.parquet column `industry` (HTML-unescaped); ministry keys validated against data/derived/budget_capex.parquet",
+ "columns": {
+  "ministry_key": "joins budget_capex.ministry_key",
+  "ministry_group": "parent-ministry label (same as budget_capex.ministry_group)",
+  "ministry_names_as_printed": "all printed names of this key in Statement 3 across budgets (pipe-separated)",
+  "industry": "one of OUR industry names (exact string, e.g. 'Telecom -  Equipment & Accessories' has two spaces)",
+  "rationale": "one line: why the ministry's capital spending pays this industry directly"
+ },
+ "rule": "direct links only: the ministry's capital (or capital-asset grants) buys the industry's output, or the ministry is the capital provider of listed PSUs in that industry. Ministries whose capital is not industry-specific (Transfers to States, Home Affairs/Police, Economic Affairs, Rural Development, etc.) are deliberately unmapped.",
+ "caveats": [
+  "Mapping is analyst judgement, not an official classification; it says nothing about how much of a ministry's capex reaches listed companies.",
+  "Drinking Water: nearly all Jal Jeevan Mission money is grants_for_creation_of_capital_assets, not the capital column; use both definitions for this ministry.",
+  "Electronics and IT / New and Renewable Energy: industrial incentives (PLI, ISM, PM Surya Ghar) are mostly revenue-side; the capital column is small."
+ ],
+ "updated": "2026-09-29T08:35:51"
+}

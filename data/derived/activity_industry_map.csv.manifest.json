@@ -1,0 +1,38 @@
+{
+ "dataset": "activity_industry_map",
+ "path": "data/derived/activity_industry_map.csv",
+ "producer": "src/agentic/fetch_iip_core.py (ACTIVITY_MAP)",
+ "rows": 139,
+ "updated": "2026-09-29T08:55:16",
+ "key": [
+  "source",
+  "series_type",
+  "series_code",
+  "industry"
+ ],
+ "industry_universe": "/private/tmp/claude-501/-Users-abhinavs--Documents-Zoom/f1d31fd0-e296-4e81-a7bd-b84642862799/scratchpad/industries.csv (column 'industry'; every mapped name is asserted to exist there)",
+ "columns": {
+  "source": "iip -> data/derived/iip_monthly.parquet; core_sector -> data/derived/core_sector_monthly.parquet",
+  "series_type": "as in the source parquet (core rows: 'core')",
+  "series_code": "join key into the source parquet",
+  "series": "series name as in the source parquet",
+  "base_years": "bases in which the series exists in the parquet",
+  "industry": "our industry name (exact string)",
+  "link": "direct = the series measures the industry's own output; direct_partial = the industry's core products are a subset of the series, or the industry spans two series (it then appears twice)",
+  "confidence": "high = NIC-2008 division/class content or same product; medium = judgement (use-based end-use aggregates, mixed industries)",
+  "rationale": "one-line reason"
+ },
+ "scope": "Only direct producer links. No demand-side or input-cost links (e.g. cement -> construction, steel -> autos). Industries without a direct IIP/ICI counterpart (services, finance, retail, construction contractors, trading) are intentionally absent.",
+ "stats": {
+  "n_links": 139,
+  "n_industries": 96,
+  "by_source": {
+   "iip": 128,
+   "core_sector": 11
+  },
+  "by_link": {
+   "direct": 83,
+   "direct_partial": 56
+  }
+ }
+}
