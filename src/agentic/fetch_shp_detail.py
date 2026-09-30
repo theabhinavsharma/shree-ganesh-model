@@ -124,6 +124,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-minutes", type=float, default=0)
     ap.add_argument("--universe", action="store_true")
+    ap.add_argument("--workers", type=int, default=1, help="parallel downloads from NSE's static archive (8 is safe)")
     a = ap.parse_args()
     t0 = time.time()
     RAW.mkdir(parents=True, exist_ok=True)
@@ -140,18 +141,43 @@ def main() -> None:
     gone = set(json.loads(gone_f.read_text())) if gone_f.exists() else set()
     todo = need[~need["xbrl"].isin(set(Xp["xbrl"]) | gone)]
     print(f"filings 2021+: {len(L)} · needed now ({'universe' if a.universe else 'G1 pool'}): {len(need)} · parsed before {len(set(Xp['xbrl']) & set(need['xbrl']))} · to read {len(todo)}", flush=True)
-    s = build_session(warm=True, referer=REF)
+    # 1) download what is not cached yet: N parallel workers, each with its own session, 0.3 s apart per worker
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+    local, lock = threading.local(), threading.Lock()
+    missing = [r for r in todo.itertuples() if not (RAW / r.xbrl.rsplit("/", 1)[-1]).exists()]
+
+    def get(r) -> str:
+        if a.max_minutes and time.time() - t0 > a.max_minutes * 60:
+            return "timebox"
+        if not hasattr(local, "s"):
+            local.s = build_session(warm=True, referer=REF)
+        try:
+            resp = local.s.get(r.xbrl, timeout=60)
+            if resp.status_code == 404:
+                with lock:
+                    gone.add(r.xbrl); gone_f.write_text(json.dumps(sorted(gone)))
+                return "404"
+            resp.raise_for_status()
+            (RAW / r.xbrl.rsplit("/", 1)[-1]).write_bytes(resp.content)
+            return "ok"
+        except Exception as x:
+            return f"err {type(x).__name__}"
+        finally:
+            time.sleep(0.3 if a.workers > 1 else 1.5)
+    done_n = 0
+    with ThreadPoolExecutor(max_workers=max(a.workers, 1)) as ex:
+        for res in ex.map(get, missing):
+            done_n += 1
+            if done_n % 500 == 0:
+                print(f"  downloaded {done_n}/{len(missing)} · {time.time() - t0:.0f}s", flush=True)
+    # 2) read every needed filing from the local cache (no network)
     rows, errors = [], 0
     for i, r in enumerate(todo.itertuples(), 1):
-        if a.max_minutes and time.time() - t0 > a.max_minutes * 60:
-            print(f"time box reached after {i - 1} filings", flush=True); break
         f = RAW / r.xbrl.rsplit("/", 1)[-1]
+        if r.xbrl in gone or not f.exists():
+            continue
         try:
-            if not f.exists():
-                resp = s.get(r.xbrl, timeout=60)
-                if resp.status_code == 404:
-                    gone.add(r.xbrl); gone_f.write_text(json.dumps(sorted(gone))); continue
-                resp.raise_for_status(); f.write_bytes(resp.content); time.sleep(1.5)
             rows.append(dict(symbol=r.symbol, quarter_end=r.quarter_end, available=r.submission, xbrl=r.xbrl,
                              **parse(f.read_text(encoding="utf-8", errors="ignore"))))
         except Exception as x:

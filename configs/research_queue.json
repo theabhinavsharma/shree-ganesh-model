@@ -41,7 +41,9 @@
    "fetch": [
     "src/agentic/fetch_shp_detail.py",
     "--max-minutes",
-    "45"
+    "50",
+    "--workers",
+    "8"
    ],
    "test": [
     "src/agentic/test_shp_detail.py"
