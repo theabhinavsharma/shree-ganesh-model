@@ -11,8 +11,9 @@ ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import score_leader_sleeve as sls  # noqa: E402
 
-sls.DIR = ROOT / "logs/sri_lakshmi"
+sls.DIR = ROOT / ("logs/sri_lakshmi_g1" if "--shadow" in sys.argv else "logs/sri_lakshmi")   # --shadow: old-rule paper track
 sls.OUT = sls.DIR / "outcomes.jsonl"
+sys.argv = [a for a in sys.argv if a != "--shadow"]
 
 if __name__ == "__main__":
     sls.main()

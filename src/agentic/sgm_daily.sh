@@ -32,6 +32,7 @@ else bash src/agentic/daily_data_layer.sh; RC=$?; fi
 /usr/bin/python3 src/agentic/score_sri_lakshmi.py > logs/sgm_daily/${TS}_sri_lakshmi.log 2>&1 \
   && echo "✅ Sri Lakshmi scored (paper)" \
   || echo "⚠ Sri Lakshmi scoring failed (paper, non-fatal) — see logs/sgm_daily/${TS}_sri_lakshmi.log"
+[ -d logs/sri_lakshmi_g1 ] && /usr/bin/python3 src/agentic/score_sri_lakshmi.py --shadow > logs/sgm_daily/${TS}_sri_lakshmi_g1.log 2>&1   # old-rule shadow (2026-09-30)
 /usr/bin/python3 src/agentic/emit_freshness_status.py > /dev/null 2>&1 && echo "✅ freshness dashboard"
 echo "═══ DONE data_layer_rc=$RC ═══"
 exit $RC

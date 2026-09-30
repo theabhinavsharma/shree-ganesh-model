@@ -28,9 +28,10 @@ import pandas as pd
 ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUTBOX = ROOT / "logs/outbox"
 CFG = Path.home() / ".config/sgm"
-TRACKS = {"sri_lakshmi": ROOT / "logs/sri_lakshmi", "model": ROOT / "logs/model_screen", "sleeve": ROOT / "logs/leader_sleeve"}
-LABEL = {"sri_lakshmi": "Sri Lakshmi", "model": "Model screen", "sleeve": "Production"}
-SHORT = {"sri_lakshmi": "SL", "model": "Model", "sleeve": "Prod"}
+TRACKS = {"sri_lakshmi": ROOT / "logs/sri_lakshmi", "sri_lakshmi_g1": ROOT / "logs/sri_lakshmi_g1",
+          "model": ROOT / "logs/model_screen", "sleeve": ROOT / "logs/leader_sleeve"}
+LABEL = {"sri_lakshmi": "Sri Lakshmi", "sri_lakshmi_g1": "Sri Lakshmi old rule", "model": "Model screen", "sleeve": "Production"}
+SHORT = {"sri_lakshmi": "SL", "sri_lakshmi_g1": "SL-old", "model": "Model", "sleeve": "Prod"}
 
 
 def _latest(pattern: str, folder: Path) -> Path | None:

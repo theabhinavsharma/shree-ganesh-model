@@ -120,8 +120,12 @@ def main() -> None:
         r = R0[k]
         print(f"{k:6s} CAGR {r['cagr']:5.1f} · 2019-22 {r['cagr_disc']:5.1f} · 2023+ {r['cagr_conf']:5.1f} · maxDD {r['maxdd']:6.1f} · names {r['avg_names']:.1f} · "
               f"phases {r.get('phases_beaten', '')} · PASS {r.get('PASS', '')}")
-    OUTDIR.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame([dict(arm=k, **r) for k, r in R0.items()]).to_csv(OUTDIR / "results.csv", index=False)
+    repro = os.environ.get("SGM_REPRO") == "1"
+    out = OUTDIR / "repro" if repro else OUTDIR
+    out.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame([dict(arm=k, **r) for k, r in R0.items()]).to_csv(out / "results.csv", index=False)
+    if repro:
+        print("REPRO RUN (not logged)"); return
     now = datetime.now().isoformat(timespec="seconds")
     (OUTDIR / "results.csv.manifest.json").write_text(json.dumps(dict(dataset="results.csv", experiment=EXP_ID, producer="src/agentic/test_sector_type.py",
         definitions=__doc__, units=dict(cagr="percent a year", maxdd="percent"), updated=now), indent=1))

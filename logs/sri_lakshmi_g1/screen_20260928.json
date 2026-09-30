@@ -1,0 +1,146 @@
+{
+ "screen_id": "20260928",
+ "data_through": "2026-09-28",
+ "created_at": "2026-09-29T21:08:09",
+ "created_note": "saved after the entry session had started; selection uses data through data_through only",
+ "entry": "next session open after data_through",
+ "hold_td": 126,
+ "cost_rt_pct": 0.5,
+ "exit": "TIME (126 sessions, close); no stops",
+ "sizing": "PAPER SHADOW",
+ "status": "old Sri Lakshmi rule (G1 top 9); identical to v2 this week (no financials in the 9)",
+ "rule": "model-ranked screen (trend, heat_pct >= 0.70, top 9 by ensemble) minus hot industries with P_pct < 0.30",
+ "names": [
+  {
+   "rank": 1,
+   "symbol": "DEEDEV",
+   "rtw": 9,
+   "industry": "Industrial Products",
+   "close": 655.5,
+   "model_score": 0.9539,
+   "heat_pct": 0.958,
+   "P_pct": null,
+   "takeover": false
+  },
+  {
+   "rank": 2,
+   "symbol": "TBZ",
+   "rtw": 8,
+   "industry": "Gems, Jewellery And Watches",
+   "close": 630.75,
+   "model_score": 0.9499,
+   "heat_pct": 0.986,
+   "P_pct": 0.69,
+   "takeover": true
+  },
+  {
+   "rank": 3,
+   "symbol": "ARROWGREEN",
+   "rtw": 7,
+   "industry": "Packaging",
+   "close": 891.85,
+   "model_score": 0.9391,
+   "heat_pct": 0.847,
+   "P_pct": null,
+   "takeover": false
+  },
+  {
+   "rank": 4,
+   "symbol": "CORDSCABLE",
+   "rtw": 6,
+   "industry": "Cables - Electricals",
+   "close": 331.4,
+   "model_score": 0.9196,
+   "heat_pct": 0.792,
+   "P_pct": 0.964,
+   "takeover": false
+  },
+  {
+   "rank": 5,
+   "symbol": "GANDHAR",
+   "rtw": 5,
+   "industry": "Lubricants",
+   "close": 262.05,
+   "model_score": 0.795,
+   "heat_pct": 0.944,
+   "P_pct": 0.31,
+   "takeover": false
+  },
+  {
+   "rank": 6,
+   "symbol": "BLSE",
+   "rtw": 4,
+   "industry": "IT Enabled Services",
+   "close": 320.65,
+   "model_score": 0.7738,
+   "heat_pct": 0.708,
+   "P_pct": null,
+   "takeover": false
+  },
+  {
+   "rank": 7,
+   "symbol": "SBCL",
+   "rtw": 3,
+   "industry": "Iron & Steel Products",
+   "close": 1110.2,
+   "model_score": 0.762,
+   "heat_pct": 0.861,
+   "P_pct": 1.0,
+   "takeover": false
+  },
+  {
+   "rank": 8,
+   "symbol": "KABRAEXTRU",
+   "rtw": 2,
+   "industry": "Industrial Products",
+   "close": 863.15,
+   "model_score": 0.757,
+   "heat_pct": 0.958,
+   "P_pct": null,
+   "takeover": false
+  },
+  {
+   "rank": 9,
+   "symbol": "RBZJEWEL",
+   "rtw": 1,
+   "industry": "Gems, Jewellery And Watches",
+   "close": 189.91,
+   "model_score": 0.7459,
+   "heat_pct": 0.986,
+   "P_pct": 0.69,
+   "takeover": false
+  }
+ ],
+ "reserves": [
+  {
+   "rank": 1,
+   "symbol": "UGARSUGAR"
+  },
+  {
+   "rank": 2,
+   "symbol": "LLOYDSENGG"
+  },
+  {
+   "rank": 3,
+   "symbol": "SOTL"
+  }
+ ],
+ "vetoed_industries": [
+  "Aluminium",
+  "Dyes And Pigments",
+  "Petrochemicals",
+  "Pharmaceuticals"
+ ],
+ "vs_model_screen": {
+  "dropped": [
+   "BHAGERIA",
+   "BODALCHEM",
+   "MMP"
+  ],
+  "added": [
+   "KABRAEXTRU",
+   "RBZJEWEL",
+   "SBCL"
+  ]
+ }
+}

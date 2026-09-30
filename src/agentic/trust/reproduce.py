@@ -26,7 +26,9 @@ PANEL = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 TESTS = {   # experiment id -> (script, results.csv written in repro mode)
     "EXP-2026-09-29-industry-fundamentals": ("src/agentic/test_industry_fundamentals.py", "logs/leader_sleeve/industry_fundamentals/repro/results.csv"),
     "EXP-2026-09-29-industry-policy": ("src/agentic/test_industry_policy.py", "logs/leader_sleeve/industry_policy/repro/results.csv"),
+    "EXP-2026-09-30-sector-shrink": ("src/agentic/test_sector_type.py", "logs/leader_sleeve/sector_type/shrink/repro/results.csv"),
 }
+ENV = {"EXP-2026-09-30-sector-shrink": {"SGM_SHRINK": "1"}}      # extra environment a test needs
 COLS = ("cagr", "cagr_disc", "cagr_conf", "maxdd")
 
 
@@ -45,7 +47,7 @@ def logged(exp: str) -> dict:
 def check(exp: str) -> dict:
     script, out = TESTS[exp]
     res = logged(exp)
-    env = dict(os.environ, SGM_REPRO="1")
+    env = dict(os.environ, SGM_REPRO="1", **ENV.get(exp, {}))
     r = subprocess.run(["nice", "-n", "10", "/usr/bin/python3", script], cwd=ROOT, env=env, capture_output=True, text=True)
     if r.returncode != 0:
         return dict(exp=exp, status="NOT REPRODUCED", detail=f"script failed: {r.stderr.strip().splitlines()[-1:]}")
