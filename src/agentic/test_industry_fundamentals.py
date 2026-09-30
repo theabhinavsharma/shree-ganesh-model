@@ -27,7 +27,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402

@@ -42,7 +42,7 @@ import argparse
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 NEWS_FEED = ROOT / "data/derived/news_feed.parquet"
 NEWS_FEAT = ROOT / "data/derived/news_features.parquet"
 EVENTS = ROOT / "data/events_full_history/normalized/stock_announcements.parquet"

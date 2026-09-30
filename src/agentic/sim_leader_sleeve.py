@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 COST = 0.5  # % round trip
 
 print("panel…", flush=True)

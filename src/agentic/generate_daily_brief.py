@@ -17,7 +17,7 @@ from pathlib import Path
 from datetime import datetime
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 TMP = ROOT / "tmp/from_scratch_7d_run"
 OUT_DIR = ROOT / "reports"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

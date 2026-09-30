@@ -33,7 +33,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT))
 from src.transform.corporate_actions import (  # noqa: E402
     PRICE_COLUMNS,

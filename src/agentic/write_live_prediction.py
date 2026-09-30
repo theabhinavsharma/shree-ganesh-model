@@ -21,7 +21,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 P1 = ROOT / "data/derived/180d_today_predictions.parquet"
 P2 = ROOT / "data/derived/multibagger_today_predictions.parquet"
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"

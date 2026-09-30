@@ -24,7 +24,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 POS = ROOT / "logs/paper_sleeve_positions.jsonl"
 SUM = ROOT / "logs/paper_sleeve.jsonl"
 HOLD_TD = 100

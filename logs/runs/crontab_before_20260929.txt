@@ -1,0 +1,8 @@
+# cian-542678-watcher: BSE tripwires for Cian Healthcare (MPS/RPT/auditor/SHP/surveillance)
+3 10,16 * * 1-5 cd /Users/abhinavs./Documents/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1
+33 20 * * 1-5 cd /Users/abhinavs./Documents/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1
+# shree-ganesh daily data layer: all feeds post-close (launchd is TCC-blocked; cron works)
+45 18 * * 1-5 /usr/bin/python3 /Users/abhinavs./Documents/Zoom/src/agentic/run_daily_layer.py >> /Users/abhinavs./Documents/Zoom/logs/daily_data_layer_cron.log 2>&1
+45 18 * * 1-5 /bin/bash /Users/abhinavs./Documents/Zoom/src/agentic/sgm_daily.sh >> /Users/abhinavs./Documents/Zoom/logs/sgm_daily/cron.log 2>&1   # SGM daily
+30 19 * * 5   /bin/bash /Users/abhinavs./Documents/Zoom/src/agentic/run_weekly_pipeline.sh >> /Users/abhinavs./Documents/Zoom/logs/weekly_pipeline/cron.log 2>&1   # SGM weekly
+0  9  * * 6   /bin/bash /Users/abhinavs./Documents/Zoom/src/agentic/run_weekly_pipeline.sh --skip-fetch >> /Users/abhinavs./Documents/Zoom/logs/weekly_pipeline/cron.log 2>&1   # SGM weekly-retry

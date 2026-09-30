@@ -223,18 +223,29 @@ def main() -> int:
     ap.add_argument("--smoke", action="store_true")
     a = ap.parse_args()
     RUNS.mkdir(parents=True, exist_ok=True)
-    if a.if_missed and not a.smoke:
+
+    def done() -> bool:                       # catch-up runs: nothing to do if this mode already sent
+        if not a.if_missed or a.smoke:
+            return False
         now = datetime.now()
         since = now - timedelta(hours=14) if a.mode == "daily" else now - timedelta(days=now.weekday() + 1)
         if _sent_since(a.mode, since):
-            print(f"[{now:%H:%M:%S}] {a.mode}: already sent since {since:%a %H:%M} — nothing to do")
-            return 0
+            print(f"[{now:%H:%M:%S}] {a.mode}: already sent since {since:%a %H:%M} — nothing to do", flush=True)
+            return True
+        return False
+
+    if done():
+        return 0
     R = Run(a.mode, a.smoke)
     if not _lock():
+        if done():                            # the run we waited for sent it; a catch-up stays quiet
+            return 0
         R.send(f"❌ SGM {a.mode} run gave up: another run held the lock for 3 hours (logs/runs/.lock)", "fail")
         return R.finish("lock timeout", 1)
     caff = subprocess.Popen(["caffeinate", "-i", "-w", str(os.getpid())])
     try:
+        if done():                            # re-check after waiting on the lock: never run the same day twice
+            return 0
         R.log(f"═══ SGM {a.mode}{' (smoke)' if a.smoke else ''} · {ROOT} ═══")
         return daily(R) if a.mode == "daily" else weekly(R)
     except Exception as x:                                                # the belt itself broke: say so, loudly

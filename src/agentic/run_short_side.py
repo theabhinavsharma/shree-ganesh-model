@@ -18,7 +18,7 @@ import lightgbm as lgb
 import xgboost as xgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom/tmp/from_scratch_7d_run")
+ROOT = Path("/Users/abhinavs./Code/Zoom/tmp/from_scratch_7d_run")
 print("== short-side model: P(low_7td <= -5%) ==")
 
 df = pd.read_parquet("data/derived/stock_daily_facts_adjusted_2015plus.parquet")

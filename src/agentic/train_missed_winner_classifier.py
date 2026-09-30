@@ -24,7 +24,7 @@ import numpy as np
 import lightgbm as lgb
 from sklearn.metrics import roc_auc_score, average_precision_score
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 CA = ROOT / "data/corporate_actions_full_history/_incremental/normalized/stock_corporate_actions.parquet"
 OUT_MODEL = ROOT / "data/derived/missed_winner_classifier.parquet"

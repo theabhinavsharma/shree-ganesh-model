@@ -2,7 +2,7 @@
 # Sep-8 basket, USER-AUTHORIZED max-memory mode (this run only): engines in
 # 3+2 parallel batches (~50-60GB peak; 5-wide = the 90-100GB freeze config).
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 while pgrep -f daily_data_layer.sh >/dev/null; do sleep 30; done
 echo "=== layer done $(date) ==="
 for ns in "cs:compare_short_horizons" "hc:find_high_conviction" "mb:find_multibagger_today"; do

@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 import torch
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/filing_scores.parquet"
 CKPT = ROOT / "data/derived/pnl_history/finbert_tone_ckpt.jsonl"
 

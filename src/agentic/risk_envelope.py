@@ -22,7 +22,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 MULTIBAGGER = ROOT / "data/derived/multibagger_today_predictions.parquet"
 OUT_REPORT = ROOT / "reports/risk_envelope.md"
 OUT_PARQUET = ROOT / "data/derived/risk_envelope.parquet"

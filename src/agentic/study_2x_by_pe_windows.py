@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 WINDOWS = {"30d~21td": 21, "60d~42td": 42, "90d~63td": 63, "180d~126td": 126}
 
 print("ttm/pe…", flush=True)

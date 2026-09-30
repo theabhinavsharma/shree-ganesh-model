@@ -1,0 +1,10 @@
+# cian-542678-watcher: BSE tripwires for Cian Healthcare (MPS/RPT/auditor/SHP/surveillance)
+3 10,16 * * 1-5 cd /Users/abhinavs./Code/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1
+33 20 * * 1-5 cd /Users/abhinavs./Code/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1
+# SGM / Sri Lakshmi (2026-09-29): ONE orchestrator, src/agentic/run_sgm.py: stage -> checks -> stop on a blocking failure.
+# The project moved to ~/Code/Zoom because macOS does not let cron read ~/Documents. Times are this Mac's (US Eastern).
+45 18 * * 1-5 /usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py daily >> /Users/abhinavs./Code/Zoom/logs/runs/cron.log 2>&1
+45 21 * * 1-5 /usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py daily --if-missed >> /Users/abhinavs./Code/Zoom/logs/runs/cron.log 2>&1   # catch-up: Mac asleep at 6:45
+15 7  * * 2-6 /usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py daily --if-missed >> /Users/abhinavs./Code/Zoom/logs/runs/cron.log 2>&1   # morning catch-up
+30 19 * * 5   /usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py weekly >> /Users/abhinavs./Code/Zoom/logs/runs/cron.log 2>&1
+0  9  * * 6   /usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py weekly --if-missed >> /Users/abhinavs./Code/Zoom/logs/runs/cron.log 2>&1   # retry if Friday did not send

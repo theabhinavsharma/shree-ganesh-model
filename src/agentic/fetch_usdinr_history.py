@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/usdinr_history.parquet"
 URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXINUS"
 

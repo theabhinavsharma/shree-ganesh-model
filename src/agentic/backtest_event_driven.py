@@ -33,7 +33,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 import os
 OOF = ROOT / os.environ.get("OOF_FILE", "data/derived/backtest_10yr_oof.parquet")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"

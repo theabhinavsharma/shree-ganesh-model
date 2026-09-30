@@ -28,7 +28,7 @@ import pandas as pd
 import lightgbm as lgb
 from sklearn.metrics import roc_auc_score
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 NEWS = ROOT / "data/derived/news_event_features.parquet"
 OUT_REPORT = ROOT / "reports/news_backtest_20260506.md"

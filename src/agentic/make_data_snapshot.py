@@ -24,7 +24,7 @@ import tarfile
 from datetime import date
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 
 # The minimal set that lets a clean clone pass the freshness gate structure and
 # run the weekly pipeline with --skip-fetch, then catch up via incremental fetchers.

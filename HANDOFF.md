@@ -2,7 +2,7 @@
 
 **Project name**: Shree Ganesh Model
 **Repo**: https://github.com/theabhinavsharma/shree-ganesh-model (private)
-**Local working directory**: `/Users/abhinavs./Documents/Zoom/` (kept historically — many Python files hardcode this path; not worth renaming)
+**Local working directory**: `/Users/abhinavs./Code/Zoom/` (kept historically — many Python files hardcode this path; not worth renaming)
 
 > **Mission**: build a calibrated, anti-overfit NSE equity trading system that
 > targets minimum 30% annualised, accepts up to 200%+ in best years, with
@@ -24,7 +24,7 @@ gate every commit, trade, and prediction passes through.
 ## 0. The first prompt to use (copy verbatim into a fresh Claude session)
 
 ```
-I'm continuing a prior Claude session in /Users/abhinavs./Documents/Zoom/.
+I'm continuing a prior Claude session in /Users/abhinavs./Code/Zoom/.
 Before answering anything, read these files in order:
 
   1. HANDOFF.md                                  ← mission + current state
@@ -167,7 +167,7 @@ Remediation tracked under CRITICAL #1 in `reports/devils_advocate_audit.md`.
 ## 7. Recovery scenarios
 
 ### Scenario A: Same machine, new Claude account
-1. Open `~/Documents/Zoom/HANDOFF.md`
+1. Open `~/Code/Zoom/HANDOFF.md`
 2. Paste the §0 first prompt into a fresh Claude conversation
 3. Verify Claude reads the 9 files listed
 4. You're back

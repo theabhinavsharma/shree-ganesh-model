@@ -3,7 +3,7 @@
 # parallel engines each load the 5M-row panel and together eat 90-100GB; serial
 # costs ~30 min more and keeps the laptop alive). nice -n 10 everything.
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

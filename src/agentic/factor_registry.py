@@ -30,7 +30,7 @@ from pathlib import Path
 import json
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 REGISTRY_PATH = ROOT / "data/derived/factor_registry.json"
 
 

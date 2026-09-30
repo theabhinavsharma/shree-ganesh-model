@@ -17,7 +17,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "evals/golden/order_book_to_grade.csv"
 N, SEED = 50, 29
 

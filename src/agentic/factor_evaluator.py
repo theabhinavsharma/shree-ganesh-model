@@ -27,7 +27,7 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 EXTRA = ROOT / "data/derived/extra_features.parquet"
 REGISTRY = ROOT / "data/derived/factor_registry.json"

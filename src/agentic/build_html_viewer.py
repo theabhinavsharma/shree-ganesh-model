@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 from datetime import datetime
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "reports/visualize.html"
 
 

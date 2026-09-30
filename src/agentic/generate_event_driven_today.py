@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 HC = ROOT / "data/derived/high_conviction_predictions.parquet"
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 OUT_REPORT = ROOT / f"reports/event_driven_today_{date.today():%Y%m%d}.md"

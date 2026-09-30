@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Resume Monday run after macOS TCC blackout — items 9(partial)→12.
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

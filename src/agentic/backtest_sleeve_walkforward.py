@@ -23,7 +23,7 @@ import pandas as pd
 import lightgbm as lgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "src/agentic"))
 import find_multibagger_today as mbmod  # reuse the engines' exact panel builder
 

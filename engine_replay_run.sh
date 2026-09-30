@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-off (2026-09-24): walk-forward replay of the 5 engines' top-30 sets, serial
 # (memory law: never parallel), 55 GB python-RSS watchdog. EXP-2026-09-24-engines-count-sizing.
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG=logs/engine_replay_20260924.log
 ( while true; do r=$(ps -axo rss,comm | awk '/[Pp]ython/{s+=$1} END{print int(s/1048576)}')
     [ "$r" -ge 55 ] && { echo "WATCHDOG ${r}GB — killing engine_replay" >> $LOG; pkill -f engine_replay.py; }

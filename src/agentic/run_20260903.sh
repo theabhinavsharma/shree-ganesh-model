@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sep-3 evening run — entry Sep-4 pre-open. Data layer already fresh (manual 20:00 run).
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

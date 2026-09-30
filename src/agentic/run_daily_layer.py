@@ -9,5 +9,5 @@ so the pipeline runs. Cron calls THIS file; it just execs the bash script.
 import subprocess
 import sys
 
-r = subprocess.run(["/bin/bash", "/Users/abhinavs./Documents/Zoom/src/agentic/daily_data_layer.sh"])
+r = subprocess.run(["/bin/bash", "/Users/abhinavs./Code/Zoom/src/agentic/daily_data_layer.sh"])
 sys.exit(r.returncode)

@@ -8,17 +8,17 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/abhinavs./Documents/Zoom/src/agentic/daily_pipeline.sh</string>
+        <string>/Users/abhinavs./Code/Zoom/src/agentic/daily_pipeline.sh</string>
     </array>
 
     <key>WorkingDirectory</key>
-    <string>/Users/abhinavs./Documents/Zoom</string>
+    <string>/Users/abhinavs./Code/Zoom</string>
 
     <key>StandardOutPath</key>
-    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_stdout.log</string>
+    <string>/Users/abhinavs./Code/Zoom/logs/launchd_stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_stderr.log</string>
+    <string>/Users/abhinavs./Code/Zoom/logs/launchd_stderr.log</string>
 
     <key>EnvironmentVariables</key>
     <dict>

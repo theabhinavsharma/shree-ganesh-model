@@ -23,7 +23,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 
 # ---------------- 1. quarterly EPS -> point-in-time TTM ----------------
 print("eps series…", flush=True)

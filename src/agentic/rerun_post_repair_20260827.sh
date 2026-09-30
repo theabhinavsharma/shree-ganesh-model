@@ -2,7 +2,7 @@
 # POST-REPAIR RERUN (2026-08-27 ~23:55): classifier + engines + gate + basket + forensics
 # + shadow on the CA-repaired parquet. Provisional basket preserved as *_prerepair.json.
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

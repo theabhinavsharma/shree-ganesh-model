@@ -39,7 +39,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
 from test_hot_order_combo import (COV_MIN, CUTOFF_MIN, ERA_SPLIT, PNL, PNL_UNIT_TO_CR, ROWS, asof_ttm, boot_means,  # noqa: E402

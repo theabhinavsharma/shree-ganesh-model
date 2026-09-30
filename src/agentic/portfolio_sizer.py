@@ -17,7 +17,7 @@ import argparse
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom/tmp/from_scratch_7d_run")
+ROOT = Path("/Users/abhinavs./Code/Zoom/tmp/from_scratch_7d_run")
 
 
 def detect_regime() -> dict:

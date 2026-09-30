@@ -25,7 +25,7 @@ import pandas as pd
 import numpy as np
 import lightgbm as lgb
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 EXTRA = ROOT / "data/derived/extra_features.parquet"
 CAT = ROOT / "data/derived/catalyst_features.parquet"

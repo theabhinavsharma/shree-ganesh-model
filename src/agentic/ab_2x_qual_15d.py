@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 EXP_ID = "EXP-2026-09-24-2x-qual-at-15d"
 FLAGS = ["IND_HOT", "HOT_LEADER", "EXTENDED", "LOSS", "CHEAP_IND", "PROM_UP", "ABOVE_200"]
 H, COST, BAR_PP, ALPHA = 15, 0.30, 4.0, 0.05 / 7

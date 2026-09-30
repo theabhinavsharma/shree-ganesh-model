@@ -11,11 +11,11 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/abhinavs./Documents/Zoom/src/agentic/daily_pipeline.sh</string>
+        <string>/Users/abhinavs./Code/Zoom/src/agentic/daily_pipeline.sh</string>
     </array>
 
     <key>WorkingDirectory</key>
-    <string>/Users/abhinavs./Documents/Zoom</string>
+    <string>/Users/abhinavs./Code/Zoom</string>
 
     <key>RunAtLoad</key>
     <false/>
@@ -32,17 +32,17 @@
     </array>
 
     <key>StandardOutPath</key>
-    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_stdout.log</string>
+    <string>/Users/abhinavs./Code/Zoom/logs/launchd_stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/abhinavs./Documents/Zoom/logs/launchd_stderr.log</string>
+    <string>/Users/abhinavs./Code/Zoom/logs/launchd_stderr.log</string>
 
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
         <string>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/homebrew/bin</string>
         <key>PYTHONPATH</key>
-        <string>/Users/abhinavs./Documents/Zoom</string>
+        <string>/Users/abhinavs./Code/Zoom</string>
     </dict>
 </dict>
 </plist>

@@ -24,7 +24,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PANEL = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 MASTER = ROOT / "data/derived/security_master.parquet"
 sys.path.insert(0, str(ROOT / "src/agentic"))

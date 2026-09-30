@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 
 # ---------- TTM PE (same machinery as ab_valuation_3h) ----------
 print("ttm/pe…", flush=True)

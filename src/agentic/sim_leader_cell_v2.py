@@ -93,7 +93,7 @@ import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
 

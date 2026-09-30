@@ -11,7 +11,7 @@ from pathlib import Path
 import re
 import datetime as _dt
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PIPE = ROOT / "src/agentic/daily_pipeline.sh"
 OUT = ROOT / "reports/WORKFLOW.md"
 

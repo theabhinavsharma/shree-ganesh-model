@@ -22,7 +22,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 EXTRA = ROOT / "data/derived/extra_features.parquet"
 
 # Prefixes that are KNOWN-LEAKING and must never be loaded into the model

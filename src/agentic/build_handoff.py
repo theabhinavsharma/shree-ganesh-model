@@ -12,7 +12,7 @@ from datetime import date, datetime
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 HANDOFF = ROOT / "HANDOFF.md"
 HC_PRED = ROOT / "data/derived/high_conviction_predictions.parquet"
 DYN_GATED = ROOT / "data/derived/dynamic_gated_backtest.parquet"

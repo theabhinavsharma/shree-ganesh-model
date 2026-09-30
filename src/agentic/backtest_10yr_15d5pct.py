@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 import lightgbm as lgb
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 # Canonical CA store (2026-08-18 law: one store per dataset). The _incremental copy this
 # script used to read is not maintained by refresh_corporate_actions.py.

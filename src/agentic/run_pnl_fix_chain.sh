@@ -2,7 +2,7 @@
 # Stage-C v2 refetch (context-date XBRL parse, financial files only) -> normalize
 # -> QC gate + 3-horizon valuation A/B. Serial after the fetch shards; memory-safe.
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 PY=/usr/bin/python3
 for i in 0 1 2; do
   nice -n 10 $PY src/agentic/fetch_pnl_history.py integrated $i 3 > logs/pnl_int2_w$i.log 2>&1 &

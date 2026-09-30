@@ -56,7 +56,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 RAW_IIP = ROOT / "data/raw/iip"
 RAW_CORE = ROOT / "data/raw/core_sector"
 DERIVED = ROOT / "data/derived"

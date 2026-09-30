@@ -4,7 +4,7 @@
 #   B. Order BOOK totals from decks / transcripts / results press releases (fetch_order_book x2 shards) -> consolidate
 # Logs: logs/backfill_20260928/*.log   Progress: tail -f logs/backfill_20260928/*.log
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 L=logs/backfill_20260928; mkdir -p $L
 P=/usr/bin/python3
 echo "[$(date +%T)] start" | tee -a $L/main.log

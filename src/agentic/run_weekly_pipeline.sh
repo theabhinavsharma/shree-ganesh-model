@@ -19,7 +19,7 @@
 
 set -euo pipefail
 
-ROOT="/Users/abhinavs./Documents/Zoom"
+ROOT="/Users/abhinavs./Code/Zoom"
 cd "$ROOT"
 
 TS=$(date +%Y%m%d_%H%M%S)

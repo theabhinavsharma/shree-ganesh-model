@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 2026-09-27 post-audit reruns on the repaired panel (serial; watchdog kills python above 55 GB).
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 L=logs/leader_sleeve/rerun_20260927
 ( while true; do kb=$(ps -axo rss,comm | awk '/[Pp]ython/{s+=$1} END{print s+0}'); if [ "$kb" -gt 57671680 ]; then echo "[$(date +%T)] WATCHDOG kill ${kb}KB" >> $L/chain.log; pkill -f "src/agentic/(anatomy|model_bakeoff|sim_)"; fi; sleep 20; done ) & WD=$!
 run(){ n=$1; shift; echo "[$(date +%T)] start $n" >> $L/chain.log; nice -n 10 /usr/bin/python3 "$@" > $L/$n.log 2>&1; echo "[$(date +%T)] end $n rc=$?" >> $L/chain.log; }

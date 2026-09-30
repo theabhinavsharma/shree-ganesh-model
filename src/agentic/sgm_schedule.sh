@@ -7,7 +7,7 @@
 # Sleep: cron does not wake a sleeping Mac. Plugged in + lid open, or once:
 #   sudo pmset repeat wakeorpoweron MTWRF 18:40:00   (and see `pmset -g sched`)
 set -eu
-ROOT=/Users/abhinavs./Documents/Zoom
+ROOT=/Users/abhinavs./Code/Zoom
 TMP=$(mktemp)
 ( crontab -l 2>/dev/null | grep -v '# SGM' || true ) > "$TMP"
 cat >> "$TMP" <<CRON

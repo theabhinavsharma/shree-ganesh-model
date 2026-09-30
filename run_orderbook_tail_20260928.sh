@@ -3,7 +3,7 @@
 # per-company queues (~3,000 documents left), so the rest is re-split across 80 workers BY DOCUMENT. Then the retry pass,
 # consolidate, and the pre-registered backlog test (the P&L stream finished at 03:19 ET). Resumable.
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 L=logs/backfill_20260928; P=/usr/bin/python3
 log() { echo "[$(date +%T) ET] $*" | tee -a $L/main.log; }
 log "orderbook tail: 80 workers by document"

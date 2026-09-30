@@ -18,7 +18,7 @@ import lightgbm as lgb
 import xgboost as xgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom/tmp/from_scratch_7d_run")
+ROOT = Path("/Users/abhinavs./Code/Zoom/tmp/from_scratch_7d_run")
 HORIZONS = [(1, 0.02), (7, 0.05), (21, 0.10)]  # (lookahead_days, +x% threshold)
 
 

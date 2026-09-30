@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/abhinavs./Documents/Zoom/src/agentic/trust/claim_check.py",
+            "command": "/usr/bin/python3 /Users/abhinavs./Code/Zoom/src/agentic/trust/claim_check.py",
             "timeout": 30
           }
         ]

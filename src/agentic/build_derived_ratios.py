@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 SCREENER = ROOT / "data/derived/screener_fundamentals.parquet"
 OUT = ROOT / "data/derived/derived_ratios.parquet"
 

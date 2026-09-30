@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 
 warnings.filterwarnings("ignore")
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "research/model_150"
 OUT.mkdir(parents=True, exist_ok=True)
 

@@ -29,7 +29,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 MASTER = ROOT / "data/derived/security_master.parquet"
 CKPT = ROOT / "data/derived/screener_industry.jsonl"
 OUT = ROOT / "data/derived/screener_industry.parquet"

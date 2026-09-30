@@ -32,7 +32,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(os.environ.get("SGM_ROOT", "/Users/abhinavs./Documents/Zoom"))
+ROOT = Path(os.environ.get("SGM_ROOT", "/Users/abhinavs./Code/Zoom"))
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 RAW = ROOT / "data/raw/nse_full_history_official"
 CA = ROOT / "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet"

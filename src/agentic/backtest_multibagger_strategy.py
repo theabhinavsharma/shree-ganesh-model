@@ -22,7 +22,7 @@ import numpy as np
 import lightgbm as lgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 OUT_REPORT = ROOT / "reports/multibagger_strategy_backtest.md"
 OUT_PARQUET = ROOT / "data/derived/multibagger_strategy_backtest.parquet"

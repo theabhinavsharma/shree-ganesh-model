@@ -21,7 +21,7 @@ import lightgbm as lgb
 import xgboost as xgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 ALT_ROOT = ROOT / "tmp/from_scratch_7d_run"
 OUT_OOF = ROOT / "data/derived/backtest_10yr_oof.parquet"
 OUT_BASKET = ROOT / "data/derived/backtest_10yr_basket.parquet"

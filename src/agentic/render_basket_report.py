@@ -29,7 +29,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path(os.environ.get("SGM_ROOT", "/Users/abhinavs./Documents/Zoom"))  # env override for off-Mac runs
+ROOT = Path(os.environ.get("SGM_ROOT", "/Users/abhinavs./Code/Zoom"))  # env override for off-Mac runs
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 INDUSTRY = ROOT / "data/derived/industry_panel.parquet"
 MACRO = ROOT / "data/derived/macro_panel.parquet"

@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 
 warnings.filterwarnings("ignore")
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT))
 OUT = ROOT / "research/model_2x"
 OUT.mkdir(parents=True, exist_ok=True)

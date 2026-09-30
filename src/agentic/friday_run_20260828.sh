@@ -3,7 +3,7 @@
 # Modeled on monday_run_20260824.sh (proven sequence); enrichment moved BEFORE the second
 # panel build so fresh sentiment folds in; basket QC resolves the newest file (midnight-safe).
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

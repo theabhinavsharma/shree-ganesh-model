@@ -33,7 +33,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import sim_leader_portfolio_7x as sp  # noqa: E402
 from test_hot_order_combo import CUTOFF_MIN, PNL, PNL_UNIT_TO_CR, asof_ttm, build_ttm, effective_session  # noqa: E402

@@ -23,7 +23,7 @@ from pathlib import Path
 
 import pyarrow.parquet as pq
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import make_full_archive as mfa  # noqa: E402
 

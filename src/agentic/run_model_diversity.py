@@ -32,7 +32,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 OUT_SCORES = ROOT / "data/derived/model_diversity_scores.parquet"
 OUT_METRICS = ROOT / "data/derived/model_diversity_metrics.parquet"

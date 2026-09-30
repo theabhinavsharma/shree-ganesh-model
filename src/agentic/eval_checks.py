@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 DER = ROOT / "data/derived"
 PANEL = DER / "stock_daily_facts_adjusted_2015plus.parquet"
 PY = "/usr/bin/python3"

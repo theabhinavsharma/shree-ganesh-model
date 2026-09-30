@@ -3,7 +3,7 @@
 # weekly step 1 = daily_data_layer.sh, CA store full re-parse, macro_sent quarantine,
 # report renderer. Same watchdog. Usage: bash reconcile_20260919b.sh ; tail -f logs/reconcile_20260919b.log
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG=logs/reconcile_20260919b.log; PY=/usr/bin/python3; MEM_CAP_GB=55
 if [ "${1:-}" != "--inner" ]; then nohup bash "$0" --inner > "$LOG" 2>&1 & echo "launched pid $! — tail -f $LOG"; exit 0; fi
 log() { echo "[$(date +%H:%M:%S)] $*"; }

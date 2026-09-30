@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import eval_checks as ec  # noqa: E402
 

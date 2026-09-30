@@ -42,7 +42,7 @@ launchctl load ~/Library/LaunchAgents/com.zoom.daily-pipeline.plist
 
 # 2. Weekly hypothesis cycle (cron)
 crontab -e
-0 19 * * 0 cd /Users/abhinavs./Documents/Zoom && python src/agentic/agent_loop.py
+0 19 * * 0 cd /Users/abhinavs./Code/Zoom && python src/agentic/agent_loop.py
 ```
 
 ## On-demand tools

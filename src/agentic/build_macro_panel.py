@@ -33,7 +33,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 DERIVED = ROOT / "data/derived"
 OUT = DERIVED / "macro_panel.parquet"
 

@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 LOG = ROOT / "logs/trust/reproductions.jsonl"
 PANEL = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 TESTS = {   # experiment id -> (script, results.csv written in repro mode)

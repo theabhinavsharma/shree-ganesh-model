@@ -26,7 +26,7 @@ import urllib.request
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/commodity_prices.parquet"
 
 UA = "Mozilla/5.0 (compatible; ZoomFetcher/1.0)"

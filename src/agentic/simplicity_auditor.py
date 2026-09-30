@@ -48,7 +48,7 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 SCAN_DIRS = ["src"]
 EXCLUDE_PARTS = {"__pycache__", ".git", "node_modules", "tmp"}
 AUDIT_MD = ROOT / "reports/simplicity_audit.md"

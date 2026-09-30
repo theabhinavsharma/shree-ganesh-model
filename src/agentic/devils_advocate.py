@@ -25,7 +25,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 EXTRA = ROOT / "data/derived/extra_features.parquet"
 HC_PRED = ROOT / "data/derived/high_conviction_predictions.parquet"

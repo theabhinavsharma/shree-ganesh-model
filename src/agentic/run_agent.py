@@ -18,7 +18,7 @@ import os
 import sys
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PROMPTS = ROOT / "prompts"
 
 AGENT_FILES = {

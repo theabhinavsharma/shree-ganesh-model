@@ -70,7 +70,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 CKPT = ROOT / "data/derived/order_fulltext_v2.jsonl"
 OUT = ROOT / "data/derived/order_amounts.parquet"
 ANN = ROOT / "data/derived/announcements_historical.parquet"

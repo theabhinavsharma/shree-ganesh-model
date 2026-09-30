@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) — checklist-by-checklist, data through Fri Aug-21.
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/weekly_pipeline; TS=$(date +%Y%m%d_%H%M%S)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 run(){ local label="$1"; shift

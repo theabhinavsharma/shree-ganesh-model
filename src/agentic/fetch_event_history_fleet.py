@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src/agentic"))
 from src.ingest.nse.session import build_session  # noqa: E402

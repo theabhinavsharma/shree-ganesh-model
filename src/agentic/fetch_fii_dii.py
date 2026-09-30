@@ -22,7 +22,7 @@ from datetime import date
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/fii_dii_flows.parquet"
 
 NSE_HOME = "https://www.nseindia.com"

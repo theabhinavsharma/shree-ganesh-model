@@ -30,7 +30,7 @@ from pathlib import Path
 
 import pyarrow.parquet as pq
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 STAGE = ROOT / "data_archive/stage"      # transcoded parquets (mirror paths)
 OUT = ROOT / "data_archive"              # final volumes + manifest
 VOL_LIMIT = int(1.8 * 1024**3)           # 1.8 GB — under GitHub's 2 GB asset cap

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-off (2026-09-24): re-insert the BE/BZ rows dropped 2026-09-08..23, then re-run the
 # coverage eval + gate. Uses the idempotent 08-28 repair script on raw partitions on disk.
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 mkdir -p logs/sgm_daily
 nohup bash -c '
   cp data/derived/stock_daily_facts_adjusted_2015plus.parquet data/derived/stock_daily_facts_adjusted_2015plus.parquet.bak-2026-09-24

@@ -24,7 +24,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 REGISTRY = ROOT / "data/derived/factor_registry.json"
 CYCLE_LOG = ROOT / "logs/agent_loop_cycles.jsonl"
 

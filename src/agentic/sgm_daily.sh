@@ -8,7 +8,7 @@
 # Engines and baskets stay on run_weekly_pipeline.sh (Friday) — RL protocol, no churn.
 # Log: logs/sgm_daily/<TS>.log     Status: logs/daily_data_layer_status.json
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 mkdir -p logs/sgm_daily; TS=$(date +%Y%m%d_%H%M%S); LOG=logs/sgm_daily/$TS.log
 exec > >(tee -a "$LOG") 2>&1
 echo "═══ SGM DAILY $TS ═══"

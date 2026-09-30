@@ -18,7 +18,7 @@ import subprocess
 import datetime as _dt
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "reports/status.md"
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 LOGS_DIR = ROOT / "logs"

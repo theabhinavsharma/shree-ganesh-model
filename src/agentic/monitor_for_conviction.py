@@ -23,7 +23,7 @@ from pathlib import Path
 import pandas as pd
 from datetime import date
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRED = ROOT / "data/derived/high_conviction_predictions.parquet"
 OUT_DIR = ROOT / "reports"
 

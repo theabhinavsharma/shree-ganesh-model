@@ -18,7 +18,7 @@ import json
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 LEDGER = ROOT / "data/derived/paper_trading_ledger.parquet"
 LIVE = ROOT / "tmp/from_scratch_7d_run/v3_live_top100.csv"
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"

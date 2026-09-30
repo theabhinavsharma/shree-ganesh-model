@@ -19,7 +19,7 @@
 
 set -uo pipefail
 
-ROOT="/Users/abhinavs./Documents/Zoom"
+ROOT="/Users/abhinavs./Code/Zoom"
 cd "$ROOT" || exit 1
 
 DATE_TAG=$(date +%Y%m%d_%H%M)

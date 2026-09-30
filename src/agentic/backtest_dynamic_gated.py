@@ -20,7 +20,7 @@ import lightgbm as lgb
 import xgboost as xgb
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 OUT_REPORT = ROOT / "reports/dynamic_gated_backtest.md"
 OUT_PARQUET = ROOT / "data/derived/dynamic_gated_backtest.parquet"

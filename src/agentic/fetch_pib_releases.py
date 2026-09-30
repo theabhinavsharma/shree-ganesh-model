@@ -75,7 +75,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT_DIR = ROOT / "data/raw/pib_releases"
 CONSOLIDATED = ROOT / "data/derived/pib_releases.parquet"
 MANIFEST = CONSOLIDATED.with_suffix(".parquet.manifest.json")

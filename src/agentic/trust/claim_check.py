@@ -18,7 +18,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 LOG = ROOT / "logs/trust/claims.jsonl"
 TAIL_BYTES = 25_000_000                      # recent part of the session log is enough and keeps the hook fast
 

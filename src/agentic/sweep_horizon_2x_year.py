@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 import lightgbm as lgb
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import find_multibagger_today as E  # noqa: E402  (panel + the engines' price features)
 

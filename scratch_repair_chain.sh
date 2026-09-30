@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 2026-09-27 panel repair chain (audit root causes 1 + 5). Backup -> BE/BZ backfill 2015+ -> price-only CA factors -> coverage eval.
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG=logs/panel_repair_20260927.log
 P=data/derived/stock_daily_facts_adjusted_2015plus.parquet
 echo "[$(date +%T)] backup" >> $LOG

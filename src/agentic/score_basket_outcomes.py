@@ -15,7 +15,7 @@ import json
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 LOG = ROOT / "logs/basket_outcomes.jsonl"
 
 

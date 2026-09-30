@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/macro_drivers_fred.parquet"
 SERIES = {  # FRED id: (name, freq, meaning)
     "DCOILBRENTEU": ("brent", "D", "Brent crude, USD/bbl (EIA)"),

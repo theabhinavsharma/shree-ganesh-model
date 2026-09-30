@@ -9,7 +9,7 @@
 # Additive (no --delete): a file removed locally stays on Drive until removed there.
 # Usage: bash src/agentic/sync_drive_mirror.sh [--exclude-pattern GLOB ...]   (extra excludes, e.g. files being written)
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 DST="$HOME/Library/CloudStorage/GoogleDrive-abhiengg.98@gmail.com/My Drive/SGM backups/day_to_day"
 [ -d "$DST" ] || { echo "[$(date +%T)] Drive folder not mounted: $DST"; exit 1; }
 EXTRA=()

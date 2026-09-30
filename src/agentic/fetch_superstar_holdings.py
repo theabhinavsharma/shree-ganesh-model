@@ -31,7 +31,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUT = ROOT / "data/derived/superstar_holdings.parquet"
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 

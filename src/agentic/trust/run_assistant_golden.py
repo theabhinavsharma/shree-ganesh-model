@@ -19,7 +19,7 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 LOG = ROOT / "logs/trust/golden_runs.jsonl"
 CLAUDE = shutil.which("claude") or "/opt/homebrew/bin/claude"
 

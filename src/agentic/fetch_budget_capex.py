@@ -55,7 +55,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 RAW = ROOT / "data/raw/budget"
 OUT = ROOT / "data/derived/budget_capex.parquet"
 MAP_OUT = ROOT / "data/derived/budget_industry_map.csv"

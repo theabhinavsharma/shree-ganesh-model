@@ -33,7 +33,7 @@ except ImportError:
     def feat_desc(f: str) -> str:
         return "Engineered feature."
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 LIVE_LONG = ROOT / "tmp/from_scratch_7d_run/v3_live_top100.csv"
 MH = ROOT / "tmp/from_scratch_7d_run/multi_horizon_top.csv"

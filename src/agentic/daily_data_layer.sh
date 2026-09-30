@@ -7,7 +7,7 @@
 # Data only — engines/baskets stay on the weekly pipeline per the RL protocol.
 # Failure is LOUD: summary line + logs/daily_data_layer_status.json for the gate.
 set -uo pipefail
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG_DIR=logs/daily_data_layer; mkdir -p "$LOG_DIR"
 TS=$(date +%Y%m%d_%H%M%S); DOW=$(date +%u)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }

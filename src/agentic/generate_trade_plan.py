@@ -15,7 +15,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 PRICES = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 MULTI = ROOT / "data/derived/multibagger_today_predictions.parquet"
 CONF = ROOT / "data/derived/confluence_picks.parquet"

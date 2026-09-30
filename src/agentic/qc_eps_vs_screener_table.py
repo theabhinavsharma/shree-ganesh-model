@@ -3,11 +3,11 @@ quarterly-results TABLE on screener.in (as-reported transcription of NSE filings
 Sample: ALL current PE-misses + 120 random passes. Bar: >=80% of symbols with
 median |ratio-1| <= 15% across the overlapping quarters."""
 import re, sys, time, random
-sys.path.insert(0, "/Users/abhinavs./Documents/Zoom/src/agentic")
+sys.path.insert(0, "/Users/abhinavs./Code/Zoom/src/agentic")
 import pandas as pd, numpy as np
 import fetch_screener_fundamentals as m
 
-ROOT = "/Users/abhinavs./Documents/Zoom"
+ROOT = "/Users/abhinavs./Code/Zoom"
 d = pd.read_parquet(f"{ROOT}/logs/qc_valuation_detail.parquet")
 bad = d[~d["ratio"].between(0.85, 1.15)]["symbol"].tolist()
 good = d[d["ratio"].between(0.85, 1.15)]["symbol"].tolist()

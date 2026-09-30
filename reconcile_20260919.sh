@@ -4,7 +4,7 @@
 # Runs in the background under nohup with a 55 GB memory watchdog; tail the log:
 #   tail -f logs/reconcile_20260919.log
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 LOG=logs/reconcile_20260919.log
 PY=/usr/bin/python3
 MEM_CAP_GB=55

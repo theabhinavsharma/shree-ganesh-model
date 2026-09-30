@@ -2,7 +2,7 @@
 import pandas as pd
 from pathlib import Path
 
-ROOT = Path("/Users/abhinavs./Documents/Zoom")
+ROOT = Path("/Users/abhinavs./Code/Zoom")
 L = ["# Deep-History Data Inventory — fetched & QC'd 2026-08-30\n",
      "All feeds below are on disk, checkpointed, and re-runnable. Coverage verified year-by-year.\n"]
 

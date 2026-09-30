@@ -6,7 +6,7 @@
 #   wait for the P&L stream (STREAM A DONE: pnl_quarterly normalized + mcap_pit rebuilt), and run the pre-registered
 #   backlog ÷ PIT TTM revenue test (EXP-2026-09-28-order-backlog). Resumable: re-run after any stop.
 set -u
-cd /Users/abhinavs./Documents/Zoom
+cd /Users/abhinavs./Code/Zoom
 L=logs/backfill_20260928; P=/usr/bin/python3
 log() { echo "[$(date +%T) ET] $*" | tee -a $L/main.log; }
 # 01:15 ET: decks average ~8 MB, so split by rank: 48 workers on each quarter's best document (mostly decks), 16 on the rest
