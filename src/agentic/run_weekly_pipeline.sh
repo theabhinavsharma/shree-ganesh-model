@@ -222,7 +222,10 @@ step "4.37. MODEL SCORES (rebuilt from this week's prices; the model-screen trac
 
 step "4.38. SRI LAKSHMI SCREEN (G1 of EXP-2026-09-29-industry-policy; paper until the weekly review is signed)"
 # Rebuild the industry scores for today's session first; the screen refuses to run on older scores.
-{ nice -n 10 /usr/bin/python3 src/agentic/build_industry_scores.py \
+{ nice -n 10 /usr/bin/python3 src/agentic/fetch_announcements_historical.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/fetch_fred_drivers.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/build_themes.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/build_industry_scores.py \
   && nice -n 10 /usr/bin/python3 src/agentic/build_policy_scores.py \
   && nice -n 10 /usr/bin/python3 src/agentic/screen_sri_lakshmi.py \
   && /usr/bin/python3 src/agentic/score_sri_lakshmi.py; } > "$LOG_DIR/${TS}_sri_lakshmi.log" 2>&1 \

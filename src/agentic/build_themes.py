@@ -81,6 +81,29 @@ def exposure() -> pd.DataFrame:
     return pd.concat(out, ignore_index=True).dropna(subset=["an_dt"])
 
 
+def fading_checker():
+    """fading_only(symbol, date) -> True when the company's filings in the last 365 days tie it to at least one fading
+    theme and to no rising theme. Same rule as test_theme_engine.py TFADE (EXP-2026-09-30-theme-engine / v3-vs-g1);
+    used live by screen_sri_lakshmi.py (V3). Also returns the newest filing date and the newest intensity date."""
+    I = pd.read_parquet(ROOT / "data/derived/theme_intensity.parquet"); I["date"] = pd.to_datetime(I["date"])
+    state = {(d, t): st for d, t, st in zip(I["date"], I["theme"], I["state"])}
+    E = pd.read_parquet(ROOT / "data/derived/theme_exposure.parquet"); E["an_dt"] = pd.to_datetime(E["an_dt"])
+    ex = {(s, t): np.sort(g["an_dt"].to_numpy()) for (s, t), g in E.groupby(["symbol", "theme"])}
+    tof: dict = {}
+    for (s, t) in ex:
+        tof.setdefault(s, []).append(t)
+
+    def fading_only(s, d) -> bool:
+        d64 = np.datetime64(d + pd.Timedelta(hours=23, minutes=59)); st = []
+        for t in tof.get(s, []):
+            a = ex[(s, t)]
+            if np.searchsorted(a, d64, side="right") - np.searchsorted(a, d64 - np.timedelta64(365, "D"), side="right") > 0:
+                st.append(state.get((d, t), "n/a"))
+        return "fading" in st and "rising" not in st
+    src = pd.to_datetime(pd.read_parquet(ROOT / "data/derived/announcements_historical.parquet", columns=["an_dt"])["an_dt"]).max()
+    return fading_only, src, I["date"].max()
+
+
 def main() -> None:
     import sim_leader_portfolio_7x as sp
     cal = pd.to_datetime(pd.read_parquet(ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet", columns=["trade_date"])["trade_date"].unique())

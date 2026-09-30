@@ -28,10 +28,10 @@ import pandas as pd
 ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUTBOX = ROOT / "logs/outbox"
 CFG = Path.home() / ".config/sgm"
-# Only two tracks (Abhinav, 2026-09-30): Sri Lakshmi G1 (all new money) and the Sep 8 production sleeve.
+# Only two tracks (Abhinav, 2026-09-30): Sri Lakshmi (G1 batch Sep 28, V3 from Oct 2) and the Sep 8 production sleeve.
 TRACKS = {"sri_lakshmi": ROOT / "logs/sri_lakshmi", "sleeve": ROOT / "logs/leader_sleeve"}
-LABEL = {"sri_lakshmi": "Sri Lakshmi G1", "sleeve": "Production"}
-SHORT = {"sri_lakshmi": "G1", "sleeve": "Prod"}
+LABEL = {"sri_lakshmi": "Sri Lakshmi V3", "sleeve": "Production"}
+SHORT = {"sri_lakshmi": "SL", "sleeve": "Prod"}
 
 
 def _latest(pattern: str, folder: Path) -> Path | None:
@@ -266,7 +266,7 @@ def weekly_text(track: str) -> str:
     per = sleeve / 26 / len(sc["names"]) if sleeve and sc["names"] else None
     entry = pd.bdate_range(pd.Timestamp(sc["data_through"]) + pd.Timedelta(days=1), periods=1)[0]
     sell = pd.bdate_range(entry, periods=126)[-1]
-    name = LABEL[track]
+    name = LABEL[track] if track != "sri_lakshmi" else ("Sri Lakshmi V3" if "V3" in sc.get("status", "") else "Sri Lakshmi G1")
     lines = [f"🛒 {name} · buy {entry:%a %b %d} at open · data {pd.Timestamp(sc['data_through']):%b %d}",
              f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight"), ""]
     for i, n in enumerate(sc["names"], 1):
@@ -274,6 +274,9 @@ def weekly_text(track: str) -> str:
         q = _shares(per, c)
         lines.append(f"{i}. {n['symbol']}" + (f" · {q} sh" if q else "") + (f" · limit ₹{c * 1.05:,.2f}" if c else "")
                      + (" · ⚑ takeover" if n.get("takeover") else ""))
+    skip = [f"{k} {', '.join(sc[c])}" for k, c in (("financials", "dropped_financials"), ("fading theme", "dropped_fading_theme")) if sc.get(c)]
+    if skip:
+        lines.append("Skipped (not refilled): " + " · ".join(skip))
     lines += ["", f"Sell all at close ~{sell:%b %d %Y} · no stop-loss", "Sign the Saturday review before real money"]
     return tidy(lines)
 

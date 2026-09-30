@@ -19,6 +19,7 @@ weekly  launchd (com.sgm.weekly): Friday 7:30 PM ET, Saturday 9 AM ET retry, or 
   POLICY DATA      fetch_iip_core.py --refresh: new IIP / core-sector releases (failure reported, does not block)
   MODEL SCORES     build_mcap_pit -> anatomy_1p5x -> model_bakeoff_1p5x: model scores rebuilt from this week's prices (~15 min;
                    failure is reported; the screen itself refuses scores more than 7 days old)
+  THEMES           fetch_announcements_historical (resume) -> fetch_fred_drivers -> build_themes (V3's fading-theme filter)
   SRI LAKSHMI      build_industry_scores -> build_policy_scores -> screen_sri_lakshmi -> score_sri_lakshmi (blocks on failure)
   REPRODUCE        trust/reproduce.py: registered results re-run from the committed code
   GATE analysis    output.*, pit.model_scores_current, model.*, strategy.*, trust.results_reproduce + this week's batch exists
@@ -201,6 +202,11 @@ def weekly(R: Run) -> int:
                        "nice -n 10 /usr/bin/python3 src/agentic/anatomy_1p5x.py; "
                        "nice -n 10 /usr/bin/python3 src/agentic/model_bakeoff_1p5x.py"], 4 * 3600):
             R.send(f"⚠ SGM · model score rebuild failed; the screen runs only if last week's scores are within 7 days. Log: {R.rec['stages'][-1]['log']}", "fail")
+        # Themes (2026-10-02, Sri Lakshmi V3): new company filings, IMF prices, then rising/fading themes. If this fails, the
+        # screen refuses theme data older than this week (no batch) rather than silently falling back to G1.
+        if not R.stage("THEMES", ["/bin/bash", "-c", "set -e; nice -n 10 /usr/bin/python3 src/agentic/fetch_announcements_historical.py; "
+                       "nice -n 10 /usr/bin/python3 src/agentic/fetch_fred_drivers.py; nice -n 10 /usr/bin/python3 src/agentic/build_themes.py"], 2 * 3600):
+            R.send(f"⚠ SGM · theme refresh failed; the V3 screen will refuse stale themes. Log: {R.rec['stages'][-1]['log']}", "fail")
         if not R.stage("SRI LAKSHMI", ["/bin/bash", "-c", "set -e; for s in build_industry_scores build_policy_scores "
                        "screen_sri_lakshmi score_sri_lakshmi; do nice -n 10 /usr/bin/python3 src/agentic/$s.py; done"], 2 * 3600):
             return R.stop("the Sri Lakshmi screen", [dict(id="stage.sri_lakshmi", detail=f"see {R.rec['stages'][-1]['log']}")])
