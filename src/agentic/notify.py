@@ -179,6 +179,7 @@ def daily_text(run: dict | None = None) -> str:
         if new:
             lines.append(f"📄 {NSE_FILINGS}")
 
+    lines += sell_lines("sri_lakshmi")
     book = []
     for tag, folder in TRACKS.items():
         of = folder / "outcomes.jsonl"
@@ -203,6 +204,53 @@ def daily_text(run: dict | None = None) -> str:
     return "\n".join(lines)
 
 
+def _sleeve() -> float | None:
+    f = CFG / "sleeve.json"
+    return json.loads(f.read_text()).get("sleeve_inr") if f.exists() else None
+
+
+def _shares(per: float | None, price: float | None) -> int | None:
+    """Planned shares for one lot: the per-stock amount at the price the buy list used (last close before entry)."""
+    return int(per // price) if per and price else None
+
+
+def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> list[str]:
+    """Lots that reach session 126 at the next Indian close (sell), those within 5 sessions, and the next sell date.
+    The plan's lots, not your broker fills. preview_days pretends every open batch has held that many sessions."""
+    of = TRACKS[track] / "outcomes.jsonl"
+    if not of.exists():
+        return []
+    last = {}
+    for l in of.read_text().splitlines():
+        if l.strip():
+            x = json.loads(l); last[x["screen_id"]] = x
+    sl, out, soon, nxt = _sleeve(), [], [], None
+    for sid, x in sorted(last.items()):
+        if x.get("status") == "CLOSED" or not x.get("names"):
+            continue
+        days = x["days_held"] if preview_days is None else preview_days
+        entry = pd.Timestamp(x["names"][0]["entry_date"])
+        sell_on = pd.bdate_range(entry, periods=126)[-1]
+        if 126 - days <= 1:
+            sc = json.loads((TRACKS[track] / f"screen_{sid}.json").read_text())
+            close = {n["symbol"]: n.get("close") for n in sc["names"]}
+            per = sl / 26 / len(sc["names"]) if sl else None
+            head = "OVERDUE, sell at the next close" if days >= 126 else "sell at today's close in India (3:30 PM IST = 6:00 AM ET)"
+            out.append(f"🔴 {LABEL[track]} batch {pd.Timestamp(sid):%b %d}: session 126 reached, {head}")
+            for n in x["names"]:
+                q = _shares(per, close.get(n["symbol"]))
+                out.append(f"• {n['symbol']} — lot bought {pd.Timestamp(n['entry_date']):%b %d} at ₹{n['entry']:,.2f}"
+                           + (f" · {q} shares" if q else "") + f" · now ₹{n['last']:,.2f} ({n['ret_gross']:+.1f}%) · best {n['peak']:+.1f}%")
+            out.append(f"Batch after costs: {x['ew_net']:+.1f}% · money goes to next week's batch")
+        elif 126 - days <= 5:
+            soon.append(f"🟡 {LABEL[track]} batch {pd.Timestamp(sid):%b %d} sells in {126 - days} sessions (about {sell_on:%a %b %d})")
+        else:
+            nxt = min(nxt, sell_on) if nxt is not None else sell_on
+    tail = soon + ([f"Next sell: {LABEL[track]}, about {nxt:%b %d %Y} (126 sessions after its buy; NSE holidays push it later)"]
+                   if nxt is not None and not out and not soon else [])
+    return (["", "🔴 SELL"] + out + soon) if out or soon else (["", "💤 SELL: nothing due"] + tail)
+
+
 def weekly_text(track: str) -> str:
     f = _latest("screen_*.json", TRACKS[track])
     if f is None:
@@ -220,7 +268,8 @@ def weekly_text(track: str) -> str:
         c = n.get("close")
         lim = f"limit ₹{c * 1.05:,.2f}" if c else "limit: last close +5%"
         flag = " ⚑ takeover" if n.get("takeover") else ""
-        lines.append(f"{n['rank']}. {n['symbol']} — {lim}{flag}")
+        q = _shares(per, c)
+        lines.append(f"{n['rank']}. {n['symbol']} — " + (f"{q} shares, " if q else "") + f"{lim}{flag}")
     lines.append(f"Sell: close of session 126, about {sell:%b %d %Y} (+ NSE holidays). No stop-loss.")
     lines.append("Real money only after you sign evals/human_review for this batch.")
     return "\n".join(lines)

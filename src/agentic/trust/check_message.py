@@ -85,6 +85,12 @@ def _pool_daily() -> tuple[list[float], str]:
         extra += list(range(len(o["filings"]) + 1))                         # counts: new / big / "and N smaller" <= all filings
     if ev:
         extra.append(len(e["results"]))
+    sl = notify._sleeve()                                                    # sell list: planned shares per lot, session 126
+    extra.append(126)
+    for f in notify.TRACKS["sri_lakshmi"].glob("screen_*.json"):
+        sc = json.loads(f.read_text())
+        per = sl / 26 / len(sc["names"]) if sl and sc["names"] else None
+        extra += [q for q in (notify._shares(per, n.get("close")) for n in sc["names"]) if q]
     return [v for t in texts for v in _nums(t)] + [float(x) for x in extra], str(st.get("date"))
 
 
@@ -92,6 +98,8 @@ def _pool_weekly(track: str) -> tuple[list[float], str, list[str]]:
     f = notify._latest("screen_*.json", notify.TRACKS[track])
     sc = json.loads(f.read_text())
     extra = [len(sc["names"])] + [n["close"] * 1.05 for n in sc["names"] if n.get("close")]
+    sl0 = notify._sleeve()
+    extra += [q for q in (notify._shares(sl0 / 26 / len(sc["names"]) if sl0 else None, n.get("close")) for n in sc["names"]) if q]
     sl = notify.CFG / "sleeve.json"
     if sl.exists():
         s = json.loads(sl.read_text()).get("sleeve_inr")
