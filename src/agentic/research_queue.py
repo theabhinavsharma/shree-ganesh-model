@@ -92,10 +92,15 @@ def report(i: int, n: int, it: dict, res: dict | None, fetch_tail: str) -> str:
         lines.append("A/B verdict: " + ("PASS: " + ", ".join(v) if isinstance(v, list) and v else str(v)))
         arms = res.get("arms", {})
         ref = next((k for k in ("G1", "S1M") if k in arms), None)
+        base = res["id"].split("-RESULT")[0].split("-RERUN")[0]
+        reg = next((json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines()
+                    if l.strip().startswith("{") and json.loads(l).get("id") == base), {})
+        desc = {**reg.get("arms", {}), **({ref: "Sri Lakshmi as it runs today"} if ref else {})}
         for k, a in arms.items():
-            lines.append(f"• {k}: {a[0]:.1f}%/yr (2019-22 {a[1]:.1f}%, 2023+ {a[2]:.1f}%) · worst fall {a[3]:.1f}%" + (f" · beat ref in {a[4]} phases" if a[4] else ""))
-        if ref:
-            lines.append(f"(reference = {ref}; a rule counts only if it beats it in both periods without a deeper fall)")
+            what = str(desc.get(k, k)).split(";")[0][:90]
+            lines.append(f"• {what}: {a[2]:.1f}%/yr in 2023+ ({a[1]:.1f}% in 2019-22) · worst fall {a[3]:.1f}%"
+                         + (f" · beat today's rule in {a[4]} test runs" if a[4] else ""))
+        lines.append("A rule is adopted only if it beats today's rule in both periods, without a deeper fall, in 4 of 5 runs.")
     else:
         lines.append("A/B: no RESULT line found; see logs/research_queue/")
     nxt = [x for x in json.loads(CFG.read_text())["items"]][i:i + 1]

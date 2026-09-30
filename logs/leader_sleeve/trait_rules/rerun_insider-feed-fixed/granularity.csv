@@ -1,0 +1,37 @@
+era,by,group,trait,n_yes,n_no,hit_yes,hit_no,gap
+disc,size,small,deliv_hi,1168,639,39.0,32.1,6.9
+disc,size,small,pb,250,1630,54.8,34.4,20.4
+disc,size,mid,deliv_hi,628,441,34.7,24.0,10.7
+disc,size,mid,pb,149,984,49.0,27.5,21.5
+disc,size,large,deliv_hi,288,297,28.5,15.8,12.7
+disc,size,large,pb,46,588,19.6,21.4,-1.8
+disc,industry,"Residential, Commercial Projects",deliv_hi,64,35,18.8,5.7,13.1
+disc,industry,"Residential, Commercial Projects",pb,27,81,37.0,4.9,32.1
+disc,industry,Civil Construction,deliv_hi,46,17,15.2,,
+disc,industry,Civil Construction,pb,4,59,,13.6,
+disc,industry,Industrial Products,deliv_hi,101,60,30.7,36.7,-6.0
+disc,industry,Industrial Products,pb,27,150,48.1,26.7,21.4
+disc,industry,Heavy Electrical Equipment,deliv_hi,111,38,31.5,26.3,5.2
+disc,industry,Heavy Electrical Equipment,pb,28,132,50.0,25.8,24.2
+disc,industry,Auto Components & Equipments,deliv_hi,51,49,29.4,8.2,21.2
+disc,industry,Auto Components & Equipments,pb,2,98,,19.4,
+disc,industry,Pharmaceuticals,deliv_hi,169,118,42.6,42.4,0.2
+disc,industry,Pharmaceuticals,pb,45,243,62.2,38.7,23.5
+conf,size,small,deliv_hi,1073,957,38.3,28.4,9.9
+conf,size,small,pb,102,2194,26.5,34.1,-7.6
+conf,size,mid,deliv_hi,586,529,34.5,37.2,-2.7
+conf,size,mid,pb,86,1208,26.7,37.7,-11.0
+conf,size,large,deliv_hi,163,143,28.8,14.0,14.8
+conf,size,large,pb,24,333,54.2,21.3,32.9
+conf,industry,"Residential, Commercial Projects",deliv_hi,123,75,44.7,38.7,6.0
+conf,industry,"Residential, Commercial Projects",pb,9,215,,43.7,
+conf,industry,Civil Construction,deliv_hi,95,48,35.8,64.6,-28.8
+conf,industry,Civil Construction,pb,1,164,,40.9,
+conf,industry,Industrial Products,deliv_hi,146,53,48.6,34.0,14.6
+conf,industry,Industrial Products,pb,15,202,,44.1,
+conf,industry,Heavy Electrical Equipment,deliv_hi,119,76,71.4,90.8,-19.4
+conf,industry,Heavy Electrical Equipment,pb,4,244,,73.0,
+conf,industry,Auto Components & Equipments,deliv_hi,136,186,33.1,16.7,16.4
+conf,industry,Auto Components & Equipments,pb,3,319,,23.8,
+conf,industry,Pharmaceuticals,deliv_hi,59,78,35.6,25.6,10.0
+conf,industry,Pharmaceuticals,pb,10,139,,27.3,

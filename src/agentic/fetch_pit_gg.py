@@ -161,7 +161,9 @@ def _main(a, t0: float) -> None:
         L = pd.concat([pd.read_parquet(LIST), L], ignore_index=True).drop_duplicates("ixbrl", keep="last")
     L.to_parquet(LIST, index=False)
     G = pd.read_parquet(OUT) if OUT.exists() else pd.DataFrame(columns=["ixbrl_url"])
-    done = set(G["ixbrl_url"])
+    gone_f = RAW / "not_on_nse.json"            # filings NSE lists but its archive answers 404 for: recorded, not retried forever
+    gone = set(json.loads(gone_f.read_text())) if gone_f.exists() else set()
+    done = set(G["ixbrl_url"]) | gone
     todo = L[~L["ixbrl"].isin(done)]
     print(f"listed {len(L)} filings · parsed before {len(done)} · to parse {len(todo)}", flush=True)
     new_rows, errors = [], 0
@@ -181,6 +183,10 @@ def _main(a, t0: float) -> None:
                          symbol=d.get("symbol") or r.symbol, source="corporates-pit-gg", fetched=datetime.now().isoformat(timespec="seconds"))
                 new_rows.append(d)
         except Exception as x:
+            if "404" in str(x):
+                gone.add(r.ixbrl); gone_f.write_text(json.dumps(sorted(gone), indent=1))
+                print(f"  404 (not on NSE's archive, recorded in {gone_f.name}): {r.symbol} {r.ixbrl.rsplit('/', 1)[-1]}", flush=True)
+                continue
             errors += 1
             print(f"  ERR {r.symbol} {r.ixbrl.rsplit('/', 1)[-1]}: {type(x).__name__} {str(x)[:80]}", flush=True)
         if i % 200 == 0:
@@ -191,14 +197,15 @@ def _main(a, t0: float) -> None:
             if G[c].dtype == object:
                 G[c] = G[c].astype("string")
         G.to_parquet(OUT, index=False)
-    remaining = int((~L["ixbrl"].isin(set(G["ixbrl_url"]))).sum())
+    remaining = int((~L["ixbrl"].isin(set(G["ixbrl_url"]) | gone)).sum())
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="pit_gg", path=str(OUT.relative_to(ROOT)), rows=len(G), filings_listed=len(L), filings_unparsed=remaining,
         source=API.replace("{f}", "DD-MM-YYYY").replace("{t}", "DD-MM-YYYY") + " -> ixbrl (in-bse-co tags)",
         columns={v: f"in-bse-co:{k}" for k, v in FIELDS.items()} | dict(date="NSE broadcast time (IST), '%d-%b-%Y %H:%M' like pit_history",
                  source="corporates-pit-gg", ixbrl_url="the filing"),
         units=dict(secAcq="number of securities", secVal="rupees as filed (text, commas kept)", befAcqSharesPer="percent as filed"),
-        known_gaps="filings NSE lists without an ixbrl link are skipped; tags missing in a filing stay blank",
+        known_gaps="filings NSE lists without an ixbrl link are skipped; tags missing in a filing stay blank; "
+                   f"{len(gone)} listed filings return 404 on NSE's archive (data/raw/pit_gg/not_on_nse.json)",
         updated=datetime.now().isoformat(timespec="seconds")), indent=1))
     if len(G):
         merge_history(G.rename(columns={"ixbrl_url": "ixbrl_url"}))

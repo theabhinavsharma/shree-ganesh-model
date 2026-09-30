@@ -1,0 +1,11 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-bulk-buyers",
+ "producer": "src/agentic/test_bulk_buyers.py",
+ "definitions": "EXP-2026-09-30-bulk-buyers (registered in logs/experiments.jsonl before the bulk-deal history was even fetched).\n\nPlain English: NSE names the client in every bulk deal (one client trading > 0.5% of a company in a day). Most are\nhigh-frequency desks that buy and sell the same stock the same day. Take those out; does it help Sri Lakshmi to put\nfirst the stocks that a fund (or a well-known investor) bought outright in the last 60 days, or to skip stocks a fund\nsold? Same engine, same pass rule as every test. Neither era has been looked at for this data.\nEvents (per client, stock, day; bulk deals dated on or before the screen date, published the same evening):\n  round trip       the client bought AND sold that stock that day -> ignored\n  churner          a client whose deals in the previous calendar year were >= 50% round trips -> ignored\n  institution      client name matches MUTUAL FUND | MF | ASSET MANAGEMENT | AMC | INSURANCE | LIFE | PENSION |\n                   PROVIDENT | FUND(S) | TRUSTEE\n  known investor   client name contains a name from data/derived/superstar_holdings.parquet (list compiled in 2026:\n                   hindsight in who counts as \"known\", reported as its own arm)\nArms (reference G1 = production Sri Lakshmi):\n  BI  institution net buy in the prior 60 days and pool rank <= 25 go first, then the rest by model; top 9\n  BK  same for a known investor\n  BA  same for any client that is not a churner\n  XI  drop pool names with an institution net sell in the prior 60 days\nPASS = sp.beats vs G1 at phase 0 and in >= 4 of 5 phases. Output: logs/leader_sleeve/bulk_buyers/ + RESULT line.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-09-30T08:36:34"
+}
