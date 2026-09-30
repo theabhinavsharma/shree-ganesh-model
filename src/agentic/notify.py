@@ -177,8 +177,9 @@ def daily_text(run: dict | None = None) -> str:
         lines.append("📈 " + " · ".join(book))
     lines += [l for l in sell_lines("sri_lakshmi") if l]
     if oj.exists() and (O.get("warming") or O.get("cooling")):
-        lines.append("🌡 " + " · ".join(x for x in (("warming: " + ", ".join(O["warming"])) if O.get("warming") else "",
-                                                    ("cooling: " + ", ".join(O["cooling"])) if O.get("cooling") else "") if x))
+        cap = lambda xs: ", ".join(xs[:3]) + (f" +{len(xs) - 3}" if len(xs) > 3 else "")  # noqa: E731
+        lines.append("🌡 " + " · ".join(x for x in (("warming: " + cap(O["warming"])) if O.get("warming") else "",
+                                                    ("cooling: " + cap(O["cooling"])) if O.get("cooling") else "") if x))
     try:
         import research_queue
         lines += [l for l in research_queue.status_lines() if l]
@@ -218,43 +219,43 @@ def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> l
             sc = json.loads((TRACKS[track] / f"screen_{sid}.json").read_text())
             close = {n["symbol"]: n.get("close") for n in sc["names"]}
             per = sl / 26 / len(sc["names"]) if sl else None
-            head = "OVERDUE, sell at the next close" if days >= 126 else "sell at today's close in India (3:30 PM IST = 6:00 AM ET)"
-            out.append(f"🔴 {LABEL[track]} batch {pd.Timestamp(sid):%b %d}: session 126 reached, {head}")
+            head = "OVERDUE · sell at the next close" if days >= 126 else "sell at today's close (3:30 PM IST = 6:00 AM ET)"
+            out.append(f"🔴 SELL {SHORT[track]} batch {pd.Timestamp(sid):%b %d} · {head}")
             for n in x["names"]:
                 q = _shares(per, close.get(n["symbol"]))
-                out.append(f"• {n['symbol']} — lot bought {pd.Timestamp(n['entry_date']):%b %d} at ₹{n['entry']:,.2f}"
-                           + (f" · {q} shares" if q else "") + f" · now ₹{n['last']:,.2f} ({n['ret_gross']:+.1f}%) · best {n['peak']:+.1f}%")
-            out.append(f"Batch after costs: {x['ew_net']:+.1f}% · money goes to next week's batch")
+                out.append(f"• {n['symbol']}" + (f" {q} sh" if q else "") + f" · ₹{n['entry']:,.2f} → ₹{n['last']:,.2f} ({n['ret_gross']:+.1f}%)")
+            out.append(f"Batch after costs {x['ew_net']:+.1f}% · money rolls into next week's batch")
         elif 126 - days <= 5:
-            soon.append(f"🟡 {LABEL[track]} batch {pd.Timestamp(sid):%b %d} sells in {126 - days} sessions (about {sell_on:%a %b %d})")
+            soon.append(f"🟡 {SHORT[track]} batch {pd.Timestamp(sid):%b %d} sells in {126 - days} sessions (~{sell_on:%a %b %d})")
         else:
             nxt = min(nxt, sell_on) if nxt is not None else sell_on
     if out or soon:
-        return ["", "🔴 SELL"] + out + soon
+        return out + soon
     return [f"💤 Sell: none due" + (f" · next ~{nxt:%b %d %Y}" if nxt is not None else "")]
 
 
 def weekly_text(track: str) -> str:
+    """Friday buy list (format reviewed 2026-09-30): header, one line per stock, when to sell, one reminder."""
     f = _latest("screen_*.json", TRACKS[track])
     if f is None:
-        return f"{LABEL[track]}: no screen saved yet"
+        return f"{LABEL[track]}: no batch saved yet"
     sc = json.loads(f.read_text())
-    sleeve = None
-    if (CFG / "sleeve.json").exists():
-        sleeve = json.loads((CFG / "sleeve.json").read_text()).get("sleeve_inr")
-    per = sleeve / 26 / len(sc["names"]) if sleeve else None
+    sleeve = _sleeve()
+    per = sleeve / 26 / len(sc["names"]) if sleeve and sc["names"] else None
     entry = pd.bdate_range(pd.Timestamp(sc["data_through"]) + pd.Timedelta(days=1), periods=1)[0]
     sell = pd.bdate_range(entry, periods=126)[-1]
-    lines = [f"{LABEL[track]} batch · data {sc['data_through']} · buy at the {entry:%a %b %d} open",
-             f"{len(sc['names'])} buys, {'₹{:,.0f} each (1/9 of a 1/26 batch)'.format(per) if per else 'equal weight (set ~/.config/sgm/sleeve.json for ₹ amounts)'}"]
-    for n in sc["names"]:
+    name = "Sri Lakshmi v2" if track == "sri_lakshmi" and "v2" in sc.get("status", "") else LABEL[track]
+    lines = [f"🛒 {name} · buy {entry:%a %b %d} at open · data {pd.Timestamp(sc['data_through']):%b %d}",
+             f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight")]
+    for i, n in enumerate(sc["names"], 1):
         c = n.get("close")
-        lim = f"limit ₹{c * 1.05:,.2f}" if c else "limit: last close +5%"
-        flag = " ⚑ takeover" if n.get("takeover") else ""
         q = _shares(per, c)
-        lines.append(f"{n['rank']}. {n['symbol']} — " + (f"{q} shares, " if q else "") + f"{lim}{flag}")
-    lines.append(f"Sell: close of session 126, about {sell:%b %d %Y} (+ NSE holidays). No stop-loss.")
-    lines.append("Real money only after you sign evals/human_review for this batch.")
+        lines.append(f"{i}. {n['symbol']}" + (f" · {q} sh" if q else "") + (f" · limit ₹{c * 1.05:,.2f}" if c else "")
+                     + (" · ⚑ takeover" if n.get("takeover") else ""))
+    if sc.get("dropped_financials"):
+        lines.append("Dropped (financials): " + ", ".join(sc["dropped_financials"]))
+    lines.append(f"Sell all at close ~{sell:%b %d %Y} · no stop-loss")
+    lines.append("Sign the Saturday review before real money")
     return "\n".join(lines)
 
 
