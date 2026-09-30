@@ -1,0 +1,11 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-sector-type",
+ "producer": "src/agentic/test_sector_type.py",
+ "definitions": "EXP-2026-09-30-sector-type (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does Sri Lakshmi do better if it avoids industry types that rarely give +50% moves? Arms vs G1:\n  NOFIN   skip Financial Services stocks            NOFIN3  skip Financial Services, FMCG and Energy\n  NOBIG   skip the week's big-company industries (top fifth by median core-band market cap)\n  AGE2    the industry must also have been hot on the previous weekly screen\n  H80     industry heat pct >= 0.80 instead of 0.70\n2019-2022 was explored for these traits, so 2023+ is the honest read. PASS = sp.beats vs G1 at phase 0 and >= 4/5.\nOutput: logs/leader_sleeve/sector_type/ + RESULT line.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-09-30T13:01:19"
+}
