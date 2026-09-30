@@ -6,7 +6,8 @@ Per pick: peak = best high in the hold / entry - 1; final = close of session 126
 days to +50% / 2x = sessions (and calendar days) from the entry session to the first high at 1.5x / 2x the entry.
 Part 1 (pick stats) covers every era: it describes a rule whose returns are already reported for both eras.
 Part 2 (entry month, pre-Diwali) slices 2019-2022 ONLY: slicing by season is idea-hunting, and 2023+ stays sealed so a
-seasonal rule, if ever proposed, can still be tested cleanly there. Diwali = Lakshmi Puja date; "pre-Diwali" = entry
+seasonal rule, if ever proposed, can still be tested cleanly there. --unseal-2023 (Abhinav asked for insight, not a rule,
+2026-09-30) also slices 2023-2025; after that run 2023+ is NO LONGER clean confirmation for any seasonal rule (logged). Diwali = Lakshmi Puja date; "pre-Diwali" = entry
 within the 42 calendar days before it.
 """
 import html
@@ -25,7 +26,8 @@ import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
 import test_industry_fundamentals as tif  # noqa: E402
 
-DIWALI = {2019: "2019-10-27", 2020: "2020-11-14", 2021: "2021-11-04", 2022: "2022-10-24"}
+DIWALI = {2019: "2019-10-27", 2020: "2020-11-14", 2021: "2021-11-04", 2022: "2022-10-24",
+          2023: "2023-11-12", 2024: "2024-11-01", 2025: "2025-10-21"}   # 2025 = NSE Muhurat trading day
 
 D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores(); cal = D["cal"]
 S = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet"); S["date"] = pd.to_datetime(S["date"])
@@ -88,25 +90,36 @@ def stats(x):
 print("=== PART 1 · V3 picks (all eras) ===")
 print(pd.concat({e: stats(R if e == "all" else R[R["era"] == e]) for e in ("2019-22", "2023+", "all")}, axis=1).to_string())
 
-B = R[R["era"] == "2019-22"].groupby("week").agg(batch_final=("final", "mean"), hit=("s50", lambda v: v.notna().mean()), n=("symbol", "size")).reset_index()
-B["month"] = B["week"].dt.month
-B["pre_diwali"] = B["week"].apply(lambda w: 0 <= (pd.Timestamp(DIWALI.get(w.year, "1900-01-01")) - w).days <= 42)
-print("\n=== PART 2 · 2019-22 only · by entry month (batch = equal-weight average of its picks, before costs) ===")
-M = B.groupby("month").agg(batches=("week", "size"), avg_batch_final=("batch_final", "mean"), median_batch_final=("batch_final", "median"),
-                            hit_rate=("hit", "mean"), losing_batches=("batch_final", lambda v: (v < 0).mean()))
-M.index = [pd.Timestamp(2000, m, 1).strftime("%b") for m in M.index]
-print(M.to_string(float_format=lambda v: f"{v:+.0%}" if abs(v) < 5 else f"{v:.0f}"))
-Y = B.assign(year=B["week"].dt.year).groupby(["year", "pre_diwali"]).agg(batches=("week", "size"), avg_batch_final=("batch_final", "mean"),
-                                                                         hit_rate=("hit", "mean")).unstack()
-print("\n=== pre-Diwali (entry 0-42 days before Diwali) vs rest of the year, 2019-22 ===")
-print(Y.to_string(float_format=lambda v: f"{v:+.0%}" if abs(v) < 5 else f"{v:.0f}"))
-pdw, rest = B[B["pre_diwali"]], B[~B["pre_diwali"]]
-print(f"\npre-Diwali batches {len(pdw)}: avg {pdw['batch_final'].mean():+.0%}, hit {pdw['hit'].mean():.0%} · rest {len(rest)}: avg {rest['batch_final'].mean():+.0%}, hit {rest['hit'].mean():.0%}")
+def season(label, x):
+    B = x.groupby("week").agg(batch_final=("final", "mean"), hit=("s50", lambda v: v.notna().mean()), n=("symbol", "size")).reset_index()
+    B["month"] = B["week"].dt.month
+    B["pre_diwali"] = B["week"].apply(lambda w: 0 <= (pd.Timestamp(DIWALI.get(w.year, "1900-01-01")) - w).days <= 42)
+    fmt = lambda v: f"{v:+.0%}" if abs(v) < 5 else f"{v:.0f}"  # noqa: E731
+    print(f"\n=== PART 2 · {label} · by entry month (batch = equal-weight average of its picks, before costs) ===")
+    M = B.groupby("month").agg(batches=("week", "size"), avg_batch_final=("batch_final", "mean"), median_batch_final=("batch_final", "median"),
+                                hit_rate=("hit", "mean"), losing_batches=("batch_final", lambda v: (v < 0).mean()))
+    M.index = [pd.Timestamp(2000, m, 1).strftime("%b") for m in M.index]
+    print(M.to_string(float_format=fmt))
+    Y = B.assign(year=B["week"].dt.year).groupby(["year", "pre_diwali"]).agg(batches=("week", "size"), avg_batch_final=("batch_final", "mean"),
+                                                                             hit_rate=("hit", "mean")).unstack()
+    print(f"\n=== pre-Diwali (entry 0-42 days before Diwali) vs rest of the year, {label} ===")
+    print(Y.to_string(float_format=fmt))
+    pdw, rest = B[B["pre_diwali"]], B[~B["pre_diwali"]]
+    print(f"\npre-Diwali batches {len(pdw)}: avg {pdw['batch_final'].mean():+.0%}, hit {pdw['hit'].mean():.0%} · rest {len(rest)}: avg {rest['batch_final'].mean():+.0%}, hit {rest['hit'].mean():.0%}")
+    return dict(pre_diwali=dict(batches=len(pdw), avg_final=round(pdw["batch_final"].mean(), 3), hit=round(pdw["hit"].mean(), 3)),
+                rest=dict(batches=len(rest), avg_final=round(rest["batch_final"].mean(), 3), hit=round(rest["hit"].mean(), 3)))
+
+
+UNSEAL = "--unseal-2023" in sys.argv
+out = {"2019-22": season("2019-22", R[R["era"] == "2019-22"])}
+if UNSEAL:
+    out["2023-25"] = season("2023-25", R[(R["week"] >= "2023-01-01") & (R["week"] < "2026-01-01")])
 
 with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id="EXP-2026-09-30-v3-season-EXPLORATION",
-        status="EXPLORATION (no rule changed; 2023+ not sliced by season)", producer="src/agentic/report_v3_stats.py",
+    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"),
+        id="EXP-2026-09-30-v3-season" + ("-2023-EXPLORATION" if UNSEAL else "-EXPLORATION"),
+        status=("EXPLORATION for insight only (no rule). 2023-2025 sliced by season at Abhinav's request: 2023+ is no longer "
+                "clean confirmation for any seasonal rule" if UNSEAL else "EXPLORATION (no rule changed; 2023+ not sliced by season)"),
+        producer="src/agentic/report_v3_stats.py",
         v3_all=dict(picks=len(R), hit50=round(R["s50"].notna().mean(), 3), hit2x=round(R["s100"].notna().mean(), 3),
-                    median_days_to_50=float(R["c50"].median())),
-        pre_diwali_2019_22=dict(batches=len(pdw), avg_final=round(pdw["batch_final"].mean(), 3), hit=round(pdw["hit"].mean(), 3)),
-        rest_2019_22=dict(batches=len(rest), avg_final=round(rest["batch_final"].mean(), 3), hit=round(rest["hit"].mean(), 3)))) + "\n")
+                    median_days_to_50=float(R["c50"].median())), season=out)) + "\n")
