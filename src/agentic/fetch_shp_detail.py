@@ -18,7 +18,12 @@ institutions + insurance + provident & pension funds + AIF + venture capital fun
 retail_holders = NumberOfShareholders of IndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh;
 promoter_pct = ShareholdingOfPromoterAndPromoterGroup. A category a filing does not report stays blank.
 Output: data/derived/shareholding_detail_history.parquet (+ manifest incl. archive-vs-xbrl agreement on overlap).
-Usage: fetch_shp_detail.py [--max-minutes N] [--universe]     prints COMPLETE when the pool's filings are all read
+Usage: fetch_shp_detail.py [--max-minutes N] [--universe] [--workers N] [--history]
+  --history (2026-09-30): also ask NSE's shareholding list per company (api/corporate-share-holdings-master, which
+  returns every quarter back to Sep 2016 with its XBRL link; our stored list kept only ~22 quarters) and read those
+  filings too. Company lists cached in data/raw/shp_master/<symbol>.json; availability = the upload time in the
+  XBRL file name (NSE's broadcastDate on pre-2020 rows is a 2023 re-publication), else broadcastDate.
+Prints COMPLETE when every needed filing has been read.
 """
 from __future__ import annotations
 
@@ -75,6 +80,44 @@ def pool_symbols() -> list[str]:
     return syms
 
 
+def history_links(symbols: list[str], t0: float, max_minutes: float) -> pd.DataFrame:
+    """Every quarter's XBRL link per company from NSE's shareholding list (cached per symbol; 1 request / second)."""
+    d = ROOT / "data/raw/shp_master"; d.mkdir(parents=True, exist_ok=True)
+    s, rows, fetched = None, [], 0
+    for sym in symbols:
+        f = d / f"{sym}.json"
+        if not f.exists():
+            if max_minutes and time.time() - t0 > max_minutes * 60 * 0.5:     # leave half the time box for downloads
+                continue
+            if s is None:
+                from src.ingest.nse.api import get_json
+                s = build_session(warm=True, referer=REF)
+            try:
+                j = get_json(s, f"https://www.nseindia.com/api/corporate-share-holdings-master?index=equities&symbol={sym}", referer=REF)
+                f.write_text(json.dumps(j if isinstance(j, list) else j.get("data", [])))
+                fetched += 1; time.sleep(1.0)
+            except Exception as x:
+                print(f"  list ERR {sym}: {type(x).__name__} {str(x)[:60]}", flush=True); continue
+        for x in json.loads(f.read_text()):
+            u = x.get("xbrl") or ""
+            if not u.endswith(".xml") or not x.get("date"):
+                continue                                   # old quarters listed without a filing ("…/xbrl/-")
+            # availability: the upload time in the file name (SHP_<id>_<id>_DDMMYYYYhhmmss_WEB.xml). NSE's broadcastDate
+            # on pre-2020 rows is the 2023 archive re-publication, not when the numbers became public.
+            m = re.search(r"_(\d{14})_WEB\.xml$", u)
+            up = pd.to_datetime(m.group(1), format="%d%m%Y%H%M%S", errors="coerce") if m else pd.NaT
+            bd = pd.to_datetime(x.get("broadcastDate"), format="mixed", errors="coerce")
+            rows.append(dict(symbol=sym, quarter_end=pd.to_datetime(x["date"], format="%d-%b-%Y", errors="coerce"),
+                             submission=up if pd.notna(up) else bd, xbrl=u))
+    H = pd.DataFrame(rows).dropna(subset=["quarter_end"])
+    H = H[H["quarter_end"].dt.is_month_end & H["quarter_end"].dt.month.isin([3, 6, 9, 12])]
+    have = sum((d / f"{x}.json").exists() for x in symbols)
+    print(f"company lists: {have}/{len(symbols)} cached ({fetched} fetched this run) · quarterly filings found {len(H)}", flush=True)
+    if have < len(symbols):
+        print("  company lists incomplete: filings of the missing companies are read in a later run", flush=True)
+    return H
+
+
 def parse(text: str) -> dict:
     ctx = {}
     for cid, body in re.findall(r'<xbrli:context id="([^"]+)">(.*?)</xbrli:context>', text, re.S):
@@ -125,6 +168,7 @@ def main() -> None:
     ap.add_argument("--max-minutes", type=float, default=0)
     ap.add_argument("--universe", action="store_true")
     ap.add_argument("--workers", type=int, default=1, help="parallel downloads from NSE's static archive (8 is safe)")
+    ap.add_argument("--history", action="store_true", help="also 2016-2020 filings via each company's NSE list")
     a = ap.parse_args()
     t0 = time.time()
     RAW.mkdir(parents=True, exist_ok=True)
@@ -135,6 +179,10 @@ def main() -> None:
     L = L[L["xbrl"].notna() & (L["quarter_end"] >= "2021-01-01") & L["quarter_end"].dt.is_month_end & L["quarter_end"].dt.month.isin([3, 6, 9, 12])]
     L = L.sort_values("submission").drop_duplicates(["symbol", "quarter_end"], keep="last")   # latest revision of each quarter
     pool = set(pool_symbols())
+    if a.history:
+        H0 = history_links(sorted(pool) if not a.universe else sorted(set(L["symbol"]) | pool), t0, a.max_minutes)
+        L = pd.concat([L, H0], ignore_index=True).sort_values("submission").drop_duplicates(["symbol", "quarter_end"], keep="last")
+        L = L[L["quarter_end"] >= "2016-09-30"]
     need = L if a.universe else L[L["symbol"].isin(pool)]
     Xp = pd.read_parquet(XOUT) if XOUT.exists() else pd.DataFrame(columns=["xbrl"])
     gone_f = RAW / "not_on_nse.json"
@@ -190,6 +238,8 @@ def main() -> None:
     H, agree = combine(A, Xp)
     H.to_parquet(OUT, index=False)
     left = int((~need["xbrl"].isin(set(Xp["xbrl"]) | gone)).sum())
+    if a.history:
+        left += sum(not (ROOT / "data/raw/shp_master" / f"{x}.json").exists() for x in (pool if not a.universe else set(L["symbol"])))
     cov = H.assign(y=H["quarter_end"].dt.year).groupby("y")[["mf_pct", "fii_fpi_pct", "dii_pct", "retail_holders"]].apply(lambda g: g.notna().mean().round(2))
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="shareholding_detail_history", path=str(OUT.relative_to(ROOT)), rows=len(H), symbols=int(H["symbol"].nunique()),

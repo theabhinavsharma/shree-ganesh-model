@@ -1,0 +1,11 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-shp-detail",
+ "producer": "src/agentic/test_shp_detail.py",
+ "definitions": "EXP-2026-09-30-shp-detail (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: every quarter a company files who owns it. If mutual funds, foreign funds or Indian institutions\nraised their stake last quarter, or small retail holders left (strong hands collecting), does it help Sri Lakshmi to\nput those stocks first? And to skip stocks institutions are cutting? Same engine and pass rule as every test.\nData: data/derived/shareholding_detail_history.parquet, source == \"xbrl\" only (one consistent reading of the official\nfilings; 2021 onward). A change needs two consecutive quarters, so signals start around mid-2021: before that every\narm equals G1, and the 2019-2022 comparison rests on 2021-H2..2022 only (stated limit).\nSignal at a screen date: the newest quarter filed on or before it (filing / submission date) and filed within the last\n120 days, versus the quarter before it (both xbrl). Changes in percentage points of total shares.\nArms (reference G1 = production Sri Lakshmi):\n  MFUP    mutual funds +0.5 pts or more        -> first if pool rank <= 25, then the rest by model; top 9\n  FIIUP   foreign portfolio investors +0.5 pts -> same\n  DIIUP   Indian institutions +0.5 pts         -> same\n  RETDN   shareholders holding up to Rs 2 lakh fell 5% or more in number -> same\n  INSTDN  Indian + foreign institutions together -1.0 pts or more -> drop the stock\nPASS = sp.beats vs G1 at phase 0 and in >= 4 of 5 phases. Output: logs/leader_sleeve/shp_detail/ + RESULT line.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-09-30T09:36:31"
+}

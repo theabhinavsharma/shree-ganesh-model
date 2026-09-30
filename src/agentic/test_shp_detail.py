@@ -15,6 +15,8 @@ Arms (reference G1 = production Sri Lakshmi):
   RETDN   shareholders holding up to Rs 2 lakh fell 5% or more in number -> same
   INSTDN  Indian + foreign institutions together -1.0 pts or more -> drop the stock
 PASS = sp.beats vs G1 at phase 0 and in >= 4 of 5 phases. Output: logs/leader_sleeve/shp_detail/ + RESULT line.
+SGM_RERUN_TAG=<tag>: the same registered test re-run on extended data (e.g. filings back to 2016 read with
+fetch_shp_detail.py --history); writes shp_detail/rerun_<tag>/ and logs EXP-2026-09-30-shp-detail-RERUN-<tag>.
 """
 from __future__ import annotations
 
@@ -133,18 +135,21 @@ def main() -> None:
         r = R0[k]
         print(f"{k:6s} CAGR {r['cagr']:5.1f} · 2019-22 {r['cagr_disc']:5.1f} · 2023+ {r['cagr_conf']:5.1f} · maxDD {r['maxdd']:6.1f} · "
               f"phases {r.get('phases_beaten', '')} · PASS {r.get('PASS', '')}")
-    OUTDIR.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame([dict(arm=k, **r) for k, r in R0.items()]).to_csv(OUTDIR / "results.csv", index=False)
+    tag = os.environ.get("SGM_RERUN_TAG", "")
+    out = OUTDIR / f"rerun_{tag}" if tag else OUTDIR
+    out.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame([dict(arm=k, **r) for k, r in R0.items()]).to_csv(out / "results.csv", index=False)
     now = datetime.now().isoformat(timespec="seconds")
-    (OUTDIR / "results.csv.manifest.json").write_text(json.dumps(dict(dataset="results.csv", experiment=EXP_ID, producer="src/agentic/test_shp_detail.py",
+    (out / "results.csv.manifest.json").write_text(json.dumps(dict(dataset="results.csv", experiment=EXP_ID, producer="src/agentic/test_shp_detail.py",
         definitions=__doc__, units=dict(cagr="percent a year", maxdd="percent"), updated=now), indent=1))
     passed = [k for k in ARMS if R0[k]["PASS"]]
-    (OUTDIR / "README.md").write_text(f"# {EXP_ID}\n\nDo quarterly shareholding changes help Sri Lakshmi? Verdict: "
+    (out / "README.md").write_text(f"# {EXP_ID}\n\nDo quarterly shareholding changes help Sri Lakshmi? Verdict: "
                                       f"{'PASS: ' + ', '.join(passed) if passed else 'no arm passes'}. See results.csv + manifest.\n")
     if os.environ.get("SGM_REPRO") == "1":
         print("REPRO RUN (not logged)"); return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + (f"-RERUN-{tag}" if tag else "-RESULT"), verdict=passed or "no arm passes",
+                                 note=("same registered rules, data extended back to 2016 (no re-tuning)" if tag else None),
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
                                  cols="CAGR, disc, conf, maxDD, phases"), default=str) + "\n")
     print(f"\nVERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm beats G1 by the registered rule'} · {time.time() - t0:.0f}s")

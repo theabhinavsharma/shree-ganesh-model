@@ -51,6 +51,26 @@
    "result_id": "EXP-2026-09-30-shp-detail-RESULT"
   },
   {
+   "id": "shp_history",
+   "title": "Shareholding before 2021: NSE filings back to Sep 2016, same A/B re-run (checks the small-shareholder rule on years it has never seen)",
+   "why": "the first test only had 2021+ data; NSE's per-company list goes back to 2016",
+   "fetch": [
+    "src/agentic/fetch_shp_detail.py",
+    "--history",
+    "--max-minutes",
+    "55",
+    "--workers",
+    "8"
+   ],
+   "test": [
+    "src/agentic/test_shp_detail.py"
+   ],
+   "test_env": {
+    "SGM_RERUN_TAG": "history-2016"
+   },
+   "result_id": "EXP-2026-09-30-shp-detail-RERUN-history-2016"
+  },
+  {
    "id": "pledges",
    "title": "Promoter pledges (released vs newly pledged)",
    "why": "a released pledge removes a forced-selling risk; a new pledge is a red flag",
