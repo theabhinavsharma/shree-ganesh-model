@@ -1,0 +1,2 @@
+{"ts": "2026-09-29T21:01:56", "exp": "EXP-2026-09-29-industry-fundamentals", "status": "REPRODUCED", "worst_diff_pts": 0.05, "data_refreshed_since": false, "per_arm": {"S1M": 0.02, "S0": 0.01, "F1": 0.03, "F2": 0.04, "H2": 0.05}, "logged_at": "2026-09-29T08:15:57"}
+{"ts": "2026-09-29T21:02:27", "exp": "EXP-2026-09-29-industry-policy", "status": "REPRODUCED", "worst_diff_pts": 0.05, "data_refreshed_since": false, "per_arm": {"S1M": 0.02, "S0": 0.01, "G1": 0.05, "G2": 0.05, "G3": 0.05}, "logged_at": "2026-09-29T08:58:49"}

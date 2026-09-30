@@ -215,6 +215,19 @@ step "4.37. MODEL-RANKED SCREEN (paper, not validated)"
   && /usr/bin/python3 src/agentic/score_model_screen.py; } > "$LOG_DIR/${TS}_model_screen.log" 2>&1 \
   && log "  ✅ model-ranked screen + reports/model_screen_*.md" \
   || log "  ⚠ model-ranked screen failed — non-fatal, see $LOG_DIR/${TS}_model_screen.log"
+/usr/bin/python3 src/agentic/notify.py weekly --track model > /dev/null 2>&1 || true   # order sheet to outbox/phone
+
+step "4.38. SRI LAKSHMI SCREEN (G1 of EXP-2026-09-29-industry-policy; paper until the weekly review is signed)"
+# Rebuild the industry scores for today's session first; the screen refuses to run on older scores.
+{ nice -n 10 /usr/bin/python3 src/agentic/build_industry_scores.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/build_policy_scores.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/screen_sri_lakshmi.py \
+  && /usr/bin/python3 src/agentic/score_sri_lakshmi.py; } > "$LOG_DIR/${TS}_sri_lakshmi.log" 2>&1 \
+  && { log "  ✅ Sri Lakshmi batch + reports/sri_lakshmi_*.md"; /usr/bin/python3 src/agentic/notify.py weekly --track sri_lakshmi > /dev/null 2>&1; } \
+  || { log "  ⚠ Sri Lakshmi screen failed — see $LOG_DIR/${TS}_sri_lakshmi.log"; /usr/bin/python3 src/agentic/notify.py fail --step "Sri Lakshmi weekly screen" --detail "see $LOG_DIR/${TS}_sri_lakshmi.log" > /dev/null 2>&1; }
+nice -n 10 /usr/bin/python3 src/agentic/trust/reproduce.py > "$LOG_DIR/${TS}_reproduce.log" 2>&1 \
+  && log "  ✅ registered results re-run from committed code (logs/trust/reproductions.jsonl)" \
+  || log "  ⚠ reproduction check failed — see $LOG_DIR/${TS}_reproduce.log"
 
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.

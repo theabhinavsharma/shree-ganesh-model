@@ -27,6 +27,10 @@ bash src/agentic/daily_data_layer.sh; RC=$?
 /usr/bin/python3 src/agentic/score_model_screen.py > logs/sgm_daily/${TS}_model_screen.log 2>&1 \
   && echo "✅ model screen scored (paper)" \
   || echo "⚠ model screen scoring failed (paper, non-fatal) — see logs/sgm_daily/${TS}_model_screen.log"
+# Sri Lakshmi (G1 of EXP-2026-09-29-industry-policy, PAPER): score its weekly batches (2026-09-29)
+/usr/bin/python3 src/agentic/score_sri_lakshmi.py > logs/sgm_daily/${TS}_sri_lakshmi.log 2>&1 \
+  && echo "✅ Sri Lakshmi scored (paper)" \
+  || echo "⚠ Sri Lakshmi scoring failed (paper, non-fatal) — see logs/sgm_daily/${TS}_sri_lakshmi.log"
 /usr/bin/python3 src/agentic/emit_freshness_status.py > /dev/null 2>&1 && echo "✅ freshness dashboard"
 echo "═══ DONE data_layer_rc=$RC ═══"
 exit $RC

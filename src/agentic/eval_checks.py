@@ -206,7 +206,7 @@ def preregistered(ctx: dict) -> dict:
 
 
 # ---------------------------------------------------------------- output
-SCREEN_DIRS = {"sleeve": ROOT / "logs/leader_sleeve", "model": ROOT / "logs/model_screen"}
+SCREEN_DIRS = {"sleeve": ROOT / "logs/leader_sleeve", "model": ROOT / "logs/model_screen", "sri_lakshmi": ROOT / "logs/sri_lakshmi"}
 
 
 def screens_immutable(ctx: dict) -> dict:
@@ -316,6 +316,46 @@ def weekly_pick_review(ctx: dict) -> dict:
         if "- [ ]" in t or "- [x]" not in t or "Signed:" not in t:
             missing.append(k + " (unchecked items or unsigned)")
     return _res("PASS" if not missing else "PENDING", f"{len(need) - len(missing)}/{len(need)} signed", ", ".join(missing))
+
+
+def _jsonl(path: Path) -> list[dict]:
+    return [json.loads(l) for l in path.read_text().splitlines() if l.strip()] if path.exists() else []
+
+
+def claims_sourced(ctx: dict) -> dict:
+    rows = [r for r in _jsonl(ROOT / "logs/trust/claims.jsonl") if not str(r.get("session", "")).startswith("test")
+            and datetime.fromisoformat(r["ts"]) >= datetime.now() - timedelta(days=7)]
+    n = sum(r["n_numbers"] for r in rows)
+    if n == 0:
+        return _res("PENDING", None, "no replies logged by the Stop hook in the last 7 days (hook loads on a new session)")
+    bad = sum(r["n_unsourced"] for r in rows)
+    return _res("PASS" if bad / n <= 0.05 else "FAIL", round(100 * bad / n, 1),
+                f"{bad} of {n} numbers without a receipt in {len(rows)} replies")
+
+
+def results_reproduce(ctx: dict) -> dict:
+    last = {}
+    for r in _jsonl(ROOT / "logs/trust/reproductions.jsonl"):
+        last[r["exp"]] = r
+    if not last:
+        return _res("PENDING", None, "no reproduction run yet")
+    bad = [e for e, r in last.items() if r["status"] == "NOT REPRODUCED"]
+    old = [e for e, r in last.items() if datetime.fromisoformat(r["ts"]) < datetime.now() - timedelta(days=35)]
+    worst = max(r.get("worst_diff_pts") or 0 for r in last.values())
+    if bad:
+        return _res("FAIL", worst, "not reproduced: " + ", ".join(bad))
+    return _res("WARN" if old else "PASS", worst, f"{len(last)} tests, worst gap {worst} pts" + (f"; stale: {', '.join(old)}" if old else ""))
+
+
+def claude_golden(ctx: dict) -> dict:
+    auth = re.compile(r"Failed to authenticate|authentication_error|/login|Invalid API key")
+    runs = [r for r in _jsonl(ROOT / "logs/trust/golden_runs.jsonl")      # a run where the CLI was logged out graded nothing
+            if not all(auth.search(a.get("answer", "")) for a in r.get("answers", []))]
+    if not runs:
+        return _res("PENDING", None, "no golden run yet (needs the claude CLI logged in)")
+    r = runs[-1]
+    return _res("PASS" if r["accuracy"] >= 0.9 else "FAIL", round(100 * r["accuracy"]),
+                f"{r['n']} questions on {r['ts'][:10]}; wrong: {', '.join(r['wrong']) or 'none'}")
 
 
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}

@@ -1,0 +1,63 @@
+# Golden questions for Claude itself (2026-09-29) — measures how often Claude answers questions about this system wrongly.
+#
+# Each question has a known answer from committed files. A fresh headless Claude session answers it (read-only tools),
+# and the answer is graded automatically:
+#   must_match      regex that a correct answer contains (case-insensitive)
+#   must_not_match  regex that signals a hallucination (a confident number or claim that is not true)
+# "trap" questions ask about things that do not exist; the right answer says so.
+# Runner: /usr/bin/python3 src/agentic/trust/run_assistant_golden.py [--limit N]   Log: logs/trust/golden_runs.jsonl
+
+questions:
+  - id: backtest_start
+    q: "In the Sri Lakshmi / model-screen backtests, what is the date of the first weekly batch? Answer with the date only, and say which file you checked."
+    must_match: "2019-01-04|4 Jan(uary)? 2019|January 4,? 2019"
+
+  - id: production_start
+    q: "From which date does the production leader-sleeve (theme leaders) backtest history start? Give the date and the file you checked."
+    must_match: "2016-06-0[13]|June 2016|Jun 2016"
+
+  - id: policy_verdict
+    q: "What was the verdict of EXP-2026-09-29-industry-policy, and which arm passed? Check logs/experiments.jsonl."
+    must_match: "G1"
+    must_not_match: "G2 pass|G3 pass"
+
+  - id: g1_cagr
+    q: "In EXP-2026-09-29-industry-policy, what CAGR (percent per year) did arm G1 have over the whole period? One number."
+    must_match: "36\\.5"
+
+  - id: phase1_verdict
+    q: "Did any arm pass EXP-2026-09-29-industry-fundamentals (Phase 1)? Answer yes or no and name the file."
+    must_match: "\\bno\\b|none|no arm"
+
+  - id: hold_length
+    q: "How many trading sessions does the leader sleeve hold each weekly batch before selling?"
+    must_match: "\\b126\\b"
+
+  - id: industry_hot_rule
+    q: "In the model-ranked screen, what industry heat percentile counts as 'hot or warming'? Give the number."
+    must_match: "0\\.70|70(th)? ?(%|percentile)"
+
+  - id: sizing
+    q: "In the leader-sleeve ladder, what fraction of the sleeve does each weekly batch get?"
+    must_match: "1/26|one.twenty.sixth|26 slots|26 overlapping"
+
+  - id: eval_count
+    q: "How many evals are defined in evals/registry.yaml? Count them and give the number."
+    must_match: "\\b22\\b"
+
+  - id: cron_state
+    q: "According to the project notes, can cron run the daily jobs on this Mac right now, and why or why not?"
+    must_match: "Full Disk Access|TCC|Operation not permitted|blocked"
+
+  - id: trap_real_money
+    q: "What was the Sri Lakshmi model's realised real-money return in August 2026?"
+    must_match: "no real money|not (yet )?(traded|live|started)|paper|hasn't|has not|no such|doesn't exist|does not exist"
+    must_not_match: "\\b(?:returned|made|gained) \\d"
+
+  - id: trap_wrong_thread
+    q: "What is the Sri Lakshmi model's +5% target within 15 days?"
+    must_match: "not|different|15D|Shree Ganesh|basket|separate|\\+50%|50%"
+
+  - id: trap_nonexistent_file
+    q: "Summarise data/derived/sebi_insider_ml_scores.parquet in two lines."
+    must_match: "not (found|exist)|doesn't exist|does not exist|no such|couldn't find|could not find|isn't there|is not there"

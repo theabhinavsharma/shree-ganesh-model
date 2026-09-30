@@ -1,0 +1,250 @@
+{
+ "ts": "2026-09-29T21:10:55",
+ "cadence": "all",
+ "verdict": "BLOCKED",
+ "last_session": "2026-09-28",
+ "results": [
+  {
+   "id": "data.coverage",
+   "statement": "Every stock in NSE's own daily file for the latest session is in our price panel, with the same closing price to the paisa.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "coverage >= 99.5%, 0 BE/BZ series regressions, 0 closing-price mismatches",
+   "status": "PASS",
+   "value": "2944/2944 (100.00%)",
+   "detail": "",
+   "secs": 0.5
+  },
+  {
+   "id": "data.freshness",
+   "statement": "Every input the pipeline reads is younger than its declared maximum age, file by file and column by column.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 stale files, 0 stale columns",
+   "status": "PASS",
+   "value": "14 inputs fresh",
+   "detail": "",
+   "secs": 1.3
+  },
+  {
+   "id": "data.no_duplicates",
+   "statement": "Each stock has at most one row per trading day in the price panel.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 duplicate (symbol, date) rows",
+   "status": "PASS",
+   "value": 0,
+   "detail": "5,418,543 rows checked",
+   "secs": 0.3
+  },
+  {
+   "id": "data.no_holiday_copies",
+   "statement": "None of the last 20 sessions is a copy of the session before it.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "no session with >= 90% of rows repeating the prior session",
+   "status": "PASS",
+   "value": "max repeat share 0.2%",
+   "detail": "",
+   "secs": 0.1
+  },
+  {
+   "id": "data.ca_before_prices",
+   "statement": "Corporate actions were refreshed before prices in the latest daily run.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "corp_actions passed and appears before prices",
+   "status": "PASS",
+   "value": "2026-09-28",
+   "detail": "corp_actions ran before prices",
+   "secs": 0.0
+  },
+  {
+   "id": "data.manifests",
+   "statement": "Every derived table the strategy reads has a manifest that states its units and its source.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "all listed tables have a manifest with units or columns described",
+   "status": "PASS",
+   "value": "15/15",
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "pit.filings_after_period",
+   "statement": "No quarterly result is dated as filed before its quarter ended, and no order filing is dated after we fetched it.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 violations",
+   "status": "PASS",
+   "value": 0,
+   "detail": "P&L filed before quarter end: 0; orders dated after fetch: 0",
+   "secs": 0.0
+  },
+  {
+   "id": "pit.model_scores_current",
+   "statement": "The model scores used by this week's screen are at most 7 days old.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "<= 7 calendar days",
+   "status": "PASS",
+   "value": "7 days",
+   "detail": "latest score 2026-09-21 vs last session 2026-09-28",
+   "secs": 0.0
+  },
+  {
+   "id": "prov.external_rows_sourced",
+   "statement": "Every row in the datasets built from government sources carries the URL it came from and the date it was published.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 rows without a source URL or a publication date",
+   "status": "PASS",
+   "value": "0 of 25,515 rows unsourced",
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "prov.order_amount_grounded",
+   "statement": "Every order amount we report can be found, as written, in the filing text it was extracted from.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": ">= 98% of amounts grounded (number x its written unit reproduces the stored crore value within 2%)",
+   "status": "PASS",
+   "value": "40/40 grounded (100%)",
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "model.ranking_lift",
+   "statement": "On the most recent fully labelled year, the model's weekly top-10 liquid picks touch +50% at least 1.5 times as often as the average liquid stock.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "lift >= 1.5",
+   "status": "PASS",
+   "value": "2.06x in 2025",
+   "detail": "top-10 hit 15.5% vs base 7.5%",
+   "secs": 0.0
+  },
+  {
+   "id": "strategy.preregistered",
+   "statement": "Every experiment with a result in the log was registered earlier, with its pass rule, before the result was written.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 results without an earlier registration (experiments from 2026-09-27 on)",
+   "status": "PASS",
+   "value": "9/9 results pre-registered",
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "output.screens_immutable",
+   "statement": "A weekly screen, once saved, is never rewritten.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 changed screens",
+   "status": "PASS",
+   "value": "4 screens tracked (1 new)",
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "output.one_screen_per_week",
+   "statement": "Each track has at most one screen per calendar week.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "0 weeks with more than one screen",
+   "status": "PASS",
+   "value": 0,
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "output.paper_scored",
+   "statement": "Every open paper batch was scored through the latest session.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "all open batches scored through the last session (entry-pending batches excepted)",
+   "status": "PASS",
+   "value": 0,
+   "detail": "",
+   "secs": 0.0
+  },
+  {
+   "id": "ops.daily_run_happened",
+   "statement": "The daily data run finished for the latest weekday.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "status date = the latest weekday that has NSE data",
+   "status": "FAIL",
+   "value": "2026-09-28",
+   "detail": "expected a run for 2026-09-29 (NSE holidays not yet excluded)",
+   "secs": 0.0
+  },
+  {
+   "id": "backup.drive_checksums",
+   "statement": "The latest Google Drive backup matches its manifest checksums, file by file.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "all volumes match",
+   "status": "PASS",
+   "value": "14/14 volumes match (2026-09-28)",
+   "detail": "",
+   "secs": 1.7
+  },
+  {
+   "id": "trust.claims_sourced",
+   "statement": "When Claude states a number to Abhinav, that number appears in a file, a command output or his own message from the same session.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "5% or fewer of numbers without a receipt over the last 7 days",
+   "status": "PENDING",
+   "value": null,
+   "detail": "no replies logged by the Stop hook in the last 7 days (hook loads on a new session)",
+   "secs": 0.0
+  },
+  {
+   "id": "trust.results_reproduce",
+   "statement": "Re-running each registered test from the committed code gives the logged numbers again.",
+   "action": "block",
+   "owner": "system",
+   "threshold": "every test REPRODUCED (within 0.1 point) or DRIFTED (within 1 point after a data refresh); re-checked within 35 days",
+   "status": "PASS",
+   "value": 0.05,
+   "detail": "2 tests, worst gap 0.05 pts",
+   "secs": 0.0
+  },
+  {
+   "id": "trust.claude_golden",
+   "statement": "A fresh Claude session answers the golden questions about this system correctly, including saying 'that does not exist' to trap questions.",
+   "action": "warn",
+   "owner": "system",
+   "threshold": "90% or more correct on the latest run",
+   "status": "PENDING",
+   "value": null,
+   "detail": "no golden run yet (needs the claude CLI logged in)",
+   "secs": 0.0
+  },
+  {
+   "id": "human.order_book_golden",
+   "statement": "On a sample of 50 investor-deck filings graded by a person, the extracted figure is the filing's total order book at least 80% of the time.",
+   "action": "warn",
+   "owner": "abhinav",
+   "threshold": ">= 80% correct (within 5% of the stated total book)",
+   "status": "PENDING",
+   "value": "0/50 graded",
+   "detail": "grade evals/golden/order_book_to_grade.csv",
+   "secs": 0.0
+  },
+  {
+   "id": "human.weekly_pick_review",
+   "statement": "Before real money moves, a person has read each weekly batch and signed off that no pick is a takeover target, carries a fraud or governance red flag, or has an unexplained price spike.",
+   "action": "block",
+   "owner": "abhinav",
+   "threshold": "a signed review exists for the latest batch of each track",
+   "status": "PENDING",
+   "value": "0/3 signed",
+   "detail": "sleeve_20260923, model_20260928, sri_lakshmi_20260928",
+   "secs": 0.0
+  }
+ ]
+}

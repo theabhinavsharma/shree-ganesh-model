@@ -83,4 +83,11 @@ else log "❌ evals: blocking failure — see reports/eval_report_$(date +%Y-%m-
 if /bin/bash src/agentic/sync_drive_mirror.sh > "$LOG_DIR/${TS}_drive_mirror.log" 2>&1; then log "✅ drive_mirror (not a feed)"
 else log "⚠ drive_mirror failed (not a feed) — see $LOG_DIR/${TS}_drive_mirror.log"; fi
 
+# --- phone message (src/agentic/notify.py; 2026-09-29): templated from the status/eval files, never model-written ---
+# Outbox + macOS banner always; Telegram once ~/.config/sgm/telegram.env exists. Not a feed.
+[ ${#FAIL[@]} -eq 0 ] || /usr/bin/python3 src/agentic/notify.py fail --step "daily data layer" \
+  --detail "failed feeds: ${FAIL[*]} (log $LOG_DIR/${TS}_*.log)" > /dev/null 2>&1
+/usr/bin/python3 src/agentic/notify.py daily > "$LOG_DIR/${TS}_notify.log" 2>&1 && log "✅ notify (not a feed)" \
+  || log "⚠ notify failed (not a feed) — see $LOG_DIR/${TS}_notify.log"
+
 [ ${#FAIL[@]} -le 3 ] || exit 1

@@ -18,6 +18,7 @@ Output: logs/leader_sleeve/industry_fundamentals/{results.csv, ic.csv, README.md
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from datetime import datetime
@@ -160,16 +161,21 @@ def main() -> None:
         a, b = summ[f"disc|{c}"], summ[f"conf|{c}"]
         print(f"  {c:12s} disc {a['mean']:+.3f} (t {a['t']:+.1f}, n {a['n']}) | conf {b['mean']:+.3f} (t {b['t']:+.1f}, n {b['n']})")
 
-    OUTDIR.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame([dict(arm=k, **{c: v for c, v in r.items() if c != "years"}) for k, r in R0.items()]).to_csv(OUTDIR / "results.csv", index=False)
-    IC.to_csv(OUTDIR / "ic.csv")
+    repro = os.environ.get("SGM_REPRO") == "1"          # reproduction run (src/agentic/trust/reproduce.py): no ledger write
+    out = OUTDIR / "repro" if repro else OUTDIR
+    out.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame([dict(arm=k, **{c: v for c, v in r.items() if c != "years"}) for k, r in R0.items()]).to_csv(out / "results.csv", index=False)
+    IC.to_csv(out / "ic.csv")
     now = datetime.now().isoformat(timespec="seconds")
     for f, desc in (("results.csv", "one row per arm (phase 0 metrics; phase_cagr = phases 1-4)"), ("ic.csv", "per-date cross-industry Spearman IC (ic_) and partial IC on heat_pct (pic_)")):
-        (OUTDIR / (f + ".manifest.json")).write_text(json.dumps(dict(dataset=f, experiment=EXP_ID, producer="src/agentic/test_industry_fundamentals.py",
+        (out / (f + ".manifest.json")).write_text(json.dumps(dict(dataset=f, experiment=EXP_ID, producer="src/agentic/test_industry_fundamentals.py",
             description=desc, definitions=__doc__, units=dict(cagr="percent a year", maxdd="percent", ic="Spearman correlation"), updated=now), indent=1))
-    (OUTDIR / "README.md").write_text(f"# {EXP_ID}\n\nRegistered industry-filter test (Phase 1). `results.csv`: portfolio arms; `ic.csv`: industry-level "
+    (out / "README.md").write_text(f"# {EXP_ID}\n\nRegistered industry-filter test (Phase 1). `results.csv`: portfolio arms; `ic.csv`: industry-level "
                                       "IC series. Definitions and the pass rule are in the manifests and src/agentic/test_industry_fundamentals.py.\n")
     passed = [k for k in ELIG if R0[k]["PASS"]]
+    if repro:
+        print(f"\nREPRO RUN (not logged) · VERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm passes'}")
+        return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
         fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
