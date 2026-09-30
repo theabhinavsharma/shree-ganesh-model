@@ -1,0 +1,23 @@
+{
+ "about": "New-data queue (2026-09-30). One item at a time: fetch slowly, QC, run its registered A/B test, message the result on Telegram, then the next. Runner: src/agentic/research_queue.py (launchd com.sgm.research, hourly). State: logs/research_queue/state.json.",
+ "items": [
+  {"id": "insider_gg", "title": "Promoter & insider trades (NSE moved to a new filing system on 1 May 2026; our feed has been empty since)",
+   "why": "promoter market purchases in the last 90 days went with twice the winners and half the crashes in 2019-2022; the feed silently stopped, so 2026 is blank",
+   "fetch": ["src/agentic/fetch_pit_gg.py", "--backfill", "--max-minutes", "45"],
+   "test": ["src/agentic/test_trait_rules.py"], "test_env": {"SGM_PBUY_SOURCE": "pit", "SGM_RERUN_TAG": "insider-feed-fixed"},
+   "result_id": "EXP-2026-09-30-trait-rules-RERUN-insider-feed-fixed"},
+  {"id": "bulk_deals", "title": "Bulk-deal buyer names (which funds and known investors are buying)",
+   "why": "who is buying matters more than that someone bought; NSE's historical bulk-deal list names the buyer",
+   "fetch": ["src/agentic/backfill_bulk_deals.py", "--max-minutes", "45"], "test": ["src/agentic/test_bulk_buyers.py"],
+   "result_id": "EXP-2026-09-30-bulk-buyers-RESULT"},
+  {"id": "shp_detail", "title": "Shareholding detail: mutual fund and foreign fund %, number of shareholders (quarterly)",
+   "why": "funds building a stake while retail shareholders shrink is the 'strong hands' pattern; the filings are already linked in stock_shareholding.parquet",
+   "fetch": ["src/agentic/fetch_shp_detail.py", "--max-minutes", "45"], "test": ["src/agentic/test_shp_detail.py"], "result_id": null},
+  {"id": "pledges", "title": "Promoter pledges (released vs newly pledged)",
+   "why": "a released pledge removes a forced-selling risk; a new pledge is a red flag",
+   "fetch": ["src/agentic/fetch_pledges.py", "--max-minutes", "45"], "test": ["src/agentic/test_pledges.py"], "result_id": null},
+  {"id": "surveillance", "title": "NSE surveillance lists (ASM/GSM) and price-band changes",
+   "why": "small caps put on extra-margin lists mid-rally often stall; history may not be downloadable, then it is collected from today and paper-tracked",
+   "fetch": ["src/agentic/fetch_surveillance.py", "--max-minutes", "45"], "test": ["src/agentic/test_surveillance.py"], "result_id": null}
+ ]
+}

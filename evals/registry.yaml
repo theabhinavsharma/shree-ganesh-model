@@ -64,6 +64,16 @@ evals:
     owner: system
     check: ca_before_prices
 
+  - id: data.insider_fresh
+    statement: "Promoter and insider trade disclosures are current: the newest one is at most 5 days old."
+    why: "NSE moved these filings to a new system on 1 May 2026 and our old feed returned nothing for 5 months without an error. Promoter buying is one of the few signals that separated winners."
+    source_of_truth: "data/derived/pit_history.parquet column date (NSE broadcast time), fed by src/agentic/fetch_pit_gg.py"
+    threshold: "newest disclosure within 5 calendar days of today"
+    action: warn
+    cadence: daily
+    owner: system
+    check: insider_fresh
+
   - id: data.manifests
     statement: "Every derived table the strategy reads has a manifest that states its units and its source."
     why: "Units were guessed from column names twice: P&L in rupee lakh vs rupees; a 'delivery %' column that holds fractions."

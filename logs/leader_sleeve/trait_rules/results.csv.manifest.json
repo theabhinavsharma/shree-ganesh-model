@@ -1,0 +1,15 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-trait-rules",
+ "producer": "src/agentic/test_trait_rules.py",
+ "definitions": "EXP-2026-09-30-trait-rules (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does Sri Lakshmi do better if, inside its weekly pool, it prefers stocks where buyers take delivery,\nwhere the promoter has been buying, and smaller companies? Same engine, same pass rule as every other test.\nThe 2019-2022 years were already looked at for these traits (exploration), so the 2023+ result is the honest one.\nArms (reference G1 = production Sri Lakshmi):\n  D1   drop the bottom half of the week's pool by 20-day average delivery % (unknown passes)\n  D1S  same, judged within the pool's size tercile (small / mid / large): delivery relative to similar-size peers\n  PB   promoter market purchase in the prior 90 days and pool rank <= 25 go first, then the rest by model\n  SZ   drop the largest fifth of the week's pool by market cap\n  ALL  SZ, then D1, then PB ordering\nPASS = sp.beats vs G1 at phase 0 and in >= 4 of 5 phases. Also: conf-era gap, feature coverage by year, and the\n+50% hit spread for delivery / promoter buying within each size tercile and the 6 largest industries (per era).\nOutput: logs/leader_sleeve/trait_rules/{results.csv, granularity.csv, coverage.csv, README.md} + manifests; RESULT line.\nSGM_REPRO=1: writes to trait_rules/repro/ and does not touch the ledger (src/agentic/trust/reproduce.py).\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "conf_gap_vs_G1": "percentage points of CAGR, 2023+",
+  "hit_yes": "percent of pool rows (rank <= 25) whose high reached 1.5x the next-open entry within 126 sessions",
+  "gap": "percentage points",
+  "coverage": "percent of pool rows where the feature is known"
+ },
+ "updated": "2026-09-30T00:56:36"
+}

@@ -85,6 +85,11 @@ def _pool_daily() -> tuple[list[float], str]:
         extra += list(range(len(o["filings"]) + 1))                         # counts: new / big / "and N smaller" <= all filings
     if ev:
         extra.append(len(e["results"]))
+    qs, qc = ROOT / "logs/research_queue/state.json", ROOT / "configs/research_queue.json"   # the new-data queue lines
+    if qs.exists():
+        texts.append(qs.read_text())
+    if qc.exists():
+        extra += list(range(len(json.loads(qc.read_text())["items"]) + 1))
     sl = notify._sleeve()                                                    # sell list: planned shares per lot, session 126
     extra.append(126)
     for f in notify.TRACKS["sri_lakshmi"].glob("screen_*.json"):

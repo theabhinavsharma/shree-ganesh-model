@@ -195,6 +195,11 @@ def daily_text(run: dict | None = None) -> str:
     if book:
         lines += ["", "📈 PAPER BATCHES (after costs)"] + book
 
+    try:
+        import research_queue
+        lines += research_queue.status_lines()
+    except Exception as x:                      # the queue must never break the daily message
+        lines += ["", f"🧪 NEW DATA QUEUE: status unavailable ({type(x).__name__})"]
     if oj.exists() and (O.get("warming") or O.get("cooling")):
         lines += ["", "🌡 INDUSTRIES"]
         if O.get("warming"):

@@ -22,6 +22,7 @@ log "═══ DAILY DATA LAYER $TS (dow=$DOW) ═══"
 run corp_actions /usr/bin/python3 src/agentic/refresh_corporate_actions.py
 run prices /usr/bin/python3 src/agentic/refresh_prices.py
 run announcements /usr/bin/python3 src/agentic/refresh_announcements.py
+run insider_trades /usr/bin/python3 src/agentic/fetch_pit_gg.py --daily   # NSE's new PIT system (old api/corporates-pit empty since 2026-05-01)
 run gold_inr /usr/bin/python3 src/agentic/build_gold_feed.py   # NSE gold ETFs -> INR gold (needs prices)
 run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 

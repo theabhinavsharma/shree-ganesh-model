@@ -322,6 +322,15 @@ def _jsonl(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text().splitlines() if l.strip()] if path.exists() else []
 
 
+def insider_fresh(ctx: dict) -> dict:
+    p = pd.read_parquet(ROOT / "data/derived/pit_history.parquet", columns=["date"])
+    d = pd.to_datetime(p["date"], format="%d-%b-%Y %H:%M", errors="coerce")
+    d = d[d <= pd.Timestamp.now()]                       # NSE rows with typo dates in the future are ignored
+    newest = d.max()
+    age = (pd.Timestamp.now() - newest).days
+    return _res("PASS" if age <= 5 else "FAIL", str(newest.date()), f"newest disclosure {age} days old")
+
+
 def message_grounded(ctx: dict) -> dict:
     rows = [r for r in _jsonl(ROOT / "logs/outbox/checks.jsonl") if r["kind"] in ("daily", "weekly")]
     if not rows:

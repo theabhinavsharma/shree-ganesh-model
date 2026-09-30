@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- New-data research queue (2026-09-30): every hour, one slow step of the current item (src/agentic/research_queue.py).
+     Skips while the daily/weekly orchestrator runs. Installed at ~/Library/LaunchAgents/com.sgm.research.plist. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.sgm.research</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/abhinavs./Code/Zoom/src/agentic/research_queue.py</string>
+    <string>run</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/abhinavs./Code/Zoom</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+  </dict>
+  <key>StartInterval</key><integer>3600</integer>
+  <key>StandardOutPath</key><string>/Users/abhinavs./Code/Zoom/logs/research_queue/launchd.log</string>
+  <key>StandardErrorPath</key><string>/Users/abhinavs./Code/Zoom/logs/research_queue/launchd.log</string>
+</dict>
+</plist>
