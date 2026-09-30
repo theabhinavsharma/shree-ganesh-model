@@ -74,6 +74,16 @@ def _pool_daily() -> tuple[list[float], str]:
     rep = notify._latest("daily_orders_industry_*.md", ROOT / "reports")
     if rep:
         texts.append(rep.read_text())
+    for g in ("gate_data_*.json", "gate_analysis_daily_*.json"):          # the QC checklist lines
+        f = notify._latest(g, ROOT / "logs/evals")
+        if f:
+            texts.append(f.read_text())
+    oj = ROOT / "logs/daily_orders/latest.json"                            # the new-orders list
+    if oj.exists():
+        o = json.loads(oj.read_text()); texts.append(oj.read_text())
+        extra += list(range(len(o["filings"]) + 1))                         # counts: new / big / "and N smaller" <= all filings
+    if ev:
+        extra.append(len(e["results"]))
     return [v for t in texts for v in _nums(t)] + [float(x) for x in extra], str(st.get("date"))
 
 

@@ -200,6 +200,23 @@ def main() -> None:
     cool = H[(H["pct"] < 0.7) & (H["pct_5d_ago"] >= 0.7)]
     lines += ["", f"Entered hot/warming (pct >= 0.70) in the last 5 sessions: {', '.join(warm.index) or 'none'}",
               f"Dropped out: {', '.join(cool.index) or 'none'}", ""]
+    # 2026-09-30: the same rows (deduplicated, with industry / heat / trend / held) as a small file the phone message
+    # reads (notify.py), so the message shows the digest instead of recomputing it. Overwritten each run.
+    js = []
+    for r in (rec.itertuples() if len(rec) else []):
+        L = last.loc[r.symbol] if r.symbol in last.index else None
+        ind = None if L is None or pd.isna(L["ind"]) else str(L["ind"])
+        hp = None if L is None or pd.isna(L.get("heat_pct")) else round(float(L["heat_pct"]), 2)
+        js.append(dict(symbol=r.symbol, filed_ist=str(pd.Timestamp(r.ts)), fetched_ist=str(r.fetched),
+                       amount_cr=None if pd.isna(r.amount_cr) else round(float(r.amount_cr), 1),
+                       pct_of_rev=None if pd.isna(r.pct_of_rev) else round(float(r.pct_of_rev), 4),
+                       industry=ind, heat_pct=hp, trend=None if L is None else bool(L["trend"]),
+                       held=held.get(r.symbol, []), headline=str(r.headline)[:160]))
+    (ROOT / "logs/daily_orders").mkdir(exist_ok=True)
+    (ROOT / "logs/daily_orders/latest.json").write_text(json.dumps(dict(
+        data_through=str(d.date()), written=datetime.now().isoformat(timespec="seconds"),
+        note="pct_of_rev is a fraction of trailing-12-month revenue (0.15 = 15%); times are IST", filings=js,
+        warming=list(warm.index), cooling=list(cool.index)), indent=1))
     rep = ROOT / f"reports/daily_orders_industry_{d.strftime('%Y%m%d')}.md"
     rep.write_text("\n".join(lines) + "\n")
     print("\n".join(lines[:40]))
