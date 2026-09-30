@@ -1,0 +1,142 @@
+# Incidents: what broke, how we found it, and what now guards it (append-only; src/agentic/trust/incident.py)
+incidents:
+  - id: INC-2026-09-24-cron-tcc
+    date: '2026-09-30'
+    title: 'Daily runs silently stopped: cron could not read ~/Documents (macOS privacy)'
+    found_by: stale data noticed 2026-09-28; ops.daily_run_happened failing
+    root_cause: project inside ~/Documents; /usr/sbin/cron not in Full Disk Access
+    blast_radius: no scheduled runs 2026-09-24..09-29
+    fix: project moved to ~/Code/Zoom; launchd with --if-missed; orchestrator run_sgm.py
+    guard_eval: ops.daily_run_happened
+    skills:
+    - sgm-triage
+    lesson: If the daily message did not arrive, check logs/runs/launchd_daily.log and logs/runs/<date>_daily.json first; never
+      keep the project under ~/Documents, ~/Desktop or ~/Downloads (macOS blocks background jobs there).
+    commit: 9ce7396
+  - id: INC-2026-09-30-insider-feed-silent-zero
+    date: '2026-09-30'
+    title: 'Promoter/insider trades blank for 5 months: NSE moved the endpoint and the old one answered 0 rows'
+    found_by: feature coverage table in EXP-2026-09-30-trait-rules (promoter buys known for 17% of 2026 rows)
+    root_cause: NSE switched insider filings to api/corporates-pit-gg on 2026-05-01; the fetcher treated 0 rows as success;
+      no freshness eval on insider data
+    blast_radius: promoter-buying features and reports blank Mar-Sep 2026
+    fix: fetch_pit_gg.py (new endpoint + iXBRL parse, 3,033 filings), daily feed insider_trades
+    guard_eval: data.insider_fresh
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    lesson: A feed that returns 0 rows is broken until the source proves 0 is real (compare the same window a year earlier),
+      and every feed gets a freshness eval.
+    commit: 524c49a
+  - id: INC-2026-09-30-renamed-symbol-cliffs
+    date: '2026-09-30'
+    title: '62 stocks carried fake one-day crashes: splits/bonuses of renamed companies never applied'
+    found_by: per-pick stats (worst pick MAJESCO -92%) -> scan of one-day moves of 45%+
+    root_cause: NSE lists corporate actions under the CURRENT symbol; the panel keeps the symbol traded that day; the join was
+      by ticker
+    blast_radius: 405 cliff rows, 62 stocks; every backtest understated (~3 pts/yr for Sri Lakshmi)
+    fix: re-key NSE actions via symbolchange.csv + ISIN issuer; dividends >= 10% adjusted; panel self-healed; guard evals data.no_unexplained_cliffs
+      and data.renames_mapped
+    guard_eval: data.no_unexplained_cliffs
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    lesson: Key corporate data by company identity (ISIN issuer + NSE symbolchange.csv), never by ticker alone, and check the
+      whole history for one-day moves of 45%+ without an NSE record, not only the new rows.
+    commit: 46fa8ee
+  - id: INC-2026-09-30-verdicts-on-broken-data
+    date: '2026-09-30'
+    title: Sri Lakshmi v2 adopted on a pass that did not survive the price fix
+    found_by: 'reproduce.py after the corporate-action fix: NOT REPRODUCED (6.8 pts); v2 vs G1 fell to 3/5'
+    root_cause: registered tests were run on a price panel with fake crashes
+    blast_radius: production rule choice for Friday 2026-10-02
+    fix: all key tests re-run on corrected data; v3 vs G1 registered and passed 5/5
+    guard_eval: trust.results_reproduce
+    skills:
+    - sgm-new-idea
+    lesson: After any data fix, re-run the registered tests (src/agentic/trust/reproduce.py) and re-check every adopted rule
+      before the next live batch; say which verdicts changed.
+    commit: 46fa8ee
+  - id: INC-2026-09-30-archive-dii-wrong
+    date: '2026-09-30'
+    title: Restored shareholding archive had institution % wrong before 2022-07
+    found_by: archive-vs-XBRL agreement on the overlap (median gap 5.2 pts; CAMLINFINE 0.00 vs 18.65 mutual funds)
+    root_cause: old ingest matched only a few category labels in older filings
+    blast_radius: would have poisoned the shareholding A/B
+    fix: archive institution split used only from 2022-07; XBRL is the single source for the test
+    guard_eval: ''
+    skills:
+    - sgm-new-data-source
+    lesson: When restoring or combining two sources, compare them on the overlap first and use only the stretch where they agree.
+    commit: bfe47cd
+  - id: INC-2026-09-30-xbrl-promoter-member
+    date: '2026-09-30'
+    title: A promoter's stake was counted as an institution in shareholding XBRL
+    found_by: archive-vs-XBRL gap on PNBHOUSING (PNB's 32.64% added to institutions)
+    root_cause: IndianFinancialInstitutionsOrBanksMember sits in the promoter table
+    blast_radius: institution % overstated for bank-promoted companies
+    fix: member excluded from institutions
+    guard_eval: ''
+    skills:
+    - sgm-new-data-source
+    lesson: In filings with several tables (shareholding XBRL), check which table a category sits in before summing it; test
+      the sum on a known company.
+    commit: bfe47cd
+  - id: INC-2026-09-30-keyword-substrings
+    date: '2026-09-30'
+    title: Theme keywords matched inside other words and company names
+    found_by: 'match counts: ''housing'' matched 2,531 companies; ''cement'' matched ''announcement'''
+    root_cause: regex without word boundaries on text that starts with the company's own name
+    blast_radius: theme exposure wrong for most companies in the first build
+    fix: word boundaries + company name removed before matching
+    guard_eval: ''
+    skills:
+    - sgm-new-data-source
+    - sgm-new-idea
+    lesson: 'Keyword matching on filings: match at word boundaries, remove the company''s own name first, and eyeball the match
+      counts before using them.'
+    commit: bb44f8e
+  - id: INC-2026-09-30-api-page-cap
+    date: '2026-09-30'
+    title: NSE bulk-deal JSON silently capped at 70 rows per request
+    found_by: every month returned exactly 70 rows
+    root_cause: page cap on the JSON form of the endpoint
+    blast_radius: would have kept ~5% of bulk deals
+    fix: csv=true form returns the whole month
+    guard_eval: ''
+    skills:
+    - sgm-new-data-source
+    lesson: 'A suspiciously round count per request (exactly 70, 100, 500) is a page cap, not the data: find the full export
+      before backfilling.'
+    commit: 524c49a
+  - id: INC-2026-09-30-lessons-not-in-skills
+    date: '2026-09-30'
+    title: Lessons from failures lived only in commit messages
+    found_by: 'user: did we modify skills and evals after the fuck-ups?'
+    root_cause: no step turned an incident into a skill lesson and a guard eval
+    blast_radius: future sessions would repeat the same mistakes
+    fix: src/agentic/trust/incident.py (append-only writer + ledger), skill sgm-incident, eval trust.lessons_intact
+    guard_eval: trust.lessons_intact
+    skills:
+    - sgm-triage
+    - sgm-incident
+    lesson: 'Every failure ends with src/agentic/trust/incident.py add: a guard eval plus a one-line lesson in each affected
+      skill; lessons only in commit messages are forgotten.'
+    commit: ''
+  - id: INC-2026-09-30-feeds-without-guards
+    date: '2026-09-30'
+    title: 20 of 26 data feeds had no freshness check; 'script finished' was read as 'data arrived'
+    found_by: user asked whether skills/evals are used at all; audit of daily_data_layer.sh vs verify_freshness.py contracts
+    root_cause: the new-data-source skill says every feed needs a freshness eval, but skills load only when Claude opens them
+      and it did not; nothing checked the rule in code
+    blast_radius: any of 20 feeds could go silently empty like the insider feed; corp-actions broadcast_date empty in every
+      row
+    fix: configs/feed_guards.json (file, date column, allowed age per feed) + eval data.every_feed_guarded (blocks on a feed
+      with no guard, warns on stale)
+    guard_eval: data.every_feed_guarded
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    lesson: Add every new feed to configs/feed_guards.json in the same change (file, date column, allowed weekdays); data.every_feed_guarded
+      blocks the daily run for a feed without one. Rules that matter go into an eval, not only into a skill.
+    commit: ''

@@ -112,3 +112,6 @@ research/doubler_audit/replay/prices_asof_20260401.parquet
 
 # Drive backup volumes (uploaded to Google Drive; manifest committed separately if needed)
 backups/
+
+# incident writer backups (local safety copies; git is the history)
+evals/.backups/

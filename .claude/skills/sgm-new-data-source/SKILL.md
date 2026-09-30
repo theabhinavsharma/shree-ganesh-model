@@ -12,3 +12,13 @@ description: Add a new data feed to the SGM data layer the safe way. Use when th
 5. Add a QC eval to `evals/registry.yaml` (+ check in `eval_checks.py`): coverage, freshness, reconciliation against the source's own totals where possible.
 6. Schedule it (daily layer, or the monthly / yearly list) and make sure the missed-run alarm covers it.
 7. Spot-check 3 values against the original documents and report them.
+
+## Lessons from incidents
+(appended by src/agentic/trust/incident.py; never edit or delete these lines)
+- 2026-09-30 [INC-2026-09-30-insider-feed-silent-zero] A feed that returns 0 rows is broken until the source proves 0 is real (compare the same window a year earlier), and every feed gets a freshness eval.
+- 2026-09-30 [INC-2026-09-30-renamed-symbol-cliffs] Key corporate data by company identity (ISIN issuer + NSE symbolchange.csv), never by ticker alone, and check the whole history for one-day moves of 45%+ without an NSE record, not only the new rows.
+- 2026-09-30 [INC-2026-09-30-archive-dii-wrong] When restoring or combining two sources, compare them on the overlap first and use only the stretch where they agree.
+- 2026-09-30 [INC-2026-09-30-xbrl-promoter-member] In filings with several tables (shareholding XBRL), check which table a category sits in before summing it; test the sum on a known company.
+- 2026-09-30 [INC-2026-09-30-keyword-substrings] Keyword matching on filings: match at word boundaries, remove the company's own name first, and eyeball the match counts before using them.
+- 2026-09-30 [INC-2026-09-30-api-page-cap] A suspiciously round count per request (exactly 70, 100, 500) is a page cap, not the data: find the full export before backfilling.
+- 2026-09-30 [INC-2026-09-30-feeds-without-guards] Add every new feed to configs/feed_guards.json in the same change (file, date column, allowed weekdays); data.every_feed_guarded blocks the daily run for a feed without one. Rules that matter go into an eval, not only into a skill.

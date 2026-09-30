@@ -1,0 +1,135 @@
+{
+ "about": "Every feed in src/agentic/daily_data_layer.sh must have an entry here (eval data.every_feed_guarded). Why: 'the script exited 0' is not 'new data arrived'; the insider feed returned 0 rows for 5 months without an error (INC-2026-09-30-insider-feed-silent-zero). file = what the feed writes; date_col = newest-row column (null = file modified time); max_stale_bd = allowed age in weekdays, counted to the last price session (market dates) or to today (fetch times). Loose limits for feeds that are not daily: block deals (not every day), FRED USD/INR (about a week behind), AMFI (monthly, published with a lag), weekly feeds 8. corp_actions uses ex_date (past dates only) because broadcast_date is empty in every row of the store (found 2026-09-30).",
+ "feeds": {
+  "corp_actions": {
+   "file": "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet",
+   "date_col": "ex_date",
+   "max_stale_bd": 5
+  },
+  "prices": {
+   "file": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "announcements": {
+   "file": "data/events_full_history/normalized/stock_announcements.parquet",
+   "date_col": "event_date",
+   "max_stale_bd": 3
+  },
+  "insider_trades": {
+   "file": "data/derived/pit_history.parquet",
+   "date_col": "date",
+   "max_stale_bd": 5
+  },
+  "gold_inr": {
+   "file": "data/derived/gold_inr_etf.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "news_events": {
+   "file": "data/derived/news_event_features.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "forex": {
+   "file": "data/derived/macro_timeseries.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "usdinr_history": {
+   "file": "data/derived/usdinr_history.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 10
+  },
+  "commodity": {
+   "file": "data/derived/commodity_prices.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 5
+  },
+  "global_macro": {
+   "file": "data/derived/global_rates.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 5
+  },
+  "fii_dii": {
+   "file": "data/derived/fii_dii_flows.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "block_deals": {
+   "file": "data/derived/block_deals.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 10
+  },
+  "breadth": {
+   "file": "data/derived/market_breadth_panel.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "india_vix": {
+   "file": "data/derived/india_vix.parquet",
+   "date_col": "date",
+   "max_stale_bd": 3
+  },
+  "industry": {
+   "file": "data/derived/industry_panel.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "news_rss": {
+   "file": "data/derived/news_feed.parquet",
+   "date_col": "fetched_at",
+   "max_stale_bd": 2
+  },
+  "sentiment": {
+   "file": "data/derived/macro_sentiment.parquet",
+   "date_col": "as_of",
+   "max_stale_bd": 3
+  },
+  "global_sentiment": {
+   "file": "data/derived/global_macro_sentiment.parquet",
+   "date_col": "as_of",
+   "max_stale_bd": 3
+  },
+  "pib_releases": {
+   "file": "data/derived/pib_releases.parquet",
+   "date_col": "pub_date",
+   "max_stale_bd": 5
+  },
+  "macro_panel": {
+   "file": "data/derived/macro_panel.parquet",
+   "date_col": "trade_date",
+   "max_stale_bd": 3
+  },
+  "screener_fundamentals": {
+   "file": "data/derived/screener_fundamentals.parquet",
+   "date_col": "fetch_date",
+   "max_stale_bd": 8
+  },
+  "amfi_mf": {
+   "file": "data/derived/amfi_mf_aum.parquet",
+   "date_col": "month_end",
+   "max_stale_bd": 50
+  },
+  "superstar": {
+   "file": "data/derived/superstar_holdings.parquet",
+   "date_col": "fetch_date",
+   "max_stale_bd": 8
+  },
+  "broker_recos": {
+   "file": "data/derived/broker_recos.parquet",
+   "date_col": "fetched_at",
+   "max_stale_bd": 8
+  },
+  "security_master": {
+   "file": "data/derived/security_master.parquet",
+   "date_col": null,
+   "max_stale_bd": 8
+  },
+  "screener_industry": {
+   "file": "data/derived/screener_industry.parquet",
+   "date_col": "fetched_at",
+   "max_stale_bd": 8
+  }
+ }
+}

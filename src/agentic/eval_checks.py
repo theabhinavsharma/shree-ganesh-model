@@ -322,6 +322,15 @@ def _jsonl(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text().splitlines() if l.strip()] if path.exists() else []
 
 
+def lessons_intact(ctx: dict) -> dict:
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import incident
+    ok, probs = incident.check()
+    L = incident._ledger()
+    return _res("PASS" if ok else "FAIL", f"{len(L['evals'])} evals · {len(L['incidents'])} incidents · {sum(len(v) for v in L['lessons'].values())} lessons",
+                "; ".join(probs[:5]) or "nothing that was ever recorded is missing")
+
+
 def no_unexplained_cliffs(ctx: dict) -> dict:
     px = pd.read_parquet(PANEL, columns=["symbol", "trade_date", "close", "avg_traded_value_20d", "price_adjustment_factor_to_present"])
     px = px.sort_values(["symbol", "trade_date"])
@@ -418,6 +427,36 @@ def claude_golden(ctx: dict) -> dict:
     r = runs[-1]
     return _res("PASS" if r["accuracy"] >= 0.9 else "FAIL", round(100 * r["accuracy"]),
                 f"{r['n']} questions on {r['ts'][:10]}; wrong: {', '.join(r['wrong']) or 'none'}")
+
+
+def every_feed_guarded(ctx: dict) -> dict:
+    """Every feed in daily_data_layer.sh has a freshness guard (configs/feed_guards.json) and its newest row is recent.
+    FAIL = a feed with no guard, or its file/column is missing (fix the guard). WARN = a guarded feed is stale."""
+    feeds = re.findall(r"^\s*run (\w+) ", (ROOT / "src/agentic/daily_data_layer.sh").read_text(), re.M)
+    G = json.loads((ROOT / "configs/feed_guards.json").read_text())["feeds"]
+    today, last = pd.Timestamp.now().normalize(), ctx["last_session"]
+    broken, stale = [f"{f}: no guard" for f in feeds if f not in G], []
+    for f in [f for f in feeds if f in G]:
+        g, p = G[f], ROOT / G[f]["file"]
+        if not p.exists():
+            broken.append(f"{f}: {g['file']} missing"); continue
+        if g["date_col"]:
+            try:
+                s = pd.read_parquet(p, columns=[g["date_col"]])[g["date_col"]]
+            except Exception:
+                broken.append(f"{f}: column {g['date_col']} missing"); continue
+            d = pd.to_datetime(s, errors="coerce", format="mixed", dayfirst=True, utc=True).dt.tz_localize(None)
+            newest = d[d <= pd.Timestamp.now()].max()
+            ref = last if g["date_col"] in ("trade_date", "date", "event_date", "broadcast_date", "pub_date") else today
+        else:
+            newest, ref = pd.Timestamp(datetime.fromtimestamp(p.stat().st_mtime)), today
+        if pd.isna(newest):
+            broken.append(f"{f}: no readable dates"); continue
+        age = int(np.busday_count(newest.date(), max(ref, newest).date()))
+        if age > g["max_stale_bd"]:
+            stale.append(f"{f} {age}bd old (limit {g['max_stale_bd']})")
+    st = "FAIL" if broken else "WARN" if stale else "PASS"
+    return _res(st, f"{len(feeds) - len(broken) - len(stale)}/{len(feeds)} feeds fresh", "; ".join(broken + stale)[:400])
 
 
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}

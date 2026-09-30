@@ -1,0 +1,69 @@
+{
+ "evals": [
+  "backup.drive_checksums",
+  "data.ca_before_prices",
+  "data.coverage",
+  "data.every_feed_guarded",
+  "data.freshness",
+  "data.insider_fresh",
+  "data.manifests",
+  "data.no_duplicates",
+  "data.no_holiday_copies",
+  "data.no_unexplained_cliffs",
+  "data.renames_mapped",
+  "human.order_book_golden",
+  "human.weekly_pick_review",
+  "model.ranking_lift",
+  "ops.daily_run_happened",
+  "output.message_grounded",
+  "output.one_screen_per_week",
+  "output.paper_scored",
+  "output.screens_immutable",
+  "pit.filings_after_period",
+  "pit.model_scores_current",
+  "prov.external_rows_sourced",
+  "prov.order_amount_grounded",
+  "strategy.preregistered",
+  "trust.claims_sourced",
+  "trust.claude_golden",
+  "trust.lessons_intact",
+  "trust.results_reproduce"
+ ],
+ "incidents": [
+  "INC-2026-09-24-cron-tcc",
+  "INC-2026-09-30-api-page-cap",
+  "INC-2026-09-30-archive-dii-wrong",
+  "INC-2026-09-30-feeds-without-guards",
+  "INC-2026-09-30-insider-feed-silent-zero",
+  "INC-2026-09-30-keyword-substrings",
+  "INC-2026-09-30-lessons-not-in-skills",
+  "INC-2026-09-30-renamed-symbol-cliffs",
+  "INC-2026-09-30-verdicts-on-broken-data",
+  "INC-2026-09-30-xbrl-promoter-member"
+ ],
+ "lessons": {
+  "sgm-triage": [
+   "5aa9d5bd31ba",
+   "78cc1ee83385",
+   "7d03aec6b924",
+   "a4fcb7e24af1",
+   "ab9b6efbe2d1"
+  ],
+  "sgm-new-data-source": [
+   "3c24a166350d",
+   "519ee084355d",
+   "5aa9d5bd31ba",
+   "7d03aec6b924",
+   "ab9b6efbe2d1",
+   "b5686081fc85",
+   "ed436f7092bf"
+  ],
+  "sgm-new-idea": [
+   "74a5a781ad81",
+   "b5686081fc85"
+  ],
+  "sgm-incident": [
+   "a4fcb7e24af1"
+  ]
+ }
+}

@@ -259,6 +259,16 @@ evals:
     owner: system
     check: claude_golden
 
+  - id: trust.lessons_intact
+    statement: "Every eval, incident and skill lesson ever recorded is still there."
+    why: "Lessons from failures must not quietly disappear when someone edits a file; an edit may only add."
+    source_of_truth: "evals/.lessons_ledger.json vs evals/registry.yaml, evals/incidents.yaml, .claude/skills/*/SKILL.md"
+    threshold: "nothing missing"
+    action: block
+    cadence: daily
+    owner: system
+    check: lessons_intact
+
   # ---------------------------------------------------------------- human judgement: what code cannot decide
   - id: human.order_book_golden
     statement: "On a sample of 50 investor-deck filings graded by a person, the extracted figure is the filing's total order book at least 80% of the time."
@@ -279,3 +289,13 @@ evals:
     cadence: weekly
     owner: abhinav
     check: weekly_pick_review
+
+  - id: data.every_feed_guarded
+    statement: "Every data feed has its own freshness check, and each feed's newest row is recent."
+    why: "A feed script can finish without error and still bring nothing new. The insider feed did that for 5 months (INC-2026-09-30-insider-feed-silent-zero). On 2026-09-30 only 6 of 26 feeds had a freshness check."
+    source_of_truth: "configs/feed_guards.json (file, date column, allowed age per feed) vs the run list in src/agentic/daily_data_layer.sh"
+    threshold: "every feed listed in the guard file (else blocks); newest row within its allowed weekdays (else warning)"
+    action: block
+    cadence: daily
+    owner: system
+    check: every_feed_guarded
