@@ -30,6 +30,7 @@ LOG = ROOT / "logs/outbox/checks.jsonl"
 TEMPLATE_NUMBERS = (26.0, 126.0)                      # 26 weekly slots in the ladder, 126-session hold
 SYMBOLS = re.compile(r"\b(?=[A-Z0-9&]*[A-Z])[A-Z0-9&]{2,}\b")   # tickers like 20MICRONS are names, not numbers
 BAD = re.compile(r"\bnan\b|\bNaN\b|\bNone\b|Traceback|Error:|[{}]")
+URL = re.compile(r"https?://\S+")          # links are checked against the source list, not read as numbers
 
 
 RAW = re.compile(r"\d[\d,]*(?:\.\d+)?")
@@ -118,7 +119,12 @@ def check(kind: str, text: str, track: str | None = None, log: bool = True) -> d
         if date not in text.splitlines()[0]:
             problems.append(f"first line does not carry the data date {date}")
         pool = np.sort(np.array(pool + (list(TEMPLATE_NUMBERS) if kind == "weekly" else []), dtype=float))
-        for s, v, dec in cc.values(SYMBOLS.sub(" ", text)):
+        oj = ROOT / "logs/daily_orders/latest.json"
+        known = {notify.NSE_FILINGS} | ({f["url"] for f in json.loads(oj.read_text())["filings"] if f.get("url")} if oj.exists() else set())
+        bad_links = [u for u in URL.findall(text) if u not in known]
+        if bad_links:
+            problems.append("links not in the order file: " + ", ".join(bad_links[:3]))
+        for s, v, dec in cc.values(SYMBOLS.sub(" ", URL.sub(" ", text))):
             if not cc.trivial(s, v) and not _grounded(s, dec, pool):
                 unsourced.append(s.strip())
     res = dict(ok=not problems and not unsourced, unsourced=unsourced, problems=problems)

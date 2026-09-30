@@ -96,6 +96,15 @@ QC_LABEL = {"data.coverage": "Every stock has a price for the day", "data.freshn
             "pit.filings_after_period": "No future-dated filings", "prov.external_rows_sourced": "Government data rows have sources",
             "prov.order_amount_grounded": "Order amounts match the filing text", "ops.daily_run_happened": "Run happened for today"}
 ICON = {"PASS": "✅", "FAIL": "❌", "WARN": "⚠️", "PENDING": "⏳", "SKIP": "·"}
+NSE_FILINGS = "https://www.nseindia.com/companies-listing/corporate-filings-announcements"
+LINK = re.compile(r"📄 (https?://\S+)")
+
+
+def _telegram_html(text: str) -> str:
+    """Plain message -> Telegram HTML: escape everything, then turn '📄 <url>' into a short tappable link."""
+    import html
+    out = html.escape(text, quote=False)
+    return LINK.sub(lambda m: f'<a href="{html.escape(m.group(1))}">📄 {"all filings on NSE" if m.group(1) == NSE_FILINGS else "read"}</a>', out)
 
 
 def _last_sent_ist() -> datetime | None:
@@ -124,6 +133,12 @@ def daily_text(run: dict | None = None) -> str:
             failed = [x for x in got if x in bad]
             lines.append(f"{'❌' if failed else '✅'} {name}: " + ", ".join(("❌ " if x in bad else "") + x for x in got))
 
+    oj = ROOT / "logs/daily_orders/latest.json"
+    if oj.exists():
+        O = json.loads(oj.read_text())
+        fresh = O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))
+        lines.append(f"{'✅' if fresh else '❌'} Orders digest: {len(O['filings'])} order filings in the last 7 days"
+                     + ("" if fresh else f" (stale: written {O['written'][:10]})"))
     gate = _latest("gate_data_*.json", ROOT / "logs/evals")
     if gate:
         g = json.loads(gate.read_text())["results"]
@@ -143,9 +158,7 @@ def daily_text(run: dict | None = None) -> str:
                      + (f" · warnings: {', '.join(warns)}" if warns else "")
                      + (f" · waiting on you: {len(pend)}" if pend else ""))
 
-    oj = ROOT / "logs/daily_orders/latest.json"
     if oj.exists():
-        O = json.loads(oj.read_text())
         cut = _last_sent_ist()
         new = [f for f in O["filings"] if cut is None or datetime.fromisoformat(f["fetched_ist"]) > cut]
         new.sort(key=lambda f: -(f["pct_of_rev"] or 0))
@@ -159,9 +172,12 @@ def daily_text(run: dict | None = None) -> str:
             heat = "" if hp is None else f" ({'hot' if hp >= 0.9 else 'warming' if hp >= 0.7 else 'not hot'}, {hp:.2f})"
             ind = f" · {f['industry']}{heat}" if f["industry"] else ""
             tr = " · trend ✅" if f["trend"] else ""
-            lines.append(f"{mark} {f['symbol']} {amt}{pc}{ind}{tr}" + (f" · HELD in {', '.join(f['held'])}" if f["held"] else ""))
+            lines.append(f"{mark} {f['symbol']} {amt}{pc}{ind}{tr}" + (f" · HELD in {', '.join(f['held'])}" if f["held"] else "")
+                         + (f" 📄 {f['url']}" if f.get("url") else ""))
         if len(new) > 8:
-            lines.append(f"… and {len(new) - 8} smaller (full list: reports/daily_orders_industry_*.md)")
+            lines.append(f"… and {len(new) - 8} smaller (full list on the laptop: reports/daily_orders_industry_*.md)")
+        if new:
+            lines.append(f"📄 {NSE_FILINGS}")
 
     book = []
     for tag, folder in TRACKS.items():
@@ -221,8 +237,17 @@ def send(text: str, kind: str) -> None:
         kv = dict(l.split("=", 1) for l in env.read_text().splitlines() if "=" in l and not l.startswith("#"))
         tok, chat = kv.get("TELEGRAM_BOT_TOKEN", "").strip(), kv.get("TELEGRAM_CHAT_ID", "").strip()
         if tok and chat:
-            r = subprocess.run(["curl", "-s", "-m", "30", f"https://api.telegram.org/bot{tok}/sendMessage",
-                                "--data-urlencode", f"chat_id={chat}", "--data-urlencode", f"text={text}"], capture_output=True, text=True)
+            def post(body: str, html_mode: bool):
+                args = ["curl", "-s", "-m", "30", f"https://api.telegram.org/bot{tok}/sendMessage",
+                        "--data-urlencode", f"chat_id={chat}", "--data-urlencode", f"text={body}",
+                        "--data-urlencode", "disable_web_page_preview=true"]
+                if html_mode:
+                    args += ["--data-urlencode", "parse_mode=HTML"]
+                return subprocess.run(args, capture_output=True, text=True)
+            r = post(_telegram_html(text), True) if LINK.search(text) else post(text, False)
+            if '"ok":true' not in (r.stdout or "") and LINK.search(text):      # HTML refused: send it plain rather than lose it
+                (OUTBOX / f"{datetime.now():%Y%m%d_%H%M%S}_telegram_html_fallback.txt").write_text((r.stdout or r.stderr)[:500])
+                r = post(text, False)
             if '"ok":true' not in (r.stdout or ""):
                 (OUTBOX / f"{datetime.now():%Y%m%d_%H%M%S}_telegram_error.txt").write_text((r.stdout or r.stderr)[:500])
     print(text)

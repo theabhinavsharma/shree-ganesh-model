@@ -211,7 +211,8 @@ def main() -> None:
                        amount_cr=None if pd.isna(r.amount_cr) else round(float(r.amount_cr), 1),
                        pct_of_rev=None if pd.isna(r.pct_of_rev) else round(float(r.pct_of_rev), 4),
                        industry=ind, heat_pct=hp, trend=None if L is None else bool(L["trend"]),
-                       held=held.get(r.symbol, []), headline=str(r.headline)[:160]))
+                       held=held.get(r.symbol, []), headline=str(r.headline)[:160],
+                       url=r.url if isinstance(r.url, str) and r.url.startswith("http") else None))
     (ROOT / "logs/daily_orders").mkdir(exist_ok=True)
     (ROOT / "logs/daily_orders/latest.json").write_text(json.dumps(dict(
         data_through=str(d.date()), written=datetime.now().isoformat(timespec="seconds"),
