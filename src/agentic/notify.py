@@ -30,6 +30,7 @@ OUTBOX = ROOT / "logs/outbox"
 CFG = Path.home() / ".config/sgm"
 TRACKS = {"sri_lakshmi": ROOT / "logs/sri_lakshmi", "model": ROOT / "logs/model_screen", "sleeve": ROOT / "logs/leader_sleeve"}
 LABEL = {"sri_lakshmi": "Sri Lakshmi", "model": "Model screen", "sleeve": "Production"}
+SHORT = {"sri_lakshmi": "SL", "model": "Model", "sleeve": "Prod"}
 
 
 def _latest(pattern: str, folder: Path) -> Path | None:
@@ -46,7 +47,7 @@ def run_line(run: dict) -> str:
     output gate reads them as times, not as numbers that need a source."""
     st = datetime.fromisoformat(run["started"])
     if run.get("trigger") != "schedule":
-        head = f"Ran {st:%-I:%M %p} (started by hand)"
+        head = f"ran {st:%-I:%M %p} by hand"
     else:
         due = st.replace(hour=18, minute=45, second=0, microsecond=0)
         if st < due:
@@ -57,17 +58,12 @@ def run_line(run: dict) -> str:
         earlier = json.loads(rec.read_text()) if rec.exists() else []
         blocked = [r for r in earlier if r.get("outcome") not in (None, "sent", "smoke") and r["started"] < run["started"]]
         if st - due <= timedelta(minutes=10):
-            head = f"Ran {st:%-I:%M %p} (on time)"
+            head = f"ran {st:%-I:%M %p} ✅"
         elif blocked:
-            head = f"Ran {st:%-I:%M %p} (retry: the earlier run was stopped by a check)"
+            head = f"ran {st:%-I:%M %p} (retry after a stop)"
         else:
-            head = f"Ran {st:%-I:%M %p}, due {due:%a %-I:%M %p} (Mac was asleep or off)"
-    parts = [head]
-    fetch = next((x["secs"] for x in run.get("stages", []) if x["stage"] == "FETCH"), None)
-    if fetch is not None:
-        parts.append(f"fetch {_hm(fetch)}")
-    parts.append(f"total {_hm((datetime.now() - st).total_seconds())} (h:mm)")
-    return " · ".join(parts)
+            head = f"ran {st:%-I:%M %p}, late (Mac asleep at {due:%-I:%M %p})"
+    return f"{head} · {_hm((datetime.now() - st).total_seconds())}"
 
 
 def missed_line(run: dict) -> str:
@@ -80,7 +76,7 @@ def missed_line(run: dict) -> str:
     if prev is None:
         return ""
     gap = pd.bdate_range(prev + timedelta(days=1), today - timedelta(days=1))
-    return ("⚠ No message on " + ", ".join(f"{d:%a %b %d}" for d in gap) + " (Mac asleep, off or away)") if len(gap) else ""
+    return ("⚠ no message on " + ", ".join(f"{d:%a %b %d}" for d in gap) + " (Mac asleep/off)") if len(gap) else ""
 
 
 FEED_GROUPS = [   # daily_data_layer.sh step labels -> how the phone message groups them (unknown labels land in "Other")
@@ -119,67 +115,51 @@ def _last_sent_ist() -> datetime | None:
 
 
 def daily_text(run: dict | None = None) -> str:
-    """The daily checklist: when it ran, every feed, every data check, new orders, paper batches, industries."""
+    """Short daily note (2026-09-30: "condensed, not long unreadable ones"): one line per topic, problems spelled out,
+    anything fine collapses to a tick. Full detail stays in reports/ and logs/."""
     st = json.loads((ROOT / "logs/daily_data_layer_status.json").read_text())
     ok, bad = st.get("passed", []), st.get("failed", [])
-    lines = [f"SGM daily · data for {st.get('date')}"] + ([x for x in (run_line(run), missed_line(run)) if x] if run else [])
+    head = f"SGM · {pd.Timestamp(st.get('date')):%b %d}"
+    if run:
+        head += " · " + run_line(run)
+    lines = [head] + ([missed_line(run)] if run and missed_line(run) else [])
 
-    lines += ["", f"📥 DATA {'✅' if not bad else '⚠️'} {len(ok)}/{len(ok) + len(bad)} feeds"]
-    seen = set()
-    for name, labels in FEED_GROUPS + [("Other", [x for x in ok + bad if x not in {l for _, g in FEED_GROUPS for l in g}])]:
-        got = [x for x in labels if x in ok or x in bad]
-        seen |= set(got)
-        if got:
-            failed = [x for x in got if x in bad]
-            lines.append(f"{'❌' if failed else '✅'} {name}: " + ", ".join(("❌ " if x in bad else "") + x for x in got))
+    gate = _latest("gate_data_*.json", ROOT / "logs/evals")
+    g = json.loads(gate.read_text())["results"] if gate else []
+    npass = sum(r["status"] == "PASS" for r in g)
+    ev = _latest("eval_run_*.json", ROOT / "logs/evals")
+    e = json.loads(ev.read_text()) if ev else {"results": [], "verdict": "n/a"}
+    pend = sum(r["status"] == "PENDING" for r in e["results"])
+    lines.append(f"📥 Data {'✅' if not bad else '⚠️'} {len(ok)}/{len(ok) + len(bad)} · QC {'✅' if g and npass == len(g) else '⚠️'} {npass}/{len(g)}"
+                 f" · checks {e['verdict'].split(' —')[0]}" + (f" · {pend} waiting on you" if pend else ""))
+    if bad:
+        lines.append("❌ feeds failed: " + ", ".join(bad))
+    for r in g:
+        if r["status"] != "PASS":
+            lines.append(f"{ICON.get(r['status'], '')} {QC_LABEL.get(r['id'], r['id'])}: {(r['detail'] or str(r['value']))[:90]}")
+    other = [r["id"] for r in e["results"] if r["status"] in ("FAIL", "WARN") and not r["id"].startswith(("data.", "pit.filings", "prov.", "ops."))]
+    if other:
+        lines.append("⚠️ other checks: " + ", ".join(other))
 
     oj = ROOT / "logs/daily_orders/latest.json"
     if oj.exists():
         O = json.loads(oj.read_text())
-        fresh = O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))
-        lines.append(f"{'✅' if fresh else '❌'} Orders digest: {len(O['filings'])} order filings in the last 7 days"
-                     + ("" if fresh else f" (stale: written {O['written'][:10]})"))
-    gate = _latest("gate_data_*.json", ROOT / "logs/evals")
-    if gate:
-        g = json.loads(gate.read_text())["results"]
-        npass = sum(r["status"] == "PASS" for r in g)
-        lines += ["", f"🧪 QC {'✅' if npass == len(g) else '⚠️'} {npass}/{len(g)} data checks pass"]
-        for r in g:
-            val = str(r["value"]) if r["value"] not in (None, "") else ""
-            det = r["detail"] if r["status"] != "PASS" or val in ("", "0") else ""
-            lines.append(f"{ICON.get(r['status'], '')} {QC_LABEL.get(r['id'], r['id'])}" + (f": {val}" if val else "") + (f" — {det[:120]}" if det else ""))
-    ev = _latest("eval_run_*.json", ROOT / "logs/evals")
-    if ev:
-        e = json.loads(ev.read_text())
-        fails = [r["id"] for r in e["results"] if r["status"] == "FAIL"]
-        pend = [r["id"] for r in e["results"] if r["status"] == "PENDING"]
-        warns = [r["id"] for r in e["results"] if r["status"] == "WARN"]
-        lines.append(f"All checks: {e['verdict'].split(' —')[0]}" + (f" · failing: {', '.join(fails)}" if fails else "")
-                     + (f" · warnings: {', '.join(warns)}" if warns else "")
-                     + (f" · waiting on you: {len(pend)}" if pend else ""))
-
-    if oj.exists():
+        if not (O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))):
+            lines.append(f"❌ orders digest stale (written {O['written'][:10]})")
         cut = _last_sent_ist()
         new = [f for f in O["filings"] if cut is None or datetime.fromisoformat(f["fetched_ist"]) > cut]
         new.sort(key=lambda f: -(f["pct_of_rev"] or 0))
         big = [f for f in new if (f["pct_of_rev"] or 0) >= 0.15]
-        lines += ["", f"📦 NEW ORDERS {len(new)} since the last message · {len(big)} big (15%+ of a year's revenue)"]
-        for f in new[:8]:
+        lines.append(f"📦 Orders: {len(new)} new · {len(big)} big" if new else "📦 Orders: none new")
+        for f in new[:5]:
             mark = "⭐" if f["held"] else ("🔥" if (f["pct_of_rev"] or 0) >= 0.15 else "•")
-            amt = f"₹{f['amount_cr']:,.0f} cr" if f["amount_cr"] is not None else "amount not stated"
-            pc = f" = {f['pct_of_rev'] * 100:.0f}% of revenue" if f["pct_of_rev"] is not None else ""
+            amt = f"₹{f['amount_cr']:,.0f}cr" if f["amount_cr"] is not None else "₹?"
+            pc = f" ({f['pct_of_rev'] * 100:.0f}% rev)" if f["pct_of_rev"] is not None else ""
             hp = f["heat_pct"]
-            heat = "" if hp is None else f" ({'hot' if hp >= 0.9 else 'warming' if hp >= 0.7 else 'not hot'}, {hp:.2f})"
-            ind = f" · {f['industry']}{heat}" if f["industry"] else ""
-            tr = " · trend ✅" if f["trend"] else ""
-            lines.append(f"{mark} {f['symbol']} {amt}{pc}{ind}{tr}" + (f" · HELD in {', '.join(f['held'])}" if f["held"] else "")
-                         + (f" 📄 {f['url']}" if f.get("url") else ""))
-        if len(new) > 8:
-            lines.append(f"… and {len(new) - 8} smaller (full list on the laptop: reports/daily_orders_industry_*.md)")
-        if new:
-            lines.append(f"📄 {NSE_FILINGS}")
+            heat = "" if hp is None else (" hot" if hp >= 0.9 else " warm" if hp >= 0.7 else "")
+            lines.append(f"{mark} {f['symbol']} {amt}{pc}{' ·' + heat if heat else ''}{' · trend ✅' if f['trend'] else ''}"
+                         + (" · HELD" if f["held"] else "") + (f" 📄 {f['url']}" if f.get("url") else ""))
 
-    lines += sell_lines("sri_lakshmi")
     book = []
     for tag, folder in TRACKS.items():
         of = folder / "outcomes.jsonl"
@@ -189,23 +169,20 @@ def daily_text(run: dict | None = None) -> str:
         for l in of.read_text().splitlines():
             if l.strip():
                 x = json.loads(l); last[x["screen_id"]] = x
-        for sid, x in sorted(last.items()):
-            if x.get("status") != "CLOSED":
-                book.append(f"{LABEL[tag]} {pd.Timestamp(sid):%b %d}: {x['ew_net']:+.1f}% (day {x['days_held']})")
+        open_ = [f"{pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}%" for sid, x in sorted(last.items()) if x.get("status") != "CLOSED"]
+        if open_:
+            book.append(f"{SHORT[tag]} " + ", ".join(open_))
     if book:
-        lines += ["", "📈 PAPER BATCHES (after costs)"] + book
-
+        lines.append("📈 " + " · ".join(book))
+    lines += [l for l in sell_lines("sri_lakshmi") if l]
+    if oj.exists() and (O.get("warming") or O.get("cooling")):
+        lines.append("🌡 " + " · ".join(x for x in (("warming: " + ", ".join(O["warming"])) if O.get("warming") else "",
+                                                    ("cooling: " + ", ".join(O["cooling"])) if O.get("cooling") else "") if x))
     try:
         import research_queue
-        lines += research_queue.status_lines()
+        lines += [l for l in research_queue.status_lines() if l]
     except Exception as x:                      # the queue must never break the daily message
-        lines += ["", f"🧪 NEW DATA QUEUE: status unavailable ({type(x).__name__})"]
-    if oj.exists() and (O.get("warming") or O.get("cooling")):
-        lines += ["", "🌡 INDUSTRIES"]
-        if O.get("warming"):
-            lines.append("Warming up: " + ", ".join(O["warming"]))
-        if O.get("cooling"):
-            lines.append("Cooling off: " + ", ".join(O["cooling"]))
+        lines.append(f"🧪 queue status unavailable ({type(x).__name__})")
     return "\n".join(lines)
 
 
@@ -251,9 +228,9 @@ def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> l
             soon.append(f"🟡 {LABEL[track]} batch {pd.Timestamp(sid):%b %d} sells in {126 - days} sessions (about {sell_on:%a %b %d})")
         else:
             nxt = min(nxt, sell_on) if nxt is not None else sell_on
-    tail = soon + ([f"Next sell: {LABEL[track]}, about {nxt:%b %d %Y} (126 sessions after its buy; NSE holidays push it later)"]
-                   if nxt is not None and not out and not soon else [])
-    return (["", "🔴 SELL"] + out + soon) if out or soon else (["", "💤 SELL: nothing due"] + tail)
+    if out or soon:
+        return ["", "🔴 SELL"] + out + soon
+    return [f"💤 Sell: none due" + (f" · next ~{nxt:%b %d %Y}" if nxt is not None else "")]
 
 
 def weekly_text(track: str) -> str:

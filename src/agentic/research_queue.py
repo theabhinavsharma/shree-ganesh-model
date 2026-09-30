@@ -44,24 +44,21 @@ def has_code(it: dict) -> bool:
     return all((ROOT / it[k][0]).exists() for k in ("fetch", "test"))
 
 
+def _short(it: dict) -> str:
+    return it["title"].split(" (")[0].split(":")[0]
+
+
 def status_lines() -> list[str]:
-    """For the daily message: where the queue stands (the daily reminder)."""
+    """One line for the daily message (the daily reminder)."""
     if not CFG.exists():
         return []
     items, st = load()
-    lines, now_set = [], False
-    for i, it in enumerate(items, 1):
-        s = st.get(it["id"], {})
-        state = s.get("state") or ("waiting" if has_code(it) else "needs code")
-        if state == "done":
-            lines.append(f"✅ {i}. {it['title'].split(' (')[0]}: {s.get('verdict', 'done')}")
-        elif not now_set:
-            prog = f" · {s['progress']}" if s.get("progress") else ""
-            lines.append(f"▶ {i}. {it['title'].split(' (')[0]}: {state}{prog}" + (" (ask Claude to build it)" if state == "needs code" else ""))
-            now_set = True
-        else:
-            lines.append(f"· {i}. {it['title'].split(' (')[0]}" + (" (needs code)" if not has_code(it) else ""))
-    return ["", f"🧪 NEW DATA QUEUE ({sum(st.get(it['id'], {}).get('state') == 'done' for it in items)}/{len(items)} done)"] + lines
+    done = sum(st.get(it["id"], {}).get("state") == "done" for it in items)
+    cur = next((it for it in items if st.get(it["id"], {}).get("state") != "done"), None)
+    if cur is None:
+        return [f"🧪 Queue {done}/{len(items)} done"]
+    state = st.get(cur["id"], {}).get("state") or ("waiting" if has_code(cur) else "needs code")
+    return [f"🧪 Queue {done}/{len(items)} · now: {_short(cur)} ({state}{': ask Claude' if state == 'needs code' else ''})"]
 
 
 def _run(cmd: list[str], log: Path, env: dict | None = None, timeout: int = 3 * 3600) -> tuple[int, str]:
@@ -82,30 +79,31 @@ def _result(rid: str) -> dict | None:
 
 
 def report(i: int, n: int, it: dict, res: dict | None, fetch_tail: str) -> str:
+    """Short Telegram result (2026-09-30: condensed): verdict, the passing rule(s) vs today's rule, what's next."""
     import notify
-    lines = [f"🧪 New data {i}/{n} done: {it['title']}"]
-    fl = [l for l in fetch_tail.splitlines() if l.startswith(("listed", "parsed", "rows", "fetched"))]
-    if fl:
-        lines.append("Fetch: " + fl[-1][:200])
+    lines = [f"🧪 {_short(it)} · A/B done ({i}/{n})"]
     if res:
-        v = res.get("verdict")
-        lines.append("A/B verdict: " + ("PASS: " + ", ".join(v) if isinstance(v, list) and v else str(v)))
         arms = res.get("arms", {})
         ref = next((k for k in ("G1", "S1M") if k in arms), None)
         base = res["id"].split("-RESULT")[0].split("-RERUN")[0]
         reg = next((json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines()
                     if l.strip().startswith("{") and json.loads(l).get("id") == base), {})
-        desc = {**reg.get("arms", {}), **({ref: "Sri Lakshmi as it runs today"} if ref else {})}
-        for k, a in arms.items():
-            what = str(desc.get(k, k)).split(";")[0][:90]
-            lines.append(f"• {what}: {a[2]:.1f}%/yr in 2023+ ({a[1]:.1f}% in 2019-22) · worst fall {a[3]:.1f}%"
-                         + (f" · beat today's rule in {a[4]} test runs" if a[4] else ""))
-        lines.append("A rule is adopted only if it beats today's rule in both periods, without a deeper fall, in 4 of 5 runs.")
+        v = res.get("verdict")
+        passed = v if isinstance(v, list) else []
+        r0 = arms.get(ref) if ref else None
+        for k in passed:
+            a = arms[k]
+            what = str(reg.get("arms", {}).get(k, k)).split(";")[0]
+            what = what if len(what) <= 70 else what[:70].rsplit(" ", 1)[0]
+            lines.append(f"✅ PASS: {what} → {a[0]:.1f}% vs {r0[0]:.1f}%/yr" if r0 else f"✅ PASS: {what}")
+        failed = [k for k in arms if k != ref and k not in passed]
+        if failed:
+            lines.append(f"❌ {len(failed)} {'rule' if len(failed) == 1 else 'rules'} failed" + ("" if passed else " · Sri Lakshmi unchanged"))
     else:
-        lines.append("A/B: no RESULT line found; see logs/research_queue/")
-    nxt = [x for x in json.loads(CFG.read_text())["items"]][i:i + 1]
+        lines.append("A/B: no result found (see logs/research_queue/)")
+    nxt = json.loads(CFG.read_text())["items"][i:i + 1]
     if nxt:
-        lines.append(f"Next: {nxt[0]['title']}" + ("" if has_code(nxt[0]) else " (needs code: ask Claude)"))
+        lines.append(f"Next: {_short(nxt[0])}" + ("" if has_code(nxt[0]) else " (needs code: ask Claude)"))
     text = "\n".join(lines)
     notify.send(text, "research")
     return text
@@ -130,8 +128,7 @@ def run() -> int:
             if not has_code(it):
                 if s.get("state") != "needs code":
                     import notify
-                    notify.send(f"🧪 New data queue: item {i}/{len(items)} needs code before it can run: {it['title']}. "
-                                "Ask Claude to build its fetcher and registered test.", "research")
+                    notify.send(f"🧪 Queue {i}/{len(items)}: {_short(it)} needs code · ask Claude", "research")
                 s.update(state="needs code", since=ts); save(st)
                 return 0
             if s.get("state") in (None, "waiting", "needs code", "fetching"):
@@ -148,7 +145,7 @@ def run() -> int:
                 if rc != 0 or (it.get("result_id") and not res):
                     s.update(state="test failed", detail=tail[-600:]); save(st)
                     import notify
-                    notify.send(f"❌ New data queue: the A/B test for '{it['title']}' failed. Log: logs/research_queue/{ts}_{it['id']}_test.log", "fail")
+                    notify.send(f"❌ Queue: {_short(it)} A/B crashed · log logs/research_queue/{ts}_{it['id']}_test.log", "fail")
                     return 1
                 v = res.get("verdict") if res else None
                 s.update(state="done", finished=ts, verdict=("PASS: " + ", ".join(v)) if isinstance(v, list) and v else str(v))

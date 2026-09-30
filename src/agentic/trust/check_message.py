@@ -79,6 +79,8 @@ def _pool_daily() -> tuple[list[float], str]:
         f = notify._latest(g, ROOT / "logs/evals")
         if f:
             texts.append(f.read_text())
+            gr = json.loads(f.read_text())["results"]
+            extra += [len(gr), sum(r["status"] == "PASS" for r in gr)]
     oj = ROOT / "logs/daily_orders/latest.json"                            # the new-orders list
     if oj.exists():
         o = json.loads(oj.read_text()); texts.append(oj.read_text())
@@ -129,7 +131,8 @@ def check(kind: str, text: str, track: str | None = None, log: bool = True) -> d
             missing = [s for s in syms if s not in text]
             if missing:
                 problems.append("picks in the file but not in the message: " + ", ".join(missing))
-        if date not in text.splitlines()[0]:
+        first = text.splitlines()[0]
+        if date not in first and pd.Timestamp(date).strftime("%b %d") not in first:
             problems.append(f"first line does not carry the data date {date}")
         pool = np.sort(np.array(pool + (list(TEMPLATE_NUMBERS) if kind == "weekly" else []), dtype=float))
         oj = ROOT / "logs/daily_orders/latest.json"
