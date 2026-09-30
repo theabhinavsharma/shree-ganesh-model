@@ -300,3 +300,13 @@ evals:
     cadence: daily
     owner: system
     check: every_feed_guarded
+
+  - id: data.holidays_match_panel
+    statement: "NSE's trading-holiday list covers this year and agrees with our price data (no prices on a listed holiday, no weekday missing unless NSE lists it)."
+    why: "Buy and sell days in messages come from this list. Without it, a list built on Thu 2026-10-01 would have said buy on Fri Oct 2, a holiday (INC-2026-09-30-buy-day-on-holiday)."
+    source_of_truth: "data/derived/nse_holidays.parquet (NSE api/holiday-master, segment CM) vs the price panel's trade dates"
+    threshold: "current year present; 0 disagreements"
+    action: block
+    cadence: daily
+    owner: system
+    check: holidays_match_panel

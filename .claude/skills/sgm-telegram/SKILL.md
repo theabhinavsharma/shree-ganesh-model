@@ -82,3 +82,4 @@ Next: Promoter pledges
 ## Lessons from incidents
 (appended by src/agentic/trust/incident.py; never edit or delete these lines)
 - 2026-09-30 [INC-2026-09-30-telegram-letters] Build messages as a list of lines and check the outbox line count before sending anything by hand.
+- 2026-09-30 [INC-2026-09-30-buy-day-on-holiday] Buy and sell days come from NSE's holiday list (src/agentic/nse_calendar.py), never 'next weekday'; check the first list after any holiday week by eye.

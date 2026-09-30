@@ -25,6 +25,10 @@ from pathlib import Path
 
 import pandas as pd
 
+import sys  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import nse_calendar  # noqa: E402
+
 ROOT = Path("/Users/abhinavs./Code/Zoom")
 OUTBOX = ROOT / "logs/outbox"
 CFG = Path.home() / ".config/sgm"
@@ -173,6 +177,7 @@ def daily_text(run: dict | None = None) -> str:
         for l in of.read_text().splitlines():
             if l.strip():
                 x = json.loads(l); last[x["screen_id"]] = x
+        last = {k: v for k, v in last.items() if (folder / f"screen_{k}.json").exists()}   # not_invested/ batches are not shown
         open_ = [f"{pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}%" for sid, x in sorted(last.items()) if x.get("status") != "CLOSED"]
         if open_:
             book.append(f"{SHORT[tag]} " + ", ".join(open_))
@@ -230,13 +235,14 @@ def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> l
     for l in of.read_text().splitlines():
         if l.strip():
             x = json.loads(l); last[x["screen_id"]] = x
+    last = {k: v for k, v in last.items() if (TRACKS[track] / f"screen_{k}.json").exists()}   # only batches still tracked
     sl, out, soon, nxt = _sleeve(), [], [], None
     for sid, x in sorted(last.items()):
         if x.get("status") == "CLOSED" or not x.get("names"):
             continue
         days = x["days_held"] if preview_days is None else preview_days
         entry = pd.Timestamp(x["names"][0]["entry_date"])
-        sell_on = pd.bdate_range(entry, periods=126)[-1]
+        sell_on = nse_calendar.add_sessions(entry, 126)
         if 126 - days <= 1:
             sc = json.loads((TRACKS[track] / f"screen_{sid}.json").read_text())
             close = {n["symbol"]: n.get("close") for n in sc["names"]}
@@ -264,8 +270,8 @@ def weekly_text(track: str) -> str:
     sc = json.loads(f.read_text())
     sleeve = _sleeve()
     per = sleeve / 26 / len(sc["names"]) if sleeve and sc["names"] else None
-    entry = pd.bdate_range(pd.Timestamp(sc["data_through"]) + pd.Timedelta(days=1), periods=1)[0]
-    sell = pd.bdate_range(entry, periods=126)[-1]
+    entry = nse_calendar.next_session(sc["data_through"])     # NSE holiday list (a Thu list must not say "buy Fri" on a holiday)
+    sell = nse_calendar.add_sessions(entry, 126)
     name = LABEL[track] if track != "sri_lakshmi" else ("Sri Lakshmi V3" if "V3" in sc.get("status", "") else "Sri Lakshmi G1")
     lines = [f"🛒 {name} · buy {entry:%a %b %d} at open · data {pd.Timestamp(sc['data_through']):%b %d}",
              f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight"), ""]

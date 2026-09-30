@@ -183,3 +183,19 @@ incidents:
     - sgm-telegram
     lesson: Build messages as a list of lines and check the outbox line count before sending anything by hand.
     commit: ''
+  - id: INC-2026-09-30-buy-day-on-holiday
+    date: '2026-09-30'
+    title: Friday's buy list would have said 'buy Fri Oct 2' — an NSE holiday
+    found_by: 'checking the first real-money V3 list: Oct 2 2026 is Gandhi Jayanti; the panel has no holiday rows so data_through
+      = Thu Oct 1'
+    root_cause: notify and the screen took the next WEEKDAY as the entry day; the repo had no NSE holiday list
+    blast_radius: wrong buy day on the first real-money V3 list (sent after the 'buy' day had passed); sell dates off by holidays
+    fix: fetch_nse_holidays.py (official NSE holiday-master, daily feed, guarded) + nse_calendar.next_session/add_sessions used
+      by notify and the screen
+    guard_eval: data.holidays_match_panel
+    skills:
+    - sgm-telegram
+    - sgm-triage
+    lesson: Buy and sell days come from NSE's holiday list (src/agentic/nse_calendar.py), never 'next weekday'; check the first
+      list after any holiday week by eye.
+    commit: ''

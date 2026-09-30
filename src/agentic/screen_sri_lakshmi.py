@@ -97,7 +97,8 @@ def main() -> None:
     dropped_fading = [s for s in g1_top if not fin(s) and fading_only(s, d)]
     names = [dict(row(i, s), g1_rank=g1_top.index(s) + 1) for i, s in enumerate([s for s in g1_top if keep(s)])]   # no refill
     reserves = [s for s in ranked[top:] if keep(s)]
-    entry = pd.bdate_range(d + pd.Timedelta(days=1), periods=1)[0]
+    import nse_calendar
+    entry = nse_calendar.next_session(d)
     CDIR.mkdir(parents=True, exist_ok=True)
     wk = tuple(d.isocalendar()[:2])
     have = [p for p in CDIR.glob("screen_*.json") if tuple(pd.Timestamp(json.loads(p.read_text())["data_through"]).isocalendar()[:2]) == wk]

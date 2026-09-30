@@ -5,6 +5,7 @@
   "data.coverage",
   "data.every_feed_guarded",
   "data.freshness",
+  "data.holidays_match_panel",
   "data.insider_fresh",
   "data.manifests",
   "data.no_duplicates",
@@ -33,6 +34,7 @@
   "INC-2026-09-24-cron-tcc",
   "INC-2026-09-30-api-page-cap",
   "INC-2026-09-30-archive-dii-wrong",
+  "INC-2026-09-30-buy-day-on-holiday",
   "INC-2026-09-30-feeds-without-guards",
   "INC-2026-09-30-insider-feed-silent-zero",
   "INC-2026-09-30-keyword-substrings",
@@ -49,6 +51,7 @@
    "5aa9d5bd31ba",
    "78cc1ee83385",
    "7d03aec6b924",
+   "87c6f694905d",
    "a4fcb7e24af1",
    "ab9b6efbe2d1",
    "b31a1ac5e634"
@@ -72,7 +75,8 @@
    "a4fcb7e24af1"
   ],
   "sgm-telegram": [
-   "3bc54ea61f65"
+   "3bc54ea61f65",
+   "87c6f694905d"
   ]
  }
 }

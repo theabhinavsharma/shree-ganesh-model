@@ -130,6 +130,11 @@
    "file": "data/derived/screener_industry.parquet",
    "date_col": "fetched_at",
    "max_stale_bd": 8
+  },
+  "nse_holidays": {
+   "file": "data/derived/nse_holidays.parquet",
+   "date_col": "fetched_at",
+   "max_stale_bd": 5
   }
  }
 }

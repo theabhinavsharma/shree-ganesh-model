@@ -459,4 +459,24 @@ def every_feed_guarded(ctx: dict) -> dict:
     return _res(st, f"{len(feeds) - len(broken) - len(stale)}/{len(feeds)} feeds fresh", "; ".join(broken + stale)[:400])
 
 
+def holidays_match_panel(ctx: dict) -> dict:
+    """NSE's holiday list covers this year and agrees with the price panel: no rows on a listed weekday holiday (Muhurat
+    sessions excepted) and no weekday missing from the panel unless NSE lists it. Buy/sell days in messages use this list."""
+    f = ROOT / "data/derived/nse_holidays.parquet"
+    if not f.exists():
+        return _res("FAIL", None, "no NSE holiday list — run src/agentic/fetch_nse_holidays.py")
+    H = pd.read_parquet(f, columns=["date", "description"]); H["date"] = pd.to_datetime(H["date"]).dt.normalize()
+    last = ctx["last_session"]; y = last.year
+    if y not in set(H["date"].dt.year):
+        return _res("FAIL", None, f"holiday list has no {y} rows")
+    panel = set(pd.to_datetime(pd.read_parquet(PANEL, columns=["trade_date"])["trade_date"].unique()))
+    Hy = H[H["date"].dt.year == y]
+    special = set(Hy.loc[Hy["description"].str.contains("Laxmi Pujan|Muhurat", case=False, na=False), "date"])
+    traded = sorted(str(x.date()) for x in Hy["date"] if x.weekday() < 5 and x <= last and x in panel and x not in special)
+    missing = sorted(str(x.date()) for x in pd.bdate_range(f"{y}-01-01", last) if x not in panel and x not in set(Hy["date"]))
+    detail = "; ".join(p for p in (("panel has rows on listed holidays: " + ", ".join(traded)) if traded else "",
+                                   ("weekdays missing from the panel that NSE does not list: " + ", ".join(missing)) if missing else "") if p)
+    return _res("PASS" if not (traded or missing) else "FAIL", f"{len(Hy)} NSE holidays in {y}", detail)
+
+
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}
