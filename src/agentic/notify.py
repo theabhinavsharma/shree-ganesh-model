@@ -20,7 +20,7 @@ import argparse
 import json
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -37,17 +37,65 @@ def _latest(pattern: str, folder: Path) -> Path | None:
     return fs[-1] if fs else None
 
 
-def daily_text() -> str:
+def _hm(secs: float) -> str:
+    return f"{int(secs // 3600)}:{int(secs % 3600 // 60):02d}"
+
+
+def run_line(run: dict) -> str:
+    """When this run started vs when it was due, why it was late, and how long it took. Times only (h:mm), so the
+    output gate reads them as times, not as numbers that need a source."""
+    st = datetime.fromisoformat(run["started"])
+    if run.get("trigger") != "schedule":
+        head = f"Ran {st:%-I:%M %p} (started by hand)"
+    else:
+        due = st.replace(hour=18, minute=45, second=0, microsecond=0)
+        if st < due:
+            due -= timedelta(days=1)
+        while due.weekday() >= 5:
+            due -= timedelta(days=1)
+        rec = ROOT / f"logs/runs/{due:%Y%m%d}_daily.json"
+        earlier = json.loads(rec.read_text()) if rec.exists() else []
+        blocked = [r for r in earlier if r.get("outcome") not in (None, "sent", "smoke") and r["started"] < run["started"]]
+        if st - due <= timedelta(minutes=10):
+            head = f"Ran {st:%-I:%M %p} (on time)"
+        elif blocked:
+            head = f"Ran {st:%-I:%M %p} (retry: the earlier run was stopped by a check)"
+        else:
+            head = f"Ran {st:%-I:%M %p}, due {due:%a %-I:%M %p} (Mac was asleep or off)"
+    parts = [head]
+    fetch = next((x["secs"] for x in run.get("stages", []) if x["stage"] == "FETCH"), None)
+    if fetch is not None:
+        parts.append(f"fetch {_hm(fetch)}")
+    parts.append(f"total {_hm((datetime.now() - st).total_seconds())} (h:mm)")
+    return " · ".join(parts)
+
+
+def missed_line(run: dict) -> str:
+    """Weekdays since the last sent daily message with no message at all (the Mac was asleep, off or away)."""
+    day = lambda t: (datetime.fromisoformat(t) - timedelta(hours=11)).date()   # NSE data day, 11 AM ET to 11 AM ET  # noqa: E731
+    sent = {day(r["started"]) for f in (ROOT / "logs/runs").glob("*_daily.json") for r in json.loads(f.read_text())
+            if r.get("outcome") == "sent"}
+    today = day(run["started"])
+    prev = max((d for d in sent if d < today), default=None)
+    if prev is None:
+        return ""
+    gap = pd.bdate_range(prev + timedelta(days=1), today - timedelta(days=1))
+    return ("⚠ No message on " + ", ".join(f"{d:%a %b %d}" for d in gap) + " (Mac asleep, off or away)") if len(gap) else ""
+
+
+def daily_text(run: dict | None = None) -> str:
     st = json.loads((ROOT / "logs/daily_data_layer_status.json").read_text())
     ok, bad = st.get("passed", []), st.get("failed", [])
-    lines = [f"SGM daily · data for {st.get('date')}",
+    lines = [f"SGM daily · data for {st.get('date')}"] + ([x for x in (run_line(run), missed_line(run)) if x] if run else []) + [
              f"Data {'✅' if not bad else '⚠️'} {len(ok)}/{len(ok) + len(bad)} feeds" + (f" · failed: {', '.join(bad)}" if bad else "")]
     ev = _latest("eval_run_*.json", ROOT / "logs/evals")
     if ev:
         e = json.loads(ev.read_text())
         fails = [r["id"] for r in e["results"] if r["status"] == "FAIL"]
         pend = [r["id"] for r in e["results"] if r["status"] == "PENDING"]
+        warns = [r["id"] for r in e["results"] if r["status"] == "WARN"]
         lines.append(f"Checks: {e['verdict'].split(' —')[0]}" + (f" · failing: {', '.join(fails)}" if fails else "")
+                     + (f" · warnings: {', '.join(warns)}" if warns else "")
                      + (f" · waiting on you: {len(pend)}" if pend else ""))
     book = []
     for tag, folder in TRACKS.items():

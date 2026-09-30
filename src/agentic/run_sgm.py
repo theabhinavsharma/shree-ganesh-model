@@ -121,7 +121,7 @@ class Run:
         return res["ok"]
 
     def stop(self, where: str, block: list[dict]) -> int:
-        lines = [f"❌ SGM {self.mode} run stopped at {where}"]
+        lines = [f"❌ SGM {self.mode} run stopped at {where} ({datetime.now():%-I:%M %p} ET)"]
         lines += [f"• {r['id']}: {r.get('detail') or r.get('statement', '')}"[:220] for r in block[:6]]
         lines.append(f"Picks on hold until this passes. Record: logs/runs/{self.ts[:8]}_{self.mode}.json")
         self.send("\n".join(lines), "fail")
@@ -177,7 +177,7 @@ def daily(R: Run) -> int:
     if b := R.gate("analysis_daily"):
         return R.stop("the analysis check", b)
     R.stage("REPORT", [PY, "src/agentic/run_evals.py", "--cadence", "daily"], 3600)
-    ok = R.message("daily", notify.daily_text())
+    ok = R.message("daily", notify.daily_text(run=R.rec))
     if not R.smoke:
         R.stage("MIRROR", ["/bin/bash", "src/agentic/sync_drive_mirror.sh"], 3600)
     return R.finish("sent" if ok else "message held", 0 if ok else 1)
@@ -244,6 +244,7 @@ def main() -> int:
     if done():
         return 0
     R = Run(a.mode, a.smoke)
+    R.rec["trigger"] = "schedule" if a.if_missed else "manual"
     if not _lock():
         if done():                            # the run we waited for sent it; a catch-up stays quiet
             return 0
