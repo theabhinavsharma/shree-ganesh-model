@@ -1,0 +1,11 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-theme-engine",
+ "producer": "src/agentic/test_theme_engine.py",
+ "definitions": "EXP-2026-09-30-theme-engine (registered, then amended, in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does it help Sri Lakshmi v2 to put first the stocks whose own filings tie them to a theme that is\nrising (government attention or global prices), and to skip stocks tied only to fading themes?\nReference V2 = G1 top 9 minus Financial Services, no refill (production from 2026-10-02).\n  TUP    pool names (rank <= 25) exposed to a rising theme first, then model order; top 9; financials dropped\n  TFADE  V2 minus names exposed only to fading themes (none rising); no refill\n  TBOTH  TUP ordering, then the TFADE filter\nData: data/derived/theme_intensity.parquet, theme_exposure.parquet (src/agentic/build_themes.py, configs/themes.json).\nPASS = sp.beats vs V2 at phase 0 and in >= 4 of 5 phases. Output: logs/leader_sleeve/theme_engine/ + RESULT line.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-09-30T13:59:58"
+}

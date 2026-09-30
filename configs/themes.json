@@ -1,0 +1,198 @@
+{
+ "about": "Theme engine themes (2026-09-30). Built from the 2016-2022 winner waves (EXP-2026-09-30-hitter-waves-EXPLORATION) plus government-priority themes. driver: govt = PIB title share, last 4 quarters vs the 4 before; commodity = 6-month change of the listed global prices (IMF monthly via FRED, macro_drivers_fred.parquet). company: regex on each company's own NSE filings (announcements_historical.parquet desc + attchmntText); a company is exposed when it filed a match in the last 365 days. Regexes are case-insensitive.",
+ "thresholds": {
+  "govt_rising": 0.2,
+  "govt_fading": -0.2,
+  "commodity_rising": 0.1,
+  "commodity_fading": -0.1,
+  "exposure_days": 365
+ },
+ "themes": [
+  {
+   "id": "defence",
+   "name": "Defence make-in-India",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "defen[cs]e (production|export|procurement|manufactur)|indigeni[sz]|positive indigeni[sz]ation list|DRDO|Defence Acquisition Council",
+   "company": "defen[cs]e|DRDO|indian (army|navy|air force)|missile|ammunition|radar|armou?red|warship|submarine"
+  },
+  {
+   "id": "railways",
+   "name": "Railways and metro",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "vande bharat|metro rail|dedicated freight corridor|railway (electrification|station|project)|kavach|rolling stock",
+   "company": "railway|\\bRVNL\\b|metro rail|rolling stock|wagon|coaches|vande bharat|kavach|locomotive"
+  },
+  {
+   "id": "power_grid",
+   "name": "Power grid and heavy electrical",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "transmission (line|system|project)|green energy corridor|power grid|thermal power (plant|capacity)|pumped storage",
+   "company": "transmission line|substation|transformer|switchgear|power grid|\\bPGCIL\\b|thermal power|boiler|turbine"
+  },
+  {
+   "id": "water",
+   "name": "Water, irrigation and pumps",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "jal jeevan|har ghar jal|\\bAMRUT\\b|namami gange|sewage|water supply|PM-KUSUM|solar pump|irrigation",
+   "company": "water supply|jal jeevan|sewage|irrigation|\\bpumps?\\b|water treatment|desalination"
+  },
+  {
+   "id": "gas",
+   "name": "Gas distribution",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "city gas distribution|\\bCGD\\b|piped natural gas|PNG connection|CNG station|gas grid|LNG terminal",
+   "company": "city gas|\\bCGD\\b|\\bCNG\\b|\\bPNG\\b|natural gas|\\bLNG\\b|gas pipeline"
+  },
+  {
+   "id": "ethanol",
+   "name": "Sugar and ethanol",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "ethanol|biofuel|\\bE20\\b|sugar (export|season|production)|sugarcane",
+   "company": "ethanol|distiller|sugar|cane crush|biofuel"
+  },
+  {
+   "id": "agri_inputs",
+   "name": "Fertilizers and agri inputs",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "fertili[sz]er|\\burea\\b|\\bDAP\\b|nano urea|nutrient based subsidy",
+   "company": "fertili[sz]er|\\burea\\b|\\bDAP\\b|agrochemical|crop protection|pesticide|\\bseeds?\\b"
+  },
+  {
+   "id": "electronics",
+   "name": "Electronics manufacturing (PLI)",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "electronics manufactur|mobile (phone )?manufactur|PLI .{0,40}(electronics|IT hardware|white goods|telecom)|component manufactur",
+   "company": "electronics manufactur|\\bEMS\\b|\\bPCB\\b|mobile phone|production linked incentive|\\bPLI\\b|white goods|telecom equipment"
+  },
+  {
+   "id": "ev",
+   "name": "EV and batteries",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "electric vehicle|e-mobility|\\bFAME\\b|advanced chemistry cell|PM E-DRIVE|charging (station|infrastructure)|lithium",
+   "company": "electric vehicle|\\bEVs?\\b|electric bus|e-bus|battery pack|lithium|charging station|e-mobility"
+  },
+  {
+   "id": "solar",
+   "name": "Solar and renewables",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "solar|renewable energy|green hydrogen|wind (energy|power)|PM-KUSUM|rooftop solar|Surya Ghar",
+   "company": "solar|renewable|wind (power|energy|turbine)|green hydrogen|photovoltaic|PV module"
+  },
+  {
+   "id": "semis",
+   "name": "Semiconductors",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "semiconductor|India Semiconductor Mission|\\bOSAT\\b|chip (fab|manufactur)|\\bATMP\\b",
+   "company": "semiconductor|\\bOSAT\\b|\\bchips?\\b|wafer|\\bATMP\\b"
+  },
+  {
+   "id": "ai_digital",
+   "name": "AI and data centres",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "artificial intelligence|IndiaAI|data cent(re|er)|digital public infrastructure",
+   "company": "artificial intelligence|data cent(re|er)|\\bGPUs?\\b|machine learning|generative AI"
+  },
+  {
+   "id": "pharma",
+   "name": "Pharma, API and medical devices",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "bulk drug|API park|pharmaceutical|PLI .{0,30}(pharma|drug|medical device)|medical device park",
+   "company": "USFDA|US FDA|bulk drug|\\bAPIs?\\b|formulation|\\bANDA\\b|\\bCDMO\\b|medical device"
+  },
+  {
+   "id": "chemicals",
+   "name": "Chemicals (China+1)",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "chemical|petrochemical|china plus one|china ?\\+ ?1|anti-dumping .{0,60}(chemical|acid)",
+   "company": "specialty chemical|chemical|intermediates|pigment|\\bdyes?\\b|fluoro"
+  },
+  {
+   "id": "textiles",
+   "name": "Textiles (China+1, PM MITRA)",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "textile|PM MITRA|apparel|garment|technical textile",
+   "company": "textile|\\byarn\\b|fabric|garment|apparel|spinning|technical textile"
+  },
+  {
+   "id": "tourism",
+   "name": "Tourism and hospitality",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "tourism|tourist|Swadesh Darshan|pilgrimage|heritage (site|tourism)|civil aviation|UDAN",
+   "company": "\\bhotels?\\b|resort|tourism|hospitality|airline|airport"
+  },
+  {
+   "id": "infra",
+   "name": "Roads and construction",
+   "family": "govt",
+   "driver": "govt",
+   "pib": "national highway|Bharatmala|Gati Shakti|road (project|construction)|smart cit(y|ies)",
+   "company": "highway|road project|\\bNHAI\\b|bridge|tunnel|letter of award|\\bEPC\\b"
+  },
+  {
+   "id": "housing",
+   "name": "Housing and building materials",
+   "family": "demand",
+   "driver": "govt",
+   "pib": "PMAY|Pradhan Mantri Awas|affordable housing|housing for all|real estate|cement",
+   "company": "housing|real estate|cement|\\btiles?\\b|plywood|laminate|\\bpipes?\\b|sanitaryware|paints"
+  },
+  {
+   "id": "consumption",
+   "name": "Jewellery and discretionary retail",
+   "family": "demand",
+   "driver": "govt",
+   "pib": "gold (import|monetisation)|hallmark|gems and jewellery",
+   "company": "jewel|\\bgold\\b|diamond|showroom|retail stores?"
+  },
+  {
+   "id": "auto",
+   "name": "Autos, components and tyres",
+   "family": "demand",
+   "driver": "govt",
+   "pib": "automobile|auto component|PLI .{0,30}auto|vehicle scrappage|\\btyres?\\b",
+   "company": "auto component|automobile|\\btyres?\\b|\\bOEMs?\\b|two[- ]wheeler|passenger vehicle|tractor"
+  },
+  {
+   "id": "metals",
+   "name": "Metals (global prices)",
+   "family": "commodity",
+   "driver": "commodity",
+   "commodities": [
+    "aluminium",
+    "copper",
+    "zinc",
+    "nickel",
+    "iron_ore"
+   ],
+   "company": "\\bsteel\\b|alumin|copper|\\bzinc\\b|iron ore|pellet|ferro alloy|\\bmetals?\\b"
+  },
+  {
+   "id": "agri_commod",
+   "name": "Agri commodities and food (global prices)",
+   "family": "commodity",
+   "driver": "commodity",
+   "commodities": [
+    "sugar",
+    "cotton",
+    "wheat"
+   ],
+   "company": "\\brice\\b|basmati|edible oil|\\bcotton\\b|food processing|pulses|spices|\\btea\\b|coffee"
+  }
+ ]
+}

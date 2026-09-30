@@ -27,6 +27,7 @@ TESTS = {   # experiment id -> (script, results.csv written in repro mode)
     "EXP-2026-09-29-industry-fundamentals": ("src/agentic/test_industry_fundamentals.py", "logs/leader_sleeve/industry_fundamentals/repro/results.csv"),
     "EXP-2026-09-29-industry-policy": ("src/agentic/test_industry_policy.py", "logs/leader_sleeve/industry_policy/repro/results.csv"),
     "EXP-2026-09-30-sector-shrink": ("src/agentic/test_sector_type.py", "logs/leader_sleeve/sector_type/shrink/repro/results.csv"),
+    "EXP-2026-09-30-theme-engine": ("src/agentic/test_theme_engine.py", "logs/leader_sleeve/theme_engine/repro/results.csv"),
 }
 ENV = {"EXP-2026-09-30-sector-shrink": {"SGM_SHRINK": "1"}}      # extra environment a test needs
 COLS = ("cagr", "cagr_disc", "cagr_conf", "maxdd")
