@@ -63,11 +63,6 @@ run macro_panel /usr/bin/python3 src/agentic/build_macro_panel.py
 if /usr/bin/python3 src/agentic/daily_orders_industry.py > "$LOG_DIR/${TS}_orders_industry.log" 2>&1; then log "✅ orders_industry digest (not a feed)"
 else log "⚠ orders_industry digest failed (not a feed) — see $LOG_DIR/${TS}_orders_industry.log"; fi
 
-# --- mirror the live working set to Google Drive (My Drive/SGM backups/day_to_day; 2026-09-28) ---
-# Not a data feed: logged here but never added to PASS/FAIL, so it cannot change the status file or the exit code.
-if /bin/bash src/agentic/sync_drive_mirror.sh > "$LOG_DIR/${TS}_drive_mirror.log" 2>&1; then log "✅ drive_mirror (not a feed)"
-else log "⚠ drive_mirror failed (not a feed) — see $LOG_DIR/${TS}_drive_mirror.log"; fi
-
 # --- loud status ---
 /usr/bin/python3 - << PYEOF
 import json, datetime
@@ -76,4 +71,16 @@ json.dump({"ts": "$TS", "date": str(datetime.date.today()),
           open("logs/daily_data_layer_status.json","w"), indent=1)
 PYEOF
 log "═══ DONE: ${#PASS[@]} ok, ${#FAIL[@]} failed (${FAIL[*]:-none}) ═══"
+
+# evals read the status file written above, so they run after it; then the mirror copies the eval report too
+# --- eval registry (evals/registry.yaml): plain-English statements + coded checks -> reports/eval_report_<date>.md ---
+# Not a feed. Until the orchestrator lands it reports (exit 1 = a blocking eval failed); it does not yet stop later steps.
+if /usr/bin/python3 src/agentic/run_evals.py --cadence daily > "$LOG_DIR/${TS}_evals.log" 2>&1; then log "✅ evals (not a feed)"
+else log "❌ evals: blocking failure — see reports/eval_report_$(date +%Y-%m-%d).md"; fi
+
+# --- mirror the live working set to Google Drive (My Drive/SGM backups/day_to_day; 2026-09-28) ---
+# Not a data feed: logged here but never added to PASS/FAIL, so it cannot change the status file or the exit code.
+if /bin/bash src/agentic/sync_drive_mirror.sh > "$LOG_DIR/${TS}_drive_mirror.log" 2>&1; then log "✅ drive_mirror (not a feed)"
+else log "⚠ drive_mirror failed (not a feed) — see $LOG_DIR/${TS}_drive_mirror.log"; fi
+
 [ ${#FAIL[@]} -le 3 ] || exit 1

@@ -1,0 +1,210 @@
+# SGM / Sri Lakshmi eval registry — the human-readable spec every coded check hangs off (2026-09-29).
+#
+# Each eval is written in plain English FIRST: what must be true, why it matters (the harm or the incident it came
+# from), where the right answer comes from, the threshold, and what happens when it fails. `check` names the function
+# in src/agentic/eval_checks.py that implements it, or `human` when a person has to judge it.
+#   action   block = stop the run / no picks / no real money until fixed;  warn = proceed, say it in the message;
+#            log = record only
+#   cadence  daily | weekly | per_experiment | per_retrain
+#   owner    system (automatic) | abhinav (human judgement) | claude (review / triage)
+# Runner: /usr/bin/python3 src/agentic/run_evals.py [--cadence daily|weekly|all]
+# Output: reports/eval_report_<date>.md (statement next to result) + logs/evals/eval_run_<date>.json; exit 1 on a
+# failed `block` eval.
+
+evals:
+
+  # ---------------------------------------------------------------- data: is the data true?
+  - id: data.coverage
+    statement: "Every stock in NSE's own daily file for the latest session is in our price panel, with the same closing price to the paisa."
+    why: "On 2026-09-08 a series filter silently dropped ~270 BE/BZ stocks a day for two weeks while every freshness check stayed green."
+    source_of_truth: "NSE bhavcopy for that session (raw file on disk)"
+    threshold: "coverage >= 99.5%, 0 BE/BZ series regressions, 0 closing-price mismatches"
+    action: block
+    cadence: daily
+    owner: system
+    check: coverage
+
+  - id: data.freshness
+    statement: "Every input the pipeline reads is younger than its declared maximum age, file by file and column by column."
+    why: "Feeds rotted silently before (FRED 55 days, corporate actions 113 days, a scheduler dead for 4 months)."
+    source_of_truth: "the contracts in src/agentic/verify_freshness.py"
+    threshold: "0 stale files, 0 stale columns"
+    action: block
+    cadence: daily
+    owner: system
+    check: freshness
+
+  - id: data.no_duplicates
+    statement: "Each stock has at most one row per trading day in the price panel."
+    why: "A duplicate day double-counts a return and breaks every wide price table."
+    source_of_truth: "the panel itself"
+    threshold: "0 duplicate (symbol, date) rows"
+    action: block
+    cadence: daily
+    owner: system
+    check: no_duplicates
+
+  - id: data.no_holiday_copies
+    statement: "None of the last 20 sessions is a copy of the session before it."
+    why: "NSE serves the previous day's file under a holiday's name; 155,999 phantom rows on 76 holidays were found on 2026-09-27."
+    source_of_truth: "the panel: share of rows whose open, high, low, close equal the prior session's"
+    threshold: "no session with >= 90% of rows repeating the prior session"
+    action: block
+    cadence: daily
+    owner: system
+    check: no_holiday_copies
+
+  - id: data.ca_before_prices
+    statement: "Corporate actions were refreshed before prices in the latest daily run."
+    why: "A split or bonus that lands after prices corrupts adjusted history (159 stocks once)."
+    source_of_truth: "the order of steps in logs/daily_data_layer_status.json"
+    threshold: "corp_actions passed and appears before prices"
+    action: block
+    cadence: daily
+    owner: system
+    check: ca_before_prices
+
+  - id: data.manifests
+    statement: "Every derived table the strategy reads has a manifest that states its units and its source."
+    why: "Units were guessed from column names twice: P&L in rupee lakh vs rupees; a 'delivery %' column that holds fractions."
+    source_of_truth: "the .manifest.json next to each table"
+    threshold: "all listed tables have a manifest with units or columns described"
+    action: warn
+    cadence: daily
+    owner: system
+    check: manifests
+
+  # ---------------------------------------------------------------- point in time: is the test honest?
+  - id: pit.filings_after_period
+    statement: "No quarterly result is dated as filed before its quarter ended, and no order filing is dated after we fetched it."
+    why: "A filing date earlier than the period it reports means the backtest can see results before they were public."
+    source_of_truth: "pnl_quarterly (quarter_end, filing_dt); order_daily (ts, fetched)"
+    threshold: "0 violations"
+    action: block
+    cadence: daily
+    owner: system
+    check: filings_after_period
+
+  - id: pit.model_scores_current
+    statement: "The model scores used by this week's screen are at most 7 days old."
+    why: "The screen ranks unscored stocks last; stale scores quietly turn the model ranking into an arbitrary one."
+    source_of_truth: "bakeoff_preds.parquet latest trade_date vs the panel's last session"
+    threshold: "<= 7 calendar days"
+    action: warn
+    cadence: weekly
+    owner: system
+    check: model_scores_current
+
+  # ---------------------------------------------------------------- provenance / hallucination guards
+  - id: prov.external_rows_sourced
+    statement: "Every row in the datasets built from government sources carries the URL it came from and the date it was published."
+    why: "Numbers collected by agents must be traceable to an official document; an unsourced number is treated as invented."
+    source_of_truth: "budget_capex, iip_monthly, core_sector_monthly, pib_releases"
+    threshold: "0 rows without a source URL or a publication date"
+    action: block
+    cadence: daily
+    owner: system
+    check: external_rows_sourced
+
+  - id: prov.order_amount_grounded
+    statement: "Every order amount we report can be found, as written, in the filing text it was extracted from."
+    why: "An extractor that returns a number the filing never states is a hallucination, even if no language model was involved."
+    source_of_truth: "the stored snippet / headline of each order filing"
+    threshold: ">= 98% of amounts grounded (number x its written unit reproduces the stored crore value within 2%)"
+    action: warn
+    cadence: daily
+    owner: system
+    check: order_amount_grounded
+
+  # ---------------------------------------------------------------- model and strategy: does it work?
+  - id: model.ranking_lift
+    statement: "On the most recent fully labelled year, the model's weekly top-10 liquid picks touch +50% at least 1.5 times as often as the average liquid stock."
+    why: "The model's job is ranking inside a week; below 1.5x it is not earning its complexity over the rules."
+    source_of_truth: "bakeoff_preds.parquet (walk-forward, out-of-sample) and the realised 95-session labels"
+    threshold: "lift >= 1.5"
+    action: warn
+    cadence: weekly
+    owner: system
+    check: ranking_lift
+
+  - id: strategy.preregistered
+    statement: "Every experiment with a result in the log was registered earlier, with its pass rule, before the result was written."
+    why: "Rules written after seeing results are grading our own homework; that is how backtests lie."
+    source_of_truth: "logs/experiments.jsonl (REGISTERED line vs RESULT line, timestamps)"
+    threshold: "0 results without an earlier registration (experiments from 2026-09-27 on)"
+    action: block
+    cadence: per_experiment
+    owner: system
+    check: preregistered
+
+  # ---------------------------------------------------------------- output: is it safe to act on?
+  - id: output.screens_immutable
+    statement: "A weekly screen, once saved, is never rewritten."
+    why: "An off-schedule run once overwrote a committed basket; the paper record is only honest if picks cannot change after the fact."
+    source_of_truth: "content hash of each screen file, recorded the first time it is seen"
+    threshold: "0 changed screens"
+    action: block
+    cadence: daily
+    owner: system
+    check: screens_immutable
+
+  - id: output.one_screen_per_week
+    statement: "Each track has at most one screen per calendar week."
+    why: "Two batches in one week double the capital in that week's names and break the 1/26 ladder."
+    source_of_truth: "logs/leader_sleeve/screen_*.json, logs/model_screen/screen_*.json"
+    threshold: "0 weeks with more than one screen"
+    action: block
+    cadence: daily
+    owner: system
+    check: one_screen_per_week
+
+  - id: output.paper_scored
+    statement: "Every open paper batch was scored through the latest session."
+    why: "An unscored batch hides losses and makes the forward record look better than it is."
+    source_of_truth: "outcomes.jsonl scored_through vs the panel's last session"
+    threshold: "all open batches scored through the last session (entry-pending batches excepted)"
+    action: warn
+    cadence: daily
+    owner: system
+    check: paper_scored
+
+  - id: ops.daily_run_happened
+    statement: "The daily data run finished for the latest weekday."
+    why: "The scheduler died silently three times; the only protection is an alarm when a run did not happen at all."
+    source_of_truth: "logs/daily_data_layer_status.json date"
+    threshold: "status date = the latest weekday that has NSE data"
+    action: block
+    cadence: daily
+    owner: system
+    check: daily_run_happened
+
+  - id: backup.drive_checksums
+    statement: "The latest Google Drive backup matches its manifest checksums, file by file."
+    why: "A backup that was never verified is a hope, not a backup."
+    source_of_truth: "full_manifest.json sha256 in My Drive/SGM backups/backup/<date>"
+    threshold: "all volumes match"
+    action: block
+    cadence: weekly
+    owner: system
+    check: drive_checksums
+
+  # ---------------------------------------------------------------- human judgement: what code cannot decide
+  - id: human.order_book_golden
+    statement: "On a sample of 50 investor-deck filings graded by a person, the extracted figure is the filing's total order book at least 80% of the time."
+    why: "Only a person reading the filing can say whether a number is the total book, a segment, an inflow or a market-size claim; automated grading must be calibrated against this."
+    source_of_truth: "evals/golden/order_book_to_grade.csv, graded by Abhinav"
+    threshold: ">= 80% correct (within 5% of the stated total book)"
+    action: warn
+    cadence: monthly
+    owner: abhinav
+    check: order_book_golden
+
+  - id: human.weekly_pick_review
+    statement: "Before real money moves, a person has read each weekly batch and signed off that no pick is a takeover target, carries a fraud or governance red flag, or has an unexplained price spike."
+    why: "Takeovers and governance events break the momentum pattern the model learned (TBZ's open offer); code flags them, a person decides."
+    source_of_truth: "evals/human_review/<track>_<screen_id>.md, from the template, all boxes ticked"
+    threshold: "a signed review exists for the latest batch of each track"
+    action: block
+    cadence: weekly
+    owner: abhinav
+    check: weekly_pick_review

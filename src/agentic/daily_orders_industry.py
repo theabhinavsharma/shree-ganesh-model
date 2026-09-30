@@ -150,7 +150,7 @@ def main() -> None:
                              headline=str(r.attchmntText)[:500], url=r.attchmntFile, text_status=status, text_chars=len(txt),
                              amount_cr=amt["order_amount_cr"], amount_method=amt["amount_method"],
                              amount_confidence=amt["amount_confidence"], amount_snippet=amt["amount_snippet"],
-                             fetched=datetime.now().isoformat(timespec="seconds")))
+                             fetched=pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).isoformat(timespec="seconds")))   # IST, like ts
             time.sleep(0.5)
     N = pd.DataFrame(rows)
     if len(N):
@@ -164,7 +164,7 @@ def main() -> None:
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="order_daily", path=str(OUT.relative_to(ROOT)), rows=len(ALL), key=["symbol", "seq_id"],
         producer="src/agentic/daily_orders_industry.py", source="NSE corporate announcements (order / L1 filings) + attachments",
-        columns=dict(ts="dissemination time (IST, naive)", amount_cr="order-attached amount, Rs crore (NaN = not stated / not parsed)",
+        columns=dict(ts="dissemination time (IST, naive)", fetched="time the attachment was fetched (IST, naive; before 2026-09-29 20:45 ET rows were stored in US Eastern and were converted)", amount_cr="order-attached amount, Rs crore (NaN = not stated / not parsed)",
                      rev_ttm_cr="point-in-time TTM revenue known at ts, Rs crore (build_ttm, pnl_quarterly manifest units)",
                      pct_of_rev="amount_cr / rev_ttm_cr as a fraction (0.15 = 15% of a year's revenue)",
                      text_status="OK | OCR | NO_TEXT | NO_ATTACHMENT | HTTP_<code> | ERR_<type>"),
