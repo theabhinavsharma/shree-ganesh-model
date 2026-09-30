@@ -98,9 +98,11 @@ LINK = re.compile(r"📄 (https?://\S+)")
 
 
 def _telegram_html(text: str) -> str:
-    """Plain message -> Telegram HTML: escape everything, then turn '📄 <url>' into a short tappable link."""
+    """Plain message -> Telegram HTML: escape everything, bold the first line (the title), turn '📄 <url>' into a
+    short tappable link."""
     import html
-    out = html.escape(text, quote=False)
+    first, _, rest = text.partition("\n")
+    out = f"<b>{html.escape(first, quote=False)}</b>" + ("\n" + html.escape(rest, quote=False) if rest else "")
     return LINK.sub(lambda m: f'<a href="{html.escape(m.group(1))}">📄 {"all filings on NSE" if m.group(1) == NSE_FILINGS else "read"}</a>', out)
 
 
@@ -123,7 +125,7 @@ def daily_text(run: dict | None = None) -> str:
     head = f"SGM · {pd.Timestamp(st.get('date')):%b %d}"
     if run:
         head += " · " + run_line(run)
-    lines = [head] + ([missed_line(run)] if run and missed_line(run) else [])
+    lines = [head] + ([missed_line(run)] if run and missed_line(run) else []) + [""]
 
     gate = _latest("gate_data_*.json", ROOT / "logs/evals")
     g = json.loads(gate.read_text())["results"] if gate else []
@@ -144,6 +146,7 @@ def daily_text(run: dict | None = None) -> str:
 
     oj = ROOT / "logs/daily_orders/latest.json"
     if oj.exists():
+        lines.append("")
         O = json.loads(oj.read_text())
         if not (O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))):
             lines.append(f"❌ orders digest stale (written {O['written'][:10]})")
@@ -173,19 +176,36 @@ def daily_text(run: dict | None = None) -> str:
         open_ = [f"{pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}%" for sid, x in sorted(last.items()) if x.get("status") != "CLOSED"]
         if open_:
             book.append(f"{SHORT[tag]} " + ", ".join(open_))
+    lines.append("")
     if book:
         lines.append("📈 " + " · ".join(book))
     lines += [l for l in sell_lines("sri_lakshmi") if l]
     if oj.exists() and (O.get("warming") or O.get("cooling")):
         cap = lambda xs: ", ".join(xs[:3]) + (f" +{len(xs) - 3}" if len(xs) > 3 else "")  # noqa: E731
-        lines.append("🌡 " + " · ".join(x for x in (("warming: " + cap(O["warming"])) if O.get("warming") else "",
-                                                    ("cooling: " + cap(O["cooling"])) if O.get("cooling") else "") if x))
+        lines.append("")
+        if O.get("warming"):
+            lines.append("🌡 Warming: " + cap(O["warming"]))
+        if O.get("cooling"):
+            lines.append("❄️ Cooling: " + cap(O["cooling"]))
     try:
         import research_queue
-        lines += [l for l in research_queue.status_lines() if l]
+        lines += [""] + [l for l in research_queue.status_lines() if l]
     except Exception as x:                      # the queue must never break the daily message
         lines.append(f"🧪 queue status unavailable ({type(x).__name__})")
-    return "\n".join(lines)
+    return tidy(lines)
+
+
+def tidy(lines: list[str]) -> str:
+    """Texting hygiene: single spaces, no trailing spaces, one blank line between sections, none at the ends."""
+    out = []
+    for l in lines:
+        l = re.sub(r"[ \t]+", " ", l).strip()
+        if l == "" and (not out or out[-1] == ""):
+            continue
+        out.append(l)
+    while out and out[-1] == "":
+        out.pop()
+    return "\n".join(out)
 
 
 def _sleeve() -> float | None:
@@ -230,7 +250,7 @@ def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> l
         else:
             nxt = min(nxt, sell_on) if nxt is not None else sell_on
     if out or soon:
-        return out + soon
+        return [""] + out + soon
     return [f"💤 Sell: none due" + (f" · next ~{nxt:%b %d %Y}" if nxt is not None else "")]
 
 
@@ -246,7 +266,7 @@ def weekly_text(track: str) -> str:
     sell = pd.bdate_range(entry, periods=126)[-1]
     name = "Sri Lakshmi v2" if track == "sri_lakshmi" and "v2" in sc.get("status", "") else LABEL[track]
     lines = [f"🛒 {name} · buy {entry:%a %b %d} at open · data {pd.Timestamp(sc['data_through']):%b %d}",
-             f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight")]
+             f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight"), ""]
     for i, n in enumerate(sc["names"], 1):
         c = n.get("close")
         q = _shares(per, c)
@@ -254,9 +274,8 @@ def weekly_text(track: str) -> str:
                      + (" · ⚑ takeover" if n.get("takeover") else ""))
     if sc.get("dropped_financials"):
         lines.append("Dropped (financials): " + ", ".join(sc["dropped_financials"]))
-    lines.append(f"Sell all at close ~{sell:%b %d %Y} · no stop-loss")
-    lines.append("Sign the Saturday review before real money")
-    return "\n".join(lines)
+    lines += ["", f"Sell all at close ~{sell:%b %d %Y} · no stop-loss", "Sign the Saturday review before real money"]
+    return tidy(lines)
 
 
 def send(text: str, kind: str) -> None:
@@ -277,8 +296,8 @@ def send(text: str, kind: str) -> None:
                 if html_mode:
                     args += ["--data-urlencode", "parse_mode=HTML"]
                 return subprocess.run(args, capture_output=True, text=True)
-            r = post(_telegram_html(text), True) if LINK.search(text) else post(text, False)
-            if '"ok":true' not in (r.stdout or "") and LINK.search(text):      # HTML refused: send it plain rather than lose it
+            r = post(_telegram_html(text), True)                             # always HTML: bold title, tappable links
+            if '"ok":true' not in (r.stdout or ""):                          # HTML refused: send it plain rather than lose it
                 (OUTBOX / f"{datetime.now():%Y%m%d_%H%M%S}_telegram_html_fallback.txt").write_text((r.stdout or r.stderr)[:500])
                 r = post(text, False)
             if '"ok":true' not in (r.stdout or ""):

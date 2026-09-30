@@ -123,7 +123,7 @@ class Run:
     def stop(self, where: str, block: list[dict]) -> int:
         lines = [f"❌ SGM {self.mode} run stopped at {where} ({datetime.now():%-I:%M %p} ET)"]
         lines += [f"• {notify.QC_LABEL.get(r['id'], r['id'])}: {r.get('detail') or r.get('statement', '')}"[:200] for r in block[:6]]
-        lines.append(f"Picks on hold until this passes. Record: logs/runs/{self.ts[:8]}_{self.mode}.json")
+        lines += ["", f"Picks on hold until this passes · record logs/runs/{self.ts[:8]}_{self.mode}.json"]
         self.send("\n".join(lines), "fail")
         return self.finish("blocked at " + where, 1)
 

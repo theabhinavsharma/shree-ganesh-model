@@ -15,18 +15,29 @@ Abhinav reads these on his phone. **Short, scannable, one line per topic.** (His
 5. **Numbers only from files.** Every number must be a file value, a stated formula (limit = close × 1.05, rupees = sleeve ÷ 26 ÷ stocks, shares = rupees ÷ close), or a template constant. `src/agentic/trust/check_message.py` holds anything else back.
 6. **Dates month-first** (`Sep 29`), times in **US Eastern** (IST only where the market needs it: `3:30 PM IST = 6:00 AM ET`).
 7. **Links as `📄 <url>`** → shown as a tappable "📄 read" (HTML mode, previews off).
-8. **Emoji legend:** ✅ ok · ❌ failed/blocked · ⚠️ warning · 🔥 big order (15%+ of a year's revenue) · ⭐ a stock we hold · 🛒 buy list · 🔴 sell now · 🟡 sell soon · 💤 nothing due · 🧪 research/queue · 📥 data · 📦 orders · 📈 paper returns · 🌡 industries.
+8. **Spacing (texting hygiene):** one blank line between sections, none inside a section, none at the start/end;
+   single spaces only; ` · ` is the only separator; one item per line in lists. `notify.tidy()` enforces it.
+9. **Bold title:** the first line is sent bold (Telegram HTML, always on; plain-text fallback if Telegram refuses).
+10. **Fixed section order (daily):** title → data/QC → orders → paper + sell → industries → queue.
+11. **Emoji legend:** ✅ ok · ❌ failed/blocked · ⚠️ warning · 🔥 big order (15%+ of a year's revenue) · ⭐ a stock we hold · 🛒 buy list · 🔴 sell now · 🟡 sell soon · 💤 nothing due · 🧪 research/queue · 📥 data · 📦 orders · 📈 paper returns · 🌡 warming · ❄️ cooling.
 
 ## The 6 messages (code → example)
 1. **Daily** (`notify.daily_text`, after every weekday run)
 ```
 SGM · Sep 30 · ran 6:45 PM ✅ · 0:16
+
 📥 Data ✅ 20/20 · QC ✅ 11/11 · checks OK
+
 📦 Orders: 3 new · 1 big
 🔥 HILINFRA ₹221cr (28% rev) 📄read
+• TRANSRAILL ₹574cr (8% rev) 📄read
+
 📈 SL Sep 28 +1.2% · SL-old +1.2% · Model +2.5% · Prod Sep 08 -6.4%
 💤 Sell: none due · next ~Mar 23 2027
-🌡 warming: Aerospace & Defense, … +1 · cooling: 2/3 Wheelers, … +2
+
+🌡 Warming: Aerospace & Defense, … +1
+❄️ Cooling: 2/3 Wheelers, … +2
+
 🧪 Queue 4/6 · now: Promoter pledges (needs code: ask Claude)
 ```
 2. **Friday buy list** (`notify.weekly_text`)

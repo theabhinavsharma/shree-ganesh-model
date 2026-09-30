@@ -81,7 +81,7 @@ def _result(rid: str) -> dict | None:
 def report(i: int, n: int, it: dict, res: dict | None, fetch_tail: str) -> str:
     """Short Telegram result (2026-09-30: condensed): verdict, the passing rule(s) vs today's rule, what's next."""
     import notify
-    lines = [f"🧪 {_short(it)} · A/B done ({i}/{n})"]
+    lines = [f"🧪 {_short(it)} · A/B done ({i}/{n})", ""]
     if res:
         arms = res.get("arms", {})
         ref = next((k for k in ("G1", "S1M") if k in arms), None)
@@ -103,6 +103,7 @@ def report(i: int, n: int, it: dict, res: dict | None, fetch_tail: str) -> str:
         lines.append("A/B: no result found (see logs/research_queue/)")
     nxt = json.loads(CFG.read_text())["items"][i:i + 1]
     if nxt:
+        lines.append("")
         lines.append(f"Next: {_short(nxt[0])}" + ("" if has_code(nxt[0]) else " (needs code: ask Claude)"))
     text = "\n".join(lines)
     notify.send(text, "research")
