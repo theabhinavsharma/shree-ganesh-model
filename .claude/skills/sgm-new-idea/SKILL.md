@@ -18,3 +18,4 @@ No rule changes without a registered test. This is what stops the backtest from 
 (appended by src/agentic/trust/incident.py; never edit or delete these lines)
 - 2026-09-30 [INC-2026-09-30-verdicts-on-broken-data] After any data fix, re-run the registered tests (src/agentic/trust/reproduce.py) and re-check every adopted rule before the next live batch; say which verdicts changed.
 - 2026-09-30 [INC-2026-09-30-keyword-substrings] Keyword matching on filings: match at word boundaries, remove the company's own name first, and eyeball the match counts before using them.
+- 2026-09-30 [INC-2026-09-30-reproduce-pinned-to-prefix] After any data or score rebuild, re-run the registered tests and log <exp>-RERUN-<tag> lines (same rules, no re-tuning), then run reproduce.py until it says REPRODUCED before the next Friday.

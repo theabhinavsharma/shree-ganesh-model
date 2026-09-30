@@ -120,7 +120,8 @@ evals:
     why: "The screen ranks unscored stocks last; stale scores quietly turn the model ranking into an arbitrary one."
     source_of_truth: "bakeoff_preds.parquet latest trade_date vs the panel's last session"
     threshold: "<= 7 calendar days"
-    action: warn
+    action: block
+    history: "2026-09-30 warn -> block: the scores were built once by hand (ended 2026-09-21) and nothing rebuilt them; Friday's list would have ranked every stock with no score (INC-2026-09-30-model-scores-stale). Now rebuilt weekly (run_sgm MODEL SCORES) and the screen refuses stale scores."
     cadence: weekly
     owner: system
     check: model_scores_current

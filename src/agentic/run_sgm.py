@@ -17,11 +17,12 @@ weekly  launchd (com.sgm.weekly): Friday 7:30 PM ET, Saturday 9 AM ET retry, or 
         (--if-missed: skipped when this ISO week already sent)
   FETCH + GATE data   fetch only if today's daily run has not fetched; the data gate always runs
   POLICY DATA      fetch_iip_core.py --refresh: new IIP / core-sector releases (failure reported, does not block)
+  MODEL SCORES     build_mcap_pit -> anatomy_1p5x -> model_bakeoff_1p5x: model scores rebuilt from this week's prices (~15 min;
+                   failure is reported; the screen itself refuses scores more than 7 days old)
   SRI LAKSHMI      build_industry_scores -> build_policy_scores -> screen_sri_lakshmi -> score_sri_lakshmi (blocks on failure)
-  MODEL SCREEN     screen_model_ranked -> score_model_screen (failure is reported, does not block)
   REPRODUCE        trust/reproduce.py: registered results re-run from the committed code
   GATE analysis    output.*, pit.model_scores_current, model.*, strategy.*, trust.results_reproduce + this week's batch exists
-  MESSAGE          order sheets (Sri Lakshmi, model screen), each through the output gate
+  MESSAGE          the Sri Lakshmi G1 order sheet, through the output gate (only G1 and the Sep 8 production sleeve are tracked, 2026-09-30)
   15D PIPELINE     run_weekly_pipeline.sh --skip-fetch (the separate 15D/5% basket thread, last so it cannot hold Sri Lakshmi up)
 One run at a time (logs/runs/.lock; a second run waits up to 3 hours). Keeps the Mac awake while running (caffeinate).
 Record: logs/runs/<date>_<mode>.json (every stage: status, seconds, log). Children get SGM_ORCHESTRATED=1 so the
@@ -194,12 +195,15 @@ def weekly(R: Run) -> int:
         # TODO: a new Union Budget (each February) needs its budget_id added to fetch_budget_capex.py by hand.
         if not R.stage("POLICY DATA", ["nice", "-n", "10", PY, "src/agentic/fetch_iip_core.py", "--refresh"], 2 * 3600):
             R.send(f"⚠ SGM · IIP/core-sector refresh failed; Sri Lakshmi uses the previous releases. Log: {R.rec['stages'][-1]['log']}", "fail")
+        # Model scores (2026-09-30): rebuilt every week from the current price panel (walk-forward, same recipe). Before this
+        # the file was built by hand and ended 2026-09-21. If the rebuild fails, the screen itself refuses stale scores.
+        if not R.stage("MODEL SCORES", ["/bin/bash", "-c", "set -e; nice -n 10 /usr/bin/python3 src/agentic/build_mcap_pit.py; "
+                       "nice -n 10 /usr/bin/python3 src/agentic/anatomy_1p5x.py; "
+                       "nice -n 10 /usr/bin/python3 src/agentic/model_bakeoff_1p5x.py"], 4 * 3600):
+            R.send(f"⚠ SGM · model score rebuild failed; the screen runs only if last week's scores are within 7 days. Log: {R.rec['stages'][-1]['log']}", "fail")
         if not R.stage("SRI LAKSHMI", ["/bin/bash", "-c", "set -e; for s in build_industry_scores build_policy_scores "
                        "screen_sri_lakshmi score_sri_lakshmi; do nice -n 10 /usr/bin/python3 src/agentic/$s.py; done"], 2 * 3600):
             return R.stop("the Sri Lakshmi screen", [dict(id="stage.sri_lakshmi", detail=f"see {R.rec['stages'][-1]['log']}")])
-        if not R.stage("MODEL SCREEN", ["/bin/bash", "-c", "set -e; nice -n 10 /usr/bin/python3 src/agentic/screen_model_ranked.py; "
-                       "/usr/bin/python3 src/agentic/score_model_screen.py"], 2 * 3600):
-            R.send(f"⚠ SGM · model screen failed (Sri Lakshmi not affected). Log: {R.rec['stages'][-1]['log']}", "fail")
         R.stage("REPRODUCE", ["nice", "-n", "10", PY, "src/agentic/trust/reproduce.py"], 2 * 3600)
     block = R.gate("analysis_weekly", "weekly")
     f = notify._latest("screen_*.json", notify.TRACKS["sri_lakshmi"])
@@ -211,8 +215,6 @@ def weekly(R: Run) -> int:
     if block:
         return R.stop("the weekly analysis check", block)
     ok = R.message("weekly", notify.weekly_text("sri_lakshmi"), "sri_lakshmi")
-    if notify._latest("screen_*.json", notify.TRACKS["model"]):
-        R.message("weekly", notify.weekly_text("model"), "model")
     if not R.smoke and not R.stage("15D PIPELINE", ["/bin/bash", "src/agentic/run_weekly_pipeline.sh", "--skip-fetch"], 6 * 3600):
         R.send(f"⚠ SGM · 15D weekly pipeline failed (Sri Lakshmi already sent). Log: {R.rec['stages'][-1]['log']}", "fail")
     return R.finish("sent" if ok else "message held", 0 if ok else 1)

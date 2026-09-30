@@ -1,8 +1,9 @@
-"""SRI LAKSHMI weekly screen — PAPER track (2026-09-29; v2 from 2026-09-30).
+"""SRI LAKSHMI weekly screen — PAPER track (2026-09-29). Rule: G1.
 
-v2 (2026-09-30, EXP-2026-09-30-sector-shrink PASS 5/5: 38.5 vs 36.9%/yr, 2023+ 41.3 vs 38.9): the G1 top 9 minus any
-Financial Services stock (screener.in broad sector), NOT refilled: the batch is split among the remaining names.
-The old G1 top 9 is still saved every week to logs/sri_lakshmi_g1/ (paper shadow) so the two can be compared live.
+History: v2 (G1 minus Financial Services, no refill) ran for one day, 2026-09-30. It passed 5/5 on the pre-fix price
+panel but only 3/5 after the split/dividend fix, so Abhinav chose G1 for all money and asked to track only G1 and the
+Sep 8 production sleeve. The v2 shadow folder logs/sri_lakshmi_g1/ is no longer written (its one batch, 2026-09-28,
+had no financials, so it equals the G1 batch).
 
 Plain English: the model-ranked screen (trend stock, hot or warming industry, top 9 by the model score) with one extra
 rule — skip a hot industry when the government's budget money and activity data for it sit in the bottom 30%.
@@ -36,7 +37,6 @@ from render_basket_report import ANN  # noqa: E402
 
 SCORES = ROOT / "data/derived/industry_scores_policy.parquet"
 CDIR = ROOT / "logs/sri_lakshmi"
-SHADOW = ROOT / "logs/sri_lakshmi_g1"
 EXTRA = 3
 
 
@@ -47,6 +47,10 @@ def main() -> None:
     if S["date"].max() != d:
         raise SystemExit(f"industry_scores_policy is dated {S['date'].max().date()}, prices {d.date()} — rebuild "
                          "build_industry_scores.py + build_policy_scores.py first; no batch written")
+    newest = P["trade_date"].max()
+    if (d - newest).days > 7:   # select_s1 matches scores within 7 days; beyond that every stock ranks with no score
+        raise SystemExit(f"model scores end {newest.date()}, prices {d.date()}: more than 7 days apart, so no stock has a "
+                         "score. Rebuild anatomy_1p5x.py + model_bakeoff_1p5x.py first; no batch written")
     Sd = S[S["date"] == d]
     g1 = Sd[(Sd["heat_pct"] >= 0.70) & ~(Sd["P_pct"] < 0.30)]
     vetoed = Sd[(Sd["heat_pct"] >= 0.70) & (Sd["P_pct"] < 0.30)]
@@ -71,17 +75,8 @@ def main() -> None:
                     P_pct=None if pd.isna(Sx.loc[ind, "P_pct"]) else round(float(Sx.loc[ind, "P_pct"]), 3),
                     takeover=bool(_takeover(sym, ann[ann["symbol"] == sym] if not ann.empty else None, ft, d)))
 
-    import html as _html
-    sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet")
-    sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry", "broad_sector"])
-    sc["industry"] = sc["industry"].map(_html.unescape)
-    sector = sc.groupby("industry")["broad_sector"].agg(lambda x: x.mode().iat[0])
-    fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
     g1_top = ranked[:top]
-    dropped = [s for s in g1_top if fin(s)]
-    v2 = [s for s in g1_top if not fin(s)]                      # no refill
-    names = [dict(row(i, s), g1_rank=g1_top.index(s) + 1) for i, s in enumerate(v2)]
-    reserves_v2 = [s for s in ranked[top:] if not fin(s)]
+    names = [row(i, s) for i, s in enumerate(g1_top)]
     entry = pd.bdate_range(d + pd.Timedelta(days=1), periods=1)[0]
     CDIR.mkdir(parents=True, exist_ok=True)
     wk = tuple(d.isocalendar()[:2])
@@ -95,31 +90,19 @@ def main() -> None:
             created_note=("saved after the entry session had started; selection uses data through data_through only"
                           if late else "saved before the entry session"),
             entry="next session open after data_through", hold_td=126, cost_rt_pct=0.5, exit="TIME (126 sessions, close); no stops",
-            sizing="PAPER", status="SLM v2: G1 (EXP-2026-09-29-industry-policy) minus Financial Services, no refill "
-                                   "(EXP-2026-09-30-sector-shrink PASS 5/5); paper until the weekly review is signed",
-            rule="model-ranked screen (trend, heat_pct >= 0.70, top 9 by ensemble) minus hot industries with P_pct < 0.30; "
-                 "then drop Financial Services stocks from the 9 without refilling",
-            names=names, reserves=[dict(rank=i + 1, symbol=s) for i, s in enumerate(reserves_v2)],
-            dropped_financials=dropped, g1_top9=g1_top,
+            sizing="PAPER", status="SLM G1 (EXP-2026-09-29-industry-policy); production rule from 2026-09-30 by Abhinav's "
+                                   "decision; paper until the weekly review is signed",
+            rule="model-ranked screen (trend, heat_pct >= 0.70, top 9 by ensemble) minus hot industries with P_pct < 0.30",
+            names=names, reserves=[dict(rank=i + 1, symbol=s) for i, s in enumerate(ranked[top:])],
             vetoed_industries=sorted(vetoed["industry"]), vs_model_screen=dict(dropped=sorted(set(s1m) - set(ranked[:top])),
                                                                             added=sorted(set(ranked[:top]) - set(s1m)))), indent=1))
-        print(f"saved paper batch logs/sri_lakshmi/screen_{d.strftime('%Y%m%d')}.json ({len(names)} names; dropped financials: {dropped or 'none'})")
-        SHADOW.mkdir(parents=True, exist_ok=True)       # old rule (G1 top 9) as a paper shadow, same cadence
-        if not any(tuple(pd.Timestamp(json.loads(p.read_text())["data_through"]).isocalendar()[:2]) == wk for p in SHADOW.glob("screen_*.json")):
-            (SHADOW / f"screen_{d.strftime('%Y%m%d')}.json").write_text(json.dumps(dict(
-                screen_id=d.strftime("%Y%m%d"), data_through=str(d.date()), created_at=datetime.now().isoformat(timespec="seconds"),
-                entry="next session open after data_through", hold_td=126, cost_rt_pct=0.5, exit="TIME (126 sessions, close); no stops",
-                sizing="PAPER SHADOW", status="old Sri Lakshmi rule (G1 top 9, financials kept) for comparison with v2",
-                names=[row(i, s) for i, s in enumerate(g1_top)]), indent=1))
+        print(f"saved paper batch logs/sri_lakshmi/screen_{d.strftime('%Y%m%d')}.json ({len(names)} names)")
     out = [f"# Sri Lakshmi batch — data through {d.date()}", "",
-           "PAPER. SLM v2: model-ranked screen minus hot industries whose budget money + activity data rank in the bottom 30% "
-           "(G1), then Financial Services stocks dropped without refill (EXP-2026-09-30-sector-shrink). Buy at the next open, "
-           "sell at the close of session 126, no stop.", "",
-           f"Financials dropped this week: {', '.join(dropped) or 'none'}",
+           "PAPER. SLM G1: model-ranked screen minus hot industries whose budget money + activity data rank in the bottom 30%. "
+           "Buy at the next open, sell at the close of session 126, no stop.", "",
            f"Hot industries vetoed today: {', '.join(sorted(vetoed['industry'])) or 'none'}",
            f"Different from the plain model screen: dropped {', '.join(sorted(set(s1m) - set(ranked[:top]))) or 'none'}; "
-           f"added {', '.join(sorted(set(ranked[:top]) - set(s1m))) or 'none'}. Full QUANT/QUAL notes per name: "
-           f"reports/model_screen_{d.strftime('%Y%m%d')}.md", "",
+           f"added {', '.join(sorted(set(ranked[:top]) - set(s1m))) or 'none'}.", "",
            "| Rank | Stock | Industry | Heat pct | Budget/activity pct | Last close | Buy limit (+5%) | Flag |", "|---|---|---|---|---|---|---|---|"]
     for n in names:
         pp = "no data" if n["P_pct"] is None else f"{n['P_pct']:.2f}"

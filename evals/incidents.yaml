@@ -140,3 +140,46 @@ incidents:
     lesson: Add every new feed to configs/feed_guards.json in the same change (file, date column, allowed weekdays); data.every_feed_guarded
       blocks the daily run for a feed without one. Rules that matter go into an eval, not only into a skill.
     commit: ''
+  - id: INC-2026-09-30-model-scores-stale
+    date: '2026-09-30'
+    title: Model scores built once by hand (ended Sep 21) and never rebuilt; market caps also stale and pre-fix
+    found_by: user asked about hazards of not retraining; bakeoff_preds.parquet newest date 2026-09-21, mcap_pit 2026-09-25
+    root_cause: no scheduled stage rebuilt mcap_pit / anatomy rows / bake-off scores; pit.model_scores_current was weekly and
+      warn-only; the screen matched scores within 7 days and gave unscored stocks -inf
+    blast_radius: Friday 2026-10-02 G1 list would have been ranked with no model score (arbitrary order); every backtest used
+      scores trained on the pre-fix panel
+    fix: weekly stage MODEL SCORES (build_mcap_pit -> anatomy_1p5x -> model_bakeoff_1p5x, ~10 min); screen refuses scores >
+      7 days old; eval now blocks; scores retrained on corrected prices
+    guard_eval: pit.model_scores_current
+    skills:
+    - sgm-triage
+    - sgm-new-data-source
+    lesson: Every input a live screen reads (model scores, market caps, industry scores) needs a scheduled rebuild and a check
+      that stops the run when it is stale; a warning on a live input is not a guard.
+    commit: ''
+  - id: INC-2026-09-30-reproduce-pinned-to-prefix
+    date: '2026-09-30'
+    title: Reproduce check compared only with the first RESULT, so after a data fix it would block every Friday
+    found_by: 'reproductions.jsonl: all 3 tests NOT REPRODUCED at 16:04 although RERUN-cafix lines existed; trust.results_reproduce
+      is block/weekly'
+    root_cause: reproduce.logged() read only <exp>-RESULT, never <exp>-RERUN-<tag>
+    blast_radius: Friday 2026-10-02 weekly run would have stopped at the analysis gate (no buy list)
+    fix: reproduce compares with the newest RESULT or RERUN; RERUN-rescored logged for 4 tests; all REPRODUCED within 0.05 pts
+    guard_eval: trust.results_reproduce
+    skills:
+    - sgm-new-idea
+    lesson: After any data or score rebuild, re-run the registered tests and log <exp>-RERUN-<tag> lines (same rules, no re-tuning),
+      then run reproduce.py until it says REPRODUCED before the next Friday.
+    commit: ''
+  - id: INC-2026-09-30-telegram-letters
+    date: '2026-09-30'
+    title: A Telegram note went out one letter per line
+    found_by: outbox file had 451 lines for a 10-line message
+    root_cause: notify.tidy() takes a list of lines and was given one string
+    blast_radius: one unreadable message on 2026-09-30 (resent correctly)
+    fix: tidy() now splits a string itself
+    guard_eval: ''
+    skills:
+    - sgm-telegram
+    lesson: Build messages as a list of lines and check the outbox line count before sending anything by hand.
+    commit: ''

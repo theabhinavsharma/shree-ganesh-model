@@ -22,3 +22,4 @@ description: Add a new data feed to the SGM data layer the safe way. Use when th
 - 2026-09-30 [INC-2026-09-30-keyword-substrings] Keyword matching on filings: match at word boundaries, remove the company's own name first, and eyeball the match counts before using them.
 - 2026-09-30 [INC-2026-09-30-api-page-cap] A suspiciously round count per request (exactly 70, 100, 500) is a page cap, not the data: find the full export before backfilling.
 - 2026-09-30 [INC-2026-09-30-feeds-without-guards] Add every new feed to configs/feed_guards.json in the same change (file, date column, allowed weekdays); data.every_feed_guarded blocks the daily run for a feed without one. Rules that matter go into an eval, not only into a skill.
+- 2026-09-30 [INC-2026-09-30-model-scores-stale] Every input a live screen reads (model scores, market caps, industry scores) needs a scheduled rebuild and a check that stops the run when it is stale; a warning on a live input is not a guard.

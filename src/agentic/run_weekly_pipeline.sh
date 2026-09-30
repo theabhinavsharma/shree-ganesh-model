@@ -201,9 +201,10 @@ step "4.35. BASKET + DAILY-ACTION REPORTS"
 # hold 126td, time exit. One immutable screen per ISO week (logs/leader_sleeve/screen_<asof>.json);
 # scored daily by sgm_daily.sh. Paper only until >= 13 weekly cohorts. Never blocks the basket.
 
-step "4.36. LEADER SLEEVE SCREEN (paper)"
-{ nice -n 10 /usr/bin/python3 src/agentic/screen_theme_leaders.py \
-  && /usr/bin/python3 src/agentic/score_leader_sleeve.py \
+# 2026-09-30: all new money goes to Sri Lakshmi G1 (Abhinav), so no NEW leader-sleeve batches; the existing
+# Sep 8 / Sep 23 batches are still scored here and daily until they exit.
+step "4.36. LEADER SLEEVE (existing batches only)"
+{ /usr/bin/python3 src/agentic/score_leader_sleeve.py \
   && /usr/bin/python3 src/agentic/render_leader_report.py; } > "$LOG_DIR/${TS}_leader.log" 2>&1 \
   && log "  ✅ leader screen + reports/leader_sleeve_*.md" \
   || log "  ⚠ leader sleeve failed — non-fatal, see $LOG_DIR/${TS}_leader.log"
@@ -211,14 +212,13 @@ step "4.36. LEADER SLEEVE SCREEN (paper)"
 # 4.37 / 4.38 run here only when this script is started by hand; under run_sgm.py (SGM_ORCHESTRATED=1) the
 # orchestrator runs them as gated stages before this 15D pipeline, so a 15D failure cannot stop Sri Lakshmi.
 if [ "${SGM_ORCHESTRATED:-0}" != 1 ]; then
-step "4.37. MODEL-RANKED SCREEN (paper, not validated)"
-# EXP-2026-09-28-screen-rank-exit S1M: trend screen x hot/warming industry, top 9 by the bake-off ensemble.
-# One immutable cohort per ISO week in logs/model_screen/; scored daily by sgm_daily.sh. Never blocks the basket.
-{ nice -n 10 /usr/bin/python3 src/agentic/screen_model_ranked.py \
-  && /usr/bin/python3 src/agentic/score_model_screen.py; } > "$LOG_DIR/${TS}_model_screen.log" 2>&1 \
-  && log "  ✅ model-ranked screen + reports/model_screen_*.md" \
-  || log "  ⚠ model-ranked screen failed — non-fatal, see $LOG_DIR/${TS}_model_screen.log"
-/usr/bin/python3 src/agentic/notify.py weekly --track model > /dev/null 2>&1 || true   # order sheet to outbox/phone
+step "4.37. MODEL SCORES (rebuilt from this week's prices; the model-screen track stopped 2026-09-30)"
+# Only Sri Lakshmi G1 and the Sep 8 production sleeve are tracked (Abhinav, 2026-09-30). G1 ranks by these scores.
+{ nice -n 10 /usr/bin/python3 src/agentic/build_mcap_pit.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/anatomy_1p5x.py \
+  && nice -n 10 /usr/bin/python3 src/agentic/model_bakeoff_1p5x.py; } > "$LOG_DIR/${TS}_model_scores.log" 2>&1 \
+  && log "  ✅ model scores rebuilt" \
+  || log "  ⚠ model score rebuild failed — the screen refuses scores older than 7 days; see $LOG_DIR/${TS}_model_scores.log"
 
 step "4.38. SRI LAKSHMI SCREEN (G1 of EXP-2026-09-29-industry-policy; paper until the weekly review is signed)"
 # Rebuild the industry scores for today's session first; the screen refuses to run on older scores.

@@ -78,3 +78,7 @@ Next: Promoter pledges
 3. Run the output gate on it (`check_message.check("daily", text, log=False)` must be ok). If a new number is flagged, add its source or formula to `check_message.py`, never loosen the matching.
 4. Only send a real preview if Abhinav asks (`notify.send(text, "preview")`).
 5. Commit with the before/after in the message.
+
+## Lessons from incidents
+(appended by src/agentic/trust/incident.py; never edit or delete these lines)
+- 2026-09-30 [INC-2026-09-30-telegram-letters] Build messages as a list of lines and check the outbox line count before sending anything by hand.

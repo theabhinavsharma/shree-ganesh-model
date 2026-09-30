@@ -38,7 +38,9 @@ def logged(exp: str) -> dict:
     for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines():
         if l.strip().startswith("{"):
             e = json.loads(l)
-            if e.get("id") == exp + "-RESULT":
+            # the newest numbers logged for these registered rules: the RESULT, or a later RERUN of the same rules on
+            # corrected data / rebuilt scores (2026-09-30: comparing only with the pre-fix RESULT would block every week)
+            if e.get("id") == exp + "-RESULT" or str(e.get("id", "")).startswith(exp + "-RERUN-"):
                 last = e
     if last is None:
         raise SystemExit(f"no RESULT logged for {exp}")

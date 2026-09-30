@@ -1,0 +1,24 @@
+{
+ "dataset": "1.5x anatomy row provenance (not features)",
+ "key": [
+  "symbol",
+  "trade_date"
+ ],
+ "rows": 817694,
+ "columns": {
+  "mcap_source": "mcap_pit source: pnl_implied (PIT shares) | screener_backcast / screener_backfill (present shares, not PIT)",
+  "ind_src": "screener | analyst_inference (industry_analyst_labels.csv analog)",
+  "close_raw": "then-traded close = adjusted close / price_adjustment_factor_to_present (Rs)",
+  "share_adjustment_factor_to_present": "panel share factor at t (EPS share-basis conversion)",
+  "eps_ttm_p": "TTM EPS on the PRESENT share basis (Rs/share); pe uses eps_ttm_p x share factor at t",
+  "basis_eps_ttm_p": "pnl_quarterly basis behind eps_ttm_p at t: con | sa | null (latest reported quarter not computable on one basis, or no state within 200 days)",
+  "basis_eps_yoy": "pnl_quarterly basis behind eps_yoy at t: con | sa | null (latest reported quarter not computable on one basis, or no state within 200 days)",
+  "basis_sales_yoy": "pnl_quarterly basis behind sales_yoy at t: con | sa | null (latest reported quarter not computable on one basis, or no state within 200 days)",
+  "basis_loss_to_profit": "pnl_quarterly basis behind loss_to_profit at t: con | sa | null (latest reported quarter not computable on one basis, or no state within 200 days)",
+  "label_obs95": "FORWARD-LOOKING audit count: sessions with a high in t+1..t+95 (never use as a feature)",
+  "label_obs63": "same over t+1..t+63"
+ },
+ "experiment": "EXP-2026-09-27-1p5x-anatomy",
+ "producer": "src/agentic/anatomy_1p5x.py",
+ "updated": "2026-09-30T16:56:35"
+}

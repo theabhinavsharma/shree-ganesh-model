@@ -37,7 +37,10 @@
   "INC-2026-09-30-insider-feed-silent-zero",
   "INC-2026-09-30-keyword-substrings",
   "INC-2026-09-30-lessons-not-in-skills",
+  "INC-2026-09-30-model-scores-stale",
   "INC-2026-09-30-renamed-symbol-cliffs",
+  "INC-2026-09-30-reproduce-pinned-to-prefix",
+  "INC-2026-09-30-telegram-letters",
   "INC-2026-09-30-verdicts-on-broken-data",
   "INC-2026-09-30-xbrl-promoter-member"
  ],
@@ -47,7 +50,8 @@
    "78cc1ee83385",
    "7d03aec6b924",
    "a4fcb7e24af1",
-   "ab9b6efbe2d1"
+   "ab9b6efbe2d1",
+   "b31a1ac5e634"
   ],
   "sgm-new-data-source": [
    "3c24a166350d",
@@ -55,15 +59,20 @@
    "5aa9d5bd31ba",
    "7d03aec6b924",
    "ab9b6efbe2d1",
+   "b31a1ac5e634",
    "b5686081fc85",
    "ed436f7092bf"
   ],
   "sgm-new-idea": [
    "74a5a781ad81",
+   "8baf4d91b659",
    "b5686081fc85"
   ],
   "sgm-incident": [
    "a4fcb7e24af1"
+  ],
+  "sgm-telegram": [
+   "3bc54ea61f65"
   ]
  }
 }

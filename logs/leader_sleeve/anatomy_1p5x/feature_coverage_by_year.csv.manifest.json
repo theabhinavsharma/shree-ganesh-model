@@ -1,0 +1,16 @@
+{
+ "dataset": "feature coverage by year (labelled rows)",
+ "key": [
+  "feature",
+  "year"
+ ],
+ "columns": {
+  "covered_pct": "% of labelled rows where the feature is known (pe/pe_ind: TTM EPS known; last_order_to_rev_90d: order source covers the window)",
+  "nonzero_pct": "count features only: % of labelled rows with a non-zero count",
+  "model_feature": "feature used by the model (covered >= 50% in every year of both eras)"
+ },
+ "units": "percent 0-100",
+ "experiment": "EXP-2026-09-27-1p5x-anatomy",
+ "producer": "src/agentic/anatomy_1p5x.py",
+ "updated": "2026-09-30T16:56:35"
+}
