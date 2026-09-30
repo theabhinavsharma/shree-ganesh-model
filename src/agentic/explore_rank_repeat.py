@@ -42,3 +42,18 @@ tab(T, "streak", [-1, 0, 1, 3, 7, 12, 25], ["0", "1", "2-3", "4-7", "8-12", "13-
 print("\nbest cell (n >= 30):", end=" ")
 cells = T.groupby([pd.cut(T["rank"], [0, 3, 6, 9]), pd.cut(T["rep"], [-1, 0, 5, 25])], observed=True)["hit"].agg(["size", "mean"])
 print(cells[cells["size"] >= 30].sort_values("mean").tail(3).round(3).to_string())
+
+# 2026-09-30 follow-up ("between 1-9, is there a rank set with higher odds? fewer stocks, more certainty?")
+# Buy only the top k each week (equal weight), discovery era only. Per stock: odds of +50%, of any gain, of -20% or
+# worse at the 126-session close. Per weekly batch: how often the batch ends up, and how bad the bad batches are.
+print("\nTOP-k SUBSETS (discovery era only)")
+out = []
+for k in (1, 2, 3, 4, 5, 6, 9):
+    t = R[R["rank"] <= k]
+    b = t.groupby("week")["ret"].mean()
+    se = (t["hit"].mean() * (1 - t["hit"].mean()) / len(t)) ** 0.5
+    out.append(dict(k=k, stocks=len(t), hit50=round(100 * t["hit"].mean(), 1), pm2se=round(200 * se, 1),
+                    any_gain=round(100 * (t["ret"] > 0).mean(), 1), loss20=round(100 * (t["ret"] <= -0.2).mean(), 1),
+                    med_ret=round(100 * t["ret"].median(), 1), batches=len(b), batch_up=round(100 * (b > 0).mean(), 1),
+                    batch_mean=round(100 * b.mean(), 1), batch_p10=round(100 * b.quantile(0.1), 1), batch_worst=round(100 * b.min(), 1)))
+print(pd.DataFrame(out).to_string(index=False))
