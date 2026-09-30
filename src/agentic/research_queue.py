@@ -114,6 +114,7 @@ def run() -> int:
         LOCK.mkdir()
     except FileExistsError:
         print("queue already running"); return 0
+    caff = subprocess.Popen(["caffeinate", "-i", "-w", str(os.getpid())])   # keep the Mac awake while a step runs
     try:
         items, st = load()
         for i, it in enumerate(items, 1):
@@ -153,6 +154,7 @@ def run() -> int:
                 return 1
         return 0
     finally:
+        caff.terminate()
         LOCK.rmdir()
 
 
