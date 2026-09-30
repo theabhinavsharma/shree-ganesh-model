@@ -72,3 +72,36 @@ for t in traits:
     x = T.dropna(subset=[t]); hi = x[t] >= x[t].median()
     cell = x[x["grp"] != "other"].groupby([hi[x["grp"] != "other"].map({True: "high", False: "low"}), "grp"])["hit"].agg(["mean", "size"])
     print(f"{t:12s} " + " · ".join(f"{a}/{b.split()[0]} {m * 100:.0f}% (n {n})" for (a, b), (m, n) in cell.iterrows()))
+
+# 2026-09-30 follow-up ("country's budget, global gaps the country can fill, govt initiatives"): policy drivers per
+# industry at pick time, from data already in SGM (2019-2022 only):
+#   budget      E_raw from industry_scores_policy (budget capex growth, ministries mapped to the industry)
+#   pib_attn    H_raw (PIB releases tagged to the industry, last 90 days vs the 90 before)
+#   initiative  PIB releases tagged to the industry in the last 180 days whose text names a scheme / protection
+#               measure (PLI, production linked incentive, make in india, atmanirbhar, indigenis/indigeniz,
+#               anti-dumping, safeguard duty, quality control order, export promotion, china plus one)
+import re as _re
+S2 = S.rename(columns={"date": "week"})[["week", "industry", "E_raw", "H_raw"]]
+T = T.merge(S2, on=["week", "industry"], how="left")
+PIB = pd.read_parquet(ROOT / "data/derived/pib_releases.parquet", columns=["pub_date", "title", "body_text", "industries_tagged"])
+PIB["pub_date"] = pd.to_datetime(PIB["pub_date"], errors="coerce")
+KW = _re.compile(r"\bPLI\b|production[- ]linked incentive|make in india|atmanirbhar|aatmanirbhar|indigeni[sz]|anti[- ]dumping|safeguard dut|quality control order|export promotion|china ?\+ ?1|china plus one", _re.I)
+PIB["init"] = (PIB["title"].fillna("") + " " + PIB["body_text"].fillna("")).str.contains(KW)
+Ti = PIB[PIB["init"]].assign(t=lambda x: x["industries_tagged"].map(lambda v: list(v) if v is not None else [])).explode("t").dropna(subset=["t"])
+by = {k: np.sort(g["pub_date"].to_numpy()) for k, g in Ti.groupby("t")}
+T["initiative"] = [int(np.searchsorted(by[i], np.datetime64(w), side="right") - np.searchsorted(by[i], np.datetime64(w - pd.Timedelta(days=180)), side="right"))
+                   if i in by else 0 for w, i in zip(T["week"], T["industry"])]
+print(f"\n4) POLICY DRIVERS · initiative releases found {int(PIB['init'].sum())} of {len(PIB)} (tagged to an industry: {len(Ti)})")
+for t in ("E_raw", "H_raw", "initiative"):
+    x = T.dropna(subset=[t])
+    if t == "initiative":
+        a, b = x[x[t] > 0], x[x[t] == 0]
+        print(f"{t:10s} picks with >=1 initiative release in 180d: {len(a)} hit {a['hit'].mean() * 100:.1f}% · none: {len(b)} hit {b['hit'].mean() * 100:.1f}%")
+    else:
+        q = pd.qcut(x[t].rank(method="first"), 5, labels=False)
+        print(f"{t:10s} coverage {len(x)}/{len(T)} picks · hit by fifth {x.groupby(q)['hit'].mean().mul(100).round(1).tolist()}")
+print("\nprofile winning vs losing sectors:\n" + T[T["grp"] != "other"].groupby("grp")[["E_raw", "H_raw", "initiative"]].agg(["median", "count"]).round(2).to_string())
+for t in ("E_raw", "initiative"):
+    x = T[(T["grp"] != "other")].dropna(subset=[t]); hi = (x[t] > x[t].median()) if t == "E_raw" else (x[t] > 0)
+    cell = x.groupby([hi.map({True: "high", False: "low"}), "grp"])["hit"].agg(["mean", "size"])
+    print(f"gap within {t}: " + " · ".join(f"{a}/{b.split()[0]} {m * 100:.0f}% (n {n})" for (a, b), (m, n) in cell.iterrows()))
