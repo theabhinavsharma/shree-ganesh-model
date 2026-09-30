@@ -10,7 +10,12 @@ Adds to data/derived/industry_scores.parquet (Phase 1, build_industry_scores.py)
              the 3 months before (acceleration); industry = mean over HIGH-confidence links in activity_industry_map.csv;
              G = mean of the two percentile ranks
   P          mean of available E, G percentile ranks;  F5 = mean of available A, B, C, E, G percentile ranks (>= 2)
-Output: data/derived/industry_scores_policy.parquet (+ manifest). H_policy (PIB) is added after the PIB backfill.
+Output: data/derived/industry_scores_policy.parquet (+ manifest).
+H_policy (added 2026-09-30 after the PIB backfill, as registered in EXP-2026-09-29-industry-policy): PIB releases
+tagged to the industry (pib_releases.parquet industries_tagged) with pub_date in (d-90d, d] vs (d-180d, d-90d]:
+H_raw = log((n1+1)/(n2+1)); H = percentile rank that day. Industries never tagged, and dates before 2019-06-30 (the
+PIB history starts 2019-01-01, so the earlier window would be empty), have no H. New columns only: P_H = mean of
+available E, G, H; F5_H = mean of available A, B, C, E, G, H (>= 2 present). P / F5 (production G1) are unchanged.
 """
 from __future__ import annotations
 
@@ -91,6 +96,25 @@ def asof_by_industry(D: pd.DataFrame, T: pd.DataFrame, tcol: str, cols: list[str
     return m.set_index("index")[cols].reindex(D.index)
 
 
+def pib_attention(S: pd.DataFrame) -> pd.Series:
+    """log((n1+1)/(n2+1)): PIB releases tagged to the industry in (d-90d, d] vs (d-180d, d-90d]."""
+    P = pd.read_parquet(ROOT / "data/derived/pib_releases.parquet", columns=["pub_date", "industries_tagged"])
+    P["pub_date"] = pd.to_datetime(P["pub_date"], errors="coerce")
+    T = P.assign(t=P["industries_tagged"].map(lambda x: list(x) if x is not None else [])).explode("t").dropna(subset=["t", "pub_date"])
+    by = {k: np.sort(g["pub_date"].to_numpy()) for k, g in T.groupby("t")}
+    start = P["pub_date"].min() + pd.Timedelta(days=180)
+    out = np.full(len(S), np.nan)
+    d = S["date"].to_numpy()
+    for i, (dt, ind) in enumerate(zip(d, S["industry"])):
+        a = by.get(ind)
+        if a is None or dt < np.datetime64(start):
+            continue
+        c = lambda lo, hi: np.searchsorted(a, hi, side="right") - np.searchsorted(a, lo, side="right")  # noqa: E731
+        n1 = c(dt - np.timedelta64(90, "D"), dt); n2 = c(dt - np.timedelta64(180, "D"), dt - np.timedelta64(90, "D"))
+        out[i] = np.log((n1 + 1) / (n2 + 1))
+    return pd.Series(out, index=S.index)
+
+
 def main() -> None:
     S = pd.read_parquet(IN); S["date"] = pd.to_datetime(S["date"]).astype("datetime64[ns]")
     E = budget_table(); E["pub_date"] = E["pub_date"].astype("datetime64[ns]")
@@ -104,14 +128,21 @@ def main() -> None:
     k = S[["A", "B", "C", "E", "G"]].notna().sum(axis=1)
     S["F5"] = S[["A", "B", "C", "E", "G"]].mean(axis=1).where(k >= 2)
     S["F5_pct"] = pct(S, "F5")
+    S["H_raw"] = pib_attention(S)
+    S["H"] = pct(S, "H_raw")
+    S["P_H"] = S[["E", "G", "H"]].mean(axis=1)
+    S["P_H_pct"] = pct(S, "P_H")
+    k6 = S[["A", "B", "C", "E", "G", "H"]].notna().sum(axis=1)
+    S["F5_H"] = S[["A", "B", "C", "E", "G", "H"]].mean(axis=1).where(k6 >= 2)
+    S["F5_H_pct"] = pct(S, "F5_H")
     S.to_parquet(OUT, index=False)
-    cov = S.groupby(S["date"].dt.year)[["E", "G", "P", "F5"]].apply(lambda x: (x.notna().mean() * 100).round(0))
+    cov = S.groupby(S["date"].dt.year)[["E", "G", "H", "P", "F5"]].apply(lambda x: (x.notna().mean() * 100).round(0))
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="industry_scores_policy", path=str(OUT.relative_to(ROOT)), rows=len(S), key=["date", "industry"],
         producer="src/agentic/build_policy_scores.py", experiment="EXP-2026-09-29-industry-policy", definitions=__doc__,
         coverage_pct_by_year=cov.to_dict(orient="index"),
         units=dict(E_raw="fraction (BE/RE - 1)", G_level="percent (mean YoY% of 3 months)", G_accel="percentage points", pct="percentile rank that day (0-1]"),
-        inputs=["data/derived/industry_scores.parquet", "data/derived/budget_capex.parquet", "data/derived/budget_industry_map.csv",
+        inputs=["data/derived/pib_releases.parquet", "data/derived/industry_scores.parquet", "data/derived/budget_capex.parquet", "data/derived/budget_industry_map.csv",
                 "data/derived/iip_monthly.parquet", "data/derived/core_sector_monthly.parquet", "data/derived/activity_industry_map.csv"],
         updated=datetime.now().isoformat(timespec="seconds")), indent=1, default=str))
     print(f"wrote {OUT.relative_to(ROOT)}: {len(S):,} rows\ncoverage % of industry-days:\n{cov.to_string()}")

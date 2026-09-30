@@ -7,6 +7,9 @@ Same engine, selector, wiring check and pass rule as test_industry_fundamentals.
   G3  trend & heat_pct >= 0.70 & F5_pct >= 0.50
 PASS = beats S1M (both eras CAGR, maxDD <= 2pp worse) at phase 0 and in >= 4 of 5 phases. Q1 IC for E, G, P, F5.
 Output: logs/leader_sleeve/industry_policy/{results.csv, ic.csv, README.md} + manifests; RESULT line in experiments.jsonl.
+SGM_POLICY_H=1 (2026-09-30): the registered H_policy follow-up: the same arms with the PIB pillar H added to P and F5
+(P_H, F5_H from build_policy_scores.py): G1H, G2H, G3H. Registered verdict vs S1M; also reported vs G1 (production),
+because that is the question that matters now. Output industry_policy/H_policy/; RESULT id ...-H_policy-RESULT.
 """
 from __future__ import annotations
 
@@ -29,6 +32,7 @@ import test_industry_fundamentals as tif  # noqa: E402
 EXP_ID = "EXP-2026-09-29-industry-policy"
 SCORES = ROOT / "data/derived/industry_scores_policy.parquet"
 OUTDIR = ROOT / "logs/leader_sleeve/industry_policy"
+H_MODE = os.environ.get("SGM_POLICY_H") == "1"
 
 
 def main() -> None:
@@ -40,6 +44,11 @@ def main() -> None:
     ELIG = {"G1": S[(S["heat_pct"] >= 0.70) & ~(S["P_pct"] < 0.30)],
             "G2": S[S["F5_pct"] >= 0.70],
             "G3": S[(S["heat_pct"] >= 0.70) & (S["F5_pct"] >= 0.50)]}
+    PROD = ELIG["G1"]
+    if H_MODE:
+        ELIG = {"G1H": S[(S["heat_pct"] >= 0.70) & ~(S["P_H_pct"] < 0.30)],
+                "G2H": S[S["F5_H_pct"] >= 0.70],
+                "G3H": S[(S["heat_pct"] >= 0.70) & (S["F5_H_pct"] >= 0.50)]}
 
     def run_phase(o: int) -> dict:
         wk = grid(o)
@@ -51,6 +60,8 @@ def main() -> None:
             if same < len(wk):
                 raise SystemExit("wiring check FAILED — no result reported")
         sels = {"S1M": ref, "S0": sp.select(D["px"], wk, "core", 3, imap)}
+        if H_MODE:
+            sels["G1"] = tif.select_elig(X["F"], wk, imap, P, PROD)
         sels.update({k: tif.select_elig(X["F"], wk, imap, P, e) for k, e in ELIG.items()})
         res = {}
         for k, pk in sels.items():
@@ -62,16 +73,21 @@ def main() -> None:
 
     R0 = run_phase(0)
     ph = {k: [bool(sp.beats(R0[k], R0["S1M"]))] for k in ELIG}
+    pg = {k: [bool(sp.beats(R0[k], R0["G1"]))] for k in ELIG} if H_MODE else {}
     for o in (1, 2, 3, 4):
         Ro = run_phase(o)
         for k in ELIG:
             ph[k].append(bool(sp.beats(Ro[k], Ro["S1M"])))
+            if H_MODE:
+                pg[k].append(bool(sp.beats(Ro[k], Ro["G1"])))
             R0[k].setdefault("phase_cagr", []).append(round(Ro[k]["cagr"], 1))
     for k in ELIG:
         R0[k]["phases_beaten"] = f"{sum(ph[k])}/5"; R0[k]["PASS"] = bool(ph[k][0] and sum(ph[k]) >= 4)
+        if H_MODE:
+            R0[k]["vs_G1_phases"] = f"{sum(pg[k])}/5"; R0[k]["beats_G1"] = bool(pg[k][0] and sum(pg[k]) >= 4)
     print(f"\n=== {EXP_ID} · weekly cohorts {tif.START}.. ===")
     print(f"{'arm':5s} {'CAGR':>6s} {'disc':>6s} {'conf':>6s} {'maxDD':>7s} {'Sharpe':>6s} {'names':>5s} {'P+50':>5s}  phases  PASS")
-    for k in ["S0", "S1M", *ELIG]:
+    for k in ["S0", "S1M", *(["G1"] if H_MODE else []), *ELIG]:
         r = R0[k]
         print(f"{k:5s} {r['cagr']:6.1f} {r['cagr_disc']:6.1f} {r['cagr_conf']:6.1f} {r['maxdd']:7.1f} {r['sharpe']:6.2f} "
               f"{r['avg_names']:5.1f} {r['pct_touched50']:5.1f}  {r.get('phases_beaten', ''):6s}  {r.get('PASS', '')}")
@@ -84,7 +100,7 @@ def main() -> None:
     ics = []
     for d, g in Q.groupby("date"):
         row = dict(date=d)
-        for c in ("E", "G", "P", "F5"):
+        for c in (("E", "G", "H", "P_H", "F5_H") if H_MODE else ("E", "G", "P", "F5")):
             row[f"ic_{c}"] = tif.spearman(g[c], g["fwd"]); row[f"pic_{c}"] = tif.partial(g[c], g["fwd"], g["heat_pct"])
         ics.append(row)
     IC = pd.DataFrame(ics).set_index("date").sort_index(); samp = IC.iloc[::tif.FWD]
@@ -100,7 +116,7 @@ def main() -> None:
         print(f"  {c:8s} " + " | ".join(line))
 
     repro = os.environ.get("SGM_REPRO") == "1"          # reproduction run (src/agentic/trust/reproduce.py): no ledger write
-    out = OUTDIR / "repro" if repro else OUTDIR
+    out = OUTDIR / "repro" if repro else (OUTDIR / "H_policy" if H_MODE else OUTDIR)
     out.mkdir(parents=True, exist_ok=True)
     pd.DataFrame([dict(arm=k, **{c: v for c, v in r.items() if c != "years"}) for k, r in R0.items()]).to_csv(out / "results.csv", index=False)
     IC.to_csv(out / "ic.csv")
@@ -115,7 +131,8 @@ def main() -> None:
         print(f"\nREPRO RUN (not logged) · VERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm passes'}")
         return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-H_policy-RESULT" if H_MODE else "-RESULT"), verdict=passed or "no arm passes",
+                                 vs_G1=({k: [R0[k]["vs_G1_phases"], R0[k]["beats_G1"]] for k in ELIG} if H_MODE else None),
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
                                  ic={k: v for k, v in summ.items()}, cols="CAGR, disc, conf, maxDD, phases"), default=str) + "\n")
     print(f"\nVERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm beats S1M by the registered rule'} · {time.time() - t0:.0f}s")
