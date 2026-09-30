@@ -81,7 +81,7 @@ def main() -> None:
         def tup(d):
             first = [s for s in full.get(d, [])[:25] if rising(s, d)]
             return [s for s in (first + [s for s in full.get(d, []) if s not in first])[:9] if not fin(s)]
-        sels = {"V2": v2, "TUP": {d: tup(d) for d in wk},
+        sels = {"G1": ref9, "V2": v2, "TUP": {d: tup(d) for d in wk},
                 "TFADE": {d: [s for s in v2[d] if not fading_only(s, d)] for d in wk}}
         sels["TBOTH"] = {d: [s for s in sels["TUP"][d] if not fading_only(s, d)] for d in wk}
         if o == 0:
@@ -94,6 +94,20 @@ def main() -> None:
         return res
 
     R0 = run_phase(0)
+    if os.environ.get("SGM_V3_VS_G1") == "1":                       # EXP-2026-09-30-v3-vs-g1: V3 (= TFADE) against G1
+        res = {"G1": R0["G1"], "V3": R0["TFADE"]}
+        ph = [bool(sp.beats(res["V3"], res["G1"]))]
+        for o in (1, 2, 3, 4):
+            Ro = run_phase(o); ph.append(bool(sp.beats(Ro["TFADE"], Ro["G1"])))
+        passed = bool(ph[0] and sum(ph) >= 4)
+        for k in ("G1", "V3"):
+            r = res[k]; print(f"{k}: CAGR {r['cagr']:.1f} · 2019-22 {r['cagr_disc']:.1f} · 2023+ {r['cagr_conf']:.1f} · maxDD {r['maxdd']:.1f}")
+        print(f"V3 beats G1 in {sum(ph)}/5 phases · PASS {passed}")
+        with (ROOT / "logs/experiments.jsonl").open("a") as fh:
+            fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id="EXP-2026-09-30-v3-vs-g1-RESULT", verdict=["V3"] if passed else "no arm passes",
+                                     arms={k: [round(res[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + ([f"{sum(ph)}/5"] if k == "V3" else [None]) for k in res},
+                                     cols="CAGR, disc, conf, maxDD, phases")) + "\n")
+        return
     ph = {k: [bool(sp.beats(R0[k], R0["V2"]))] for k in ARMS}
     for o in (1, 2, 3, 4):
         Ro = run_phase(o)

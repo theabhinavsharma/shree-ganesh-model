@@ -322,6 +322,50 @@ def _jsonl(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text().splitlines() if l.strip()] if path.exists() else []
 
 
+def no_unexplained_cliffs(ctx: dict) -> dict:
+    px = pd.read_parquet(PANEL, columns=["symbol", "trade_date", "close", "avg_traded_value_20d", "price_adjustment_factor_to_present"])
+    px = px.sort_values(["symbol", "trade_date"])
+    g = px.groupby("symbol")
+    r = g["close"].pct_change(fill_method=None)
+    core = (g["avg_traded_value_20d"].shift(1) / 1e7 >= 5) & ((px["close"] / px["price_adjustment_factor_to_present"]).groupby(px["symbol"]).shift(1) > 50)
+    import sim_leader_portfolio_7x as _sp                    # stocks only: ETFs have no industry and are never picked
+    stocks = set(_sp.industry_maps()["analogs"].index)
+    c = px.loc[(r <= -0.45) & core & px["symbol"].isin(stocks), ["symbol", "trade_date"]]
+    ok = pd.read_csv(ROOT / "evals/verified_real_crashes.csv", parse_dates=["date"])
+    c = c[~c.set_index(["symbol", "trade_date"]).index.isin(list(zip(ok["symbol"], ok["date"])))]
+    return _res("PASS" if c.empty else "FAIL", len(c), "; ".join(f"{a} {b.date()}" for a, b in c.head(5).itertuples(index=False)) or "none in core-band stocks")
+
+
+def renames_mapped(ctx: dict) -> dict:
+    ca = pd.read_parquet(ROOT / "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet")
+    ca["ex_date"] = pd.to_datetime(ca["ex_date"], errors="coerce")
+    f = ROOT / "data/raw/nse_symbol_change/symbolchange.csv"
+    if not f.exists():
+        return _res("FAIL", None, "NSE symbolchange.csv missing")
+    sc = pd.read_csv(f, header=None, names=["company", "old", "new", "date"], dtype=str)
+    sc["date"] = pd.to_datetime(sc["date"].str.strip(), format="%d-%b-%Y", errors="coerce")
+    sc["old"], sc["new"] = sc["old"].str.strip(), sc["new"].str.strip()
+    orig = ca[ca["mapped_from_symbol"].isna() & ca["adjustment_factor"].notna()] if "mapped_from_symbol" in ca.columns else ca[ca["adjustment_factor"].notna()]
+    back = {}
+    for r in sc.dropna(subset=["date"]).itertuples():
+        back.setdefault(r.new, []).append((r.date, r.old))
+    have = set(zip(ca["symbol"], ca["ex_date"], ca["subject"]))
+    need, miss = 0, []
+    for r in orig.dropna(subset=["ex_date"]).itertuples():
+        sym, seen = r.symbol, set()
+        while sym in back and sym not in seen:          # full rename chain: the symbol traded on the ex-date
+            seen.add(sym)
+            prev = [o for d, o in sorted(back[sym], reverse=True) if d > r.ex_date]
+            if not prev:
+                break
+            sym = prev[-1]
+        if sym != r.symbol:
+            need += 1
+            if (sym, r.ex_date, r.subject) not in have:
+                miss.append(f"{sym} (now {r.symbol}) {r.ex_date.date()}")
+    return _res("PASS" if not miss else "FAIL", len(miss), "; ".join(miss[:5]) or f"{need} pre-rename splits/bonuses all mapped")
+
+
 def insider_fresh(ctx: dict) -> dict:
     p = pd.read_parquet(ROOT / "data/derived/pit_history.parquet", columns=["date"])
     d = pd.to_datetime(p["date"], format="%d-%b-%Y %H:%M", errors="coerce")

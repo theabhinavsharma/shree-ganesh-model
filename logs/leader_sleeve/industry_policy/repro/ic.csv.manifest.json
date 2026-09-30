@@ -2,11 +2,11 @@
  "dataset": "ic.csv",
  "experiment": "EXP-2026-09-29-industry-policy",
  "producer": "src/agentic/test_industry_policy.py",
- "definitions": "EXP-2026-09-29-industry-policy (Phase 2; registered in logs/experiments.jsonl before any outcome).\n\nSame engine, selector, wiring check and pass rule as test_industry_fundamentals.py, with the Phase 2 scores\n(data/derived/industry_scores_policy.parquet, build_policy_scores.py):\n  G1  trend & heat_pct >= 0.70 & NOT (P_pct < 0.30)   (veto hot industries with bottom-30% budget/activity; no data passes)\n  G2  trend & F5_pct >= 0.70                           (A, B, C, E, G; no price heat)\n  G3  trend & heat_pct >= 0.70 & F5_pct >= 0.50\nPASS = beats S1M (both eras CAGR, maxDD <= 2pp worse) at phase 0 and in >= 4 of 5 phases. Q1 IC for E, G, P, F5.\nOutput: logs/leader_sleeve/industry_policy/{results.csv, ic.csv, README.md} + manifests; RESULT line in experiments.jsonl.\n",
+ "definitions": "EXP-2026-09-29-industry-policy (Phase 2; registered in logs/experiments.jsonl before any outcome).\n\nSame engine, selector, wiring check and pass rule as test_industry_fundamentals.py, with the Phase 2 scores\n(data/derived/industry_scores_policy.parquet, build_policy_scores.py):\n  G1  trend & heat_pct >= 0.70 & NOT (P_pct < 0.30)   (veto hot industries with bottom-30% budget/activity; no data passes)\n  G2  trend & F5_pct >= 0.70                           (A, B, C, E, G; no price heat)\n  G3  trend & heat_pct >= 0.70 & F5_pct >= 0.50\nPASS = beats S1M (both eras CAGR, maxDD <= 2pp worse) at phase 0 and in >= 4 of 5 phases. Q1 IC for E, G, P, F5.\nOutput: logs/leader_sleeve/industry_policy/{results.csv, ic.csv, README.md} + manifests; RESULT line in experiments.jsonl.\nSGM_POLICY_H=1 (2026-09-30): the registered H_policy follow-up: the same arms with the PIB pillar H added to P and F5\n(P_H, F5_H from build_policy_scores.py): G1H, G2H, G3H. Registered verdict vs S1M; also reported vs G1 (production),\nbecause that is the question that matters now. Output industry_policy/H_policy/; RESULT id ...-H_policy-RESULT.\n",
  "units": {
   "cagr": "percent a year",
   "maxdd": "percent",
   "ic": "Spearman correlation"
  },
- "updated": "2026-09-29T21:02:57"
+ "updated": "2026-09-30T16:05:15"
 }

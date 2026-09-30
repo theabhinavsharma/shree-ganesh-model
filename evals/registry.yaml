@@ -74,6 +74,26 @@ evals:
     owner: system
     check: insider_fresh
 
+  - id: data.no_unexplained_cliffs
+    statement: "No stock we could buy shows a one-day fall of 45% or more in its whole history unless NSE recorded a corporate action that day or the crash is verified real."
+    why: "Unapplied splits, bonuses and special dividends looked like crashes in 62 stocks until 2026-09-30 (renamed companies, Majesco's Rs 974 dividend). Daily checks only looked at new rows, so old history rotted silently."
+    source_of_truth: "adjusted panel vs corporate-actions store + price_only_ca_factors; verified real crashes in evals/verified_real_crashes.csv"
+    threshold: "0 unexplained cliffs in core-band stocks (20d ADV >= Rs 5 cr and price > Rs 50 the day before)"
+    action: block
+    cadence: daily
+    owner: system
+    check: no_unexplained_cliffs
+
+  - id: data.renames_mapped
+    statement: "Every corporate action NSE lists under a company's new symbol is also applied to the symbol it traded under before the rename."
+    why: "NSE lists actions under the current symbol; the price history keeps the old one. 1,517 actions were re-keyed on 2026-09-30."
+    source_of_truth: "NSE symbolchange.csv + symbol_isin_history.parquet vs stock_corporate_actions.parquet (mapped_from_symbol)"
+    threshold: "0 split/bonus actions dated before a rename without a copy under the old symbol"
+    action: block
+    cadence: daily
+    owner: system
+    check: renames_mapped
+
   - id: data.manifests
     statement: "Every derived table the strategy reads has a manifest that states its units and its source."
     why: "Units were guessed from column names twice: P&L in rupee lakh vs rupees; a 'delivery %' column that holds fractions."

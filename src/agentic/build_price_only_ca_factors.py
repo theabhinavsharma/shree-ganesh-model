@@ -27,6 +27,7 @@ Raw-basis prices come from the panel as adjusted / price_adjustment_factor_to_pr
 from __future__ import annotations
 
 import argparse
+import re as _re
 import json
 import re
 import sys
@@ -47,6 +48,9 @@ PANEL = ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet"
 CA_PATH = ROOT / "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet"
 RIGHTS_RE = re.compile(r"rights\s*(\d+)\s*:\s*(\d+)\s*@\s*(?:(?:prem\w*|premium)\s*(?:of\s*)?(?:rs|re)\.?\s*([\d.]+)|(par))", re.I)
 SPDIV_RE = re.compile(r"special\s+dividend\s*[-:]?\s*(?:of\s*)?(?:rs|re)\.?\s*([\d.]+)", re.I)
+
+
+DIV_AMT_RE = _re.compile(r"(?:Rs\.?|Re\.?|₹)\s*([0-9]+(?:\.[0-9]+)?)", _re.I)
 
 
 def kind_of(subject: str) -> str | None:
@@ -74,6 +78,11 @@ def main() -> None:
     ca = pd.read_parquet(CA_PATH)
     ca["ex_date"] = pd.to_datetime(ca["ex_date"], errors="coerce").dt.normalize()
     ca["kind"] = ca["subject"].astype(str).map(kind_of)
+    # 2026-09-30: a LARGE ordinary dividend (>= 10% of the price) moves the price like a special one (MAJESCO paid
+    # Rs 974 as an "Interim Dividend" on 2020-12-23: -99% in the panel). Candidate here; applied below only if >= 10%.
+    div = ca["kind"].isna() & ca["subject"].astype(str).str.contains("dividend", case=False) & \
+        ~ca["subject"].astype(str).str.contains("split|sub-division|bonus", case=False)
+    ca.loc[div, "kind"] = "large_dividend"
     C = ca[ca["kind"].notna() & ca["ex_date"].notna()].drop_duplicates(["symbol", "ex_date", "kind"]).copy()
     print(f"price-only CA candidates: {len(C)} · {C['kind'].value_counts().to_dict()}", flush=True)
 
@@ -132,6 +141,16 @@ def main() -> None:
                     rec["applied"] = True
                 else:
                     rec["reason"] = "issue price >= cum price (no value transfer)" if pd.notna(fac) else "missing prices"
+        elif r.kind == "large_dividend":
+            amts = [float(a) for a in DIV_AMT_RE.findall(str(r.subject))]
+            d = sum(amts)
+            share = d / pcum if pcum and d > 0 else np.nan
+            rec.update(method=f"dividend Rs {d:g} = {share:.1%} of the prior close" if pd.notna(share) else "dividend amount not parseable",
+                       price_factor=(pcum - d) / pcum if pd.notna(share) and share < 1 else np.nan, dividend=d)
+            if pd.notna(share) and 0.10 <= share < 1:
+                rec["applied"] = True
+            else:
+                rec["reason"] = "ordinary dividend under 10% of the price (price-return series keeps it)" if pd.notna(share) else "amount not parseable"
         elif r.kind == "special_dividend":
             m = SPDIV_RE.search(str(r.subject))
             if not m:
