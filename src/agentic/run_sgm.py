@@ -14,6 +14,7 @@ daily   weekdays 6:45 PM ET, with catch-ups at 9:45 PM and 7:15 AM next day (--i
   MIRROR           Google Drive day_to_day copy (never blocks)
 weekly  Friday 7:30 PM ET; Saturday 9 AM ET retry (--if-missed: skipped when Friday's run sent)
   FETCH + GATE data   fetch only if today's daily run has not fetched; the data gate always runs
+  POLICY DATA      fetch_iip_core.py --refresh: new IIP / core-sector releases (failure reported, does not block)
   SRI LAKSHMI      build_industry_scores -> build_policy_scores -> screen_sri_lakshmi -> score_sri_lakshmi (blocks on failure)
   MODEL SCREEN     screen_model_ranked -> score_model_screen (failure is reported, does not block)
   REPRODUCE        trust/reproduce.py: registered results re-run from the committed code
@@ -186,6 +187,11 @@ def weekly(R: Run) -> int:
     if b := R.gate("data"):
         return R.stop("the data check", b)
     if not R.smoke:
+        # new monthly IIP / core-sector releases (cached; --refresh re-reads the release listings). A failure leaves the
+        # previous releases in place (point-in-time, just older), so it is reported and does not block.
+        # TODO: a new Union Budget (each February) needs its budget_id added to fetch_budget_capex.py by hand.
+        if not R.stage("POLICY DATA", ["nice", "-n", "10", PY, "src/agentic/fetch_iip_core.py", "--refresh"], 2 * 3600):
+            R.send(f"⚠ SGM · IIP/core-sector refresh failed; Sri Lakshmi uses the previous releases. Log: {R.rec['stages'][-1]['log']}", "fail")
         if not R.stage("SRI LAKSHMI", ["/bin/bash", "-c", "set -e; for s in build_industry_scores build_policy_scores "
                        "screen_sri_lakshmi score_sri_lakshmi; do nice -n 10 /usr/bin/python3 src/agentic/$s.py; done"], 2 * 3600):
             return R.stop("the Sri Lakshmi screen", [dict(id="stage.sri_lakshmi", detail=f"see {R.rec['stages'][-1]['log']}")])

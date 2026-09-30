@@ -1,0 +1,7 @@
+{
+ "dataset": "configs/policy_industries.csv",
+ "what": "The industries (nse4 map + analyst analogs) that fetch_iip_core.py maps to IIP / core-sector series, with the number of symbols in each on 2026-09-29.",
+ "columns": {"industry": "industry name as used in data/derived/industry_scores*.parquet", "n_symbols": "count of symbols mapped to it (integer)"},
+ "producer": "copied 2026-09-29 from the session scratchpad the Phase 2 build used, so the scheduled run does not depend on a temp file",
+ "used_by": "src/agentic/fetch_iip_core.py --industries (default)"
+}

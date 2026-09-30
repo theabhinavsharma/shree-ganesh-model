@@ -1795,8 +1795,7 @@ def build_map(industries_csv: Path, iip: pd.DataFrame, core: pd.DataFrame) -> pd
 # ----------------------------------------------------------------------------------------------
 # WRITE
 # ----------------------------------------------------------------------------------------------
-INDUSTRIES_CSV = Path("/private/tmp/claude-501/-Users-abhinavs--Documents-Zoom/"
-                      "f1d31fd0-e296-4e81-a7bd-b84642862799/scratchpad/industries.csv")
+INDUSTRIES_CSV = ROOT / "configs/policy_industries.csv"   # was a session scratchpad file; moved into the repo 2026-09-29
 
 
 def _lag_table(rel_dates: list[tuple]) -> list[dict]:
