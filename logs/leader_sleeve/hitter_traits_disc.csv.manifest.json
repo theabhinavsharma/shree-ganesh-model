@@ -1,0 +1,12 @@
+{
+ "dataset": "hitter_traits_disc.csv",
+ "what": "Exploration, discovery era 2019-01-04..2022-12-28 only (2023+ sealed): per feature, the +50% hit-rate spread (top fifth or event present minus bottom fifth or absent) inside the Sri Lakshmi G1 pool, within rank bands.",
+ "columns": {"feature": "rows.parquet column (units: logs/leader_sleeve/anatomy_1p5x/rows.parquet.manifest.json; delivery columns are 0-1 fractions in the data although that manifest says %)",
+             "cov": "percent of pool rows where the feature is known", "spread_within_rank": "percentage points, mean of the three bands",
+             "bought_1_9 / r10_25 / r26plus": "percentage points within each rank band", "years_agree": "years of 2019..2022 with the same sign (of 4)",
+             "two_se": "approximate 2-standard-error band in percentage points for the smallest band"},
+ "hit": "high >= 1.5x the next-open entry within 126 sessions",
+ "producer": "src/agentic/explore_hitter_traits.py",
+ "status": "exploration, not a test; 68+ features compared, so some spreads are chance",
+ "updated": "2026-09-30"
+}
