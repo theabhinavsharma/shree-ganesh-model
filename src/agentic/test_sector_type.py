@@ -27,7 +27,11 @@ import test_industry_fundamentals as tif  # noqa: E402
 
 EXP_ID = "EXP-2026-09-30-sector-type"
 OUTDIR = ROOT / "logs/leader_sleeve/sector_type"
-ARMS = ("NOFIN", "NOFIN3", "NOBIG", "AGE2", "H80")
+import os
+SHRINK = os.environ.get("SGM_SHRINK") == "1"     # EXP-2026-09-30-sector-shrink: drop from the top 9, no refill
+ARMS = ("NOFIN_S", "NOFIN3_S", "NOBIG_S", "AGE2_S") if SHRINK else ("NOFIN", "NOFIN3", "NOBIG", "AGE2", "H80")
+if SHRINK:
+    EXP_ID, OUTDIR = "EXP-2026-09-30-sector-shrink", OUTDIR / "shrink"
 
 
 def main() -> None:
@@ -67,6 +71,24 @@ def main() -> None:
             p = S[S["date"] <= prev[d]]
             p = p[p["date"] == p["date"].max()] if len(p) else p
             hot_prev[d] = set(p.loc[p["heat_pct"] >= 0.70, "industry"])
+        if SHRINK:
+            base = lambda d: ref.get(d, [])  # noqa: E731
+            sels = {"G1": ref,
+                    "NOFIN_S": {d: [s for s in base(d) if sector.get(imap.get(s)) not in bad1] for d in wk},
+                    "NOFIN3_S": {d: [s for s in base(d) if sector.get(imap.get(s)) not in bad3] for d in wk},
+                    "AGE2_S": {d: [s for s in base(d) if imap.get(s) in hot_prev[d]] for d in wk}}
+            sels["NOBIG_S"] = {}
+            for d in wk:
+                b = big_industries(d)
+                sels["NOBIG_S"][d] = [s for s in base(d) if imap.get(s) not in b]
+            if o == 0:
+                print("weeks where the arm changed the picks: " + " · ".join(f"{a} {sum(sels[a].get(d, []) != ref.get(d, []) for d in wk)}" for a in ARMS), flush=True)
+            res = {}
+            for k, pk in sels.items():
+                nav, info = sre.run_exit(D, X, pk, wk, "E0")
+                m = sp.metrics(nav)
+                res[k] = dict(**{c: m[c] for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd", "sharpe", "final")}, avg_names=info["avg_names"])
+            return res
         sels = {"G1": ref,
                 "NOFIN": {d: [s for s in full.get(d, []) if sector.get(imap.get(s)) not in bad1][:9] for d in wk},
                 "NOFIN3": {d: [s for s in full.get(d, []) if sector.get(imap.get(s)) not in bad3][:9] for d in wk},
