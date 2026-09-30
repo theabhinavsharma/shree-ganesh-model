@@ -1,0 +1,3 @@
+# cian-542678-watcher: BSE tripwires for Cian Healthcare (MPS/RPT/auditor/SHP/surveillance)
+3 10,16 * * 1-5 cd /Users/abhinavs./Code/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1
+33 20 * * 1-5 cd /Users/abhinavs./Code/Zoom && /usr/bin/python3 cian_542678_watcher.py >> logs/cian_watcher_cron.log 2>&1

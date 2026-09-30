@@ -4,7 +4,8 @@ a blocking check failure stops the run and you get a failure message instead of 
 Plain English: this is the conveyor belt. Fetch the data, check it, work it up, check that, write the message, check
 the message, send it. If any check that is marked "block" in evals/registry.yaml fails, the belt stops there.
 
-daily   weekdays 6:45 PM ET, with catch-ups at 9:45 PM and 7:15 AM next day (--if-missed: skipped when already sent)
+daily   launchd (com.sgm.daily): weekdays 6:45 PM ET, retries 9:45 PM and 7:15 AM; a time missed while the Mac slept runs
+        when it wakes. All use --if-missed: skipped when a run already sent since 11 AM ET (one per NSE data day)
   FETCH            daily_data_layer.sh: every feed, corporate actions before prices, panel rebuilt, status file
   GATE data        data.*, pit.filings_after_period, prov.*, ops.daily_run_happened
   ANALYSE          sgm_daily.sh: score every paper batch, basket / leader reports, freshness dashboard
@@ -12,7 +13,8 @@ daily   weekdays 6:45 PM ET, with catch-ups at 9:45 PM and 7:15 AM next day (--i
   REPORT           the full daily eval report (reports/eval_report_<date>.md), read by the message
   MESSAGE          notify.daily_text() -> GATE output (trust/check_message.py) -> send, or hold it and send a failure note
   MIRROR           Google Drive day_to_day copy (never blocks)
-weekly  Friday 7:30 PM ET; Saturday 9 AM ET retry (--if-missed: skipped when Friday's run sent)
+weekly  launchd (com.sgm.weekly): Friday 7:30 PM ET, Saturday 9 AM ET retry, or on wake if both were slept through
+        (--if-missed: skipped when this ISO week already sent)
   FETCH + GATE data   fetch only if today's daily run has not fetched; the data gate always runs
   POLICY DATA      fetch_iip_core.py --refresh: new IIP / core-sector releases (failure reported, does not block)
   SRI LAKSHMI      build_industry_scores -> build_policy_scores -> screen_sri_lakshmi -> score_sri_lakshmi (blocks on failure)
@@ -228,7 +230,12 @@ def main() -> int:
         if not a.if_missed or a.smoke:
             return False
         now = datetime.now()
-        since = now - timedelta(hours=14) if a.mode == "daily" else now - timedelta(days=now.weekday() + 1)
+        if a.mode == "daily":         # NSE's end-of-day files for an IST session are out by ~11 AM ET: one sent run per 11-to-11 window
+            since = now.replace(hour=11, minute=0, second=0, microsecond=0)
+            if now < since:
+                since -= timedelta(days=1)
+        else:
+            since = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)   # this ISO week
         if _sent_since(a.mode, since):
             print(f"[{now:%H:%M:%S}] {a.mode}: already sent since {since:%a %H:%M} — nothing to do", flush=True)
             return True
