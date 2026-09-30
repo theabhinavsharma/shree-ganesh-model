@@ -11,6 +11,8 @@ Where messages go:
      (the person creates the bot with @BotFather and writes this file; the token never goes into chat or git)
 Sleeve size for rupee amounts: ~/.config/sgm/sleeve.json {"sleeve_inr": 3000000} (optional).
 Usage: notify.py daily | weekly [--track sri_lakshmi|model|sleeve] | fail --step NAME --detail TEXT | test
+Dates are written month-first ("Sep 29") so the output gate (trust/check_message.py) can tell dates from numbers.
+Scheduled runs send through run_sgm.py, which checks every daily/weekly message before it goes out.
 """
 from __future__ import annotations
 
@@ -58,7 +60,7 @@ def daily_text() -> str:
                 x = json.loads(l); last[x["screen_id"]] = x
         for sid, x in sorted(last.items()):
             if x.get("status") != "CLOSED":
-                book.append(f"{LABEL[tag]} {sid[4:6]}/{sid[6:]} {x['ew_net']:+.1f}% (day {x['days_held']})")
+                book.append(f"{LABEL[tag]} {pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}% (day {x['days_held']})")
     if book:
         lines.append("Paper: " + " · ".join(book))
     od = ROOT / "data/derived/order_daily.parquet"
@@ -94,14 +96,14 @@ def weekly_text(track: str) -> str:
     per = sleeve / 26 / len(sc["names"]) if sleeve else None
     entry = pd.bdate_range(pd.Timestamp(sc["data_through"]) + pd.Timedelta(days=1), periods=1)[0]
     sell = pd.bdate_range(entry, periods=126)[-1]
-    lines = [f"{LABEL[track]} batch · data {sc['data_through']} · buy at the {entry:%a %d %b} open",
+    lines = [f"{LABEL[track]} batch · data {sc['data_through']} · buy at the {entry:%a %b %d} open",
              f"{len(sc['names'])} buys, {'₹{:,.0f} each (1/9 of a 1/26 batch)'.format(per) if per else 'equal weight (set ~/.config/sgm/sleeve.json for ₹ amounts)'}"]
     for n in sc["names"]:
         c = n.get("close")
         lim = f"limit ₹{c * 1.05:,.2f}" if c else "limit: last close +5%"
         flag = " ⚑ takeover" if n.get("takeover") else ""
         lines.append(f"{n['rank']}. {n['symbol']} — {lim}{flag}")
-    lines.append(f"Sell: close of session 126, about {sell:%d %b %Y} (+ NSE holidays). No stop-loss.")
+    lines.append(f"Sell: close of session 126, about {sell:%b %d %Y} (+ NSE holidays). No stop-loss.")
     lines.append("Real money only after you sign evals/human_review for this batch.")
     return "\n".join(lines)
 

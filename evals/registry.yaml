@@ -158,6 +158,16 @@ evals:
     owner: system
     check: one_screen_per_week
 
+  - id: output.message_grounded
+    statement: "The last phone message passed its number check before it was sent: every number traced to a file, date right, every pick listed."
+    why: "A message is what you act on from your phone. A wrong number there is worse than a wrong number in a log."
+    source_of_truth: "logs/outbox/checks.jsonl (src/agentic/trust/check_message.py, run by src/agentic/run_sgm.py before every send)"
+    threshold: "latest daily or weekly check ok"
+    action: warn
+    cadence: daily
+    owner: system
+    check: message_grounded
+
   - id: output.paper_scored
     statement: "Every open paper batch was scored through the latest session."
     why: "An unscored batch hides losses and makes the forward record look better than it is."

@@ -322,6 +322,15 @@ def _jsonl(path: Path) -> list[dict]:
     return [json.loads(l) for l in path.read_text().splitlines() if l.strip()] if path.exists() else []
 
 
+def message_grounded(ctx: dict) -> dict:
+    rows = [r for r in _jsonl(ROOT / "logs/outbox/checks.jsonl") if r["kind"] in ("daily", "weekly")]
+    if not rows:
+        return _res("PENDING", None, "no message checked yet (run_sgm.py writes one per send)")
+    r = rows[-1]
+    why = ", ".join(r["unsourced"][:5] + r["problems"][:2])
+    return _res("PASS" if r["ok"] else "FAIL", r["ts"][:16], f"{r['kind']} message " + ("ok" if r["ok"] else "held: " + why))
+
+
 def claims_sourced(ctx: dict) -> dict:
     rows = [r for r in _jsonl(ROOT / "logs/trust/claims.jsonl") if not str(r.get("session", "")).startswith("test")
             and datetime.fromisoformat(r["ts"]) >= datetime.now() - timedelta(days=7)]

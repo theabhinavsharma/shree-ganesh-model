@@ -72,6 +72,9 @@ json.dump({"ts": "$TS", "date": str(datetime.date.today()),
 PYEOF
 log "═══ DONE: ${#PASS[@]} ok, ${#FAIL[@]} failed (${FAIL[*]:-none}) ═══"
 
+# Standalone runs only: under run_sgm.py (SGM_ORCHESTRATED=1) the orchestrator runs the evals as gates, then the
+# message and the mirror as its own stages (2026-09-29).
+if [ "${SGM_ORCHESTRATED:-0}" != 1 ]; then
 # evals read the status file written above, so they run after it; then the mirror copies the eval report too
 # --- eval registry (evals/registry.yaml): plain-English statements + coded checks -> reports/eval_report_<date>.md ---
 # Not a feed. Until the orchestrator lands it reports (exit 1 = a blocking eval failed); it does not yet stop later steps.
@@ -89,5 +92,6 @@ else log "⚠ drive_mirror failed (not a feed) — see $LOG_DIR/${TS}_drive_mirr
   --detail "failed feeds: ${FAIL[*]} (log $LOG_DIR/${TS}_*.log)" > /dev/null 2>&1
 /usr/bin/python3 src/agentic/notify.py daily > "$LOG_DIR/${TS}_notify.log" 2>&1 && log "✅ notify (not a feed)" \
   || log "⚠ notify failed (not a feed) — see $LOG_DIR/${TS}_notify.log"
+fi
 
 [ ${#FAIL[@]} -le 3 ] || exit 1

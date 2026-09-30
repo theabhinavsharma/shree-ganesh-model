@@ -43,7 +43,7 @@ questions:
 
   - id: eval_count
     q: "How many evals are defined in evals/registry.yaml? Count them and give the number."
-    must_match: "\\b22\\b"
+    must_match: "\\b23\\b"
 
   - id: cron_state
     q: "According to the project notes, can cron run the daily jobs on this Mac right now, and why or why not?"

@@ -5,7 +5,10 @@ Every eval is printed with its plain-English statement next to the measured resu
 Exit code 1 when an eval with action=block FAILS (PENDING human sign-off does not fail the daily run; it blocks real
 money, which is stated in the report).
 Usage: /usr/bin/python3 src/agentic/run_evals.py [--cadence daily|weekly|monthly|per_experiment|all]
+                                                  [--only PREFIX,PREFIX --gate NAME]
 Output: reports/eval_report_<date>.md, logs/evals/eval_run_<date>.json
+Gate mode (--gate, used by run_sgm.py between stages): only evals whose id starts with one of --only, written to
+logs/evals/gate_<NAME>_<date>.json; the daily report files are not touched.
 """
 from __future__ import annotations
 
@@ -30,13 +33,18 @@ CADENCE_ORDER = {"daily": ["daily"], "weekly": ["daily", "weekly", "per_experime
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cadence", default="all", choices=list(CADENCE_ORDER) + ["per_experiment"])
+    ap.add_argument("--only", default="", help="comma-separated eval id prefixes")
+    ap.add_argument("--gate", default="", help="gate name: write logs/evals/gate_<name>_<date>.json only")
     a = ap.parse_args()
+    only = tuple(x.strip() for x in a.only.split(",") if x.strip())
     reg = yaml.safe_load((ROOT / "evals/registry.yaml").read_text())["evals"]
     allow = CADENCE_ORDER.get(a.cadence, [a.cadence])
     ctx = dict(last_session=ec.last_session())
     rows = []
     for e in reg:
         if allow is not None and e["cadence"] not in allow:
+            continue
+        if only and not e["id"].startswith(only):
             continue
         t0 = time.time()
         fn = ec.REGISTRY.get(e["check"])
@@ -50,6 +58,14 @@ def main() -> int:
     human_pending = [r for r in rows if r["status"] == "PENDING"]
     today = datetime.now().strftime("%Y-%m-%d")
     verdict = "BLOCKED" if blocking else ("OK — waiting on human sign-off for real money" if human_pending else "OK")
+
+    if a.gate:
+        (ROOT / f"logs/evals/gate_{a.gate}_{today}.json").write_text(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"),
+            gate=a.gate, only=list(only), verdict=verdict, results=rows), indent=1, default=str))
+        for r in rows:
+            print(f"{ICON.get(r['status'], ''):2s} {r['status']:7s} {r['id']:28s} {str(r['value'] or ''):38s} {r['detail'][:90]}")
+        print(f"\nGATE {a.gate}: {verdict}")
+        return 1 if blocking else 0
 
     md = [f"# Eval report — {today} (data through {ctx['last_session'].date()})", "",
           f"**Verdict: {verdict}.** {len(rows)} evals · {sum(r['status'] == 'PASS' for r in rows)} pass · "

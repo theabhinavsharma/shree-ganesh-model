@@ -208,6 +208,9 @@ step "4.36. LEADER SLEEVE SCREEN (paper)"
   && log "  ✅ leader screen + reports/leader_sleeve_*.md" \
   || log "  ⚠ leader sleeve failed — non-fatal, see $LOG_DIR/${TS}_leader.log"
 
+# 4.37 / 4.38 run here only when this script is started by hand; under run_sgm.py (SGM_ORCHESTRATED=1) the
+# orchestrator runs them as gated stages before this 15D pipeline, so a 15D failure cannot stop Sri Lakshmi.
+if [ "${SGM_ORCHESTRATED:-0}" != 1 ]; then
 step "4.37. MODEL-RANKED SCREEN (paper, not validated)"
 # EXP-2026-09-28-screen-rank-exit S1M: trend screen x hot/warming industry, top 9 by the bake-off ensemble.
 # One immutable cohort per ISO week in logs/model_screen/; scored daily by sgm_daily.sh. Never blocks the basket.
@@ -228,6 +231,7 @@ step "4.38. SRI LAKSHMI SCREEN (G1 of EXP-2026-09-29-industry-policy; paper unti
 nice -n 10 /usr/bin/python3 src/agentic/trust/reproduce.py > "$LOG_DIR/${TS}_reproduce.log" 2>&1 \
   && log "  ✅ registered results re-run from committed code (logs/trust/reproductions.jsonl)" \
   || log "  ⚠ reproduction check failed — see $LOG_DIR/${TS}_reproduce.log"
+fi
 
 # ---------------- 4.4. Lean shadow check ----------------
 # Engine-free basket diff vs prod. Non-fatal, logs to logs/lean_shadow.jsonl.

@@ -12,7 +12,8 @@ cd /Users/abhinavs./Documents/Zoom
 mkdir -p logs/sgm_daily; TS=$(date +%Y%m%d_%H%M%S); LOG=logs/sgm_daily/$TS.log
 exec > >(tee -a "$LOG") 2>&1
 echo "═══ SGM DAILY $TS ═══"
-bash src/agentic/daily_data_layer.sh; RC=$?
+if [ "${SGM_ORCHESTRATED:-0}" = 1 ]; then RC=0; echo "data layer: already run and gated by run_sgm.py"   # 2026-09-29
+else bash src/agentic/daily_data_layer.sh; RC=$?; fi
 /usr/bin/python3 src/agentic/eval_panel_coverage.py --sessions 5 > logs/sgm_daily/${TS}_eval.log 2>&1 \
   && echo "✅ panel coverage eval" || { echo "❌ PANEL COVERAGE EVAL FAILED — see logs/sgm_daily/${TS}_eval.log"; tail -6 logs/sgm_daily/${TS}_eval.log; RC=1; }
 /usr/bin/python3 src/agentic/render_basket_report.py > logs/sgm_daily/${TS}_reports.log 2>&1 \
