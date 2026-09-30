@@ -1,0 +1,4 @@
+{"dataset": "hitter_waves_2016_2022.csv", "producer": "src/agentic/explore_hitter_waves.py",
+ "what": "industry-years (entries 2016-01..2022-06) whose share of +50% winners was >= 1.8x that year's rate, with >= 20 winning stock-weeks from >= 4 stocks; used to build the theme list",
+ "columns": {"n": "core-band stock-weeks", "hits": "stock-weeks whose high reached 1.5x the next open within 126 sessions", "stocks": "distinct stocks", "hit_stocks": "distinct stocks with a hit", "rate": "hits / n (fraction)", "lift": "rate / that year's rate (ratio)"},
+ "status": "exploration; 2023+ not looked at", "updated": "2026-09-30"}
