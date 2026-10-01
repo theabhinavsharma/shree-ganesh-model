@@ -1,0 +1,16 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-09-30-v3-pnl",
+ "producer": "src/agentic/test_v3_pnl.py",
+ "definitions": "EXP-2026-09-30-v3-pnl (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does Sri Lakshmi V3 pick better when its ranking model can also see the company's P&L (sales growth,\nEPS growth, P/E, P/E vs industry, profitable, turned profitable, days since results)?\nArms (same V3 rule: G1 top 9 minus Financial Services minus stocks tied only to fading themes, no refill):\n  V3   live model scores (logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet; 50 features, trained on rows from 2016)\n  V3T  model retrained on the same 50 features from rows dated 2019-01-01 on (logs/leader_sleeve/v3_pnl/model_T)\n  V3P  model retrained on the 50 features + 7 P&L features from rows dated 2019-01-01 on (logs/leader_sleeve/v3_pnl/model_P)\nWindow: weekly entries from 2020-01-01 (the first year a 2019-trained model can score); eras 2020-2022 and 2023+.\nADOPTION PASS = sp.beats(V3P, V3) at phase 0 and in >= 4 of 5 phases. DIAGNOSTIC: V3P vs V3T (the P&L effect alone).\nSGM_PNL_FULL=1: EXP-2026-09-30-v3-pnl-full \u2014 V3 vs V3F (rows rebuilt on the P&L backfill, 50 features, all years) vs V3PF\n(same rows, + the 7 P&L features, all years), entries from 2019-01-01; adoption = V3PF beats V3 (same pass rule).\nSGM_RERUN_TAG=<tag>: same registered test on re-built model scores (e.g. after the old-format P&L backfill); writes\nv3_pnl/rerun_<tag>/ and logs EXP-2026-09-30-v3-pnl-RERUN-<tag>. SGM_REPRO=1: run, write repro/, log nothing.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "phases": {
+  "V3P_vs_V3": "0/5",
+  "V3P_vs_V3T": "0/5",
+  "V3T_vs_V3": "0/5"
+ },
+ "updated": "2026-10-01T09:45:27"
+}
