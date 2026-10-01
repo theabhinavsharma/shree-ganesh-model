@@ -14,19 +14,21 @@ until grep -qh "^normalized" logs/pnl_old/fetch_*.log 2>/dev/null; do
 done
 grep -h "^normalized" logs/pnl_old/fetch_*.log
 
-# 2. QC: overlap with NSE's machine-readable numbers + spot check against a page read by eye (20MICRONS Q3 FY17)
+# 2. QC (2026-10-01): same-quarter overlaps are restatements (old row first filed, NEW row ~13 months later), so the check
+#    is the old/new ratio median plus sales continuity across the format switch; spot check against a page read by eye
 $PY - <<'EOF' || fail "QC"
 import pandas as pd
 O = pd.read_parquet("data/derived/pnl_quarterly_old.parquet"); L = pd.read_parquet("data/derived/pnl_quarterly.parquet")
-L["quarter_end"] = pd.to_datetime(L["quarter_end"]); L = L[L["source"] == "detail_api"]
+L["quarter_end"] = pd.to_datetime(L["quarter_end"]); L["filing_dt"] = pd.to_datetime(L["filing_dt"]); L = L[L["source"] == "detail_api"]
 m = O.merge(L, on=["symbol", "quarter_end", "basis"], suffixes=("_old", "_new"))
-for c in ("net_sales", "pat", "eps_basic"):
-    a, b = m[f"{c}_old"], m[f"{c}_new"]; ok = ((a - b).abs() <= (0.01 * b.abs()).clip(lower=0.01)) | (a.isna() & b.isna())
-    print(f"overlap {c}: {len(m)} rows in both sources · agree within 1%: {ok.mean():.1%}")
+print(f"overlap {len(m)} quarters · old filed first {(m.filing_dt_old < m.filing_dt_new).mean():.0%} · median gap {(m.filing_dt_new - m.filing_dt_old).dt.days.median():.0f} days · "
+      f"median old/new: sales {(m.net_sales_old / m.net_sales_new).median():.3f}, profit {(m.pat_old / m.pat_new).median():.3f}")
+lo = O.sort_values("quarter_end").groupby(["symbol", "basis"]).tail(1); fn = L.sort_values("quarter_end").groupby(["symbol", "basis"]).head(1)
+j = lo.merge(fn, on=["symbol", "basis"], suffixes=("_o", "_n")); j = j[(j.quarter_end_n - j.quarter_end_o).dt.days.between(80, 100) & (j.net_sales_o > 0)]
+r = j.net_sales_n / j.net_sales_o
+print(f"sales continuity across the switch: {len(j)} companies · median {r.median():.2f} · 20x jumps {int(((r > 20) | (r < .05)).sum())}")
 s = O[(O["symbol"] == "20MICRONS") & (O["quarter_end"] == "2016-12-31") & (O["basis"] == "sa")]
-print("spot check 20MICRONS 2016-12-31 sa (page: net sales 8498.69, net profit 244.96, EPS 0.69 · Rs lakh):",
-      s[["net_sales", "pat", "eps_basic"]].to_dict("records"))
-print("rows", len(O), "· EPS-consistent", round(O["eps_check_ok"].mean(), 3), "· by year", O.groupby(O["quarter_end"].dt.year).size().to_dict())
+print("spot check 20MICRONS 2016-12-31 sa (page: net sales 8498.69, net profit 244.96, EPS 0.69 · Rs lakh):", s[["net_sales", "pat", "eps_basic"]].to_dict("records"))
 EOF
 
 # 3. enriched P&L table (live table untouched)

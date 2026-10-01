@@ -226,20 +226,36 @@ def normalize() -> pd.DataFrame:
 
 
 def merge() -> None:
+    """Enriched P&L = live table + old-format rows. Rules (2026-10-01, after the overlap QC):
+    - keep only old rows whose unit was read and whose EPS matches profit / shares (eps_check_ok);
+    - drop isolated sales spikes (>20x or <0.05x vs BOTH neighbouring quarters: a unit slip on one page);
+    - where both sources have the same (symbol, quarter, basis), the NEW row is a restatement filed ~13 months later
+      (Ind AS transition; median 395 days, every overlap filed after the old row), so the FIRST-FILED old row is kept and
+      the restated row is dropped: what investors saw at the time is the point of the backfill. Known limit: for 2018
+      dates, those quarters serve as year-ago bases on the old accounting standard."""
     O = pd.read_parquet(OUT)
     O = O[O["eps_check_ok"] & O["unit"].str.contains("lakh|lac|crore|million|thousand", case=False, na=False)]
-    P = pd.read_parquet(PNL)
-    P = P[P["source"] != "nse_old_html"]
-    have = set(zip(P["symbol"], pd.to_datetime(P["quarter_end"]), P["basis"]))
-    add = O[[k not in have for k in zip(O["symbol"], O["quarter_end"], O["basis"])]][list(P.columns)]
+    O = O.sort_values(["symbol", "basis", "quarter_end"]).reset_index(drop=True)
+    g = O.groupby(["symbol", "basis"])["net_sales"]
+    ext = lambda r: (r > 20) | (r < 0.05)  # noqa: E731
+    spike = ext(O["net_sales"] / g.shift(1)) & ext(O["net_sales"] / g.shift(-1))
+    O = O[~spike]
+    P = pd.read_parquet(PNL); P = P[P["source"] != "nse_old_html"].copy()
+    P["quarter_end"] = pd.to_datetime(P["quarter_end"]); P["filing_dt"] = pd.to_datetime(P["filing_dt"])
+    j = P.reset_index().merge(O[["symbol", "quarter_end", "basis", "filing_dt"]], on=["symbol", "quarter_end", "basis"], suffixes=("", "_old"))
+    restated = j.loc[j["filing_dt_old"] < j["filing_dt"], "index"]
+    newer_live = set(zip(*[j.loc[j["filing_dt_old"] >= j["filing_dt"], c] for c in ("symbol", "quarter_end", "basis")]))
+    P = P.drop(index=restated)
+    add = O[[k not in newer_live for k in zip(O["symbol"], O["quarter_end"], O["basis"])]][list(P.columns)]
     M = pd.concat([P, add], ignore_index=True).sort_values(["symbol", "quarter_end", "basis"])
     M.to_parquet(ENRICHED, index=False)
     ENRICHED.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="pnl_quarterly_enriched.parquet", producer="src/agentic/fetch_pnl_old_format.py --merge",
-        definition="pnl_quarterly.parquet + nse_old_html rows (EPS-consistent, unit read) where no NEW/XBRL row exists",
-        units="as pnl_quarterly: detail_api and nse_old_html in Rs LAKH, xbrl in Rs; EPS Rs per share",
-        rows=len(M), added=len(add), updated=datetime.now().isoformat(timespec="seconds")), indent=1))
-    print(f"enriched P&L: {len(P):,} live rows + {len(add):,} old-format rows = {len(M):,} -> {ENRICHED.name} (live file untouched)")
+        definition=merge.__doc__, units="as pnl_quarterly: detail_api and nse_old_html in Rs LAKH, xbrl in Rs; EPS Rs per share",
+        rows=len(M), added_old=len(add), restated_rows_replaced=int(len(restated)), sales_spikes_dropped=int(spike.sum()),
+        updated=datetime.now().isoformat(timespec="seconds")), indent=1))
+    print(f"enriched P&L: {len(M):,} rows = live {len(P) + len(restated):,} - {len(restated):,} restated (first-filed kept) + "
+          f"{len(add):,} old-format · {int(spike.sum())} sales spikes dropped · live file untouched")
 
 
 if __name__ == "__main__":
