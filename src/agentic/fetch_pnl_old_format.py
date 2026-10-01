@@ -98,6 +98,30 @@ def parse(page: str) -> dict:
     return out
 
 
+def symbol_at():
+    """symbol_at(sym, date): the symbol a company traded under on that date (NSE symbolchange.csv chain, walked back).
+    NSE's archive links use today's symbol, but the archived page is filed under the symbol of its day: without this
+    every renamed company (TATAMOTORS -> TMPV, SRTRANSFIN -> SHRIRAMFIN, ...) 404s."""
+    ch: dict = {}
+    for line in open(ROOT / "data/raw/nse_symbol_change/symbolchange.csv", encoding="utf-8", errors="replace"):
+        parts = line.strip().rsplit(",", 3)
+        if len(parts) == 4:
+            d = pd.to_datetime(parts[3], format="%d-%b-%Y", errors="coerce")
+            if pd.notna(d):
+                ch.setdefault(parts[2].strip(), []).append((parts[1].strip(), d))
+
+    def at(sym: str, when: pd.Timestamp) -> str:
+        s, seen = sym, set()
+        while s in ch and s not in seen:
+            seen.add(s)
+            later = [(o, d) for o, d in ch[s] if d > when]
+            if not later:
+                break
+            s = max(later, key=lambda x: x[1])[0]
+        return s
+    return at
+
+
 def calendar() -> pd.DataFrame:
     c = pd.read_parquet(CAL)
     c = c[(c["format"] == "Old") & (c["period"].astype(str).str.lower() == "quarterly")
@@ -111,13 +135,17 @@ def calendar() -> pd.DataFrame:
     return c
 
 
-def done_keys() -> set:
-    out = set()
-    for p in OUTDIR.glob("old_html*.jsonl"):
+def _lines(pattern: str):
+    for p in sorted(OUTDIR.glob(pattern)):
         for line in open(p):
-            if line.strip():
-                out.add(json.loads(line)["_key"])
-    return out
+            try:
+                yield json.loads(line)
+            except ValueError:      # a line cut short when a run was stopped mid-write: skipped, refetched next run
+                continue
+
+
+def done_keys() -> set:
+    return {r["_key"] for r in _lines("old_html_w*.jsonl")}
 
 
 def fetch(limit: int | None, workers: int) -> None:
@@ -127,20 +155,28 @@ def fetch(limit: int | None, workers: int) -> None:
         todo = todo.sample(min(limit, len(todo)), random_state=1)   # smoke test: spread across 2014-2017
     print(f"old-format quarterly filings {len(c):,} · to fetch {len(todo):,} · workers {workers}", flush=True)
     chunks = [todo.iloc[i::workers] for i in range(workers)]
-    lock, n = threading.Lock(), [0]
+    lock, n, failed = threading.Lock(), [0], []
+    at = symbol_at()
 
     def work(k: int, part: pd.DataFrame) -> None:
         s = build_session(warm=True)
-        with open(OUTDIR / f"old_html_w{k}.jsonl", "a") as fh:
+        with open(OUTDIR / f"old_html_w{k}.jsonl", "a") as fh, open(OUTDIR / "old_html_errors.jsonl", "a") as eh:
             for r in part.itertuples():
                 rec = dict(_key=r.key, symbol=r.symbol, qe=str(r.qe.date()), is_con=int(r.is_con), fd=str(r.fd),
                            bank=r.bank, url=r.resultDetailedDataLink)
+                old = at(r.symbol, r.fd)
+                url = r.resultDetailedDataLink.replace(f"financial_res_{r.symbol}_", f"financial_res_{old}_") if old != r.symbol else r.resultDetailedDataLink
+                rec.update(url=url, symbol_then=old)
                 try:
-                    rec.update(parse(get_text(s, r.resultDetailedDataLink)), status="OK")
-                except Exception as x:  # noqa: BLE001 — recorded, retried next run (not marked done below)
-                    rec.update(status=f"ERR_{type(x).__name__}")
+                    rec.update(parse(get_text(s, url)), status="OK")
+                except Exception as x:  # noqa: BLE001 — logged with its message, retried once at the end and on the next run
+                    rec.update(status=f"ERR_{type(x).__name__}", error=str(x)[:160])
                 if rec["status"] == "OK":
                     fh.write(json.dumps(rec, default=str) + "\n"); fh.flush()
+                else:
+                    eh.write(json.dumps(dict(_key=rec["_key"], status=rec["status"], error=rec["error"], ts=datetime.now().isoformat(timespec="seconds"))) + "\n"); eh.flush()
+                    with lock:
+                        failed.append(r.Index)
                 with lock:
                     n[0] += 1
                     if n[0] % 500 == 0:
@@ -149,10 +185,16 @@ def fetch(limit: int | None, workers: int) -> None:
 
     with ThreadPoolExecutor(workers) as ex:
         list(ex.map(lambda a: work(*a), enumerate(chunks)))
+    if failed:                                   # one slower retry pass for the misses (throttling is usually brief)
+        print(f"retrying {len(failed):,} misses with 2 workers after 60s", flush=True); time.sleep(60)
+        retry = todo.loc[failed]; failed.clear(); n[0] = 0
+        with ThreadPoolExecutor(2) as ex:
+            list(ex.map(lambda a: work(*a), enumerate([retry.iloc[i::2] for i in range(2)])))
+        print(f"still missing after retry: {len(failed):,}", flush=True)
 
 
 def normalize() -> pd.DataFrame:
-    recs = [json.loads(l) for p in sorted(OUTDIR.glob("old_html*.jsonl")) for l in open(p) if l.strip()]
+    recs = list(_lines("old_html_w*.jsonl"))
     D = pd.DataFrame(recs).drop_duplicates("_key", keep="last")
     m = D["to_lakh"]
     pat = D["pat_con"].where(D["is_con"] == 1).fillna(D["pat"]) if "pat_con" in D else D["pat"]
