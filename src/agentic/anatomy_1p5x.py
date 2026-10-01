@@ -414,6 +414,8 @@ def main() -> None:
     ap.add_argument("--first-test-year", type=int, default=2019)
     ap.add_argument("--no-write", action="store_true", help="compute and print only; write nothing")
     ap.add_argument("--outdir", default=str(ROOT / "logs/leader_sleeve/anatomy_1p5x"))
+    ap.add_argument("--pnl", default=None, help="P&L table to read instead of data/derived/pnl_quarterly.parquet "
+                    "(registered A/B tests only, e.g. the old-format backfill in pnl_quarterly_enriched.parquet)")
     args = ap.parse_args()
     if args.panel:
         rp.PANEL = Path(args.panel)
@@ -537,7 +539,7 @@ def main() -> None:
     S["rank_in_ind_pct"] = S.groupby(["trade_date", "ind"])["ret60"].rank(pct=True, ascending=False)
 
     # ============ fundamentals (PIT, per basis, con preferred per quarter, calendar quarters) ============
-    q = pd.read_parquet(DD / "pnl_quarterly.parquet", filters=sfilt)
+    q = pd.read_parquet(Path(args.pnl) if args.pnl else DD / "pnl_quarterly.parquet", filters=sfilt)
     fund, fund_audit = fundamentals_pit(q, cal, sf_w)
     print("fundamentals: symbol-quarters with a computable metric, by quarter year and the basis used "
           "(con preferred; windows on one basis only):\n" + fund_audit.to_string())

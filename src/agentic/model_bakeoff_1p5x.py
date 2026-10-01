@@ -508,6 +508,10 @@ def main(argv=None):
     ap.add_argument("--smoke", action="store_true",
                     help="code smoke test only: 300 symbols, small models, <=4 MLP epochs. Numbers are NOT results.")
     ap.add_argument("--no-save", action="store_true", help="print only; write nothing")
+    ap.add_argument("--add-features", default="", help="comma list of extra rows columns added to the manifest's model "
+                    "features (registered A/B tests only, e.g. EXP-2026-09-30-v3-pnl; default: none = production model)")
+    ap.add_argument("--train-from", default=None, help="YYYY-MM-DD: train only on rows dated on/after this (registered A/B "
+                    "tests only; default: all rows = production model)")
     args = ap.parse_args(argv)
     if args.panel:
         rp.PANEL = Path(args.panel)
@@ -534,6 +538,15 @@ def main(argv=None):
     S["trade_date"] = pd.to_datetime(S["trade_date"])
     drop = {c.strip() for c in args.drop_features.split(",") if c.strip()}
     FEATS, feat_src, feat_info = select_features(man, S, drop)
+    for c in [c.strip() for c in args.add_features.split(",") if c.strip()]:
+        if c not in S.columns or LEAK_PAT.search(c):
+            raise SystemExit(f"--add-features {c}: not a rows column, or looks forward-looking")
+        if pd.api.types.is_bool_dtype(S[c]):
+            S[c] = S[c].astype(float)
+        if c not in FEATS:
+            FEATS.append(c)
+    if args.add_features:
+        feat_src += f" + --add-features {args.add_features}"
     leak_refused = feat_info["leak_guard_refused"]
     if leak_refused:
         say(f"WARNING forward-looking-name guard refused features: {leak_refused}")
@@ -675,6 +688,8 @@ def main(argv=None):
             continue
         i0 = cal.get_loc(first[0])
         tr = L[L["win_end"] < i0]                              # measured label window ends before the first test session
+        if args.train_from:
+            tr = tr[tr["trade_date"] >= pd.Timestamp(args.train_from)]
         te = S[S["year"] == Y]                                 # ALL rows of Y: the point-in-time candidate set
         if te.empty or tr["y95"].nunique() < 2:
             continue

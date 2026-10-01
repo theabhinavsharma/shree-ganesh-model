@@ -1,0 +1,49 @@
+{
+ "dataset": "1.5x model bake-off out-of-sample predictions",
+ "experiment": "model-bakeoff-1p5x (EXP-2026-09-27-1p5x-anatomy companion)",
+ "producer": "src/agentic/model_bakeoff_1p5x.py",
+ "rows": 584376,
+ "key": [
+  "symbol",
+  "trade_date"
+ ],
+ "date_range": [
+  "2020-01-07",
+  "2026-09-28"
+ ],
+ "inputs": [
+  "logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+  "/Users/abhinavs./Code/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet"
+ ],
+ "smoke": false,
+ "stale_adjusted_price_features": false,
+ "label_basis": "session",
+ "stale_row_counted_labels": false,
+ "walk_forward": "test year Y scored by models trained on labelled rows whose label window ends before Y's first session; window = sessions t+1..t+95 of the global calendar (session-counted labels, verified on the panel)",
+ "columns": {
+  "symbol": "NSE symbol",
+  "trade_date": "signal date (weekly sample, session close)",
+  "year": "test year (walk-forward fold)",
+  "era": "disc = test years 2019-2022, conf = 2023+",
+  "y95": "anatomy label (see rows.parquet.manifest.json)",
+  "fh95": "anatomy: max high over the label window / entry close (ratio); window per label_basis in bakeoff.json",
+  "label_span_sessions": "FORWARD-LOOKING audit only: global-calendar sessions from t to the symbol's 95th next panel row (> 95 = the symbol misses sessions in the window); never a feature",
+  "long_span": "label_span_sessions >= 105 (row-counted labels: inflated; session-counted: lower bound)",
+  "adv": "20d average traded value, Rs crore (from rows)",
+  "raw_close": "then-traded close, Rs per share (research_panel.raw_price)",
+  "tradable": "adv >= 5 and raw_close > 50",
+  "core": "anatomy's own flag (adjusted close > 50), kept for comparison only",
+  "copied_session": "trade_date is a copied non-trading session (panel row = an earlier session's bhavcopy); features are that earlier session's",
+  "next_session_copied": "the next calendar date of the panel is a copied session (label window repeats the high of t)",
+  "high_over_close_t": "adjusted high / close of the trade_date row (ratio)",
+  "logit": "P(y95), standardised logistic regression",
+  "lgbm": "P(y95), LightGBM",
+  "xgb": "P(y95), XGBoost",
+  "mlp": "P(y95), MLP (time-ordered early stopping)",
+  "lgbm_rank": "LambdaRank score: only its within-week order is meaningful",
+  "ensemble": "mean within-week percentile rank of lgbm, xgb, mlp (0-1)",
+  "fold_train_end": "last training trade_date of the fold that scored this row"
+ },
+ "units": "scores are probabilities except lgbm_rank (unitless) and ensemble (percentile 0-1); ratios are fractions",
+ "updated": "2026-10-01T07:36:26+05:30"
+}
