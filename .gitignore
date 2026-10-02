@@ -115,3 +115,11 @@ backups/
 
 # incident writer backups (local safety copies; git is the history)
 evals/.backups/
+
+# Sri Lakshmi model-build outputs: large, rebuilt every Friday; their .manifest.json files stay tracked (2026-10-02)
+logs/leader_sleeve/**/rows.parquet
+logs/leader_sleeve/**/rows_audit.parquet
+logs/leader_sleeve/**/bakeoff_preds.parquet
+logs/leader_sleeve/event_rows*.parquet
+logs/leader_sleeve/anatomy_1p5x/_pre_fix_*/
+logs/leader_sleeve/anatomy_1p5x/rebuild_*.log

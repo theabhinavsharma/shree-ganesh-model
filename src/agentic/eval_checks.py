@@ -211,7 +211,7 @@ def preregistered(ctx: dict) -> dict:
 
 
 # ---------------------------------------------------------------- output
-SCREEN_DIRS = {"sleeve": ROOT / "logs/leader_sleeve", "model": ROOT / "logs/model_screen", "sri_lakshmi": ROOT / "logs/sri_lakshmi", "sri_lakshmi_g1": ROOT / "logs/sri_lakshmi_g1"}
+SCREEN_DIRS = {"sleeve": ROOT / "logs/leader_sleeve", "model": ROOT / "logs/model_screen", "sri_lakshmi": ROOT / "logs/sri_lakshmi"}
 
 
 def screens_immutable(ctx: dict) -> dict:

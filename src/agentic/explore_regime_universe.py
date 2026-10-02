@@ -21,7 +21,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src/agentic"))
-import build_themes  # noqa: E402
+import v3_rule  # noqa: E402
 import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
@@ -31,10 +31,7 @@ COST = 0.005
 D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores(); cal = D["cal"]
 S = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet"); S["date"] = pd.to_datetime(S["date"])
 G1 = S[(S["heat_pct"] >= 0.70) & ~(S["P_pct"] < 0.30)]
-sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet"); sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry", "broad_sector"])
-sc["industry"] = sc["industry"].map(html.unescape); sector = sc.groupby("industry")["broad_sector"].agg(lambda x: x.mode().iat[0])
-fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
-fading_only, _, _ = build_themes.fading_checker()
+ctx = v3_rule.context(imap); fin, fading_only = ctx["fin"], ctx["fading_only"]   # shared V3 rule
 wk = [d for d in sp.weekly_grid(cal, 0) if pd.Timestamp("2019-01-01") <= d <= pd.Timestamp("2022-12-31")]
 top = sre.TOPN; sre.TOPN = 100000
 full = tif.select_elig(X["F"], wk, imap, P, G1); sre.TOPN = top

@@ -7,8 +7,7 @@ screen session and company filings (announcements_historical) at most 10 days ol
 
 History: v2 (G1 minus Financial Services, no refill) ran for one day, 2026-09-30. It passed 5/5 on the pre-fix price
 panel but only 3/5 after the split/dividend fix, so Abhinav chose G1 for all money and asked to track only G1 and the
-Sep 8 production sleeve. The v2 shadow folder logs/sri_lakshmi_g1/ is no longer written (its one batch, 2026-09-28,
-had no financials, so it equals the G1 batch).
+Sep 8 production sleeve. The v2-era shadow folder logs/sri_lakshmi_g1/ was removed on 2026-10-02 (its one batch duplicated the Sep 28 batch; it is in git history).
 
 Plain English: the model-ranked screen (trend stock, hot or warming industry, top 9 by the model score) with one extra
 rule — skip a hot industry when the government's budget money and activity data for it sit in the bottom 30%.
@@ -40,7 +39,6 @@ from render_leader_report import FULLTEXT, _takeover  # noqa: E402
 from screen_model_ranked import _opt  # noqa: E402
 from render_basket_report import ANN  # noqa: E402
 
-SCORES = ROOT / "data/derived/industry_scores_policy.parquet"
 CDIR = ROOT / "logs/sri_lakshmi"
 EXTRA = 3
 
@@ -48,7 +46,9 @@ EXTRA = 3
 def main() -> None:
     D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores()
     d = D["cal"][-1]
-    S = pd.read_parquet(SCORES); S["date"] = pd.to_datetime(S["date"])
+    import v3_rule                                   # the V3 rule lives in one place (v3_rule.py, 2026-10-02)
+    ctx = v3_rule.context(imap)
+    S = ctx["scores"]
     if S["date"].max() != d:
         raise SystemExit(f"industry_scores_policy is dated {S['date'].max().date()}, prices {d.date()} — rebuild "
                          "build_industry_scores.py + build_policy_scores.py first; no batch written")
@@ -56,8 +56,7 @@ def main() -> None:
     if (d - newest).days > 7:   # select_s1 matches scores within 7 days; beyond that every stock ranks with no score
         raise SystemExit(f"model scores end {newest.date()}, prices {d.date()}: more than 7 days apart, so no stock has a "
                          "score. Rebuild anatomy_1p5x.py + model_bakeoff_1p5x.py first; no batch written")
-    import build_themes
-    fading_only, filings_to, themes_to = build_themes.fading_checker()
+    fading_only, fin, filings_to, themes_to = ctx["fading_only"], ctx["fin"], ctx["filings_to"], ctx["themes_to"]
     if themes_to < d or (d - filings_to).days > 10:
         raise SystemExit(f"theme data stale (intensity {themes_to.date()}, filings {filings_to.date()}, prices {d.date()}): run "
                          "fetch_announcements_historical.py + fetch_fred_drivers.py + build_themes.py first; no batch written")
@@ -85,13 +84,7 @@ def main() -> None:
                     P_pct=None if pd.isna(Sx.loc[ind, "P_pct"]) else round(float(Sx.loc[ind, "P_pct"]), 3),
                     takeover=bool(_takeover(sym, ann[ann["symbol"] == sym] if not ann.empty else None, ft, d)))
 
-    import html as _html
-    sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet")
-    sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry", "broad_sector"])
-    sc["industry"] = sc["industry"].map(_html.unescape)
-    sector = sc.groupby("industry")["broad_sector"].agg(lambda x: x.mode().iat[0])
-    fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
-    keep = lambda s: not fin(s) and not fading_only(s, d)  # noqa: E731
+    keep = lambda s: ctx["keep"](s, d)  # noqa: E731
     g1_top = ranked[:top]
     dropped_fin = [s for s in g1_top if fin(s)]
     dropped_fading = [s for s in g1_top if not fin(s) and fading_only(s, d)]

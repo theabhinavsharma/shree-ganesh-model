@@ -25,36 +25,15 @@ import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
 import test_industry_fundamentals as tif  # noqa: E402
+import v3_rule  # noqa: E402
 
 DIWALI = {2019: "2019-10-27", 2020: "2020-11-14", 2021: "2021-11-04", 2022: "2022-10-24",
           2023: "2023-11-12", 2024: "2024-11-01", 2025: "2025-10-21"}   # 2025 = NSE Muhurat trading day
 
 D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores(); cal = D["cal"]
-S = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet"); S["date"] = pd.to_datetime(S["date"])
-sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet"); sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry", "broad_sector"])
-sc["industry"] = sc["industry"].map(html.unescape); sector = sc.groupby("industry")["broad_sector"].agg(lambda x: x.mode().iat[0])
-fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
-I = pd.read_parquet(ROOT / "data/derived/theme_intensity.parquet"); I["date"] = pd.to_datetime(I["date"])
-state = {(d, t): st for d, t, st in zip(I["date"], I["theme"], I["state"])}
-E = pd.read_parquet(ROOT / "data/derived/theme_exposure.parquet"); E["an_dt"] = pd.to_datetime(E["an_dt"])
-ex = {(s, t): np.sort(g["an_dt"].to_numpy()) for (s, t), g in E.groupby(["symbol", "theme"])}
-tof = {}
-for (s, t) in ex:
-    tof.setdefault(s, []).append(t)
-
-
-def fading_only(s, d):   # identical to test_theme_engine.py TFADE
-    d64 = np.datetime64(d + pd.Timedelta(hours=23, minutes=59)); st = []
-    for t in tof.get(s, []):
-        a = ex[(s, t)]
-        if np.searchsorted(a, d64, side="right") - np.searchsorted(a, d64 - np.timedelta64(365, "D"), side="right") > 0:
-            st.append(state.get((d, t), "n/a"))
-    return "fading" in st and "rising" not in st
-
-
+ctx = v3_rule.context(imap)                                  # the V3 rule, shared with the live screen
 wk = [d for d in sp.weekly_grid(cal, 0) if d >= pd.Timestamp(tif.START)]
-g1 = tif.select_elig(X["F"], wk, imap, P, S[(S["heat_pct"] >= 0.70) & ~(S["P_pct"] < 0.30)])
-v3 = {d: [s for s in g1.get(d, []) if not fin(s) and not fading_only(s, d)] for d in wk}
+v3 = v3_rule.picks(X["F"], wk, imap, P, ctx)
 PX = rp.load_panel(["open", "high", "low", "close"]); O, H, L, C = (rp.wide(PX, c, cal) for c in ("open", "high", "low", "close")); del PX
 rows = []
 for d in wk:
@@ -115,6 +94,8 @@ out = {"2019-22": season("2019-22", R[R["era"] == "2019-22"])}
 if UNSEAL:
     out["2023-25"] = season("2023-25", R[(R["week"] >= "2023-01-01") & (R["week"] < "2026-01-01")])
 
+if __import__("os").environ.get("SGM_NO_LOG") == "1":   # verification runs (e.g. after a refactor) log nothing
+    raise SystemExit(0)
 with (ROOT / "logs/experiments.jsonl").open("a") as fh:
     fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"),
         id="EXP-2026-09-30-v3-season" + ("-2023-EXPLORATION" if UNSEAL else "-EXPLORATION"),

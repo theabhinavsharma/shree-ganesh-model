@@ -1,6 +1,6 @@
 """Sri Lakshmi V3: bought in early October, how did it look around Diwali? (2026-09-30; insight only, no rule.)
 
-Batches: V3 picks (build_themes.fading_checker + G1, same rule as production) for every session Oct 1-14 of 2019-2025
+Batches: V3 picks (v3_rule.py, the same code as the live screen) for every session Oct 1-14 of 2019-2025
 (all five weekly phase offsets, so ~10 overlapping batches a year). Entry = next session open.
 Marked at the last session on or before Diwali + 0 / 7 / 14 / 21 / 28 calendar days (Diwali = Lakshmi Puja; 2025 = NSE
 Muhurat trading day). Batch return = equal-weight average of its picks, before costs.
@@ -17,7 +17,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src/agentic"))
-import build_themes  # noqa: E402
+import v3_rule  # noqa: E402
 import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
@@ -29,10 +29,7 @@ MARKS = (0, 7, 14, 21, 28)
 
 D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores(); cal = D["cal"]
 S = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet"); S["date"] = pd.to_datetime(S["date"])
-sc = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet"); sc = sc[sc["status"].str.startswith("OK")].dropna(subset=["industry", "broad_sector"])
-sc["industry"] = sc["industry"].map(html.unescape); sector = sc.groupby("industry")["broad_sector"].agg(lambda x: x.mode().iat[0])
-fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
-fading_only, _, _ = build_themes.fading_checker()
+ctx = v3_rule.context(imap); fin, fading_only = ctx["fin"], ctx["fading_only"]   # shared V3 rule
 days = [d for d in cal if d.month == 10 and d.day <= 14 and d.year in DIWALI]
 g1 = tif.select_elig(X["F"], days, imap, P, S[(S["heat_pct"] >= 0.70) & ~(S["P_pct"] < 0.30)])
 v3 = {d: [s for s in g1.get(d, []) if not fin(s) and not fading_only(s, d)] for d in days}
