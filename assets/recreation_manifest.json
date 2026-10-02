@@ -1,11 +1,21 @@
 {
- "generated": "2026-09-23",
+ "generated": "2026-10-02",
  "inventory": {
   "Other tools": [
+   {
+    "path": "src/agentic/ab_2x_qual_15d.py",
+    "loc": 248,
+    "purpose": "EXP-2026-09-24-2x-qual-at-15d \u2014 do the 2x model's qualitative indicators help at 15D/+5%?"
+   },
    {
     "path": "src/agentic/ab_deepcheap_leader_bands.py",
     "loc": 92,
     "purpose": "Deep-cheap leader bands (registered 2026-09-08): leader sleeve restricted to"
+   },
+   {
+    "path": "src/agentic/ab_engines_count.py",
+    "loc": 144,
+    "purpose": "EXP-2026-09-24-engines-count-sizing \u2014 does multi-engine consensus earn more under C2?"
    },
    {
     "path": "src/agentic/ab_event_features_15d.py",
@@ -88,6 +98,11 @@
     "purpose": "Multi-horizon superstar-confluence analysis."
    },
    {
+    "path": "src/agentic/anatomy_1p5x.py",
+    "loc": 930,
+    "purpose": "ANATOMY OF A 1.5x \u2014 what precedes a +50% move within ~95 sessions (EXP-2026-09-27-1p5x-anatomy)."
+   },
+   {
     "path": "src/agentic/autopsy_leader_paths.py",
     "loc": 100,
     "purpose": "HINDSIGHT autopsy of the hot-industry leader cell (2026-09-23). DESCRIPTIVE \u2014 no ship bar."
@@ -96,6 +111,11 @@
     "path": "src/agentic/autopsy_leader_winners.py",
     "loc": 148,
     "purpose": "Winners autopsy INSIDE the hot-industry leader cell (reg. 2026-09-08)."
+   },
+   {
+    "path": "src/agentic/backfill_bulk_deals.py",
+    "loc": 98,
+    "purpose": "NSE bulk deals with buyer / seller names, 2016 -> today, one month per request (2026-09-30)."
    },
    {
     "path": "src/agentic/build_academic_alphas.py",
@@ -158,6 +178,41 @@
     "purpose": "Build a single self-contained HTML file that renders all the mermaid"
    },
    {
+    "path": "src/agentic/build_industry_scores.py",
+    "loc": 254,
+    "purpose": "Point-in-time industry scores for EXP-2026-09-29-industry-fundamentals (registered in logs/experiments.jsonl f"
+   },
+   {
+    "path": "src/agentic/build_mcap_pit.py",
+    "loc": 673,
+    "purpose": "MARKET CAP PANEL \u2014 data/derived/mcap_pit.parquet (+ .manifest.json)."
+   },
+   {
+    "path": "src/agentic/build_policy_scores.py",
+    "loc": 156,
+    "purpose": "Phase 2 pillars for EXP-2026-09-29-industry-policy (registered in logs/experiments.jsonl before any outcome)."
+   },
+   {
+    "path": "src/agentic/build_price_only_ca_factors.py",
+    "loc": 226,
+    "purpose": "PRICE-ONLY corporate-action factors \u2014 demergers, schemes, rights, special dividends, capital"
+   },
+   {
+    "path": "src/agentic/build_security_master.py",
+    "loc": 430,
+    "purpose": "SECURITY MASTER \u2014 one row per NSE symbol ever seen: ISIN, instrument type (company / fund unit /"
+   },
+   {
+    "path": "src/agentic/build_symbol_isin_history.py",
+    "loc": 36,
+    "purpose": "Which symbol traded under which ISIN, and when (2026-09-30), from NSE's own bhavcopies (cm*bhav.csv.zip, 2015 "
+   },
+   {
+    "path": "src/agentic/build_themes.py",
+    "loc": 134,
+    "purpose": "Theme engine data (2026-09-30): which themes are rising or fading, and which companies are tied to each."
+   },
+   {
     "path": "src/agentic/build_workflow_diagram.py",
     "loc": 199,
     "purpose": "Auto-generate a Mermaid workflow diagram from daily_pipeline.sh."
@@ -173,9 +228,74 @@
     "purpose": "Compute feature-importance for the v3 long ensemble + tag each feature"
    },
    {
+    "path": "src/agentic/daily_orders_industry.py",
+    "loc": 229,
+    "purpose": "DAILY ORDERS + INDUSTRY HEAT digest (2026-09-28; user: \"fetch orders data and industry evaluations daily \u2014 new"
+   },
+   {
+    "path": "src/agentic/engine_replay.py",
+    "loc": 235,
+    "purpose": "Walk-forward replay of the five engines' top-30 sets (EXP-2026-09-24-engines-count-sizing)."
+   },
+   {
+    "path": "src/agentic/eval_checks.py",
+    "loc": 514,
+    "purpose": "Coded checks for evals/registry.yaml (2026-09-29). One function per `check:` name."
+   },
+   {
     "path": "src/agentic/eval_panel_coverage.py",
-    "loc": 164,
+    "loc": 186,
     "purpose": "DAILY EVAL \u2014 is every stock that traded actually in the panel, at today's date?"
+   },
+   {
+    "path": "src/agentic/event_materiality_study.py",
+    "loc": 284,
+    "purpose": "EVENT x MATERIALITY x MARKET'S VOTE \u2014 what happens after each kind of filing (EXP-2026-09-24-event-materiality"
+   },
+   {
+    "path": "src/agentic/explore_big_winners.py",
+    "loc": 88,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): what did Sri Lakshmi v2's 2x winners look like on th"
+   },
+   {
+    "path": "src/agentic/explore_hitter_traits.py",
+    "loc": 127,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): which traits separate +50% hitters from the rest INS"
+   },
+   {
+    "path": "src/agentic/explore_hitter_waves.py",
+    "loc": 40,
+    "purpose": "Exploration (2026-09-30): which industries produced unusually many +50% winners, year by year, 2016 to mid-202"
+   },
+   {
+    "path": "src/agentic/explore_industry_reasons.py",
+    "loc": 108,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): WHY do some sectors give far more +50% hitters?"
+   },
+   {
+    "path": "src/agentic/explore_pnl_winners.py",
+    "loc": 86,
+    "purpose": "Do P&L numbers separate winners? (2026-09-30, EXPLORATION, 2019-2022 only; 2023+ stays sealed for a registered"
+   },
+   {
+    "path": "src/agentic/explore_pockets.py",
+    "loc": 55,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): are there pockets (industry heat level, industry siz"
+   },
+   {
+    "path": "src/agentic/explore_rank_repeat.py",
+    "loc": 60,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ kept sealed for a registered test):"
+   },
+   {
+    "path": "src/agentic/explore_regime_universe.py",
+    "loc": 90,
+    "purpose": "Does V3 do worse when mid/small caps are weak, and would larger caps have held up? (2026-10-02, EXPLORATION, 2"
+   },
+   {
+    "path": "src/agentic/explore_stop_levels.py",
+    "loc": 54,
+    "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): is there a loss level where a Sri Lakshmi v2 pick is"
    },
    {
     "path": "src/agentic/factor_evaluator.py",
@@ -258,9 +378,19 @@
     "purpose": "Build the bootstrap data snapshot \u2014 the minimal set a cloner needs to run the system."
    },
    {
+    "path": "src/agentic/make_drive_backup.py",
+    "loc": 81,
+    "purpose": "Google Drive backup of the live data (2026-09-28) \u2014 lossless, verified, volumed."
+   },
+   {
     "path": "src/agentic/make_full_archive.py",
     "loc": 221,
     "purpose": "Full lossless data archive \u2014 every byte of fetched + derived data, compressed and volumed."
+   },
+   {
+    "path": "src/agentic/make_golden_set.py",
+    "loc": 50,
+    "purpose": "Human-graded sample for eval human.order_book_golden (2026-09-29)."
    },
    {
     "path": "src/agentic/mine_doubler_ignition.py",
@@ -288,9 +418,29 @@
     "purpose": "THE 2X MODEL \u2014 P(touch 2x within x td | everything knowable at T), walk-forward 2016\u21922026."
    },
    {
+    "path": "src/agentic/model_bakeoff_1p5x.py",
+    "loc": 872,
+    "purpose": "MODEL BAKE-OFF for the 1.5x-in-95-sessions target (companion to EXP-2026-09-27-1p5x-anatomy)."
+   },
+   {
     "path": "src/agentic/monitor_for_conviction.py",
     "loc": 141,
     "purpose": "Daily conviction monitor \u2014 fires alerts at the 0.95 calibrated band."
+   },
+   {
+    "path": "src/agentic/notify.py",
+    "loc": 336,
+    "purpose": "Phone messages for SGM / Sri Lakshmi (2026-09-29) \u2014 filled in from data files, never written by a language mod"
+   },
+   {
+    "path": "src/agentic/nse_calendar.py",
+    "loc": 50,
+    "purpose": "Trading-day arithmetic from NSE's own holiday list (data/derived/nse_holidays.parquet, fetch_nse_holidays.py)."
+   },
+   {
+    "path": "src/agentic/ocr_order_filings.py",
+    "loc": 109,
+    "purpose": "OCR pass for scanned order/L1 filings (companion to fetch_order_fulltext.py)."
    },
    {
     "path": "src/agentic/paper_sleeve.py",
@@ -301,6 +451,16 @@
     "path": "src/agentic/paper_trading_recorder.py",
     "loc": 135,
     "purpose": "Paper-trading recorder: every run, score yesterday's brief picks against"
+   },
+   {
+    "path": "src/agentic/parse_order_amounts.py",
+    "loc": 537,
+    "purpose": "Order value ATTACHED TO THE ORDER for every crawled order / L1-tender filing (EXP-2026-09-27-hot-x-material-or"
+   },
+   {
+    "path": "src/agentic/pocket_search_leader.py",
+    "loc": 188,
+    "purpose": "POCKET SEARCH inside the hot-industry leader cell (EXP-2026-09-24-leader-pockets)."
    },
    {
     "path": "src/agentic/portfolio_sizer.py",
@@ -319,12 +479,12 @@
    },
    {
     "path": "src/agentic/render_leader_report.py",
-    "loc": 158,
+    "loc": 224,
     "purpose": "LEADER SLEEVE report \u2014 reports/leader_sleeve_<session>.md, every session."
    },
    {
     "path": "src/agentic/repair_be_series_gaps.py",
-    "loc": 141,
+    "loc": 143,
     "purpose": "Backfill BE/BZ-series gap rows (2025-01-01 onward) into stock_daily_facts."
    },
    {
@@ -333,9 +493,39 @@
     "purpose": "REPAIR CA ADJUSTMENTS \u2014 fix unadjusted split/bonus cliffs in the prices parquet."
    },
    {
+    "path": "src/agentic/repair_holiday_copies.py",
+    "loc": 59,
+    "purpose": "Remove NSE holiday-copy rows from the panel and re-date special sessions (2026-09-27)."
+   },
+   {
     "path": "src/agentic/replay_engines_asof_20260401.py",
     "loc": 121,
     "purpose": "APRIL-1 ENGINE REPLAY \u2014 what would mb / 180d / hc have flagged on 2026-04-01?"
+   },
+   {
+    "path": "src/agentic/report_pick_stats.py",
+    "loc": 59,
+    "purpose": "Per-pick outcome stats for Sri Lakshmi versions (2026-09-30): G1 (old), V2 (financials dropped), V3 (V2 + skip"
+   },
+   {
+    "path": "src/agentic/report_v3_diwali_window.py",
+    "loc": 77,
+    "purpose": "Sri Lakshmi V3: bought in early October, how did it look around Diwali? (2026-09-30; insight only, no rule.)"
+   },
+   {
+    "path": "src/agentic/report_v3_stats.py",
+    "loc": 126,
+    "purpose": "Sri Lakshmi V3 pick stats + time of year (2026-09-30; EXPLORATION, no rule is changed by this)."
+   },
+   {
+    "path": "src/agentic/research_panel.py",
+    "loc": 180,
+    "purpose": "Shared, audited primitives for research backtests (2026-09-27, after the 73-finding audit)."
+   },
+   {
+    "path": "src/agentic/research_queue.py",
+    "loc": 169,
+    "purpose": "New-data research queue runner (2026-09-30): one feed at a time, slowly, each with its registered A/B test."
    },
    {
     "path": "src/agentic/risk_envelope.py",
@@ -348,9 +538,19 @@
     "purpose": "Cron wrapper for daily_data_layer.sh."
    },
    {
+    "path": "src/agentic/run_evals.py",
+    "loc": 89,
+    "purpose": "Run the eval registry (evals/registry.yaml) and write a report a person can read."
+   },
+   {
     "path": "src/agentic/run_model_diversity.py",
     "loc": 250,
     "purpose": "Train 5 diverse model families on the same feature set + label."
+   },
+   {
+    "path": "src/agentic/run_sgm.py",
+    "loc": 280,
+    "purpose": "SGM / Sri Lakshmi orchestrator (2026-09-29): the one scheduled entry point. Each stage runs, then its checks r"
    },
    {
     "path": "src/agentic/run_short_side.py",
@@ -383,14 +583,34 @@
     "purpose": "LEADER SLEEVE forward scorer \u2014 replays every immutable screen day by day."
    },
    {
+    "path": "src/agentic/score_model_screen.py",
+    "loc": 20,
+    "purpose": "Daily forward scorer for the model-ranked PAPER screen (logs/model_screen/screen_*.json, written by"
+   },
+   {
     "path": "src/agentic/score_sentiment.py",
     "loc": 380,
     "purpose": "Finance-tuned sentiment scorer for news / reddit / youtube text."
    },
    {
+    "path": "src/agentic/score_sri_lakshmi.py",
+    "loc": 22,
+    "purpose": "Daily forward scorer for the Sri Lakshmi PAPER batches (logs/sri_lakshmi/screen_*.json, written by"
+   },
+   {
+    "path": "src/agentic/screen_model_ranked.py",
+    "loc": 188,
+    "purpose": "MODEL-RANKED SCREEN (S1M of EXP-2026-09-28-screen-rank-exit) on the latest session, with QUANT / QUAL / MACRO "
+   },
+   {
+    "path": "src/agentic/screen_sri_lakshmi.py",
+    "loc": 144,
+    "purpose": "SRI LAKSHMI weekly screen \u2014 PAPER track (2026-09-29). Rule: V3 from 2026-10-02 (Abhinav, 2026-09-30)."
+   },
+   {
     "path": "src/agentic/screen_theme_leaders.py",
-    "loc": 191,
-    "purpose": "LIVE SCREEN \u2014 winner theme > hot industry > right-to-win names (2026-09-08)."
+    "loc": 418,
+    "purpose": "LIVE SCREEN \u2014 winner theme > hot industry > right-to-win names (2026-09-08; universe aligned 2026-09-27)."
    },
    {
     "path": "src/agentic/sector_weak_shorts.py",
@@ -398,9 +618,34 @@
     "purpose": "Sector-weak large-cap short overlay."
    },
    {
+    "path": "src/agentic/setup_telegram.py",
+    "loc": 64,
+    "purpose": "One-time Telegram setup for SGM phone messages (2026-09-29)."
+   },
+   {
+    "path": "src/agentic/sim_allin_matrix.py",
+    "loc": 529,
+    "purpose": "ALL-IN x HOLD MATRIX (EXP-2026-09-27-allin-hold-matrix)."
+   },
+   {
+    "path": "src/agentic/sim_leader_cell_v2.py",
+    "loc": 655,
+    "purpose": "LEADER CELL v2 \u2014 the industry-leader philosophy rebuilt from scratch (EXP-2026-09-23b)."
+   },
+   {
+    "path": "src/agentic/sim_leader_portfolio_7x.py",
+    "loc": 815,
+    "purpose": "LEADER SLEEVE \u2014 10-year PORTFOLIO backtest, full factorial of 3 levers (EXP-2026-09-27-leader-7x-factorial)."
+   },
+   {
     "path": "src/agentic/sim_leader_sleeve.py",
     "loc": 109,
     "purpose": "STRATEGY-LEVEL walk-forward sim of theme>industry>leader (reg. 2026-09-08)."
+   },
+   {
+    "path": "src/agentic/sim_screen_rank_exit.py",
+    "loc": 327,
+    "purpose": "SCREEN x RANK x EXIT for the leader sleeve (EXP-2026-09-28-screen-rank-exit; registered in logs/experiments.js"
    },
    {
     "path": "src/agentic/study_2x_by_pe_windows.py",
@@ -408,9 +653,69 @@
     "purpose": "2x-ers x starting valuation x window (21/42/63/126 td ~ 30/60/90/180 days)."
    },
    {
+    "path": "src/agentic/study_order_book_events.py",
+    "loc": 149,
+    "purpose": "Order-book announcement event study (DESCRIPTIVE, not pre-registered; 2026-09-28, follow-up to EXP-2026-09-28-"
+   },
+   {
+    "path": "src/agentic/sweep_horizon_2x_year.py",
+    "loc": 152,
+    "purpose": "EXP-2026-09-24-horizon-sweep-2x-year \u2014 which (horizon, target) bucket doubles capital"
+   },
+   {
     "path": "src/agentic/tape_forensics.py",
     "loc": 112,
     "purpose": "Tape forensics \u2014 the deep per-name scrutiny, applied to EVERY basket name, every run."
+   },
+   {
+    "path": "src/agentic/test_bulk_buyers.py",
+    "loc": 146,
+    "purpose": "EXP-2026-09-30-bulk-buyers (registered in logs/experiments.jsonl before the bulk-deal history was even fetched"
+   },
+   {
+    "path": "src/agentic/test_hot_order_combo.py",
+    "loc": 843,
+    "purpose": "HOT INDUSTRY x MATERIAL ORDER x ABOVE 200DMA (EXP-2026-09-27-hot-x-material-order)."
+   },
+   {
+    "path": "src/agentic/test_industry_fundamentals.py",
+    "loc": 189,
+    "purpose": "EXP-2026-09-29-industry-fundamentals (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_industry_policy.py",
+    "loc": 143,
+    "purpose": "EXP-2026-09-29-industry-policy (Phase 2; registered in logs/experiments.jsonl before any outcome)."
+   },
+   {
+    "path": "src/agentic/test_order_backlog.py",
+    "loc": 277,
+    "purpose": "ORDER BACKLOG / PIT TTM REVENUE (EXP-2026-09-28-order-backlog; registered in logs/experiments.jsonl before any"
+   },
+   {
+    "path": "src/agentic/test_sector_type.py",
+    "loc": 143,
+    "purpose": "EXP-2026-09-30-sector-type (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_shp_detail.py",
+    "loc": 160,
+    "purpose": "EXP-2026-09-30-shp-detail (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_theme_engine.py",
+    "loc": 153,
+    "purpose": "EXP-2026-09-30-theme-engine (registered, then amended, in logs/experiments.jsonl before any outcome was comput"
+   },
+   {
+    "path": "src/agentic/test_trait_rules.py",
+    "loc": 215,
+    "purpose": "EXP-2026-09-30-trait-rules (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_v3_pnl.py",
+    "loc": 148,
+    "purpose": "EXP-2026-09-30-v3-pnl (registered in logs/experiments.jsonl before any outcome was computed)."
    },
    {
     "path": "src/agentic/track_multibagger_basket.py",
@@ -429,7 +734,7 @@
    },
    {
     "path": "src/agentic/daily_data_layer.sh",
-    "loc": 66,
+    "loc": 100,
     "purpose": "DAILY DATA LAYER \u2014 every data feed, every trading day. Cron-scheduled (launchd is"
    },
    {
@@ -493,14 +798,24 @@
     "purpose": "Parallel P&L crawl driver (user-approved 2026-09-05: \"run parallel fetchers\")."
    },
    {
+    "path": "src/agentic/run_v3_pnl_chain.sh",
+    "loc": 68,
+    "purpose": "EXP-2026-09-30-v3-pnl-full (+ RERUN-enriched of EXP-2026-09-30-v3-pnl), chained after the old-format P&L fetch"
+   },
+   {
     "path": "src/agentic/sgm_daily.sh",
-    "loc": 29,
+    "loc": 35,
     "purpose": "SGM DAILY \u2014 post-close, every trading day (cron; launchd is TCC-blocked on this Mac)."
    },
    {
     "path": "src/agentic/sgm_schedule.sh",
     "loc": 20,
     "purpose": "Install the SGM cron schedule (idempotent \u2014 replaces only lines tagged # SGM)."
+   },
+   {
+    "path": "src/agentic/sync_drive_mirror.sh",
+    "loc": 25,
+    "purpose": "Mirror the live working set to Google Drive: My Drive/SGM backups/day_to_day (2026-09-28, user request)."
    }
   ],
   "Backtests": [
@@ -511,7 +826,7 @@
    },
    {
     "path": "src/agentic/backtest_10yr_15d5pct.py",
-    "loc": 343,
+    "loc": 347,
     "purpose": "PROPER 10-YEAR BACKTEST \u2014 15D/+5% hybrid pipeline."
    },
    {
@@ -563,12 +878,17 @@
     "path": "src/agentic/backtest_sleeve_walkforward.py",
     "loc": 133,
     "purpose": "SLEEVE WALK-FORWARD A/B \u2014 pre-registered 2026-08-29, run BEFORE any sleeve ships."
+   },
+   {
+    "path": "src/agentic/backtest_weekly7d_6m_hold.py",
+    "loc": 114,
+    "purpose": "EXP-2026-10-02-weekly7d-6m-hold \u2014 the Mar/Apr 2026 weekly 7-day-winners logic, held 6 months."
    }
   ],
   "Data fetchers": [
    {
     "path": "src/agentic/build_macro_panel.py",
-    "loc": 208,
+    "loc": 224,
     "purpose": "Consolidate ALL macro/aggregate features into a single daily panel."
    },
    {
@@ -597,6 +917,11 @@
     "purpose": "Aggregate published broker / advisor stock recommendations from free public sources."
    },
    {
+    "path": "src/agentic/fetch_budget_capex.py",
+    "loc": 1003,
+    "purpose": "Union Budget capital expenditure by ministry/department, point-in-time (budgets 2016-17 .. 2026-27)."
+   },
+   {
     "path": "src/agentic/fetch_commodity_prices.py",
     "loc": 123,
     "purpose": "Fetch commodity prices via FRED (Federal Reserve Economic Data) \u2014 free, no auth."
@@ -622,6 +947,11 @@
     "purpose": "Fetch macro time-series \u2014 USDINR, Brent, India 10y yield, India VIX."
    },
    {
+    "path": "src/agentic/fetch_fred_drivers.py",
+    "loc": 75,
+    "purpose": "Macro driver histories from FRED for the industry macro pillar (EXP-2026-09-29-industry-fundamentals)."
+   },
+   {
     "path": "src/agentic/fetch_fundamentals.py",
     "loc": 416,
     "purpose": "Enrich the universe with fundamentals ratios per stock from NSE."
@@ -640,6 +970,11 @@
     "path": "src/agentic/fetch_global_rates.py",
     "loc": 125,
     "purpose": "Fetch global rates / risk indices via FRED \u2014 free, no auth."
+   },
+   {
+    "path": "src/agentic/fetch_iip_core.py",
+    "loc": 2001,
+    "purpose": "Point-in-time monthly IIP (MoSPI) and Index of Eight Core Industries (OEA/DPIIT), 2016 -> today."
    },
    {
     "path": "src/agentic/fetch_india_vix.py",
@@ -667,19 +1002,44 @@
     "purpose": "Pull RSS feeds for Indian-market news and tag each item with mentioned NSE symbols."
    },
    {
+    "path": "src/agentic/fetch_nse_holidays.py",
+    "loc": 58,
+    "purpose": "NSE trading holidays (2026-09-30) -> data/derived/nse_holidays.parquet (+ .manifest.json)."
+   },
+   {
     "path": "src/agentic/fetch_options_chain.py",
     "loc": 343,
     "purpose": "Fetch NSE F&O options chain data for each F&O underlying and write per-stock"
    },
    {
+    "path": "src/agentic/fetch_order_book.py",
+    "loc": 324,
+    "purpose": "ORDER BOOK (backlog) from company filings \u2014 investor presentations, press releases, results, concall transcrip"
+   },
+   {
+    "path": "src/agentic/fetch_order_fulltext.py",
+    "loc": 174,
+    "purpose": "Full-text order amounts for every order / L1-tender filing 2016-2026 (EXP-2026-09-27-hot-x-material-order)."
+   },
+   {
     "path": "src/agentic/fetch_pib_releases.py",
-    "loc": 278,
-    "purpose": "Fetch Press Information Bureau (PIB) press releases from 2016-present."
+    "loc": 902,
+    "purpose": "Fetch Press Information Bureau (PIB) press releases (English, PIB Delhi)."
+   },
+   {
+    "path": "src/agentic/fetch_pit_gg.py",
+    "loc": 219,
+    "purpose": "Insider / promoter trades from NSE's new filing system (corporates-pit-gg), 2026-05-01 onward (2026-09-30)."
    },
    {
     "path": "src/agentic/fetch_pnl_history.py",
-    "loc": 332,
+    "loc": 369,
     "purpose": "P&L HISTORY CRAWL \u2014 quarterly results figures for the fair-value program (2026-09-05)."
+   },
+   {
+    "path": "src/agentic/fetch_pnl_old_format.py",
+    "loc": 272,
+    "purpose": "Quarterly P&L for NSE's OLD-format results filings, 2014-2017 (2026-09-30)."
    },
    {
     "path": "src/agentic/fetch_reddit.py",
@@ -692,9 +1052,24 @@
     "purpose": "Fetch comprehensive fundamentals from Screener.in per-company pages."
    },
    {
+    "path": "src/agentic/fetch_screener_industry.py",
+    "loc": 162,
+    "purpose": "Industry classification for symbols NSE no longer labels \u2014 screener.in company pages."
+   },
+   {
+    "path": "src/agentic/fetch_screener_mcap_backfill.py",
+    "loc": 153,
+    "purpose": "Market cap + price from screener.in for equities that screener_fundamentals does not size."
+   },
+   {
     "path": "src/agentic/fetch_screener_screens.py",
     "loc": 129,
     "purpose": "Pull curated Screener.in stock screens \u2014 FII/DII buying, promoter buying, etc."
+   },
+   {
+    "path": "src/agentic/fetch_shp_detail.py",
+    "loc": 260,
+    "purpose": "Quarterly shareholding detail: mutual fund %, foreign portfolio investor %, domestic institutions %, retail"
    },
    {
     "path": "src/agentic/fetch_stock_fii_dii.py",
@@ -705,6 +1080,11 @@
     "path": "src/agentic/fetch_superstar_holdings.py",
     "loc": 224,
     "purpose": "Fetch publicly disclosed 'Superstar' investor holdings from Tickertape."
+   },
+   {
+    "path": "src/agentic/fetch_usdinr_history.py",
+    "loc": 61,
+    "purpose": "Historical USD/INR \u2014 FRED series DEXINUS (Federal Reserve H.10, Indian rupees per US dollar, noon"
    },
    {
     "path": "src/agentic/fetch_wiki_pageviews.py",
@@ -728,12 +1108,12 @@
    },
    {
     "path": "src/agentic/refresh_corporate_actions.py",
-    "loc": 91,
+    "loc": 169,
     "purpose": "Refresh the corporate-actions store (splits/bonuses) from NSE."
    },
    {
     "path": "src/agentic/refresh_prices.py",
-    "loc": 158,
+    "loc": 155,
     "purpose": "Fetch the latest NSE bhavcopy(s) and append/refresh stock_daily_facts parquet."
    }
   ],
@@ -762,7 +1142,7 @@
    },
    {
     "path": "src/agentic/generate_hybrid_basket.py",
-    "loc": 395,
+    "loc": 463,
     "purpose": "Generate the WEEKLY 15D/+5% hybrid basket."
    }
   ],
@@ -804,7 +1184,7 @@
    },
    {
     "path": "src/agentic/run_multi_horizon.py",
-    "loc": 180,
+    "loc": 191,
     "purpose": "Multi-horizon ensemble: 1d, 7d, 21d models stacked."
    }
   ],
@@ -831,7 +1211,7 @@
    },
    {
     "path": "src/agentic/verify_freshness.py",
-    "loc": 339,
+    "loc": 355,
     "purpose": "Freshness gate \u2014 refuses to let the pipeline proceed if any critical input is stale."
    }
   ],
@@ -867,7 +1247,7 @@
    },
    {
     "path": "src/agentic/run_weekly_pipeline.sh",
-    "loc": 293,
+    "loc": 321,
     "purpose": "WEEKLY 15D/+5% PIPELINE ORCHESTRATOR"
    }
   ],

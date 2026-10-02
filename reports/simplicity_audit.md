@@ -1,14 +1,26 @@
-# Simplicity Audit — 2026-09-23T20:09:58
+# Simplicity Audit — 2026-10-02T12:07:15
 
-**Scanned**: 240 files · 52,569 LOC · **184 findings**
+**Scanned**: 320 files · 73,429 LOC · **249 findings**
 
 Policy: stdlib-first, simplest correct solution, no speculative abstraction.
 Findings are candidates for deletion/simplification — audit never auto-rewrites.
 
-## Dead functions (defined, never referenced anywhere) — 10
+## Dead functions (defined, never referenced anywhere) — 22
 
 - `src/agentic/build_data_inventory_report.py` **year_counts** — line 9
+- `src/agentic/build_mcap_pit.py` **rename_successors** — line 228
 - `src/agentic/build_news_event_features.py` **load_news** — line 75
+- `src/agentic/eval_checks.py` **ranking_lift** — line 178
+- `src/agentic/eval_checks.py` **preregistered** — line 192
+- `src/agentic/eval_checks.py` **drive_checksums** — line 282
+- `src/agentic/eval_checks.py` **weekly_pick_review** — line 315
+- `src/agentic/eval_checks.py` **no_unexplained_cliffs** — line 345
+- `src/agentic/eval_checks.py` **renames_mapped** — line 359
+- `src/agentic/eval_checks.py` **insider_fresh** — line 389
+- `src/agentic/eval_checks.py` **message_grounded** — line 398
+- `src/agentic/eval_checks.py` **claims_sourced** — line 407
+- `src/agentic/eval_checks.py` **claude_golden** — line 432
+- `src/agentic/eval_checks.py` **every_feed_guarded** — line 443
 - `src/agentic/fetch_forex_macro.py` **stooq_csv** — line 51
 - `src/ingest/fundamentals/interface.py` **load_fundamentals** — line 24
 - `src/ingest/nse/normalize.py` **read_bhavcopy_csv_text** — line 57
@@ -21,7 +33,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Dead classes — 0
 
 
-## Unused imports — 88
+## Unused imports — 92
 
 - `src/agentic/ab_event_features_15d.py` **sys** — from sys
 - `src/agentic/ab_event_rules_15d.py` **re** — from re
@@ -42,10 +54,14 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/build_event_polarity.py` **np** — from numpy
 - `src/agentic/build_handoff.py` **json** — from json
 - `src/agentic/build_status_dashboard.py` **subprocess** — from subprocess
+- `src/agentic/build_symbol_isin_history.py` **sys** — from sys
 - `src/agentic/compute_feature_importance.py` **np** — from numpy
 - `src/agentic/data_completeness.py` **np** — from numpy
 - `src/agentic/devils_advocate.py` **json** — from json
 - `src/agentic/devils_advocate.py` **np** — from numpy
+- `src/agentic/event_materiality_study.py` **re** — from re
+- `src/agentic/explore_hitter_waves.py` **np** — from numpy
+- `src/agentic/explore_pnl_winners.py` **sys** — from sys
 - `src/agentic/factor_evaluator.py` **stats** — from scipy
 - `src/agentic/factor_registry.py` **field** — from dataclasses
 - `src/agentic/fetch_amfi_mf_holdings.py` **time** — from time
@@ -60,8 +76,8 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/fetch_fundamentals.py` **sys** — from sys
 - `src/agentic/fetch_global_macro.py` **timedelta** — from datetime
 - `src/agentic/fetch_news_per_symbol.py` **re** — from re
-- `src/agentic/fetch_pib_releases.py` **sys** — from sys
 - `src/agentic/fetch_pnl_history.py` **ET** — from xml
+- `src/agentic/fetch_pnl_old_format.py` **shutil** — from shutil
 - `src/agentic/fetch_reddit.py` **hashlib** — from hashlib
 - `src/agentic/fetch_screener_fundamentals.py` **timezone** — from datetime
 - `src/agentic/fetch_screener_screens.py` **timezone** — from datetime
@@ -79,32 +95,50 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/generate_trade_plan.py` **np** — from numpy
 - `src/agentic/hypothesis_agent.py` **pd** — from pandas
 - `src/agentic/inspect_symbol.py` **sys** — from sys
-- `src/agentic/joint_signal_analyzer.py` **np** — from numpy
-- `src/agentic/mine_doubler_ignition.py` **np** — from numpy
-- `src/agentic/mine_fast_double_conditional.py` **sys** — from sys
-- `src/agentic/mine_industry_contagion.py` **sys** — from sys
-- … and 28 more
+- … and 32 more
 
 ## Single-method stateless classes (should be functions) — 0
 
 
-## Trivial wrappers (single-call bodies) — 32
+## Trivial wrappers (single-call bodies) — 54
 
 - `src/agentic/ab_event_features_15d.py` **had** — line 138
 - `src/agentic/ab_valuation_3h.py` **fwd** — line 135
 - `src/agentic/agent_loop.py` **load_registry** — line 52
+- `src/agentic/anatomy_1p5x.py` **era_of** — line 247
 - `src/agentic/autopsy_leader_winners.py` **B** — line 111
-- `src/agentic/backtest_10yr_15d5pct.py` **qc** — line 124
+- `src/agentic/backfill_bulk_deals.py` **months** — line 37
+- `src/agentic/backtest_10yr_15d5pct.py` **qc** — line 126
 - `src/agentic/backtest_hybrid_15d5pct.py` **qc** — line 118
 - `src/agentic/backtest_sleeve_walkforward.py` **fwd_max** — line 38
 - `src/agentic/build_dashboard.py` **extract_mermaid** — line 65
 - `src/agentic/build_html_viewer.py` **extract_mermaid_blocks** — line 23
+- `src/agentic/build_industry_scores.py` **pct** — line 49
+- `src/agentic/build_policy_scores.py` **pct** — line 34
+- `src/agentic/engine_replay.py` **lgbm** — line 54
+- `src/agentic/engine_replay.py` **xgbm** — line 60
+- `src/agentic/eval_checks.py` **_res** — line 28
 - `src/agentic/fetch_announcements_historical.py` **has_chunk** — line 65
-- `src/agentic/fetch_pib_releases.py` **has_shard** — line 120
+- `src/agentic/fetch_budget_capex.py` **fy_start** — line 224
+- `src/agentic/fetch_iip_core.py` **ym** — line 329
+- `src/agentic/fetch_iip_core.py` **fnum** — line 333
+- `src/agentic/fetch_iip_core.py` **norm_ws** — line 343
+- `src/agentic/fetch_iip_core.py` **fy_month** — line 425
+- `src/agentic/fetch_iip_core.py` **parse_iip_pdf** — line 742
+- `src/agentic/fetch_pib_releases.py` **now_ist** — line 143
+- `src/agentic/fetch_pib_releases.py` **_norm** — line 147
+- `src/agentic/fetch_pib_releases.py` **_meta_path** — line 325
 - `src/agentic/mine_doubler_ignition.py` **fwd** — line 40
 - `src/agentic/mine_fast_double_conditional.py` **fwd** — line 52
 - `src/agentic/mine_highvol_subcohorts.py` **fend** — line 51
 - `src/agentic/mine_industry_contagion.py` **fwd** — line 37
+- `src/agentic/pocket_search_leader.py` **cut** — line 102
+- `src/agentic/research_queue.py` **has_code** — line 43
+- `src/agentic/sim_allin_matrix.py` **fixed_offsets** — line 337
+- `src/agentic/sim_leader_cell_v2.py` **_norm** — line 125
+- `src/agentic/sim_leader_portfolio_7x.py` **_period** — line 478
+- `src/agentic/sweep_horizon_2x_year.py` **fwd_max** — line 40
+- `src/agentic/trust/data_ready.py` **qc** — line 61
 - `src/analysis/week7_15pct_cluster_rerank_compare.py` **_make_relaxed_rule** — line 83
 - `src/analysis/week7_15pct_random_forest_allnames.py` **_combine_focus_score** — line 55
 - `src/analysis/week7_universe_contextual_bandit.py` **_bool_to_float** — line 60
@@ -123,7 +157,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/report/weekly_portfolio_report.py` **_default_target_date** — line 55
 - `src/utils/data_catalog.py` **sidecar_manifest_path** — line 120
 
-## Duplicated function bodies (shape-identical) — 32
+## Duplicated function bodies (shape-identical) — 34
 
 - `2 copies` **build_panel** — src/agentic/ab_test_event_features.py:build_panel, src/agentic/ab_test_event_polarity.py:build_panel
 - `2 copies` **c2** — src/agentic/ab_vol_gate.py:c2, src/agentic/ab_zscore_bands.py:c2
@@ -136,6 +170,8 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `2 copies` **tag_symbols** — src/agentic/fetch_reddit.py:tag_symbols, src/agentic/fetch_youtube.py:tag_symbols
 - `2 copies` **get_top_symbols** — src/agentic/fetch_screener_fundamentals.py:get_top_symbols, src/agentic/fetch_stock_fii_dii.py:get_top_symbols
 - `2 copies` **main** — src/agentic/hypothesis_agent.py:main, src/agentic/hypothesis_agent_macro.py:main
+- `2 copies` **fading_only** — src/agentic/report_pick_stats.py:fading_only, src/agentic/report_v3_stats.py:fading_only
+- `2 copies` **model_scores** — src/agentic/sim_screen_rank_exit.py:model_scores, src/agentic/test_v3_pnl.py:scores
 - `2 copies` **_select_daily_top_n** — src/analysis/day1_5pct_model.py:_select_daily_top_n, src/analysis/day1_model_challenger.py:_select_daily_top_n
 - `2 copies` **_evaluate_rf_metrics** — src/analysis/day1_random_forest_quick_compare.py:_evaluate_rf_metrics, src/analysis/week7_random_forest_quick_compare.py:_evaluate_rf_metrics
 - `2 copies` **_fit_predict_classifier** — src/analysis/day1_random_forest_quick_compare.py:_fit_predict_classifier, src/analysis/week7_random_forest_quick_compare.py:_fit_predict_classifier
@@ -158,11 +194,15 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `2 copies` **load_current_positions** — src/portfolio/state.py:load_current_positions, src/portfolio/state.py:load_execution_ledger
 - `2 copies` **_suggested_allocation** — src/report/stateful_weekly_winners.py:_suggested_allocation, src/report/weekly_portfolio_report.py:_suggested_allocation
 
-## Third-party deps with a stdlib equivalent — 13
+## Third-party deps with a stdlib equivalent — 17
 
+- `src/agentic/fetch_iip_core.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/agentic/fetch_news_rss.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/agentic/fetch_pib_releases.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/agentic/fetch_reddit.py` **requests** — urllib.request (already used by every fetcher in this repo)
+- `src/agentic/fetch_screener_industry.py` **requests** — urllib.request (already used by every fetcher in this repo)
+- `src/agentic/fetch_screener_mcap_backfill.py` **requests** — urllib.request (already used by every fetcher in this repo)
+- `src/agentic/fetch_usdinr_history.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/agentic/fetch_youtube.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/ingest/derivatives/nse_oi.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/ingest/events/nse_bulk_block.py` **requests** — urllib.request (already used by every fetcher in this repo)
@@ -174,28 +214,44 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/ingest/nse/session.py` **requests** — urllib.request (already used by every fetcher in this repo)
 - `src/ingest/public_fallback/groww.py` **requests** — urllib.request (already used by every fetcher in this repo)
 
-## Files > 800 LOC (split candidates) — 5
+## Files > 800 LOC (split candidates) — 12
 
+- `src/agentic/anatomy_1p5x.py` **** — 930 LOC
 - `src/agentic/build_dashboard.py` **** — 1114 LOC
+- `src/agentic/fetch_budget_capex.py` **** — 1003 LOC
+- `src/agentic/fetch_iip_core.py` **** — 2001 LOC
+- `src/agentic/fetch_pib_releases.py` **** — 902 LOC
+- `src/agentic/model_bakeoff_1p5x.py` **** — 872 LOC
+- `src/agentic/sim_leader_portfolio_7x.py` **** — 815 LOC
+- `src/agentic/test_hot_order_combo.py` **** — 843 LOC
 - `src/analysis/week7_15pct_cluster_rerank_compare.py` **** — 886 LOC
 - `src/analysis/week7_15pct_random_forest_allnames.py` **** — 923 LOC
 - `src/analysis/week7_5pct_gbm_allnames_macro_veto.py` **** — 1054 LOC
 - `src/report/production_weekly_run.py` **** — 989 LOC
 
-## Functions nested > 5 deep — 4
+## Functions nested > 5 deep — 18
 
+- `src/agentic/build_mcap_pit.py` **rename_links** — depth>5
+- `src/agentic/build_price_only_ca_factors.py` **main** — depth>5
+- `src/agentic/fetch_budget_capex.py` **parse_stat3** — depth>5
+- `src/agentic/fetch_iip_core.py` **parse_iip_text** — depth>5
+- `src/agentic/fetch_iip_core.py` **parse_ici_xlsx** — depth>5
+- `src/agentic/fetch_iip_core.py` **build_iip** — depth>5
+- `src/agentic/fetch_iip_core.py` **build_core** — depth>5
+- `src/agentic/fetch_order_book.py` **crawl** — depth>5
+- `src/agentic/fetch_order_fulltext.py` **main** — depth>5
+- `src/agentic/fetch_pib_releases.py` **backfill** — depth>5
 - `src/agentic/miss_learner.py` **analyze_misses** — depth>5
 - `src/agentic/repair_ca_adjustments.py` **main** — depth>5
+- `src/agentic/sim_leader_portfolio_7x.py` **run** — depth>5
+- `src/agentic/sim_screen_rank_exit.py` **run_exit** — depth>5
 - `src/agentic/simplicity_auditor.py` **audit** — depth>5
+- `src/agentic/test_hot_order_combo.py` **simulate** — depth>5
+- `src/agentic/trust/claim_check.py` **read_session** — depth>5
 - `src/analysis/week7_15pct_meta_rerank_compare.py` **_run_single_model** — depth>5
 
-## Debt ledger — 18 open / 19 total
+## Debt ledger — 25 open / 27 total
 
-- 2026-07-07 `src/agentic/generate_hybrid_basket.py` — ML>=0.85 penalty (-0.5 band_fit) routes around classifier overconfidence instead of recalibrating the classifier (why: ship corrected basket same day as the 10-yr backtest finding; loc 8; speed none)
-- 2026-07-07 `src/agentic/backtest_10yr_15d5pct.py` — band-fit>=2 subset not yet re-run under day-by-day sequenced exits (why: day-by-day correction landed 2026-07-07; full rerun takes hours; loc 0; speed unknown until rerun)
-- 2026-07-07 `src/agentic/fetch_global_macro.py` — nifty_50/bank_nifty/shcomp/gold have NO fallback source when Yahoo 429s (why: FRED has no NSE index series; alternates need research; loc 0; speed none)
-- 2026-09-19 `reconcile_20260919.sh / generate_hybrid_basket.py` — Convergence check 3 tests generator determinism on identical live inputs, not a full engine-retrain reproduce of an OLD committed basket (why: engines and generator take no --data-through arg; truncating the 5M-row panel to a past date is a multi-hour serial run; loc 40; speed none)
-- 2026-09-19 `src/agentic/find_high_conviction.py / run_weekly_pipeline.sh step 1 / verify_freshness.py` — extra_features.parquet (HC engine join, 123 cols) is 3 months stale and ungated; left as-is this run (why: feature_factory.py loads the full 5M-row panel plus 8 side inputs — unprofiled under the 55GB memory law; and fresh vs median-filled extras is a model change that needs a pre-registered walk-forward A/B, not a hot swap on basket night; loc 15; speed +? min/week (unprofiled))
 - 2026-09-19 `src/agentic/verify_freshness.py MACRO_PANEL contract` — breadth_50/adv_decl_ratio (price-derived) not column-checked; 7 FRED spread columns dead since Apr-30 with no contract (why: found during 09-19 reconcile; adding contracts without fixing fetch_global_rates.py would hard-block every basket; loc 6; speed none)
 - 2026-09-19 `src/agentic/render_basket_report.py _eta_days` — ETA is vol-implied median first-passage (0.45*(0.05/vol)^2), not calibrated on realized touch times (why: first report needed today; the 4,222-trade day-by-day backtest has the realized days-to-touch to calibrate against; loc 20; speed none)
 - 2026-09-23 `src/agentic/sim_leader_sleeve.py maxdd_of_cohort_path (used by EXP-2026-09-23-extended-leader)` — maxDD is the sim's smoothed rolling-26 proxy, not a true overlapping-cohort daily NAV (why: 6e had to use the metric the registered +11.1/+19.3% leader result was judged on; changing it mid-experiment would be a second experiment; loc +40; speed +1 min)
@@ -209,3 +265,10 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - 2026-09-23 `src/agentic/backtest_10yr_15d5pct.py (EXP-2026-09-24-engines-count-sizing)` — engines_count A/B registered but not run; no engines_count in the 10y trade table (why: The five engines take no as-of date: each trains LGBM+XGB on the full panel and scores only the latest day (31 min serial for one as-of on 2026-09-23). A walk-forward engines_count needs a replay harness that refits all 5 engines at each cutoff and scores every weekly Monday since 2016 (~540 windows). Even with yearly refits and no OOF-CV that is ~10 refits x ~12 model pairs, an est. 2-4 h serial on a 24 GB Mac, plus porting each engine's panel/targets into cutoff-aware functions. Fidelity limits: extras exist only from 2023-06 (median-filled before, so pre-2023 hc/cs are different models from live); mh reads catalyst_features/sector_index_members, which may not be point-in-time. The backtest itself still uses the flat -3% SL (banned) and the non-canonical CA store (_incremental/normalized), so C2 (ab_vol_gate.c2) and the canonical CA path must go in first; loc +~350; speed one-off 2-4 h serial)
 - 2026-09-23 `data/derived/extra_features.parquet / feature_factory.py / verify_freshness.py` — profiled but NOT wired into daily_data_layer.sh or the gate (update to 2026-09-19 entry) (why: Profile 2026-09-24 on the repaired panel: peak RSS 13.5 GB (14,475,296,768 B), 44 s wall, 1,862,326 rows x 184 cols, 2023-06-01..2026-09-23, so memory is fine. But cs AND hc both join this file, so refreshing it in place changes both engines immediately, and a 3-bd Contract blocks every basket until it is refreshed. The registered A/B (fresh vs incumbent median-filled extras, >=13 weekly windows) differs only after 2026-06-17; windows with a matured 15d label run 2026-06-22..2026-09-01 = 11 Mondays, so the >=13 bar can't be met before data through ~2026-10-13. Fresh file also adds 5 macro_gold_inr_* cols that pass the macro_ SAFE prefix: a feature-set change too; loc +5; speed +44 s per data-layer run)
 - 2026-09-23 `reports/simplicity_audit.md` — audit 185 findings vs 162 at the 2026-07-07 baseline (+13 unused imports, +8 trivial wrappers, +1 dead func, +1 deep nesting), not zero (why: the delta sits in the 47 research scripts added since July (ab_*/mine_*/autopsy_*), not in the production files touched this session (only the unused numpy import in build_news_event_features.py, removed). Cleaning ~20 untracked research scripts is out of scope for a data-integrity session; loc -25; speed 0)
+- 2026-09-23 `data/derived/news_feed.parquet (fetch_news_rss.py)` — RSS store begins Apr-2026 (July missing); symbol tagger matches tickers only (GRT/TBZ headline has symbols=[]) (why: free RSS has no history; tagger predates company-name matching; loc +15; speed 0)
+- 2026-09-23 `screen_theme_leaders.py / sim_leader_sleeve.py group heat` — industry heat = MEAN own ret60 over >=5 names — one outlier (TBZ +182%) makes a flat group 'hot' (why: the validated cell was defined this way; changing it is a new experiment; loc +10; speed 0)
+- 2026-09-23 `src/agentic/run_multi_horizon.py (mh engine) / verify_freshness.py` — data/derived/catalyst_features.parquet ends 2026-06-01 and is ungated; mh fillna(0.0)s every catalyst feature after that date, and its sector map is today's index membership (tmp/from_scratch_7d_run/alt2/sector_index_members.parquet, 1,726 rows), not point-in-time (why: found while building engine_replay.py 2026-09-24. Same class as extra_features (sgm-data-integrity #3): an 'optional' join silently going stale. Zero-filling is a silent model change, and it's worse than median-filling because 0 means 'no catalyst'; loc +5; speed unknown until profiled)
+- 2026-09-24 `render_leader_report.PRIOR_2X / screen overlays` — LEADER&cheap and FRESH priors still from the v1 sim on the old map; screen PE overlay shows demerger/tiny-EPS artifacts (RAYMOND PE 1.4, KABRAEXTRU PE 5,235) (why: only the production cell was re-run on nse4 this session; loc +15; speed 0)
+- 2026-09-24 `src/agentic/pocket_search_leader.py` — re-implements sim_leader_cell_v2 panel/path/heat machinery instead of importing it (sim is a top-level script) (why: one-session search; refactoring the sim mid-experiment risks changing registered numbers; loc -80; speed 0)
+- 2026-09-27 `data/derived/stock_daily_facts_adjusted_2015plus.parquet` — symbols that only ever traded BE/BZ (never EQ) are not in the panel; 2015-16 coverage 98-99.5% of raw EQ/BE/BZ symbols (2017+ >= 99.57%) (why: repair_be_series_gaps inserts only missing sessions of symbols already in the panel (no new symbols); loc +20; speed 0)
+- 2026-09-27 `data/corporate_actions_full_history (CA store)` — corporate actions missing from the NSE CA feed (e.g. CROMPGREAV demerger 2016-03-15) stay unadjusted (why: price-only factors are derived only for CA-store rows; auto-adjusting unexplained cliffs risks erasing real crashes; loc +40; speed 0)

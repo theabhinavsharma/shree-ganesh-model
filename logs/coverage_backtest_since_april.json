@@ -1,0 +1,10 @@
+{
+  "run_date": "2026-07-01T10:47:33.759186",
+  "baskets_analyzed": 5,
+  "total_winners_scanned": 100,
+  "caught": 3,
+  "correctly_filtered": 45,
+  "missed_catchable": 52,
+  "coverage_rate": 0.055,
+  "filter_precision": 0.464
+}
