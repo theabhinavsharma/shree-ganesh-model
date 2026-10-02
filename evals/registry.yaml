@@ -310,3 +310,13 @@ evals:
     cadence: daily
     owner: system
     check: holidays_match_panel
+
+  - id: trust.results_data_ready
+    statement: "No A/B result is computed on data below the bar: every result logged from 2026-10-02 has a passing data-readiness check before it, the same day."
+    why: "Garbage in, garbage out. The P&L test (EXP-2026-09-30-v3-pnl-full) gave a verdict on P&L that was 85-90% complete for 2015-17, unverifiable for 2025-26 and filled in 20-75% of rows in 2016-19 (INC-2026-10-02-ab-on-incomplete-data)."
+    source_of_truth: "logs/experiments.jsonl: <EXP>-DATA-READY lines written by src/agentic/trust/data_ready.gate() vs RESULT / RERUN lines; the bar in configs/data_bar.json"
+    threshold: "0 results without a READY line"
+    action: warn
+    cadence: daily
+    owner: system
+    check: results_data_ready

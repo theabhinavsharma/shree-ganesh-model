@@ -28,6 +28,7 @@
   "trust.claims_sourced",
   "trust.claude_golden",
   "trust.lessons_intact",
+  "trust.results_data_ready",
   "trust.results_reproduce"
  ],
  "incidents": [
@@ -45,6 +46,7 @@
   "INC-2026-09-30-telegram-letters",
   "INC-2026-09-30-verdicts-on-broken-data",
   "INC-2026-09-30-xbrl-promoter-member",
+  "INC-2026-10-02-ab-on-incomplete-data",
   "INC-2026-10-02-weekly-freshness-deadlock"
  ],
  "lessons": {
@@ -59,6 +61,7 @@
    "b31a1ac5e634"
   ],
   "sgm-new-data-source": [
+   "0cbf0a9bcd58",
    "2987603fa8a9",
    "3c24a166350d",
    "519ee084355d",
@@ -70,6 +73,7 @@
    "ed436f7092bf"
   ],
   "sgm-new-idea": [
+   "0cbf0a9bcd58",
    "74a5a781ad81",
    "8baf4d91b659",
    "b5686081fc85"

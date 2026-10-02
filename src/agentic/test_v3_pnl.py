@@ -10,6 +10,8 @@ Window: weekly entries from 2020-01-01 (the first year a 2019-trained model can 
 ADOPTION PASS = sp.beats(V3P, V3) at phase 0 and in >= 4 of 5 phases. DIAGNOSTIC: V3P vs V3T (the P&L effect alone).
 SGM_PNL_FULL=1: EXP-2026-09-30-v3-pnl-full — V3 vs V3F (rows rebuilt on the P&L backfill, 50 features, all years) vs V3PF
 (same rows, + the 7 P&L features, all years), entries from 2019-01-01; adoption = V3PF beats V3 (same pass rule).
+Before any outcome: trust/data_ready.gate() (configs/data_bar.json). Below the bar -> DATA-READY NOT READY, exit 3, no
+result. SGM_GATE_ONLY=1: run the gate and stop.
 SGM_RERUN_TAG=<tag>: same registered test on re-built model scores (e.g. after the old-format P&L backfill); writes
 v3_pnl/rerun_<tag>/ and logs EXP-2026-09-30-v3-pnl-RERUN-<tag>. SGM_REPRO=1: run, write repro/, log nothing.
 """
@@ -61,6 +63,27 @@ def main() -> None:
     fin = lambda s: sector.get(imap.get(s)) == "Financial Services"  # noqa: E731
     fading_only, _, _ = build_themes.fading_checker()
     grid = lambda o: [d for d in sp.weekly_grid(D["cal"], o) if d >= START]  # noqa: E731
+
+    # ---- data-readiness gate (2026-10-02, GIGO): no result on P&L data below configs/data_bar.json
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import data_ready as dr
+    PNL_F = ["sales_yoy", "eps_yoy", "profitable", "loss_to_profit", "days_since_results"]   # pe / pe_ind blank for loss-makers by
+    rows_path = OUTDIR / "full/rows/rows.parquet" if FULL else ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet"  # definition:
+    pnl_path = ROOT / ("data/derived/pnl_quarterly_enriched.parquet" if FULL else "data/derived/pnl_quarterly.parquet")  # 'profitable'
+    R = pd.read_parquet(rows_path, columns=["trade_date", "core"] + PNL_F); R = R[R["core"].astype(bool)]  # stands in for them
+    Q = pd.read_parquet(pnl_path, columns=["symbol", "quarter_end"]); Q["y"] = pd.to_datetime(Q["quarter_end"]).dt.year
+    C = pd.read_parquet(ROOT / "data/derived/results_calendar_full.parquet", columns=["symbol", "toDate", "period"])
+    C = C[C["period"].astype(str).str.lower() == "quarterly"]; C["y"] = pd.to_datetime(C["toDate"], format="%d-%b-%Y", errors="coerce").dt.year
+    have = Q.drop_duplicates(["symbol", "quarter_end"]).groupby("y").size()
+    official = C.drop_duplicates(["symbol", "toDate"]).groupby("y").size()
+    train_from = 2016 if FULL else 2019
+    end = D["cal"][-1]
+    checks = [dr.completeness("P&L company-quarters vs NSE's quarterly results calendar", have, official, range(train_from - 1, end.year + 1)),
+              dr.coverage("P&L features filled in the model rows (liquid stocks)", R, "trade_date", PNL_F, range(train_from, end.year + 1))]
+    checks += [dr.span(f"{NAME[k]} model scores", P["trade_date"], START, end) for k, P in PS.items()]
+    dr.gate(EXP_ID, checks, run=os.environ.get("SGM_RERUN_TAG") or "RESULT")
+    if os.environ.get("SGM_GATE_ONLY") == "1":
+        return
 
     def v3(P, wk):
         top9 = tif.select_elig(X["F"], wk, imap, P, G1)

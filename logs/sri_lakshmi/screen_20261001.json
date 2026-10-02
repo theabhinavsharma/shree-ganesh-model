@@ -1,0 +1,152 @@
+{
+ "screen_id": "20261001",
+ "data_through": "2026-10-01",
+ "created_at": "2026-10-02T11:05:22",
+ "created_note": "saved before the entry session",
+ "entry": "next session open after data_through",
+ "hold_td": 126,
+ "cost_rt_pct": 0.5,
+ "exit": "TIME (126 sessions, close); no stops",
+ "sizing": "PAPER",
+ "status": "SLM V3 (EXP-2026-09-30-v3-vs-g1); production rule from 2026-10-02 by Abhinav's decision; paper until the weekly review is signed",
+ "rule": "G1 (model-ranked screen: trend, heat_pct >= 0.70, top 9 by ensemble, minus hot industries with P_pct < 0.30), then drop Financial Services and stocks tied only to fading themes, no refill",
+ "names": [
+  {
+   "rank": 1,
+   "symbol": "BIRLACABLE",
+   "rtw": 9,
+   "industry": "Telecom -  Equipment & Accessories",
+   "close": 383.0,
+   "model_score": 0.9755,
+   "heat_pct": 0.986,
+   "P_pct": 0.767,
+   "takeover": false,
+   "g1_rank": 1
+  },
+  {
+   "rank": 2,
+   "symbol": "DEEDEV",
+   "rtw": 8,
+   "industry": "Industrial Products",
+   "close": 663.2,
+   "model_score": 0.9658,
+   "heat_pct": 0.959,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 3
+  },
+  {
+   "rank": 3,
+   "symbol": "STLTECH",
+   "rtw": 7,
+   "industry": "Telecom -  Equipment & Accessories",
+   "close": 955.35,
+   "model_score": 0.9598,
+   "heat_pct": 0.986,
+   "P_pct": 0.767,
+   "takeover": false,
+   "g1_rank": 4
+  },
+  {
+   "rank": 4,
+   "symbol": "ARROWGREEN",
+   "rtw": 6,
+   "industry": "Packaging",
+   "close": 865.2,
+   "model_score": 0.9512,
+   "heat_pct": 0.863,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 5
+  },
+  {
+   "rank": 5,
+   "symbol": "JNKINDIA",
+   "rtw": 5,
+   "industry": "Industrial Products",
+   "close": 432.7,
+   "model_score": 0.9443,
+   "heat_pct": 0.959,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 6
+  },
+  {
+   "rank": 6,
+   "symbol": "KABRAEXTRU",
+   "rtw": 4,
+   "industry": "Industrial Products",
+   "close": 765.3,
+   "model_score": 0.8866,
+   "heat_pct": 0.959,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 7
+  },
+  {
+   "rank": 7,
+   "symbol": "GANDHAR",
+   "rtw": 3,
+   "industry": "Lubricants",
+   "close": 282.6,
+   "model_score": 0.8672,
+   "heat_pct": 0.945,
+   "P_pct": 0.395,
+   "takeover": false,
+   "g1_rank": 8
+  },
+  {
+   "rank": 8,
+   "symbol": "SUNFLAG",
+   "rtw": 2,
+   "industry": "Iron & Steel Products",
+   "close": 433.5,
+   "model_score": 0.8629,
+   "heat_pct": 0.89,
+   "P_pct": 1.0,
+   "takeover": false,
+   "g1_rank": 9
+  }
+ ],
+ "reserves": [
+  {
+   "rank": 1,
+   "symbol": "CORDSCABLE"
+  },
+  {
+   "rank": 2,
+   "symbol": "IDEAFORGE"
+  }
+ ],
+ "dropped_financials": [],
+ "dropped_fading_theme": [
+  "TBZ"
+ ],
+ "g1_top9": [
+  "BIRLACABLE",
+  "TBZ",
+  "DEEDEV",
+  "STLTECH",
+  "ARROWGREEN",
+  "JNKINDIA",
+  "KABRAEXTRU",
+  "GANDHAR",
+  "SUNFLAG"
+ ],
+ "vetoed_industries": [
+  "Dyes And Pigments",
+  "Garments & Apparels",
+  "Paper & Paper Products",
+  "Petrochemicals"
+ ],
+ "vs_model_screen": {
+  "dropped": [
+   "BHAGERIA",
+   "BODALCHEM"
+  ],
+  "added": [
+   "GANDHAR",
+   "SUNFLAG"
+  ]
+ }
+}

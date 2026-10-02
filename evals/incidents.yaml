@@ -217,3 +217,20 @@ incidents:
     lesson: A gate may only require inputs that are produced before it runs; outputs refreshed later in the same run belong
       to that later step's own check. Count file age in NSE sessions (nse_calendar), never plain weekdays.
     commit: ''
+  - id: INC-2026-10-02-ab-on-incomplete-data
+    date: '2026-10-02'
+    title: P&L A/B gave a verdict on P&L that was incomplete (85-90% 2015-17, unverifiable 2025-26, 20-75% of rows filled 2016-19)
+    found_by: user asked if P&L was complete 2015-2026; coverage check against NSE's results calendar
+    root_cause: 'registered tests had no data-quality bar: a test computed a result on whatever data existed'
+    blast_radius: EXP-2026-09-30-v3-pnl and -v3-pnl-full verdicts (marked PROVISIONAL in experiments.jsonl); any future A/B
+    fix: trust/data_ready.gate() + configs/data_bar.json (completeness >= 95% of the official count every year, features filled
+      >= 75% of rows every year, inputs span the window); below the bar a test logs NOT READY and exits 3 with no verdict; wired
+      into test_v3_pnl; demo blocks the P&L test
+    guard_eval: trust.results_data_ready
+    skills:
+    - sgm-new-idea
+    - sgm-new-data-source
+    lesson: 'No verdict on data below the bar (GIGO): every registered test calls src/agentic/trust/data_ready.gate() before
+      computing outcomes, with completeness vs the official count, per-year coverage of every input an arm uses, and span checks;
+      NOT READY means fix the data, not lower the bar.'
+    commit: ''

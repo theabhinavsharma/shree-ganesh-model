@@ -1,0 +1,6 @@
+{
+ "about": "Minimum data quality before any registered A/B test may compute a result (src/agentic/trust/data_ready.py). Set 2026-10-02 after the P&L test ran on 85-90% complete 2015-17 data and unverifiable 2025-26 data. A REGISTERED line may set a different bar for its own test; the log shows which bar was used.",
+ "completeness_min": 0.95,
+ "coverage_min": 0.75,
+ "span_tolerance_days": 10
+}

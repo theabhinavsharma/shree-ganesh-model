@@ -241,9 +241,15 @@ def one_screen_per_week(ctx: dict) -> dict:
     return _res("PASS" if not dup else "FAIL", len(dup), "; ".join(dup))
 
 
+LIVE_TRACKS = ("sleeve", "sri_lakshmi")   # still scored daily (2026-09-30: model screen and SL-old stopped); immutability
+                                          # (screens_immutable) still covers every folder in SCREEN_DIRS
+
+
 def paper_scored(ctx: dict) -> dict:
     behind = []
     for tag, d in SCREEN_DIRS.items():
+        if tag not in LIVE_TRACKS:
+            continue
         outs = {}
         of = d / "outcomes.jsonl"
         if of.exists():
