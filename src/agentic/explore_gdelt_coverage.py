@@ -38,7 +38,12 @@ def clean(n: str) -> str:
 
 
 rows = []
+T0, BUDGET_MIN = time.time(), 30          # hard stop: a feasibility check must not run for hours (2026-10-02, ran 2 h unnoticed)
 for r in S.itertuples():
+    done = len(rows); bad = sum(x["status"] != "OK" for x in rows)
+    if (done >= 5 and bad / done > 0.5) or (time.time() - T0) / 60 > BUDGET_MIN:
+        print(f"STOPPED EARLY: {bad}/{done} failed, {(time.time() - T0) / 60:.0f} min elapsed (budget {BUDGET_MIN} min)", flush=True)
+        break
     name = clean(C.get(r.symbol, r.symbol))
     q = urllib.parse.quote(f'"{name}" sourcecountry:IN')
     url = f"https://api.gdeltproject.org/api/v2/doc/doc?query={q}&mode=timelinevolraw&format=json&startdatetime=20170101000000&enddatetime=20251231235959"

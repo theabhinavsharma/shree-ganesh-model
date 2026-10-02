@@ -47,11 +47,13 @@
   "INC-2026-09-30-verdicts-on-broken-data",
   "INC-2026-09-30-xbrl-promoter-member",
   "INC-2026-10-02-ab-on-incomplete-data",
+  "INC-2026-10-02-background-job-unwatched",
   "INC-2026-10-02-weekly-freshness-deadlock"
  ],
  "lessons": {
   "sgm-triage": [
    "2987603fa8a9",
+   "2c8359f77256",
    "5aa9d5bd31ba",
    "78cc1ee83385",
    "7d03aec6b924",
@@ -63,6 +65,7 @@
   "sgm-new-data-source": [
    "0cbf0a9bcd58",
    "2987603fa8a9",
+   "2c8359f77256",
    "3c24a166350d",
    "519ee084355d",
    "5aa9d5bd31ba",

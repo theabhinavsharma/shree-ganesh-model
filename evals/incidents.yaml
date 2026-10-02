@@ -234,3 +234,19 @@ incidents:
       computing outcomes, with completeness vs the official count, per-year coverage of every input an arm uses, and span checks;
       NOT READY means fix the data, not lower the bar.'
     commit: ''
+  - id: INC-2026-10-02-background-job-unwatched
+    date: '2026-10-02'
+    title: GDELT coverage probe ran ~2 hours unnoticed; 20 of 28 requests throttled
+    found_by: user asked why it was still running
+    root_cause: background job had no time budget and no stop-on-failure rule; I expected ~25 min, moved to other work and only
+      waited for the completion notice, which never came while it crawled
+    blast_radius: 2 hours of laptop time; the user's trust; no data harm
+    fix: probe now stops itself after 30 min or when more than half its requests fail; check every background job at its expected
+      finish time, not only at completion
+    guard_eval: ''
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    lesson: Every background fetch gets a time budget and a stop rule (e.g. >50% failures after 5 tries) in code, and I check
+      it at its expected finish time; never leave a job running unwatched past its ETA.
+    commit: ''
