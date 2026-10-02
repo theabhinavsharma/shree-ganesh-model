@@ -24,6 +24,9 @@ import sys
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
+import os
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pandas as pd
 
 ROOT = Path("/Users/abhinavs./Code/Zoom")
@@ -110,10 +113,16 @@ CONTRACTS: list[Contract] = [
 
 
 def _business_days_between(a: date, b: date) -> int:
-    """Count of business days from a to b inclusive (Mon-Fri)."""
+    """Count of NSE sessions from a (exclusive) to b (inclusive): weekdays minus NSE's own holiday list
+    (nse_calendar.py) where that list covers the year. Before 2026-10-02 this counted Mon-Fri only, so a holiday
+    (Gandhi Jayanti) made every file one day 'older' and blocked the weekly run."""
     if a >= b: return 0
     days = pd.bdate_range(start=a + timedelta(days=1), end=b)
-    return len(days)
+    try:
+        import nse_calendar
+        return sum(1 for d in days if not nse_calendar.covers(d) or nse_calendar.is_session(d))
+    except Exception:
+        return len(days)
 
 
 def _today() -> date:
@@ -277,9 +286,16 @@ def check_coverage() -> dict:
     return snap
 
 
+ENGINE_TAGS = ("CS_ENGINE", "HC_ENGINE", "MB_ENGINE", "F180_ENGINE", "MH_ENGINE", "ML_CLASSIFIER")
+
+
 def snapshot() -> list[dict]:
-    """Return the full snapshot as a list of dicts — for the dashboard."""
-    return [check_one(c) for c in CONTRACTS] + [check_continuity(), check_coverage()]
+    """Return the full snapshot as a list of dicts — for the dashboard.
+    SGM_FRESH_CORE=1 (the run_sgm data gate, via eval data.freshness): skip the 15D engine outputs. They are refreshed
+    only by the 15D step at the END of the weekly run, so gating the weekly run on them deadlocked every Friday
+    (2026-10-02); the 15D pipeline still runs the full check before its own basket."""
+    core = os.environ.get("SGM_FRESH_CORE") == "1"
+    return [check_one(c) for c in CONTRACTS if not (core and c.tag in ENGINE_TAGS)] + [check_continuity(), check_coverage()]
 
 
 def _fmt_row_file(s: dict) -> str:

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -47,7 +48,8 @@ def coverage(ctx: dict) -> dict:
 
 
 def freshness(ctx: dict) -> dict:
-    r = subprocess.run([PY, str(ROOT / "src/agentic/verify_freshness.py")], capture_output=True, text=True, cwd=ROOT)
+    r = subprocess.run([PY, str(ROOT / "src/agentic/verify_freshness.py")], capture_output=True, text=True, cwd=ROOT,
+                       env={**os.environ, "SGM_FRESH_CORE": "1"})   # 15D engine outputs: checked by the 15D step itself
     out = r.stdout + r.stderr
     n = re.search(r"(\d+) inputs checked", out)
     if r.returncode == 0 and "ALL FRESH" in out:

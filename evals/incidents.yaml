@@ -199,3 +199,21 @@ incidents:
     lesson: Buy and sell days come from NSE's holiday list (src/agentic/nse_calendar.py), never 'next weekday'; check the first
       list after any holiday week by eye.
     commit: ''
+  - id: INC-2026-10-02-weekly-freshness-deadlock
+    date: '2026-10-02'
+    title: 'Friday''s weekly run (first V3 list) blocked: data gate required 15D engine files that only the end of the same
+      run refreshes'
+    found_by: '❌ Telegram 10:09 AM ET Oct 2 (data.freshness: CS_ENGINE 4/3 business days); user asked why no update'
+    root_cause: verify_freshness gated the weekly run on 15D engine outputs (written Sun Sep 28 by the 15D step, which runs
+      after Sri Lakshmi), so from Thursday on they were always stale = deadlock every Friday; staleness counted weekdays, so
+      the Oct 2 NSE holiday added a day
+    blast_radius: first real-money V3 list held at 10:09 AM ET Oct 2; would have blocked every Friday
+    fix: data gate checks core inputs only (SGM_FRESH_CORE=1 skips the 6 15D engine outputs; the 15D step keeps the full check);
+      staleness counted in NSE sessions via nse_calendar; weekly re-run manually 10:42 AM ET
+    guard_eval: data.freshness
+    skills:
+    - sgm-triage
+    - sgm-new-data-source
+    lesson: A gate may only require inputs that are produced before it runs; outputs refreshed later in the same run belong
+      to that later step's own check. Count file age in NSE sessions (nse_calendar), never plain weekdays.
+    commit: ''
