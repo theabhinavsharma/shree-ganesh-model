@@ -1,0 +1,19 @@
+{
+ "dataset": "announcements_completeness.csv",
+ "producer": "src/agentic/check_announcements_completeness.py",
+ "definitions": "Completeness of our NSE announcements archive vs NSE's own feed (2026-10-02; event-ledger data gate).\n\nYardstick: for sample days, NSE's whole-day count from api/corporate-announcements (index=equities, from=to=that day)\nversus the filings our archive holds for that day. (NSE's results calendar is the wrong yardstick for 2016-18: many\nresults filings of those years were never posted as announcements; checked on GODREJPROP / INGERRAND / UMESLTD 2017.)\nSample: 8 random trading days per year, 2016 to the latest year, fixed seed. Pacing 2.5 s; hard stop after 15 minutes\nor when more than 30% of requests fail after the first 8 (lesson INC-2026-10-02-background-job-unwatched).\nOutput: logs/news/announcements_completeness.csv (+ manifest); share = ours / NSE, by year.\n",
+ "share_by_year": {
+  "2016": 0.993,
+  "2017": 0.996,
+  "2018": 0.992,
+  "2019": 0.994,
+  "2020": 0.998,
+  "2021": 1.0,
+  "2022": 1.0,
+  "2023": 0.999,
+  "2024": 1.001,
+  "2025": 0.99,
+  "2026": 0.991
+ },
+ "updated": "2026-10-02T17:27:20"
+}

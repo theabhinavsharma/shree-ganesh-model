@@ -1,55 +1,105 @@
-# Event ledger QC · 2026-10-02 14:05
+# Event ledger QC · 2026-10-02 17:28
 
-rows 222,673 · symbols 2,914 · sessions 2016-01-04..2026-10-01
+rows 246,045 · symbols 2,931 · sessions 2016-01-01..2026-10-01
 
 ## Events by bucket and year
 
 ```
-session                    2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
-bucket                                                                                     
-acquisition                4748  4429  3998  4154  2807  1573  1626  4588  5283  6164  5863
-agreement                   229   189   223   227   174   269   443   463   697   987   798
-approval_launch             153   225   195   233   177    95   164   234   237   330   232
-auditor_exit                 11    20    22    14    47     8    17     8     3     8     4
-bonus_split                 120   153   138   124    93   178   156   173   254   167    81
-buyback                     117   126   192   167   149   159   169   119   103    33    71
-capacity_start               86    81    74    70    43   124   176   145   262   556   515
-clarification              1706  3726  4366  3840  2595  2660  1599  1639  1936  1799  1923
-default_insolvency           35   194   535   740  1173  1365  1688  1382  1110   759   595
-delayed_results               0     0    24   111    66    55     4    57    53    69    52
-fund_raise                  476   631   498   462   449   653   469   823  1402  1267   887
-independent_director_exit     0     0     0     0     0     0     0   393   377   378   117
-merger_scheme               517   513   552   679   471   586   647   700   777   806   688
-mgmt_exit                   174   170   238   258   282   277   356   374   427   564   479
-order_cancel                  5    10     9    18     5     8     4     2    10    16    15
-order_win                   264   221   271   173   149   189   234   294   643  1553  1472
-price_movement_query        111   171   229  1232  2017  1124   895   644   787   474   700
-rating_change               505   717   849  1121  1290  1285   984  1549  1859  2162  1842
-rating_down                  11     1     3    19    16     0    35     0     0     8     1
-rating_up                    58    31    42     9    17     5   246     0     3    31    30
-regulatory_action            88    30    60    96    56   143   443   128   920  2751  1753
-results                    7142  7290  7183  6916  7219  7621  3848  7852  8304  4648   241
-strike_disruption           134   114   121   116   517   122    14    67    65    31    33
-suspension                   25    46    42    62    39    56    47    48    51    63    51
-takeover_target             226   176   325   214   186   188   258   105   171   195   139
+session                    2016  2017  2018  2019  2020  2021  2022  2023  2024   2025  2026
+bucket                                                                                      
+acquisition                4748  4429  3998  4154  2807  1573  1626  4588  5283   6164  5863
+agreement                   229   189   223   227   174   269   443   463   697    987   798
+approval_launch             153   225   195   233   177    95   164   234   237    330   232
+auditor_exit                 11    20    22    14    47     8    17     8     3      8     4
+bonus_split                 120   153   138   124    93   178   156   173   254    167    81
+buyback                     117   126   192   167   149   159   169   119   103     33    71
+capacity_start               86    81    74    70    43   124   176   145   262    556   515
+clarification              1706  3726  4366  3840  2595  2660  1599  1639  1936   1799  1923
+default_insolvency           35   194   535   740  1173  1365  1688  1382  1110    759   595
+delayed_results               0     0    24   111    66    55     4    57    53     69    52
+fund_raise                  476   631   498   462   449   653   469   823  1402   1267   887
+independent_director_exit   210   284   376   670   462   428   819   778  1272   1029   628
+merger_scheme               517   513   552   679   471   586   647   700   777    806   688
+mgmt_exit                   174   170   238   258   282   277   356   374   427    564   479
+order_cancel                  5    10     9    18     5     8     4     2    10     16    15
+order_win                   264   221   271   173   149   189   234   294   643   1553  1472
+price_movement_query        111   171   229  1232  2017  1124   895   644   787    474   700
+rating_change               505   717   849  1121  1290  1285   984  1549  1859   2162  1842
+rating_down                  11     1     3    19    16     0    35     0     0      8     1
+rating_up                    58    31    42     9    17     5   246     0     3     31    30
+regulatory_action            88    30    60    96    56   143   443   128   920   2751  1753
+results                    7191  7580  7611  7420  7773  8125  4832  8399  8835  10998  7181
+strike_disruption           134   114   121   116   517   122    14    67    65     31    33
+suspension                   25    46    42    62    39    56    47    48    51     63    51
+takeover_target             226   176   325   214   186   188   258   105   171    195   139
 ```
 
-## Completeness: NSE results-calendar filings found in the archive (±1 day)
+## Stability (events per 1,000 listed companies; only stable buckets may feed a test)
+
+```
+                           min_per_yr  max_over_min  max_yoy_factor  stable    2016    2017    2018    2019    2020    2021    2022    2023    2024    2025
+bucket                                                                                                                                                     
+acquisition                      1573          3.65            2.63   False  2802.8  2546.9  2275.5  2306.5  1521.4   786.9   767.3  2014.9  2217.9  2348.2
+agreement                         174          3.99            1.55   False   135.2   108.7   126.9   126.0    94.3   134.6   209.1   203.3   292.6   376.0
+approval_launch                    95          2.72            1.63   False    90.3   129.4   111.0   129.4    95.9    47.5    77.4   102.8    99.5   125.7
+auditor_exit                        3         19.62            3.27   False     6.5    11.5    12.5     7.8    25.5     4.0     8.0     3.5     1.3     3.0
+bonus_split                        93          2.12            1.77    True    70.8    88.0    78.5    68.9    50.4    89.0    73.6    76.0   106.6    63.6
+buyback                            33          8.67            1.71   False    69.1    72.5   109.3    92.7    80.8    79.5    79.8    52.3    43.2    12.6
+capacity_start                     43          9.09            2.66   False    50.8    46.6    42.1    38.9    23.3    62.0    83.1    63.7   110.0   211.8
+clarification                    1599          3.63            2.13   False  1007.1  2142.6  2484.9  2132.1  1406.5  1330.7   754.6   719.8   812.8   685.3
+default_insolvency                 35         38.48            5.39   False    20.7   111.6   304.5   410.9   635.8   682.8   796.6   606.9   466.0   289.1
+delayed_results                     0           NaN             inf   False     0.0     0.0    13.7    61.6    35.8    27.5     1.9    25.0    22.3    26.3
+fund_raise                        449          2.66            1.63   False   281.0   362.9   283.4   256.5   243.4   326.7   221.3   361.4   588.6   482.7
+independent_director_exit         210          4.31            1.81   False   124.0   163.3   214.0   372.0   250.4   214.1   386.5   341.7   534.0   392.0
+merger_scheme                     471          1.48            1.32    True   305.2   295.0   314.2   377.0   255.3   293.1   305.3   307.4   326.2   307.0
+mgmt_exit                         170          2.20            1.39    True   102.7    97.8   135.5   143.3   152.8   138.6   168.0   164.3   179.3   214.9
+order_cancel                        2         11.11            4.67   False     3.0     5.8     5.1    10.0     2.7     4.0     1.9     0.9     4.2     6.1
+order_win                         149          7.32            2.19   False   155.8   127.1   154.2    96.1    80.8    94.5   110.4   129.1   269.9   591.6
+price_movement_query              111         16.69            5.25   False    65.5    98.3   130.3   684.1  1093.2   562.3   422.4   282.8   330.4   180.6
+rating_change                     505          2.76            1.46   False   298.1   412.3   483.2   622.4   699.2   642.8   464.4   680.3   780.4   823.6
+rating_down                         0           NaN             inf   False     6.5     0.6     1.7    10.5     8.7     0.0    16.5     0.0     0.0     3.0
+rating_up                           0           NaN             inf   False    34.2    17.8    23.9     5.0     9.2     2.5   116.1     0.0     1.3    11.8
+regulatory_action                  30         60.58            6.87   False    51.9    17.3    34.1    53.3    30.4    71.5   209.1    56.2   386.2  1048.0
+results                          4832          1.91            1.62    True  4245.0  4358.8  4331.8  4119.9  4213.0  4064.5  2280.3  3688.6  3709.1  4189.7
+strike_disruption                  14         42.45            4.45   False    79.1    65.6    68.9    64.4   280.2    61.0     6.6    29.4    27.3    11.8
+suspension                         25          2.32            1.79    True    14.8    26.5    23.9    34.4    21.1    28.0    22.2    21.1    21.4    24.0
+takeover_target                   105          4.01            1.83   False   133.4   101.2   185.0   118.8   100.8    94.0   121.8    46.1    71.8    74.3
+```
+
+## Completeness vs NSE's own announcements feed (sample days; check_announcements_completeness.py)
+
+```
+{
+ "2016": 0.993,
+ "2017": 0.996,
+ "2018": 0.992,
+ "2019": 0.994,
+ "2020": 0.998,
+ "2021": 1.0,
+ "2022": 1.0,
+ "2023": 0.999,
+ "2024": 1.001,
+ "2025": 0.99,
+ "2026": 0.991
+}
+```
+
+## Results filings also posted as announcements (NOT a completeness measure: 2016-18 results often weren't)
 
 ```
       share
 d          
 2016  0.248
-2017  0.120
+2017  0.121
 2018  0.026
-2019  0.599
+2019  0.600
 2020  0.840
 2021  0.956
-2022  0.506
+2022  0.590
 2023  0.974
 2024  0.976
-2025  0.933
-2026  0.000
+2025  0.949
+2026  0.296
 ```
 
 ## Order amounts
@@ -108,9 +158,9 @@ order_win rows with an amount: 66.0%
 - 2023-04-17 PCBL: PCBL LIMITED has informed the Exchange regarding 'Commencement of commercial production of first phase ( 63,000 MT ) of 147,000 MT Greenfield carbon black manuf
 
 **clarification**
-- 2019-11-25 CGPOWER: The Exchange has sought clarification from CG Power and Industrial Solutions Limited with respect to recent news item captioned SFIO to probe fund diversion at 
+- 2019-11-25 CGPOWER: The Exchange has sought clarification from CG Power and Industrial Solutions Limited with respect to recent news item captioned CG Power plans to raise Rs 800 c
 - 2020-02-17 PEL: PEL:The Exchange has sought clarification from Piramal Enterprises Limited with respect to announcement dated 04-Feb-2020, regarding Resignation of Mr Siddharth
-- 2017-10-26 YESBANK: The Exchange has sought clarification from Yes Bank Limited with respect to recent news item captioned "RBI slaps penalty on Yes Bank". The Exchange, in order t
+- 2017-10-26 YESBANK: The Exchange has sought clarification from Yes Bank Limited with respect to recent news item captioned "RBI slaps penalty on Yes Bank". In this regard, Exchange
 - 2021-07-02 VERTOZ: The Exchange had sought clarification from Vertoz Advertising Limited for the quarter ended 31-Mar-2021 with respect to Regulation 33 of the SEBI (Listing Oblig
 - 2019-11-07 BANARBEADS: The Exchange has sought clarification from Banaras Beads Limited for the quarter ended 30-Sep-2019 with respect to Regulation 33 of the SEBI (Listing Obligation
 
@@ -136,11 +186,11 @@ order_win rows with an amount: 66.0%
 - 2025-04-24 FUSION: Fusion Finance Limited has informed the Exchange about Copy of Newspaper Publication  of Corrigendum to LOF in respect of Rights issue
 
 **independent_director_exit**
-- 2024-05-30 USK: UDAYSHIVAKUMAR INFRA LIMITED has informed the Exchange about Resignation of Independent director.
-- 2025-11-04 RPOWER: RELIANCE POWER LIMITED has informed the Exchange about Resignation of Independent director.
-- 2025-01-06 VAISHALI: VAISHALI PHARMA LIMITED has informed the Exchange about Resignation of Independent director.
-- 2024-01-18 DCMFINSERV: DCM FINANCIAL SERVICES LIMITED has informed the Exchange about Resignation of Independent director.
-- 2023-03-09 THEJO: THEJO ENGINEERING LIMITED has informed the Exchange about Resignation of Independent director.
+- 2019-08-13 TALWALKARS: Talwalkars Better Value Fitness Limited has informed the Exchange regarding Cessation of Mr MANOHAR BHIDE as Independent Director of the company w.e.f. August 0
+- 2019-05-29 PREMIERPOL: Premier Polyfilm Limited has informed the Exchange regarding Resignation of Mr Ratnesh Kumar Gupta as Non- Executive Independent Director of the company w.e.f. 
+- 2022-05-10 SRF: SRF Limited  has informed the Exchange about resignation of Vellayan Subbiah as Independent Director of the company w.e.f. 09-May-2022
+- 2025-02-20 BOHRAIND: Bohra Industries Limited has informed the Exchange regarding Resignation of Ms KALPANA MEHTA as Non- Executive Independent Director of the company w.e.f. Februa
+- 2018-05-07 HINDALCO: Hindalco Industries Limited has informed the Exchange regarding Resignation of Mr JAGDISH KHATTAR as Independent Director of the company w.e.f. May 04, 2018.
 
 **merger_scheme**
 - 2022-09-30 TEJASNET: Tejas Networks Limited  has informed the Exchange about Board Meeting held on 29-Sep-2022 to consider and approve Draft Scheme of Amalgamation
@@ -206,11 +256,11 @@ order_win rows with an amount: 66.0%
 - 2026-01-22 AMBER: Amber Enterprises India Limited has informed that in furtherance to our earlier intimation dated 05th March 2025 and pursuant to Regulation 30(13) of SEBI (LODR
 
 **results**
-- 2025-02-12 OPTIEMUS:  Optiemus Infracom Limited has submitted to the Exchange, the financial results for the period ended December 31, 2024.
-- 2016-08-29 ALANKIT: Alankit Limited has submitted to the Exchange the standalone financial results along with the Limited Review Report for the period ended 30-Jun-2016.
-- 2018-11-13 ESSENTIA: Integra Garments and Textiles Limited has submitted to the Exchange, the financial results for the period ended September 30, 2018.
-- 2019-05-03 GREAVESCOT: Greaves Cotton Limited has submitted to the Exchange, the financial results for the period ended March 31, 2019.
-- 2026-08-03 GHCL: Integrated Financial Results
+- 2019-02-15 VENUSREM: Venus Remedies Limited has submitted to the Exchange, the financial results for the period ended December 31, 2018.
+- 2020-08-13 KINGFA: Kingfa Science & Technology (India) Limited has submitted to the Exchange, the financial results for the period ended June 30, 2020.
+- 2020-02-11 PETRONET: Petronet LNG Limited has submitted to the Exchange, the financial results for the period ended December 31, 2019.
+- 2026-02-09 RAJRILTD: Raj Rayon Industries Limited has submitted to the Exchange, the financial results for the period ended December 31, 2025.
+- 2024-08-13 SOUTHWEST:  South West Pinnacle Exploration Limited has submitted to the Exchange, the financial results for the period ended June 30, 2024.
 
 **strike_disruption**
 - 2020-07-29 KECL: Kirloskar Electric Company Limited has informed the Exchange about strikes/lockouts/disturbances
@@ -230,5 +280,5 @@ order_win rows with an amount: 66.0%
 - 2020-10-05 ACCELYA: Accelya Solutions India Limited has informed the Exchange regarding 'Update on Open offer to the Public Shareholders of Accelya Solutions India Limited (the Tar
 - 2026-06-18 TRU:  Sundae capital Advisors Private Ltd has submitted to  the Exchange a copy of Interim order of The Hon ble SAT in the matter of Open Offer given by Marwadi Chan
 - 2019-06-19 SURANACORP: Members of the Exchange are hereby informed that the Exchange on June 06,2019 has issued public notice in the newspaper for proposed compulsory delisting of equ
-- 2022-10-17 GTECJAINX: Navigant Corporate Advisors Limited has informed the Exchange regarding Corrigendum to DPS of Keerti Knowledge and Skills Limited (Target Company)
+- 2022-10-17 GTECJAINX: Navigant Corporate Advisors Limited has informed the Exchange regarding Letter of Offer of Keerti Knowledge and Skills Limited (Target Company) 
 - 2018-03-01 ACROPETAL: Members of the Exchange are hereby informed that the Exchange on February 28, 2018 has issued public notice in the newspaper for�� proposed compulsory delisting

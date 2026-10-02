@@ -74,6 +74,10 @@ def main() -> None:
             m |= A["text"].str.contains(txt_re, case=False, regex=True)
         if b in ("mgmt_exit",):            # category alone (any resignation) is too broad: need a top-role mention too
             m = A["category"].str.contains(cat_re, case=False, regex=True) & A["text"].str.contains(txt_re, case=False, regex=True)
+        if b == "independent_director_exit":   # before 2023 NSE had no own category: plain "Resignation" naming the role
+            m |= A["category"].str.contains(r"Resignation|Cessation", case=False, regex=True) & A["text"].str.contains(r"\bindependent director\b", case=False, regex=True)
+        if b == "results":                      # results inside "Outcome of Board Meeting" (2022: most of them)
+            m |= A["category"].str.contains(r"Outcome of Board Meeting", case=False, regex=True) & A["text"].str.contains(r"\b(financial results?|audited results|unaudited)\b", case=False, regex=True)
         if b == "auditor_exit":
             m = (A["category"].str.contains(cat_re, case=False, regex=True) & A["text"].str.contains(r"resign", case=False)) | A["text"].str.contains(txt_re, case=False, regex=True)
         hit = m & open_
@@ -107,6 +111,15 @@ def main() -> None:
     L = L.sort_values(["session", "symbol"]).reset_index(drop=True)
     L.to_parquet(OUT, index=False)
     by = L.groupby([L["session"].dt.year, "bucket"]).size().unstack(fill_value=0).T
+    # stability: events per 1,000 listed companies per year (listed = symbols with a price that year); full years only
+    px = pd.read_parquet(ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet", columns=["symbol", "trade_date"])
+    listed = px.groupby(pd.to_datetime(px["trade_date"]).dt.year)["symbol"].nunique()
+    yrs = [y for y in by.columns if 2016 <= y <= 2025]
+    rate = (by[yrs] / listed.reindex(yrs).values * 1000).round(1)
+    jump = (rate.T.pct_change().abs() + 1).T.drop(columns=yrs[0]).max(axis=1)        # largest year-on-year factor (up or down)
+    stab = pd.DataFrame({"min_per_yr": by[yrs].min(axis=1), "max_over_min": (rate.max(axis=1) / rate.min(axis=1).replace(0, float("nan"))).round(2),
+                         "max_yoy_factor": jump.round(2)})
+    stab["stable"] = (stab["min_per_yr"] >= 20) & (stab["max_over_min"] <= 2.5) & (stab["max_yoy_factor"] <= 2.0)
     # completeness vs NSE's results calendar (official): share of quarterly results filings that appear as a filing
     C = pd.read_parquet(ROOT / "data/derived/results_calendar_full.parquet", columns=["symbol", "broadCastDate", "period"])
     C["d"] = pd.to_datetime(C["broadCastDate"], format="%d-%b-%Y %H:%M:%S", errors="coerce").dt.normalize(); C = C.dropna(subset=["d"])
@@ -114,8 +127,13 @@ def main() -> None:
     key = set(zip(R["symbol"], R["d"])) | set(zip(R["symbol"], R["d"] - pd.Timedelta(days=1))) | set(zip(R["symbol"], R["d"] + pd.Timedelta(days=1)))
     C["found"] = [(s, d) in key for s, d in zip(C["symbol"], C["d"])]
     comp = C.groupby(C["d"].dt.year)["found"].mean().round(3)
+    nse_comp = ROOT / "logs/news/announcements_completeness.csv.manifest.json"
+    nse_share = json.loads(nse_comp.read_text()).get("share_by_year", {}) if nse_comp.exists() else {}
     lines = [f"# Event ledger QC · {datetime.now():%Y-%m-%d %H:%M}", "", f"rows {len(L):,} · symbols {L['symbol'].nunique():,} · sessions {L['session'].min().date()}..{L['session'].max().date()}",
-             "", "## Events by bucket and year", "", "```\n" + by.to_string() + "\n```", "", "## Completeness: NSE results-calendar filings found in the archive (±1 day)", "",
+             "", "## Events by bucket and year", "", "```\n" + by.to_string() + "\n```", "", "## Stability (events per 1,000 listed companies; only stable buckets may feed a test)", "", "```\n" + stab.join(rate).to_string() + "\n```", "",
+             "## Completeness vs NSE's own announcements feed (sample days; check_announcements_completeness.py)", "",
+             "```\n" + json.dumps(nse_share, indent=1) + "\n```", "",
+             "## Results filings also posted as announcements (NOT a completeness measure: 2016-18 results often weren't)", "",
              "```\n" + comp.loc[2016:].to_frame("share").to_string() + "\n```", "", "## Order amounts", "",
              f"order_win rows with an amount: {L.loc[L.bucket == 'order_win', 'amount_cr'].notna().mean():.1%}", "", "## Examples (5 per bucket, random)", ""]
     for b, g in L.groupby("bucket"):
@@ -126,9 +144,11 @@ def main() -> None:
         source="data/derived/announcements_historical.parquet (NSE corporate announcements, fetch_announcements_historical.py) + order_amounts.parquet + mcap_pit.parquet",
         units=dict(amount_cr="Rs crore", amt_to_mcap="fraction of market cap the session before", direction="+1 good / -1 bad / 0 neutral"),
         buckets=[r[0] for r in RULES] + ["rating_up", "rating_down"], qc="logs/news/event_ledger_qc.md",
+        stable_buckets=sorted(stab.index[stab["stable"]].tolist()), unstable_buckets=sorted(stab.index[~stab["stable"]].tolist()),
+        nse_completeness_by_year=nse_share,
         updated=datetime.now().isoformat(timespec="seconds")), indent=1))
     print(f"ledger {len(L):,} events · {L['symbol'].nunique():,} symbols · QC -> {QC.relative_to(ROOT)}")
-    print(by.to_string())
+    print(stab.to_string())
     print("\nresults-calendar completeness by year:", comp.loc[2016:].to_dict())
 
 
