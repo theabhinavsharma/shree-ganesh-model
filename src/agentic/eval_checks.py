@@ -191,10 +191,10 @@ def ranking_lift(ctx: dict) -> dict:
 
 def preregistered(ctx: dict) -> dict:
     L = [json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines() if l.strip().startswith("{")]
-    reg = {}
+    reg, reg_text = {}, {}
     for e in L:
         if str(e.get("status", "")).startswith("REGISTERED"):
-            reg.setdefault(e["id"], e.get("ts", ""))
+            reg.setdefault(e["id"], e.get("ts", "")); reg_text.setdefault(e["id"], json.dumps(e))
     viol, n = [], 0
     for e in L:
         i = str(e.get("id", ""))
@@ -202,6 +202,9 @@ def preregistered(ctx: dict) -> dict:
             continue
         n += 1
         base = i.split("-RESULT")[0]
+        if base not in reg:   # a planned sub-arm (e.g. ...-industry-policy-H_policy) counts only if the parent's earlier
+            par = next((p for p in reg if base.startswith(p + "-") and base[len(p) + 1:] in reg_text[p]), None)  # registration names it
+            base = par or base
         if base not in reg or reg[base] > e.get("ts", ""):
             viol.append(i)
     return _res("PASS" if not viol else "FAIL", f"{n - len(viol)}/{n} results pre-registered", ", ".join(viol[:5]))
@@ -479,6 +482,26 @@ def holidays_match_panel(ctx: dict) -> dict:
     detail = "; ".join(p for p in (("panel has rows on listed holidays: " + ", ".join(traded)) if traded else "",
                                    ("weekdays missing from the panel that NSE does not list: " + ", ".join(missing)) if missing else "") if p)
     return _res("PASS" if not (traded or missing) else "FAIL", f"{len(Hy)} NSE holidays in {y}", detail)
+
+
+def results_data_ready(ctx: dict) -> dict:
+    """Every RESULT / RERUN logged from 2026-10-02 on has a DATA-READY line with status READY for the same experiment and
+    run, logged earlier the same day (trust/data_ready.gate). Catches a test that computes a verdict without the GIGO gate."""
+    L = [json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines() if l.strip().startswith("{")]
+    ready = {}
+    for e in L:
+        if str(e.get("id", "")).endswith("-DATA-READY") and e.get("status") == "READY":
+            ready.setdefault((e["id"][: -len("-DATA-READY")], e.get("run", "RESULT")), []).append(e.get("ts", ""))
+    viol, n = [], 0
+    for e in L:
+        i, ts = str(e.get("id", "")), str(e.get("ts", ""))
+        if ts < "2026-10-02T12:00" or ("-RESULT" not in i and "-RERUN-" not in i):
+            continue
+        n += 1
+        base, run = (i.split("-RESULT")[0], "RESULT") if "-RESULT" in i else (i.split("-RERUN-")[0], i.split("-RERUN-")[1])
+        if not any(r <= ts and r[:10] == ts[:10] for r in ready.get((base, run), [])):
+            viol.append(i)
+    return _res("PASS" if not viol else "FAIL", f"{n - len(viol)}/{n} results had their data checked", ", ".join(viol[:5]))
 
 
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}
