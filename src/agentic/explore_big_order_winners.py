@@ -299,6 +299,33 @@ if HOT_MODE and __import__("os").environ.get("SGM_OCT") == "1":   # (2026-10-04)
            f"same {len(g)} trades · buy when the industry turns hot, hold 12m: avg {pct(g.f12.mean())} · median {pct(g.f12.median())} · up {(g.f12 > 0).mean():.0%} · typical stock {pct(g.f12typ.mean())}")
     Hh = R[(R.entry == "next open") & (R.hold == "12m") & (R.group == "hot") & (R.date <= cal[len(cal) - 504])]
     print(f"for reference · hot at the order, same window (entry by {cal[len(cal) - 504].date()}), hold 12m: {len(Hh)} trades · avg {pct(Hh.ret.mean())} · median {pct(Hh.ret.median())} · up {(Hh.ret > 0).mean():.0%}")
+if HOT_MODE and __import__("os").environ.get("SGM_NOW") == "1":   # (2026-10-04) "is history repeating?": each October's backdrop vs what the next year of orders did
+    Tq = T[(T["ratio"] >= MIN_RATIO) & (T["group"] != "unknown")]
+    Rn = R[(R.entry == "next open") & (R.group != "unknown") & (R.ratio >= MIN_RATIO)].copy()
+    Rn["coh"] = np.where(Rn.date.dt.month >= 10, Rn.date.dt.year, Rn.date.dt.year - 1)
+    On_ = Ow.to_numpy(); Cn_ = Cw.to_numpy()
+    print(f"\n=== EVERY OCTOBER · backdrop then vs the next 12 months of orders >= {MIN_RATIO:.0%} (12m hold) ===")
+    print(" Oct    typical stock past 12m · past 24m · below 2-yr high   big orders past 12m (hot)   next year's orders: hot avg (median) n · not hot avg (median) n · typical stock next 12m")
+    for Y in range(2019, 2027):
+        s0 = min(int(cal.searchsorted(pd.Timestamp(f"{Y}-10-01"))), len(cal) - 1)
+        live = np.isfinite(On_[s0 - 1]) & (On_[s0 - 1] > 0)
+        below = np.nanmedian(Cn_[s0 - 1, live] / np.nanmax(Cn_[s0 - 504:s0, live], axis=0) - 1)
+        w = Tq[(Tq.i0 >= s0 - 252) & (Tq.i0 < s0)]
+        def c(gn):
+            g = Rn[(Rn.coh == Y) & (Rn.hold == "12m") & (Rn.group == gn)]
+            return f"{pct(g.ret.mean())} ({pct(g.ret.median())}) {len(g)}" if len(g) else "not done yet"
+        nxt = pct(typical(s0, 252)) if s0 + 252 <= len(cal) else "-"
+        print(f" {Y}   {pct(typical(s0 - 252, 252)):>6s} · {pct(typical(s0 - 504, 504)):>6s} · {pct(below):>6s}            {len(w):4d} ({(w.group == 'hot').mean():.0%})          {c('hot')} · {c('not hot')} · {nxt}")
+    hot_now = Sx[Sx.date == Sx.date.max()].sort_values("heat_pct", ascending=False)
+    print(f"hottest industries on {Sx.date.max().date()}: " + ", ".join(f"{r.industry} {r.heat_pct:.2f}" for r in hot_now.head(12).itertuples()))
+    last = len(cal) - 1; rec = Tq[Tq.i0 >= last - 126].sort_values("i0")
+    print(f"orders >= {MIN_RATIO:.0%} in the last 6 months: {len(rec)} ({(rec.group == 'hot').mean():.0%} hot) · return to {cal[last].date()} (median): hot "
+          + pct(np.nanmedian([Cn_[last, Cw.columns.get_loc(s)] / On_[i, Cw.columns.get_loc(s)] - 1 for s, i, gg in zip(rec.symbol, rec.i0, rec.group) if gg == "hot" and s in Cw.columns])) + " · not hot "
+          + pct(np.nanmedian([Cn_[last, Cw.columns.get_loc(s)] / On_[i, Cw.columns.get_loc(s)] - 1 for s, i, gg in zip(rec.symbol, rec.i0, rec.group) if gg == "not hot" and s in Cw.columns])))
+    for r in rec[rec.group == "hot"].itertuples():
+        if r.symbol in Cw.columns:
+            k = Cw.columns.get_loc(r.symbol)
+            print(f"  {cal[r.i0].date()} {r.symbol:12s} {imap.get(r.symbol, '?')[:28]:28s} {r.ratio:5.0%}  {Cn_[last, k] / On_[r.i0, k] - 1:+.0%} so far")
 print("\n=== first order vs repeat order (bought at the next open) ===")
 for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
