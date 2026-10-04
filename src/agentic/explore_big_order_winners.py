@@ -326,6 +326,35 @@ if HOT_MODE and __import__("os").environ.get("SGM_NOW") == "1":   # (2026-10-04)
         if r.symbol in Cw.columns:
             k = Cw.columns.get_loc(r.symbol)
             print(f"  {cal[r.i0].date()} {r.symbol:12s} {imap.get(r.symbol, '?')[:28]:28s} {r.ratio:5.0%}  {Cn_[last, k] / On_[r.i0, k] - 1:+.0%} so far")
+if HOT_MODE and __import__("os").environ.get("SGM_ROLL") == "1":   # (2026-10-04) buy every order over ANY 12-month window, sell each 12/18/24 months after its own buy
+    Rr = R[(R.entry == "next open") & (R.group != "unknown") & (R.ratio >= MIN_RATIO)]
+    rows3 = []
+    for st in pd.date_range("2019-01-01", cal[-1], freq="MS"):
+        en = st + pd.DateOffset(months=12); i_en = int(cal.searchsorted(en))
+        for h, mo in (("12m", 12), ("18m", 18), ("24m", 24)):
+            if i_en + H[h] > len(cal): continue   # every trade in the window must have finished its hold
+            w = Rr[(Rr.date >= st) & (Rr.date < en) & (Rr.hold == h)]
+            for gname, g in (("hot", w[w.group == "hot"]), ("not hot", w[w.group == "not hot"]), ("all", w)):
+                if len(g): rows3.append(dict(start=st, hold=h, mo=mo, group=gname, n=len(g), avg=g.ret.mean(), med=g.ret.median(), typ=g.typ.mean()))
+    W = pd.DataFrame(rows3)
+    print(f"\n=== ANY 12-MONTH BUYING WINDOW (start = 1st of each month from Jan 2019) · same money in every order >= {MIN_RATIO:.0%} · each sold N months after its own buy ===")
+    print(" windows overlap month to month, so 58 windows at 24m are roughly 5 independent years")
+    for gname in ("all", "hot", "not hot"):
+        for h in ("12m", "18m", "24m"):
+            g = W[(W.group == gname) & (W.hold == h)]
+            if not len(g): continue
+            mo = int(g.mo.iloc[0]); wv = g.loc[g.avg.idxmin()]; bv = g.loc[g.avg.idxmax()]
+            print(f" {gname:7s} {h}: {len(g):2d} windows ({g.start.min():%b %Y} to {g.start.max():%b %Y}) · window return median {pct(g.avg.median())} (≈ {pct((1 + g.avg.median()) ** (12 / mo) - 1)} a year)"
+                  f" · lost money in {(g.avg < 0).mean():.0%} · worst {pct(wv.avg)} ({wv.start:%b %Y}) · best {pct(bv.avg)} ({bv.start:%b %Y}) · typical stock median {pct(g.typ.median())} · trades per window median {g.n.median():.0f}")
+            out[f"roll {gname} {h}"] = dict(windows=len(g), median=round(float(g.avg.median()), 4), lost=round(float((g.avg < 0).mean()), 3))
+    print("\n window starting · 12m / 18m / 24m hold · all orders avg (hot avg · not hot avg)")
+    for st in sorted(W.start.unique()):
+        if pd.Timestamp(st).month not in (1, 4, 7, 10): continue
+        cells = []
+        for h in ("12m", "18m", "24m"):
+            q = W[(W.start == st) & (W.hold == h)].set_index("group")
+            cells.append(f"{pct(q.loc['all', 'avg'])} ({pct(q.loc['hot', 'avg']) if 'hot' in q.index else '-'} · {pct(q.loc['not hot', 'avg']) if 'not hot' in q.index else '-'})" if "all" in q.index else "not finished")
+        print(f" {pd.Timestamp(st):%b %Y}   " + "   ".join(f"{c:>26s}" for c in cells))
 print("\n=== first order vs repeat order (bought at the next open) ===")
 for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
