@@ -90,7 +90,8 @@ def main() -> int:
     ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
     ic["bd"] = fph._xbrl_fallback_fd(ic)
     done = fph.load_done("integrated2")
-    todo = [r for _, r in ic.iterrows() if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done and r["qe"] >= pd.Timestamp("2024-01-01")]
+    todo = [r for _, r in ic.sort_values("bd", ascending=False).iterrows()    # newest filings first: the day's results come
+            if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done and r["qe"] >= pd.Timestamp("2024-01-01")]   # before old gaps
     print(f"XBRL to fetch: {len(todo)} (quarters from 2024 not yet fetched)", flush=True)
     got, xerr = 0, 0
     with open(fph.OUTDIR / "integrated2.jsonl", "a") as fh:
