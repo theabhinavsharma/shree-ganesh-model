@@ -8,11 +8,15 @@
  ],
  "producer": "src/agentic/fetch_pnl_history.py (normalize stage)",
  "units": {
-  "net_sales, total_income, pbt, pat": "MIXED BY SOURCE \u2014 source=='detail_api' (quarters to 2024): Rs LAKH; source=='xbrl' (2025+): Rs (rupees). Divide detail_api by 100 and xbrl by 1e7 for Rs crore.",
+  "net_sales, total_income, pbt, pat": "MIXED BY SOURCE \u2014 source=='detail_api' (quarters to 2024): Rs LAKH; source=='xbrl' (2025+): Rs (rupees); source=='xbrl_derived' (quarter = year-to-date XBRL - earlier quarters, 2026-10-04): Rs LAKH; source=='nse_results_pdf' (company results PDF where NSE's structured lists have a hole, 2026-10-04): Rs LAKH. Divide lakh sources by 100 and xbrl by 1e7 for Rs crore.",
   "eps_basic, eps_diluted": "Rs per share (unit-free across sources)",
   "face_value": "Rs"
  },
  "verification": "2026-09-24: for 1,549 companies with both sources, xbrl first-quarter net_sales / (last detail_api net_sales x 1e5): median 1.04, IQR 0.93-1.17, 87.7% within 0.5-2x, 0% near 100x",
  "caveat": "EPS-only consumers (PE studies 2026-09-05..08) are unaffected; anything using sales/PAT levels across 2024->2025 must normalise",
- "updated": "2026-09-24T12:49:01"
+ "updated": "2026-09-24T12:49:01",
+ "notes": [
+  "2026-09-28: xbrl rows whose integrated-calendar broadcast time is missing (1,679 rows, 2025-03..2026-06) take filing_dt from the XBRL filename upload time read as PM + 20 min (fetch_pnl_history._xbrl_fallback_fd); on 27,563 rows with both, never earlier than the broadcast",
+  "2026-09-28: NSE's results detail API returns little before 2018 (2016: 594 rows / 443 symbols, 2017: 930 / 614, 2018: 8,722 / 1,640), so a 4-quarter PIT TTM exists for most names only from early 2019"
+ ]
 }

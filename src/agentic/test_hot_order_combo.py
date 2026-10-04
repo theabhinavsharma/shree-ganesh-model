@@ -126,7 +126,8 @@ CUTOFF_MIN = 15 * 60 + 30           # filings at/after 15:30 IST count from the 
 REG_COST = 0.005                    # registered flat round trip (close-entry mode)
 CATCHUP_MAX = 250                   # sessions a name with no print at its exit may take to print again (sim_allin_matrix)
 WINDOWS = ("2016-06-01", "2019-01-01")
-PNL_UNIT_TO_CR = {"detail_api": 1e-2, "xbrl": 1e-7}   # pnl_quarterly manifest: detail_api Rs lakh, xbrl Rs
+PNL_UNIT_TO_CR = {"detail_api": 1e-2, "xbrl": 1e-7,   # pnl_quarterly manifest: detail_api Rs lakh, xbrl Rs
+                  "xbrl_derived": 1e-2, "nse_results_pdf": 1e-2}   # 2026-10-04: derived quarters and results-PDF rows, Rs lakh
 
 ORDER_CATS = ("order", "tender_L1")
 ORDERS = ROOT / "data/derived/order_fulltext.parquet"

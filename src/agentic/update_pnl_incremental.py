@@ -65,7 +65,7 @@ def main() -> int:
 
     # 2. per-company filing list
     s, new, errs, pending, partial = build_session(), [], 0, [], False
-    if PART.startswith("xbrl"):
+    if PART.startswith(("xbrl", "refetch_empty")):
         syms = []                                                # lists are done by the "lists" part
     for i, sym in enumerate(syms):
         if time.time() - t0 > BUDGET * 0.5 or (i >= 20 and errs / i > 0.5):   # half the budget for lists, half for XBRL
@@ -103,11 +103,26 @@ def main() -> int:
     ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
     ic["bd"] = fph._xbrl_fallback_fd(ic)
     done = fph.load_done("integrated2")
+    if PART.startswith("refetch_empty"):   # 2026-10-04: re-read filings whose XBRL parsed empty (cumulative-only year-end files)
+        empty = set()
+        for p in fph.OUTDIR.glob("integrated2*.jsonl"):
+            for l in open(p):
+                if l.strip():
+                    x = json.loads(l)
+                    if x.get("d"):
+                        empty.discard(x["_key"])
+                    else:
+                        empty.add(x["_key"])
+        done = done - empty
+        ic = ic[[f"{s}|{q.date()}|{c}" in empty for s, q, c in zip(ic["symbol"], ic["qe"], ic["is_con"])]]
+        PART_ = "xbrl:" + PART.split(":", 1)[1] if ":" in PART else "xbrl:0/1"
+    else:
+        PART_ = PART
     todo = [r for _, r in ic.sort_values("bd", ascending=False).iterrows()    # newest filings first: the day's results come
             if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done and r["qe"] >= pd.Timestamp("2024-01-01")]   # before old gaps
     shard = "integrated2.jsonl"
-    if PART.startswith("xbrl:"):
-        n, k = map(int, PART.split(":")[1].split("/")); todo = todo[n::k]; shard = f"integrated2_inc_w{n}.jsonl"
+    if PART_.startswith("xbrl:"):
+        n, k = map(int, PART_.split(":")[1].split("/")); todo = todo[n::k]; shard = f"integrated2_inc_w{n}.jsonl"
     print(f"XBRL to fetch: {len(todo)} (quarters from 2024 not yet fetched)", flush=True)
     got, xerr = 0, 0
     with open(fph.OUTDIR / shard, "a") as fh:
@@ -125,13 +140,13 @@ def main() -> int:
             if resp.status_code in (403, 429) or resp.status_code >= 500:
                 xerr += 1; continue                        # throttled / server error: not written, retried next run
             # 200, or a dead link (404 ...): written (a dead link with no figures) so it is not retried forever
-            got += d.get("net_sales") is not None
+            got += d.get("net_sales") is not None or d.get("cum_net_sales") is not None
             fh.write(json.dumps({"_key": key, "_sym": r["symbol"], "_qe": str(r["qe"].date()), "_con": int(r["is_con"]),
                                  "_fd": str(r["bd"]), "d": d}) + "\n"); fh.flush()
             time.sleep(fph.SLEEP)
     print(f"XBRL fetched with sales: {got}", flush=True)
 
-    if PART.startswith("xbrl"):
+    if PART.startswith(("xbrl", "refetch_empty")):
         print(f"XBRL part {PART}: {got} with sales", flush=True); return 2 if partial else 0
     # 4. rebuild the tables from the checkpoints (always, so whatever arrived is used)
     fph.stage_normalize()

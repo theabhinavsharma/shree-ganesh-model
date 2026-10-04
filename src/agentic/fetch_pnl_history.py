@@ -197,10 +197,12 @@ FIN_FILE = _re.compile(r"INTEGRATED_FILING_(INDAS|NBFC_INDAS|BANKING|NONINDAS)_|
 def parse_xbrl(text: str, qe) -> dict:
     """Extract quarter-period facts: context must END at qe with 75-100d duration."""
     ctxs = {}
-    for cid, sd, ed in _re.findall(
-            r'<xbrli:context id="([^"]+)">.*?<xbrli:startDate>([^<]+)</xbrli:startDate>'
-            r'\s*<xbrli:endDate>([^<]+)</xbrli:endDate>.*?</xbrli:context>', text, _re.S):
-        ctxs[cid] = (sd.strip(), ed.strip())
+    # 2026-10-04: one context block at a time. The old single pattern ran past an instant context (no startDate) into the
+    # next context, so that next context (often the quarter or the year) was swallowed and the filing parsed empty.
+    for cid, body in _re.findall(r'<xbrli:context id="([^"]+)">(.*?)</xbrli:context>', text, _re.S):
+        m = _re.search(r'<xbrli:startDate>([^<]+)</xbrli:startDate>\s*<xbrli:endDate>([^<]+)</xbrli:endDate>', body)
+        if m:
+            ctxs[cid] = (m.group(1).strip(), m.group(2).strip())
     qs = str(qe.date()) if hasattr(qe, "date") else str(qe)[:10]
     valid = set()
     for cid, (sd, ed) in ctxs.items():
@@ -213,7 +215,7 @@ def parse_xbrl(text: str, qe) -> dict:
         if 75 <= dur <= 100:
             valid.add(cid)
     if not valid:
-        return {}
+        return _parse_cumulative(text, qs, ctxs)
     facts = {}
     for pre_tag, ctx, val in _re.findall(
             r'<([a-z-]+:[A-Za-z0-9]+)\s+contextRef="([^"]+)"[^>]*>([^<]+)<', text):
@@ -232,6 +234,75 @@ def parse_xbrl(text: str, qe) -> dict:
                     pass
                 break
     return out
+
+
+def _parse_cumulative(text: str, qs: str, ctxs: dict) -> dict:
+    """2026-10-04: some filings carry no 3-month context for the quarter, only cumulative ones ending at the quarter end
+    (year-end filings: 6 months + full year; Q3: 9 months). Return the year-to-date period's P&L facts as cum_<field>
+    plus cum_start; stage_normalize derives the quarter = cumulative - the earlier quarters inside it. Contexts with a
+    dimension (segments, members) are skipped so only the entity total is read."""
+    blocks = dict(_re.findall(r'<xbrli:context id="([^"]+)">(.*?)</xbrli:context>', text, _re.S))
+    best = None
+    for cid, (sd, ed) in ctxs.items():
+        if ed != qs or "explicitMember" in blocks.get(cid, "") or "typedMember" in blocks.get(cid, ""):
+            continue
+        try:
+            dur = (pd.Timestamp(ed) - pd.Timestamp(sd)).days
+        except Exception:
+            continue
+        # year-to-date only (starts on April 1, the fiscal-year start): a "6-month" context starting Oct 1 in a year-end
+        # file was found to hold the Jan-Mar quarter mislabelled (AMRUTANJAN Mar-2025), so it is not trusted
+        if sd.strip()[5:10] == "04-01" and any(lo <= dur <= hi for lo, hi in ((170, 195), (260, 285), (330, 375))) and (best is None or dur > best[1]):
+            best = (cid, dur, sd)
+    if best is None:
+        return {}
+    facts = {}
+    for pre_tag, ctx, val in _re.findall(r'<([a-z-]+:[A-Za-z0-9]+)\s+contextRef="([^"]+)"[^>]*>([^<]+)<', text):
+        tag = pre_tag.split(":")[1]
+        if ctx == best[0] and tag not in facts:
+            facts[tag] = val.strip()
+    out = {}
+    for k in ("net_sales", "total_income", "pbt", "pat"):
+        for c in XTAGS[k]:
+            if c in facts:
+                try:
+                    out[f"cum_{k}"] = float(facts[c])
+                except ValueError:
+                    pass
+                break
+    if out:
+        out["cum_start"] = best[2]; out["cum_days"] = best[1]
+    return out
+
+
+def _derive_from_cumulative(df: pd.DataFrame, cum: pd.DataFrame) -> pd.DataFrame:
+    """Quarter = cumulative period - the quarters before it inside the same period (same symbol and basis), in Rs LAKH.
+    Kept only when every earlier quarter is present and the derived sales are > 0 and within 1/3x..3x of the previous
+    quarter. source 'xbrl_derived' (Rs LAKH, like detail_api); EPS left blank."""
+    if cum.empty:
+        return pd.DataFrame()
+    lakh = lambda r: 1e-5 if r == "xbrl" else 1.0  # noqa: E731 (detail_api already in lakh)
+    base = df.assign(f=df["source"].map(lakh))
+    idx = {k: g.set_index("quarter_end") for k, g in base.groupby(["symbol", "basis"])}
+    out = []
+    for r in cum.itertuples():
+        g = idx.get((r.symbol, r.basis))
+        qe, st = pd.Timestamp(r.quarter_end), pd.Timestamp(r.cum_start)
+        prev = [q for q in pd.date_range(st, qe, freq="QE") if q < qe]
+        if g is None or not prev or not all(q in g.index for q in prev):
+            continue
+        rows = g.loc[prev]
+        rec = dict(symbol=r.symbol, quarter_end=qe, filing_dt=r.filing_dt, basis=r.basis, bank=None, source="xbrl_derived",
+                   eps_basic=None, eps_diluted=None, face_value=None)
+        for k in ("net_sales", "total_income", "pbt", "pat"):
+            c = getattr(r, f"cum_{k}", None)
+            rec[k] = (c * 1e-5 - float((rows[k] * rows["f"]).sum())) if c == c and c is not None and rows[k].notna().all() else None
+        last = float(rows.iloc[-1]["net_sales"] * rows.iloc[-1]["f"]) if rows.iloc[-1]["net_sales"] == rows.iloc[-1]["net_sales"] else None
+        ns = rec["net_sales"]
+        if ns is None or ns <= 0 or not last or not (1 / 3 <= ns / last <= 3):
+            continue
+        out.append(rec)
+    return pd.DataFrame(out)
 
 
 def _xbrl_fallback_fd(ic: pd.DataFrame) -> pd.Series:
@@ -319,7 +390,7 @@ def stage_normalize():
                     pat=NUM(d, "re_con_pro_loss", "re_proloss_ord_act", "re_net_prft"),
                     face_value=NUM(d, "re_face_val"),
                 ))
-    int_lines = []
+    int_lines, cum_rows = [], []
     for p in sorted(OUTDIR.glob("integrated2*.jsonl")):
         int_lines += [l for l in open(p) if l.strip()]
     if True:
@@ -328,6 +399,9 @@ def stage_normalize():
                 r = json.loads(l)
                 d = r.get("d") or {}
                 if not d:
+                    continue
+                if "cum_start" in d and d.get("net_sales") is None:     # cumulative-only filing: derived below
+                    cum_rows.append(dict(symbol=r["_sym"], quarter_end=r["_qe"], filing_dt=r["_fd"], basis="con" if r["_con"] else "sa", **d))
                     continue
                 rows.append(dict(symbol=r["_sym"], quarter_end=r["_qe"], filing_dt=r["_fd"],
                                  basis="con" if r["_con"] else "sa", bank=None, source="xbrl",
@@ -346,6 +420,23 @@ def stage_normalize():
         print(f"xbrl filing_dt from the XBRL filename time: {int(df.loc[x, 'filing_dt'].notna().sum())} of {int(x.sum())} filled", flush=True)
     df = (df.sort_values(["symbol", "quarter_end", "filing_dt"])
             .drop_duplicates(["symbol", "quarter_end", "basis", "source"], keep="last"))
+    # 2026-10-04: quarters derived from cumulative-only XBRL, then quarters read from results PDFs (pnl_quarterly_pdf.parquet),
+    # each only where no structured row exists for the same (symbol, quarter_end, basis)
+    have = set(zip(df["symbol"], df["quarter_end"], df["basis"]))
+    C = pd.DataFrame(cum_rows)
+    if len(C):
+        C["quarter_end"] = pd.to_datetime(C["quarter_end"]); C["filing_dt"] = pd.to_datetime(C["filing_dt"], errors="coerce")
+        C = C[[k not in have for k in zip(C["symbol"], C["quarter_end"], C["basis"])]].sort_values("filing_dt").drop_duplicates(["symbol", "quarter_end", "basis"], keep="first")
+    Dv = _derive_from_cumulative(df, C)
+    if len(Dv):
+        df = pd.concat([df, Dv], ignore_index=True); have |= set(zip(Dv["symbol"], Dv["quarter_end"], Dv["basis"]))
+    pdfp = ROOT / "data/derived/pnl_quarterly_pdf.parquet"
+    if pdfp.exists():
+        Pp = pd.read_parquet(pdfp); Pp["quarter_end"] = pd.to_datetime(Pp["quarter_end"]); Pp["filing_dt"] = pd.to_datetime(Pp["filing_dt"])
+        Pp = Pp[Pp["qc_ok"] & [k not in have for k in zip(Pp["symbol"], Pp["quarter_end"], Pp["basis"])]]
+        df = pd.concat([df, Pp[[c for c in df.columns if c in Pp.columns]]], ignore_index=True)
+    print(f"derived from cumulative XBRL: {len(Dv)} quarters (of {len(C)} cumulative-only filings) · from results PDFs: "
+          f"{len(Pp) if pdfp.exists() else 0}", flush=True)
     df.to_parquet(NORM_OUT, index=False)
     print(f"pnl_quarterly: {len(df):,} rows, {df['symbol'].nunique()} symbols, "
           f"{df['quarter_end'].min().date()} -> {df['quarter_end'].max().date()}", flush=True)
