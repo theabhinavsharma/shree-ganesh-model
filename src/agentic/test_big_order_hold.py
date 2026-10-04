@@ -36,13 +36,14 @@ import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 
 CUT = float(os.environ.get("SGM_CUT", "0.15"))   # 0.5 -> EXP-2026-10-04-big-order-hold-18-24m-50pct (registered variant)
-EXP_ID = "EXP-2026-10-04-big-order-hold-18-24m" + ("" if CUT == 0.15 else f"-{CUT * 100:.0f}pct")
-SUF = "" if CUT == 0.15 else f"_{CUT * 100:.0f}pct"
+FROM = os.environ.get("SGM_START")   # "2018-01-01" -> EXP-2026-10-04-big-order-hold-from2018 (registered variant, strict rule added)
+EXP_ID = ("EXP-2026-10-04-big-order-hold-from2018" if FROM else "EXP-2026-10-04-big-order-hold-18-24m") + ("" if CUT == 0.15 else f"-{CUT * 100:.0f}pct")
+SUF = ("" if CUT == 0.15 else f"_{CUT * 100:.0f}pct") + ("_from2018" if FROM else "")
 OUTDIR = ROOT / "logs/leader_sleeve/big_order_hold"
 ARMS = {"A18": 378, "A24": 504}
 COST, MIN_RATIO = 0.005, 0.15
-START, END_ENTRY = pd.Timestamp("2019-01-01"), pd.Timestamp("2024-12-31")
-ERAS = {"2019-2022": (2019, 2022), "2023+": (2023, 2100)}
+START, END_ENTRY = pd.Timestamp(FROM or "2019-01-01"), pd.Timestamp("2024-12-31")
+ERAS = {f"{START.year}-2022": (START.year, 2022), "2023+": (2023, 2100)}
 LAGS = range(5)
 REPRO = os.environ.get("SGM_REPRO") == "1"
 
@@ -214,18 +215,21 @@ for arm, h in ARMS.items():
     na, ns = nav(R0, h); sa, ss = stats(na), stats(ns)
     p1, p2, p3, p4 = ok0, n_lags >= 4, lost <= 0.25, sa["maxdd"] >= ss["maxdd"] - 0.10
     verdict[arm] = bool(p1 and p2 and p3 and p4)
+    p5 = sa["cagr"] > ss["cagr"]                                   # strict (from2018 registration): beats the market basket
     results[arm] = dict(eras=eras0, lags_passing=f"{n_lags}/5", windows=len(W), windows_lost=round(lost, 3),
                         window_median=round(float(W.avg.median()), 4), window_worst=round(float(W.avg.min()), 4),
                         worst_start=str(W.loc[W.avg.idxmin(), "start"].date()), portfolio=sa, shadow=ss,
-                        checks=dict(eras=p1, lags=p2, windows=p3, drawdown=p4), passed=verdict[arm])
+                        checks=dict(eras=p1, lags=p2, windows=p3, drawdown=p4, beats_basket=bool(p5)), passed=verdict[arm],
+                        passed_strict=bool(verdict[arm] and p5))
     print(f"\n=== {arm} · hold {h} sessions · entries {START.date()}..{END_ENTRY.date()} with a full hold ===")
     for name, e in eras0.items():
         print(f"  {name:9s}: {e['trades']:3d} trades · avg {e['avg']:+.0%} vs typical stock {e['typical_avg']:+.0%} · median {e['median']:+.0%} · up {e['up']:.0%} · {'ok' if e['ok'] else 'FAIL'}")
-    print("  entry lags 0-4: " + " · ".join(f"lag {k} {'ok' if v[0] else 'FAIL'} ({v[1]['2019-2022']['avg']:+.0%}/{v[1]['2023+']['avg']:+.0%})" for k, v in lag_res.items()) + f" -> {n_lags}/5")
+    print("  entry lags 0-4: " + " · ".join(f"lag {k} {'ok' if v[0] else 'FAIL'} ({v[1][list(ERAS)[0]]['avg']:+.0%}/{v[1]['2023+']['avg']:+.0%})" for k, v in lag_res.items()) + f" -> {n_lags}/5")
     print(f"  12-month buying windows: {len(W)} · lost money in {lost:.0%} · median {W.avg.median():+.0%} · worst {W.avg.min():+.0%} "
           f"(start {W.loc[W.avg.idxmin(), 'start']:%b %Y}) · best {W.avg.max():+.0%}")
     print(f"  portfolio {START.date()}..{na.index[-1].date()}: {sa['cagr']:+.1%}/yr, worst fall {sa['maxdd']:.1%} · market shadow {ss['cagr']:+.1%}/yr, worst fall {ss['maxdd']:.1%}")
-    print(f"  checks: eras {'✅' if p1 else '❌'} · lags {'✅' if p2 else '❌'} · windows {'✅' if p3 else '❌'} · drawdown {'✅' if p4 else '❌'} -> {'PASS' if verdict[arm] else 'FAIL'}")
+    print(f"  checks: eras {'✅' if p1 else '❌'} · lags {'✅' if p2 else '❌'} · windows {'✅' if p3 else '❌'} · drawdown {'✅' if p4 else '❌'} -> {'PASS' if verdict[arm] else 'FAIL'}"
+          + (f" · strict (also beats the market basket {sa['cagr']:+.1%} vs {ss['cagr']:+.1%}/yr): {'PASS' if verdict[arm] and p5 else 'FAIL'}" if FROM else ""))
     if not REPRO:
         OUTDIR.mkdir(parents=True, exist_ok=True)
         R0.assign(arm=arm).to_csv(OUTDIR / f"trades_{arm}{SUF}.csv", index=False)
@@ -241,7 +245,8 @@ print(f"\nVERDICT: {', '.join(passed) + ' PASS' if passed else 'no arm passes'}"
 if not REPRO:
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
         fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=EXP_ID + (f"-RERUN-{tag}" if tag else "-RESULT"),
-                                 verdict=passed or "no arm passes", arms=results), default=str) + "\n")
+                                 verdict=passed or "no arm passes", arms=results,
+                                 **({"verdict_strict": [a for a, r in results.items() if r["passed_strict"]] or "no arm passes"} if FROM else {})), default=str) + "\n")
 
 # ---------------- INFO, not part of the verdict: 2025 buying windows so far (2025 revenue known for fewer orders: thin)
 print(f"\nINFO · orders >= {CUT:.0%} of revenue · buying windows starting in 2025, valued on {cal[-1].date()} · 12m hold: each trade at its 12-month exit if passed, else today · equal money per trade")
