@@ -168,6 +168,50 @@ if HOT_MODE:
             print(f"{h:>3s} {gname:7s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
                   f"+50% {(g.ret >= 0.5).mean():.0%} · 2x {(g.ret >= 1).mean():.0%} · -30% {(g.ret <= -0.3).mean():.0%} · typical stock {pct(g.typ.mean())} · beat {(g.ret > g.typ).mean():.0%}")
             out[f">={cut:.2f} {h} {gname}"] = dict(trades=len(g), avg=round(float(g.ret.mean()), 4), median=round(float(g.ret.median()), 4), up50=round(float((g.ret >= 0.5).mean()), 3))
+if HOT_MODE and __import__("os").environ.get("SGM_YOY") == "1":   # year-on-year view (2026-10-04)
+    print(f"\n=== YEAR BY YEAR · orders >= {MIN_RATIO:.0%} of revenue · 12-month hold · by year of the order ===")
+    g = R[(R.entry == "next open") & (R.hold == "12m") & (R.group != "unknown")]
+    cov_y = cov.to_dict()
+    yy = g.groupby(["year", "group"]).agg(trades=("ret", "size"), median=("ret", "median"), avg=("ret", "mean"), up=("ret", lambda v: (v > 0).mean()),
+                                          typical=("typ", "median")).unstack("group")
+    for y in sorted(g.year.unique()):
+        row = yy.loc[y]
+        def cell(k):
+            try:
+                return f"{int(row[('trades', k)]):3d} tr · median {pct(row[('median', k)])} · avg {pct(row[('avg', k)])} · up {row[('up', k)]:.0%} · typical stock {pct(row[('typical', k)])}"
+            except Exception:
+                return "  0 tr"
+        print(f"{y} (revenue known for {cov_y.get(y, float('nan')):.0%} of orders){' THIN' if cov_y.get(y, 0) < 0.75 else ''}\n   hot    : {cell('hot')}\n   not hot: {cell('not hot')}")
+    # order year x hold period: median trade (trade count), per group; a trade appears only once its full hold has passed
+    G2 = R[(R.entry == "next open") & (R.group != "unknown")]
+    for gname in ("hot", "not hot"):
+        M = G2[G2.group == gname].groupby(["year", "hold"], sort=False).ret.agg(["median", "size"])
+        print(f"\n=== {gname.upper()} · median trade (trades) by order year x hold ===\n year  " + "".join(f"{h:>13s}" for h in H))
+        for y in sorted(G2.year.unique()):
+            print(f" {y}  " + "".join(f"{pct(M.loc[(y, h), 'median']):>8s} ({int(M.loc[(y, h), 'size']):2d})" if (y, h) in M.index else f"{'-':>13s}" for h in H)
+                  + (" THIN" if cov_y.get(y, 0) < 0.75 else ""))
+    # calendar-year returns of a portfolio holding every trade of a group for its hold, equal money per open trade, cash when none
+    print("\n=== CALENDAR-YEAR returns: hold every trade of the group for the hold period, equal money in each open trade, cash when none ===")
+    Cn = Cw.to_numpy(); On = Ow.to_numpy(); col = {s: i for i, s in enumerate(Cw.columns)}
+    for hold_n, hold_s in [(63, "3m"), (126, "6m"), (189, "9m"), (252, "12m"), (315, "15m"), (378, "18m"), (504, "24m")]:
+     for gname in ("hot", "not hot"):
+        Tg = T[(T["group"] == gname) & (T["ratio"] >= MIN_RATIO)]
+        ret_sum = np.zeros(len(cal)); n_open = np.zeros(len(cal))
+        for r in Tg.itertuples():
+            if r.symbol not in col: continue
+            c = col[r.symbol]; i0 = r.i0; i1 = min(i0 + hold_n, len(cal))
+            e = On[i0, c]
+            if not (np.isfinite(e) and e > 0): continue
+            path = Cn[i0:i1, c].astype(float); prev = np.concatenate([[e], path[:-1]])
+            dr = np.where(np.isfinite(path) & np.isfinite(prev) & (prev > 0), path / prev - 1, 0.0); dr[0] -= 0.005
+            ret_sum[i0:i1] += dr; n_open[i0:i1] += 1
+        daily = np.where(n_open > 0, ret_sum / np.maximum(n_open, 1), 0.0)
+        nav = pd.Series(np.cumprod(1 + daily), index=cal)
+        yl = nav.groupby(nav.index.year).last(); yr = (yl / yl.shift(1).fillna(1.0) - 1)
+        opn = pd.Series(n_open, index=cal).groupby(cal.year).mean()
+        n21 = nav[nav.index >= "2021-01-01"]; yrs21 = (n21.index[-1] - n21.index[0]).days / 365.25
+        cagr = (n21.iloc[-1] / n21.iloc[0]) ** (1 / yrs21) - 1; dd = (n21 / n21.cummax() - 1).min()
+        print(f"  {hold_s:>3s} {gname:7s}: since 2021 {cagr:+.0%}/yr · worst fall {dd:.0%} · " + " · ".join(f"{y}: {v:+.0%}" for y, v in yr.items() if y >= 2021) + f" · avg open {opn[opn.index >= 2021].mean():.0f}")
 print("\n=== first order vs repeat order (bought at the next open) ===")
 for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
