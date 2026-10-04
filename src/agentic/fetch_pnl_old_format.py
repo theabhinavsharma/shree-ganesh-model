@@ -168,7 +168,12 @@ def fetch(limit: int | None, workers: int) -> None:
                 url = r.resultDetailedDataLink.replace(f"financial_res_{r.symbol}_", f"financial_res_{old}_") if old != r.symbol else r.resultDetailedDataLink
                 rec.update(url=url, symbol_then=old)
                 try:
-                    rec.update(parse(get_text(s, url)), status="OK")
+                    try:
+                        rec.update(parse(get_text(s, url)), status="OK")
+                    except Exception as x0:   # 2026-10-04: a renamed company's page is sometimes archived under the CURRENT
+                        if url == r.resultDetailedDataLink or "404" not in str(x0):   # ticker (the calendar link as given)
+                            raise
+                        rec.update(parse(get_text(s, r.resultDetailedDataLink)), status="OK", url=r.resultDetailedDataLink, symbol_then=r.symbol)
                 except Exception as x:  # noqa: BLE001 — logged with its message, retried once at the end and on the next run
                     rec.update(status=f"ERR_{type(x).__name__}", error=str(x)[:160])
                 if rec["status"] == "OK":
@@ -234,13 +239,34 @@ def merge() -> None:
       the restated row is dropped: what investors saw at the time is the point of the backfill. Known limit: for 2018
       dates, those quarters serve as year-ago bases on the old accounting standard."""
     O = pd.read_parquet(OUT)
-    O = O[O["eps_check_ok"] & O["unit"].str.contains("lakh|lac|crore|million|thousand", case=False, na=False)]
+    unit_ok = O["unit"].str.contains("lakh|lac|crore|million|thousand", case=False, na=False)
+    # 2026-10-04 (Abhinav: "2016-26 ka revenue bhi bharo max capacity pe"): a page whose EPS check fails can still carry right
+    # SALES. Keep its sales (and total income) when they sit within 1/3x..3x of the median verified sales of the same company
+    # and basis within +-380 days (verified = live rows + EPS-checked old rows); its EPS / profit / PBT are blanked and the
+    # row is marked source "nse_old_html_sales_only". Rows with no verified neighbour or outside that band stay out.
+    Pv = pd.read_parquet(PNL, columns=["symbol", "quarter_end", "basis", "net_sales"])
+    good = O[O["eps_check_ok"] & unit_ok]
+    V = pd.concat([Pv, good[["symbol", "quarter_end", "basis", "net_sales"]]]); V["quarter_end"] = pd.to_datetime(V["quarter_end"])
+    V = V[V["net_sales"] > 0]
+    Vs = {k: g.set_index("quarter_end")["net_sales"].sort_index() for k, g in V.groupby(["symbol", "basis"])}
+    cand = O[unit_ok & ~O["eps_check_ok"] & (O["net_sales"] > 0)].copy()
+
+    def _consistent(r) -> bool:
+        s = Vs.get((r.symbol, r.basis))
+        if s is None:
+            return False
+        q = pd.Timestamp(r.quarter_end); w = s[(s.index >= q - pd.Timedelta(days=380)) & (s.index <= q + pd.Timedelta(days=380))]
+        return bool(len(w)) and 1 / 3 <= r.net_sales / w.median() <= 3
+    cand = cand[[_consistent(r) for r in cand.itertuples()]]
+    cand[["eps_basic", "eps_diluted", "pbt", "pat"]] = float("nan"); cand["source"] = "nse_old_html_sales_only"
+    n_rescued = len(cand)
+    O = pd.concat([good, cand], ignore_index=True)
     O = O.sort_values(["symbol", "basis", "quarter_end"]).reset_index(drop=True)
     g = O.groupby(["symbol", "basis"])["net_sales"]
     ext = lambda r: (r > 20) | (r < 0.05)  # noqa: E731
     spike = ext(O["net_sales"] / g.shift(1)) & ext(O["net_sales"] / g.shift(-1))
     O = O[~spike]
-    P = pd.read_parquet(PNL); P = P[P["source"] != "nse_old_html"].copy()
+    P = pd.read_parquet(PNL); P = P[~P["source"].isin(["nse_old_html", "nse_old_html_sales_only"])].copy()
     P["quarter_end"] = pd.to_datetime(P["quarter_end"]); P["filing_dt"] = pd.to_datetime(P["filing_dt"])
     j = P.reset_index().merge(O[["symbol", "quarter_end", "basis", "filing_dt"]], on=["symbol", "quarter_end", "basis"], suffixes=("", "_old"))
     restated = j.loc[j["filing_dt_old"] < j["filing_dt"], "index"]
@@ -252,10 +278,11 @@ def merge() -> None:
     ENRICHED.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(
         dataset="pnl_quarterly_enriched.parquet", producer="src/agentic/fetch_pnl_old_format.py --merge",
         definition=merge.__doc__, units="as pnl_quarterly: detail_api and nse_old_html in Rs LAKH, xbrl in Rs; EPS Rs per share",
-        rows=len(M), added_old=len(add), restated_rows_replaced=int(len(restated)), sales_spikes_dropped=int(spike.sum()),
+        rows=len(M), added_old=len(add), restated_rows_replaced=int(len(restated)), sales_spikes_dropped=int(spike.sum()), sales_only_rescued=int(n_rescued),
+        sales_only_rule="EPS check failed but sales within 1/3x..3x of verified neighbours (+-380 days); EPS / profit / PBT blank",
         updated=datetime.now().isoformat(timespec="seconds")), indent=1))
     print(f"enriched P&L: {len(M):,} rows = live {len(P) + len(restated):,} - {len(restated):,} restated (first-filed kept) + "
-          f"{len(add):,} old-format · {int(spike.sum())} sales spikes dropped · live file untouched")
+          f"{len(add):,} old-format ({n_rescued:,} sales-only) · {int(spike.sum())} sales spikes dropped · live file untouched")
 
 
 if __name__ == "__main__":
