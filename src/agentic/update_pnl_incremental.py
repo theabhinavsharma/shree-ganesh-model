@@ -13,6 +13,8 @@ Point in time: a quarter keeps the first filing fetched (as before); filing_dt i
 Budget: stops after SGM_BUDGET_MIN minutes (default 40) or when more than half of the first 20+ requests fail; whatever
 is left is listed in logs/pnl_update/state.json and done next run. Normalize and merge always run on what was fetched.
 Exit 0 = done or nothing new; 2 = stopped early (partial, still written); 1 = error.
+SGM_PNL_PART (catch-up in parallel, 2026-10-04): "lists" = steps 1-2 only; "xbrl:n/k" = step 3 for every k-th filing from
+n, into its own checkpoint integrated2_inc_w<n>.jsonl (read by load_done / normalize like the others); "rebuild" = step 4.
 """
 from __future__ import annotations
 
@@ -41,8 +43,14 @@ BUDGET = float(os.environ.get("SGM_BUDGET_MIN", "40")) * 60
 KEY = ["symbol", "period_to", "broadcast", "consolidated", "detail_link"]
 
 
+PART = os.environ.get("SGM_PNL_PART", "all")
+
+
 def main() -> int:
     t0 = time.time()
+    if PART == "rebuild":
+        fph.stage_normalize()
+        return subprocess.run([sys.executable, str(ROOT / "src/agentic/fetch_pnl_old_format.py"), "--merge"], cwd=ROOT).returncode
     STATE.parent.mkdir(parents=True, exist_ok=True)
     st = json.loads(STATE.read_text()) if STATE.exists() else {}
     cal = pd.read_parquet(CAL)
@@ -57,6 +65,8 @@ def main() -> int:
 
     # 2. per-company filing list
     s, new, errs, pending, partial = build_session(), [], 0, [], False
+    if PART.startswith("xbrl"):
+        syms = []                                                # lists are done by the "lists" part
     for i, sym in enumerate(syms):
         if time.time() - t0 > BUDGET * 0.5 or (i >= 20 and errs / i > 0.5):   # half the budget for lists, half for XBRL
             pending = syms[i:]; partial = True
@@ -79,6 +89,9 @@ def main() -> int:
             shutil.copy2(CAL, CAL.with_suffix(".parquet.prev"))
             pd.concat([cal, N[cal.columns.intersection(N.columns)]], ignore_index=True).to_parquet(CAL, index=False)
     print(f"filing list: {added} new filings appended to {CAL.name}", flush=True)
+    if PART == "lists":
+        st["pending"] = pending; st["feed_through"] = feed_through if not pending else st.get("feed_through")
+        STATE.write_text(json.dumps(st, indent=1)); return 2 if partial else 0
 
     # 3. XBRL for filings not yet fetched (same selection, record format and checkpoint as fph.stage_integrated)
     ic = pd.read_parquet(CAL)
@@ -92,9 +105,12 @@ def main() -> int:
     done = fph.load_done("integrated2")
     todo = [r for _, r in ic.sort_values("bd", ascending=False).iterrows()    # newest filings first: the day's results come
             if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done and r["qe"] >= pd.Timestamp("2024-01-01")]   # before old gaps
+    shard = "integrated2.jsonl"
+    if PART.startswith("xbrl:"):
+        n, k = map(int, PART.split(":")[1].split("/")); todo = todo[n::k]; shard = f"integrated2_inc_w{n}.jsonl"
     print(f"XBRL to fetch: {len(todo)} (quarters from 2024 not yet fetched)", flush=True)
     got, xerr = 0, 0
-    with open(fph.OUTDIR / "integrated2.jsonl", "a") as fh:
+    with open(fph.OUTDIR / shard, "a") as fh:
         for i, r in enumerate(todo):
             if time.time() - t0 > BUDGET or (i >= 20 and xerr / i > 0.5):
                 partial = True
@@ -115,6 +131,8 @@ def main() -> int:
             time.sleep(fph.SLEEP)
     print(f"XBRL fetched with sales: {got}", flush=True)
 
+    if PART.startswith("xbrl"):
+        print(f"XBRL part {PART}: {got} with sales", flush=True); return 2 if partial else 0
     # 4. rebuild the tables from the checkpoints (always, so whatever arrived is used)
     fph.stage_normalize()
     rc = subprocess.run([sys.executable, str(ROOT / "src/agentic/fetch_pnl_old_format.py"), "--merge"], cwd=ROOT).returncode

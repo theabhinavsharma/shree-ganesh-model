@@ -101,7 +101,17 @@ def main() -> None:
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--since", default=None, help="only OCR filings dated on/after this date (e.g. 2018-10-01)")
+    ap.add_argument("--worker", type=int, default=0); ap.add_argument("--of", type=int, default=1)   # parallel catch-up (2026-10-04)
+    ap.add_argument("--merge-shards", action="store_true", help="append worker shards to the checkpoint, shards to Trash")
     args = ap.parse_args()
+    if args.merge_shards:
+        shards = sorted(CKPT.parent.glob(CKPT.stem + ".ocr_w*.jsonl"))
+        with CKPT.open("a") as out:
+            for p in shards:
+                out.write("".join(l + "\n" for l in p.read_text().splitlines() if l.strip()))
+                shutil.move(str(p), str(Path.home() / ".Trash" / f"{p.name}.{int(time.time())}"))
+        print(f"merged {len(shards)} OCR shards into {CKPT.name}", flush=True)
+        return
     for tool in ("tesseract", "pdftoppm"):
         if not shutil.which(tool):
             raise SystemExit(f"{tool} not on PATH — install first (brew install tesseract poppler)")
@@ -114,12 +124,14 @@ def main() -> None:
             or (r.get("status") == "NO_AMOUNT" and not r.get("ocr") and (r.get("text_chars") or 0) < SHORT_TEXT)]
     if args.since:
         todo = [r for r in todo if (r.get("d") or "") >= args.since]
+    todo = todo[args.worker::args.of]
+    dest = CKPT if args.of == 1 else CKPT.parent / f"{CKPT.stem}.ocr_w{args.worker}.jsonl"
     fx = load_usdinr().set_index("fx_date")["usdinr"]                   # historical series only, never a fixed rate
     print(f"{len(todo):,} scanned filings to OCR", flush=True)
     s = build_session(warm=True, referer=REF)
     budget = float(__import__("os").environ.get("SGM_BUDGET_MIN", "0")) * 60
     t0, errs = time.time(), 0
-    with CKPT.open("a") as fh:
+    with dest.open("a") as fh:
         for i, r in enumerate(todo):
             if budget and (time.time() - t0 > budget or (i >= 20 and errs / i > 0.5)):
                 print(f"STOPPED EARLY after {i} of {len(todo)} ({errs} network/throttle errors); the rest next run", flush=True)
