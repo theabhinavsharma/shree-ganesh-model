@@ -68,7 +68,8 @@ def main() -> None:
     sys.path.insert(0, str(ROOT / "src/agentic/trust"))
     import data_ready as dr
     PNL_F = ["sales_yoy", "eps_yoy", "profitable", "loss_to_profit", "days_since_results"]   # pe / pe_ind blank for loss-makers by
-    rows_path = OUTDIR / "full/rows/rows.parquet" if FULL else ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet"  # definition:
+    # the rows the compared models were trained on (2026-10-04): FULL and every re-run train on the enriched full rows
+    rows_path = OUTDIR / "full/rows/rows.parquet" if (FULL or os.environ.get("SGM_RERUN_TAG")) else ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet"  # definition:
     pnl_path = ROOT / ("data/derived/pnl_quarterly_enriched.parquet" if FULL else "data/derived/pnl_quarterly.parquet")  # 'profitable'
     R = pd.read_parquet(rows_path, columns=["trade_date", "core"] + PNL_F); R = R[R["core"].astype(bool)]  # stands in for them
     Q = pd.read_parquet(pnl_path, columns=["symbol", "quarter_end"]); Q["y"] = pd.to_datetime(Q["quarter_end"]).dt.year
