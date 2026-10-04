@@ -1,0 +1,16 @@
+{
+ "dataset": "reference_trades",
+ "path": "logs/leader_sleeve/big_order_hold/reference_trades.parquet",
+ "rows": 532,
+ "producer": "src/agentic/explore_big_order_winners.py (SGM_HOT=1 SGM_MIN_RATIO=0.15 SGM_DUMP_T=...)",
+ "experiment": "EXP-2026-10-04-big-order-hold-18-24m",
+ "purpose": "wiring check: the registered test's frozen trade construction must reproduce this list exactly",
+ "columns": {
+  "symbol": "NSE symbol",
+  "ts": "filing time of the order",
+  "i0": "index of the entry session in the price calendar (open of the first session after the filing)",
+  "ratio": "order amount / trailing-12-month net sales (fraction, 0.15 = 15%)",
+  "group": "industry heat_pct >= 0.70 on the session before entry: hot / not hot / unknown"
+ },
+ "updated": "2026-10-04T10:06:23"
+}

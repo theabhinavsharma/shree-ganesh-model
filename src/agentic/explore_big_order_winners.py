@@ -114,6 +114,8 @@ T["repeat"] = [((a := bigt.get(s, np.array([], dtype="datetime64[ns]"))) < np.da
                ((a < np.datetime64(t - pd.Timedelta(days=30))) & (a >= np.datetime64(t - pd.Timedelta(days=365)))).any()
                for s, t in zip(T["symbol"], T["ts"])]
 
+if __import__("os").environ.get("SGM_DUMP_T"):   # reference trade list for a registered test's wiring check
+    T[["symbol", "ts", "i0", "ratio"] + (["group"] if HOT_MODE else [])].to_parquet(__import__("os").environ["SGM_DUMP_T"])
 PX = rp.load_panel(["open", "close"]); Ow, Cw = rp.wide(PX, "open", cal), rp.wide(PX, "close", cal).ffill(limit=300); del PX
 allsyms = Cw.columns
 
@@ -363,7 +365,7 @@ for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=Fa
 if MIN_RATIO < 0.5:
     T2 = T.set_index(["symbol", "ts"])["ratio"]
     for hh in ("24m", "12m"):
-        g = R[(R.entry == "next open") & (R.hold == hh)].merge(T[["symbol", "i0", "ratio", "amount_cr", "rev_ttm_cr", "ts"]].assign(date=lambda x: [cal[i] for i in x["i0"]]), on=["symbol", "date"])
+        g = R[(R.entry == "next open") & (R.hold == hh)].drop(columns=["ratio"], errors="ignore").merge(T[["symbol", "i0", "ratio", "amount_cr", "rev_ttm_cr", "ts"]].assign(date=lambda x: [cal[i] for i in x["i0"]]), on=["symbol", "date"])
         g["size"] = pd.cut(g["ratio"], [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.5, 1e9], right=False, labels=["10-25%", "25-50%", "50-75%", "75-100%", "100-150%", "150-250%", ">=250%"])
         print(f"\n=== {hh} hold, by order size (% of trailing revenue) ===")
         print(g.groupby("size", observed=True).agg(trades=("ret", "size"), doubled=("ret", lambda v: (v >= 1.0).mean()), up50=("ret", lambda v: (v >= 0.5).mean()),

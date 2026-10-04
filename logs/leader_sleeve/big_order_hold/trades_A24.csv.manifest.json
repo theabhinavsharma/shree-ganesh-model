@@ -1,0 +1,15 @@
+{
+ "dataset": "trades_A24",
+ "producer": "src/agentic/test_big_order_hold.py",
+ "experiment": "EXP-2026-10-04-big-order-hold-18-24m",
+ "rows": 278,
+ "columns": {
+  "symbol": "NSE symbol",
+  "i0": "entry session index",
+  "date": "entry session",
+  "year": "entry year",
+  "ret": "close after 504 sessions / entry open - 1 - 0.005 (fraction)",
+  "typ": "median return of every stock priced on the entry day, same dates (fraction)"
+ },
+ "updated": "2026-10-04T10:07:51"
+}
