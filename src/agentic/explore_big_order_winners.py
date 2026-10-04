@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 
-H = {"3m": 63, "6m": 126, "9m": 189, "12m": 252}
+H = {"3m": 63, "6m": 126, "9m": 189, "12m": 252, "15m": 315, "18m": 378, "24m": 504}
 COST = 0.005
 D = sp.load(None); cal = D["cal"]; pos = {d: i for i, d in enumerate(cal)}
 px = D["px"]
@@ -89,6 +89,12 @@ for r in f3.sort_values("ts").itertuples():
         continue
     last[r.symbol] = r.ts; keep.append(r.Index)
 T = f3.loc[keep].copy(); funnel["one per company per 30 days"] = len(T)
+# repeat order = the same company had ANOTHER >= 50% order 31-365 days earlier (2026-10-04 follow-up question)
+bigt = big.groupby("symbol")["ts"].apply(lambda s: np.sort(s.values)).to_dict()
+T["repeat"] = [((a := bigt.get(s, np.array([], dtype="datetime64[ns]"))) < np.datetime64(t - pd.Timedelta(days=30))).any() and
+               (a >= np.datetime64(t - pd.Timedelta(days=365))).any() and
+               ((a < np.datetime64(t - pd.Timedelta(days=30))) & (a >= np.datetime64(t - pd.Timedelta(days=365)))).any()
+               for s, t in zip(T["symbol"], T["ts"])]
 
 PX = rp.load_panel(["open", "close"]); Ow, Cw = rp.wide(PX, "open", cal), rp.wide(PX, "close", cal).ffill(limit=300); del PX
 allsyms = Cw.columns
@@ -119,7 +125,7 @@ for lag in (0, 4):
             i0 = r.i0 + lag
             if i0 + h > len(cal):
                 continue
-            rows.append(dict(entry=("next open" if lag == 0 else "5 sessions later"), hold=name, symbol=r.symbol, date=cal[i0], year=cal[i0].year,
+            rows.append(dict(entry=("next open" if lag == 0 else "5 sessions later"), hold=name, symbol=r.symbol, date=cal[i0], year=cal[i0].year, repeat=r.repeat,
                              ret=trade(r.symbol, i0, h), typ=typical(i0, h)))
 R = pd.DataFrame(rows).dropna(subset=["ret"])
 pct = lambda v: f"{v:+.0%}"  # noqa: E731
@@ -134,6 +140,11 @@ for (e, h), g in R.groupby(["entry", "hold"], sort=False):
     if e == "next open" or h == "6m":
         print(f"{e:16s} {h:>3s}: {len(g):4d} trades · avg {pct(s['avg'])} · median {pct(s['median'])} · up {s['up']:.0%} · "
               f"+50% {s['hit50']:.0%} · -30% or worse {s['down30']:.0%} · typical stock {pct(s['typical'])} · beat typical {s['beat']:.0%}")
+print("\n=== first order vs repeat order (bought at the next open) ===")
+for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
+    print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
+          f"+50% {(g.ret >= 0.5).mean():.0%} · -30% or worse {(g.ret <= -0.3).mean():.0%} · typical stock {pct(g.typ.mean())} · beat typical {(g.ret > g.typ).mean():.0%}")
+    out[f"next open {h} {'repeat' if rep else 'first'}"] = dict(trades=len(g), avg=round(float(g.ret.mean()), 4), median=round(float(g.ret.median()), 4))
 g6 = R[(R.entry == "next open") & (R.hold == "6m")]
 print("\n6-month trades by entry year (median trade vs median typical):")
 print(g6.groupby("year").agg(trades=("ret", "size"), median=("ret", "median"), typical=("typ", "median"), beat=("ret", lambda v: 0)).assign(
@@ -142,6 +153,6 @@ print("\n8 random qualifying orders (eyeball the amounts):")
 for r in T.sample(min(8, len(T)), random_state=3).itertuples():
     print(f"  {r.ts.date()} {r.symbol:12s} order Rs {r.amount_cr:,.0f} cr · trailing revenue Rs {r.rev_ttm_cr:,.0f} cr ({r.ratio:.0%}) · {str(r.amount_snippet)[:110]}")
 with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id="EXP-2026-10-04-big-order-winners-EXPLORATION",
+    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id="EXP-2026-10-04-big-order-winners-v2-EXPLORATION",
                              status="EXPLORATION (no rule changed; uses 2016-2026 incl. 2023+, so 2023+ is no longer clean for this idea)",
                              producer="src/agentic/explore_big_order_winners.py", funnel=funnel, results=out)) + "\n")
