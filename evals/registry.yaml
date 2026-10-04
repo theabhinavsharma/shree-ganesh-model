@@ -301,6 +301,16 @@ evals:
     owner: system
     check: every_feed_guarded
 
+  - id: data.input_chain
+    statement: "Every strategy input ran today, fetched the whole day (as many filings as NSE's own count), and the day's rows reached the tables built from them (order amounts, bad-news ledger, P&L)."
+    why: "Order amounts, P&L and the bad-news ledger had no schedule and sat 5 weeks stale with nothing flagging it (found 2026-10-04). A step can run and fetch yet the table built from it can still miss the day."
+    source_of_truth: "src/agentic/trust/input_chain.py vs NSE's corporate-announcements whole-day count; logs/evals/input_chain_<day>.json"
+    threshold: ">= 95% of NSE's count fetched; >= 95% of the day's order filings and results companies used downstream"
+    action: warn
+    cadence: daily
+    owner: system
+    check: input_chain
+
   - id: data.holidays_match_panel
     statement: "NSE's trading-holiday list covers this year and agrees with our price data (no prices on a listed holiday, no weekday missing unless NSE lists it)."
     why: "Buy and sell days in messages come from this list. Without it, a list built on Thu 2026-10-01 would have said buy on Fri Oct 2, a holiday (INC-2026-09-30-buy-day-on-holiday)."

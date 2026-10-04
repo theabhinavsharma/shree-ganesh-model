@@ -37,6 +37,7 @@ the crawl loop is untouched because the v2 crawl was running when this was writt
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import time
@@ -84,8 +85,13 @@ def main() -> None:
     T = T[[(s, str(q)) not in done for s, q in zip(T["symbol"], T["seq_id"])]]
     print(f"{len(T):,} order/L1 filings to fetch ({len(done):,} checkpointed)", flush=True)
     s = build_session(warm=True, referer=REF)
+    budget = float(os.environ.get("SGM_BUDGET_MIN", "0")) * 60   # scheduled runs (2026-10-04): time limit + stop rule; the
+    t0, errs = time.time(), 0                                      # rest is fetched next run (resume-safe); manual runs unchanged
     with CKPT.open("a") as fh:
         for i, r in enumerate(T.itertuples()):
+            if budget and (time.time() - t0 > budget or (i >= 20 and errs / i > 0.5)):
+                print(f"STOPPED EARLY after {i} of {len(T)} ({errs} network/throttle errors, {(time.time() - t0) / 60:.0f} min); the rest next run", flush=True)
+                break
             d = pd.to_datetime(r.sort_date, errors="coerce")
             u = fx.asof(d) if pd.notna(d) else 83.0
             rec = dict(symbol=r.symbol, seq_id=str(r.seq_id), cat=r.cat, d=str(d.date()) if pd.notna(d) else None, url=r.attchmntFile,
@@ -114,6 +120,8 @@ def main() -> None:
                         except Exception:
                             continue
             fh.write(json.dumps(rec, default=str) + "\n"); fh.flush()
+            st_ = str(rec.get("status", ""))   # stop rule counts throttling / network failures only: a 404 or a broken PDF fails the same way every run
+            errs += st_ in ("HTTP_403", "HTTP_429") or st_.startswith(("HTTP_5", "ERR_Connection", "ERR_Timeout", "ERR_ReadTimeout", "ERR_SSL"))
             if i % 200 == 0:
                 print(f"  {i}/{len(T)} {r.symbol} {rec['status']} {rec.get('fulltext_amount_cr')}", flush=True)
             time.sleep(0.8)

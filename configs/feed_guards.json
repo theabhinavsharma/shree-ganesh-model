@@ -135,6 +135,26 @@
    "file": "data/derived/nse_holidays.parquet",
    "date_col": "fetched_at",
    "max_stale_bd": 5
+  },
+  "announcements_archive": {
+   "file": "data/derived/announcements_historical.parquet",
+   "date_col": "an_dt",
+   "max_stale_bd": 3
+  },
+  "order_amounts": {
+   "file": "data/derived/order_amounts.parquet",
+   "date_col": "ts",
+   "max_stale_bd": 5
+  },
+  "event_ledger": {
+   "file": "data/derived/event_ledger.parquet",
+   "date_col": "filed_at",
+   "max_stale_bd": 5
+  },
+  "pnl_update": {
+   "file": "data/derived/pnl_quarterly.parquet",
+   "date_col": "filing_dt",
+   "max_stale_bd": 10
   }
  }
 }

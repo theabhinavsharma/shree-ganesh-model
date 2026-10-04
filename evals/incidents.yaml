@@ -250,3 +250,24 @@ incidents:
     lesson: Every background fetch gets a time budget and a stop rule (e.g. >50% failures after 5 tries) in code, and I check
       it at its expected finish time; never leave a job running unwatched past its ETA.
     commit: ''
+  - id: INC-2026-10-04-derived-inputs-unscheduled
+    date: '2026-10-04'
+    title: Order amounts, quarterly P&L and the bad-news ledger had no schedule and went stale for 5 weeks unnoticed
+    found_by: Abhinav asked 'do we have systems to robustly fetch all inputs ... and health'; the inputs check showed order_amounts
+      and pnl_quarterly ending Aug 29
+    root_cause: The three tables were built by hand for research (parse_order_amounts / fetch_order_fulltext, fetch_pnl_history,
+      build_event_ledger) and never added to daily_data_layer.sh or feed_guards.json; fetch_pnl_history also skips a company
+      forever once fetched, so it could not update even if run
+    blast_radius: Big-order explorations and registered tests used data through Aug 29 (results as of then are unaffected);
+      the daily orders digest computes amounts on the fly so the daily message was correct; V3 does not read these tables
+    fix: 'daily_data_layer.sh: announcements_archive -> order_amounts (20-min cap) -> event_ledger -> pnl_update (new update_pnl_incremental.py,
+      40-min cap); feed guards for all four; data.input_chain eval + message line checks ran -> fetched (vs NSE''s whole-day
+      count) -> used every day'
+    guard_eval: data.input_chain
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    - sgm-new-idea
+    lesson: 'A table a strategy or test reads is an input even if a script built it once: it gets a scheduled builder that can
+      update incrementally, a feed guard, and a ran->fetched->used check in the same change; a by-hand build is not done.'
+    commit: ''

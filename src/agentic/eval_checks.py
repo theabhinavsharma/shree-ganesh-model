@@ -510,4 +510,14 @@ def results_data_ready(ctx: dict) -> dict:
     return _res("PASS" if not viol else "FAIL", f"{n - len(viol)}/{n} results had their data checked", ", ".join(viol[:5]))
 
 
+def input_chain(ctx: dict) -> dict:
+    """Ran -> fetched -> used for the latest data day (src/agentic/trust/input_chain.py; 2026-10-04): each strategy input ran
+    today, holds the day's rows (vs NSE's own count where NSE gives one) and those rows reached the tables built from them."""
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import input_chain as ic
+    r = ic.run()
+    bad = [x for x in r["rows"] if not x["ok"]]
+    return _res("PASS" if not bad else "WARN", f"{len(r['rows']) - len(bad)}/{len(r['rows'])} inputs ran, fetched and used", ic.line(r)[:400] if bad else "")
+
+
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}

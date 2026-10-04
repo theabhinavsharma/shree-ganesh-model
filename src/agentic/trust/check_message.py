@@ -81,6 +81,9 @@ def _pool_daily() -> tuple[list[float], str]:
             texts.append(f.read_text())
             gr = json.loads(f.read_text())["results"]
             extra += [len(gr), sum(r["status"] == "PASS" for r in gr)]
+    ch = notify._latest("input_chain_*.json", ROOT / "logs/evals")         # the ran -> fetched -> used line (2026-10-04)
+    if ch:
+        texts.append(ch.read_text())
     oj = ROOT / "logs/daily_orders/latest.json"                            # the new-orders list
     if oj.exists():
         o = json.loads(oj.read_text()); texts.append(oj.read_text())

@@ -27,6 +27,14 @@ run insider_trades /usr/bin/python3 src/agentic/fetch_pit_gg.py --daily   # NSE'
 run gold_inr /usr/bin/python3 src/agentic/build_gold_feed.py   # NSE gold ETFs -> INR gold (needs prices)
 run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 
+# --- strategy inputs built from filings (2026-10-04; they had no schedule and went 5 weeks stale unnoticed) ---
+# archive (attachments + categories) -> order amounts (new order PDFs, 20 min cap, rest next day) -> bad-news ledger;
+# P&L for companies that filed results since the last run (40 min cap; exit 2 = partial, shown as failed so it is seen)
+run announcements_archive /usr/bin/python3 src/agentic/fetch_announcements_historical.py
+run order_amounts /bin/bash -c "SGM_BUDGET_MIN=20 /usr/bin/python3 src/agentic/fetch_order_fulltext.py"
+run event_ledger /usr/bin/python3 src/agentic/build_event_ledger.py
+run pnl_update /bin/bash -c "SGM_BUDGET_MIN=40 /usr/bin/python3 src/agentic/update_pnl_incremental.py"
+
 # --- daily macro + flows ---
 run forex /usr/bin/python3 src/agentic/fetch_forex_macro.py
 run usdinr_history /usr/bin/python3 src/agentic/fetch_usdinr_history.py   # FRED DEXINUS (pre-2024 FX for USD amounts)

@@ -86,7 +86,8 @@ def missed_line(run: dict) -> str:
 
 
 FEED_GROUPS = [   # daily_data_layer.sh step labels -> how the phone message groups them (unknown labels land in "Other")
-    ("Prices & filings", ["corp_actions", "prices", "announcements", "pnl_calendar", "pnl_history"]),
+    ("Prices & filings", ["corp_actions", "prices", "announcements", "pnl_calendar", "pnl_history", "announcements_archive",
+                          "order_amounts", "event_ledger", "pnl_update"]),
     ("Macro & flows", ["forex", "usdinr_history", "commodity", "global_macro", "fii_dii", "india_vix", "breadth", "gold_inr"]),
     ("News & policy", ["news_events", "news_rss", "sentiment", "global_sentiment", "pib_releases"]),
     ("Deals & industry", ["block_deals", "industry", "security_master", "screener_industry"]),
@@ -235,6 +236,11 @@ def daily_text(run: dict | None = None) -> str:
     if other:
         lines.append("⚠️ other checks: " + ", ".join(other))
     lines.append(inputs_line())
+    ch = _latest("input_chain_*.json", ROOT / "logs/evals")
+    if ch:
+        sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+        import input_chain
+        lines.append(input_chain.line(json.loads(ch.read_text())))
 
     lines += _orders_lines(st) + _book_lines() + _heat_lines()
     try:
