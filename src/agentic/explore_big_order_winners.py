@@ -184,11 +184,11 @@ if HOT_MODE and __import__("os").environ.get("SGM_YOY") == "1":   # year-on-year
         print(f"{y} (revenue known for {cov_y.get(y, float('nan')):.0%} of orders){' THIN' if cov_y.get(y, 0) < 0.75 else ''}\n   hot    : {cell('hot')}\n   not hot: {cell('not hot')}")
     # order year x hold period: median trade (trade count), per group; a trade appears only once its full hold has passed
     G2 = R[(R.entry == "next open") & (R.group != "unknown")]
-    for gname in ("hot", "not hot"):
-        M = G2[G2.group == gname].groupby(["year", "hold"], sort=False).ret.agg(["median", "size"])
-        print(f"\n=== {gname.upper()} · median trade (trades) by order year x hold ===\n year  " + "".join(f"{h:>13s}" for h in H))
+    for stat, gname in [(s_, g_) for s_ in ("median", "mean") for g_ in ("hot", "not hot")]:
+        M = G2[G2.group == gname].groupby(["year", "hold"], sort=False).ret.agg([stat, "size"])
+        print(f"\n=== {gname.upper()} · {'average' if stat == 'mean' else 'median'} trade (trades) by order year x hold ===\n year  " + "".join(f"{h:>13s}" for h in H))
         for y in sorted(G2.year.unique()):
-            print(f" {y}  " + "".join(f"{pct(M.loc[(y, h), 'median']):>8s} ({int(M.loc[(y, h), 'size']):2d})" if (y, h) in M.index else f"{'-':>13s}" for h in H)
+            print(f" {y}  " + "".join(f"{pct(M.loc[(y, h), stat]):>8s} ({int(M.loc[(y, h), 'size']):2d})" if (y, h) in M.index else f"{'-':>13s}" for h in H)
                   + (" THIN" if cov_y.get(y, 0) < 0.75 else ""))
     # calendar-year returns of a portfolio holding every trade of a group for its hold, equal money per open trade, cash when none
     print("\n=== CALENDAR-YEAR returns: hold every trade of the group for the hold period, equal money in each open trade, cash when none ===")
