@@ -118,6 +118,7 @@ sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
 
 MAT, WIN, HOLD = 0.15, 60, 90
+EXP_ID = "EXP-2026-09-27-hot-x-material-order"
 ERA_SPLIT = pd.Timestamp("2023-01-01")
 COV_MIN = 0.50                      # materiality window starts when >= 50% of anatomy rows have a PIT TTM revenue
 TTM_TOL = pd.Timedelta(days=200)    # registered: the TTM used must have become available within 200 days
@@ -806,6 +807,32 @@ def main() -> None:
         reasons.append(f"PIT TTM coverage < {COV_MIN:.0%} on {len(low)} of {len(inwin)} measured weeks "
                        f"{cov_check['weeks_below_by_year']} ({cov_check['first_below']}..{cov_check['last_below']}): "
                        f"pnl_quarterly quarters / filing dates missing, orders there cannot be sized")
+    # ---- data-readiness gate (2026-10-04; lesson INC-2026-10-02-ab-on-incomplete-data): before any outcome
+    import os
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import data_ready as dr
+    yrs = range(cov_start.year, pd.Timestamp(meas_end).year + 1)
+    A = pd.read_csv(ROOT / "logs/news/announcements_completeness.csv").dropna(subset=["nse"]); A = A[A["nse"] > 0]
+    oy, uy = O["eff"].dt.year, UO["eff"].dt.year
+    Pq = pd.read_parquet(ROOT / "data/derived/pnl_quarterly.parquet", columns=["symbol", "quarter_end", "net_sales"])
+    Pq["quarter_end"] = pd.to_datetime(Pq["quarter_end"])
+    p_have = Pq.dropna(subset=["net_sales"]).drop_duplicates(["symbol", "quarter_end"]).groupby(Pq["quarter_end"].dt.year).size()
+    Cf = pd.read_parquet(ROOT / "data/derived/results_calendar_full.parquet", columns=["symbol", "toDate", "period"])
+    Cf = Cf[Cf["period"].astype(str).str.lower() == "quarterly"]; Cf["qe"] = pd.to_datetime(Cf["toDate"], format="%d-%b-%Y", errors="coerce")
+    Ci = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet", columns=["symbol", "period_to"])
+    Ci["qe"] = pd.to_datetime(Ci["period_to"], format="%d-%b-%Y", errors="coerce")
+    off = pd.concat([Cf[["symbol", "qe"]], Ci[["symbol", "qe"]]]).dropna().drop_duplicates()
+    Sw = S[(S["trade_date"] >= cov_start) & (S["trade_date"] <= meas_end)][["trade_date", "covered"]].copy()
+    Sw["pit_ttm"] = Sw["covered"].where(Sw["covered"])
+    checks = [dr.completeness("NSE announcements we hold vs NSE's own day feed (sample days)", A.groupby("year")["ours"].sum(), A.groupby("year")["nse"].sum(), yrs),
+              dr.completeness("order filings crawled (text read) vs all order filings", O.groupby(oy).size(), pd.concat([oy, uy]).value_counts(), yrs),
+              dr.completeness("live P&L company-quarters vs NSE's results calendar + integrated filings", p_have, off.groupby(off["qe"].dt.year).size(),
+                              range(cov_start.year - 1, pd.Timestamp(meas_end).year + 1)),
+              dr.coverage("PIT trailing revenue known for the anatomy stock-weeks in the measured window", Sw, "trade_date", ["pit_ttm"], yrs),
+              dr.span("anatomy rows", S["trade_date"], cov_start, pd.Timestamp(meas_end))]
+    tag = os.environ.get("SGM_RERUN_TAG")
+    if os.environ.get("SGM_REPRO") != "1":
+        dr.gate(EXP_ID, checks, run=tag or "RESULT")
     res = {"meta": dict(run_at_ist=datetime.now(ZoneInfo("Asia/Kolkata")).isoformat(timespec="seconds"),
                         amount_source=oinfo["amount_source"], orders=oinfo, cov_start=str(cov_start.date()),
                         cov_min=COV_MIN, labels=args.labels, label_end=str(label_end.date()) if label_end is not None else None,
@@ -835,6 +862,17 @@ def main() -> None:
         print(f"wrote {out}")
     else:
         print("--symbols without --out: results not written")
+    if tag and syms is None:                                          # re-run of the registered test after a data change
+        C = {e: res.get(f"{C_KEY}|{e}", {}) for e in ("disc", "conf")}
+        K = {e: res.get(f"{K1_KEY}|{e}", {}) for e in ("disc", "conf")}
+        with (ROOT / "logs/experiments.jsonl").open("a") as fh:
+            fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=f"{EXP_ID}-RERUN-{tag}",
+                                     note="same registered test re-run after a data change; same code and rules (data gate added 2026-10-04)",
+                                     verdict=res["verdict"], cov_start=str(cov_start.date()),
+                                     **{e: dict(n=C[e].get("n"), p=C[e].get("p"), lift_base=C[e].get("lift"), p_control=K[e].get("p"),
+                                                lift_control=(C[e].get("p") / K[e]["p"]) if K[e].get("p") else None, episodes=C[e].get("n_ep"))
+                                        for e in ("disc", "conf")}, results=str(out)), default=lambda x: x.item() if isinstance(x, np.generic) else str(x)) + "\n")
+        print(f"logged {EXP_ID}-RERUN-{tag}")
     print(f"HOT ORDER COMBO COMPLETE · {time.time() - t0:.0f}s")
 
 
