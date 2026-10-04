@@ -212,6 +212,74 @@ if HOT_MODE and __import__("os").environ.get("SGM_YOY") == "1":   # year-on-year
         n21 = nav[nav.index >= "2021-01-01"]; yrs21 = (n21.index[-1] - n21.index[0]).days / 365.25
         cagr = (n21.iloc[-1] / n21.iloc[0]) ** (1 / yrs21) - 1; dd = (n21 / n21.cummax() - 1).min()
         print(f"  {hold_s:>3s} {gname:7s}: since 2021 {cagr:+.0%}/yr · worst fall {dd:.0%} · " + " · ".join(f"{y}: {v:+.0%}" for y, v in yr.items() if y >= 2021) + f" · avg open {opn[opn.index >= 2021].mean():.0f}")
+if HOT_MODE and __import__("os").environ.get("SGM_OCT") == "1":   # (2026-10-04) start fresh in the first October week each year; do not-hot industries turn hot later?
+    Cn = Cw.to_numpy(); On = Ow.to_numpy(); col = {s: i for i, s in enumerate(Cw.columns)}
+
+    def fresh(Tg, s0, hold_n, end):   # new money from s0: only trades entered in [s0, end), equal money in each open trade, cash when none
+        ret_sum = np.zeros(end - s0); n_open = np.zeros(end - s0); n = 0
+        for r in Tg.itertuples():
+            if r.symbol not in col or not (s0 <= r.i0 < end): continue
+            c = col[r.symbol]; a = r.i0; b = min(a + hold_n, end); e = On[a, c]
+            if not (np.isfinite(e) and e > 0): continue
+            path = Cn[a:b, c].astype(float); prev = np.concatenate([[e], path[:-1]])
+            dr = np.where(np.isfinite(path) & np.isfinite(prev) & (prev > 0), path / prev - 1, 0.0); dr[0] -= COST
+            ret_sum[a - s0:b - s0] += dr; n_open[a - s0:b - s0] += 1; n += 1
+        daily = np.where(n_open > 0, ret_sum / np.maximum(n_open, 1), 0.0)
+        return np.prod(1 + daily) - 1, n, (n_open == 0).mean()
+    holds_oct = [(189, "9m"), (252, "12m"), (378, "18m"), (504, "24m")]
+    for horizon, hz in [(252, "12 months"), (504, "24 months")]:
+        print(f"\n=== START FRESH IN THE FIRST OCTOBER WEEK · value after {hz} · hot / not hot · orders >= {MIN_RATIO:.0%} of revenue ===")
+        print(" start      " + "".join(f"{h:>15s}" for _, h in holds_oct) + "   trades in   cash days (12m hold)   typical stock")
+        for Y in range(2019, 2026):
+            s0 = int(cal.searchsorted(pd.Timestamp(f"{Y}-10-01"))); end = min(s0 + horizon, len(cal)); part = "" if s0 + horizon <= len(cal) else " (to date)"
+            cells, extra = [], ""
+            for hold_n, hs in holds_oct:
+                v = {g: fresh(T[(T["group"] == g) & (T["ratio"] >= MIN_RATIO)], s0, hold_n, end) for g in ("hot", "not hot")}
+                cells.append(f"{pct(v['hot'][0])} / {pct(v['not hot'][0])}")
+                if hs == "12m":
+                    extra = f"   {v['hot'][1]:3d} / {v['not hot'][1]:3d}   {v['hot'][2]:.0%} / {v['not hot'][2]:.0%}"
+                    out[f"oct{Y} {hz} 12m"] = dict(hot=round(float(v['hot'][0]), 4), not_hot=round(float(v['not hot'][0]), 4))
+            print(f" Oct {Y}{part:10s}" + "".join(f"{c:>15s}" for c in cells) + extra + f"          {pct(typical(s0, end - s0))}")
+    s0 = int(cal.searchsorted(pd.Timestamp("2024-10-01"))); end = min(s0 + 252, len(cal))
+    print("eyeball · Oct 2024 start, hot, 12m hold, return to the earlier of exit or Oct 2025:")
+    for r in T[(T["group"] == "hot") & (T["ratio"] >= MIN_RATIO)].itertuples():
+        if r.symbol in col and s0 <= r.i0 < end:
+            c = col[r.symbol]; x = min(r.i0 + 252, end) - 1
+            print(f"  {cal[r.i0].date()} {r.symbol:12s} {Cn[x, c] / On[r.i0, c] - 1:+.0%} to {cal[x].date()}")
+    # not-hot trades: does the industry turn hot (heat_pct >= 0.70) during the 24 months after entry, and when? (uses later data: an explanation, not a rule)
+    Hp = Sx.pivot_table(index="date", columns="industry", values="heat_pct").reindex(cal).ffill(limit=7)
+    icol = {k: i for i, k in enumerate(Hp.columns)}
+    for dname, Hn in [("any single day >= 0.70", Hp.to_numpy()), ("20-session average >= 0.70", Hp.rolling(20, min_periods=15).mean().to_numpy())]:
+     fl = []
+     for r in T[(T["group"] == "not hot") & (T["ratio"] >= MIN_RATIO)].itertuples():
+         ind = imap.get(r.symbol); a = r.i0
+         if ind not in icol or r.symbol not in col or a + 504 > len(cal): continue
+         hit = np.where(Hn[a:a + 504, icol[ind]] >= 0.70)[0]; j = a + int(hit[0]) if len(hit) else None
+         c = col[r.symbol]; e = On[a, c]
+         d = dict(m=np.nan if j is None else (j - a) / 21, r12=trade(r.symbol, a, 252), r24=trade(r.symbol, a, 504), pre=np.nan, post=np.nan, f12=np.nan, f12typ=np.nan)
+         if j is not None and j + 1 < a + 504:
+             f0 = On[j + 1, c]
+             if np.isfinite(f0) and f0 > 0 and np.isfinite(e) and e > 0:
+                 d["pre"] = f0 / e - 1; d["post"] = Cn[a + 503, c] / f0 - 1 - COST
+             if j + 1 + 252 <= len(cal):
+                 d["f12"] = trade(r.symbol, j + 1, 252); d["f12typ"] = typical(j + 1, 252)
+         fl.append(d)
+     F = pd.DataFrame(fl)
+     print(f"\n=== NOT-HOT trades with a full 24 months ({len(F)}): does the industry turn hot later, and when? · turned hot = {dname} ===")
+     print(" share turned hot by: " + " · ".join(f"{k}m {(F.m < k).mean():.0%}" for k in (3, 6, 9, 12, 18, 24)))
+     F["when"] = pd.cut(F.m, [-0.01, 3, 9, 24], labels=["within 3m", "3-9m", "9-24m"]).astype(str).replace("nan", "never in 24m")
+     for w in ["within 3m", "3-9m", "9-24m", "never in 24m"]:
+         g = F[F.when == w]
+         if not len(g): continue
+         s = (f"{w:13s}: {len(g):3d} trades · 12m avg {pct(g.r12.mean())} median {pct(g.r12.median())} · 24m avg {pct(g.r24.mean())} median {pct(g.r24.median())}")
+         if w != "never in 24m":
+             s += f" · entry->turn avg {pct(g.pre.mean())} · turn->24m end avg {pct(g.post.mean())} median {pct(g.post.median())}"
+         print(s); out[f"flip {dname[:6]} {w}"] = dict(trades=len(g), r24_avg=round(float(g.r24.mean()), 4), r24_median=round(float(g.r24.median()), 4))
+     g = F.dropna(subset=["f12"])
+     print(f"same {len(g)} trades · buy at the order, hold 12m: avg {pct(g.r12.mean())} · median {pct(g.r12.median())} · up {(g.r12 > 0).mean():.0%}\n"
+           f"same {len(g)} trades · buy when the industry turns hot, hold 12m: avg {pct(g.f12.mean())} · median {pct(g.f12.median())} · up {(g.f12 > 0).mean():.0%} · typical stock {pct(g.f12typ.mean())}")
+    Hh = R[(R.entry == "next open") & (R.hold == "12m") & (R.group == "hot") & (R.date <= cal[len(cal) - 504])]
+    print(f"for reference · hot at the order, same window (entry by {cal[len(cal) - 504].date()}), hold 12m: {len(Hh)} trades · avg {pct(Hh.ret.mean())} · median {pct(Hh.ret.median())} · up {(Hh.ret > 0).mean():.0%}")
 print("\n=== first order vs repeat order (bought at the next open) ===")
 for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
