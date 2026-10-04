@@ -240,6 +240,21 @@ if HOT_MODE and __import__("os").environ.get("SGM_OCT") == "1":   # (2026-10-04)
                     extra = f"   {v['hot'][1]:3d} / {v['not hot'][1]:3d}   {v['hot'][2]:.0%} / {v['not hot'][2]:.0%}"
                     out[f"oct{Y} {hz} 12m"] = dict(hot=round(float(v['hot'][0]), 4), not_hot=round(float(v['not hot'][0]), 4))
             print(f" Oct {Y}{part:10s}" + "".join(f"{c:>15s}" for c in cells) + extra + f"          {pct(typical(s0, end - s0))}")
+    # cohorts: every order from Oct Y to Sep Y+1 gets the same money; each is sold exactly N months after its own buy (abhinav's framing, 2026-10-04)
+    Rn = R[(R.entry == "next open") & (R.group != "unknown") & (R.ratio >= MIN_RATIO)].copy()
+    Rn["coh"] = np.where(Rn.date.dt.month >= 10, Rn.date.dt.year, Rn.date.dt.year - 1)
+    Tq = T[(T["ratio"] >= MIN_RATIO) & (T["group"] != "unknown")].copy(); dts = pd.DatetimeIndex([cal[i] for i in Tq["i0"]])
+    Tq["coh"] = np.where(dts.month >= 10, dts.year, dts.year - 1); bought = Tq.groupby(["coh", "group"]).size()
+    hc = ["9m", "12m", "18m", "24m"]
+    print("\n=== OCTOBER COHORTS · same money in every order from Oct Y to Sep Y+1, each sold exactly N months after its own buy · avg (median) [sold/bought] ===")
+    for gname in ("hot", "not hot"):
+        print(f" {gname.upper()}\n cohort        " + "".join(f"{h:>24s}" for h in hc))
+        for Y in range(2018, 2026):
+            cells = []
+            for h in hc:
+                g = Rn[(Rn.coh == Y) & (Rn.group == gname) & (Rn.hold == h)]
+                cells.append(f"{pct(g.ret.mean())} ({pct(g.ret.median())}) [{len(g)}/{bought.get((Y, gname), 0)}]" if len(g) else f"- [0/{bought.get((Y, gname), 0)}]")
+            print(f" Oct {Y}-Sep {Y + 1 - 2000:02d}" + "".join(f"{c:>24s}" for c in cells))
     s0 = int(cal.searchsorted(pd.Timestamp("2024-10-01"))); end = min(s0 + 252, len(cal))
     print("eyeball · Oct 2024 start, hot, 12m hold, return to the earlier of exit or Oct 2025:")
     for r in T[(T["group"] == "hot") & (T["ratio"] >= MIN_RATIO)].itertuples():
