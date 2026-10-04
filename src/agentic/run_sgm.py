@@ -25,10 +25,14 @@ weekly  launchd (com.sgm.weekly): Friday 7:30 PM ET, Saturday 9 AM ET retry, or 
   GATE analysis    output.*, pit.model_scores_current, model.*, strategy.*, trust.results_reproduce + this week's batch exists
   MESSAGE          the Sri Lakshmi G1 order sheet, through the output gate (only G1 and the Sep 8 production sleeve are tracked, 2026-09-30)
   15D PIPELINE     run_weekly_pipeline.sh --skip-fetch (the separate 15D/5% basket thread, last so it cannot hold Sri Lakshmi up)
+weekend launchd (com.sgm.weekend): Saturday and Sunday 11:30 AM ET, retry 7:30 PM (Abhinav 2026-10-04: "let's not skip
+        telegram on weekends"); --if-missed: skipped when a weekend note was already sent today
+  ORDERS           refresh_announcements -> daily_orders_industry (companies file on weekends; no prices: NSE is closed)
+  MESSAGE          notify.weekend_text() -> GATE output (the daily number check) -> send
 One run at a time (logs/runs/.lock; a second run waits up to 3 hours). Keeps the Mac awake while running (caffeinate).
 Record: logs/runs/<date>_<mode>.json (every stage: status, seconds, log). Children get SGM_ORCHESTRATED=1 so the
 shell scripts skip the steps this file runs itself.
-Usage: /usr/bin/python3 src/agentic/run_sgm.py daily|weekly [--if-missed] [--smoke]
+Usage: /usr/bin/python3 src/agentic/run_sgm.py daily|weekly|weekend [--if-missed] [--smoke]
   --smoke   nothing fetched, computed or sent: gates are reported (not enforced), messages are built, checked and
             written to logs/outbox/smoke/. Used to prove the schedule can run.
 """
@@ -107,13 +111,13 @@ class Run:
         else:
             notify.send(text, kind)
 
-    def message(self, kind: str, text: str, track: str | None = None) -> bool:
+    def message(self, kind: str, text: str, track: str | None = None, send_as: str | None = None) -> bool:
         res = check_message.check(kind, text, track, log=not self.smoke)
         label = f"GATE output ({kind}{' ' + track if track else ''})"
         self.rec["stages"].append(dict(stage=label, status="pass" if res["ok"] else "HELD", **res))
         self.log(f"{'✅' if res['ok'] else '🛑'} {label}: " + ("sent" if res["ok"] else f"held — {res}"))
         if res["ok"]:
-            self.send(text, kind)
+            self.send(text, send_as or kind)
         else:
             self.send(f"❌ SGM · {kind} message held (it did not pass its number check)\n"
                       + (f"No source for: {', '.join(res['unsourced'][:8])}\n" if res["unsourced"] else "")
@@ -185,6 +189,14 @@ def daily(R: Run) -> int:
     return R.finish("sent" if ok else "message held", 0 if ok else 1)
 
 
+def weekend(R: Run) -> int:
+    if not R.smoke:
+        R.stage("ORDERS", ["/bin/bash", "-c", "set -e; /usr/bin/python3 src/agentic/refresh_announcements.py; "
+                           "/usr/bin/python3 src/agentic/daily_orders_industry.py"], 3600)   # a failure shows as a stale digest
+    ok = R.message("daily", notify.weekend_text(run=R.rec), send_as="weekend")
+    return R.finish("sent" if ok else "message held", 0 if ok else 1)
+
+
 def weekly(R: Run) -> int:
     if not R.smoke and not _fetched_today():
         R.stage("FETCH", ["/bin/bash", "src/agentic/daily_data_layer.sh"], 3 * 3600)
@@ -228,7 +240,7 @@ def weekly(R: Run) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("mode", choices=["daily", "weekly"])
+    ap.add_argument("mode", choices=["daily", "weekly", "weekend"])
     ap.add_argument("--if-missed", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     a = ap.parse_args()
@@ -242,6 +254,8 @@ def main() -> int:
             since = now.replace(hour=11, minute=0, second=0, microsecond=0)
             if now < since:
                 since -= timedelta(days=1)
+        elif a.mode == "weekend":     # one weekend note per calendar day
+            since = now.replace(hour=0, minute=0, second=0, microsecond=0)
         else:
             since = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)   # this ISO week
         if _sent_since(a.mode, since):
@@ -263,7 +277,7 @@ def main() -> int:
         if done():                            # re-check after waiting on the lock: never run the same day twice
             return 0
         R.log(f"═══ SGM {a.mode}{' (smoke)' if a.smoke else ''} · {ROOT} ═══")
-        return daily(R) if a.mode == "daily" else weekly(R)
+        return daily(R) if a.mode == "daily" else (weekend(R) if a.mode == "weekend" else weekly(R))
     except Exception as x:                                                # the belt itself broke: say so, loudly
         R.send(f"❌ SGM {a.mode} orchestrator crashed: {type(x).__name__}: {x}"[:600], "fail")
         R.rec["error"] = repr(x)

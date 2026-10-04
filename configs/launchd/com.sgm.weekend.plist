@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- SGM weekend note (2026-10-04, Abhinav: "let's not skip telegram on weekends - mujhe still reports chahye").
+     Saturday and Sunday 11:30 AM ET, retry 7:30 PM; a time missed while the Mac sleeps runs on wake; --if-missed sends one
+     note per day. Installed at ~/Library/LaunchAgents/com.sgm.weekend.plist; this copy lives in configs/launchd/. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.sgm.weekend</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/abhinavs./Code/Zoom/src/agentic/run_sgm.py</string>
+    <string>weekend</string>
+    <string>--if-missed</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/abhinavs./Code/Zoom</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Weekday</key><integer>6</integer><key>Hour</key><integer>11</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>6</integer><key>Hour</key><integer>19</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>0</integer><key>Hour</key><integer>11</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>0</integer><key>Hour</key><integer>19</integer><key>Minute</key><integer>30</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>/Users/abhinavs./Code/Zoom/logs/runs/launchd_weekend.log</string>
+  <key>StandardErrorPath</key><string>/Users/abhinavs./Code/Zoom/logs/runs/launchd_weekend.log</string>
+</dict>
+</plist>

@@ -1,7 +1,8 @@
 """Phone messages for SGM / Sri Lakshmi (2026-09-29) — filled in from data files, never written by a language model.
 
 Plain English: after the daily run this sends one short message (did the data come in, how are the paper batches doing,
-any big order in a stock we hold, which industries just heated up). On Saturdays it sends the order sheet. When a step
+any big order in a stock we hold, which industries just heated up). On Fridays it sends the order sheet; on Saturdays and
+Sundays a weekend note (no new prices: filings, open batches, input health, the next buy). When a step
 fails it sends a failure message. Every number in a message is read from a file the pipeline wrote.
 
 Where messages go:
@@ -10,7 +11,7 @@ Where messages go:
   3. Telegram, once ~/.config/sgm/telegram.env exists with TELEGRAM_BOT_TOKEN=... and TELEGRAM_CHAT_ID=...
      (the person creates the bot with @BotFather and writes this file; the token never goes into chat or git)
 Sleeve size for rupee amounts: ~/.config/sgm/sleeve.json {"sleeve_inr": 3000000} (optional).
-Usage: notify.py daily | weekly [--track sri_lakshmi|model|sleeve] | fail --step NAME --detail TEXT | test
+Usage: notify.py daily | weekend | weekly [--track sri_lakshmi|model|sleeve] | fail --step NAME --detail TEXT | test
 Dates are written month-first ("Sep 29") so the output gate (trust/check_message.py) can tell dates from numbers.
 Scheduled runs send through run_sgm.py, which checks every daily/weekly message before it goes out.
 """
@@ -111,14 +112,100 @@ def _telegram_html(text: str) -> str:
 
 
 def _last_sent_ist() -> datetime | None:
-    """When the previous daily message finished, in IST (the order file's clock)."""
+    """When the previous daily or weekend message finished, in IST (the order file's clock)."""
     from zoneinfo import ZoneInfo
-    ts = [r.get("finished") or r["started"] for f in (ROOT / "logs/runs").glob("*_daily.json")   # finished: its own fetches came before
-          for r in json.loads(f.read_text()) if r.get("outcome") == "sent"]
+    ts = [r.get("finished") or r["started"] for m in ("daily", "weekend") for f in (ROOT / "logs/runs").glob(f"*_{m}.json")   # finished: its own
+          for r in json.loads(f.read_text()) if r.get("outcome") == "sent"]                          # fetches came before (weekend: 2026-10-04)
     if not ts:
         return None
     t = datetime.fromisoformat(max(ts)).replace(tzinfo=ZoneInfo("America/New_York"))
     return t.astimezone(ZoneInfo("Asia/Kolkata")).replace(tzinfo=None)
+
+
+def _orders_lines(st: dict) -> list[str]:
+    """New order filings since the last sent message (big ones first)."""
+    lines: list[str] = []
+    oj = ROOT / "logs/daily_orders/latest.json"
+    if oj.exists():
+        lines.append("")
+        O = json.loads(oj.read_text())
+        if not (O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))):
+            lines.append(f"❌ orders digest stale (written {O['written'][:10]})")
+        cut = _last_sent_ist()
+        new = [f for f in O["filings"] if cut is None or datetime.fromisoformat(f["fetched_ist"]) > cut]
+        new.sort(key=lambda f: -(f["pct_of_rev"] or 0))
+        big = [f for f in new if (f["pct_of_rev"] or 0) >= 0.15]
+        lines.append(f"📦 Orders: {len(new)} new · {len(big)} big" if new else "📦 Orders: none new")
+        for f in new[:5]:
+            mark = "⭐" if f["held"] else ("🔥" if (f["pct_of_rev"] or 0) >= 0.15 else "•")
+            amt = f"₹{f['amount_cr']:,.0f}cr" if f["amount_cr"] is not None else "₹?"
+            pc = f" ({f['pct_of_rev'] * 100:.0f}% rev)" if f["pct_of_rev"] is not None else ""
+            hp = f["heat_pct"]
+            heat = "" if hp is None else (" hot" if hp >= 0.9 else " warm" if hp >= 0.7 else "")
+            lines.append(f"{mark} {f['symbol']} {amt}{pc}{' ·' + heat if heat else ''}{' · trend ✅' if f['trend'] else ''}"
+                         + (" · HELD" if f["held"] else "") + (f" 📄 {f['url']}" if f.get("url") else ""))
+
+    return lines
+
+
+def _book_lines() -> list[str]:
+    """Open paper batches (tracked folders only) and the sell list."""
+    lines: list[str] = []
+    book = []
+    for tag, folder in TRACKS.items():
+        of = folder / "outcomes.jsonl"
+        if not of.exists():
+            continue
+        last = {}
+        for l in of.read_text().splitlines():
+            if l.strip():
+                x = json.loads(l); last[x["screen_id"]] = x
+        last = {k: v for k, v in last.items() if (folder / f"screen_{k}.json").exists()}   # not_invested/ batches are not shown
+        open_ = [f"{pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}%" for sid, x in sorted(last.items()) if x.get("status") != "CLOSED"]
+        if open_:
+            book.append(f"{SHORT[tag]} " + ", ".join(open_))
+    lines.append("")
+    if book:
+        lines.append("📈 " + " · ".join(book))
+    lines += [l for l in sell_lines("sri_lakshmi") if l]
+    return lines
+
+
+def _heat_lines() -> list[str]:
+    """Industries that just warmed up or cooled down (from the orders digest)."""
+    lines: list[str] = []
+    oj = ROOT / "logs/daily_orders/latest.json"
+    O = json.loads(oj.read_text()) if oj.exists() else {}
+    if oj.exists() and (O.get("warming") or O.get("cooling")):
+        cap = lambda xs: ", ".join(xs[:3]) + (f" +{len(xs) - 3}" if len(xs) > 3 else "")  # noqa: E731
+        lines.append("")
+        if O.get("warming"):
+            lines.append("🌡 Warming: " + cap(O["warming"]))
+        if O.get("cooling"):
+            lines.append("❄️ Cooling: " + cap(O["cooling"]))
+    return lines
+
+
+# Inputs of the strategies (2026-10-04, "do we have systems to robustly fetch all inputs ... health"): latest date in each
+# file and how many calendar days old it may be before the message flags it. Shown every day so a stale input is seen.
+INPUTS = [("prices", "data/derived/stock_daily_facts_adjusted_2015plus.parquet", "trade_date", 4),
+          ("filings", "data/events_full_history/normalized/stock_announcements.parquet", "event_date", 4),
+          ("order amounts", "data/derived/order_amounts.parquet", "ts", 7),
+          ("P&L", "data/derived/pnl_quarterly.parquet", "filing_dt", 10),
+          ("bad-news check", "data/derived/event_ledger.parquet", "filed_at", 7),
+          ("industry heat", "data/derived/industry_scores_policy.parquet", "date", 8)]
+
+
+def inputs_line() -> str:
+    out = []
+    for label, path, colname, days in INPUTS:
+        try:
+            d = pd.to_datetime(pd.read_parquet(ROOT / path, columns=[colname])[colname], errors="coerce").max()
+            ok = (pd.Timestamp.now().normalize() - d.normalize()).days <= days
+            out.append(f"{label} {d:%b %d} {'✅' if ok else '⚠️'}")
+        except Exception:
+            out.append(f"{label} ❌ unreadable")
+    return "📚 Inputs: " + " · ".join(out)
 
 
 def daily_text(run: dict | None = None) -> str:
@@ -147,56 +234,40 @@ def daily_text(run: dict | None = None) -> str:
     other = [r["id"] for r in e["results"] if r["status"] in ("FAIL", "WARN") and not r["id"].startswith(("data.", "pit.filings", "prov.", "ops."))]
     if other:
         lines.append("⚠️ other checks: " + ", ".join(other))
+    lines.append(inputs_line())
 
-    oj = ROOT / "logs/daily_orders/latest.json"
-    if oj.exists():
-        lines.append("")
-        O = json.loads(oj.read_text())
-        if not (O["data_through"] >= str(st.get("date")) or O["written"][:10] >= str(st.get("date"))):
-            lines.append(f"❌ orders digest stale (written {O['written'][:10]})")
-        cut = _last_sent_ist()
-        new = [f for f in O["filings"] if cut is None or datetime.fromisoformat(f["fetched_ist"]) > cut]
-        new.sort(key=lambda f: -(f["pct_of_rev"] or 0))
-        big = [f for f in new if (f["pct_of_rev"] or 0) >= 0.15]
-        lines.append(f"📦 Orders: {len(new)} new · {len(big)} big" if new else "📦 Orders: none new")
-        for f in new[:5]:
-            mark = "⭐" if f["held"] else ("🔥" if (f["pct_of_rev"] or 0) >= 0.15 else "•")
-            amt = f"₹{f['amount_cr']:,.0f}cr" if f["amount_cr"] is not None else "₹?"
-            pc = f" ({f['pct_of_rev'] * 100:.0f}% rev)" if f["pct_of_rev"] is not None else ""
-            hp = f["heat_pct"]
-            heat = "" if hp is None else (" hot" if hp >= 0.9 else " warm" if hp >= 0.7 else "")
-            lines.append(f"{mark} {f['symbol']} {amt}{pc}{' ·' + heat if heat else ''}{' · trend ✅' if f['trend'] else ''}"
-                         + (" · HELD" if f["held"] else "") + (f" 📄 {f['url']}" if f.get("url") else ""))
-
-    book = []
-    for tag, folder in TRACKS.items():
-        of = folder / "outcomes.jsonl"
-        if not of.exists():
-            continue
-        last = {}
-        for l in of.read_text().splitlines():
-            if l.strip():
-                x = json.loads(l); last[x["screen_id"]] = x
-        last = {k: v for k, v in last.items() if (folder / f"screen_{k}.json").exists()}   # not_invested/ batches are not shown
-        open_ = [f"{pd.Timestamp(sid):%b %d} {x['ew_net']:+.1f}%" for sid, x in sorted(last.items()) if x.get("status") != "CLOSED"]
-        if open_:
-            book.append(f"{SHORT[tag]} " + ", ".join(open_))
-    lines.append("")
-    if book:
-        lines.append("📈 " + " · ".join(book))
-    lines += [l for l in sell_lines("sri_lakshmi") if l]
-    if oj.exists() and (O.get("warming") or O.get("cooling")):
-        cap = lambda xs: ", ".join(xs[:3]) + (f" +{len(xs) - 3}" if len(xs) > 3 else "")  # noqa: E731
-        lines.append("")
-        if O.get("warming"):
-            lines.append("🌡 Warming: " + cap(O["warming"]))
-        if O.get("cooling"):
-            lines.append("❄️ Cooling: " + cap(O["cooling"]))
+    lines += _orders_lines(st) + _book_lines() + _heat_lines()
     try:
         import research_queue
         lines += [""] + [l for l in research_queue.status_lines() if l]
     except Exception as x:                      # the queue must never break the daily message
         lines.append(f"🧪 queue status unavailable ({type(x).__name__})")
+    return tidy(lines)
+
+
+def weekend_text(run: dict | None = None) -> str:
+    """Saturday / Sunday note (Abhinav 2026-10-04: "let's not skip telegram on weekends - mujhe still reports chahye").
+    NSE is closed, so no new prices: last data run, input health, order filings since the last message (companies do
+    file on weekends), the open batches at the last close, and the next buy if one is due."""
+    st = json.loads((ROOT / "logs/daily_data_layer_status.json").read_text())
+    ok, bad = st.get("passed", []), st.get("failed", [])
+    now = datetime.now()
+    head = f"SGM · {now:%a %b %d} · weekend · data {pd.Timestamp(st.get('date')):%b %d}"
+    if run:
+        head += f" · ran {datetime.fromisoformat(run['started']):%-I:%M %p}"
+    lines = [head, f"Market closed · next session {nse_calendar.next_session(now):%a %b %d}", "",
+             f"📥 Last data run {pd.Timestamp(st.get('date')):%b %d}: feeds {'✅' if not bad else '⚠️'} {len(ok)}/{len(ok) + len(bad)}"
+             + (" · failed: " + ", ".join(bad) if bad else ""), inputs_line()]
+    lines += _orders_lines(st) + _book_lines()
+    f = _latest("screen_*.json", TRACKS["sri_lakshmi"])
+    if f is not None:
+        sc = json.loads(f.read_text())
+        entry = nse_calendar.next_session(sc["data_through"])
+        if entry >= pd.Timestamp(now.date()) and sc["names"]:
+            name = "Sri Lakshmi V3" if "V3" in sc.get("status", "") else "Sri Lakshmi G1"
+            lines += ["", f"🛒 {entry:%a %b %d} at open: buy {', '.join(n['symbol'] for n in sc['names'])} ({name}, list of "
+                          f"{pd.Timestamp(sc['data_through']):%b %d}; limits in the Friday sheet)"]
+    lines += _heat_lines()
     return tidy(lines)
 
 
@@ -290,7 +361,7 @@ def weekly_text(track: str) -> str:
 def send(text: str, kind: str) -> None:
     OUTBOX.mkdir(parents=True, exist_ok=True)
     (OUTBOX / f"{datetime.now():%Y%m%d_%H%M%S}_{kind}.txt").write_text(text + "\n")
-    title = {"daily": "SGM daily", "weekly": "SGM batch", "fail": "SGM ❌"}.get(kind, "SGM")
+    title = {"daily": "SGM daily", "weekend": "SGM weekend", "weekly": "SGM batch", "fail": "SGM ❌"}.get(kind, "SGM")
     first = text.splitlines()[1] if len(text.splitlines()) > 1 else text
     subprocess.run(["osascript", "-e", f'display notification {json.dumps(first[:200])} with title {json.dumps(title)}'], capture_output=True)
     env = CFG / "telegram.env"
@@ -316,13 +387,15 @@ def send(text: str, kind: str) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("kind", choices=["daily", "weekly", "fail", "test"])
+    ap.add_argument("kind", choices=["daily", "weekend", "weekly", "fail", "test"])
     ap.add_argument("--track", default="sri_lakshmi", choices=list(TRACKS))
     ap.add_argument("--step", default="")
     ap.add_argument("--detail", default="")
     a = ap.parse_args()
     if a.kind == "daily":
         send(daily_text(), "daily")
+    elif a.kind == "weekend":
+        send(weekend_text(), "weekend")
     elif a.kind == "weekly":
         send(weekly_text(a.track), "weekly")
     elif a.kind == "fail":
