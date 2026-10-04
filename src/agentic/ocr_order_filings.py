@@ -10,6 +10,13 @@ ocr=True); the latest record per (symbol, seq_id) wins when fetch_order_fulltext
 HTTP_/ERR_ are retried on the next run. Nothing else is touched.
 Requires: tesseract + pdftoppm on PATH (brew install tesseract poppler).
 
+2026-10-04 (Abhinav: "OCR achhe se kyu nahi ho raha"): 882 order filings (9%) had ZIP attachments and were never read:
+the pass skipped every non-PDF as OCR_SKIPPED_NON_PDF. Now a ZIP is opened and every PDF (first MAX_PAGES pages) and
+image inside is OCR'd (members capped at ZIP_MEMBERS); those records are retried. Also OCR'd: NO_AMOUNT filings whose
+text layer is under SHORT_TEXT characters (half-scanned pages); their stored text = original text + OCR text.
+Scheduled daily inside the order_amounts step (daily_data_layer.sh). SGM_BUDGET_MIN: time limit; the stop rule counts
+throttling / network errors only; whatever is left is done next run.
+
 2026-09-27 audit fixes (logs/audits/audit_20260927_research_code.json):
   FIXED  :57,62,70 USD converted at a fixed 83.0 whenever macro_panel had no USDINR (all dates before
          2024-02-19). Now as-of the filing date (7-day tolerance) from data/derived only: macro_panel.usdinr,
@@ -57,6 +64,39 @@ def ocr_pdf(blob: bytes) -> str:
         return re.sub(r"\s+", " ", " ".join(out)).strip()
 
 
+ZIP_MEMBERS = 6
+SHORT_TEXT = 1000
+IMAGE = (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp")
+
+
+def ocr_image(blob: bytes, suffix: str) -> str:
+    with tempfile.TemporaryDirectory() as td:
+        p = Path(td) / f"i{suffix}"; p.write_bytes(blob)
+        r = subprocess.run(["tesseract", str(p), "stdout", "-l", "eng"], capture_output=True, text=True, timeout=120)
+        return re.sub(r"\s+", " ", r.stdout).strip()
+
+
+def ocr_blob(blob: bytes) -> str:
+    """PDF -> ocr_pdf; ZIP -> OCR every PDF / image inside (text files read as they are); anything else -> ''."""
+    if blob[:4] == b"%PDF":
+        return ocr_pdf(blob)
+    if blob[:2] == b"PK":
+        import io
+        import zipfile
+        out = []
+        with zipfile.ZipFile(io.BytesIO(blob)) as z:
+            for n in [n for n in z.namelist() if not n.endswith("/")][:ZIP_MEMBERS]:
+                b, low = z.read(n), n.lower()
+                if b[:4] == b"%PDF":
+                    out.append(ocr_pdf(b))
+                elif low.endswith(IMAGE):
+                    out.append(ocr_image(b, Path(low).suffix))
+                elif low.endswith((".txt", ".xml", ".htm", ".html")):
+                    out.append(re.sub(r"<[^>]+>", " ", b.decode("utf-8", "ignore")))
+        return re.sub(r"\s+", " ", " ".join(out)).strip()
+    return ""
+
+
 def main() -> None:
     import argparse
     ap = argparse.ArgumentParser()
@@ -69,25 +109,34 @@ def main() -> None:
     latest = {}
     for r in recs:
         latest[(r["symbol"], str(r["seq_id"]))] = r
-    todo = [r for r in latest.values() if r.get("status") == "NEEDS_OCR" or (r.get("ocr") and str(r.get("status", "")).startswith(("HTTP_", "ERR_")))]
+    todo = [r for r in latest.values() if r.get("status") in ("NEEDS_OCR", "OCR_SKIPPED_NON_PDF")
+            or (r.get("ocr") and str(r.get("status", "")).startswith(("HTTP_", "ERR_")))
+            or (r.get("status") == "NO_AMOUNT" and not r.get("ocr") and (r.get("text_chars") or 0) < SHORT_TEXT)]
     if args.since:
         todo = [r for r in todo if (r.get("d") or "") >= args.since]
     fx = load_usdinr().set_index("fx_date")["usdinr"]                   # historical series only, never a fixed rate
     print(f"{len(todo):,} scanned filings to OCR", flush=True)
     s = build_session(warm=True, referer=REF)
+    budget = float(__import__("os").environ.get("SGM_BUDGET_MIN", "0")) * 60
+    t0, errs = time.time(), 0
     with CKPT.open("a") as fh:
         for i, r in enumerate(todo):
+            if budget and (time.time() - t0 > budget or (i >= 20 and errs / i > 0.5)):
+                print(f"STOPPED EARLY after {i} of {len(todo)} ({errs} network/throttle errors); the rest next run", flush=True)
+                break
             u = float("nan")
             if r.get("d"):
                 d = pd.Timestamp(r["d"]); w = fx.loc[d - FX_TOL:d]
                 u = float(w.iloc[-1]) if len(w) else float("nan")
             rec = dict(r, ocr=True)
             try:
-                if not str(r.get("url", "")).lower().endswith(".pdf"):
+                if not str(r.get("url", "")).lower().endswith((".pdf", ".zip")):
                     rec["status"] = "OCR_SKIPPED_NON_PDF"
                 else:
                     resp = _request_with_retries(s, r["url"], request_headers=_request_headers(s, referer=REF), referer=REF, timeout=60)
-                    txt = ocr_pdf(resp.content)
+                    txt = ocr_blob(resp.content)
+                    if r.get("status") == "NO_AMOUNT" and r.get("text"):
+                        txt = (str(r["text"]) + " " + txt).strip()
                     amt = extract_order_amount(None, txt, u)["order_amount_cr"] if txt else None
                     amt = None if amt is None or amt != amt else float(amt)
                     m = AMT.search(txt) if txt else None
@@ -97,6 +146,7 @@ def main() -> None:
             except Exception as e:
                 code = getattr(getattr(e, "response", None), "status_code", None)
                 rec["status"] = f"HTTP_{code}" if code else f"ERR_{type(e).__name__}"
+                errs += code in (403, 429) or (code or 0) >= 500 or (not code and "Connection" in type(e).__name__)
             fh.write(json.dumps(rec, default=str) + "\n"); fh.flush()
             if i % 50 == 0:
                 print(f"  {i}/{len(todo)} {r['symbol']} {rec['status']} {rec.get('fulltext_amount_cr')}", flush=True)

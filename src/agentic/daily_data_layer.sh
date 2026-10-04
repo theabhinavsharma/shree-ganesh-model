@@ -28,10 +28,10 @@ run gold_inr /usr/bin/python3 src/agentic/build_gold_feed.py   # NSE gold ETFs -
 run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 
 # --- strategy inputs built from filings (2026-10-04; they had no schedule and went 5 weeks stale unnoticed) ---
-# archive (attachments + categories) -> order amounts (new order PDFs, 20 min cap, rest next day) -> bad-news ledger;
+# archive (attachments + categories) -> order amounts (new order PDFs 20 min + OCR of scans/ZIPs 15 min, rest next day) -> bad-news ledger;
 # P&L for companies that filed results since the last run (40 min cap; exit 2 = partial, shown as failed so it is seen)
 run announcements_archive /usr/bin/python3 src/agentic/fetch_announcements_historical.py
-run order_amounts /bin/bash -c "SGM_BUDGET_MIN=20 /usr/bin/python3 src/agentic/fetch_order_fulltext.py"
+run order_amounts /bin/bash -c "SGM_BUDGET_MIN=20 /usr/bin/python3 src/agentic/fetch_order_fulltext.py && SGM_BUDGET_MIN=15 /usr/bin/python3 src/agentic/ocr_order_filings.py && /usr/bin/python3 src/agentic/fetch_order_fulltext.py --consolidate-only"   # crawl -> OCR (scans, ZIPs) -> rebuild
 run event_ledger /usr/bin/python3 src/agentic/build_event_ledger.py
 run pnl_update /bin/bash -c "SGM_BUDGET_MIN=40 /usr/bin/python3 src/agentic/update_pnl_incremental.py"
 
