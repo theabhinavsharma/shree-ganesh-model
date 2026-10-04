@@ -35,7 +35,9 @@ import data_ready as dr  # noqa: E402
 import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 
-EXP_ID = "EXP-2026-10-04-big-order-hold-18-24m"
+CUT = float(os.environ.get("SGM_CUT", "0.15"))   # 0.5 -> EXP-2026-10-04-big-order-hold-18-24m-50pct (registered variant)
+EXP_ID = "EXP-2026-10-04-big-order-hold-18-24m" + ("" if CUT == 0.15 else f"-{CUT * 100:.0f}pct")
+SUF = "" if CUT == 0.15 else f"_{CUT * 100:.0f}pct"
 OUTDIR = ROOT / "logs/leader_sleeve/big_order_hold"
 ARMS = {"A18": 378, "A24": 504}
 COST, MIN_RATIO = 0.005, 0.15
@@ -119,7 +121,7 @@ if not same:
 PX = rp.load_panel(["open", "close"]); Ow = rp.wide(PX, "open", cal); Craw = rp.wide(PX, "close", cal); del PX
 Cw = Craw.ffill(limit=300)
 Tw = T[(T["ts"] >= START) & (T["ts"] <= END_ENTRY + pd.Timedelta(days=1))].copy()
-Tw["date"] = [cal[i] for i in Tw["i0"]]; Tw = Tw[(Tw["date"] >= START) & (Tw["date"] <= END_ENTRY)]
+Tw["date"] = [cal[i] for i in Tw["i0"]]; Tw = Tw[(Tw["date"] >= START) & (Tw["date"] <= END_ENTRY) & (Tw["ratio"] >= CUT)]
 col = {s: i for i, s in enumerate(Cw.columns)}
 On, Cn = Ow.to_numpy(), Cw.to_numpy()
 Tw["has_px"] = [1.0 if s in col and np.isfinite(On[i, col[s]]) and On[i, col[s]] > 0 else np.nan for s, i in zip(Tw["symbol"], Tw["i0"])]
@@ -226,9 +228,9 @@ for arm, h in ARMS.items():
     print(f"  checks: eras {'✅' if p1 else '❌'} · lags {'✅' if p2 else '❌'} · windows {'✅' if p3 else '❌'} · drawdown {'✅' if p4 else '❌'} -> {'PASS' if verdict[arm] else 'FAIL'}")
     if not REPRO:
         OUTDIR.mkdir(parents=True, exist_ok=True)
-        R0.assign(arm=arm).to_csv(OUTDIR / f"trades_{arm}.csv", index=False)
-        (OUTDIR / f"trades_{arm}.csv.manifest.json").write_text(json.dumps(dict(
-            dataset=f"trades_{arm}", producer="src/agentic/test_big_order_hold.py", experiment=EXP_ID, rows=len(R0),
+        R0.assign(arm=arm).to_csv(OUTDIR / f"trades_{arm}{SUF}.csv", index=False)
+        (OUTDIR / f"trades_{arm}{SUF}.csv.manifest.json").write_text(json.dumps(dict(
+            dataset=f"trades_{arm}{SUF}", producer="src/agentic/test_big_order_hold.py", experiment=EXP_ID, rows=len(R0),
             columns=dict(symbol="NSE symbol", i0="entry session index", date="entry session", year="entry year",
                          ret=f"close after {h} sessions / entry open - 1 - 0.005 (fraction)", typ="median return of every stock priced on the entry day, same dates (fraction)"),
             updated=datetime.now().isoformat(timespec="seconds")), indent=1))
@@ -242,11 +244,11 @@ if not REPRO:
                                  verdict=passed or "no arm passes", arms=results), default=str) + "\n")
 
 # ---------------- INFO, not part of the verdict: 2025 buying windows so far (2025 revenue known for fewer orders: thin)
-print(f"\nINFO · buying windows starting in 2025, valued on {cal[-1].date()} · 12m hold: each trade at its 12-month exit if passed, else today · equal money per trade")
+print(f"\nINFO · orders >= {CUT:.0%} of revenue · buying windows starting in 2025, valued on {cal[-1].date()} · 12m hold: each trade at its 12-month exit if passed, else today · equal money per trade")
 lastc = len(cal) - 1
 for st in pd.date_range("2025-01-01", "2025-10-01", freq="MS"):
     en = st + pd.DateOffset(months=12)
-    g = T[(T["ts"] >= st) & (T["ts"] < en) & (T["i0"] <= lastc)]
+    g = T[(T["ts"] >= st) & (T["ts"] < en) & (T["i0"] <= lastc) & (T["ratio"] >= CUT)]
     rr, tt, still = [], [], 0
     for r in g.itertuples():
         if r.symbol not in col:
@@ -257,3 +259,18 @@ for st in pd.date_range("2025-01-01", "2025-10-01", freq="MS"):
     if rr:
         print(f"  {st:%b %Y}: {len(rr):3d} trades ({still} still inside their 12 months) · avg {np.mean(rr):+.0%} · median {np.median(rr):+.0%} · "
               f"up {np.mean(np.array(rr) > 0):.0%} · typical stock {np.mean(tt):+.0%}")
+print(f"\nINFO · orders >= {CUT:.0%} of revenue bought in each month of 2025, each held 12 months (valued today if not yet finished)")
+B = T[(T["ratio"] >= CUT)].copy(); B["buy"] = [cal[i] for i in B["i0"]]; B = B[(B.buy >= "2025-01-01") & (B.buy < "2026-01-01")]
+mrows = []
+for r in B.itertuples():
+    if r.symbol not in col:
+        continue
+    e = On[r.i0, col[r.symbol]]; x_i = min(r.i0 + 252, len(cal)) - 1
+    if np.isfinite(e) and e > 0 and np.isfinite(Cn[x_i, col[r.symbol]]):
+        mrows.append(dict(m=r.buy.strftime("%b %Y"), k=r.buy.month, ret=Cn[x_i, col[r.symbol]] / e - 1 - COST, typ=typical(r.i0, x_i - r.i0 + 1), done=r.i0 + 252 <= len(cal), sym=r.symbol))
+MB = pd.DataFrame(mrows)
+for k, g in MB.groupby("k"):
+    print(f"  {g.m.iloc[0]}: {len(g):3d} trades · finished {int(g.done.sum()):3d} · avg {g.ret.mean():+.0%} · median {g.ret.median():+.0%} · up {(g.ret > 0).mean():.0%} · typical stock {g.typ.mean():+.0%}"
+          + (" · " + ", ".join(f"{s} {v:+.0%}" for s, v in zip(g.sym, g.ret)) if CUT >= 0.5 else ""))
+g = MB[MB.done]
+print(f"  all finished: {len(g)} · avg {g.ret.mean():+.0%} · median {g.ret.median():+.0%} · up {(g.ret > 0).mean():.0%} · typical stock {g.typ.mean():+.0%}")

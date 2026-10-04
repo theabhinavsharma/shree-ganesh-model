@@ -12,3 +12,9 @@ Files:
 Result (2026-10-04): no arm passes. Both beat the typical stock in both eras, in 5 of 5 entry lags, and lost money in
 <= 2% of 12-month buying windows, but the portfolio's worst fall (-66%, Jun 2019 to Apr 2020, when only 4-6 trades were
 open) was more than 10 points worse than the market's (-50%). Not out of sample: 2019+ was explored before registering.
+
+## Variant: orders >= 50% of revenue (EXP-2026-10-04-big-order-hold-18-24m-50pct)
+Same rules on the >= 50% subset (`trades_A18_50pct.csv`, `trades_A24_50pct.csv`). Result (2026-10-04): both arms PASS
+the registered checks (eras, 5/5 lags, windows lost 7% / 9%, drawdown -52% / -49% vs market -43%). But as a portfolio
+(equal money in each open trade) A18 made +17.8%/yr and A24 +27.1%/yr against +29.0% / +28.4% for an equal-weight basket of
+every NSE stock on the same days: the per-trade edge is measured against the median stock, which is a low bar.
