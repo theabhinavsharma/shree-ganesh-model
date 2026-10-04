@@ -75,7 +75,13 @@ def main() -> None:
     C = pd.read_parquet(ROOT / "data/derived/results_calendar_full.parquet", columns=["symbol", "toDate", "period"])
     C = C[C["period"].astype(str).str.lower() == "quarterly"]; C["y"] = pd.to_datetime(C["toDate"], format="%d-%b-%Y", errors="coerce").dt.year
     have = Q.drop_duplicates(["symbol", "quarter_end"]).groupby("y").size()
-    official = C.drop_duplicates(["symbol", "toDate"]).groupby("y").size()
+    # 2026-10-04: NSE's own count = quarterly results calendar + integrated filings (2025+ results are filed only as
+    # integrated filings, so the calendar alone left 2025-26 "official count missing")
+    I = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet", columns=["symbol", "period_to"])
+    I["qe"] = pd.to_datetime(I["period_to"], format="%d-%b-%Y", errors="coerce")
+    C["qe"] = pd.to_datetime(C["toDate"], format="%d-%b-%Y", errors="coerce")
+    off = pd.concat([C[["symbol", "qe"]], I[["symbol", "qe"]]]).dropna().drop_duplicates()
+    official = off.groupby(off["qe"].dt.year).size()
     train_from = 2016 if FULL else 2019
     end = D["cal"][-1]
     checks = [dr.completeness("P&L company-quarters vs NSE's quarterly results calendar", have, official, range(train_from - 1, end.year + 1)),
