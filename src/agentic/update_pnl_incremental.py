@@ -60,6 +60,14 @@ def main() -> int:
     F["event_date"] = pd.to_datetime(F["event_date"], errors="coerce")
     F = F[F["is_results_event"].astype(bool) & (F["event_date"] >= since)]
     syms = sorted(set(F["symbol"].dropna()) | set(st.get("pending", [])))
+    if os.environ.get("SGM_PNL_STALE") == "1":   # 2026-10-04: still-trading companies whose P&L stops before mid-2025 (their
+        Pq = pd.read_parquet(ROOT / "data/derived/pnl_quarterly.parquet", columns=["symbol", "quarter_end"])   # filing list was
+        last = pd.to_datetime(Pq["quarter_end"]).groupby(Pq["symbol"]).max()                               # never re-read after
+        R = pd.read_parquet(ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet", columns=["symbol", "trade_date"])   # the switch)
+        live = set(R.loc[pd.to_datetime(R["trade_date"]) >= pd.Timestamp.now() - pd.Timedelta(days=200), "symbol"])
+        stale = sorted(s for s in live if last.get(s, pd.Timestamp("1900-01-01")) < pd.Timestamp("2025-06-30"))
+        print(f"stale companies added: {len(stale)}", flush=True)
+        syms = sorted(set(syms) | set(stale))
     feed_through = str(F["event_date"].max().date()) if len(F) else st.get("feed_through")
     print(f"results filings in the feed since {since.date()}: {len(F)} rows, {len(syms)} companies to refresh", flush=True)
 

@@ -33,7 +33,9 @@ run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 run announcements_archive /usr/bin/python3 src/agentic/fetch_announcements_historical.py
 run order_amounts /bin/bash -c "SGM_BUDGET_MIN=20 /usr/bin/python3 src/agentic/fetch_order_fulltext.py && SGM_BUDGET_MIN=15 /usr/bin/python3 src/agentic/ocr_order_filings.py && /usr/bin/python3 src/agentic/fetch_order_fulltext.py --consolidate-only"   # crawl -> OCR (scans, ZIPs) -> rebuild
 run event_ledger /usr/bin/python3 src/agentic/build_event_ledger.py
-run pnl_update /bin/bash -c "SGM_BUDGET_MIN=40 /usr/bin/python3 src/agentic/update_pnl_incremental.py"
+# P&L: companies with results since the last run (Mondays also every still-trading company whose P&L stops before
+# mid-2025), then the results-PDF fallback for quarters NSE's structured lists lack (<= 300 new holes a day), then rebuild
+run pnl_update /bin/bash -c "SGM_PNL_STALE=$([ "$DOW" = "1" ] && echo 1 || echo 0) SGM_BUDGET_MIN=40 /usr/bin/python3 src/agentic/update_pnl_incremental.py; rc=\$?; /usr/bin/python3 src/agentic/fetch_results_pdf.py --workers 4 --limit 300 && SGM_PNL_PART=rebuild /usr/bin/python3 src/agentic/update_pnl_incremental.py && exit \$rc"
 
 # --- daily macro + flows ---
 run forex /usr/bin/python3 src/agentic/fetch_forex_macro.py
