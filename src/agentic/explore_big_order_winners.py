@@ -62,7 +62,8 @@ def ttm(sym, t):
 O[["rev_ttm_cr", "pat_ttm_cr"]] = [ttm(s, t) for s, t in zip(O["symbol"], O["ts"])]
 O["ratio"] = O["amount_cr"] / O["rev_ttm_cr"]
 cov = O.groupby(O["ts"].dt.year)["rev_ttm_cr"].apply(lambda v: v.notna().mean()).round(2)
-big = O[O["ratio"] >= 0.5].sort_values("ts").copy()
+MIN_RATIO = float(__import__("os").environ.get("SGM_MIN_RATIO", "0.5"))   # SGM_MIN_RATIO=0.1: size sweep (2026-10-04)
+big = O[O["ratio"] >= MIN_RATIO].sort_values("ts").copy()
 n_big = len(big)
 
 # non-alarming filters
@@ -145,6 +146,18 @@ for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=Fa
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
           f"+50% {(g.ret >= 0.5).mean():.0%} · -30% or worse {(g.ret <= -0.3).mean():.0%} · typical stock {pct(g.typ.mean())} · beat typical {(g.ret > g.typ).mean():.0%}")
     out[f"next open {h} {'repeat' if rep else 'first'}"] = dict(trades=len(g), avg=round(float(g.ret.mean()), 4), median=round(float(g.ret.median()), 4))
+if MIN_RATIO < 0.5:
+    T2 = T.set_index(["symbol", "ts"])["ratio"]
+    for hh in ("24m", "12m"):
+        g = R[(R.entry == "next open") & (R.hold == hh)].merge(T[["symbol", "i0", "ratio", "amount_cr", "rev_ttm_cr", "ts"]].assign(date=lambda x: [cal[i] for i in x["i0"]]), on=["symbol", "date"])
+        g["size"] = pd.cut(g["ratio"], [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.5, 1e9], right=False, labels=["10-25%", "25-50%", "50-75%", "75-100%", "100-150%", "150-250%", ">=250%"])
+        print(f"\n=== {hh} hold, by order size (% of trailing revenue) ===")
+        print(g.groupby("size", observed=True).agg(trades=("ret", "size"), doubled=("ret", lambda v: (v >= 1.0).mean()), up50=("ret", lambda v: (v >= 0.5).mean()),
+              median=("ret", "median"), avg=("ret", "mean"), typical=("typ", "median"), lost30=("ret", lambda v: (v <= -0.3).mean())).round(2).to_string())
+        if hh == "24m":
+            print("\ntop 12 outliers (24m):")
+            for r in g.nlargest(12, "ret").itertuples():
+                print(f"  {r.ts.date()} {r.symbol:12s} {r.ret:+.0%} · order Rs {r.amount_cr:,.0f} cr vs revenue Rs {r.rev_ttm_cr:,.0f} cr ({r.ratio:.0%})")
 g6 = R[(R.entry == "next open") & (R.hold == "6m")]
 print("\n6-month trades by entry year (median trade vs median typical):")
 print(g6.groupby("year").agg(trades=("ret", "size"), median=("ret", "median"), typical=("typ", "median"), beat=("ret", lambda v: 0)).assign(
@@ -153,6 +166,6 @@ print("\n8 random qualifying orders (eyeball the amounts):")
 for r in T.sample(min(8, len(T)), random_state=3).itertuples():
     print(f"  {r.ts.date()} {r.symbol:12s} order Rs {r.amount_cr:,.0f} cr · trailing revenue Rs {r.rev_ttm_cr:,.0f} cr ({r.ratio:.0%}) · {str(r.amount_snippet)[:110]}")
 with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id="EXP-2026-10-04-big-order-winners-v2-EXPLORATION",
+    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=("EXP-2026-10-04-order-size-sweep-EXPLORATION" if MIN_RATIO < 0.5 else "EXP-2026-10-04-big-order-winners-v2-EXPLORATION"),
                              status="EXPLORATION (no rule changed; uses 2016-2026 incl. 2023+, so 2023+ is no longer clean for this idea)",
                              producer="src/agentic/explore_big_order_winners.py", funnel=funnel, results=out)) + "\n")
