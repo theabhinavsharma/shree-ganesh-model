@@ -36,6 +36,13 @@ O = pd.read_parquet(ROOT / "data/derived/order_amounts.parquet")
 O = O[(O["cat_current"] == "order") & O["amount_confidence"].isin(["high", "medium"])].copy()
 O["amount_cr"] = O["order_amount_cr"].fillna(O["parsed_amount_cr"]); O = O[O["amount_cr"] > 0]
 O["ts"] = pd.to_datetime(O["ts"]); O["act"] = pd.to_datetime(O["d_actionable"])
+HOT_MODE = __import__("os").environ.get("SGM_HOT") == "1"   # 2026-10-04: big order x hot industry, cleaned amounts
+clean = {}
+if HOT_MODE:   # cleaning rules fixed before any outcome was computed
+    q = O["headline"].fillna("").str.contains(r"^(Clarification|News Verification|Reply to Clarification)|sought clarification|news item|media report", case=False, regex=True)
+    clean["exchange question / clarification filings"] = int(q.sum()); O = O[~q]
+    dis = O["headline_fulltext_agree"].astype(str) == "False"; clean["headline vs PDF amount disagree"] = int(dis.sum()); O = O[~dis]
+    ui = O["amount_flags"].fillna("").str.contains("unit_inferred"); clean["unit guessed (no crore/lakh written)"] = int(ui.sum()); O = O[~ui]
 n_orders = len(O)
 
 # trailing-12-month revenue and profit known BEFORE the order (point in time)
@@ -63,6 +70,8 @@ O[["rev_ttm_cr", "pat_ttm_cr"]] = [ttm(s, t) for s, t in zip(O["symbol"], O["ts"
 O["ratio"] = O["amount_cr"] / O["rev_ttm_cr"]
 cov = O.groupby(O["ts"].dt.year)["rev_ttm_cr"].apply(lambda v: v.notna().mean()).round(2)
 MIN_RATIO = float(__import__("os").environ.get("SGM_MIN_RATIO", "0.5"))   # SGM_MIN_RATIO=0.1: size sweep (2026-10-04)
+if HOT_MODE:
+    clean["order > 10x trailing revenue"] = int((O["ratio"] > 10).sum()); O = O[~(O["ratio"] > 10)]
 big = O[O["ratio"] >= MIN_RATIO].sort_values("ts").copy()
 n_big = len(big)
 
@@ -90,6 +99,14 @@ for r in f3.sort_values("ts").itertuples():
         continue
     last[r.symbol] = r.ts; keep.append(r.Index)
 T = f3.loc[keep].copy(); funnel["one per company per 30 days"] = len(T)
+if HOT_MODE:   # hot = the company's industry heat percentile >= 0.70 (V3's definition) on the session BEFORE entry
+    imap = sp.industry_maps()["analogs"]
+    Sx = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet", columns=["date", "industry", "heat_pct"])
+    Sx["date"] = pd.to_datetime(Sx["date"]); Sx = Sx.sort_values("date")
+    look = pd.DataFrame({"industry": T["symbol"].map(imap).values, "date": [cal[i - 1] for i in T["i0"]], "k": T.index}).dropna(subset=["industry"]).sort_values("date")
+    m = pd.merge_asof(look, Sx, on="date", by="industry", direction="backward", tolerance=pd.Timedelta(days=10)).set_index("k")
+    T["heat"] = m["heat_pct"].reindex(T.index)
+    T["group"] = np.where(T["heat"].isna(), "unknown", np.where(T["heat"] >= 0.70, "hot", "not hot"))
 # repeat order = the same company had ANOTHER >= 50% order 31-365 days earlier (2026-10-04 follow-up question)
 bigt = big.groupby("symbol")["ts"].apply(lambda s: np.sort(s.values)).to_dict()
 T["repeat"] = [((a := bigt.get(s, np.array([], dtype="datetime64[ns]"))) < np.datetime64(t - pd.Timedelta(days=30))).any() and
@@ -127,6 +144,7 @@ for lag in (0, 4):
             if i0 + h > len(cal):
                 continue
             rows.append(dict(entry=("next open" if lag == 0 else "5 sessions later"), hold=name, symbol=r.symbol, date=cal[i0], year=cal[i0].year, repeat=r.repeat,
+                             group=getattr(r, "group", "all"), ratio=r.ratio,
                              ret=trade(r.symbol, i0, h), typ=typical(i0, h)))
 R = pd.DataFrame(rows).dropna(subset=["ret"])
 pct = lambda v: f"{v:+.0%}"  # noqa: E731
@@ -141,6 +159,15 @@ for (e, h), g in R.groupby(["entry", "hold"], sort=False):
     if e == "next open" or h == "6m":
         print(f"{e:16s} {h:>3s}: {len(g):4d} trades · avg {pct(s['avg'])} · median {pct(s['median'])} · up {s['up']:.0%} · "
               f"+50% {s['hit50']:.0%} · -30% or worse {s['down30']:.0%} · typical stock {pct(s['typical'])} · beat typical {s['beat']:.0%}")
+if HOT_MODE:
+    print("cleaning removed:", clean, "· groups:", T["group"].value_counts().to_dict())
+    for cut in (MIN_RATIO, 0.5):
+        print(f"\n=== orders >= {cut:.0%} of trailing revenue · hot vs not-hot industry · bought at the next open ===")
+        G = R[(R.entry == "next open") & (R.ratio >= cut) & (R.group != "unknown")]
+        for (h, gname), g in G.groupby(["hold", "group"], sort=False):
+            print(f"{h:>3s} {gname:7s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
+                  f"+50% {(g.ret >= 0.5).mean():.0%} · 2x {(g.ret >= 1).mean():.0%} · -30% {(g.ret <= -0.3).mean():.0%} · typical stock {pct(g.typ.mean())} · beat {(g.ret > g.typ).mean():.0%}")
+            out[f">={cut:.2f} {h} {gname}"] = dict(trades=len(g), avg=round(float(g.ret.mean()), 4), median=round(float(g.ret.median()), 4), up50=round(float((g.ret >= 0.5).mean()), 3))
 print("\n=== first order vs repeat order (bought at the next open) ===")
 for (h, rep), g in R[R.entry == "next open"].groupby(["hold", "repeat"], sort=False):
     print(f"{h:>3s} {'repeat' if rep else 'first ':6s}: {len(g):4d} trades · avg {pct(g.ret.mean())} · median {pct(g.ret.median())} · up {(g.ret > 0).mean():.0%} · "
@@ -166,6 +193,6 @@ print("\n8 random qualifying orders (eyeball the amounts):")
 for r in T.sample(min(8, len(T)), random_state=3).itertuples():
     print(f"  {r.ts.date()} {r.symbol:12s} order Rs {r.amount_cr:,.0f} cr · trailing revenue Rs {r.rev_ttm_cr:,.0f} cr ({r.ratio:.0%}) · {str(r.amount_snippet)[:110]}")
 with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=("EXP-2026-10-04-order-size-sweep-EXPLORATION" if MIN_RATIO < 0.5 else "EXP-2026-10-04-big-order-winners-v2-EXPLORATION"),
+    fh.write(json.dumps(dict(ts=datetime.now().isoformat(timespec="seconds"), id=("EXP-2026-10-04-hot-big-order-EXPLORATION" if HOT_MODE else ("EXP-2026-10-04-order-size-sweep-EXPLORATION" if MIN_RATIO < 0.5 else "EXP-2026-10-04-big-order-winners-v2-EXPLORATION")),
                              status="EXPLORATION (no rule changed; uses 2016-2026 incl. 2023+, so 2023+ is no longer clean for this idea)",
                              producer="src/agentic/explore_big_order_winners.py", funnel=funnel, results=out)) + "\n")
