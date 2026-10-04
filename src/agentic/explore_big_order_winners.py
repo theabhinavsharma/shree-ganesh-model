@@ -182,6 +182,10 @@ if HOT_MODE and __import__("os").environ.get("SGM_YOY") == "1":   # year-on-year
             except Exception:
                 return "  0 tr"
         print(f"{y} (revenue known for {cov_y.get(y, float('nan')):.0%} of orders){' THIN' if cov_y.get(y, 0) < 0.75 else ''}\n   hot    : {cell('hot')}\n   not hot: {cell('not hot')}")
+    if MIN_RATIO >= 0.5:   # few trades: list every hot 12m trade so the pattern can be read by eye
+        print("\nevery hot trade, 12m hold (buy date, stock, order as % of revenue, return):")
+        for r in g[g.group == "hot"].sort_values("date").itertuples():
+            print(f"  {r.date.date()} {r.symbol:12s} {r.ratio:5.0%}  {r.ret:+.0%}")
     # order year x hold period: median trade (trade count), per group; a trade appears only once its full hold has passed
     G2 = R[(R.entry == "next open") & (R.group != "unknown")]
     for stat, gname in [(s_, g_) for s_ in ("median", "mean") for g_ in ("hot", "not hot")]:
