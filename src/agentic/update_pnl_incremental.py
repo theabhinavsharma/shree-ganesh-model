@@ -73,7 +73,7 @@ def main() -> int:
 
     # 2. per-company filing list
     s, new, errs, pending, partial = build_session(), [], 0, [], False
-    if PART.startswith(("xbrl", "refetch_empty")):
+    if PART.startswith(("xbrl", "refetch_empty", "refetch_syms")):
         syms = []                                                # lists are done by the "lists" part
     for i, sym in enumerate(syms):
         if time.time() - t0 > BUDGET * 0.5 or (i >= 20 and errs / i > 0.5):   # half the budget for lists, half for XBRL
@@ -111,7 +111,13 @@ def main() -> int:
     ic = ic.sort_values("bd").drop_duplicates(["symbol", "qe", "is_con"], keep="last")
     ic["bd"] = fph._xbrl_fallback_fd(ic)
     done = fph.load_done("integrated2")
-    if PART.startswith("refetch_empty"):   # 2026-10-04: re-read filings whose XBRL parsed empty (cumulative-only year-end files)
+    if PART.startswith("refetch_syms"):    # 2026-10-04: re-read 2025+ filings of listed companies (to add finance cost)
+        want = set(Path(os.environ["SGM_PNL_SYMS"]).read_text().split())
+        ic = ic[ic["symbol"].isin(want) & (ic["qe"] >= pd.Timestamp("2025-01-01"))]
+        done = set()
+        n_, k_ = map(int, PART.split(":")[1].split("/")) if ":" in PART else (0, 1)
+        PART_ = f"xbrl:{n_}/{k_}"
+    elif PART.startswith("refetch_empty"):   # 2026-10-04: re-read filings whose XBRL parsed empty (cumulative-only year-end files)
         empty = set()
         for p in fph.OUTDIR.glob("integrated2*.jsonl"):
             for l in open(p):
@@ -130,7 +136,8 @@ def main() -> int:
             if f"{r['symbol']}|{r['qe'].date()}|{r['is_con']}" not in done and r["qe"] >= pd.Timestamp("2024-01-01")]   # before old gaps
     shard = "integrated2.jsonl"
     if PART_.startswith("xbrl:"):
-        n, k = map(int, PART_.split(":")[1].split("/")); todo = todo[n::k]; shard = f"integrated2_inc_w{n}.jsonl"
+        n, k = map(int, PART_.split(":")[1].split("/")); todo = todo[n::k]
+        shard = f"integrated2_zfc_w{n}.jsonl" if PART.startswith("refetch_syms") else f"integrated2_inc_w{n}.jsonl"   # zfc sorts last: wins
     print(f"XBRL to fetch: {len(todo)} (quarters from 2024 not yet fetched)", flush=True)
     got, xerr = 0, 0
     with open(fph.OUTDIR / shard, "a") as fh:
@@ -154,7 +161,7 @@ def main() -> int:
             time.sleep(fph.SLEEP)
     print(f"XBRL fetched with sales: {got}", flush=True)
 
-    if PART.startswith(("xbrl", "refetch_empty")):
+    if PART.startswith(("xbrl", "refetch_empty", "refetch_syms")):
         print(f"XBRL part {PART}: {got} with sales", flush=True); return 2 if partial else 0
     # 4. rebuild the tables from the checkpoints (always, so whatever arrived is used)
     fph.stage_normalize()

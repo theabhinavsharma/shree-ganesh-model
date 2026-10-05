@@ -519,5 +519,19 @@ def input_chain(ctx: dict) -> dict:
     bad = [x for x in r["rows"] if not x["ok"]]
     return _res("PASS" if not bad else "WARN", f"{len(r['rows']) - len(bad)}/{len(r['rows'])} inputs ran, fetched and used", ic.line(r)[:400] if bad else "")
 
+def pledge_feed(ctx: dict) -> dict:
+    """Promoter pledge events (fetch_pledge_events.py, NSE SAST Reg 31): every month since Jan 2016 has its own saved NSE
+    response (a month NSE returned empty is not saved and shows here), and events arrived in the last 30 days."""
+    raw = ROOT / "data/raw/pledge_events"; f = ROOT / "data/derived/pledge_events.parquet"
+    if not f.exists():
+        return _res("FAIL", None, "no pledge_events.parquet — run src/agentic/fetch_pledge_events.py")
+    want = [m.strftime("%Y-%m") for m in pd.date_range("2016-01-01", pd.Timestamp.now() - pd.offsets.MonthBegin(1), freq="MS")]
+    missing = [m for m in want if not (raw / f"{m}.json").exists()]
+    d = pd.to_datetime(pd.read_parquet(f, columns=["broadcast_dt"])["broadcast_dt"])
+    recent = int((d >= pd.Timestamp.now() - pd.Timedelta(days=30)).sum())
+    st = "PASS" if not missing and recent > 0 else "WARN"
+    return _res(st, f"{len(want) - len(missing)}/{len(want)} months · {recent} events in 30 days",
+                ("months not fetched: " + ", ".join(missing[:12]) if missing else "") + ("" if recent else " · no events in 30 days"))
+
 
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}

@@ -194,7 +194,8 @@ INPUTS = [("prices", "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
           ("order amounts", "data/derived/order_amounts.parquet", "ts", 7),
           ("P&L", "data/derived/pnl_quarterly.parquet", "filing_dt", 10),
           ("bad-news check", "data/derived/event_ledger.parquet", "filed_at", 7),
-          ("industry heat", "data/derived/industry_scores_policy.parquet", "date", 8)]
+          ("industry heat", "data/derived/industry_scores_policy.parquet", "date", 8),
+          ("pledges", "data/derived/pledge_events.parquet", "broadcast_dt", 7)]
 
 
 def inputs_line() -> str:

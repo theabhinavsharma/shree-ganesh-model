@@ -311,6 +311,16 @@ evals:
     owner: system
     check: input_chain
 
+  - id: data.pledge_feed
+    statement: "Promoter pledge and release events from NSE (SAST Regulation 31) are on file for every month since January 2016, and new events arrived in the last 30 days."
+    why: "Input to the leverage test (T2): a newly pledged promoter stake is a forced-selling risk. NSE's 'Pledged Data' endpoint returns nothing, so this feed uses the Regulation 31 disclosures; an empty month must show, not pass silently."
+    source_of_truth: "data/raw/pledge_events/<month>.json (NSE api/corporate-pledgedata-sast3132), data/derived/pledge_events.parquet"
+    threshold: "0 months missing since 2016-01; > 0 events in the last 30 days"
+    action: warn
+    cadence: daily
+    owner: system
+    check: pledge_feed
+
   - id: data.holidays_match_panel
     statement: "NSE's trading-holiday list covers this year and agrees with our price data (no prices on a listed holiday, no weekday missing unless NSE lists it)."
     why: "Buy and sell days in messages come from this list. Without it, a list built on Thu 2026-10-01 would have said buy on Fri Oct 2, a holiday (INC-2026-09-30-buy-day-on-holiday)."

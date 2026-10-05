@@ -190,6 +190,7 @@ XTAGS = {
     "pbt": ["ProfitBeforeTax", "ProfitLossBeforeTax"],
     "pat": ["ProfitLossForPeriod", "NetProfitLoss", "ProfitLossForThePeriod"],
     "face_value": ["FaceValueOfEquityShareCapital", "FaceValuePerShare"],
+    "finance_cost": ["FinanceCosts"],                                   # 2026-10-04: interest, for the leverage test
 }
 FIN_FILE = _re.compile(r"INTEGRATED_FILING_(INDAS|NBFC_INDAS|BANKING|NONINDAS)_|INTEGRATED_FILING_\d")
 
@@ -262,7 +263,7 @@ def _parse_cumulative(text: str, qs: str, ctxs: dict) -> dict:
         if ctx == best[0] and tag not in facts:
             facts[tag] = val.strip()
     out = {}
-    for k in ("net_sales", "total_income", "pbt", "pat"):
+    for k in ("net_sales", "total_income", "pbt", "pat", "finance_cost"):
         for c in XTAGS[k]:
             if c in facts:
                 try:
@@ -294,9 +295,9 @@ def _derive_from_cumulative(df: pd.DataFrame, cum: pd.DataFrame) -> pd.DataFrame
         rows = g.loc[prev]
         rec = dict(symbol=r.symbol, quarter_end=qe, filing_dt=r.filing_dt, basis=r.basis, bank=None, source="xbrl_derived",
                    eps_basic=None, eps_diluted=None, face_value=None)
-        for k in ("net_sales", "total_income", "pbt", "pat"):
+        for k in ("net_sales", "total_income", "pbt", "pat", "finance_cost"):
             c = getattr(r, f"cum_{k}", None)
-            rec[k] = (c * 1e-5 - float((rows[k] * rows["f"]).sum())) if c == c and c is not None and rows[k].notna().all() else None
+            rec[k] = (c * 1e-5 - float((rows[k] * rows["f"]).sum())) if c == c and c is not None and k in rows and rows[k].notna().all() else None
         last = float(rows.iloc[-1]["net_sales"] * rows.iloc[-1]["f"]) if rows.iloc[-1]["net_sales"] == rows.iloc[-1]["net_sales"] else None
         ns = rec["net_sales"]
         if ns is None or ns <= 0 or not last or not (1 / 3 <= ns / last <= 3):
@@ -388,11 +389,15 @@ def stage_normalize():
                     total_income=NUM(d, "re_total_inc", "re_tot_inc"),
                     pbt=NUM(d, "re_pro_loss_bef_tax"),
                     pat=NUM(d, "re_con_pro_loss", "re_proloss_ord_act", "re_net_prft"),
-                    face_value=NUM(d, "re_face_val"),
+                    face_value=NUM(d, "re_face_val"), finance_cost=NUM(d, "re_int_new"),
                 ))
     int_lines, cum_rows = [], []
     for p in sorted(OUTDIR.glob("integrated2*.jsonl")):
         int_lines += [l for l in open(p) if l.strip()]
+    last = {}                                   # 2026-10-04: a re-read record (later file / later line) replaces the earlier one
+    for i, l in enumerate(int_lines):
+        last[json.loads(l)["_key"]] = i
+    int_lines = [int_lines[i] for i in sorted(last.values())]
     if True:
         if True:
             for l in int_lines:
@@ -406,7 +411,7 @@ def stage_normalize():
                 rows.append(dict(symbol=r["_sym"], quarter_end=r["_qe"], filing_dt=r["_fd"],
                                  basis="con" if r["_con"] else "sa", bank=None, source="xbrl",
                                  **{k: d.get(k) for k in ["eps_basic", "eps_diluted", "net_sales",
-                                                          "total_income", "pbt", "pat", "face_value"]}))
+                                                          "total_income", "pbt", "pat", "face_value", "finance_cost"]}))
     df = pd.DataFrame(rows)
     df["quarter_end"] = pd.to_datetime(df["quarter_end"])
     df["filing_dt"] = pd.to_datetime(df["filing_dt"], errors="coerce")
