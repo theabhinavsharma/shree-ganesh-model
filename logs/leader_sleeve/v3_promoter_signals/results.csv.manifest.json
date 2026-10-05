@@ -1,0 +1,55 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-04-v3-promoter-signals",
+ "producer": "src/agentic/test_v3_promoter_signals.py",
+ "definitions": "EXP-2026-10-04-v3-promoter-signals (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: inside V3's G1 pool, does moving recent promoter buyers and pledge releasers to the front (within the top 25\nby model) pick better than V3?\nArms (each: full G1 pool by model rank -> reorder -> top 9 -> V3's filters (Financial Services, fading-theme-only), no refill):\n  V3       no reorder (= v3_rule.picks; wiring check)\n  V3_PB    names with prom_buys90 > 0 (promoter PIT 'Market Purchase' in the prior 90 days; anatomy rows as of the list date,\n           <= 7 days old) AND pool rank <= 25 go first, in model order\n  V3_PR    same with promoter pledges RELEASED >= 1% of share capital in the prior 90 days (NSE SAST Reg 31 'Release',\n           encumbrance type Pledge, by broadcast time; today's ticker via nse_symbols)\n  V3_PBPR  either signal\nWindow: weekly entries from 2019-04-01 (promoter-buying data starts April 2019); eras 2019-22 and 2023+; phases 0-4.\nEngine: sim_screen_rank_exit.run_exit(..., \"E0\"), 126-session hold. PASS (per arm vs V3) = sp.beats at phase 0 and in >= 4 of 5.\nBefore any outcome: trust/data_ready.gate(). SGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "moved": {
+  "V3_PB": {
+   "moved_in": {
+    "n": 326,
+    "avg": 0.317,
+    "hit50": 0.414,
+    "lost30": 0.089
+   },
+   "moved_out": {
+    "n": 342,
+    "avg": NaN,
+    "hit50": 0.404,
+    "lost30": 0.085
+   }
+  },
+  "V3_PR": {
+   "moved_in": {
+    "n": 170,
+    "avg": NaN,
+    "hit50": 0.371,
+    "lost30": 0.041
+   },
+   "moved_out": {
+    "n": 152,
+    "avg": NaN,
+    "hit50": 0.52,
+    "lost30": 0.02
+   }
+  },
+  "V3_PBPR": {
+   "moved_in": {
+    "n": 473,
+    "avg": NaN,
+    "hit50": 0.395,
+    "lost30": 0.074
+   },
+   "moved_out": {
+    "n": 473,
+    "avg": NaN,
+    "hit50": 0.431,
+    "lost30": 0.078
+   }
+  }
+ },
+ "updated": "2026-10-04T21:10:23"
+}
