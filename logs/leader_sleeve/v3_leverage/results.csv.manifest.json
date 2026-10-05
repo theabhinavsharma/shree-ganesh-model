@@ -1,0 +1,40 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-04-v3-leverage",
+ "producer": "src/agentic/test_v3_leverage.py",
+ "definitions": "EXP-2026-10-04-v3-leverage (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does dropping V3 picks that are stretched on debt avoid losers without costing return?\nArms (no refill in any): V3 (live rule, v3_rule.picks) \u00b7 V3_IC minus weak interest cover \u00b7 V3_CR minus recent credit\nevents \u00b7 V3_LEV minus both.\n  interest cover = sum over the latest 4 consecutive quarters filed before the decision date (one basis, consolidated\n  first) of (profit before tax + finance cost) / sum of finance cost. Weak = < 1.5x, or a loss before interest while\n  paying interest. Finance cost 0 = no interest = kept; not computable = kept (the data gate counts it).\n  credit event = event_ledger bucket rating_down or default_insolvency filed in the 180 days before the decision date.\n  Tickers: a pick's old ticker is mapped to today's (nse_symbols, NSE symbolchange.csv) before the P&L / ledger lookup.\nEngine: sim_screen_rank_exit.run_exit(D, X, picks, weekly grid, \"E0\"), weekly entries 2019+ (tif.START), phases 0-4.\nPASS (per arm vs V3) = sp.beats (CAGR higher in 2019-22 and 2023+, max drawdown not worse by > 2 pts) at phase 0 and\nin >= 4 of 5 phases. Diagnostic: loser catch rate on phase-0 picks (dropped vs kept: share ending <= -30% at session\n126, share touching +50%).\nBefore any outcome: trust/data_ready.gate(). Wiring check: V3 from the full G1 pool equals v3_rule.picks.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "loser_catch": {
+  "V3_IC": {
+   "dropped": 340,
+   "dropped_lost30": 0.115,
+   "kept_lost30": 0.102,
+   "dropped_hit50": 0.532,
+   "kept_hit50": 0.389,
+   "dropped_avg": 0.393,
+   "kept_avg": 0.257
+  },
+  "V3_CR": {
+   "dropped": 80,
+   "dropped_lost30": 0.163,
+   "kept_lost30": 0.102,
+   "dropped_hit50": 0.55,
+   "kept_hit50": 0.405,
+   "dropped_avg": 0.171,
+   "kept_avg": 0.28
+  },
+  "V3_LEV": {
+   "dropped": 365,
+   "dropped_lost30": 0.107,
+   "kept_lost30": 0.103,
+   "dropped_hit50": 0.521,
+   "kept_hit50": 0.39,
+   "dropped_avg": 0.385,
+   "kept_avg": 0.257
+  }
+ },
+ "updated": "2026-10-04T20:33:58"
+}
