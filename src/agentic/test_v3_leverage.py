@@ -7,6 +7,7 @@ events · V3_LEV minus both.
   first) of (profit before tax + finance cost) / sum of finance cost. Weak = < 1.5x, or a loss before interest while
   paying interest. Finance cost 0 = no interest = kept; not computable = kept (the data gate counts it).
   credit event = event_ledger bucket rating_down or default_insolvency filed in the 180 days before the decision date.
+  Tickers: a pick's old ticker is mapped to today's (nse_symbols, NSE symbolchange.csv) before the P&L / ledger lookup.
 Engine: sim_screen_rank_exit.run_exit(D, X, picks, weekly grid, "E0"), weekly entries 2019+ (tif.START), phases 0-4.
 PASS (per arm vs V3) = sp.beats (CAGR higher in 2019-22 and 2023+, max drawdown not worse by > 2 pts) at phase 0 and
 in >= 4 of 5 phases. Diagnostic: loser catch rate on phase-0 picks (dropped vs kept: share ending <= -30% at session
@@ -33,6 +34,7 @@ import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
 import test_industry_fundamentals as tif  # noqa: E402
+import nse_symbols  # noqa: E402
 import v3_rule  # noqa: E402
 
 EXP_ID = "EXP-2026-10-04-v3-leverage"
@@ -75,10 +77,10 @@ def main() -> None:
     ctx = v3_rule.context(imap)
     START = pd.Timestamp(tif.START)
     V3ALL = {o: v3_rule.picks(X["F"], [d for d in sp.weekly_grid(cal, o) if d >= START], imap, P, ctx) for o in range(5)}
-    IC = interest_cover({s for v in V3ALL.values() for names in v.values() for s in names})
+    IC = interest_cover({nse_symbols.now(s) for v in V3ALL.values() for names in v.values() for s in names})   # P&L is keyed by today's ticker
 
     def ic_at(s, d):
-        a = IC.get(s)
+        a = IC.get(nse_symbols.now(s))                                   # a 2019 pick may carry its old ticker (NIITTECH -> COFORGE)
         if a is None:
             return ("na", np.nan)
         i = np.searchsorted(a[0], np.datetime64(pd.Timestamp(d)), side="left") - 1    # filed strictly before the decision date
@@ -88,9 +90,10 @@ def main() -> None:
     CR = {s: np.sort(pd.to_datetime(g["filed_at"]).values) for s, g in L.groupby("symbol")}
 
     def cr_at(s, d):
-        a = CR.get(s)
-        if a is None:
+        a = [x for x in (CR.get(s), CR.get(nse_symbols.now(s))) if x is not None]   # ledger: ticker as filed or today's
+        if not a:
             return False
+        a = np.concatenate(a)
         d = np.datetime64(pd.Timestamp(d)); return bool(((a <= d) & (a > d - np.timedelta64(CR_DAYS, "D"))).any())
 
     def arms(o):

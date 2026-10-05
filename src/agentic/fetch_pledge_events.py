@@ -79,7 +79,7 @@ def consolidate() -> pd.DataFrame:
     num = lambda c: pd.to_numeric(D[c].astype(str).str.replace(",", "").str.strip(), errors="coerce")  # noqa: E731
     dt = lambda c, f: pd.to_datetime(D[c].astype(str).str.strip(), format=f, errors="coerce")  # noqa: E731
     O = pd.DataFrame(dict(seq_id=D["seqId"].astype(str), symbol=D["symbol"], company=D["companyName"], promoter=D["promoterName"],
-                          event=D["eventDetailsType"], encumbrance=D["eventDetailsTypeEncumb"], entity=D["eventDetailsEntity"],
+                          event=D["eventDetailsType"].astype(str).str.strip(), encumbrance=D["eventDetailsTypeEncumb"].astype(str).str.strip(), entity=D["eventDetailsEntity"],
                           event_from=dt("eventDetailsFromDate", "%d-%b-%Y"), event_to=dt("eventDetailsToDate", "%d-%b-%Y"),
                           shares=num("eventDetailsHolding"), pct_of_capital=num("eventDetailsPerc"),
                           pre_shares=num("preeventHolding"), pre_pct=num("preeventHoldingPerc"),
@@ -87,16 +87,9 @@ def consolidate() -> pd.DataFrame:
                           reported_on=dt("reportingDate", "%d-%b-%Y"), broadcast_dt=dt("broadcastdate", "%d-%b-%Y %H:%M:%S"),
                           attachment=D["attachment"], source_url=D["source_url"]))
     O = O.sort_values("broadcast_dt").drop_duplicates("seq_id", keep="last")
-    sc = ROOT / "data/derived/symbolchange.csv"
-    if not sc.exists():
-        sc = next(iter(sorted(ROOT.glob("data/**/symbolchange*.csv"))), None)
-    O["symbol_now"] = O["symbol"]
-    if sc is not None:
-        S = pd.read_csv(sc); S.columns = [c.strip().lower().replace(" ", "_") for c in S.columns]
-        old_c = next(c for c in S.columns if "old" in c); new_c = next(c for c in S.columns if "new" in c)
-        mp = dict(zip(S[old_c].astype(str).str.strip(), S[new_c].astype(str).str.strip()))
-        for _ in range(5):                                   # follow chains of renames
-            O["symbol_now"] = O["symbol_now"].map(lambda x: mp.get(x, x))
+    sys.path.insert(0, str(ROOT / "src/agentic"))
+    import nse_symbols
+    O["symbol_now"] = O["symbol"].map(nse_symbols.now)                  # renames: NSE symbolchange.csv chains
     O.to_parquet(OUT, index=False)
     by_m = O.groupby(O["broadcast_dt"].dt.to_period("M")).size()
     OUT.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(

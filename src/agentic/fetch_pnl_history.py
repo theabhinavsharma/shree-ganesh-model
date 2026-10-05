@@ -392,12 +392,20 @@ def stage_normalize():
                     face_value=NUM(d, "re_face_val"), finance_cost=NUM(d, "re_int_new"),
                 ))
     int_lines, cum_rows = [], []
+    best = {}   # 2026-10-04: one record per filing key. Prefer a record WITH figures (quarter > year-to-date > empty), then
+    #             the newest re-read (zfc = finance-cost re-read > inc = incremental / empty re-read > original crawl), then
+    #             the later line. File-name order alone let an old empty record override a good re-read (caught same day).
     for p in sorted(OUTDIR.glob("integrated2*.jsonl")):
-        int_lines += [l for l in open(p) if l.strip()]
-    last = {}                                   # 2026-10-04: a re-read record (later file / later line) replaces the earlier one
-    for i, l in enumerate(int_lines):
-        last[json.loads(l)["_key"]] = i
-    int_lines = [int_lines[i] for i in sorted(last.values())]
+        tier = 2 if "_zfc_" in p.name else (1 if "_inc_" in p.name else 0)
+        for i, l in enumerate(open(p)):
+            if not l.strip():
+                continue
+            x = json.loads(l); d = x.get("d") or {}
+            score = (2 if d.get("net_sales") is not None else (1 if "cum_start" in d else 0), tier, i)
+            k = x["_key"]
+            if k not in best or score > best[k][0]:
+                best[k] = (score, l)
+    int_lines = [v[1] for v in best.values()]
     if True:
         if True:
             for l in int_lines:
