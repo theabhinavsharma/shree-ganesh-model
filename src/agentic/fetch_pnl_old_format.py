@@ -272,7 +272,7 @@ def merge() -> None:
     restated = j.loc[j["filing_dt_old"] < j["filing_dt"], "index"]
     newer_live = set(zip(*[j.loc[j["filing_dt_old"] >= j["filing_dt"], c] for c in ("symbol", "quarter_end", "basis")]))
     P = P.drop(index=restated)
-    add = O[[k not in newer_live for k in zip(O["symbol"], O["quarter_end"], O["basis"])]][list(P.columns)]
+    add = O[[k not in newer_live for k in zip(O["symbol"], O["quarter_end"], O["basis"])]].reindex(columns=list(P.columns))   # columns old pages lack (e.g. finance_cost, 2026-10-04) stay blank
     M = pd.concat([P, add], ignore_index=True).sort_values(["symbol", "quarter_end", "basis"])
     M.to_parquet(ENRICHED, index=False)
     ENRICHED.with_suffix(".parquet.manifest.json").write_text(json.dumps(dict(

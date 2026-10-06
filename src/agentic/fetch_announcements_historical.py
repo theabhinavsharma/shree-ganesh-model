@@ -114,7 +114,9 @@ def backfill(start_date: date, end_date: date, sleep_s: int = SLEEP_S) -> None:
     while cur <= end_date:
         chunk_end = min(cur + timedelta(days=CHUNK_DAYS - 1), end_date)
         outp = chunk_path(cur)
-        if has_chunk(cur):
+        # 2026-10-06: a chunk whose 14 days reach into the last 16 days is re-fetched every run (it was skipped forever once
+        # its file existed, so the archive froze at Sep 30 and order amounts / the bad-news ledger with it)
+        if has_chunk(cur) and (cur + timedelta(days=13)) < (date.today() - timedelta(days=16)):
             n_skipped += 1
             cur = chunk_end + timedelta(days=1)
             continue

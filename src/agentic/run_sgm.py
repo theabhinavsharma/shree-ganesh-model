@@ -188,7 +188,8 @@ def _lock(wait_s: int = 3 * 3600) -> bool:
 
 
 def daily(R: Run) -> int:
-    if not R.smoke:
+    skip = os.environ.get("SGM_SKIP_FETCH") == "1" and _fetched_today()   # re-run after a fix: today's fetch already done
+    if not R.smoke and not skip:
         R.stage("FETCH", ["/bin/bash", "src/agentic/daily_data_layer.sh"], 3 * 3600)   # the data gate decides, not the exit code
     if b := R.gate("data"):
         return R.stop("the data check", b)

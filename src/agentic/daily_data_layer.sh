@@ -21,6 +21,7 @@ log "═══ DAILY DATA LAYER $TS (dow=$DOW) ═══"
 # --- core price/CA/filings spine (order matters: CA before prices) ---
 run corp_actions /usr/bin/python3 src/agentic/refresh_corporate_actions.py
 run prices /usr/bin/python3 src/agentic/refresh_prices.py
+run price_only_ca /usr/bin/python3 src/agentic/build_price_only_ca_factors.py --apply   # demergers / schemes / rights / special dividends: factor from the ex-date open (2026-10-06: was by hand, VERANDA demerger blocked the run)
 run announcements /usr/bin/python3 src/agentic/refresh_announcements.py
 run nse_holidays /usr/bin/python3 src/agentic/fetch_nse_holidays.py   # official NSE holiday list (buy-day / sell-day dates)
 run insider_trades /usr/bin/python3 src/agentic/fetch_pit_gg.py --daily   # NSE's new PIT system (old api/corporates-pit empty since 2026-05-01)
