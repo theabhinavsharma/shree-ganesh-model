@@ -533,5 +533,14 @@ def pledge_feed(ctx: dict) -> dict:
     return _res(st, f"{len(want) - len(missing)}/{len(want)} months · {recent} events in 30 days",
                 ("months not fetched: " + ", ".join(missing[:12]) if missing else "") + ("" if recent else " · no events in 30 days"))
 
+def watchdog_alive(ctx: dict) -> dict:
+    """The independent watchdog (src/agentic/watchdog.py, launchd com.sgm.watchdog, every 30 min) wrote its heartbeat in the
+    last 2 hours. Without it a hung run is silent: the daily run's own checks cannot fire while it is stuck (2026-10-06)."""
+    f = ROOT / "logs/runs/watchdog_heartbeat.json"
+    if not f.exists():
+        return _res("FAIL", None, "no watchdog heartbeat — is com.sgm.watchdog installed? (configs/launchd/com.sgm.watchdog.plist)")
+    age = (datetime.now() - datetime.fromisoformat(json.loads(f.read_text())["ts"])).total_seconds() / 3600
+    return _res("PASS" if age <= 2 else "FAIL", round(age, 1), "" if age <= 2 else f"heartbeat {age:.1f} h old")
+
 
 REGISTRY = {n: f for n, f in globals().items() if callable(f) and not n.startswith("_") and n not in ("last_session",)}

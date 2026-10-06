@@ -12,11 +12,13 @@
   "data.no_duplicates",
   "data.no_holiday_copies",
   "data.no_unexplained_cliffs",
+  "data.pledge_feed",
   "data.renames_mapped",
   "human.order_book_golden",
   "human.weekly_pick_review",
   "model.ranking_lift",
   "ops.daily_run_happened",
+  "ops.watchdog_alive",
   "output.message_grounded",
   "output.one_screen_per_week",
   "output.paper_scored",
@@ -50,13 +52,15 @@
   "INC-2026-10-02-ab-on-incomplete-data",
   "INC-2026-10-02-background-job-unwatched",
   "INC-2026-10-02-weekly-freshness-deadlock",
-  "INC-2026-10-04-derived-inputs-unscheduled"
+  "INC-2026-10-04-derived-inputs-unscheduled",
+  "INC-2026-10-06-daily-run-hung-silent"
  ],
  "lessons": {
   "sgm-triage": [
    "2987603fa8a9",
    "2c8359f77256",
    "5aa9d5bd31ba",
+   "66b8a60a2591",
    "6c6dd865a856",
    "78cc1ee83385",
    "7d03aec6b924",
@@ -72,6 +76,7 @@
    "3c24a166350d",
    "519ee084355d",
    "5aa9d5bd31ba",
+   "66b8a60a2591",
    "6c6dd865a856",
    "7d03aec6b924",
    "ab9b6efbe2d1",
@@ -91,6 +96,7 @@
   ],
   "sgm-telegram": [
    "3bc54ea61f65",
+   "66b8a60a2591",
    "87c6f694905d"
   ]
  }

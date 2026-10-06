@@ -321,6 +321,16 @@ evals:
     owner: system
     check: pledge_feed
 
+  - id: ops.watchdog_alive
+    statement: "The independent watchdog checked in within the last 2 hours (it kills runs stuck over 4 hours and alerts when a daily or weekend message is missing)."
+    why: "On 2026-10-05 the Mac lost internet, the daily run hung for over a day, launchd would not start the next runs, and no message or alarm went out until the user noticed (INC-2026-10-06-daily-run-hung-silent)."
+    source_of_truth: "logs/runs/watchdog_heartbeat.json written by src/agentic/watchdog.py"
+    threshold: "heartbeat <= 2 hours old"
+    action: warn
+    cadence: daily
+    owner: system
+    check: watchdog_alive
+
   - id: data.holidays_match_panel
     statement: "NSE's trading-holiday list covers this year and agrees with our price data (no prices on a listed holiday, no weekday missing unless NSE lists it)."
     why: "Buy and sell days in messages come from this list. Without it, a list built on Thu 2026-10-01 would have said buy on Fri Oct 2, a holiday (INC-2026-09-30-buy-day-on-holiday)."

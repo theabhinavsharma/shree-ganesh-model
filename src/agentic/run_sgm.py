@@ -41,6 +41,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -78,12 +79,25 @@ class Run:
     def stage(self, name: str, cmd: list[str], timeout: int) -> bool:
         lf = RUNS / f"{self.ts}_{name.lower().replace(' ', '_')}.log"
         t0 = time.time()
-        try:
-            with lf.open("w") as fh:
-                rc = subprocess.run(cmd, cwd=ROOT, env=ENV, stdout=fh, stderr=subprocess.STDOUT, timeout=timeout).returncode
-            status = "ok" if rc == 0 else f"exit {rc}"
-        except subprocess.TimeoutExpired:
-            status = f"timeout after {timeout // 60} min"
+        # 2026-10-06 (INC-2026-10-06-daily-run-hung-silent): the limit is WALL-CLOCK time (time.time() keeps counting while
+        # the Mac sleeps; subprocess's own timeout did not, and only killed the shell, not its children), checked every
+        # 30 s, and it kills the step's whole process group.
+        with lf.open("w") as fh:
+            p = subprocess.Popen(cmd, cwd=ROOT, env=ENV, stdout=fh, stderr=subprocess.STDOUT, start_new_session=True)
+            deadline, rc = time.time() + timeout, None
+            while rc is None:
+                try:
+                    rc = p.wait(timeout=30)
+                except subprocess.TimeoutExpired:
+                    if time.time() > deadline:
+                        for sig in (signal.SIGTERM, signal.SIGKILL):
+                            try:
+                                os.killpg(p.pid, sig)
+                            except ProcessLookupError:
+                                break
+                            time.sleep(10)
+                        rc = "timeout"
+        status = "ok" if rc == 0 else (f"timeout after {timeout // 60} min (wall clock, step killed)" if rc == "timeout" else f"exit {rc}")
         self.rec["stages"].append(dict(stage=name, status=status, secs=round(time.time() - t0), log=str(lf.relative_to(ROOT))))
         self.log(f"{'✅' if status == 'ok' else '❌'} {name}: {status} ({time.time() - t0:.0f}s)")
         return status == "ok"

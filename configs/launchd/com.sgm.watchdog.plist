@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- SGM watchdog (2026-10-06, INC-2026-10-06-daily-run-hung-silent): every 30 minutes, independent of the runs it watches.
+     Kills a run stuck > 4 h and restarts it; alerts on a missing daily / weekend message. A slept-through interval runs on wake.
+     Install: cp configs/launchd/com.sgm.watchdog.plist ~/Library/LaunchAgents/ && launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.sgm.watchdog.plist -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.sgm.watchdog</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/abhinavs./Code/Zoom/src/agentic/watchdog.py</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/abhinavs./Code/Zoom</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+  </dict>
+  <key>StartInterval</key><integer>1800</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>/Users/abhinavs./Code/Zoom/logs/runs/launchd_watchdog.log</string>
+  <key>StandardErrorPath</key><string>/Users/abhinavs./Code/Zoom/logs/runs/launchd_watchdog.log</string>
+</dict>
+</plist>
