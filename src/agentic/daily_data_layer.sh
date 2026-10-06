@@ -12,8 +12,10 @@ LOG_DIR=logs/daily_data_layer; mkdir -p "$LOG_DIR"
 TS=$(date +%Y%m%d_%H%M%S); DOW=$(date +%u)
 log(){ echo "[$(date +%H:%M:%S)] $*"; }
 PASS=(); FAIL=()
+# every step is capped at STEP_MAX seconds (default 45 min; 2026-10-06: a Monday step ran 11+ hours with no internet and hung
+# the whole run): perl's alarm kills the step, which is then logged as failed and the run moves on
 run(){ local label="$1"; shift
-  if "$@" > "$LOG_DIR/${TS}_${label}.log" 2>&1; then log "✅ $label"; PASS+=("$label"); else
+  if perl -e 'alarm shift; exec @ARGV' "${STEP_MAX:-2700}" "$@" > "$LOG_DIR/${TS}_${label}.log" 2>&1; then log "✅ $label"; PASS+=("$label"); else
     log "❌ $label"; tail -3 "$LOG_DIR/${TS}_${label}.log"; FAIL+=("$label"); fi }
 
 log "═══ DAILY DATA LAYER $TS (dow=$DOW) ═══"
