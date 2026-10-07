@@ -4,7 +4,7 @@ a blocking check failure stops the run and you get a failure message instead of 
 Plain English: this is the conveyor belt. Fetch the data, check it, work it up, check that, write the message, check
 the message, send it. If any check that is marked "block" in evals/registry.yaml fails, the belt stops there.
 
-daily   launchd (com.sgm.daily): weekdays 6:45 PM ET, retries 9:45 PM and 7:15 AM; a time missed while the Mac slept runs
+daily   launchd (com.sgm.daily): weekdays 6:45 PM Mac-local (IST from 2026-10-07; US Eastern before), retries 9:45 PM and 7:15 AM; a time missed while the Mac slept runs
         when it wakes. All use --if-missed: skipped when a run already sent since 11 AM ET (one per NSE data day)
   FETCH            daily_data_layer.sh: every feed, corporate actions before prices, panel rebuilt, status file
   GATE data        data.*, pit.filings_after_period, prov.*, ops.daily_run_happened
@@ -141,7 +141,7 @@ class Run:
         return res["ok"]
 
     def stop(self, where: str, block: list[dict]) -> int:
-        lines = [f"❌ SGM {self.mode} run stopped at {where} ({datetime.now():%-I:%M %p} ET)"]
+        lines = [f"❌ SGM {self.mode} run stopped at {where} ({datetime.now():%-I:%M %p} {time.strftime('%Z')})"]
         lines += [f"• {notify.QC_LABEL.get(r['id'], r['id'])}: {r.get('detail') or r.get('statement', '')}"[:200] for r in block[:6]]
         lines += ["", f"Picks on hold until this passes · record logs/runs/{self.ts[:8]}_{self.mode}.json"]
         self.send("\n".join(lines), "fail")

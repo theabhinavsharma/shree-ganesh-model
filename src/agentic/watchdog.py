@@ -3,8 +3,8 @@ com.sgm.watchdog), so a hung or missed run cannot go silent. The daily run's own
 
 1. Stuck run: a run holding logs/runs/.lock for more than 4 hours (wall clock) is killed with all its child processes, the
    lock is cleared, a failure note is sent, and a fresh catch-up run is started (daily on a weekday, weekend note on Sat/Sun).
-2. Missed daily: on an NSE session day after 10:30 PM ET, no daily message sent since 11 AM ET -> alert (once a day).
-3. Missed weekend note: Saturday / Sunday after 9 PM ET, none sent today -> alert (once a day).
+2. Missed daily: on an NSE session day after 11:30 PM Mac-local (IST), no daily message sent since 11 AM -> alert (once a day).
+3. Missed weekend note: Saturday / Sunday after 9 PM Mac-local, none sent today -> alert (once a day).
 Heartbeat: logs/runs/watchdog_heartbeat.json (eval ops.watchdog_alive warns if it is older than 2 hours).
 Usage: watchdog.py [--dry-run]
 """
@@ -73,7 +73,7 @@ def main() -> None:
             logs = sorted(RUNS.glob("*_*.log"), key=lambda p: p.stat().st_mtime)
             if logs:
                 stage = logs[-1].stem.split("_", 2)[-1]
-            msg = (f"❌ SGM run stuck {age_h:.0f}h (last stage: {stage}) — killed by the watchdog at {now:%-I:%M %p} ET; "
+            msg = (f"❌ SGM run stuck {age_h:.0f}h (last stage: {stage}) — killed by the watchdog at {now:%-I:%M %p} {time.strftime('%Z')}; "
                    f"a fresh run starts now. Log: {logs[-1].name if logs else '-'}")
             if not dry:
                 for p in descendants(pid)[::-1] + [pid]:
@@ -99,13 +99,13 @@ def main() -> None:
                                  stdout=open(RUNS / f"launchd_{mode}.log", "a"), stderr=subprocess.STDOUT, start_new_session=True)
     # 2. / 3. missed messages
     today = now.date()
-    if now.weekday() < 5 and nse_calendar.is_session(today) and (now.hour, now.minute) >= (22, 30):
+    if now.weekday() < 5 and nse_calendar.is_session(today) and (now.hour, now.minute) >= (23, 30):
         if not run_sgm._sent_since("daily", now.replace(hour=11, minute=0, second=0, microsecond=0)):
-            alert(f"daily:{today}", f"⚠️ SGM: no daily message today ({today:%a %b %d}) by {now:%-I:%M %p} ET — the run failed, is "
+            alert(f"daily:{today}", f"⚠️ SGM: no daily message today ({today:%a %b %d}) by {now:%-I:%M %p} {time.strftime('%Z')} — the run failed, is "
                   f"still running, or the Mac was asleep/offline. Checking logs/runs/{today:%Y%m%d}_daily.json.")
     if now.weekday() >= 5 and now.hour >= 21:
         if not run_sgm._sent_since("weekend", now.replace(hour=0, minute=0, second=0, microsecond=0)):
-            alert(f"weekend:{today}", f"⚠️ SGM: no weekend note today ({today:%a %b %d}) by {now:%-I:%M %p} ET.")
+            alert(f"weekend:{today}", f"⚠️ SGM: no weekend note today ({today:%a %b %d}) by {now:%-I:%M %p} {time.strftime('%Z')}.")
     st["alerted"] = {k: v for k, v in st["alerted"].items() if v >= (now.replace(day=1).isoformat())} | {k: v for k, v in st["alerted"].items() if k.endswith(str(today))}
     if not dry:
         STATE.write_text(json.dumps(st, indent=1))

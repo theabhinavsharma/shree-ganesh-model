@@ -119,7 +119,7 @@ def _last_sent_ist() -> datetime | None:
           for r in json.loads(f.read_text()) if r.get("outcome") == "sent"]                          # fetches came before (weekend: 2026-10-04)
     if not ts:
         return None
-    t = datetime.fromisoformat(max(ts)).replace(tzinfo=ZoneInfo("America/New_York"))
+    t = datetime.fromisoformat(max(ts)).astimezone()   # run records are Mac-local time (US Eastern until 2026-10-06, IST after)
     return t.astimezone(ZoneInfo("Asia/Kolkata")).replace(tzinfo=None)
 
 
@@ -325,7 +325,7 @@ def sell_lines(track: str = "sri_lakshmi", preview_days: int | None = None) -> l
             sc = json.loads((TRACKS[track] / f"screen_{sid}.json").read_text())
             close = {n["symbol"]: n.get("close") for n in sc["names"]}
             per = sl / 26 / len(sc["names"]) if sl else None
-            head = "OVERDUE · sell at the next close" if days >= 126 else "sell at today's close (3:30 PM IST = 6:00 AM ET)"
+            head = "OVERDUE · sell at the next close" if days >= 126 else "sell at today's close (3:30 PM IST)"
             out.append(f"🔴 SELL {SHORT[track]} batch {pd.Timestamp(sid):%b %d} · {head}")
             for n in x["names"]:
                 q = _shares(per, close.get(n["symbol"]))

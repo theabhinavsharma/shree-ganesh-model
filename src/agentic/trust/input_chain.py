@@ -38,7 +38,9 @@ def _nse_day_count(d: pd.Timestamp) -> int | None:
 
 def run(day: str | None = None) -> dict:
     st = json.loads((ROOT / "logs/daily_data_layer_status.json").read_text())
-    D = pd.Timestamp(day or st["date"]).normalize()
+    # default day = the last IST day that has fully ended (NSE keeps filing until midnight IST; a 6:45 PM IST run would
+    # otherwise see a partial day). Same day as before for the old US-Eastern evening run (4:15 AM IST next day).
+    D = pd.Timestamp(day).normalize() if day else (pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize() - pd.Timedelta(days=1))
     passed = set(st.get("passed", []))
     rows = []
 
