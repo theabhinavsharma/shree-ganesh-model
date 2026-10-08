@@ -1,0 +1,140 @@
+{
+ "dataset": "big_order_trades_params.parquet",
+ "producer": "src/agentic/explore_order_params.py",
+ "status": "EXPLORATION (no rule changed)",
+ "definitions": "What does an order filing say beyond its amount? (2026-10-08, EXPLORATION for Abhinav: \"large order distributed over\ntime hai kya? kuch caveat hai kya usmein bhi? can you go across some orders and find params of the order itself? can we\nconsume it as one info or need to understand order deeply?\"; no rule changed).\n\nFor every order filing with text (data/derived/order_fulltext_text.parquet joined to order_amounts.parquet, current\ncategories order | tender_L1), read from the filing text:\n  exec_months   execution / completion period: the duration nearest after an execution cue (\"time period by which ... is to\n                be executed\", \"execution period\", \"completion period\", \"to be completed\", \"within N months\", \"tenure\",\n                \"contract period\", \"duration\"); also \"by <Month YYYY>\" / \"by FY27\" converted to months from the filing date\n  om            operation & maintenance years mentioned (long tail after construction)\n  jv            joint venture / consortium mentioned; jv_pct = a percentage stated next to share / stake / participation\n  gst           incl (amount includes GST / taxes) | excl (excludes) | unknown\n  kind          framework (rate contract / empanelment) > l1 (lowest bidder, not yet awarded) > loi > loa > po_wo > mou > other\n  aggregate     the amount sums several orders (orders worth X received during the quarter / multiple orders / inflow)\n  intl          international | domestic | unknown (SEBI's 2023 table states it)\n  sebi_table    the filing uses SEBI's order-disclosure table (July 2023+ format: \"broad consideration or size\", \"time\n                period by which\")\nAnnual-equivalent ratio = order ratio (order amount / trailing revenue, as in the big-order tests) / max(exec years, 1):\nthe share of a year's revenue the order can add per year. Unknown period -> not computed.\nOutcomes (exploration): the big-order reference trades (logs/leader_sleeve/big_order_hold/reference_trades.parquet, cleaned\norder wins >= 15% of trailing revenue) split by these parameters; 12-month return from the entry open (i0) to the close\n251 sessions later, vs the equal-weight average of all priced stocks over the same dates. Before costs.\nOutput: logs/explorations/order_params/ (params.parquet, audit_sample.csv, manifests, README).\n",
+ "units": {
+  "exec_months": "months",
+  "jv_pct": "percent",
+  "order_amount_cr": "Rs crore",
+  "ratio": "fraction of trailing revenue",
+  "ratio_annual": "fraction of trailing revenue per year of execution",
+  "r12": "fraction",
+  "mkt12": "fraction",
+  "exc12": "fraction"
+ },
+ "coverage_by_year": {
+  "2016": {
+   "filings": 454,
+   "sebi_table": 2.0,
+   "period_stated": 21.0,
+   "jv": 21.0,
+   "gst_incl": 1.0,
+   "gst_excl": 0.0,
+   "aggregate": 3.0,
+   "om": 12.0,
+   "intl": 0.0
+  },
+  "2017": {
+   "filings": 426,
+   "sebi_table": 2.0,
+   "period_stated": 26.0,
+   "jv": 12.0,
+   "gst_incl": 1.0,
+   "gst_excl": 2.0,
+   "aggregate": 3.0,
+   "om": 8.0,
+   "intl": 0.0
+  },
+  "2018": {
+   "filings": 590,
+   "sebi_table": 3.0,
+   "period_stated": 19.0,
+   "jv": 12.0,
+   "gst_incl": 3.0,
+   "gst_excl": 4.0,
+   "aggregate": 4.0,
+   "om": 15.0,
+   "intl": 0.0
+  },
+  "2019": {
+   "filings": 428,
+   "sebi_table": 5.0,
+   "period_stated": 26.0,
+   "jv": 11.0,
+   "gst_incl": 3.0,
+   "gst_excl": 10.0,
+   "aggregate": 6.0,
+   "om": 6.0,
+   "intl": 0.0
+  },
+  "2020": {
+   "filings": 386,
+   "sebi_table": 3.0,
+   "period_stated": 20.0,
+   "jv": 11.0,
+   "gst_incl": 4.0,
+   "gst_excl": 8.0,
+   "aggregate": 7.0,
+   "om": 11.0,
+   "intl": 0.0
+  },
+  "2021": {
+   "filings": 514,
+   "sebi_table": 3.0,
+   "period_stated": 18.0,
+   "jv": 12.0,
+   "gst_incl": 7.0,
+   "gst_excl": 7.0,
+   "aggregate": 7.0,
+   "om": 14.0,
+   "intl": 0.0
+  },
+  "2022": {
+   "filings": 761,
+   "sebi_table": 9.0,
+   "period_stated": 26.0,
+   "jv": 12.0,
+   "gst_incl": 7.0,
+   "gst_excl": 11.0,
+   "aggregate": 7.0,
+   "om": 10.0,
+   "intl": 1.0
+  },
+  "2023": {
+   "filings": 837,
+   "sebi_table": 35.0,
+   "period_stated": 38.0,
+   "jv": 13.0,
+   "gst_incl": 10.0,
+   "gst_excl": 13.0,
+   "aggregate": 5.0,
+   "om": 9.0,
+   "intl": 0.0
+  },
+  "2024": {
+   "filings": 1217,
+   "sebi_table": 47.0,
+   "period_stated": 44.0,
+   "jv": 9.0,
+   "gst_incl": 15.0,
+   "gst_excl": 15.0,
+   "aggregate": 3.0,
+   "om": 8.0,
+   "intl": 1.0
+  },
+  "2025": {
+   "filings": 1865,
+   "sebi_table": 58.0,
+   "period_stated": 47.0,
+   "jv": 6.0,
+   "gst_incl": 18.0,
+   "gst_excl": 17.0,
+   "aggregate": 3.0,
+   "om": 7.0,
+   "intl": 2.0
+  },
+  "2026": {
+   "filings": 1685,
+   "sebi_table": 66.0,
+   "period_stated": 53.0,
+   "jv": 5.0,
+   "gst_incl": 22.0,
+   "gst_excl": 18.0,
+   "aggregate": 3.0,
+   "om": 9.0,
+   "intl": 1.0
+  }
+ },
+ "updated": "2026-10-08T08:58:25"
+}
