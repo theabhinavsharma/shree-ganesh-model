@@ -12,6 +12,8 @@ set -u
 cd /Users/abhinavs./Code/Zoom
 DST="$HOME/Library/CloudStorage/GoogleDrive-abhiengg.98@gmail.com/My Drive/SGM backups/day_to_day"
 [ -d "$DST" ] || { echo "[$(date +%T)] Drive folder not mounted: $DST"; exit 1; }
+SKIP="/Users/abhinavs./Code/Zoom/logs/runs/SKIP_DRIVE_MIRROR_$(date +%F)"   # one-night skip (2026-10-08: network cut uploads >= ~99 MB; a split delta went up instead)
+[ -f "$SKIP" ] && { echo "[$(date +%T)] mirror skipped tonight: $(cat "$SKIP")"; exit 0; }
 EXTRA=()
 while [ $# -gt 0 ]; do [ "$1" = "--exclude-pattern" ] && { EXTRA+=(--exclude "$2"); shift; }; shift; done
 RS=(rsync -a --exclude '*.bak*' --exclude '__pycache__' --exclude '*.pyc' --exclude '.DS_Store' "${EXTRA[@]+"${EXTRA[@]}"}")
