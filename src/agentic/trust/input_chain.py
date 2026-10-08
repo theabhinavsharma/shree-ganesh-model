@@ -66,6 +66,10 @@ def run(day: str | None = None) -> dict:
     have = set(zip(O["symbol"], O["seq_id"].astype(str)))
     add("order amounts", "order_amounts", used=int(sum((s, str(q)) in have for s, q in zip(td["symbol"], td["seq_id"]))), of=len(td),
         note="order filings of the day read from their PDFs")
+    OT = pd.read_parquet(ROOT / "data/derived/order_terms.parquet", columns=["symbol", "seq_id"])
+    have_t = set(zip(OT["symbol"], OT["seq_id"].astype(str)))
+    add("order terms", "order_terms", used=int(sum((s, str(q)) in have_t for s, q in zip(td["symbol"], td["seq_id"]) if (s, str(q)) in have)), of=int(sum((s, str(q)) in have for s, q in zip(td["symbol"], td["seq_id"]))),
+        note="order filings of the day with execution period / own share / firmness read")
 
     L = pd.read_parquet(ROOT / "data/derived/event_ledger.parquet", columns=["filed_at"])
     nl = int((pd.to_datetime(L["filed_at"]).dt.normalize() == D).sum())

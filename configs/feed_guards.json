@@ -165,6 +165,11 @@
    "file": "data/corporate_actions_full_history/normalized/price_only_ca_factors.parquet",
    "date_col": null,
    "max_stale_bd": 2
+  },
+  "order_terms": {
+   "file": "data/derived/order_terms.parquet",
+   "date_col": "ts",
+   "max_stale_bd": 5
   }
  }
 }

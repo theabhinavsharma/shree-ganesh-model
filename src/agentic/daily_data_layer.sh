@@ -35,6 +35,7 @@ run news_events /usr/bin/python3 src/agentic/build_news_event_features.py
 # P&L for companies that filed results since the last run (40 min cap; exit 2 = partial, shown as failed so it is seen)
 run announcements_archive /usr/bin/python3 src/agentic/fetch_announcements_historical.py
 run order_amounts /bin/bash -c "SGM_BUDGET_MIN=20 /usr/bin/python3 src/agentic/fetch_order_fulltext.py && SGM_BUDGET_MIN=15 /usr/bin/python3 src/agentic/ocr_order_filings.py && /usr/bin/python3 src/agentic/fetch_order_fulltext.py --consolidate-only"   # crawl -> OCR (scans, ZIPs) -> rebuild
+run order_terms /usr/bin/python3 src/agentic/build_order_terms.py   # execution period, own share, firm vs L1/LoI, repeats, non-orders per order filing (2026-10-08)
 run event_ledger /usr/bin/python3 src/agentic/build_event_ledger.py
 run pledge_events /usr/bin/python3 src/agentic/fetch_pledge_events.py   # promoter pledge / release events (SAST Reg 31), 2016+ (2026-10-04)
 # P&L: companies with results since the last run (Mondays also every still-trading company whose P&L stops before
