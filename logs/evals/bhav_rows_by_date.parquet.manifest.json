@@ -1,0 +1,13 @@
+{
+ "dataset": "bhav_rows_by_date.parquet",
+ "producer": "src/agentic/trust/data_ready.py bhav_rows()",
+ "source": "NSE daily bhavcopy files in data/raw/nse_full_history_official",
+ "columns": {
+  "folder": "raw folder date (trade_date=...)",
+  "session": "trade date written inside the file (DATE1 / TIMESTAMP)",
+  "rows": "count of EQ, BE and BZ series rows in that file"
+ },
+ "note": "a holiday folder repeats the previous session; bhav_rows() keeps one file per session",
+ "folders": 2983,
+ "updated": "2026-10-08T08:55:03"
+}

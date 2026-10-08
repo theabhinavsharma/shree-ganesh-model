@@ -1,0 +1,88 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-07-v3-badnews-veto",
+ "producer": "src/agentic/test_v3_badnews_veto.py",
+ "definitions": "EXP-2026-10-07-v3-badnews-veto (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does skipping V3 picks whose company filed bad news in the 90 days before the list date do better than V3?\nArms (each drops names from V3's list, no refill):\n  V3         live rule (v3_rule.picks)\n  V3_BAD     minus bad news: default_insolvency, mgmt_exit, independent_director_exit, auditor_exit, suspension,\n             order_cancel, delayed_results, strike_disruption (event_ledger, filed in the 90 calendar days up to the list\n             date's 15:30 close)  \u2014 primary\n  V3_SEV2    minus severity-2 only: default_insolvency, auditor_exit, suspension\n  V3_BADREG  V3_BAD plus regulatory_action \u2014 diagnostic only, no verdict (its category settles only in late 2024)\nWindow: weekly entries from 2023-01-01; eras 2023-24 and 2025+ (CAGR of the NAV inside each era); phases 0-4.\nEngine: sim_screen_rank_exit.run_exit(..., \"E0\"), 126-session hold. PASS (verdict arms vs V3) = CAGR higher in both eras,\nfull maxDD not worse by more than 2 pts, at phase 0 and in >= 4 of 5. One era of regime -> a pass is provisional.\nBefore any outcome: trust/data_ready.gate(). SGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "columns": {
+  "cagr": "percent a year, full window",
+  "cagr_e1": "percent a year inside 2023-01-01..2024-12-31",
+  "cagr_e2": "percent a year from 2025-01-01",
+  "maxdd": "percent, full window",
+  "final": "NAV multiple",
+  "avg_names": "average names held",
+  "phases_beaten": "phases where the arm beats V3",
+  "PASS": "verdict arms only; V3_BADREG is diagnostic"
+ },
+ "event_rates_per_1000_listed": {
+  "V3_BAD": {
+   "2023": 1199.4,
+   "2024": 1252.7,
+   "2025": 967.6,
+   "2026": 809.5
+  },
+  "V3_SEV2": {
+   "2023": 633.2,
+   "2024": 487.7,
+   "2025": 316.6,
+   "2026": 286.5
+  },
+  "V3_BADREG": {
+   "2023": 1256.3,
+   "2024": 1640.8,
+   "2025": 2032.8,
+   "2026": 1569.8
+  }
+ },
+ "dropped_vs_kept": {
+  "V3_BAD": {
+   "dropped": {
+    "n": 162,
+    "avg": 0.134,
+    "median": -0.019,
+    "hit50": 0.383,
+    "lost30": 0.29
+   },
+   "kept": {
+    "n": 969,
+    "avg": 0.304,
+    "median": 0.142,
+    "hit50": 0.453,
+    "lost30": 0.095
+   }
+  },
+  "V3_SEV2": {
+   "dropped": {
+    "n": 24,
+    "avg": 0.458,
+    "median": 0.568,
+    "hit50": 0.667,
+    "lost30": 0.042
+   },
+   "kept": {
+    "n": 1107,
+    "avg": 0.275,
+    "median": 0.111,
+    "hit50": 0.438,
+    "lost30": 0.125
+   }
+  },
+  "V3_BADREG": {
+   "dropped": {
+    "n": 257,
+    "avg": 0.109,
+    "median": -0.005,
+    "hit50": 0.381,
+    "lost30": 0.23
+   },
+   "kept": {
+    "n": 874,
+    "avg": 0.329,
+    "median": 0.16,
+    "hit50": 0.461,
+    "lost30": 0.092
+   }
+  }
+ },
+ "phase0_only_for_metrics": true,
+ "updated": "2026-10-08T08:47:58"
+}

@@ -194,6 +194,30 @@ def main() -> None:
     if hit.empty:
         raise SystemExit(f"PIT TTM coverage never reaches {COV_MIN:.0%} of anatomy rows")
     cov_start = pd.Timestamp(hit.index[0])
+    # ---- data-readiness gate (2026-10-08; lesson INC-2026-10-02-ab-on-incomplete-data): before any outcome
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import data_ready as dr
+    meas_end = S.loc[S["y95"].notna(), "trade_date"].max()
+    yrs = range(cov_start.year, pd.Timestamp(meas_end).year + 1)
+    Pq = pd.read_parquet(PNL, columns=["symbol", "quarter_end", "net_sales"]); Pq["quarter_end"] = pd.to_datetime(Pq["quarter_end"])
+    p_have = Pq.dropna(subset=["net_sales"]).drop_duplicates(["symbol", "quarter_end"]).groupby(Pq["quarter_end"].dt.year).size()
+    Cf = pd.read_parquet(ROOT / "data/derived/results_calendar_full.parquet", columns=["symbol", "toDate", "period"])
+    Cf = Cf[Cf["period"].astype(str).str.lower() == "quarterly"]; Cf["qe"] = pd.to_datetime(Cf["toDate"], format="%d-%b-%Y", errors="coerce")
+    Ci = pd.read_parquet(ROOT / "data/derived/results_calendar_integrated.parquet", columns=["symbol", "period_to"])
+    Ci["qe"] = pd.to_datetime(Ci["period_to"], format="%d-%b-%Y", errors="coerce")
+    off = pd.concat([Cf[["symbol", "qe"]], Ci[["symbol", "qe"]]]).dropna().drop_duplicates()
+    Sw = S[(S["trade_date"] >= cov_start) & (S["trade_date"] <= meas_end)][["trade_date", "covered"]].copy()
+    Sw["pit_ttm"] = Sw["covered"].where(Sw["covered"])
+    Px = pd.to_datetime(pd.read_parquet(rp.PANEL, columns=["trade_date"])["trade_date"]); bh = dr.bhav_rows()
+    checks = [dr.completeness("live P&L company-quarters vs NSE's results calendar + integrated filings", p_have, off.groupby(off["qe"].dt.year).size(),
+                              range(cov_start.year - 1, pd.Timestamp(meas_end).year + 1)),
+              dr.coverage("PIT trailing revenue known for the anatomy stock-weeks in the measured window", Sw, "trade_date", ["pit_ttm"], yrs),
+              dr.completeness("price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)", Px.groupby(Px.dt.year).size(),
+                              bh.groupby(bh.index.year).sum(), range(cov_start.year, cal[-1].year + 1)),
+              dr.span("order-book statements", E["eff"], cov_start, pd.Timestamp(meas_end)),
+              dr.span("anatomy rows", S["trade_date"], cov_start, pd.Timestamp(meas_end))]
+    if not args.dry:
+        dr.gate(EXP_ID, checks, run=args.tag or "RESULT")
     L = S.dropna(subset=["y95"])
     era = np.where(L["trade_date"] >= ERA_SPLIT, "conf", np.where(L["trade_date"] >= cov_start, "disc", ""))
     L = L.assign(era_w=era)[era != ""]

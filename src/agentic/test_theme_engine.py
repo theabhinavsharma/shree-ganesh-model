@@ -94,6 +94,41 @@ def main() -> None:
             res[k] = dict(**{c: m[c] for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd", "sharpe", "final")}, avg_names=info["avg_names"])
         return res
 
+    if os.environ.get("SGM_V3_VS_G1") == "1":   # data-readiness gate (2026-10-08) before any outcome of the V3 adoption test
+        sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+        import data_ready as dr
+        cal, wk0 = D["cal"], grid(0)
+        yrs = range(pd.Timestamp(tif.START).year, cal[-1].year + 1)
+        Px = pd.to_datetime(pd.read_parquet(ROOT / "data/derived/stock_daily_facts_adjusted_2015plus.parquet", columns=["trade_date"])["trade_date"])
+        bh = dr.bhav_rows()
+        top = sre.TOPN; sre.TOPN = 100000
+        pool0 = tif.select_elig(X["F"], wk0, imap, P, G1)
+        sre.TOPN = top
+        PS = {s: np.sort(g["trade_date"].to_numpy()) for s, g in P.groupby("symbol")}
+
+        def scored(s, d):
+            a = PS.get(s)
+            if a is None:
+                return np.nan
+            i = np.searchsorted(a, np.datetime64(d), side="right") - 1
+            return 1.0 if i >= 0 and np.datetime64(d) - a[i] <= np.timedelta64(7, "D") else np.nan
+        pool_rows = pd.DataFrame([dict(d=d, known=scored(s, d)) for d in wk0 for s in pool0.get(d, [])])
+        Fw = X["F"][X["F"]["trade_date"].isin(set(wk0)) & X["F"]["core"]][["symbol", "trade_date"]].copy()
+        Fw["ind"] = Fw["symbol"].map(imap).notna().astype(float).where(lambda x: x > 0)
+        A = pd.read_csv(ROOT / "logs/news/announcements_completeness.csv").dropna(subset=["nse"]); A = A[A["nse"] > 0]
+        end = cal[-1] - pd.Timedelta(days=10)
+        checks = [dr.completeness("price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)", Px.groupby(Px.dt.year).size(),
+                                  bh.groupby(bh.index.year).sum(), range(yrs.start - 1, yrs.stop)),
+                  dr.coverage("model score known for G1-pool names on list dates (phase 0)", pool_rows, "d", ["known"], yrs),
+                  dr.coverage("industry known for core stocks on list dates (phase 0)", Fw, "trade_date", ["ind"], yrs),
+                  dr.completeness("NSE announcements we hold vs NSE's own day feed (theme-exposure source)", A.groupby("year")["ours"].sum(),
+                                  A.groupby("year")["nse"].sum(), range(yrs.start - 1, yrs.stop)),
+                  dr.span("model scores", P["trade_date"], pd.Timestamp(tif.START), end),
+                  dr.span("industry heat scores (G1 eligibility)", S["date"], pd.Timestamp(tif.START), end),
+                  dr.span("theme states", I["date"], pd.Timestamp(tif.START), end),
+                  dr.span("theme exposure filings", E["an_dt"], pd.Timestamp(tif.START) - pd.Timedelta(days=365), end)]
+        if os.environ.get("SGM_REPRO") != "1":
+            dr.gate("EXP-2026-09-30-v3-vs-g1", checks, run=os.environ.get("SGM_RERUN_TAG") or "RESULT")
     R0 = run_phase(0)
     if os.environ.get("SGM_V3_VS_G1") == "1":   # EXP-2026-09-30-v3-vs-g1 (V3 = TFADE) and EXP-2026-09-30-g1-fade (G1T), both vs G1
         vs = ("V3", "G1T")

@@ -1,0 +1,44 @@
+{
+ "dataset": "cohorts.csv",
+ "producer": "src/agentic/explore_rank_bands.py",
+ "status": "EXPLORATION (no rule changed)",
+ "definitions": "Which slice of the model ranking does best, bought in April or October and held 3-24 months? (2026-10-08, EXPLORATION\nfor Abhinav: \"what % of the top if held for 3/6/9/12/18/24 months gives the highest return? check in 5% intervals and go\ngranular if you find it wise. Pick 2 scenarios of Oct & April as the month where we invest\"; no rule changed).\n\nRanking: the walk-forward model score (logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet, column ensemble; each test\nyear scored by models trained only on rows whose labels ended before that year) of every scored stock on the first\nweekly score date of April and of October, 2019-2026. Scored universe: about 1,300 stocks in 2019, 2,400 in 2026.\nThis is the model alone across all stocks, not V3 (V3 = model rank inside hot industries + trend filter, top 9).\nSlices: rank percentile bands 0-5%, 5-10%, ..., 95-100% (0 = highest score), 1% bands inside the top 20%, and\ncumulative top X% (2, 5, 10, ..., 50, 100).\nTrade: buy at the next session's open after the score date, sell at the close H sessions later (H = 63 / 126 / 189 / 252\n/ 378 / 504 sessions = 3 / 6 / 9 / 12 / 18 / 24 months), equal money in every stock of the slice. A stock that stops\ntrading keeps its last close (up to 300 sessions). Per-stock return clipped to [-100%, +1000%]. Before costs.\nA cohort (one April or one October) counts for a hold only once the hold has ended.\nReported: average over cohorts of the slice's average stock return (each cohort counts once), the same minus the\nall-scored average (excess), and how many cohorts the slice beat the all-scored average in.\nOutput: logs/explorations/rank_bands/ (cohorts.csv + manifest + README) and an EXPLORATION line in logs/experiments.jsonl.\n",
+ "key": [
+  "month",
+  "year",
+  "hold",
+  "kind",
+  "slice"
+ ],
+ "columns": {
+  "month": "entry month scenario (Apr / Oct)",
+  "year": "calendar year of the entry",
+  "score_date": "model score date (session close)",
+  "entry": "buy session (open)",
+  "hold": "hold label; sessions in HOLDS",
+  "kind": "band5 = 5% rank bands, band1 = 1% bands in the top 20%, cum = top X% cumulative",
+  "slice": "rank percentile range, 0 = highest score",
+  "avg": "average stock return over the hold, fraction (0.10 = +10%)",
+  "median": "median stock return, fraction",
+  "n": "stocks in the slice with an entry price",
+  "all_avg": "average over every scored stock, fraction",
+  "all_n": "scored stocks with an entry price",
+  "excess": "avg - all_avg, fraction"
+ },
+ "holds_sessions": {
+  "3m": 63,
+  "6m": 126,
+  "9m": 189,
+  "12m": 252,
+  "18m": 378,
+  "24m": 504
+ },
+ "model_scores": "logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet",
+ "price_panel": "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+ "caveats": [
+  "few cohorts: 8 Aprils (2019-2026) and 7 Octobers (2019-2025) at most, fewer for long holds; 18m and 24m cohorts overlap",
+  "before costs; the scored universe includes illiquid small stocks that cannot take real money at size",
+  "a stock that stops trading keeps its last close (delistings at a loss may be flattered)"
+ ],
+ "updated": "2026-10-08T08:53:47"
+}

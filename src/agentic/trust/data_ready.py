@@ -63,6 +63,44 @@ def qc(name: str, value: float, min_value: float) -> dict:
                 fails=[] if value >= min_value else [f"{value:.1%} < {min_value:.0%}"])
 
 
+def bhav_rows() -> pd.Series:
+    """Official stock-day count per session (2026-10-08): EQ/BE/BZ rows in NSE's own daily bhavcopy files
+    (data/raw/nse_full_history_official/trade_date=*/sec_bhavdata_full_*.csv; before 2020 cm*bhav.csv.zip), the
+    series the price panel keeps. Each file counts under the trade date written inside it: NSE also publishes a file on
+    trading holidays that repeats the previous session (folder 2020-03-10, Holi, holds 09-Mar-2020), so a folder date is
+    not proof of a session. Counted once per folder, cached in logs/evals/bhav_rows_by_date.parquet."""
+    cache = ROOT / "logs/evals/bhav_rows_by_date.parquet"
+    have = pd.read_parquet(cache) if cache.exists() else pd.DataFrame(columns=["folder", "session", "rows"])
+    seen, new = set(pd.to_datetime(have["folder"])), []
+    for day in sorted((ROOT / "data/raw/nse_full_history_official").glob("trade_date=*")):
+        d = pd.Timestamp(day.name.split("=", 1)[1])
+        f = next(iter(sorted(day.glob("sec_bhavdata_full_*.csv"))), None) or next(iter(sorted(day.glob("cm*bhav.csv.zip"))), None)
+        if d in seen or f is None:
+            continue
+        want = lambda c: str(c).strip() in ("SERIES", "DATE1", "TIMESTAMP")  # noqa: E731
+        if f.suffix == ".zip":   # before 2020: the classic cm bhavcopy
+            r = pd.read_csv(f, usecols=want)
+        elif f.open("rb").read(2) == b"PK":   # NSE served 2022-08-08 as an Excel workbook under the .csv name
+            r = pd.read_excel(f); r = r[[c for c in r.columns if want(c)]]
+        else:
+            r = pd.read_csv(f, usecols=want)
+        r.columns = [str(c).strip() for c in r.columns]
+        dt = pd.to_datetime(r["DATE1" if "DATE1" in r else "TIMESTAMP"].astype(str).str.strip(), format="%d-%b-%Y", errors="coerce")
+        sess = dt.mode().iat[0] if dt.notna().any() else pd.NaT
+        new.append(dict(folder=d, session=sess, rows=int(r["SERIES"].astype(str).str.strip().isin(["EQ", "BE", "BZ"]).sum())))
+    if new:
+        have = pd.concat([x for x in (have, pd.DataFrame(new)) if len(x)], ignore_index=True)
+        have.to_parquet(cache)
+        cache.with_name(cache.name + ".manifest.json").write_text(json.dumps(dict(
+            dataset=cache.name, producer="src/agentic/trust/data_ready.py bhav_rows()", source="NSE daily bhavcopy files in data/raw/nse_full_history_official",
+            columns=dict(folder="raw folder date (trade_date=...)", session="trade date written inside the file (DATE1 / TIMESTAMP)",
+                         rows="count of EQ, BE and BZ series rows in that file"),
+            note="a holiday folder repeats the previous session; bhav_rows() keeps one file per session",
+            folders=len(have), updated=datetime.now().isoformat(timespec="seconds")), indent=1, default=str))
+    h = have.dropna(subset=["session"]).sort_values("folder").drop_duplicates("session")
+    return pd.Series(h["rows"].astype(int).to_numpy(), index=pd.DatetimeIndex(h["session"]), name="rows").sort_index()
+
+
 def gate(exp_id: str, checks: list[dict], run: str = "RESULT") -> None:
     ok = all(c["ok"] for c in checks)
     print(f"\n=== DATA READINESS · {exp_id} ({run}) · {'READY' if ok else 'NOT READY'} ===")
