@@ -504,7 +504,12 @@ def results_data_ready(ctx: dict) -> dict:
         if ts < "2026-10-02T12:00" or ("-RESULT" not in i and "-RERUN-" not in i):
             continue
         n += 1
-        base, run = (i.split("-RESULT")[0], "RESULT") if "-RESULT" in i else (i.split("-RERUN-")[0], i.split("-RERUN-")[1])
+        if "-RESULT-" in i:      # "<exp>-RESULT-<tag>" (test_order_backlog.py --tag): its gate logs run=<tag> (2026-10-09 fix)
+            base, run = i.split("-RESULT-")[0], i.split("-RESULT-")[1]
+        elif "-RESULT" in i:
+            base, run = i.split("-RESULT")[0], "RESULT"
+        else:
+            base, run = i.split("-RERUN-")[0], i.split("-RERUN-")[1]
         if not any(r <= ts and r[:10] == ts[:10] for r in ready.get((base, run), [])):
             viol.append(i)
     return _res("PASS" if not viol else "FAIL", f"{n - len(viol)}/{n} results had their data checked", ", ".join(viol[:5]))
