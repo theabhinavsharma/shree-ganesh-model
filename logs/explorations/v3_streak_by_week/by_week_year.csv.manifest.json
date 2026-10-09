@@ -1,0 +1,23 @@
+{
+ "dataset": "by_week_year.csv",
+ "producer": "src/agentic/explore_v3_streak_by_week.py",
+ "status": "EXPLORATION (no rule changed)",
+ "definitions": "V3 streak names week by week (8, 9, 10, ... separately), every year (2019-10-10, EXPLORATION for Abhinav: \"8 plus mat kar,\ncheck for 8 9 10 11 12 13 14 15 ... median average hits +50% ... har year ke liye\"; no rule changed).\n\nWeekly lists: v3_rule.picks on the last session of every ISO week (the live Friday list). Streak = consecutive weekly lists.\nFor every (list date, stock): weeks on the list k, gain since its first-week entry (first-week entry open -> this list's close),\nand the next 126 sessions from the next open: return, touched +50% (max high >= 1.5x entry), ended <= -30%. Before costs.\nRows per year: k = 8, 9, ..., the longest streak; plus a baseline row \"1-7\" (all picks in weeks 1 to 7 that year).\nOutput: logs/explorations/v3_streak_by_week/by_week_year.csv (+ manifest, README) and printed tables.\n",
+ "columns": {
+  "period": "all years / 2019-22 / 2023+ / a calendar year (of the list date)",
+  "week_on_list": "consecutive weeks on the V3 list at the list date; 1-7 = all early weeks",
+  "picks": "list-date x stock rows with a finished 126-session hold",
+  "stocks": "distinct stocks",
+  "avg": "mean next-126-session return, percent",
+  "median": "median return, percent",
+  "hit50": "percent touching +50% within 126 sessions",
+  "down30": "percent ending <= -30%",
+  "gained_so_far": "median gain from the stock's first-week entry open to this list's close, percent"
+ },
+ "caveats": [
+  "overlapping trades: a stock in week 8 is usually also in week 9, 10",
+  "small cells: many week x year cells have 0-5 picks",
+  "V3 in-sample; before costs"
+ ],
+ "updated": "2026-10-10T05:20:38"
+}
