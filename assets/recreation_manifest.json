@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-02",
+ "generated": "2026-10-10",
  "inventory": {
   "Other tools": [
    {
@@ -158,6 +158,11 @@
     "purpose": "Assemble reports/doubler_audit_20260828.md from the audit artifacts."
    },
    {
+    "path": "src/agentic/build_event_ledger.py",
+    "loc": 157,
+    "purpose": "Event ledger from NSE's own filings, 2016+ (2026-10-02; news plan step 1). Official, time-stamped, covers smal"
+   },
+   {
     "path": "src/agentic/build_event_polarity.py",
     "loc": 203,
     "purpose": "Build TWO new sets of polarity-aware event features:"
@@ -186,6 +191,11 @@
     "path": "src/agentic/build_mcap_pit.py",
     "loc": 673,
     "purpose": "MARKET CAP PANEL \u2014 data/derived/mcap_pit.parquet (+ .manifest.json)."
+   },
+   {
+    "path": "src/agentic/build_order_terms.py",
+    "loc": 236,
+    "purpose": "Order terms beyond the amount, one row per order filing (2026-10-08, for EXP-2026-10-08-big-order-annual; Abhi"
    },
    {
     "path": "src/agentic/build_policy_scores.py",
@@ -223,6 +233,11 @@
     "purpose": "NLP-tag NSE corporate announcements into catalyst categories."
    },
    {
+    "path": "src/agentic/check_announcements_completeness.py",
+    "loc": 50,
+    "purpose": "Completeness of our NSE announcements archive vs NSE's own feed (2026-10-02; event-ledger data gate)."
+   },
+   {
     "path": "src/agentic/compute_feature_importance.py",
     "loc": 294,
     "purpose": "Compute feature-importance for the v3 long ensemble + tag each feature"
@@ -239,7 +254,7 @@
    },
    {
     "path": "src/agentic/eval_checks.py",
-    "loc": 514,
+    "loc": 552,
     "purpose": "Coded checks for evals/registry.yaml (2026-09-29). One function per `check:` name."
    },
    {
@@ -253,9 +268,29 @@
     "purpose": "EVENT x MATERIALITY x MARKET'S VOTE \u2014 what happens after each kind of filing (EXP-2026-09-24-event-materiality"
    },
    {
+    "path": "src/agentic/explore_big_order_month.py",
+    "loc": 113,
+    "purpose": "Does the month you buy a big-order stock matter? (2026-10-04, EXPLORATION for Abhinav's question; no rule chan"
+   },
+   {
+    "path": "src/agentic/explore_big_order_winners.py",
+    "loc": 388,
+    "purpose": "Big order winners (2026-10-04, EXPLORATION for Abhinav's question; no rule changed)."
+   },
+   {
     "path": "src/agentic/explore_big_winners.py",
     "loc": 88,
     "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): what did Sri Lakshmi v2's 2x winners look like on th"
+   },
+   {
+    "path": "src/agentic/explore_gdelt_coverage.py",
+    "loc": 72,
+    "purpose": "GDELT coverage check (2026-10-02): could GDELT give us media history (2017+) for the stocks V3 trades?"
+   },
+   {
+    "path": "src/agentic/explore_heat_seasonality.py",
+    "loc": 70,
+    "purpose": "Does the hot-industry list shift in particular months? (2026-10-04, EXPLORATION for Abhinav's question; no rul"
    },
    {
     "path": "src/agentic/explore_hitter_traits.py",
@@ -273,6 +308,21 @@
     "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): WHY do some sectors give far more +50% hitters?"
    },
    {
+    "path": "src/agentic/explore_leverage_holds.py",
+    "loc": 102,
+    "purpose": "Leverage flags vs outcome at 6 / 9 / 12 / 18 / 24 months (2026-10-04, EXPLORATION for Abhinav; no rule changed"
+   },
+   {
+    "path": "src/agentic/explore_leverage_traits.py",
+    "loc": 146,
+    "purpose": "What separates +50% hitters from the rest on leverage, pledges and P&L? (2026-10-04, EXPLORATION for Abhinav: "
+   },
+   {
+    "path": "src/agentic/explore_order_params.py",
+    "loc": 190,
+    "purpose": "What does an order filing say beyond its amount? (2026-10-08, EXPLORATION for Abhinav: \"large order distribute"
+   },
+   {
     "path": "src/agentic/explore_pnl_winners.py",
     "loc": 86,
     "purpose": "Do P&L numbers separate winners? (2026-09-30, EXPLORATION, 2019-2022 only; 2023+ stays sealed for a registered"
@@ -283,19 +333,34 @@
     "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): are there pockets (industry heat level, industry siz"
    },
    {
+    "path": "src/agentic/explore_rank_bands.py",
+    "loc": 132,
+    "purpose": "Which slice of the model ranking does best, bought in April or October and held 3-24 months? (2026-10-08, EXPL"
+   },
+   {
     "path": "src/agentic/explore_rank_repeat.py",
     "loc": 60,
     "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ kept sealed for a registered test):"
    },
    {
     "path": "src/agentic/explore_regime_universe.py",
-    "loc": 90,
+    "loc": 87,
     "purpose": "Does V3 do worse when mid/small caps are weak, and would larger caps have held up? (2026-10-02, EXPLORATION, 2"
    },
    {
     "path": "src/agentic/explore_stop_levels.py",
     "loc": 54,
     "purpose": "Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): is there a loss level where a Sri Lakshmi v2 pick is"
+   },
+   {
+    "path": "src/agentic/explore_strategies_2025.py",
+    "loc": 165,
+    "purpose": "Which explored strategy did best in calendar 2025 and 2026 so far? (2026-10-05, EXPLORATION for Abhinav; no ru"
+   },
+   {
+    "path": "src/agentic/explore_v3_holds.py",
+    "loc": 107,
+    "purpose": "V3 at different hold lengths, with 2023+ shown separately (2026-10-04, EXPLORATION for Abhinav: \"v3 post 2023 "
    },
    {
     "path": "src/agentic/factor_evaluator.py",
@@ -429,7 +494,7 @@
    },
    {
     "path": "src/agentic/notify.py",
-    "loc": 336,
+    "loc": 416,
     "purpose": "Phone messages for SGM / Sri Lakshmi (2026-09-29) \u2014 filled in from data files, never written by a language mod"
    },
    {
@@ -438,8 +503,13 @@
     "purpose": "Trading-day arithmetic from NSE's own holiday list (data/derived/nse_holidays.parquet, fetch_nse_holidays.py)."
    },
    {
+    "path": "src/agentic/nse_symbols.py",
+    "loc": 38,
+    "purpose": "Company identity across NSE ticker renames (2026-10-04; lesson INC-2026-09-30-renamed-symbol-cliffs: key corpo"
+   },
+   {
     "path": "src/agentic/ocr_order_filings.py",
-    "loc": 109,
+    "loc": 171,
     "purpose": "OCR pass for scanned order/L1 filings (companion to fetch_order_fulltext.py)."
    },
    {
@@ -509,12 +579,12 @@
    },
    {
     "path": "src/agentic/report_v3_diwali_window.py",
-    "loc": 77,
+    "loc": 74,
     "purpose": "Sri Lakshmi V3: bought in early October, how did it look around Diwali? (2026-09-30; insight only, no rule.)"
    },
    {
     "path": "src/agentic/report_v3_stats.py",
-    "loc": 126,
+    "loc": 107,
     "purpose": "Sri Lakshmi V3 pick stats + time of year (2026-09-30; EXPLORATION, no rule is changed by this)."
    },
    {
@@ -549,7 +619,7 @@
    },
    {
     "path": "src/agentic/run_sgm.py",
-    "loc": 280,
+    "loc": 309,
     "purpose": "SGM / Sri Lakshmi orchestrator (2026-09-29): the one scheduled entry point. Each stage runs, then its checks r"
    },
    {
@@ -594,7 +664,7 @@
    },
    {
     "path": "src/agentic/score_sri_lakshmi.py",
-    "loc": 22,
+    "loc": 21,
     "purpose": "Daily forward scorer for the Sri Lakshmi PAPER batches (logs/sri_lakshmi/screen_*.json, written by"
    },
    {
@@ -604,7 +674,7 @@
    },
    {
     "path": "src/agentic/screen_sri_lakshmi.py",
-    "loc": 144,
+    "loc": 137,
     "purpose": "SRI LAKSHMI weekly screen \u2014 PAPER track (2026-09-29). Rule: V3 from 2026-10-02 (Abhinav, 2026-09-30)."
    },
    {
@@ -668,13 +738,23 @@
     "purpose": "Tape forensics \u2014 the deep per-name scrutiny, applied to EVERY basket name, every run."
    },
    {
+    "path": "src/agentic/test_big_order_annual.py",
+    "loc": 282,
+    "purpose": "EXP-2026-10-08-big-order-annual (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_big_order_hold.py",
+    "loc": 282,
+    "purpose": "EXP-2026-10-04-big-order-hold-18-24m (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
     "path": "src/agentic/test_bulk_buyers.py",
     "loc": 146,
     "purpose": "EXP-2026-09-30-bulk-buyers (registered in logs/experiments.jsonl before the bulk-deal history was even fetched"
    },
    {
     "path": "src/agentic/test_hot_order_combo.py",
-    "loc": 843,
+    "loc": 882,
     "purpose": "HOT INDUSTRY x MATERIAL ORDER x ABOVE 200DMA (EXP-2026-09-27-hot-x-material-order)."
    },
    {
@@ -689,7 +769,7 @@
    },
    {
     "path": "src/agentic/test_order_backlog.py",
-    "loc": 277,
+    "loc": 301,
     "purpose": "ORDER BACKLOG / PIT TTM REVENUE (EXP-2026-09-28-order-backlog; registered in logs/experiments.jsonl before any"
    },
    {
@@ -704,7 +784,7 @@
    },
    {
     "path": "src/agentic/test_theme_engine.py",
-    "loc": 153,
+    "loc": 188,
     "purpose": "EXP-2026-09-30-theme-engine (registered, then amended, in logs/experiments.jsonl before any outcome was comput"
    },
    {
@@ -713,9 +793,24 @@
     "purpose": "EXP-2026-09-30-trait-rules (registered in logs/experiments.jsonl before any outcome was computed)."
    },
    {
+    "path": "src/agentic/test_v3_badnews_veto.py",
+    "loc": 181,
+    "purpose": "EXP-2026-10-07-v3-badnews-veto (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_v3_leverage.py",
+    "loc": 202,
+    "purpose": "EXP-2026-10-04-v3-leverage (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
     "path": "src/agentic/test_v3_pnl.py",
-    "loc": 148,
+    "loc": 155,
     "purpose": "EXP-2026-09-30-v3-pnl (registered in logs/experiments.jsonl before any outcome was computed)."
+   },
+   {
+    "path": "src/agentic/test_v3_promoter_signals.py",
+    "loc": 171,
+    "purpose": "EXP-2026-10-04-v3-promoter-signals (registered in logs/experiments.jsonl before any outcome was computed)."
    },
    {
     "path": "src/agentic/track_multibagger_basket.py",
@@ -728,13 +823,28 @@
     "purpose": "1.5x CONFIDENCE MODEL \u2014 P(+50% within 100td from ENTRY) for confirmed ignitions."
    },
    {
+    "path": "src/agentic/update_pnl_incremental.py",
+    "loc": 181,
+    "purpose": "Keep quarterly P&L current, every day (2026-10-04; Abhinav: \"wire karo before Oct 15 and dhyaan rakhna aage se"
+   },
+   {
+    "path": "src/agentic/v3_rule.py",
+    "loc": 44,
+    "purpose": "Sri Lakshmi V3 rule, in one place (2026-10-02 cleanup; before this it was copy-pasted into 9 scripts)."
+   },
+   {
+    "path": "src/agentic/watchdog.py",
+    "loc": 118,
+    "purpose": "SGM watchdog (2026-10-06, INC-2026-10-06-daily-run-hung-silent): an independent check every 30 minutes (launch"
+   },
+   {
     "path": "src/agentic/write_live_prediction.py",
     "loc": 146,
     "purpose": "Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs."
    },
    {
     "path": "src/agentic/daily_data_layer.sh",
-    "loc": 100,
+    "loc": 115,
     "purpose": "DAILY DATA LAYER \u2014 every data feed, every trading day. Cron-scheduled (launchd is"
    },
    {
@@ -746,6 +856,11 @@
     "path": "src/agentic/friday_run_20260828.sh",
     "loc": 148,
     "purpose": "FRIDAY-ENTRY RUN (entry 2026-08-28 pre-open AMO) \u2014 checklist-by-checklist, data through Thu Aug-27 close."
+   },
+   {
+    "path": "src/agentic/handover_backup.sh",
+    "loc": 59,
+    "purpose": "Laptop handover backup (2026-10-08, user: \"move all essential files related to this compressed format mein to "
    },
    {
     "path": "src/agentic/install_schedule.sh",
@@ -813,8 +928,13 @@
     "purpose": "Install the SGM cron schedule (idempotent \u2014 replaces only lines tagged # SGM)."
    },
    {
-    "path": "src/agentic/sync_drive_mirror.sh",
+    "path": "src/agentic/split_for_drive.sh",
     "loc": 25,
+    "purpose": "Split every file > 50 MB in a Drive folder into 40 MB pieces (2026-10-08: this network cuts Drive for desktop "
+   },
+   {
+    "path": "src/agentic/sync_drive_mirror.sh",
+    "loc": 27,
     "purpose": "Mirror the live working set to Google Drive: My Drive/SGM backups/day_to_day (2026-09-28, user request)."
    }
   ],
@@ -903,7 +1023,7 @@
    },
    {
     "path": "src/agentic/fetch_announcements_historical.py",
-    "loc": 197,
+    "loc": 199,
     "purpose": "Backfill NSE corporate announcements from 2016-01-01 to today."
    },
    {
@@ -1018,7 +1138,7 @@
    },
    {
     "path": "src/agentic/fetch_order_fulltext.py",
-    "loc": 174,
+    "loc": 182,
     "purpose": "Full-text order amounts for every order / L1-tender filing 2016-2026 (EXP-2026-09-27-hot-x-material-order)."
    },
    {
@@ -1032,19 +1152,29 @@
     "purpose": "Insider / promoter trades from NSE's new filing system (corporates-pit-gg), 2026-05-01 onward (2026-09-30)."
    },
    {
+    "path": "src/agentic/fetch_pledge_events.py",
+    "loc": 117,
+    "purpose": "Promoter pledge / encumbrance events from NSE (SAST Regulation 31(1) & 31(2) disclosures), 2016 onward (2026-1"
+   },
+   {
     "path": "src/agentic/fetch_pnl_history.py",
-    "loc": 369,
+    "loc": 473,
     "purpose": "P&L HISTORY CRAWL \u2014 quarterly results figures for the fair-value program (2026-09-05)."
    },
    {
     "path": "src/agentic/fetch_pnl_old_format.py",
-    "loc": 272,
+    "loc": 299,
     "purpose": "Quarterly P&L for NSE's OLD-format results filings, 2014-2017 (2026-09-30)."
    },
    {
     "path": "src/agentic/fetch_reddit.py",
     "loc": 114,
     "purpose": "Pull recent posts from public Reddit JSON for India-investing subs."
+   },
+   {
+    "path": "src/agentic/fetch_results_pdf.py",
+    "loc": 240,
+    "purpose": "Quarterly sales and profit from the company's own results PDF where NSE's structured results lists have a hole"
    },
    {
     "path": "src/agentic/fetch_screener_fundamentals.py",

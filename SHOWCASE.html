@@ -2403,10 +2403,10 @@ the rebuild complete:
 Then commit everything and push to a new private GitHub repo.
 
 ═══ CURRENT INVENTORY (auto-generated) ═══
-As of 2026-10-02 · 255 files · 53,812 LOC · regenerated on every
+As of 2026-10-10 · 281 files · 58,119 LOC · regenerated on every
 weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS current.
 
-[Data fetchers]  (46)
+[Data fetchers]  (48)
   src/agentic/build_macro_panel.py                     — Consolidate ALL macro/aggregate features into a single daily panel.
   src/agentic/build_news_event_features.py             — News + corporate-event feature builder — 5d and 15d windows, stock + industry.
   src/agentic/fetch_amfi_mf_holdings.py                — Fetch AMFI mutual-fund AUM data — non-conventional ownership signal.
@@ -2436,9 +2436,11 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/fetch_order_fulltext.py                  — Full-text order amounts for every order / L1-tender filing 2016-2026 (EXP-2026-09-27-hot-x-material-order).
   src/agentic/fetch_pib_releases.py                    — Fetch Press Information Bureau (PIB) press releases (English, PIB Delhi).
   src/agentic/fetch_pit_gg.py                          — Insider / promoter trades from NSE's new filing system (corporates-pit-gg), 2026-05-01 onward (2026-09-30).
+  src/agentic/fetch_pledge_events.py                   — Promoter pledge / encumbrance events from NSE (SAST Regulation 31(1) & 31(2) disclosures), 2016 onward (2026-1
   src/agentic/fetch_pnl_history.py                     — P&L HISTORY CRAWL — quarterly results figures for the fair-value program (2026-09-05).
   src/agentic/fetch_pnl_old_format.py                  — Quarterly P&L for NSE's OLD-format results filings, 2014-2017 (2026-09-30).
   src/agentic/fetch_reddit.py                          — Pull recent posts from public Reddit JSON for India-investing subs.
+  src/agentic/fetch_results_pdf.py                     — Quarterly sales and profit from the company's own results PDF where NSE's structured results lists have a hole
   src/agentic/fetch_screener_fundamentals.py           — Fetch comprehensive fundamentals from Screener.in per-company pages.
   src/agentic/fetch_screener_industry.py               — Industry classification for symbols NSE no longer labels — screener.in company pages.
   src/agentic/fetch_screener_mcap_backfill.py          — Market cap + price from screener.in for equities that screener_fundamentals does not size.
@@ -2518,7 +2520,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   prompts/INDEX.md                                     — Agent Prompts — Index
   prompts/META_REPROMPT.md                             — Meta-Reprompt — How I Re-Prompt Myself Each User Turn
 
-[Other tools]  (163)
+[Other tools]  (187)
   src/agentic/ab_2x_qual_15d.py                        — EXP-2026-09-24-2x-qual-at-15d — do the 2x model's qualitative indicators help at 15D/+5%?
   src/agentic/ab_deepcheap_leader_bands.py             — Deep-cheap leader bands (registered 2026-09-08): leader sleeve restricted to
   src/agentic/ab_engines_count.py                      — EXP-2026-09-24-engines-count-sizing — does multi-engine consensus earn more under C2?
@@ -2550,12 +2552,14 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/build_data_inventory_report.py           — Assemble reports/data_inventory_20260830.md — deep-history acquisition QC.
   src/agentic/build_derived_ratios.py                  — Compute derived ratios from existing fundamentals — 50+ new factors
   src/agentic/build_doubler_audit_report.py            — Assemble reports/doubler_audit_20260828.md from the audit artifacts.
+  src/agentic/build_event_ledger.py                    — Event ledger from NSE's own filings, 2016+ (2026-10-02; news plan step 1). Official, time-stamped, covers smal
   src/agentic/build_event_polarity.py                  — Build TWO new sets of polarity-aware event features:
   src/agentic/build_gold_feed.py                       — Domestic gold price (INR) from NSE-listed gold ETFs — data/derived/gold_inr_etf.parquet.
   src/agentic/build_handoff.py                         — Regenerate HANDOFF.md with current state snapshot.
   src/agentic/build_html_viewer.py                     — Build a single self-contained HTML file that renders all the mermaid
   src/agentic/build_industry_scores.py                 — Point-in-time industry scores for EXP-2026-09-29-industry-fundamentals (registered in logs/experiments.jsonl f
   src/agentic/build_mcap_pit.py                        — MARKET CAP PANEL — data/derived/mcap_pit.parquet (+ .manifest.json).
+  src/agentic/build_order_terms.py                     — Order terms beyond the amount, one row per order filing (2026-10-08, for EXP-2026-10-08-big-order-annual; Abhi
   src/agentic/build_policy_scores.py                   — Phase 2 pillars for EXP-2026-09-29-industry-policy (registered in logs/experiments.jsonl before any outcome).
   src/agentic/build_price_only_ca_factors.py           — PRICE-ONLY corporate-action factors — demergers, schemes, rights, special dividends, capital
   src/agentic/build_security_master.py                 — SECURITY MASTER — one row per NSE symbol ever seen: ISIN, instrument type (company / fund unit /
@@ -2563,21 +2567,32 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/build_themes.py                          — Theme engine data (2026-09-30): which themes are rising or fading, and which companies are tied to each.
   src/agentic/build_workflow_diagram.py                — Auto-generate a Mermaid workflow diagram from daily_pipeline.sh.
   src/agentic/catalyst_tagger.py                       — NLP-tag NSE corporate announcements into catalyst categories.
+  src/agentic/check_announcements_completeness.py      — Completeness of our NSE announcements archive vs NSE's own feed (2026-10-02; event-ledger data gate).
   src/agentic/compute_feature_importance.py            — Compute feature-importance for the v3 long ensemble + tag each feature
   src/agentic/daily_orders_industry.py                 — DAILY ORDERS + INDUSTRY HEAT digest (2026-09-28; user: "fetch orders data and industry evaluations daily — new
   src/agentic/engine_replay.py                         — Walk-forward replay of the five engines' top-30 sets (EXP-2026-09-24-engines-count-sizing).
   src/agentic/eval_checks.py                           — Coded checks for evals/registry.yaml (2026-09-29). One function per `check:` name.
   src/agentic/eval_panel_coverage.py                   — DAILY EVAL — is every stock that traded actually in the panel, at today's date?
   src/agentic/event_materiality_study.py               — EVENT x MATERIALITY x MARKET'S VOTE — what happens after each kind of filing (EXP-2026-09-24-event-materiality
+  src/agentic/explore_big_order_month.py               — Does the month you buy a big-order stock matter? (2026-10-04, EXPLORATION for Abhinav's question; no rule chan
+  src/agentic/explore_big_order_winners.py             — Big order winners (2026-10-04, EXPLORATION for Abhinav's question; no rule changed).
   src/agentic/explore_big_winners.py                   — Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): what did Sri Lakshmi v2's 2x winners look like on th
+  src/agentic/explore_gdelt_coverage.py                — GDELT coverage check (2026-10-02): could GDELT give us media history (2017+) for the stocks V3 trades?
+  src/agentic/explore_heat_seasonality.py              — Does the hot-industry list shift in particular months? (2026-10-04, EXPLORATION for Abhinav's question; no rul
   src/agentic/explore_hitter_traits.py                 — Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): which traits separate +50% hitters from the rest INS
   src/agentic/explore_hitter_waves.py                  — Exploration (2026-09-30): which industries produced unusually many +50% winners, year by year, 2016 to mid-202
   src/agentic/explore_industry_reasons.py              — Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): WHY do some sectors give far more +50% hitters?
+  src/agentic/explore_leverage_holds.py                — Leverage flags vs outcome at 6 / 9 / 12 / 18 / 24 months (2026-10-04, EXPLORATION for Abhinav; no rule changed
+  src/agentic/explore_leverage_traits.py               — What separates +50% hitters from the rest on leverage, pledges and P&L? (2026-10-04, EXPLORATION for Abhinav: 
+  src/agentic/explore_order_params.py                  — What does an order filing say beyond its amount? (2026-10-08, EXPLORATION for Abhinav: "large order distribute
   src/agentic/explore_pnl_winners.py                   — Do P&L numbers separate winners? (2026-09-30, EXPLORATION, 2019-2022 only; 2023+ stays sealed for a registered
   src/agentic/explore_pockets.py                       — Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): are there pockets (industry heat level, industry siz
+  src/agentic/explore_rank_bands.py                    — Which slice of the model ranking does best, bought in April or October and held 3-24 months? (2026-10-08, EXPL
   src/agentic/explore_rank_repeat.py                   — Exploration (discovery era 2019-2022 ONLY; 2023+ kept sealed for a registered test):
   src/agentic/explore_regime_universe.py               — Does V3 do worse when mid/small caps are weak, and would larger caps have held up? (2026-10-02, EXPLORATION, 2
   src/agentic/explore_stop_levels.py                   — Exploration (discovery era 2019-2022 ONLY; 2023+ sealed): is there a loss level where a Sri Lakshmi v2 pick is
+  src/agentic/explore_strategies_2025.py               — Which explored strategy did best in calendar 2025 and 2026 so far? (2026-10-05, EXPLORATION for Abhinav; no ru
+  src/agentic/explore_v3_holds.py                      — V3 at different hold lengths, with 2023+ shown separately (2026-10-04, EXPLORATION for Abhinav: "v3 post 2023 
   src/agentic/factor_evaluator.py                      — Factor evaluator — measure each new feature's lift on 7d-forward return.
   src/agentic/factor_evaluator_macro.py                — Macro-aware factor evaluator — for date-level (NOT cross-sectional) features.
   src/agentic/factor_registry.py                       — Factor / data hypothesis registry — the "what to try next" catalog.
@@ -2606,6 +2621,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/monitor_for_conviction.py                — Daily conviction monitor — fires alerts at the 0.95 calibrated band.
   src/agentic/notify.py                                — Phone messages for SGM / Sri Lakshmi (2026-09-29) — filled in from data files, never written by a language mod
   src/agentic/nse_calendar.py                          — Trading-day arithmetic from NSE's own holiday list (data/derived/nse_holidays.parquet, fetch_nse_holidays.py).
+  src/agentic/nse_symbols.py                           — Company identity across NSE ticker renames (2026-10-04; lesson INC-2026-09-30-renamed-symbol-cliffs: key corpo
   src/agentic/ocr_order_filings.py                     — OCR pass for scanned order/L1 filings (companion to fetch_order_fulltext.py).
   src/agentic/paper_sleeve.py                          — PAPER SLEEVE — 100td-hold momentum/ignition sleeve, paper-tracked weekly.
   src/agentic/paper_trading_recorder.py                — Paper-trading recorder: every run, score yesterday's brief picks against
@@ -2652,6 +2668,8 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/study_order_book_events.py               — Order-book announcement event study (DESCRIPTIVE, not pre-registered; 2026-09-28, follow-up to EXP-2026-09-28-
   src/agentic/sweep_horizon_2x_year.py                 — EXP-2026-09-24-horizon-sweep-2x-year — which (horizon, target) bucket doubles capital
   src/agentic/tape_forensics.py                        — Tape forensics — the deep per-name scrutiny, applied to EVERY basket name, every run.
+  src/agentic/test_big_order_annual.py                 — EXP-2026-10-08-big-order-annual (registered in logs/experiments.jsonl before any outcome was computed).
+  src/agentic/test_big_order_hold.py                   — EXP-2026-10-04-big-order-hold-18-24m (registered in logs/experiments.jsonl before any outcome was computed).
   src/agentic/test_bulk_buyers.py                      — EXP-2026-09-30-bulk-buyers (registered in logs/experiments.jsonl before the bulk-deal history was even fetched
   src/agentic/test_hot_order_combo.py                  — HOT INDUSTRY x MATERIAL ORDER x ABOVE 200DMA (EXP-2026-09-27-hot-x-material-order).
   src/agentic/test_industry_fundamentals.py            — EXP-2026-09-29-industry-fundamentals (registered in logs/experiments.jsonl before any outcome was computed).
@@ -2661,13 +2679,20 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/test_shp_detail.py                       — EXP-2026-09-30-shp-detail (registered in logs/experiments.jsonl before any outcome was computed).
   src/agentic/test_theme_engine.py                     — EXP-2026-09-30-theme-engine (registered, then amended, in logs/experiments.jsonl before any outcome was comput
   src/agentic/test_trait_rules.py                      — EXP-2026-09-30-trait-rules (registered in logs/experiments.jsonl before any outcome was computed).
+  src/agentic/test_v3_badnews_veto.py                  — EXP-2026-10-07-v3-badnews-veto (registered in logs/experiments.jsonl before any outcome was computed).
+  src/agentic/test_v3_leverage.py                      — EXP-2026-10-04-v3-leverage (registered in logs/experiments.jsonl before any outcome was computed).
   src/agentic/test_v3_pnl.py                           — EXP-2026-09-30-v3-pnl (registered in logs/experiments.jsonl before any outcome was computed).
+  src/agentic/test_v3_promoter_signals.py              — EXP-2026-10-04-v3-promoter-signals (registered in logs/experiments.jsonl before any outcome was computed).
   src/agentic/track_multibagger_basket.py              — Live tracker for the multibagger basket — proves whether the 90%-conviction
   src/agentic/train_150_confidence.py                  — 1.5x CONFIDENCE MODEL — P(+50% within 100td from ENTRY) for confirmed ignitions.
+  src/agentic/update_pnl_incremental.py                — Keep quarterly P&L current, every day (2026-10-04; Abhinav: "wire karo before Oct 15 and dhyaan rakhna aage se
+  src/agentic/v3_rule.py                               — Sri Lakshmi V3 rule, in one place (2026-10-02 cleanup; before this it was copy-pasted into 9 scripts).
+  src/agentic/watchdog.py                              — SGM watchdog (2026-10-06, INC-2026-10-06-daily-run-hung-silent): an independent check every 30 minutes (launch
   src/agentic/write_live_prediction.py                 — Write today's live_predictions/YYYY-MM-DD.json from current pipeline outputs.
   src/agentic/daily_data_layer.sh                      — DAILY DATA LAYER — every data feed, every trading day. Cron-scheduled (launchd is
   src/agentic/final_run_20260818.sh                    — FINAL RUN 2026-08-18 — on today's close, corrected CA adjustments, C2 contract.
   src/agentic/friday_run_20260828.sh                   — FRIDAY-ENTRY RUN (entry 2026-08-28 pre-open AMO) — checklist-by-checklist, data through Thu Aug-27 close.
+  src/agentic/handover_backup.sh                       — Laptop handover backup (2026-10-08, user: "move all essential files related to this compressed format mein to 
   src/agentic/install_schedule.sh                      — Install / reinstall the launchd schedule for the daily pipeline.
   src/agentic/monday_run_20260824.sh                   — MONDAY-ENTRY RUN (entry 2026-08-24 pre-open) — checklist-by-checklist, data through Fri Aug-21.
   src/agentic/rerun_post_repair_20260827.sh            — POST-REPAIR RERUN (2026-08-27 ~23:55): classifier + engines + gate + basket + forensics
@@ -2681,6 +2706,7 @@ weekly pipeline run by src/agentic/build_recreation_kit.py — this list IS curr
   src/agentic/run_v3_pnl_chain.sh                      — EXP-2026-09-30-v3-pnl-full (+ RERUN-enriched of EXP-2026-09-30-v3-pnl), chained after the old-format P&L fetch
   src/agentic/sgm_daily.sh                             — SGM DAILY — post-close, every trading day (cron; launchd is TCC-blocked on this Mac).
   src/agentic/sgm_schedule.sh                          — Install the SGM cron schedule (idempotent — replaces only lines tagged # SGM).
+  src/agentic/split_for_drive.sh                       — Split every file > 50 MB in a Drive folder into 40 MB pieces (2026-10-08: this network cuts Drive for desktop 
   src/agentic/sync_drive_mirror.sh                     — Mirror the live working set to Google Drive: My Drive/SGM backups/day_to_day (2026-09-28, user request).
 
 ═══ END INVENTORY ═══
