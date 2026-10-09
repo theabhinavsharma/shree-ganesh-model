@@ -1,0 +1,63 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-10-v3-new-pledge-veto",
+ "producer": "src/agentic/test_v3_new_pledge_veto.py",
+ "definitions": "EXP-2026-10-10-v3-new-pledge-veto (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: when a promoter newly pledges shares, skip that V3 pick. Does V3 do better without those picks?\nArms (each drops names from V3's list, no refill):\n  V3      live rule (v3_rule.picks)\n  V3_NP   minus picks whose promoter created any new pledge (NSE SAST Reg 31 'Creation', encumbrance Pledge; today's ticker\n          via nse_symbols) broadcast in the 90 calendar days up to the list date's 15:30 close\n  V3_NP1  same, only when those new pledges sum to >= 1% of share capital\nWindow: weekly entries from 2019-01-01; eras 2019-22 and 2023+; phases 0-4. Engine: sim_screen_rank_exit.run_exit(\"E0\"),\n126-session hold. PASS per arm vs V3 = sp.beats at phase 0 and in >= 4 of 5. Before any outcome: trust/data_ready.gate().\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "dropped_vs_kept": {
+  "V3_NP": {
+   "dropped": {
+    "n": 116,
+    "avg": 0.268,
+    "median": 0.138,
+    "hit50": 0.422,
+    "lost30": 0.095
+   },
+   "kept": {
+    "n": 2329,
+    "avg": 0.265,
+    "median": 0.116,
+    "hit50": 0.409,
+    "lost30": 0.104
+   },
+   "dropped_companies": 29,
+   "top": {
+    "WEBELSOLAR": 19,
+    "AXISCADES": 14,
+    "SERVOTECH": 11,
+    "GRANULES": 7,
+    "MANGCHEFER": 7,
+    "PARADEEP": 7
+   }
+  },
+  "V3_NP1": {
+   "dropped": {
+    "n": 95,
+    "avg": 0.28,
+    "median": 0.142,
+    "hit50": 0.411,
+    "lost30": 0.116
+   },
+   "kept": {
+    "n": 2350,
+    "avg": 0.265,
+    "median": 0.116,
+    "hit50": 0.41,
+    "lost30": 0.103
+   },
+   "dropped_companies": 22,
+   "top": {
+    "AXISCADES": 14,
+    "WEBELSOLAR": 13,
+    "SERVOTECH": 11,
+    "GRANULES": 7,
+    "MANGCHEFER": 7,
+    "PARADEEP": 7
+   }
+  }
+ },
+ "updated": "2026-10-10T02:31:39"
+}

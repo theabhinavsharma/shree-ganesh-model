@@ -75,14 +75,13 @@
    "title": "Promoter pledges (released vs newly pledged)",
    "why": "a released pledge removes a forced-selling risk; a new pledge is a red flag",
    "fetch": [
-    "src/agentic/fetch_pledges.py",
-    "--max-minutes",
-    "45"
+    "src/agentic/fetch_pledge_events.py"
    ],
    "test": [
-    "src/agentic/test_pledges.py"
+    "src/agentic/test_v3_new_pledge_veto.py"
    ],
-   "result_id": null
+   "result_id": "EXP-2026-10-10-v3-new-pledge-veto-RESULT",
+   "note": "released-pledge arm tested in test_v3_promoter_signals.py (EXP-2026-10-04-v3-promoter-signals)"
   },
   {
    "id": "surveillance",
