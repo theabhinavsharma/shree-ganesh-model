@@ -1,0 +1,76 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-10-v3-regime-switch",
+ "producer": "src/agentic/test_v3_regime_switch.py",
+ "definitions": "EXP-2026-10-10-v3-regime-switch (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3 falls 1.6-1.8x the market in small-cap sell-offs. Does holding cash while the broad market is in a downtrend\ncut the worst falls without giving up the return?\nSignal: risk-off on a session = equal-weight index of every priced stock (average daily return, each clipped to [-50%, +100%])\ncloses below its own 200-session average (known at that close).\nArms:\n  V3        live rule, time exit (E0)\n  V3_RSKIP  no new weekly buy when the list date is risk-off (that slot's money stays in cash until its next scheduled batch)\n  V3_REXIT  V3_RSKIP plus: a held position is sold at the next open after the first risk-off session in its holding window\n            (exit rule E3 fed the market risk-off flag instead of the stock's own 200-day flag); cash waits for the slot's next batch\nWindow: weekly entries from 2019-01-01; eras 2019-22 / 2023+; phases 0-4; 126-session hold, 26-slot ladder.\nPASS per arm = sp.beats vs V3 at phase 0 and in >= 4 of 5. Before any outcome: trust/data_ready.gate().\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "sold_early_pct": "percent of positions"
+ },
+ "calendar_years": {
+  "V3": {
+   "2019": -1.0,
+   "2020": 75.4,
+   "2021": 143.8,
+   "2022": -4.0,
+   "2023": 80.1,
+   "2024": 82.0,
+   "2025": -12.3,
+   "2026": 29.1
+  },
+  "V3_RSKIP": {
+   "2019": 0.0,
+   "2020": 31.0,
+   "2021": 144.0,
+   "2022": -8.3,
+   "2023": 73.2,
+   "2024": 84.2,
+   "2025": -19.1,
+   "2026": -4.7
+  },
+  "V3_REXIT": {
+   "2019": 0.0,
+   "2020": 34.5,
+   "2021": 142.9,
+   "2022": -16.1,
+   "2023": 44.1,
+   "2024": 84.1,
+   "2025": -8.9,
+   "2026": 1.7
+  }
+ },
+ "stress_windows": {
+  "Jan-Feb 2025": {
+   "V3": -36.8,
+   "V3_RSKIP": -33.1,
+   "V3_REXIT": -7.5
+  },
+  "Jan 2026": {
+   "V3": -13.6,
+   "V3_RSKIP": -10.3,
+   "V3_REXIT": 0.0
+  },
+  "Mar 2026": {
+   "V3": -11.9,
+   "V3_RSKIP": -2.5,
+   "V3_REXIT": 0.0
+  },
+  "Apr 2026": {
+   "V3": 27.8,
+   "V3_RSKIP": 4.2,
+   "V3_REXIT": 0.0
+  }
+ },
+ "risk_off_share_by_year": {
+  "2019": 1.0,
+  "2020": 0.307,
+  "2021": 0.0,
+  "2022": 0.181,
+  "2023": 0.11,
+  "2024": 0.0,
+  "2025": 0.488,
+  "2026": 0.468
+ },
+ "updated": "2026-10-10T19:38:41"
+}
