@@ -1,0 +1,14 @@
+{
+ "dataset": "scoreboard.csv",
+ "producer": "src/agentic/explore_yearly_scoreboard.py",
+ "status": "EXPLORATION (no rule changed)",
+ "definitions": "Year-by-year scoreboard of every registered V3 test arm (2026-10-11, EXPLORATION for Abhinav: \"har output registered test ka\n2023, 2024, 2025 and 2026 till now mein split karke batana \u2014 i want recent years to outperform as well, beyond just the average\").\n\nEvery arm is rebuilt exactly as its registered test defines it and run on the same engine (sim_screen_rank_exit.run_exit, 126-\nsession hold, 26-slot weekly ladder), with every ladder starting on 2019-01-01 so the calendar years compare like for like\n(the bad-news tests were registered on a 2023+ window; here they start in 2019 too). Calendar-year return = NAV at the year's\nlast session / NAV at the previous year's last session - 1; 2026 = to the last data day. Averaged over the 5 weekly entry\nschedules. Before costs beyond the engine's 0.5% round trip. Verdicts are the registered results (logs/experiments.jsonl).\n",
+ "columns": {
+  "arm": "rule variant",
+  "test": "registered test and its verdict",
+  "2023..2026": "calendar-year return, percent, average of 5 entry schedules (2026 to date)",
+  "cagr": "percent a year 2019 -> last day, average of 5 schedules"
+ },
+ "data_to": "2026-10-09",
+ "updated": "2026-10-11T05:00:58"
+}

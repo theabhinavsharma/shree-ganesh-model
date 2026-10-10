@@ -1,0 +1,17 @@
+arm,test,2023,2024,2025,2026,cagr
+V3 (live),—,80.87,76.1,-11.56,28.43,41.41
+G1 (V3 before its two filters),EXP-2026-09-30-v3-vs-g1: V3 passed vs G1,77.82,71.95,-13.6,25.84,38.87
+V2 (V3 without the fading-theme filter),theme-engine: filter lost its pass on 2026-10-09,78.77,72.52,-10.78,30.53,40.51
+V3 + P&L in the model (2020+),EXP-2026-09-30-v3-pnl: no pass,77.81,76.84,-15.59,16.93,40.67
+V3 minus weak interest cover,EXP-2026-10-04-v3-leverage: no pass,82.25,59.95,-15.05,31.91,36.98
+V3 minus credit events,EXP-2026-10-04-v3-leverage: no pass,89.5,75.37,-11.59,28.09,41.68
+V3 promoter buyers first,EXP-2026-10-04-v3-promoter-signals: no pass,77.56,84.76,-10.79,30.04,42.36
+V3 pledge releasers first,EXP-2026-10-04-v3-promoter-signals: no pass,82.12,72.25,-11.43,27.11,39.73
+V3 minus bad news (cash),EXP-2026-10-07-v3-badnews-veto: no pass,88.84,72.52,-2.77,18.9,41.56
+V3 bad news swapped (refill),EXP-2026-10-11-v3-badnews-refill: no pass,88.56,69.32,-3.39,18.1,40.14
+V3 minus new promoter pledges,EXP-2026-10-10-v3-new-pledge-veto: no pass,80.36,72.63,-12.19,28.89,41.32
+V3 on the boom-free model,EXP-2026-10-10-model-minus-boom: no pass,84.86,62.27,-5.04,27.07,41.46
+V3 regime: skip buys,EXP-2026-10-10-v3-regime-switch: no pass,72.01,77.31,-19.28,-3.69,28.23
+V3 regime: skip + sell,EXP-2026-10-10-v3-regime-switch: no pass,41.72,77.19,-10.37,1.47,26.17
+V3 + new listings after 3m,EXP-2026-10-11-v3-new-listings: PASS,85.88,78.79,-12.59,28.87,42.16
+"V3 + new listings, trend since listing",EXP-2026-10-11-v3-new-listings: no pass,83.97,78.11,-12.39,28.92,41.93
