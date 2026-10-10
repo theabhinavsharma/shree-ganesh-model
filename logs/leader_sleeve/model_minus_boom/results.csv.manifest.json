@@ -1,0 +1,123 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-10-model-minus-boom",
+ "producer": "src/agentic/test_v3_noboom_model.py",
+ "definitions": "EXP-2026-10-10-model-minus-boom (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: the same V3 rule on two sets of model scores: the current model (trained on every year since 2016) and a model\nthat never learns from the COVID boom (training rows whose outcome window touches Mar 2020 - Dec 2021 removed). Which one\npicks better?\n  V3_OLD  v3_rule.picks on logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet (the live scores)\n  V3_NB   v3_rule.picks on logs/leader_sleeve/anatomy_1p5x_noboom/bakeoff_preds.parquet\nWindow: weekly entries from 2019-01-01; eras 2019-22 and 2023+; phases 0-4. Engine sim_screen_rank_exit.run_exit(\"E0\").\nPASS = sp.beats(V3_NB, V3_OLD) at phase 0 and in >= 4 of 5. Wiring: V3_OLD == the live rule; 2019-2020 scores identical.\nDiagnostics: per test year model skill from both bakeoff.json files; how many names the two lists share each year.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "skill": {
+  "old": {
+   "2019": {
+    "auc": 0.645509,
+    "top1": 24.777603,
+    "base": 9.17097,
+    "lift": 2.701743
+   },
+   "2020": {
+    "auc": 0.642692,
+    "top1": 53.851648,
+    "base": 38.714122,
+    "lift": 1.391008
+   },
+   "2021": {
+    "auc": 0.71444,
+    "top1": 63.261662,
+    "base": 34.133128,
+    "lift": 1.85338
+   },
+   "2022": {
+    "auc": 0.665179,
+    "top1": 31.036765,
+    "base": 13.889342,
+    "lift": 2.234574
+   },
+   "2023": {
+    "auc": 0.660941,
+    "top1": 52.654395,
+    "base": 28.736875,
+    "lift": 1.832294
+   },
+   "2024": {
+    "auc": 0.671191,
+    "top1": 40.783626,
+    "base": 17.338659,
+    "lift": 2.352179
+   },
+   "2025": {
+    "auc": 0.646566,
+    "top1": 21.713212,
+    "base": 9.572069,
+    "lift": 2.268393
+   },
+   "2026": {
+    "auc": 0.603265,
+    "top1": 19.906585,
+    "base": 18.160279,
+    "lift": 1.096161
+   }
+  },
+  "no-boom": {
+   "2019": {
+    "auc": 0.645509,
+    "top1": 24.777603,
+    "base": 9.17097,
+    "lift": 2.701743
+   },
+   "2020": {
+    "auc": 0.642692,
+    "top1": 53.851648,
+    "base": 38.714122,
+    "lift": 1.391008
+   },
+   "2021": {
+    "auc": 0.709451,
+    "top1": 71.646016,
+    "base": 34.133128,
+    "lift": 2.099017
+   },
+   "2022": {
+    "auc": 0.669188,
+    "top1": 33.286765,
+    "base": 13.889342,
+    "lift": 2.396569
+   },
+   "2023": {
+    "auc": 0.653644,
+    "top1": 52.314259,
+    "base": 28.736875,
+    "lift": 1.820457
+   },
+   "2024": {
+    "auc": 0.657962,
+    "top1": 43.479532,
+    "base": 17.338659,
+    "lift": 2.507664
+   },
+   "2025": {
+    "auc": 0.643628,
+    "top1": 23.764769,
+    "base": 9.572069,
+    "lift": 2.48272
+   },
+   "2026": {
+    "auc": 0.608214,
+    "top1": 22.897015,
+    "base": 18.160279,
+    "lift": 1.260829
+   }
+  }
+ },
+ "list_overlap_by_year": {
+  "2019": 0.816,
+  "2020": 1.0,
+  "2021": 0.616,
+  "2022": 0.662,
+  "2023": 0.569,
+  "2024": 0.567,
+  "2025": 0.842,
+  "2026": 0.772
+ },
+ "updated": "2026-10-10T06:36:08"
+}

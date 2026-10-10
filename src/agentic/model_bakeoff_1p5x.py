@@ -510,6 +510,8 @@ def main(argv=None):
     ap.add_argument("--no-save", action="store_true", help="print only; write nothing")
     ap.add_argument("--add-features", default="", help="comma list of extra rows columns added to the manifest's model "
                     "features (registered A/B tests only, e.g. EXP-2026-09-30-v3-pnl; default: none = production model)")
+    ap.add_argument("--exclude-train", default=None, help="START:END (YYYY-MM-DD): drop training rows dated on/before END whose 95-session "
+                    "outcome window reaches START or later (2026-10-10: COVID-boom-excluded model, EXP-2026-10-10-model-minus-boom)")
     ap.add_argument("--train-from", default=None, help="YYYY-MM-DD: train only on rows dated on/after this (registered A/B "
                     "tests only; default: all rows = production model)")
     args = ap.parse_args(argv)
@@ -690,6 +692,9 @@ def main(argv=None):
         tr = L[L["win_end"] < i0]                              # measured label window ends before the first test session
         if args.train_from:
             tr = tr[tr["trade_date"] >= pd.Timestamp(args.train_from)]
+        if args.exclude_train:                                 # drop rows whose outcome window touches the excluded period
+            xa, xb = (pd.Timestamp(x) for x in args.exclude_train.split(":"))
+            tr = tr[~((tr["trade_date"] <= xb) & (tr["win_end"] >= int(cal.searchsorted(xa))))]
         te = S[S["year"] == Y]                                 # ALL rows of Y: the point-in-time candidate set
         if te.empty or tr["y95"].nunique() < 2:
             continue
