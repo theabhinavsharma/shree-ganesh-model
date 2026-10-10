@@ -1,0 +1,66 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-11-v3-badnews-refill",
+ "producer": "src/agentic/test_v3_badnews_refill.py",
+ "definitions": "EXP-2026-10-11-v3-badnews-refill (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: replace a V3 pick whose company filed bad news in the 90 days before the list date with the next-ranked G1\nname (instead of leaving cash, the flaw of EXP-2026-10-07-v3-badnews-veto). Arms (full G1 pool by model rank -> remove flagged\nnames -> top 9 -> V3's financial / fading-only filters, no refill for those, exactly as V3):\n  V3         live rule (v3_rule.picks)\n  V3_BADF    refill after removing bad news: default_insolvency, mgmt_exit, independent_director_exit, auditor_exit, suspension,\n             order_cancel, delayed_results, strike_disruption (event_ledger, filed in the 90 calendar days up to the list\n             date's 15:30 close)  \u2014 primary\n  V3_BADREGF V3_BADF plus regulatory_action \u2014 diagnostic only, no verdict (its category settles only in late 2024)\nWindow: weekly entries from 2023-01-01; eras 2023-24 and 2025+ (CAGR of the NAV inside each era); phases 0-4.\nEngine: sim_screen_rank_exit.run_exit(..., \"E0\"), 126-session hold. PASS (verdict arms vs V3) = CAGR higher in both eras,\nfull maxDD not worse by more than 2 pts, at phase 0 and in >= 4 of 5. One era of regime -> a pass is provisional.\nBefore any outcome: trust/data_ready.gate(). SGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "columns": {
+  "cagr": "percent a year, full window",
+  "cagr_e1": "percent a year inside 2023-01-01..2024-12-31",
+  "cagr_e2": "percent a year from 2025-01-01",
+  "maxdd": "percent, full window",
+  "final": "NAV multiple",
+  "avg_names": "average names held",
+  "phases_beaten": "phases where the arm beats V3",
+  "PASS": "verdict arm only; V3_BADREGF is diagnostic"
+ },
+ "event_rates_per_1000_listed": {
+  "V3_BADF": {
+   "2023": 1199.4,
+   "2024": 1252.7,
+   "2025": 967.6,
+   "2026": 812.6
+  },
+  "V3_BADREGF": {
+   "2023": 1256.3,
+   "2024": 1640.8,
+   "2025": 2032.8,
+   "2026": 1571.8
+  }
+ },
+ "dropped_vs_kept": {
+  "V3_BADF": {
+   "dropped": {
+    "n": 162,
+    "avg": 0.162,
+    "median": -0.002,
+    "hit50": 0.414,
+    "lost30": 0.278
+   },
+   "kept": {
+    "n": 980,
+    "avg": 0.282,
+    "median": 0.141,
+    "hit50": 0.449,
+    "lost30": 0.093
+   }
+  },
+  "V3_BADREGF": {
+   "dropped": {
+    "n": 256,
+    "avg": 0.137,
+    "median": 0.003,
+    "hit50": 0.406,
+    "lost30": 0.215
+   },
+   "kept": {
+    "n": 886,
+    "avg": 0.302,
+    "median": 0.153,
+    "hit50": 0.455,
+    "lost30": 0.091
+   }
+  }
+ },
+ "phase0_only_for_metrics": true,
+ "updated": "2026-10-11T04:40:33"
+}
