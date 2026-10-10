@@ -1,0 +1,19 @@
+{
+ "dataset": "bands_by_horizon.csv",
+ "producer": "src/agentic/explore_order_annual_cutoffs.py",
+ "status": "EXPLORATION (no rule changed)",
+ "definitions": "Per-year order size vs later returns, every cutoff and horizon (2026-10-10, EXPLORATION for Abhinav: \"(order / tenure) / revenue\nvs stock price after 3, 6, 9, 12, 18 months ... 50% hata do, kuch aur number pe bhi uptick aati hai kya?\"; no rule changed).\n\nOrders: the cleaned set of EXP-2026-10-08-big-order-annual (order_amounts category 'order', high/medium confidence, no\nclarification filings, headline and text agree, unit not inferred; order_terms: awarded or unclear, not a non-order, repeat,\noperating contract or roundup; execution period and own share stated). Per-year size = amount x own share (/1.18 if GST is\nincluded) / max(execution years, 1) / trailing revenue known before the filing. Same filters as that test: no bad filing in\nthe prior 90 days, profitable, price >= Rs 20 and >= Rs 1 cr traded a day on the session before entry, one trade per company\nper 30 days. Entry at the open of the first session after the filing.\nOutcomes at 63 / 126 / 189 / 252 / 378 sessions (3 / 6 / 9 / 12 / 18 months): return to that close minus 0.5% cost, touched +50%\n(max high >= 1.5x entry within the horizon), and the equal-weight average of every priced stock over the same dates (market).\nOnly trades whose horizon has ended count. Reported for entries 2023+ (where periods are mostly stated) and for all years 2016+.\nThis is an exploration: execution periods are stated for 54-72% of clean big orders in 2023+ (the registered test's data gate\nwas NOT READY), so the sized orders are a subset.\n",
+ "columns": {
+  "slice": "entry period | horizon",
+  "band": "per-year order size as a share of trailing revenue; 'no period stated' = clean orders without an execution period",
+  "trades": "trades with that horizon finished",
+  "stocks": "distinct companies",
+  "avg": "mean return after 0.5% cost, percent",
+  "median": "median return, percent",
+  "hit50": "percent touching +50% within the horizon",
+  "market": "equal-weight average of every priced stock over the same dates, percent",
+  "beat_mkt": "mean (return - market), percentage points",
+  "beat_mkt_share": "percent of trades beating the market"
+ },
+ "updated": "2026-10-10T19:40:21"
+}
