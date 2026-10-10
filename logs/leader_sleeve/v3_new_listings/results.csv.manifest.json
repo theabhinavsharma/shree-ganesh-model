@@ -1,0 +1,45 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-11-v3-new-listings",
+ "producer": "src/agentic/test_v3_new_listings.py",
+ "definitions": "EXP-2026-10-11-v3-new-listings (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3 cannot see a new listing for about a year (its trend test needs a 1-year return and a 200-day average).\nLet liquid new listings in after 3 months of trading \u2014 do the lists get better?\nNew listing: first panel session after 2015-01-10, not the new name of a renamed company (nse_symbols chains), aged 63-251\nsessions on the list date (from 252 sessions on, V3's normal test applies).\n  V3         live rule (v3_rule.picks)\n  V3_NL      a new listing passes the trend test measured since listing: close >= 1.5x its lowest low since listing (lo252),\n             close >= 1.30x its first close (replaces 1-year return >= 30%), close > its 50-day average (replaces the 200-day\n             tests); everything else as V3 (hot-industry eligibility, liquidity, model rank, top 9, financial / fading filters)\n  V3_NLOPEN  new listings skip the trend test (liquid + hot industry + model rank only)\nWindow: weekly entries from 2019-01-01; eras 2019-22 / 2023+; phases 0-4; run_exit(\"E0\"), 126-session hold.\nPASS per arm = sp.beats vs V3 at phase 0 and in >= 4 of 5. Before any outcome: trust/data_ready.gate().\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "new_listing_vs_other": {
+  "V3_NL": {
+   "new_listing_picks": {
+    "n": 190,
+    "avg": 0.155,
+    "median": 0.134,
+    "hit50": 0.3,
+    "lost30": 0.074
+   },
+   "other_picks": {
+    "n": 2276,
+    "avg": 0.27,
+    "median": 0.123,
+    "hit50": 0.417,
+    "lost30": 0.101
+   }
+  },
+  "V3_NLOPEN": {
+   "new_listing_picks": {
+    "n": 301,
+    "avg": 0.132,
+    "median": 0.087,
+    "hit50": 0.282,
+    "lost30": 0.086
+   },
+   "other_picks": {
+    "n": 2178,
+    "avg": 0.276,
+    "median": 0.127,
+    "hit50": 0.422,
+    "lost30": 0.099
+   }
+  }
+ },
+ "updated": "2026-10-11T04:54:30"
+}
