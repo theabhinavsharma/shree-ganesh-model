@@ -31,6 +31,13 @@ OUT = DIR / "outcomes.jsonl"
 HOLD_TD, COST, TOP_K, PAPER_MIN_COHORTS = 126, 0.5, 4, 13
 
 
+def _cost(n: dict) -> float:
+    """Round-trip cost in %: liquidity-scaled when the screen records the stock's traded value (V3.1 batches, 2026-10-09 on;
+    research_panel.cost_rt tiers 0.5 / 1.0 / 2.0 at Rs 5 cr+ / Rs 1-5 cr / below), else the flat COST of older batches."""
+    a = n.get("adv_cr")
+    return COST if a is None else (0.5 if a >= 5 else 1.0 if a >= 1 else 2.0)
+
+
 def _r(v, n=2):
     return None if v is None or pd.isna(v) else round(float(v), n)
 
@@ -48,7 +55,7 @@ def score_screen(sc: dict, px: pd.DataFrame) -> dict:
         gross = (last / e - 1) * 100
         rows.append(dict(base, entry_date=str(g["trade_date"].iloc[0].date()), entry=_r(e),
                          last_date=str(g["trade_date"].iloc[-1].date()), last=_r(last),
-                         ret_gross=_r(gross), ret_net=_r(gross - COST),
+                         ret_gross=_r(gross), ret_net=_r(gross - _cost(n)),
                          peak=_r((g["high"].max() / e - 1) * 100), trough=_r((g["low"].min() / e - 1) * 100),
                          days=len(g), status="CLOSED" if len(g) >= HOLD_TD else "OPEN"))
     live = [r for r in rows if r["status"] != "PENDING"]

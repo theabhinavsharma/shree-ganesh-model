@@ -214,20 +214,43 @@ def preregistered(ctx: dict) -> dict:
 SCREEN_DIRS = {"sleeve": ROOT / "logs/leader_sleeve", "model": ROOT / "logs/model_screen", "sri_lakshmi": ROOT / "logs/sri_lakshmi"}
 
 
+REPLACEMENTS = EVAL_DIR / "screen_replacements.jsonl"   # append-only: a batch swapped by the user's decision before money moved
+
+
+def _approved_replacement(key: str, old: str, new: str) -> bool:
+    """A changed screen passes only if REPLACEMENTS records exactly this swap (old hash -> new hash), the old file is kept
+    with its old hash, and the swap was recorded before the batch's entry session opened (09:15 IST, Mac clock is IST)."""
+    if not REPLACEMENTS.exists():
+        return False
+    import nse_calendar
+    for line in REPLACEMENTS.read_text().splitlines():
+        r = json.loads(line)
+        if r.get("key") != key or r.get("old_sha256") != old or r.get("new_sha256") != new:
+            continue
+        kept = ROOT / r.get("old_kept_at", "")
+        if not kept.is_file() or hashlib.sha256(kept.read_bytes()).hexdigest() != old:
+            continue
+        entry = nse_calendar.next_session(pd.Timestamp(r["data_through"]))
+        if pd.Timestamp(r["ts"]) < pd.Timestamp(f"{pd.Timestamp(entry).date()} 09:15"):
+            return True
+    return False
+
+
 def screens_immutable(ctx: dict) -> dict:
     store = EVAL_DIR / "screen_hashes.json"
     seen = json.loads(store.read_text()) if store.exists() else {}
-    changed, new = [], 0
+    changed, replaced, new = [], [], 0
     for tag, d in SCREEN_DIRS.items():
         for f in sorted(d.glob("screen_*.json")):
             h = hashlib.sha256(f.read_bytes()).hexdigest()
             k = f"{tag}/{f.name}"
             if k in seen and seen[k] != h:
-                changed.append(k)
+                (replaced if _approved_replacement(k, seen[k], h) else changed).append(k)
             elif k not in seen:
                 seen[k] = h; new += 1
     store.write_text(json.dumps(seen, indent=1))
-    return _res("PASS" if not changed else "FAIL", f"{len(seen)} screens tracked ({new} new)", ", ".join(changed))
+    return _res("PASS" if not changed else "FAIL", f"{len(seen)} screens tracked ({new} new)" + (f", {len(replaced)} replaced before entry (recorded)" if replaced else ""),
+                ", ".join(changed) or ("replaced: " + ", ".join(replaced) if replaced else ""))
 
 
 def one_screen_per_week(ctx: dict) -> dict:

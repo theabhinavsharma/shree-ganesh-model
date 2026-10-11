@@ -187,7 +187,9 @@ def main() -> None:
         print(f"   verdict: {', '.join(o['verdict']) + ' PASS' if o['verdict'] else 'no arm passes'}")
     verdict = out["std"]["verdict"]
     print(f"VERDICT (registered, liquidity-scaled costs): {', '.join(verdict) + ' PASS' if verdict else 'no arm passes'}")
-    if os.environ.get("SGM_REPRO") == "1":
+    if os.environ.get("SGM_REPRO") == "1":   # trust/reproduce.py reads this file (standard-cost rows only)
+        (OUTDIR / "repro").mkdir(parents=True, exist_ok=True)
+        pd.DataFrame([dict(arm=a, **{k: round(out["std"]["res"][a][k], 2) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd")}) for a in ARMS]).to_csv(OUTDIR / "repro/results.csv", index=False)
         print("REPRO RUN (not logged)"); return
     OUTDIR.mkdir(parents=True, exist_ok=True)
     rows = [dict(costs=lab, arm=a, **out[lab]["res"][a], **{str(y): out[lab]["years"][a][y] for y in YEARS},

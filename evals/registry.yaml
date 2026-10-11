@@ -170,7 +170,7 @@ evals:
 
   # ---------------------------------------------------------------- output: is it safe to act on?
   - id: output.screens_immutable
-    statement: "A weekly screen, once saved, is never rewritten."
+    statement: "A weekly screen, once saved, is never rewritten (only exception: a swap recorded in logs/evals/screen_replacements.jsonl with old and new hash, the old file kept, made before the batch's entry session)."
     why: "An off-schedule run once overwrote a committed basket; the paper record is only honest if picks cannot change after the fact."
     source_of_truth: "content hash of each screen file, recorded the first time it is seen"
     threshold: "0 changed screens"
