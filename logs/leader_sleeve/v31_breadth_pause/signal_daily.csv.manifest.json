@@ -1,0 +1,14 @@
+{
+ "dataset": "signal_daily.csv",
+ "experiment": "EXP-2026-10-11-v31-breadth-pause",
+ "producer": "src/agentic/test_v31_breadth_pause.py",
+ "definitions": "EXP-2026-10-11-v31-breadth-pause (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: skip the new weekly V3.1 list whenever the market has visibly turned: fewer than half of liquid stocks are\nabove their 200-day average AND the equal-weight index of liquid stocks is 10% or more below its running peak (both turned\nin mid-Nov 2024). Universe each day = Rs 1 cr average traded value and raw price > Rs 50 on the previous day; both signs\nare read at the list date's close. A skipped week's slot holds cash until its next turn (26 weeks, the engine's ladder);\nheld positions are not sold.\nArms: V3.1 (frozen copy of the live selection) vs V3.1_PAUSE. Engine: test_v3_l1_newlist_cost.run_cost, weekly entries\n2019+, schedules 0-4. PASS: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and >= 4 of 5.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules",
+  "breadth": "share 0-1",
+  "ew_dd": "fraction below running peak"
+ },
+ "updated": "2026-10-11T19:21:00"
+}
