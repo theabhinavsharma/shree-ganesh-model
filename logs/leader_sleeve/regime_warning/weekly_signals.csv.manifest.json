@@ -1,0 +1,33 @@
+{
+ "dataset": "weekly_signals.csv",
+ "producer": "src/agentic/explore_regime_warning.py",
+ "kind": "exploration",
+ "definitions": "Exploration (not a registered test; changes no rule): did the 2024-25 fall show up early, and where do those signs stand now?\n\nUniverse each day = stocks trading >= Rs 1 cr a day (20-day average) at a raw price > Rs 50 the day before (V3.1's bar).\nSignals, all known on the day (no look-ahead):\n  ew_vs_200   equal-weight index of the universe (daily returns clipped to -50%..+100%) vs its 200-day average\n  ew_dd       equal-weight index fall from its running peak\n  above200    share of universe stocks above their own 200-day average\n  trend_pass  share of universe stocks passing V3.1's trend test (50% over 52w low, 1y return >= 30%, above 200d, 50d > 200d)\n  pool        V3.1 candidate pool on the weekly list date (liquid, hot industry, trend or new listing; phase 0, from\n              logs/leader_sleeve/v31_hits_by_year/v31_picks.csv)\n  held13      average return so far of V3.1 picks bought in the previous 13 weekly lists (what the account shows)\n  t2t         share of that week's V3.1 picks in the trade-for-trade (BE/BZ) series\nEpisodes: every fall of the equal-weight index of 20% or more from a peak. For each signal: value 6 / 3 / 0 months before the\npeak, 3 months after, and today, plus the first date after each peak a simple line was crossed.\n",
+ "units": {
+  "ew_vs_200": "fraction above(+)/below(-) the 200-day average",
+  "ew_dd": "fraction below running peak",
+  "above200": "share 0-1",
+  "trend_pass": "share 0-1",
+  "pool": "stocks",
+  "held13": "fraction, average return so far",
+  "t2t": "share 0-1"
+ },
+ "episodes": [
+  [
+   "2018-01-15",
+   "2020-03-24",
+   -0.605
+  ],
+  [
+   "2022-01-17",
+   "2022-06-20",
+   -0.224
+  ],
+  [
+   "2024-09-16",
+   "2026-03-30",
+   -0.275
+  ]
+ ],
+ "updated": "2026-10-11T19:13:56"
+}
