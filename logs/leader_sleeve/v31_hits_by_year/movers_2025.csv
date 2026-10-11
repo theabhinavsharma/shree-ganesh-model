@@ -1,0 +1,1741 @@
+symbol,industry,ret2025,weeks_liquid,weeks_hot,weeks_trend,weeks_picked,winning_weeks,main_block
+CUPID,Personal Care,584.0,49,20,23,17,48,industry not hot
+MAHASTEEL,Iron & Steel Products,391.0,11,1,11,1,7,industry not hot
+BGRENERGY,Civil Construction,268.0,38,10,33,6,21,industry not hot
+FORCEMOT,Passenger Cars & Utility Vehicles,216.0,49,19,30,0,37,industry not hot
+WAAREEINDO,Heavy Electrical Equipment,213.0,5,0,0,0,0,no industry / short history
+SOMATEX,Other Textile Products,207.0,4,0,4,0,4,industry not hot
+NACLIND,Pesticides & Agrochemicals,167.0,49,5,33,2,24,industry not hot
+KRISHANA,Fertilizers,166.0,44,21,33,6,15,failed trend test
+ATHERENERG,2/3 Wheelers,150.0,29,20,20,0,22,ranked below top 9
+GRMOVER,Other Agricultural Products,142.0,49,22,40,0,24,industry not hot
+VENUSREM,Pharmaceuticals,141.0,35,4,17,0,35,industry not hot
+LUMAXTECH,Auto Components & Equipments,139.0,49,25,33,1,35,industry not hot
+APOLLO,Aerospace & Defense,136.0,49,16,32,8,37,industry not hot
+INDOTHAI,Stockbroking & Allied,133.0,42,20,39,0,18,industry not hot
+IFBAGRO,Breweries & Distilleries,133.0,16,8,13,1,7,industry not hot
+LTF,Non Banking Financial Company (NBFC),133.0,49,29,18,0,29,failed trend test
+SUNDARMHLD,Investment Company,129.0,39,30,21,0,24,failed trend test
+ASHAPURMIN,Industrial Minerals,126.0,49,22,23,11,27,industry not hot
+SMLISUZU,Commercial Vehicles,124.0,42,0,17,0,26,industry not hot
+LUMAXIND,Auto Components & Equipments,124.0,40,25,22,0,24,industry not hot
+JAYNECOIND,Iron & Steel Products,123.0,21,8,17,0,13,industry not hot
+MEGASOFT,Aerospace & Defense,113.0,34,12,30,7,18,industry not hot
+GABRIEL,Auto Components & Equipments,113.0,49,25,40,0,24,industry not hot
+TERASOFT,IT Enabled Services,112.0,12,10,12,10,1,picked
+SILGO,"Gems, Jewellery And Watches",112.0,2,0,2,0,0,industry not hot
+AXISCADES,Aerospace & Defense,109.0,49,16,37,14,28,industry not hot
+HINDCOPPER,Copper,109.0,49,0,3,0,34,industry not hot
+RELIABLE,Other Financial Services,106.0,5,0,4,0,0,industry not hot
+ABINFRA,Civil Construction,106.0,22,4,22,0,16,industry not hot
+BHARATSE,Auto Components & Equipments,104.0,23,15,18,0,7,no industry / short history
+PROZONER,"Residential, Commercial Projects",102.0,8,0,8,0,0,industry not hot
+ABCAPITAL,Investment Company,101.0,49,37,14,0,22,failed trend test
+MANGCHEFER,Fertilizers,101.0,41,24,34,11,18,industry not hot
+INFOBEAN,Computers - Software & Consulting,100.0,30,5,15,4,27,industry not hot
+RBLBANK,Private Sector Bank,100.0,49,19,12,0,22,failed trend test
+TFCILTD,Financial Institution,97.0,49,1,28,0,25,industry not hot
+ZOTA,Pharmaceuticals,93.0,49,7,49,0,20,industry not hot
+BELRISE,Auto Components & Equipments,90.0,26,21,17,0,9,ranked below top 9
+ARFIN,Aluminium,90.0,11,0,9,0,10,industry not hot
+CARTRADE,E-Retail/ E-Commerce,90.0,49,18,49,0,26,industry not hot
+QPOWER,Heavy Electrical Equipment,88.0,38,14,29,4,21,industry not hot
+STALLION,Industrial Gases,87.0,40,0,32,0,29,industry not hot
+GMDCLTD,Industrial Minerals,86.0,49,22,16,0,31,industry not hot
+AIIL,Non Banking Financial Company (NBFC),84.0,49,29,49,0,17,financial / fading filter
+LAURUSLABS,Pharmaceuticals,84.0,49,7,45,0,21,industry not hot
+MBAPL,Fertilizers,84.0,44,20,31,1,13,failed trend test
+ANURAS,Specialty Chemicals,83.0,49,0,29,0,14,industry not hot
+COMSYN,Packaging,82.0,30,13,30,10,3,ranked below top 9
+NAVINFLUOR,Specialty Chemicals,82.0,49,0,23,0,3,industry not hot
+GUJTHEM,Pharmaceuticals,81.0,38,0,29,0,8,no industry / short history
+LOTUSEYE,Hospital,79.0,7,6,4,4,2,failed trend test
+MCX,Exchange and Data Platform,79.0,49,0,39,0,43,industry not hot
+MUTHOOTFIN,Non Banking Financial Company (NBFC),78.0,49,29,41,0,18,industry not hot
+AUBANK,Other Bank,78.0,49,12,9,0,7,industry not hot
+TIMESGTY,Non Banking Financial Company (NBFC),78.0,2,0,2,0,0,industry not hot
+SIGMA,IT Enabled Services,78.0,16,12,5,2,3,industry not hot
+SANDUMA,Iron & Steel,76.0,49,17,8,0,22,industry not hot
+IMFA,Ferro & Silica Manganese,74.0,49,0,20,0,26,industry not hot
+POCL,Diversified Metals,72.0,49,0,21,0,25,industry not hot
+SHRIRAMFIN,Non Banking Financial Company (NBFC),72.0,49,29,8,0,17,industry not hot
+PFOCUS,Media & Entertainment,72.0,36,0,8,0,33,industry not hot
+THANGAMAYL,"Gems, Jewellery And Watches",70.0,49,4,11,0,30,industry not hot
+SKMEGGPROD,Meat Products including Poultry,69.0,40,0,14,0,19,industry not hot
+CUB,Private Sector Bank,69.0,49,19,13,0,15,industry not hot
+RAMAPHO,Fertilizers,68.0,19,7,11,0,6,failed trend test
+JINDALPHOT,Investment Company,66.0,26,20,16,0,8,failed trend test
+KMEW,Dredging,66.0,49,0,43,0,37,industry not hot
+AHCL,Pharmaceuticals,65.0,12,0,4,0,0,no industry / short history
+BHAGYANGR,Copper,65.0,13,0,7,0,13,industry not hot
+RICOAUTO,Auto Components & Equipments,65.0,49,25,2,1,31,failed trend test
+MANAPPURAM,Non Banking Financial Company (NBFC),64.0,49,29,25,0,3,industry not hot
+ASHOKLEY,Commercial Vehicles,63.0,49,0,7,0,19,industry not hot
+NYKAA,E-Retail/ E-Commerce,62.0,49,18,12,0,3,industry not hot
+UPL,Pesticides & Agrochemicals,59.0,49,5,15,0,0,industry not hot
+PRIVISCL,Specialty Chemicals,59.0,49,0,40,0,13,industry not hot
+GODFRYPHLP,Cigarettes & Tobacco Products,59.0,49,0,31,0,14,industry not hot
+INDOBORAX,Commodity Chemicals,58.0,23,1,7,0,9,industry not hot
+INDIANB,Public Sector Bank,58.0,49,0,13,0,4,industry not hot
+INDIAGLYCO,Breweries & Distilleries,58.0,49,15,33,2,17,industry not hot
+ANANDRATHI,Financial Products Distributor,58.0,49,0,23,0,21,industry not hot
+SILVERTUC,Computers - Software & Consulting,57.0,38,8,0,0,25,industry not hot
+TVSMOTOR,2/3 Wheelers,57.0,49,23,9,0,4,industry not hot
+UJJIVANSFB,Other Bank,57.0,10,10,9,0,0,ranked below top 9
+SHAILY,Plastic Products - Consumer,57.0,49,0,49,0,22,industry not hot
+M&MFIN,Non Banking Financial Company (NBFC),56.0,49,29,3,0,13,industry not hot
+GALLANTT,Iron & Steel Products,56.0,44,10,33,0,28,industry not hot
+ISHANCH,Specialty Chemicals,56.0,4,0,4,0,0,industry not hot
+TDPOWERSYS,Heavy Electrical Equipment,56.0,49,14,26,0,45,industry not hot
+CANBK,Public Sector Bank,55.0,49,0,9,0,4,industry not hot
+ZUARI,Fertilizers,55.0,49,24,13,0,25,failed trend test
+POONAWALLA,Non Banking Financial Company (NBFC),54.0,49,29,6,0,14,failed trend test
+MARUTI,Passenger Cars & Utility Vehicles,54.0,49,19,5,0,0,industry not hot
+ORICONENT,Packaging,54.0,19,3,18,2,0,industry not hot
+PARAGMILK,Dairy Products,54.0,49,0,17,0,29,industry not hot
+ITDCEM,Civil Construction,54.0,35,10,31,0,17,industry not hot
+FIEMIND,Auto Components & Equipments,53.0,49,25,20,0,12,industry not hot
+IXIGO,"Tour, Travel Related Services",52.0,49,15,44,1,27,industry not hot
+EICHERMOT,2/3 Wheelers,52.0,49,23,16,0,0,industry not hot
+ACUTAAS,Pharmaceuticals,52.0,25,0,0,0,24,industry not hot
+MIDWESTLTD,Granites & Marbles,51.0,5,0,0,0,0,no industry / short history
+CHOICEIN,Holding Company,51.0,49,25,48,0,11,ranked below top 9
+SHREERAMA,Packaging,51.0,5,0,5,0,0,industry not hot
+GRSE,Aerospace & Defense,51.0,49,16,22,0,18,industry not hot
+GVT&D,Heavy Electrical Equipment,51.0,49,14,7,0,26,industry not hot
+WELINV,Investment Company,51.0,2,2,2,0,0,financial / fading filter
+TATVA,Specialty Chemicals,50.0,49,0,10,0,31,industry not hot
+MFSL,Life Insurance,50.0,49,21,30,0,9,industry not hot
+KAVDEFENCE,Aerospace & Defense,50.0,11,2,0,0,1,no industry / short history
+YATRA,"Tour, Travel Related Services",50.0,49,15,8,1,25,industry not hot
+IZMO,IT Enabled Services,49.0,30,17,22,6,12,industry not hot
+HBLENGINE,Other Industrial Products,49.0,47,18,0,0,25,industry not hot
+PARADEEP,Fertilizers,49.0,49,24,39,4,16,industry not hot
+GMBREW,Breweries & Distilleries,49.0,49,15,8,0,25,industry not hot
+NH,Hospital,49.0,49,32,32,0,9,failed trend test
+JUBLCPL,Specialty Chemicals,48.0,20,0,0,0,9,no industry / short history
+BSE,Exchange and Data Platform,48.0,49,0,48,0,25,industry not hot
+NATIONALUM,Aluminium,48.0,49,0,4,0,33,industry not hot
+MAHSCOOTER,Investment Company,48.0,48,37,32,0,17,industry not hot
+IIFL,Non Banking Financial Company (NBFC),48.0,49,29,4,0,18,failed trend test
+SHRIPISTON,Auto Components & Equipments,48.0,49,25,7,0,5,industry not hot
+THYROCARE,Healthcare Service Provider,47.0,49,8,28,0,23,industry not hot
+FEDFINA,Non Banking Financial Company (NBFC),47.0,49,29,9,0,16,failed trend test
+HINDALCO,Aluminium,47.0,49,0,1,0,2,industry not hot
+SJS,Auto Components & Equipments,47.0,49,25,29,0,19,industry not hot
+CSBBANK,Private Sector Bank,47.0,49,19,7,0,11,industry not hot
+AGIIL,"Residential, Commercial Projects",47.0,49,5,49,0,22,industry not hot
+MTARTECH,Other Electrical Equipment,46.0,49,16,8,0,37,industry not hot
+KARURVYSYA,Private Sector Bank,46.0,49,19,7,0,11,industry not hot
+SBILIFE,Life Insurance,46.0,49,21,0,0,0,industry not hot
+SENORES,Pharmaceuticals,45.0,46,5,37,0,16,industry not hot
+GARUDA,Civil Construction,45.0,49,12,47,0,24,industry not hot
+BANCOINDIA,Auto Components & Equipments,45.0,49,25,30,0,22,industry not hot
+BAJFINANCE,Non Banking Financial Company (NBFC),45.0,49,29,12,0,0,industry not hot
+EPACKPEB,Industrial Products,44.0,8,0,0,0,0,no industry / short history
+CREDITACC,Microfinance Institutions,44.0,49,1,9,0,4,industry not hot
+V2RETAIL,Speciality Retail,44.0,49,6,47,0,4,failed trend test
+CHOLAFIN,Non Banking Financial Company (NBFC),44.0,49,29,0,0,0,failed trend test
+KANPRPLA,Packaging,43.0,5,2,4,1,0,industry not hot
+CRAFTSMAN,Auto Components & Equipments,43.0,49,25,9,0,11,industry not hot
+SHREEJISPG,Shipping,43.0,13,0,5,0,12,no industry / short history
+ABDL,Breweries & Distilleries,43.0,49,15,49,0,21,ranked below top 9
+LGBBROSLTD,Auto Components & Equipments,42.0,49,25,8,0,18,failed trend test
+SIRCA,Paints,42.0,49,10,19,0,16,industry not hot
+DCBBANK,Private Sector Bank,42.0,49,19,9,0,11,industry not hot
+ARSSBL,Stockbroking & Allied,41.0,9,9,0,0,1,no industry / short history
+BANKINDIA,Public Sector Bank,41.0,49,0,6,0,7,industry not hot
+PROSTARM,Other Electrical Equipment,41.0,25,8,16,1,1,no industry / short history
+BLACKBUCK,Transport Related Services,41.0,49,0,42,0,24,industry not hot
+PRECWIRE,"Aluminium, Copper & Zinc Products",40.0,49,0,6,0,30,industry not hot
+SUBROS,Other Industrial Products,40.0,49,19,20,0,21,industry not hot
+UMIYA-MRO,Telecom -  Equipment & Accessories,39.0,6,0,0,0,0,industry not hot
+HEROMOTOCO,2/3 Wheelers,39.0,49,23,1,0,8,industry not hot
+BALAJITELE,Media & Entertainment,39.0,30,0,14,0,12,industry not hot
+SEJALLTD,Glass - Industrial,39.0,8,0,8,0,0,industry not hot
+NRAIL,Paper & Paper Products,38.0,13,0,6,0,2,industry not hot
+HINDZINC,Zinc,38.0,49,0,1,0,17,industry not hot
+CPPLUS,Industrial Products,38.0,16,0,7,0,12,industry not hot
+PTCIL,Castings & Forgings,38.0,49,2,19,0,2,industry not hot
+SAKAR,Pharmaceuticals,38.0,18,2,3,0,9,industry not hot
+SRF,Commodity Chemicals,37.0,49,6,3,0,0,industry not hot
+STAR,Pharmaceuticals,37.0,49,7,44,2,12,industry not hot
+ROSSTECH,Aerospace & Defense,37.0,28,5,20,3,15,industry not hot
+VEDL,Diversified Metals,36.0,49,0,2,0,23,industry not hot
+REDINGTON,Trading & Distributors,36.0,49,2,22,0,6,industry not hot
+VISHNU,Specialty Chemicals,36.0,49,0,16,0,3,industry not hot
+IDFCFIRSTB,Private Sector Bank,36.0,49,19,2,0,0,industry not hot
+BEL,Aerospace & Defense,36.0,49,16,24,0,11,industry not hot
+PARAS,Aerospace & Defense,36.0,49,16,14,0,19,industry not hot
+HCG,Hospital,35.0,49,32,48,0,2,industry not hot
+CUMMINSIND,"Compressors, Pumps & Diesel Engines",35.0,49,2,2,0,5,industry not hot
+CUBEXTUB,"Aluminium, Copper & Zinc Products",35.0,7,0,0,0,0,industry not hot
+ECLERX,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),35.0,49,0,23,0,11,industry not hot
+IDBI,Private Sector Bank,35.0,49,19,3,0,0,industry not hot
+SMCGLOBAL,Stockbroking & Allied,35.0,43,23,0,0,4,failed trend test
+ADANIPOWER,Integrated Power Utilities,35.0,49,6,7,0,30,industry not hot
+RAMCOSYS,Software Products,34.0,44,10,11,3,22,industry not hot
+VINCOFE,Tea & Coffee,34.0,49,0,43,0,13,industry not hot
+FEDERALBNK,Private Sector Bank,34.0,49,19,1,0,9,industry not hot
+PSPPROJECT,Civil Construction,34.0,49,12,5,0,10,industry not hot
+CHENNPETRO,Refineries & Marketing,34.0,49,20,8,0,24,industry not hot
+CANHLIFE,Life Insurance,33.0,6,4,0,0,0,no industry / short history
+AARVEEDEN,Other Textile Products,33.0,4,0,4,0,0,industry not hot
+GMRAIRPORT,Airport & Airport services,33.0,48,0,0,0,0,industry not hot
+RPEL,Electrodes & Refractories,33.0,49,0,35,0,20,industry not hot
+BHARTIARTL,Telecom - Cellular & Fixed line services,33.0,49,0,14,0,0,industry not hot
+EIFFL,Packaged Foods,33.0,6,0,6,0,1,industry not hot
+SRM,Civil Construction,33.0,38,11,38,1,7,industry not hot
+ASAHIINDIA,Auto Components & Equipments,33.0,49,25,10,0,3,industry not hot
+GPIL,Iron & Steel Products,32.0,49,10,7,0,17,industry not hot
+LLOYDSENT,Trading - Metals,32.0,40,0,35,0,11,industry not hot
+RNBDENIMS,Other Textile Products,32.0,5,1,0,0,5,no industry / short history
+JSWHL,Investment Company,32.0,49,37,29,0,8,industry not hot
+IRISDOREME,Garments & Apparels,32.0,9,0,0,0,0,industry not hot
+ETERNAL,E-Retail/ E-Commerce,32.0,32,16,0,0,4,no industry / short history
+KRBL,Other Agricultural Products,31.0,49,22,17,0,15,failed trend test
+BDL,Aerospace & Defense,31.0,49,16,10,0,13,industry not hot
+JAINREC,Diversified Metals,31.0,8,0,0,0,4,no industry / short history
+NBCC,Civil Construction,31.0,49,12,3,0,9,industry not hot
+INTERARCH,Civil Construction,31.0,49,12,47,0,11,industry not hot
+KEYFINSERV,Stockbroking & Allied,31.0,9,4,3,0,1,industry not hot
+BPCL,Refineries & Marketing,31.0,49,20,0,0,0,industry not hot
+TNPETRO,Petrochemicals,31.0,38,0,6,0,8,industry not hot
+CHOLAHLDNG,Investment Company,30.0,49,37,15,0,4,failed trend test
+TATACONSUM,Tea & Coffee,30.0,49,0,0,0,0,industry not hot
+TVSHLTD,Investment Company,30.0,48,37,0,0,12,failed trend test
+SAIL,Iron & Steel,30.0,49,17,0,0,7,industry not hot
+BAJAJCON,Personal Care,30.0,49,20,2,0,38,industry not hot
+TATASTEEL,Iron & Steel,30.0,49,17,0,0,0,industry not hot
+MAANALU,Aluminium,30.0,20,0,0,0,3,industry not hot
+SUVEN,"Healthcare Research, Analytics & Technology",30.0,49,0,25,0,25,industry not hot
+SMSPHARMA,Pharmaceuticals,30.0,49,7,1,0,19,industry not hot
+SBICARD,Non Banking Financial Company (NBFC),30.0,49,29,1,0,0,failed trend test
+BAJAJFINSV,Holding Company,30.0,49,25,0,0,0,failed trend test
+JAMNAAUTO,Auto Components & Equipments,30.0,49,25,0,0,12,failed trend test
+JSWSTEEL,Iron & Steel,29.0,49,17,0,0,0,industry not hot
+RACLGEAR,Auto Components & Equipments,29.0,33,21,30,7,21,industry not hot
+SMLMAH,Commercial Vehicles,29.0,3,0,0,0,0,no industry / short history
+RELIANCE,Refineries & Marketing,29.0,49,20,0,0,0,industry not hot
+JKTYRE,Tyres & Rubber Products,29.0,49,6,0,0,12,industry not hot
+STLTECH,Telecom -  Equipment & Accessories,28.0,49,4,14,0,39,industry not hot
+VMM,Diversified Retail,28.0,47,1,38,0,6,industry not hot
+UNIONBANK,Public Sector Bank,28.0,49,0,1,0,6,industry not hot
+TARACHAND,Diversified Commercial Services,28.0,24,4,6,1,3,industry not hot
+PAYTM,Financial Technology (Fintech),28.0,49,0,45,0,17,industry not hot
+ASTRAMICRO,Aerospace & Defense,28.0,49,16,9,0,19,industry not hot
+SOUTHWEST,Diversified Commercial Services,28.0,20,1,6,0,8,industry not hot
+RELTD,Other Electrical Equipment,27.0,38,13,27,3,5,industry not hot
+RADICO,Breweries & Distilleries,27.0,49,15,42,0,1,failed trend test
+POWERINDIA,Heavy Electrical Equipment,27.0,49,14,32,0,28,industry not hot
+BRITANNIA,Packaged Foods,27.0,49,0,0,0,0,industry not hot
+CCL,Tea & Coffee,27.0,49,0,16,0,12,industry not hot
+DATAMATICS,IT Enabled Services,27.0,49,17,20,0,23,industry not hot
+SUNDARMFIN,Non Banking Financial Company (NBFC),27.0,49,29,0,0,0,failed trend test
+HDFCAMC,Asset Management Company,27.0,49,0,9,0,7,industry not hot
+NESCO,Diversified Commercial Services,27.0,49,6,15,0,18,industry not hot
+JSLL,Wellness,27.0,15,0,7,0,0,no industry / short history
+HYUNDAI,Passenger Cars & Utility Vehicles,27.0,49,19,39,0,15,industry not hot
+WHEELS,Auto Components & Equipments,27.0,49,25,1,0,10,failed trend test
+AGARWALEYE,Hospital,27.0,41,24,32,0,5,industry not hot
+ADANIENSOL,Power Distribution,27.0,49,0,2,0,9,industry not hot
+KINGFA,Plastic Products - Industrial,26.0,49,4,22,0,15,industry not hot
+ARMANFIN,Non Banking Financial Company (NBFC),26.0,49,29,0,0,2,failed trend test
+TMCV,Commercial Vehicles,26.0,3,0,0,0,0,no industry / short history
+GLENMARK,Pharmaceuticals,26.0,49,7,11,0,17,industry not hot
+BAJAJINDEF,Industrial Products,26.0,25,9,22,2,5,no industry / short history
+VSSL,Iron & Steel Products,26.0,43,8,0,0,2,industry not hot
+RMDRIP,Plastic Products - Industrial,26.0,17,0,8,0,17,industry not hot
+NMDC,Industrial Minerals,26.0,49,22,0,0,0,industry not hot
+BHEL,Heavy Electrical Equipment,25.0,49,14,0,0,7,industry not hot
+TITAN,"Gems, Jewellery And Watches",25.0,49,4,0,0,0,industry not hot
+BHARTIHEXA,Telecom - Cellular & Fixed line services,25.0,49,0,20,0,8,industry not hot
+MSUMI,Auto Components & Equipments,25.0,25,8,0,0,1,industry not hot
+VASWANI,Sponge Iron,25.0,12,0,3,0,0,industry not hot
+GLOBAL,Education,25.0,7,0,0,0,2,industry not hot
+GUJAPOLLO,Industrial Products,25.0,15,6,8,2,1,industry not hot
+SOLARINDS,Explosives,25.0,49,0,20,0,16,industry not hot
+TEGA,Industrial Products,25.0,49,14,0,0,8,industry not hot
+SBIN,Public Sector Bank,24.0,49,0,0,0,3,industry not hot
+DELPHIFX,Other Financial Services,24.0,13,0,0,0,0,industry not hot
+VADILALIND,Dairy Products,24.0,49,0,17,0,12,industry not hot
+ZFCVINDIA,Auto Components & Equipments,24.0,49,25,0,0,0,failed trend test
+MANORAMA,Other Food Products,24.0,49,0,44,0,14,industry not hot
+EUROPRATIK,"Furniture, Home Furnishing",24.0,10,0,1,0,1,no industry / short history
+ASTRAZEN,Pharmaceuticals,24.0,49,7,14,0,6,failed trend test
+PIRAMALFIN,Housing Finance Company,24.0,4,0,0,0,0,no industry / short history
+SYRMA,Industrial Products,24.0,49,14,22,0,25,industry not hot
+FMGOETZE,Auto Components & Equipments,24.0,46,24,7,1,16,industry not hot
+ARVEE,Specialty Chemicals,23.0,2,0,0,0,0,industry not hot
+BANKBARODA,Public Sector Bank,23.0,49,0,0,0,0,industry not hot
+PASUPTAC,Petrochemicals,23.0,11,0,2,0,2,industry not hot
+M&M,Passenger Cars & Utility Vehicles,23.0,49,19,7,0,1,failed trend test
+FORTIS,Hospital,23.0,49,32,47,0,13,ranked below top 9
+SHREEPUSHK,Dyes And Pigments,23.0,49,0,31,0,15,industry not hot
+INDUSTOWER,Telecom - Infrastructure,23.0,49,0,0,0,0,industry not hot
+KOTAKBANK,Private Sector Bank,23.0,49,19,0,0,0,industry not hot
+STEL,Investment Company,23.0,6,6,1,0,0,failed trend test
+GLOBUSSPR,Breweries & Distilleries,23.0,49,15,8,1,4,failed trend test
+FOSECOIND,Specialty Chemicals,23.0,27,0,0,0,2,industry not hot
+APLAPOLLO,Iron & Steel Products,22.0,49,10,0,0,0,industry not hot
+ADOR,Other Industrial Products,22.0,27,13,0,0,0,failed trend test
+STEELCAS,Castings & Forgings,22.0,48,2,34,0,9,industry not hot
+HINDPETRO,Refineries & Marketing,22.0,49,20,2,0,0,industry not hot
+IOC,Refineries & Marketing,22.0,49,20,0,0,0,industry not hot
+VIMTALABS,"Healthcare Research, Analytics & Technology",22.0,49,0,46,0,24,industry not hot
+AVANTIFEED,Animal Feed,22.0,49,0,15,0,23,industry not hot
+UNOMINDA,Auto Components & Equipments,22.0,49,25,6,0,8,industry not hot
+HEG,Electrodes & Refractories,22.0,49,0,4,0,8,industry not hot
+HDFCLIFE,Life Insurance,22.0,49,21,1,0,0,industry not hot
+PRICOLLTD,Auto Components & Equipments,22.0,49,25,7,0,15,failed trend test
+KESORAMIND,Cement & Cement Products,22.0,9,6,0,0,0,failed trend test
+SHRINGARMS,"Gems, Jewellery And Watches",22.0,10,4,2,0,0,no industry / short history
+UNIPARTS,Auto Components & Equipments,22.0,49,25,0,0,12,industry not hot
+LGHL,"Gems, Jewellery And Watches",22.0,29,4,22,1,1,industry not hot
+CANFINHOME,Housing Finance Company,22.0,49,10,0,0,0,industry not hot
+USHAMART,Iron & Steel Products,21.0,49,10,2,0,11,industry not hot
+DALBHARAT,Cement & Cement Products,21.0,49,16,1,0,0,industry not hot
+MCL,"Aluminium, Copper & Zinc Products",21.0,3,0,0,0,2,industry not hot
+SAILIFE,Pharmaceuticals,21.0,47,6,38,0,0,industry not hot
+COROMANDEL,Fertilizers,21.0,49,24,32,0,6,industry not hot
+SWARAJENG,"Compressors, Pumps & Diesel Engines",21.0,49,2,31,0,7,industry not hot
+NAM-INDIA,Asset Management Company,21.0,49,0,6,0,13,industry not hot
+ASIANPAINT,Paints,21.0,49,10,0,0,0,industry not hot
+SANATHAN,Other Textile Products,20.0,46,7,37,2,10,no industry / short history
+TVSSRICHAK,Tyres & Rubber Products,20.0,43,6,1,0,17,industry not hot
+JKCEMENT,Cement & Cement Products,20.0,49,16,20,0,10,failed trend test
+JSL,Iron & Steel,20.0,49,17,0,0,1,failed trend test
+YATHARTH,Hospital,20.0,49,32,17,0,22,failed trend test
+ASTERDM,Hospital,20.0,49,32,37,0,7,failed trend test
+DREDGECORP,Dredging,20.0,49,0,0,0,24,industry not hot
+BERGEPAINT,Paints,20.0,49,10,0,0,0,industry not hot
+CARYSIL,Household Appliances,20.0,49,1,1,0,11,industry not hot
+PNB,Public Sector Bank,20.0,49,0,0,0,0,industry not hot
+SANGAMIND,Other Textile Products,20.0,42,10,0,0,0,industry not hot
+ENDURANCE,Auto Components & Equipments,20.0,49,25,0,0,14,industry not hot
+INDORAMA,Other Textile Products,20.0,8,2,6,1,0,industry not hot
+RISHABH,Other Electrical Equipment,19.0,44,14,1,0,26,industry not hot
+ADANIPORTS,Port & Port services,19.0,49,0,0,0,0,industry not hot
+NDRAUTO,Auto Components & Equipments,19.0,48,25,25,0,15,industry not hot
+AAREYDRUGS,Pharmaceuticals,19.0,2,0,0,0,0,industry not hot
+KIRLOSENG,"Compressors, Pumps & Diesel Engines",19.0,49,2,0,0,28,industry not hot
+INOXGREEN,Diversified Commercial Services,19.0,49,6,7,0,27,industry not hot
+VSTTILLERS,Tractors,19.0,49,0,7,0,18,industry not hot
+AXISBANK,Private Sector Bank,19.0,49,19,0,0,0,industry not hot
+NESTLEIND,Packaged Foods,19.0,49,0,0,0,0,industry not hot
+GROWW,Stockbroking & Allied,19.0,3,3,0,0,2,no industry / short history
+PANACHE,IT Enabled Services,19.0,4,4,4,2,0,financial / fading filter
+MAHABANK,Public Sector Bank,19.0,39,0,0,0,5,industry not hot
+HLEGLAS,Industrial Products,19.0,49,14,7,0,24,industry not hot
+SEQUENT,Pharmaceuticals,19.0,49,7,7,2,7,industry not hot
+CEATLTD,Tyres & Rubber Products,18.0,49,6,17,0,3,industry not hot
+JPOLYINVST,Investment Company,18.0,25,21,2,0,5,failed trend test
+MASFIN,Non Banking Financial Company (NBFC),18.0,49,29,0,0,1,failed trend test
+PASHUPATI,Other Textile Products,18.0,5,0,0,0,2,no industry / short history
+MANINDS,Iron & Steel Products,18.0,49,10,4,0,19,industry not hot
+MANAKSTEEL,Iron & Steel,18.0,4,4,0,0,0,failed trend test
+AIAENG,Castings & Forgings,18.0,49,2,0,0,0,industry not hot
+DECCANCE,Cement & Cement Products,17.0,48,15,22,1,15,industry not hot
+SMSLIFE,Pharmaceuticals,17.0,2,0,0,0,0,industry not hot
+KIRIINDUS,Dyes And Pigments,17.0,49,0,27,0,0,industry not hot
+GOODLUCK,Iron & Steel Products,17.0,49,10,0,0,14,industry not hot
+MRF,Tyres & Rubber Products,17.0,49,6,1,0,0,industry not hot
+3MINDIA,Diversified,17.0,49,0,0,0,0,industry not hot
+MARICO,Edible Oil,17.0,49,0,0,0,0,industry not hot
+GESHIP,Shipping,17.0,49,0,0,0,12,industry not hot
+MINDACORP,Auto Components & Equipments,17.0,49,25,2,0,0,failed trend test
+ROHLTD,Hotels & Resorts,17.0,49,18,11,0,17,industry not hot
+MODIRUBBER,Tyres & Rubber Products,17.0,1,0,0,0,0,industry not hot
+DELHIVERY,Logistics Solution Provider,17.0,49,5,0,0,12,industry not hot
+BORANA,Other Textile Products,17.0,26,2,17,0,18,industry not hot
+GRASIM,Cement & Cement Products,16.0,49,16,0,0,0,industry not hot
+INDIACEM,Cement & Cement Products,16.0,49,16,3,0,3,failed trend test
+CAMLINFINE,Specialty Chemicals,16.0,49,0,29,0,19,industry not hot
+SHYAMMETL,Iron & Steel Products,16.0,49,10,10,0,0,industry not hot
+EIDPARRY,Other Food Products,16.0,49,0,17,0,11,industry not hot
+DDEVPLSTIK,Specialty Chemicals,16.0,44,0,35,0,3,no industry / short history
+INDNIPPON,Auto Components & Equipments,16.0,30,24,6,0,5,failed trend test
+CARERATING,Ratings,16.0,49,0,21,0,16,industry not hot
+JMFINANCIL,Holding Company,15.0,49,25,12,0,18,failed trend test
+MOTHERSON,Auto Components & Equipments,15.0,49,25,0,0,1,industry not hot
+KAPSTON,Diversified Commercial Services,15.0,4,0,0,0,4,industry not hot
+HAPPYFORGE,Castings & Forgings,15.0,49,2,0,0,3,industry not hot
+PUNJABCHEM,Pesticides & Agrochemicals,15.0,39,5,2,0,10,industry not hot
+NORTHARC,Non Banking Financial Company (NBFC),15.0,49,29,37,0,7,ranked below top 9
+NAVA,Power Generation,15.0,49,1,18,0,14,industry not hot
+RAMCOIND,Other Construction Materials,15.0,49,0,9,0,14,industry not hot
+ITCHOTELS,Hotels & Resorts,15.0,42,11,33,0,2,no industry / short history
+KAYA,Wellness,15.0,16,0,0,0,8,industry not hot
+ZYDUSWELL,Packaged Foods,15.0,49,0,1,0,9,industry not hot
+AADHARHFC,Housing Finance Company,15.0,49,10,19,0,0,industry not hot
+SBFC,Non Banking Financial Company (NBFC),15.0,49,29,1,0,1,failed trend test
+SPIC,Fertilizers,15.0,49,24,0,0,13,failed trend test
+TORNTPHARM,Pharmaceuticals,15.0,49,7,0,0,0,industry not hot
+NETWEB,IT Enabled Services,14.0,49,17,9,0,34,industry not hot
+ELDEHSG,"Residential, Commercial Projects",14.0,2,0,0,0,0,industry not hot
+INDIASHLTR,Housing Finance Company,14.0,49,10,9,0,7,industry not hot
+INDIANHUME,Civil Construction,14.0,44,11,0,0,4,industry not hot
+GRAPHITE,Electrodes & Refractories,14.0,49,0,0,0,4,industry not hot
+TMB,Private Sector Bank,14.0,49,19,0,0,19,industry not hot
+SCHAEFFLER,Auto Components & Equipments,14.0,49,25,0,0,1,industry not hot
+GCSL,Other Capital Market related Services,13.0,9,0,1,0,4,no industry / short history
+BHARATFORG,Auto Components & Equipments,13.0,49,25,0,0,13,failed trend test
+WAAREERTL,Other Electrical Equipment,13.0,32,13,23,0,0,industry not hot
+TAJGVK,Hotels & Resorts,13.0,49,18,14,4,1,failed trend test
+KSCL,Other Agricultural Products,13.0,49,22,13,2,9,failed trend test
+JINDALSTEL,Iron & Steel,13.0,49,17,0,0,0,industry not hot
+ADVANCE,Pesticides & Agrochemicals,13.0,8,0,0,0,0,no industry / short history
+PHOENIXLTD,"Residential, Commercial Projects",13.0,49,5,0,0,0,industry not hot
+MCLEODRUSS,Tea & Coffee,13.0,8,0,8,0,2,industry not hot
+SANSERA,Auto Components & Equipments,13.0,49,25,2,0,21,failed trend test
+LT,Civil Construction,13.0,49,12,0,0,0,industry not hot
+GODREJCP,Personal Care,13.0,49,20,0,0,0,industry not hot
+MAZDOCK,Ship Building & Allied Services,12.0,49,0,26,0,11,industry not hot
+LENSKART,Speciality Retail,12.0,3,0,0,0,0,no industry / short history
+ESCORTS,Tractors,12.0,49,0,0,0,1,industry not hot
+CENTURYPLY,Plywood Boards/ Laminates,12.0,49,0,0,0,0,industry not hot
+MANAKCOAT,Iron & Steel Products,12.0,32,10,30,10,3,industry not hot
+KOLTEPATIL,"Residential, Commercial Projects",12.0,49,5,0,0,11,industry not hot
+ARIES,Fertilizers,12.0,35,18,17,2,3,failed trend test
+CENTUM,Aerospace & Defense,12.0,49,16,29,0,19,industry not hot
+MAHEPC,Industrial Products,12.0,26,10,1,0,1,industry not hot
+SANGHVIMOV,Diversified Commercial Services,12.0,49,6,0,0,12,industry not hot
+ASIANTILES,Ceramics,12.0,36,0,0,0,0,industry not hot
+OMFREIGHT,Logistics Solution Provider,12.0,6,0,0,0,0,no industry / short history
+HONASA,Personal Care,12.0,49,20,0,0,8,failed trend test
+HDFCBANK,Private Sector Bank,12.0,49,19,0,0,0,industry not hot
+AFSL,Holding Company,12.0,14,11,0,0,0,no industry / short history
+NEULANDLAB,Pharmaceuticals,11.0,49,7,7,0,12,industry not hot
+DYNAMATECH,Industrial Products,11.0,49,14,2,0,14,industry not hot
+INDIGO,Airline,11.0,49,0,15,0,0,industry not hot
+MANCREDIT,Non Banking Financial Company (NBFC),11.0,11,1,6,0,0,industry not hot
+GAEL,Other Agricultural Products,11.0,49,22,0,0,8,industry not hot
+MOIL,Industrial Minerals,11.0,49,22,0,0,0,industry not hot
+BHARATGEAR,Auto Components & Equipments,11.0,6,4,1,0,0,failed trend test
+FLAIR,Stationary,11.0,49,0,0,0,8,industry not hot
+SCI,Shipping,11.0,49,0,0,0,13,industry not hot
+CAPILLARY,Software Products,11.0,2,0,0,0,0,no industry / short history
+ENGINERSIN,Civil Construction,11.0,49,12,0,0,13,industry not hot
+IIFLCAPS,Stockbroking & Allied,11.0,49,24,0,0,13,industry not hot
+SMARTWORKS,Diversified Commercial Services,11.0,19,6,10,0,0,no industry / short history
+PTC,Power Trading,11.0,49,0,0,0,2,industry not hot
+SGIL,Castings & Forgings,11.0,34,2,27,0,0,industry not hot
+MEDANTA,Hospital,10.0,49,32,0,0,0,failed trend test
+KILITCH,Pharmaceuticals,10.0,17,0,3,0,0,industry not hot
+ERIS,Pharmaceuticals,10.0,49,7,31,0,9,ranked below top 9
+GLS,Pharmaceuticals,10.0,2,1,2,0,0,industry not hot
+ICICIGI,General Insurance,10.0,49,0,0,0,0,industry not hot
+SHARDACROP,Pesticides & Agrochemicals,10.0,49,5,21,0,29,industry not hot
+SCODATUBES,Iron & Steel Products,10.0,25,10,16,0,0,industry not hot
+AARTIPHARM,Pharmaceuticals,10.0,49,7,29,1,3,industry not hot
+GLAXO,Pharmaceuticals,10.0,49,7,7,0,6,failed trend test
+PGIL,Garments & Apparels,9.0,49,9,24,1,15,industry not hot
+AMIORG,Pharmaceuticals,9.0,20,7,20,5,0,industry not hot
+PGHL,Pharmaceuticals,9.0,49,7,0,0,0,industry not hot
+CPEDU,Education,9.0,5,0,0,0,0,no industry / short history
+MUFIN,Non Banking Financial Company (NBFC),9.0,49,29,0,0,10,industry not hot
+LTIM,Computers - Software & Consulting,9.0,49,12,0,0,0,industry not hot
+NURECA,Medical Equipment & Supplies,9.0,12,0,0,0,0,industry not hot
+DCMSHRIRAM,Diversified,9.0,49,0,5,0,4,industry not hot
+MWL,Trading - Metals,9.0,4,0,1,0,1,no industry / short history
+MAPMYINDIA,Software Products,9.0,49,10,0,0,0,industry not hot
+UNIVCABLES,Cables - Electricals,9.0,49,8,7,0,22,industry not hot
+KHAICHEM,Fertilizers,9.0,41,22,16,2,16,failed trend test
+TRAVELFOOD,Restaurants,9.0,19,0,11,0,0,industry not hot
+HIRECT,Industrial Products,9.0,49,14,26,1,30,industry not hot
+RAMCOCEM,Cement & Cement Products,9.0,49,16,3,0,0,industry not hot
+GODIGIT,General Insurance,8.0,49,0,20,0,0,industry not hot
+RUBICON,Pharmaceuticals,8.0,6,0,0,0,5,no industry / short history
+FABTECH,"Healthcare Research, Analytics & Technology",8.0,8,0,0,0,0,no industry / short history
+BIOCON,Pharmaceuticals,8.0,49,7,4,0,0,industry not hot
+SHREDIGCEM,Cement & Cement Products,8.0,49,16,0,0,7,failed trend test
+NAZARA,Digital Entertainment,8.0,49,0,17,0,12,industry not hot
+AVANTEL,Aerospace & Defense,8.0,49,16,29,0,19,industry not hot
+SUNFLAG,Iron & Steel Products,8.0,49,10,7,0,10,industry not hot
+SANDHAR,Auto Components & Equipments,8.0,49,25,0,0,7,industry not hot
+ICEMAKE,Industrial Products,8.0,44,14,6,0,7,industry not hot
+PNBHOUSING,Housing Finance Company,8.0,49,10,5,0,0,industry not hot
+RAMRAT,Other Electrical Equipment,8.0,46,14,17,0,15,industry not hot
+JSFB,Other Bank,8.0,49,12,7,0,0,industry not hot
+TI,Breweries & Distilleries,8.0,49,15,26,0,19,industry not hot
+SARDAEN,Iron & Steel,8.0,49,17,23,0,2,failed trend test
+DEEPAKFERT,Commodity Chemicals,8.0,49,6,39,0,12,industry not hot
+DCMSRIND,Sugar,8.0,49,0,0,0,0,industry not hot
+SANGHIIND,Cement & Cement Products,7.0,45,15,0,0,0,industry not hot
+UNIVPHOTO,Consumer Electronics,7.0,6,0,0,0,2,industry not hot
+EUREKAFORB,Household Appliances,7.0,49,1,35,0,0,industry not hot
+LLOYDSME,Industrial Minerals,7.0,49,22,35,0,4,failed trend test
+TATACOMM,Telecom - Cellular & Fixed line services,7.0,49,0,0,0,0,industry not hot
+UTLSOLAR,Other Electrical Equipment,7.0,2,0,0,0,2,no industry / short history
+ATLANTAELE,Heavy Electrical Equipment,7.0,9,0,0,0,9,no industry / short history
+NUVAMA,Stockbroking & Allied,7.0,49,24,9,0,7,industry not hot
+DATAPATTNS,Aerospace & Defense,6.0,49,16,1,0,20,industry not hot
+MUKANDLTD,Iron & Steel Products,6.0,47,10,0,0,12,industry not hot
+INTLCONV,Industrial Products,6.0,27,12,0,0,0,industry not hot
+DBL,Civil Construction,6.0,49,12,0,0,1,industry not hot
+VRLLOG,Logistics Solution Provider,6.0,49,5,0,0,0,industry not hot
+DMART,Diversified Retail,6.0,49,1,0,0,0,industry not hot
+VENTIVE,Hotels & Resorts,6.0,46,15,37,1,0,industry not hot
+INSECTICID,Pesticides & Agrochemicals,6.0,48,5,8,0,16,industry not hot
+ONESOURCE,Pharmaceuticals,6.0,42,2,33,0,3,no industry / short history
+PENIND,Industrial Products,6.0,49,14,21,0,10,industry not hot
+RPGLIFE,Pharmaceuticals,6.0,49,7,13,0,0,industry not hot
+BOSCHLTD,Auto Components & Equipments,6.0,49,25,0,0,8,industry not hot
+BAJAJ-AUTO,2/3 Wheelers,6.0,49,23,0,0,0,industry not hot
+VESUVIUS,Electrodes & Refractories,6.0,49,0,0,0,9,industry not hot
+AUTOAXLES,Auto Components & Equipments,6.0,41,18,0,0,0,industry not hot
+ICICIBANK,Private Sector Bank,5.0,49,19,0,0,0,industry not hot
+VIKRAN,Civil Construction,5.0,12,2,4,0,0,no industry / short history
+CRAMC,Asset Management Company,5.0,6,0,0,0,0,no industry / short history
+GOKULAGRO,Edible Oil,5.0,49,0,25,0,14,industry not hot
+SWANCORP,Petrochemicals,5.0,12,0,0,0,0,no industry / short history
+ISEC,Stockbroking & Allied,5.0,11,5,0,0,0,industry not hot
+WCIL,Logistics Solution Provider,5.0,49,5,37,0,12,industry not hot
+POLYCAB,Cables - Electricals,5.0,49,8,1,0,2,industry not hot
+HAL,Aerospace & Defense,5.0,49,16,0,0,3,industry not hot
+SGMART,Trading - Metals,5.0,11,0,2,0,11,no industry / short history
+DIVISLAB,Pharmaceuticals,5.0,49,7,26,0,0,industry not hot
+COCHINSHIP,Ship Building & Allied Services,5.0,49,0,0,0,17,industry not hot
+ETHOSLTD,"Gems, Jewellery And Watches",5.0,49,4,0,0,1,industry not hot
+HOMEFIRST,Housing Finance Company,4.0,49,10,7,0,9,industry not hot
+SURYODAY,Other Bank,4.0,49,12,0,0,2,industry not hot
+LEMONTREE,Hotels & Resorts,4.0,49,18,3,0,0,industry not hot
+JAYBARMARU,Auto Components & Equipments,4.0,20,14,0,0,3,failed trend test
+OCCL,Commodity Chemicals,4.0,4,0,0,0,0,industry not hot
+MOSCHIP,Computers Hardware & Equipments,4.0,41,5,32,0,25,industry not hot
+KRN,Other Industrial Products,4.0,49,19,40,1,11,industry not hot
+SGFIN,Non Banking Financial Company (NBFC),4.0,16,12,7,0,9,ranked below top 9
+AMBUJACEM,Cement & Cement Products,4.0,49,16,0,0,0,industry not hot
+WAAREEENER,Other Electrical Equipment,4.0,49,16,39,0,11,industry not hot
+DIAMONDYD,Packaged Foods,4.0,49,0,5,0,0,industry not hot
+COALINDIA,Coal,4.0,49,0,0,0,0,industry not hot
+AAATECH,Consulting Services,3.0,8,0,0,0,0,industry not hot
+SHREECEM,Cement & Cement Products,3.0,49,16,0,0,0,industry not hot
+ULTRACEMCO,Cement & Cement Products,3.0,49,16,0,0,0,industry not hot
+MEGASTAR,Other Food Products,3.0,8,0,0,0,0,industry not hot
+TRANSRAILL,Heavy Electrical Equipment,3.0,46,14,37,0,15,no industry / short history
+SAGILITY,IT Enabled Services,3.0,8,4,3,0,0,ranked below top 9
+TATACAP,Non Banking Financial Company (NBFC),3.0,7,7,0,0,0,no industry / short history
+KAMATHOTEL,Hotels & Resorts,3.0,47,16,10,1,3,failed trend test
+AEGISVOPAK,Oil Storage & Transportation,3.0,25,0,17,0,0,industry not hot
+MPSLTD,Printing & Publication,3.0,49,0,21,0,3,industry not hot
+ESABINDIA,Other Industrial Products,3.0,47,17,0,0,0,industry not hot
+TENNIND,Auto Components & Equipments,3.0,2,2,0,0,0,no industry / short history
+INOXINDIA,Other Industrial Products,2.0,49,19,0,0,4,industry not hot
+TATAINVEST,Investment Company,2.0,49,37,3,0,25,failed trend test
+BANARBEADS,"Gems, Jewellery And Watches",2.0,3,0,0,0,0,industry not hot
+PEL,Non Banking Financial Company (NBFC),2.0,36,17,2,0,0,industry not hot
+ICICIPRULI,Life Insurance,2.0,49,21,0,0,0,industry not hot
+APEX,Seafood,2.0,48,0,0,0,23,industry not hot
+REPCOHOME,Housing Finance Company,2.0,49,10,0,0,0,industry not hot
+WOCKPHARMA,Pharmaceuticals,2.0,49,7,36,2,9,industry not hot
+PIDILITIND,Specialty Chemicals,2.0,49,0,0,0,0,industry not hot
+MIDHANI,Aerospace & Defense,2.0,49,16,0,0,16,industry not hot
+INTELLECT,Computers - Software & Consulting,2.0,49,12,8,0,13,industry not hot
+KIMS,Hospital,2.0,49,32,34,0,3,failed trend test
+MRPL,Refineries & Marketing,2.0,49,20,0,0,10,industry not hot
+NUVOCO,Cement & Cement Products,2.0,49,16,4,0,5,failed trend test
+SUPRIYA,Pharmaceuticals,2.0,49,7,27,3,0,industry not hot
+MUTHOOTMF,Microfinance Institutions,1.0,49,1,0,0,4,industry not hot
+GRANULES,Pharmaceuticals,1.0,49,7,2,0,0,industry not hot
+ASKAUTOLTD,Auto Components & Equipments,1.0,49,25,15,0,1,industry not hot
+ASIANHOTNR,Hotels & Resorts,1.0,2,1,0,0,0,failed trend test
+SUPRAJIT,Auto Components & Equipments,1.0,49,25,0,0,0,failed trend test
+STYLAMIND,Plywood Boards/ Laminates,1.0,49,0,1,0,5,industry not hot
+AFFLE,IT Enabled Services,1.0,49,17,12,0,1,industry not hot
+IWEL,Heavy Electrical Equipment,1.0,23,6,1,0,0,industry not hot
+KEI,Cables - Electricals,1.0,49,8,0,0,2,industry not hot
+DIVGIITTS,Auto Components & Equipments,1.0,8,1,0,0,2,industry not hot
+IOLCP,Pharmaceuticals,1.0,49,7,1,0,19,industry not hot
+NLCINDIA,Power Generation,1.0,49,1,0,0,7,industry not hot
+DIFFNKG,Other Industrial Products,1.0,45,19,36,1,6,industry not hot
+ACMESOLAR,Power Generation,1.0,49,1,38,0,15,industry not hot
+SABTNL,TV Broadcasting & Software Production,1.0,6,0,0,0,3,industry not hot
+ZUARIIND,Sugar,1.0,49,0,0,0,12,industry not hot
+RRKABEL,Cables - Electricals,1.0,49,8,0,0,13,industry not hot
+SHARDAMOTR,Auto Components & Equipments,1.0,49,25,0,0,10,industry not hot
+HEXT,Computers - Software & Consulting,0.0,39,6,30,0,1,no industry / short history
+INDIAMART,Internet & Catalogue Retail,-0.0,49,0,0,0,0,industry not hot
+KIOCL,Sponge Iron,0.0,49,0,3,0,26,industry not hot
+THELEELA,Hotels & Resorts,-0.0,25,5,17,0,0,industry not hot
+GPPL,Port & Port services,-0.0,49,0,0,0,0,industry not hot
+VEEDOL,Lubricants,-0.0,48,0,0,0,1,industry not hot
+WELCORP,Iron & Steel Products,0.0,49,10,24,0,8,industry not hot
+PRIMESECU,Other Financial Services,0.0,49,0,1,0,1,industry not hot
+SCPL,Dairy Products,-0.0,3,0,0,0,3,industry not hot
+DOMS,Stationary,-0.0,49,0,17,0,0,industry not hot
+PREMEXPLN,Explosives,0.0,49,0,4,0,20,industry not hot
+VARROC,Auto Components & Equipments,0.0,49,25,0,0,7,industry not hot
+METROBRAND,Footwear,0.0,49,2,0,0,0,industry not hot
+AJAXENGG,Construction Vehicles,-0.0,39,0,30,0,0,industry not hot
+ONEPOINT,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),0.0,26,0,0,0,0,industry not hot
+ONGC,Oil Exploration & Production,0.0,49,0,0,0,0,industry not hot
+HNDFDS,Diversified FMCG,0.0,49,0,0,0,0,industry not hot
+LORDSCHLO,Commodity Chemicals,-0.0,14,2,6,0,2,industry not hot
+HINDUNILVR,Diversified FMCG,-0.0,49,0,0,0,0,industry not hot
+APCOTEXIND,Rubber,0.0,34,0,0,0,0,industry not hot
+VIJAYA,Healthcare Service Provider,0.0,49,8,15,0,0,industry not hot
+OIL,Oil Exploration & Production,-1.0,49,0,0,0,0,industry not hot
+IVALUE,IT Enabled Services,-1.0,9,5,0,0,0,no industry / short history
+GULFOILLUB,Lubricants,-1.0,49,0,0,0,0,industry not hot
+DABUR,Personal Care,-1.0,49,20,0,0,0,industry not hot
+JIOFIN,Investment Company,-1.0,49,37,0,0,3,industry not hot
+BLISSGVS,Pharmaceuticals,-1.0,49,7,6,0,29,industry not hot
+CASTROLIND,Lubricants,-1.0,49,0,0,0,0,industry not hot
+J&KBANK,Private Sector Bank,-1.0,49,19,0,0,4,failed trend test
+BLSE,IT Enabled Services,-1.0,46,16,5,0,6,industry not hot
+LALPATHLAB,Healthcare Service Provider,-1.0,49,8,0,0,0,industry not hot
+MANALIPETC,Petrochemicals,-1.0,47,0,0,0,3,industry not hot
+NTPC,Power Generation,-1.0,49,1,0,0,0,industry not hot
+CIPLA,Pharmaceuticals,-1.0,49,7,0,0,0,industry not hot
+LINDEINDIA,Industrial Gases,-1.0,49,0,0,0,0,industry not hot
+JBCHEPHARM,Pharmaceuticals,-1.0,49,7,0,0,0,industry not hot
+HINDWAREAP,Sanitary Ware,-2.0,49,0,0,0,15,industry not hot
+DODLA,Dairy Products,-2.0,49,0,1,0,4,industry not hot
+TVSELECT,Computers Hardware & Equipments,-2.0,37,5,13,0,21,industry not hot
+UTTAMSUGAR,Sugar,-2.0,43,0,0,0,7,industry not hot
+SSWL,Auto Components & Equipments,-2.0,49,25,0,0,8,industry not hot
+CHAMBLFERT,Fertilizers,-2.0,49,24,18,0,2,failed trend test
+CGCL,Non Banking Financial Company (NBFC),-2.0,49,29,0,0,0,failed trend test
+ABBOTINDIA,Pharmaceuticals,-2.0,49,7,0,0,0,industry not hot
+SDBL,Breweries & Distilleries,-2.0,49,15,6,1,7,industry not hot
+ALKEM,Pharmaceuticals,-2.0,49,7,0,0,0,industry not hot
+DENTA,Water Supply & Management,-2.0,42,5,33,3,17,industry not hot
+SAMBHV,Iron & Steel Products,-2.0,21,8,12,0,1,industry not hot
+NAVNETEDUL,Stationary,-2.0,49,0,0,0,0,industry not hot
+EQUITASBNK,Other Bank,-2.0,49,12,0,0,0,industry not hot
+NHPC,Power Generation,-2.0,49,1,0,0,0,industry not hot
+BANARISUG,Sugar,-2.0,4,0,3,0,0,industry not hot
+ADANIGREEN,Power Generation,-2.0,49,1,0,0,4,industry not hot
+SYSTMTXC,Stockbroking & Allied,-2.0,8,8,0,0,0,no industry / short history
+OCCLLTD,Commodity Chemicals,-2.0,29,6,21,3,16,industry not hot
+KSB,"Compressors, Pumps & Diesel Engines",-2.0,49,2,0,0,1,industry not hot
+MPHASIS,Computers - Software & Consulting,-2.0,49,12,0,0,0,industry not hot
+TARC,"Residential, Commercial Projects",-3.0,49,5,0,0,10,industry not hot
+APOLLOHOSP,Hospital,-3.0,49,32,0,0,0,failed trend test
+BORORENEW,Glass - Industrial,-3.0,49,0,6,0,0,industry not hot
+ARVINDFASN,Speciality Retail,-3.0,49,6,0,0,1,industry not hot
+JUBLPHARMA,Pharmaceuticals,-3.0,49,7,11,0,1,industry not hot
+ORIENTBELL,Ceramics,-3.0,3,0,0,0,1,industry not hot
+AETHER,Specialty Chemicals,-3.0,49,0,0,0,10,industry not hot
+GANDHITUBE,Iron & Steel Products,-3.0,17,6,0,0,2,industry not hot
+CANTABIL,Garments & Apparels,-3.0,49,9,1,0,0,industry not hot
+XELPMOC,Software Products,-3.0,4,0,0,0,1,industry not hot
+TATAPOWER,Integrated Power Utilities,-3.0,49,6,0,0,0,industry not hot
+STARCEMENT,Cement & Cement Products,-3.0,49,16,5,0,0,industry not hot
+MEDPLUS,Pharmacy Retail,-3.0,49,0,2,0,1,industry not hot
+PERSISTENT,Computers - Software & Consulting,-3.0,49,12,8,0,0,industry not hot
+SPLPETRO,Petrochemicals,-3.0,49,0,0,0,10,industry not hot
+HATSUN,Dairy Products,-3.0,49,0,0,0,0,industry not hot
+HUDCO,Financial Institution,-3.0,49,1,0,0,0,industry not hot
+GLAND,Pharmaceuticals,-3.0,49,7,0,0,4,industry not hot
+STARHEALTH,General Insurance,-4.0,49,0,0,0,0,industry not hot
+BIKAJI,Packaged Foods,-4.0,49,0,0,0,0,industry not hot
+CSLFINANCE,Non Banking Financial Company (NBFC),-4.0,14,11,0,0,2,failed trend test
+LICI,Life Insurance,-4.0,49,21,0,0,0,industry not hot
+AEROFLEX,Iron & Steel Products,-4.0,49,10,5,0,13,industry not hot
+IPL,Pesticides & Agrochemicals,-4.0,49,5,0,0,14,industry not hot
+APTUS,Housing Finance Company,-4.0,49,10,0,0,0,industry not hot
+STUDDS,Auto Components & Equipments,-4.0,4,4,0,0,0,no industry / short history
+HPIL,Dyes And Pigments,-4.0,2,0,0,0,0,industry not hot
+UFLEX,Packaging,-4.0,43,13,0,0,1,industry not hot
+NRBBEARING,Auto Components & Equipments,-4.0,49,25,0,0,7,failed trend test
+SAMMAANCAP,Housing Finance Company,-4.0,49,10,1,0,14,industry not hot
+SAGCEM,Cement & Cement Products,-4.0,40,9,0,0,3,failed trend test
+INNOVANA,Computers - Software & Consulting,-4.0,10,2,10,0,2,industry not hot
+RAJRATAN,Auto Components & Equipments,-4.0,49,25,0,0,15,industry not hot
+PILANIINVS,Investment Company,-4.0,49,37,1,0,2,industry not hot
+SATIN,Microfinance Institutions,-4.0,49,1,0,0,8,industry not hot
+AVL,Speciality Retail,-4.0,49,6,38,0,9,industry not hot
+KTKBANK,Private Sector Bank,-4.0,49,19,0,0,3,failed trend test
+AZAD,Heavy Electrical Equipment,-4.0,49,14,3,0,2,industry not hot
+TBOTEK,"Tour, Travel Related Services",-4.0,49,15,18,0,5,industry not hot
+INDIQUBE,Diversified Commercial Services,-4.0,17,6,8,0,0,no industry / short history
+PFIZER,Pharmaceuticals,-4.0,49,7,0,0,2,industry not hot
+TIMKEN,Abrasives & Bearings,-4.0,49,0,0,0,1,industry not hot
+WEWORK,Diversified Commercial Services,-4.0,7,0,0,0,0,no industry / short history
+ABSLAMC,Asset Management Company,-4.0,49,0,3,0,7,industry not hot
+CAREERP,Non Banking Financial Company (NBFC),-4.0,1,1,0,0,0,failed trend test
+AHLUCONT,Civil Construction,-4.0,49,12,0,0,6,industry not hot
+SIKKO,Pesticides & Agrochemicals,-4.0,16,1,1,0,5,industry not hot
+MARATHON,"Residential, Commercial Projects",-5.0,49,5,3,0,12,industry not hot
+SUVENPHAR,Pharmaceuticals,-5.0,18,7,14,0,0,industry not hot
+GEPIL,Heavy Electrical Equipment,-5.0,32,14,0,0,14,industry not hot
+ICRA,Ratings,-5.0,49,0,0,0,0,industry not hot
+PINELABS,Financial Technology (Fintech),-5.0,3,0,0,0,0,no industry / short history
+RALLIS,Pesticides & Agrochemicals,-5.0,49,5,0,0,14,industry not hot
+CEMPRO,Civil Construction,-5.0,10,2,0,0,4,industry not hot
+DPABHUSHAN,"Gems, Jewellery And Watches",-5.0,48,4,9,0,0,industry not hot
+PPAP,Auto Components & Equipments,-5.0,11,9,3,3,0,failed trend test
+360ONE,Stockbroking & Allied,-5.0,49,24,5,0,2,industry not hot
+BAJAJHLDNG,Holding Company,-5.0,49,25,26,0,0,industry not hot
+PRAKASH,Iron & Steel,-5.0,49,17,0,0,0,industry not hot
+AARON,Industrial Products,-5.0,11,6,9,0,0,industry not hot
+HERITGFOOD,Dairy Products,-5.0,49,0,0,0,1,industry not hot
+KPRMILL,Other Textile Products,-5.0,49,10,10,0,8,industry not hot
+FAZE3Q,Other Textile Products,-5.0,36,6,10,0,2,industry not hot
+RATEGAIN,Computers - Software & Consulting,-5.0,49,12,0,0,19,industry not hot
+AARVI,Diversified Commercial Services,-5.0,8,0,0,0,0,industry not hot
+ITDC,Hotels & Resorts,-6.0,44,15,0,0,0,industry not hot
+LATENTVIEW,Computers - Software & Consulting,-6.0,49,12,0,0,0,industry not hot
+AJANTPHARM,Pharmaceuticals,-6.0,49,7,1,0,0,industry not hot
+ALLTIME,Houseware,-6.0,15,0,6,0,0,no industry / short history
+ZENSARTECH,Computers - Software & Consulting,-6.0,49,12,5,0,1,industry not hot
+ZYDUSLIFE,Pharmaceuticals,-6.0,49,7,0,0,0,industry not hot
+IGL,LPG/CNG/PNG/LNG Supplier,-6.0,49,5,0,0,0,industry not hot
+RUCHIRA,Paper & Paper Products,-6.0,18,0,0,0,0,industry not hot
+DHARMAJ,Pesticides & Agrochemicals,-6.0,45,5,0,0,17,industry not hot
+SCHNEIDER,Heavy Electrical Equipment,-6.0,49,14,0,0,25,industry not hot
+GOLDIAM,"Gems, Jewellery And Watches",-6.0,49,4,17,0,1,industry not hot
+GMMPFAUDLR,Industrial Products,-6.0,49,14,0,0,0,industry not hot
+MBEL,Civil Construction,-6.0,16,2,7,0,0,no industry / short history
+TCI,Logistics Solution Provider,-6.0,49,5,0,0,0,industry not hot
+TCPLPACK,Packaging,-6.0,43,11,26,0,3,industry not hot
+BLUEJET,Pharmaceuticals,-6.0,49,7,32,3,5,industry not hot
+SIEMENS,Heavy Electrical Equipment,-6.0,49,14,0,0,0,industry not hot
+ORIENTTECH,IT Enabled Services,-6.0,49,17,35,0,18,industry not hot
+PICCADIL,Breweries & Distilleries,-6.0,21,4,12,0,0,industry not hot
+EMCURE,Pharmaceuticals,-6.0,49,7,26,0,8,industry not hot
+PRESTIGE,"Residential, Commercial Projects",-6.0,49,5,0,0,4,industry not hot
+ENRIN,Heavy Electrical Equipment,-6.0,23,5,14,0,1,industry not hot
+CIGNITITEC,IT Enabled Services,-6.0,49,17,8,0,2,industry not hot
+APOLLOTYRE,Tyres & Rubber Products,-6.0,49,6,0,0,0,industry not hot
+CONTROLPR,Computers Hardware & Equipments,-6.0,45,5,0,0,3,industry not hot
+LTTS,IT Enabled Services,-6.0,49,17,0,0,0,industry not hot
+AMRUTANJAN,Pharmaceuticals,-7.0,45,6,0,0,0,industry not hot
+RUBFILA,Rubber,-7.0,5,0,4,0,0,industry not hot
+SURYAROSNI,Iron & Steel Products,-7.0,49,10,0,0,5,industry not hot
+RML,Auto Components & Equipments,-7.0,34,15,0,0,6,industry not hot
+KPIL,Civil Construction,-7.0,49,12,0,0,2,industry not hot
+BHAGERIA,Dyes And Pigments,-7.0,23,0,0,0,0,industry not hot
+KPIGREEN,Power Generation,-7.0,49,1,0,0,4,industry not hot
+SAKSOFT,Computers - Software & Consulting,-7.0,49,12,0,0,9,industry not hot
+SOBHA,"Residential, Commercial Projects",-7.0,49,5,0,0,2,industry not hot
+PRUDENT,Financial Products Distributor,-7.0,49,0,9,0,6,industry not hot
+JKLAKSHMI,Cement & Cement Products,-7.0,49,16,0,0,0,industry not hot
+KALAMANDIR,Speciality Retail,-7.0,49,6,0,0,13,industry not hot
+FACT,Fertilizers,-7.0,49,24,0,0,8,industry not hot
+SHANTIGEAR,Industrial Products,-7.0,44,13,0,0,1,industry not hot
+METROPOLIS,Healthcare Service Provider,-7.0,49,8,0,0,1,industry not hot
+SASTASUNDR,Healthcare Service Provider,-7.0,14,2,0,0,1,industry not hot
+MMTC,Trading & Distributors,-7.0,49,2,0,0,11,industry not hot
+BIL,Leather And Leather Products,-7.0,10,0,5,0,0,industry not hot
+TECHM,Computers - Software & Consulting,-7.0,49,12,0,0,0,industry not hot
+LTFOODS,Other Agricultural Products,-7.0,49,22,19,1,5,failed trend test
+MAXHEALTH,Hospital,-7.0,49,32,17,0,0,failed trend test
+MAHLIFE,"Residential, Commercial Projects",-7.0,49,5,0,0,1,industry not hot
+LAXMIINDIA,Non Banking Financial Company (NBFC),-7.0,16,12,7,0,0,no industry / short history
+TREJHARA,Computers - Software & Consulting,-7.0,6,0,0,0,0,industry not hot
+SEAMECLTD,Shipping,-8.0,49,0,0,0,20,industry not hot
+HUBTOWN,"Residential, Commercial Projects",-8.0,49,5,8,0,18,industry not hot
+SIS,Other Consumer Services,-8.0,49,0,0,0,0,industry not hot
+FINEORG,Specialty Chemicals,-8.0,49,0,0,0,1,industry not hot
+SANOFICONR,Pharmaceuticals,-8.0,49,7,35,0,0,industry not hot
+RAILTEL,Other Telecom Services,-8.0,49,0,0,0,11,industry not hot
+MAWANASUG,Sugar,-8.0,6,0,0,0,0,industry not hot
+BVCL,Cement & Cement Products,-8.0,3,2,0,0,0,failed trend test
+DRREDDY,Pharmaceuticals,-8.0,49,7,0,0,0,industry not hot
+TIL,Construction Vehicles,-8.0,15,0,1,0,6,industry not hot
+SHILCTECH,Other Electrical Equipment,-8.0,1,0,0,0,0,no industry / short history
+PATANJALI,Edible Oil,-8.0,49,0,4,0,0,industry not hot
+TALBROAUTO,Auto Components & Equipments,-8.0,49,25,0,0,4,failed trend test
+WORTH,Packaging,-8.0,10,7,6,0,0,failed trend test
+GANESHHOU,"Residential, Commercial Projects",-8.0,11,0,0,0,0,no industry / short history
+SGLTL,Industrial Products,-8.0,44,11,35,0,3,no industry / short history
+EBGNG,Computers Hardware & Equipments,-8.0,17,3,8,0,4,industry not hot
+GSFC,Fertilizers,-8.0,49,24,0,0,0,industry not hot
+MOLDTKPAC,Packaging,-8.0,49,13,0,0,15,industry not hot
+MEDICO,Pharmaceuticals,-8.0,27,7,2,0,0,industry not hot
+IFGLEXPOR,Electrodes & Refractories,-8.0,22,0,0,0,0,industry not hot
+DCAL,Pharmaceuticals,-8.0,49,7,22,0,5,industry not hot
+GMRP&UI,Power Generation,-8.0,49,1,3,0,0,industry not hot
+BANDHANBNK,Private Sector Bank,-8.0,49,19,0,0,1,failed trend test
+CRIZAC,Internet & Catalogue Retail,-8.0,20,0,11,0,0,industry not hot
+GVPIL,Heavy Electrical Equipment,-8.0,13,0,0,0,13,no industry / short history
+UFBL,Restaurants,-8.0,7,0,0,0,7,no industry / short history
+AKZOINDIA,Paints,-8.0,49,10,5,0,0,industry not hot
+NCLIND,Cement & Cement Products,-8.0,46,15,0,0,0,industry not hot
+ARIHANTCAP,Stockbroking & Allied,-9.0,49,24,4,0,17,industry not hot
+MAHLOG,Logistics Solution Provider,-9.0,49,5,0,0,8,industry not hot
+ABCOTS,Other Textile Products,-9.0,4,1,0,0,0,no industry / short history
+KERNEX,Transport Related Services,-9.0,49,0,24,0,18,industry not hot
+SATINDLTD,Iron & Steel Products,-9.0,23,0,0,0,0,industry not hot
+AARTIIND,Specialty Chemicals,-9.0,49,0,0,0,0,industry not hot
+RHIM,Electrodes & Refractories,-9.0,49,0,0,0,0,industry not hot
+SAMHI,Hotels & Resorts,-9.0,49,18,1,0,10,failed trend test
+RPTECH,Computers Hardware & Equipments,-9.0,49,5,7,0,9,industry not hot
+TMPV,Passenger Cars & Utility Vehicles,-9.0,5,0,0,0,0,no industry / short history
+UNIENTER,Trading - Chemicals,-9.0,2,0,0,0,0,industry not hot
+TATAMOTORS,Passenger Cars & Utility Vehicles,-9.0,40,17,0,0,0,industry not hot
+MAITHANALL,Ferro & Silica Manganese,-9.0,49,0,0,0,0,industry not hot
+BEML,Construction Vehicles,-9.0,49,0,0,0,12,industry not hot
+SUNDROP,Edible Oil,-9.0,27,0,0,0,0,industry not hot
+PNGJL,"Gems, Jewellery And Watches",-9.0,49,4,36,0,0,industry not hot
+ONWARDTEC,IT Enabled Services,-9.0,40,12,0,0,6,industry not hot
+HDBFS,Non Banking Financial Company (NBFC),-9.0,21,13,12,0,0,ranked below top 9
+SUNPHARMA,Pharmaceuticals,-9.0,49,7,0,0,0,industry not hot
+FUSION,Microfinance Institutions,-9.0,49,1,0,0,3,industry not hot
+ADANIENT,Trading - Minerals,-9.0,49,0,0,0,0,industry not hot
+ALKYLAMINE,Specialty Chemicals,-9.0,49,0,0,0,5,industry not hot
+ALLDIGI,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),-9.0,24,0,0,0,0,industry not hot
+EMKAY,Stockbroking & Allied,-9.0,5,2,3,0,0,industry not hot
+AVALON,Other Electrical Equipment,-9.0,49,16,41,0,26,industry not hot
+NUCLEUS,Software Products,-10.0,48,10,0,0,12,industry not hot
+MOTILALOFS,Stockbroking & Allied,-10.0,49,24,12,0,12,industry not hot
+NIVABUPA,General Insurance,-10.0,49,0,38,0,0,industry not hot
+WEL,Household Appliances,-10.0,49,1,24,0,0,industry not hot
+LUPIN,Pharmaceuticals,-10.0,49,7,3,0,0,industry not hot
+JSWINFRA,Port & Port services,-10.0,49,0,1,0,0,industry not hot
+RELIGARE,Investment Company,-10.0,49,37,0,0,0,failed trend test
+SKFINDIA,Abrasives & Bearings,-10.0,49,0,0,0,0,industry not hot
+MARKOLINES,Civil Construction,-10.0,7,1,0,0,0,no industry / short history
+PANACEABIO,Pharmaceuticals,-10.0,49,7,27,7,11,industry not hot
+LGEINDIA,Household Appliances,-10.0,7,0,0,0,0,no industry / short history
+LICHSGFIN,Housing Finance Company,-10.0,49,10,0,0,0,industry not hot
+MENONBE,Auto Components & Equipments,-10.0,4,4,0,0,0,failed trend test
+20MICRONS,Industrial Minerals,-10.0,49,22,2,0,6,failed trend test
+CHEMCON,Specialty Chemicals,-10.0,27,0,0,0,3,industry not hot
+ATLANTAA,Civil Construction,-10.0,3,1,0,0,0,industry not hot
+CIEINDIA,Auto Components & Equipments,-10.0,49,25,0,0,0,failed trend test
+CREST,Non Banking Financial Company (NBFC),-10.0,7,4,1,0,0,failed trend test
+AEROENTER,Iron & Steel Products,-10.0,20,8,0,0,3,industry not hot
+DIACABS,Other Electrical Equipment,-10.0,47,15,4,0,22,industry not hot
+CESC,Integrated Power Utilities,-10.0,49,6,1,0,0,industry not hot
+GAIL,Gas Transmission/Marketing,-10.0,49,0,0,0,0,industry not hot
+INDUSINDBK,Private Sector Bank,-10.0,49,19,0,0,0,industry not hot
+CAPITALSFB,Other Bank,-10.0,35,7,7,0,0,industry not hot
+PRABHA,Oil Exploration & Production,-11.0,16,0,12,0,1,no industry / short history
+KANSAINER,Paints,-11.0,49,10,0,0,0,industry not hot
+VALIANTORG,Specialty Chemicals,-11.0,24,0,0,0,13,industry not hot
+KAUSHALYA,Hotels & Resorts,-11.0,2,2,2,2,0,picked
+POWERMECH,Civil Construction,-11.0,49,12,1,0,8,industry not hot
+AUROPHARMA,Pharmaceuticals,-11.0,49,7,0,0,0,industry not hot
+SHALBY,Hospital,-11.0,49,32,0,0,4,industry not hot
+UNITDSPR,Breweries & Distilleries,-11.0,49,15,0,0,0,industry not hot
+EFCIL,Diversified Commercial Services,-11.0,14,6,5,0,0,no industry / short history
+BLAL,Investment Company,-11.0,36,27,0,0,0,failed trend test
+ANTHEM,Biotechnology,-11.0,18,0,10,0,0,industry not hot
+DCM,IT Enabled Services,-11.0,7,2,2,0,0,industry not hot
+CGPOWER,Heavy Electrical Equipment,-11.0,49,14,1,0,1,industry not hot
+CHALET,Hotels & Resorts,-11.0,49,18,1,0,3,failed trend test
+CORDSCABLE,Cables - Electricals,-11.0,20,5,0,0,0,industry not hot
+AJMERA,"Residential, Commercial Projects",-11.0,49,5,13,0,0,industry not hot
+BBTC,Packaged Foods,-11.0,49,0,0,0,0,industry not hot
+JTEKTINDIA,Auto Components & Equipments,-11.0,49,25,0,0,6,industry not hot
+ORKLAINDIA,Other Food Products,-11.0,4,0,0,0,0,no industry / short history
+JLHL,Hospital,-11.0,49,32,2,0,0,failed trend test
+AARTIDRUGS,Pharmaceuticals,-11.0,49,7,0,0,9,industry not hot
+FSL,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),-11.0,49,0,20,0,0,industry not hot
+VLSFINANCE,Investment Company,-11.0,23,13,1,0,0,failed trend test
+BHARATRAS,Pesticides & Agrochemicals,-11.0,49,5,0,0,0,industry not hot
+ACCELYA,Computers - Software & Consulting,-11.0,45,12,0,0,0,industry not hot
+NAHARPOLY,Packaging,-11.0,7,5,3,1,1,failed trend test
+GODAVARIB,Diversified FMCG,-11.0,43,0,32,0,8,industry not hot
+KRISHIVAL,Other Food Products,-12.0,9,0,9,0,0,industry not hot
+RAINBOW,Hospital,-12.0,49,32,2,0,0,failed trend test
+RAMKY,Civil Construction,-12.0,49,12,0,0,4,industry not hot
+VINATIORGA,Specialty Chemicals,-12.0,49,0,0,0,0,industry not hot
+STYLEBAAZA,Speciality Retail,-12.0,49,6,34,0,14,industry not hot
+JGCHEM,Commodity Chemicals,-12.0,49,6,17,1,17,industry not hot
+NIITMTS,Education,-12.0,49,0,0,0,0,industry not hot
+TORNTPOWER,Integrated Power Utilities,-12.0,49,6,0,0,0,industry not hot
+ATUL,Specialty Chemicals,-12.0,49,0,0,0,1,industry not hot
+MANOMAY,Other Textile Products,-12.0,10,4,1,0,0,industry not hot
+BELLACASA,Garments & Apparels,-12.0,2,0,2,0,0,industry not hot
+GILLETTE,Personal Care,-12.0,49,20,5,0,0,industry not hot
+GKENERGY,Civil Construction,-12.0,9,1,0,0,0,no industry / short history
+EIHAHOTELS,Hotels & Resorts,-12.0,33,18,0,0,0,failed trend test
+SUMICHEM,Pesticides & Agrochemicals,-12.0,49,5,1,0,0,industry not hot
+EMAMILTD,Personal Care,-12.0,49,20,0,0,0,industry not hot
+VETO,Consumer Electronics,-12.0,17,0,0,0,0,industry not hot
+PGHH,Personal Care,-12.0,49,20,0,0,0,industry not hot
+EMMVEE,Other Electrical Equipment,-12.0,2,0,0,0,2,no industry / short history
+SUNDRMFAST,Auto Components & Equipments,-12.0,49,25,0,0,0,failed trend test
+AEGISLOG,Trading - Gas,-12.0,49,0,0,0,2,industry not hot
+FLUOROCHEM,Specialty Chemicals,-12.0,49,0,0,0,0,industry not hot
+PIIND,Pesticides & Agrochemicals,-12.0,49,5,0,0,0,industry not hot
+AVTNPL,Other Agricultural Products,-12.0,12,0,0,0,0,industry not hot
+GNFC,Commodity Chemicals,-12.0,49,6,0,0,0,industry not hot
+MGL,LPG/CNG/PNG/LNG Supplier,-12.0,49,5,0,0,0,industry not hot
+EIHOTEL,Hotels & Resorts,-12.0,49,18,0,0,0,industry not hot
+ITC,Diversified FMCG,-12.0,49,0,0,0,0,industry not hot
+KROSS,Auto Components & Equipments,-13.0,49,25,35,0,2,industry not hot
+BIRLANU,Other Construction Materials,-13.0,32,0,0,0,0,industry not hot
+INTENTECH,IT Enabled Services,-13.0,16,10,0,0,3,industry not hot
+BALMLAWRIE,Diversified,-13.0,49,0,0,0,0,industry not hot
+EDELWEISS,Holding Company,-13.0,49,25,7,0,4,industry not hot
+POLICYBZR,Financial Technology (Fintech),-13.0,49,0,5,0,0,industry not hot
+ASALCBR,Breweries & Distilleries,-13.0,49,15,21,3,0,industry not hot
+AAVAS,Housing Finance Company,-13.0,49,10,2,0,0,industry not hot
+WIPRO,Computers - Software & Consulting,-13.0,49,12,1,0,0,industry not hot
+DBCORP,Print Media,-13.0,49,0,0,0,0,industry not hot
+RSYSTEMS,IT Enabled Services,-13.0,49,17,0,0,4,industry not hot
+IRCTC,"Tour, Travel Related Services",-13.0,49,15,0,0,0,industry not hot
+EXIDEIND,Auto Components & Equipments,-13.0,49,25,0,0,0,failed trend test
+ADVENZYMES,Biotechnology,-13.0,49,0,0,0,0,industry not hot
+GREENPLY,Plywood Boards/ Laminates,-13.0,49,0,0,0,0,industry not hot
+COASTCORP,Seafood,-14.0,2,0,0,0,0,industry not hot
+BIRLACORPN,Cement & Cement Products,-14.0,49,16,0,0,4,failed trend test
+SPANDANA,Microfinance Institutions,-14.0,49,1,0,0,1,industry not hot
+OMAXAUTO,Auto Components & Equipments,-14.0,13,12,0,0,7,failed trend test
+BHARATWIRE,Iron & Steel Products,-14.0,49,10,0,0,6,industry not hot
+GODREJIND,Diversified,-14.0,49,0,14,0,5,industry not hot
+IKS,IT Enabled Services,-14.0,47,15,37,0,0,industry not hot
+PACEDIGITK,Telecom - Infrastructure,-14.0,8,0,0,0,0,no industry / short history
+ICIL,Other Textile Products,-14.0,49,10,0,0,4,industry not hot
+EUROBOND,"Aluminium, Copper & Zinc Products",-14.0,1,0,0,0,0,no industry / short history
+BLUESTONE,"Gems, Jewellery And Watches",-14.0,14,4,6,0,0,no industry / short history
+COFORGE,Computers - Software & Consulting,-14.0,49,12,12,0,2,industry not hot
+POWERGRID,Power - Transmission,-14.0,49,0,0,0,0,industry not hot
+MHRIL,Hotels & Resorts,-14.0,49,18,0,0,0,industry not hot
+INDGN,"Healthcare Research, Analytics & Technology",-14.0,49,0,18,0,0,industry not hot
+PWL,E-Learning,-14.0,2,0,0,0,0,no industry / short history
+RAIN,Petrochemicals,-14.0,49,0,0,0,6,industry not hot
+HEUBACHIND,Dyes And Pigments,-14.0,41,0,11,0,0,industry not hot
+MANBA,Non Banking Financial Company (NBFC),-14.0,25,13,25,0,0,industry not hot
+JKPAPER,Paper & Paper Products,-14.0,49,0,0,0,0,industry not hot
+GICRE,General Insurance,-14.0,49,0,1,0,0,industry not hot
+TRIVENI,Sugar,-14.0,49,0,0,0,0,industry not hot
+YUKEN,"Compressors, Pumps & Diesel Engines",-14.0,25,2,0,0,6,industry not hot
+AMBER,Household Appliances,-14.0,49,1,41,0,0,industry not hot
+VASCONEQ,"Residential, Commercial Projects",-14.0,27,4,0,0,0,industry not hot
+INFY,Computers - Software & Consulting,-14.0,49,12,0,0,0,industry not hot
+INDRAMEDCO,Hospital,-14.0,49,32,16,2,10,failed trend test
+SUNTV,TV Broadcasting & Software Production,-14.0,49,0,0,0,0,industry not hot
+JAGRAN,Print Media,-14.0,28,0,0,0,0,industry not hot
+THEJO,Industrial Products,-14.0,40,14,0,0,4,industry not hot
+VTL,Other Textile Products,-14.0,49,10,0,0,5,industry not hot
+ARTEMISMED,Hospital,-14.0,49,32,7,1,0,failed trend test
+RUBYMILLS,Other Textile Products,-15.0,10,2,0,0,0,industry not hot
+ATFL,Edible Oil,-15.0,12,0,0,0,0,industry not hot
+CHEMBONDCH,Specialty Chemicals,-15.0,3,0,0,0,0,no industry / short history
+HCLTECH,Computers - Software & Consulting,-15.0,49,12,0,0,0,industry not hot
+HINDOILEXP,Oil Exploration & Production,-15.0,49,0,0,0,0,industry not hot
+HAVELLS,Consumer Electronics,-15.0,49,1,0,0,0,industry not hot
+REPRO,Printing & Publication,-15.0,26,0,0,0,2,industry not hot
+GSPL,Gas Transmission/Marketing,-15.0,49,0,0,0,0,industry not hot
+RVNL,Civil Construction,-15.0,49,12,0,0,0,industry not hot
+ACC,Cement & Cement Products,-15.0,49,16,0,0,0,industry not hot
+SAATVIKGL,Other Electrical Equipment,-15.0,9,0,0,0,0,no industry / short history
+GICHSGFIN,Housing Finance Company,-15.0,47,10,0,0,0,industry not hot
+MUNJALSHOW,Auto Components & Equipments,-15.0,15,14,0,0,0,failed trend test
+UTIAMC,Asset Management Company,-15.0,49,0,8,0,6,industry not hot
+GOPAL,Packaged Foods,-15.0,49,0,11,0,3,industry not hot
+GRAVITA,Industrial Minerals,-15.0,49,22,5,0,1,industry not hot
+OSWALAGRO,Trading & Distributors,-15.0,21,2,16,0,0,industry not hot
+LMW,Industrial Products,-15.0,49,14,0,0,0,industry not hot
+SUZLON,Heavy Electrical Equipment,-15.0,49,14,1,0,1,industry not hot
+JUBLINGREA,Specialty Chemicals,-15.0,49,0,11,0,1,industry not hot
+INDOSTAR,Non Banking Financial Company (NBFC),-15.0,49,29,11,0,5,failed trend test
+FDC,Pharmaceuticals,-15.0,49,7,0,0,0,industry not hot
+ORBTEXP,Other Textile Products,-15.0,10,2,1,0,0,industry not hot
+IFCI,Financial Institution,-15.0,32,1,0,0,2,industry not hot
+BBOX,IT Enabled Services,-15.0,49,17,8,0,17,industry not hot
+WELENT,Civil Construction,-15.0,49,12,6,0,0,industry not hot
+ONMOBILE,Web based media and service,-15.0,40,0,0,0,0,industry not hot
+SKYGOLD,"Gems, Jewellery And Watches",-15.0,49,4,16,0,8,failed trend test
+SOLARWORLD,Civil Construction,-15.0,9,1,0,0,0,no industry / short history
+OSWALPUMPS,"Compressors, Pumps & Diesel Engines",-16.0,23,0,14,0,0,industry not hot
+MARINE,Industrial Products,-16.0,49,14,3,0,8,industry not hot
+HEIDELBERG,Cement & Cement Products,-16.0,49,16,0,0,0,industry not hot
+SAFARI,Plastic Products - Consumer,-16.0,49,0,1,0,0,industry not hot
+VAIBHAVGBL,"Gems, Jewellery And Watches",-16.0,49,4,0,0,0,industry not hot
+KAJARIACER,Ceramics,-16.0,49,0,0,0,9,industry not hot
+DEEPINDS,Oil Equipment & Services,-16.0,49,0,15,0,1,industry not hot
+EVEREADY,Household Products,-16.0,49,0,0,0,12,industry not hot
+MOL,Pesticides & Agrochemicals,-16.0,49,5,0,0,9,industry not hot
+INDHOTEL,Hotels & Resorts,-16.0,49,18,15,0,0,industry not hot
+RCF,Fertilizers,-16.0,49,24,0,0,0,industry not hot
+IRFC,Financial Institution,-16.0,49,1,0,0,0,industry not hot
+UNITEDTEA,Tea & Coffee,-16.0,4,0,4,0,0,industry not hot
+MHLXMIRU,Other Textile Products,-16.0,2,1,0,0,0,failed trend test
+IPCALAB,Pharmaceuticals,-16.0,49,7,2,0,0,industry not hot
+KKCL,Garments & Apparels,-16.0,49,9,0,0,0,industry not hot
+STCINDIA,Trading & Distributors,-16.0,32,2,0,0,1,industry not hot
+NSIL,Investment Company,-16.0,49,37,28,0,2,industry not hot
+ASTRAL,Plastic Products - Industrial,-16.0,49,4,0,0,0,industry not hot
+MADRASFERT,Fertilizers,-16.0,39,24,0,0,2,industry not hot
+SUPREME,"Residential, Commercial Projects",-16.0,21,5,18,0,0,industry not hot
+NELCAST,Castings & Forgings,-16.0,30,2,0,0,7,industry not hot
+INGERRAND,"Compressors, Pumps & Diesel Engines",-16.0,49,2,0,0,0,industry not hot
+SPORTKING,Other Textile Products,-16.0,44,9,6,0,18,industry not hot
+BALRAMCHIN,Sugar,-16.0,49,0,3,0,0,industry not hot
+GREENLAM,Plywood Boards/ Laminates,-17.0,47,0,0,0,0,industry not hot
+HONDAPOWER,Industrial Products,-17.0,45,14,0,0,11,industry not hot
+HSCL,Carbon Black,-17.0,49,0,3,0,4,industry not hot
+DALMIASUG,Sugar,-17.0,48,0,0,0,0,industry not hot
+ALIVUS,Pharmaceuticals,-17.0,43,3,0,0,0,industry not hot
+SIMPLEXINF,Civil Construction,-17.0,48,12,26,4,0,industry not hot
+KICL,Investment Company,-17.0,41,29,1,0,1,failed trend test
+OLECTRA,Passenger Cars & Utility Vehicles,-17.0,49,19,0,0,6,failed trend test
+GUJGASLTD,LPG/CNG/PNG/LNG Supplier,-17.0,49,5,0,0,0,industry not hot
+DOLPHIN,Offshore Support Solution Drilling,-17.0,9,0,0,0,2,industry not hot
+VENKEYS,Meat Products including Poultry,-17.0,49,0,0,0,0,industry not hot
+DLF,"Residential, Commercial Projects",-17.0,49,5,0,0,0,industry not hot
+EPL,Packaging,-17.0,49,13,1,0,0,industry not hot
+WELSPUNLIV,Other Textile Products,-17.0,49,10,0,0,0,industry not hot
+IRCON,Civil Construction,-17.0,49,12,0,0,5,industry not hot
+SOLARA,Pharmaceuticals,-17.0,49,7,3,0,7,industry not hot
+SUDARSCHEM,Dyes And Pigments,-17.0,49,0,23,0,13,industry not hot
+CONCOR,Logistics Solution Provider,-17.0,49,5,0,0,0,industry not hot
+ASHIANA,"Residential, Commercial Projects",-17.0,40,5,0,0,0,industry not hot
+NATHBIOGEN,Other Agricultural Products,-17.0,4,0,0,0,0,industry not hot
+ACI,Specialty Chemicals,-17.0,49,0,0,0,2,industry not hot
+SIGNATURE,"Residential, Commercial Projects",-17.0,49,5,0,0,0,industry not hot
+RITES,Civil Construction,-17.0,49,12,0,0,2,industry not hot
+CARRARO,Auto Components & Equipments,-17.0,46,25,37,0,10,no industry / short history
+GILLANDERS,Tea & Coffee,-18.0,9,0,9,0,0,industry not hot
+JBMA,Auto Components & Equipments,-18.0,49,25,0,0,2,industry not hot
+LLOYDSENGG,Industrial Products,-18.0,48,13,3,0,16,industry not hot
+ELGIEQUIP,"Compressors, Pumps & Diesel Engines",-18.0,49,2,0,0,0,industry not hot
+PETRONET,LPG/CNG/PNG/LNG Supplier,-18.0,49,5,0,0,0,industry not hot
+FINOPB,Other Bank,-18.0,49,12,0,0,1,industry not hot
+ALICON,Auto Components & Equipments,-18.0,36,18,0,0,3,industry not hot
+MUTHOOTCAP,Non Banking Financial Company (NBFC),-18.0,25,13,0,0,0,failed trend test
+BAYERCROP,Pesticides & Agrochemicals,-18.0,49,5,0,0,0,industry not hot
+KDDL,"Gems, Jewellery And Watches",-18.0,49,4,0,0,2,industry not hot
+INDIGOPNTS,Paints,-18.0,49,10,0,0,0,industry not hot
+IFBIND,Household Appliances,-18.0,49,1,3,0,7,industry not hot
+MUNJALAU,Auto Components & Equipments,-18.0,36,20,0,0,6,failed trend test
+RPOWER,Power Generation,-18.0,10,0,10,0,0,industry not hot
+NITIRAJ,Consumer Electronics,-18.0,7,1,4,0,1,industry not hot
+CDSL,"Depositories, Clearing Houses and Other Intermediaries",-18.0,49,0,8,0,8,industry not hot
+TIIL,Iron & Steel Products,-18.0,49,10,0,0,1,industry not hot
+IRMENERGY,LPG/CNG/PNG/LNG Supplier,-18.0,49,5,0,0,1,industry not hot
+SHANTIGOLD,"Gems, Jewellery And Watches",-18.0,17,4,8,0,0,no industry / short history
+SHIVATEX,Other Textile Products,-18.0,5,2,3,0,0,industry not hot
+KITEX,Garments & Apparels,-18.0,49,9,28,1,10,ranked below top 9
+NAHARCAP,Investment Company,-18.0,4,4,0,0,0,failed trend test
+TITAGARH,Railway Wagons,-19.0,49,0,0,0,0,industry not hot
+INDSWFTLAB,Pharmaceuticals,-19.0,20,1,0,0,6,industry not hot
+GOCLCORP,Explosives,-19.0,47,0,0,0,7,industry not hot
+NDLVENTURE,Other Financial Services,-19.0,4,0,0,0,0,industry not hot
+SONACOMS,Auto Components & Equipments,-19.0,49,25,0,0,0,failed trend test
+APARINDS,Other Electrical Equipment,-19.0,49,16,3,0,17,industry not hot
+DEVYANI,Restaurants,-19.0,49,5,0,0,0,industry not hot
+RESPONIND,"Furniture, Home Furnishing",-19.0,45,0,0,0,1,industry not hot
+GRINDWELL,Abrasives & Bearings,-19.0,49,0,0,0,0,industry not hot
+VHL,Investment Company,-19.0,1,0,1,0,0,industry not hot
+MAYURUNIQ,Leather And Leather Products,-19.0,49,0,0,0,6,industry not hot
+BUTTERFLY,Household Appliances,-19.0,28,0,0,0,0,industry not hot
+RATNAVEER,Iron & Steel Products,-19.0,49,10,2,0,0,industry not hot
+GULPOLY,Other Agricultural Products,-19.0,42,20,0,0,3,failed trend test
+KRSNAA,Healthcare Service Provider,-19.0,49,8,1,0,0,industry not hot
+GALAXYSURF,Specialty Chemicals,-19.0,49,0,0,0,0,industry not hot
+MODISONLTD,Other Electrical Equipment,-19.0,25,14,2,0,1,industry not hot
+LOTUSDEV,"Residential, Commercial Projects",-19.0,16,0,7,0,0,no industry / short history
+BLUESTARCO,Household Appliances,-19.0,49,1,13,0,0,industry not hot
+JSWCEMENT,Cement & Cement Products,-19.0,15,1,6,0,0,no industry / short history
+UFO,"Film Production, Distribution & Exhibition",-19.0,25,0,0,0,0,industry not hot
+CAMPUS,Footwear,-19.0,49,2,0,0,0,industry not hot
+ABLBL,Speciality Retail,-20.0,22,6,14,0,0,industry not hot
+63MOONS,Computers - Software & Consulting,-20.0,49,12,38,2,9,industry not hot
+REMSONSIND,Auto Components & Equipments,-20.0,46,25,0,0,0,failed trend test
+FILATEX,Other Textile Products,-20.0,30,6,0,0,0,industry not hot
+VISAKAIND,Cement & Cement Products,-20.0,29,11,0,0,8,failed trend test
+SPECIALITY,Restaurants,-20.0,7,0,0,0,0,industry not hot
+BALKRISIND,Tyres & Rubber Products,-20.0,49,6,0,0,0,industry not hot
+SKIPPER,Heavy Electrical Equipment,-20.0,49,14,7,0,1,industry not hot
+TCS,Computers - Software & Consulting,-20.0,49,12,0,0,0,industry not hot
+SARLAPOLY,Other Textile Products,-20.0,31,8,3,0,5,industry not hot
+SANSTAR,Other Agricultural Products,-20.0,49,22,28,5,2,failed trend test
+CONSOFINVT,Non Banking Financial Company (NBFC),-20.0,1,1,0,0,0,failed trend test
+CREATIVE,Trading & Distributors,-20.0,37,2,0,0,0,industry not hot
+RAJESHEXPO,"Gems, Jewellery And Watches",-20.0,49,4,0,0,0,industry not hot
+UBL,Breweries & Distilleries,-20.0,49,15,0,0,0,industry not hot
+PRSMJOHNSN,Cement & Cement Products,-20.0,49,16,0,0,1,failed trend test
+ANGELONE,Stockbroking & Allied,-20.0,49,24,0,0,3,industry not hot
+AMDIND,Packaging,-20.0,1,0,0,0,0,industry not hot
+URBANCO,E-Retail/ E-Commerce,-20.0,10,3,2,0,0,no industry / short history
+EMAMIPAP,Paper & Paper Products,-20.0,5,0,0,0,0,industry not hot
+AKSHARCHEM,Dyes And Pigments,-20.0,2,0,0,0,0,industry not hot
+VIPIND,Plastic Products - Consumer,-20.0,49,0,0,0,10,industry not hot
+BODALCHEM,Dyes And Pigments,-20.0,43,0,0,0,2,industry not hot
+DHANUKA,Pesticides & Agrochemicals,-20.0,49,5,0,0,8,failed trend test
+KPITTECH,Computers - Software & Consulting,-20.0,49,12,0,0,0,industry not hot
+MEDIASSIST,Insurance Distributors,-20.0,49,0,4,0,0,industry not hot
+MAHSEAMLES,Iron & Steel Products,-20.0,49,10,0,0,0,industry not hot
+MONTECARLO,Garments & Apparels,-20.0,49,9,0,0,2,industry not hot
+MATRIMONY,Internet & Catalogue Retail,-20.0,15,0,0,0,0,industry not hot
+NAHARINDUS,Other Textile Products,-20.0,2,2,0,0,0,failed trend test
+ITI,Telecom -  Equipment & Accessories,-20.0,49,4,5,0,3,industry not hot
+JCHAC,Household Appliances,-20.0,48,1,1,0,0,industry not hot
+TASTYBITE,Packaged Foods,-21.0,44,0,0,0,1,industry not hot
+SIGIND,Trading & Distributors,-21.0,4,2,0,0,0,industry not hot
+AWHCL,Waste Management,-21.0,49,0,0,0,0,industry not hot
+BANSWRAS,Other Textile Products,-21.0,13,4,0,0,0,industry not hot
+STEELCITY,Stockbroking & Allied,-21.0,1,1,1,0,0,ranked below top 9
+AURUM,IT Enabled Services,-21.0,36,15,4,1,0,industry not hot
+BLUEDART,Logistics Solution Provider,-21.0,49,5,0,0,0,industry not hot
+IDEAFORGE,Aerospace & Defense,-21.0,49,16,0,0,22,industry not hot
+BLUSPRING,Diversified Commercial Services,-21.0,21,6,12,0,0,no industry / short history
+MAGADSUGAR,Sugar,-21.0,16,0,0,0,0,industry not hot
+SHRIRAMPPS,"Residential, Commercial Projects",-21.0,49,5,0,0,3,industry not hot
+SHILPAMED,Pharmaceuticals,-21.0,49,7,10,1,14,industry not hot
+APLLTD,Pharmaceuticals,-21.0,49,7,0,0,0,industry not hot
+CEIGALL,Civil Construction,-21.0,49,12,30,0,7,industry not hot
+MALLCOM,Other Industrial Products,-21.0,18,11,0,0,0,failed trend test
+HEMIPROP,Diversified Commercial Services,-21.0,49,6,0,0,3,industry not hot
+DBREALTY,"Residential, Commercial Projects",-21.0,49,5,0,0,12,industry not hot
+MAXESTATES,"Residential, Commercial Projects",-21.0,49,5,4,0,4,industry not hot
+RBL,Auto Components & Equipments,-21.0,1,0,0,0,0,industry not hot
+EIMCOELECO,Industrial Products,-21.0,49,14,0,0,18,industry not hot
+ELIN,Household Appliances,-21.0,44,1,1,0,11,industry not hot
+GPTINFRA,Civil Construction,-21.0,49,12,1,0,3,industry not hot
+TEXINFRA,Diversified Commercial Services,-21.0,46,6,0,0,0,industry not hot
+PFC,Financial Institution,-21.0,49,1,0,0,0,industry not hot
+NFL,Fertilizers,-21.0,49,24,0,0,1,industry not hot
+ANDHRSUGAR,Commodity Chemicals,-21.0,49,6,0,0,0,industry not hot
+UMANGDAIRY,Dairy Products,-21.0,1,0,0,0,0,industry not hot
+AIROLAM,Plywood Boards/ Laminates,-21.0,2,0,0,0,0,industry not hot
+NITCO,Ceramics,-21.0,47,0,28,0,2,industry not hot
+WABAG,Water Supply & Management,-21.0,49,5,4,0,3,industry not hot
+VERANDA,E-Learning,-21.0,49,0,0,0,0,industry not hot
+GENUSPOWER,Other Electrical Equipment,-21.0,49,16,2,0,9,industry not hot
+JAGSNPHARM,Pharmaceuticals,-21.0,49,7,31,2,1,industry not hot
+RUSTOMJEE,"Residential, Commercial Projects",-22.0,49,5,0,0,0,industry not hot
+NGLFINE,Pharmaceuticals,-22.0,4,3,0,0,1,failed trend test
+VGUARD,Household Appliances,-22.0,49,1,0,0,0,industry not hot
+HINDCOMPOS,Auto Components & Equipments,-22.0,1,0,0,0,0,industry not hot
+KALPATARU,"Residential, Commercial Projects",-22.0,21,0,12,0,0,industry not hot
+MANAKSIA,Iron & Steel Products,-22.0,5,4,0,0,0,failed trend test
+SAPPHIRE,Restaurants,-22.0,49,5,0,0,0,industry not hot
+JUBLFOOD,Restaurants,-22.0,49,5,12,0,0,industry not hot
+RSWM,Other Textile Products,-22.0,16,6,0,0,0,industry not hot
+WANBURY,Pharmaceuticals,-22.0,49,7,15,1,7,failed trend test
+PYRAMID,Packaging,-22.0,11,3,0,0,0,industry not hot
+PVRINOX,"Film Production, Distribution & Exhibition",-22.0,49,0,0,0,0,industry not hot
+ACL,Cement & Cement Products,-22.0,3,2,0,0,0,failed trend test
+PANAMAPET,Lubricants,-22.0,46,0,0,0,3,industry not hot
+MMFL,Auto Components & Equipments,-22.0,49,25,0,0,15,failed trend test
+GHCL,Commodity Chemicals,-22.0,49,6,0,0,0,industry not hot
+HONAUT,Industrial Products,-22.0,49,14,0,0,0,industry not hot
+KIRLOSBROS,"Compressors, Pumps & Diesel Engines",-22.0,49,2,3,0,4,industry not hot
+BRIGHOTEL,Hotels & Resorts,-22.0,13,4,4,0,0,no industry / short history
+SUDEEPPHRM,Pharmaceuticals,-22.0,1,0,0,0,0,no industry / short history
+ARKADE,"Residential, Commercial Projects",-22.0,49,5,37,0,3,industry not hot
+AMJLAND,"Residential, Commercial Projects",-22.0,5,2,3,0,0,industry not hot
+KCP,Cement & Cement Products,-22.0,49,16,1,0,0,industry not hot
+SUNTECK,"Residential, Commercial Projects",-22.0,49,5,0,0,0,industry not hot
+TANLA,Software Products,-22.0,49,10,0,0,9,industry not hot
+JASH,Industrial Products,-22.0,49,14,19,0,0,industry not hot
+SILINV,Investment Company,-22.0,3,2,0,0,0,failed trend test
+RANEHOLDIN,Holding Company,-23.0,49,25,2,0,0,failed trend test
+UGROCAP,Non Banking Financial Company (NBFC),-23.0,49,29,0,0,0,failed trend test
+ZOMATO,E-Retail/ E-Commerce,-23.0,13,2,1,0,0,industry not hot
+TINNARUBR,Rubber,-23.0,31,0,23,0,0,industry not hot
+ARVIND,Garments & Apparels,-23.0,49,9,3,0,4,industry not hot
+TEXMOPIPES,Plastic Products - Industrial,-23.0,4,0,0,0,0,industry not hot
+DVL,Packaging,-23.0,25,5,0,0,0,industry not hot
+TATAELXSI,Computers - Software & Consulting,-23.0,49,12,0,0,0,industry not hot
+AWL,Edible Oil,-23.0,49,0,0,0,0,industry not hot
+DLINKINDIA,Computers Hardware & Equipments,-23.0,49,5,1,0,2,industry not hot
+HUHTAMAKI,Packaging,-23.0,49,13,0,0,0,industry not hot
+VOLTAMP,Heavy Electrical Equipment,-23.0,49,14,0,0,14,industry not hot
+ADORWELD,Other Industrial Products,-23.0,13,1,0,0,0,industry not hot
+SESHAPAPER,Paper & Paper Products,-23.0,3,0,0,0,0,industry not hot
+VENUSPIPES,Iron & Steel Products,-23.0,49,10,0,0,2,industry not hot
+ALEMBICLTD,"Residential, Commercial Projects",-23.0,49,5,1,0,0,industry not hot
+VSTIND,Cigarettes & Tobacco Products,-23.0,49,0,0,0,0,industry not hot
+MANGLMCEM,Cement & Cement Products,-23.0,49,16,2,0,0,industry not hot
+COLPAL,Personal Care,-23.0,49,20,0,0,0,industry not hot
+SPAL,Garments & Apparels,-23.0,49,9,4,0,3,industry not hot
+VBL,Other Beverages,-23.0,49,0,0,0,0,industry not hot
+AMANTA,Pharmaceuticals,-23.0,12,0,3,0,4,industry not hot
+BSOFT,Computers - Software & Consulting,-23.0,49,12,0,0,0,industry not hot
+GANESHCP,Packaged Foods,-23.0,9,0,0,0,0,no industry / short history
+MSTCLTD,Trading & Distributors,-23.0,49,2,0,0,2,industry not hot
+NAUKRI,Internet & Catalogue Retail,-23.0,49,0,6,0,0,industry not hot
+GODREJAGRO,Animal Feed,-23.0,49,0,3,0,0,industry not hot
+NIACL,General Insurance,-23.0,49,0,0,0,0,industry not hot
+INDOAMIN,Specialty Chemicals,-24.0,39,0,0,0,2,industry not hot
+PAGEIND,Garments & Apparels,-24.0,49,9,0,0,0,industry not hot
+UNIDT,Industrial Products,-24.0,5,3,0,0,0,failed trend test
+RAYMOND,Industrial Products,-24.0,49,14,1,0,15,industry not hot
+TTKPRESTIG,Household Appliances,-24.0,49,1,0,0,0,industry not hot
+TRUALT,Other Agricultural Products,-24.0,8,4,0,0,0,no industry / short history
+SAREGAMA,Media & Entertainment,-24.0,49,0,0,0,0,industry not hot
+ARE&M,Auto Components & Equipments,-24.0,49,25,0,0,0,failed trend test
+TNPL,Paper & Paper Products,-24.0,44,0,0,0,3,industry not hot
+CLEDUCATE,Education,-24.0,20,0,0,0,5,industry not hot
+QUADFUTURE,Cables - Electricals,-24.0,44,6,35,0,2,industry not hot
+INDOFARM,Construction Vehicles,-24.0,36,0,27,0,8,industry not hot
+TIMETECHNO,Plastic Products - Industrial,-24.0,49,4,9,0,1,industry not hot
+AMBIKCO,Other Textile Products,-24.0,39,8,0,0,0,industry not hot
+ASIANENE,Oil Equipment & Services,-24.0,49,0,1,0,4,industry not hot
+ATULAUTO,Commercial Vehicles,-24.0,49,0,0,0,0,industry not hot
+ELECON,Heavy Electrical Equipment,-24.0,49,14,2,0,9,industry not hot
+SYNGENE,"Healthcare Research, Analytics & Technology",-24.0,49,0,0,0,0,industry not hot
+BALUFORGE,Castings & Forgings,-24.0,49,2,16,0,7,industry not hot
+BMWVENTLTD,Trading - Metals,-24.0,8,0,0,0,0,no industry / short history
+THOMASCOOK,"Tour, Travel Related Services",-24.0,49,15,0,0,1,industry not hot
+LODHA,"Residential, Commercial Projects",-24.0,49,5,0,0,0,industry not hot
+AGRITECH,Other Agricultural Products,-24.0,2,2,0,0,0,failed trend test
+VOLTAS,Household Appliances,-24.0,49,1,2,0,0,industry not hot
+GPTHEALTH,Hospital,-24.0,49,32,9,0,0,failed trend test
+WINDLAS,Pharmaceuticals,-24.0,49,7,13,2,1,failed trend test
+WINDMACHIN,Industrial Products,-24.0,49,14,29,5,2,industry not hot
+WSI,Civil Construction,-24.0,14,1,0,0,0,industry not hot
+MOLDTECH,Civil Construction,-24.0,30,5,0,0,4,industry not hot
+ORIENTELEC,Household Appliances,-24.0,49,1,0,0,0,industry not hot
+DHAMPURSUG,Sugar,-24.0,49,0,0,0,0,industry not hot
+MANKIND,Pharmaceuticals,-24.0,49,7,1,0,0,industry not hot
+JKIL,Civil Construction,-24.0,49,12,0,0,0,industry not hot
+BCONCEPTS,Speciality Retail,-25.0,10,2,0,0,1,industry not hot
+ABFRL,Speciality Retail,-25.0,49,6,0,0,0,industry not hot
+HARSHA,Other Industrial Products,-25.0,44,19,0,0,0,industry not hot
+TEMBO,Iron & Steel Products,-25.0,47,8,14,0,16,industry not hot
+LANDMARK,Auto Dealer,-25.0,49,0,0,0,9,industry not hot
+ABB,Heavy Electrical Equipment,-25.0,49,14,0,0,6,industry not hot
+SRD,Trading - Chemicals,-25.0,22,0,22,0,1,industry not hot
+HPL,Industrial Products,-25.0,49,14,4,0,10,industry not hot
+OMAXE,"Residential, Commercial Projects",-25.0,41,5,0,0,2,industry not hot
+HMVL,Print Media,-25.0,6,0,0,0,0,industry not hot
+FCL,Specialty Chemicals,-25.0,41,0,0,0,7,industry not hot
+GATEWAY,Logistics Solution Provider,-25.0,49,5,0,0,0,industry not hot
+KOTHARIPRO,Trading & Distributors,-25.0,10,0,1,0,0,industry not hot
+JSWENERGY,Power Generation,-25.0,49,1,0,0,0,industry not hot
+THERMAX,Heavy Electrical Equipment,-25.0,49,14,0,0,8,industry not hot
+AFIL,Non Banking Financial Company (NBFC),-25.0,14,11,14,0,4,ranked below top 9
+COSMOFIRST,Packaging,-25.0,49,13,8,1,16,industry not hot
+RATNAMANI,Iron & Steel Products,-25.0,49,10,0,0,0,industry not hot
+PNBGILTS,Investment Company,-25.0,49,37,0,0,2,failed trend test
+MMP,Aluminium,-25.0,14,0,0,0,0,industry not hot
+PNCINFRA,Civil Construction,-25.0,49,12,0,0,0,industry not hot
+IGCL,Pesticides & Agrochemicals,-25.0,21,1,12,0,0,industry not hot
+ROSSARI,Specialty Chemicals,-25.0,49,0,0,0,0,industry not hot
+SBCL,Iron & Steel Products,-25.0,49,10,0,0,8,industry not hot
+HARIOMPIPE,Iron & Steel Products,-25.0,49,10,0,0,7,industry not hot
+NDTV,TV Broadcasting & Software Production,-25.0,41,0,0,0,5,industry not hot
+MAMATA,Industrial Products,-25.0,46,11,37,0,5,industry not hot
+SCHAND,Printing & Publication,-25.0,30,0,0,0,4,industry not hot
+DSSL,IT Enabled Services,-26.0,49,17,2,0,9,failed trend test
+RIIL,Logistics Solution Provider,-26.0,49,5,0,0,0,industry not hot
+RADHIKAJWE,"Gems, Jewellery And Watches",-26.0,49,4,8,0,0,industry not hot
+CAPLIPOINT,Pharmaceuticals,-26.0,49,7,8,0,0,industry not hot
+GLOTTIS,Logistics Solution Provider,-26.0,8,0,0,0,0,no industry / short history
+GNA,Auto Components & Equipments,-26.0,43,19,0,0,9,failed trend test
+HIL,Other Construction Materials,-26.0,13,0,0,0,0,industry not hot
+RBA,Restaurants,-26.0,49,5,0,0,0,industry not hot
+IEX,Exchange and Data Platform,-26.0,49,0,0,0,0,industry not hot
+SCILAL,Investment Company,-26.0,24,18,7,0,0,failed trend test
+GUFICBIO,Pharmaceuticals,-26.0,49,7,3,0,0,industry not hot
+GHCLTEXTIL,Other Textile Products,-26.0,34,10,0,0,2,industry not hot
+MAZDA,Industrial Products,-26.0,15,9,2,0,0,failed trend test
+EXCELSOFT,IT Enabled Services,-26.0,1,0,0,0,0,no industry / short history
+TTKHLTCARE,Diversified,-26.0,10,0,0,0,0,industry not hot
+ARISINFRA,Other Construction Materials,-26.0,22,0,13,0,0,industry not hot
+TIRUMALCHM,Commodity Chemicals,-26.0,49,6,1,0,0,industry not hot
+BIGBLOC,Cement & Cement Products,-26.0,28,12,0,0,0,industry not hot
+VINDHYATEL,Civil Construction,-26.0,44,11,0,0,7,industry not hot
+ASAL,Auto Components & Equipments,-26.0,44,23,0,0,1,industry not hot
+ATGL,LPG/CNG/PNG/LNG Supplier,-26.0,49,5,0,0,1,industry not hot
+AUTOIND,Auto Components & Equipments,-26.0,9,4,0,0,0,industry not hot
+NTPCGREEN,Power Generation,-26.0,49,1,38,0,0,industry not hot
+JINDRILL,Offshore Support Solution Drilling,-26.0,49,0,3,0,0,industry not hot
+WSTCSTPAPR,Paper & Paper Products,-26.0,49,0,0,0,0,industry not hot
+BAJAJHFL,Housing Finance Company,-26.0,49,10,35,0,0,industry not hot
+KUANTUM,Paper & Paper Products,-26.0,11,0,0,0,0,industry not hot
+ZEEL,TV Broadcasting & Software Production,-26.0,49,0,0,0,5,industry not hot
+IKIO,Consumer Electronics,-26.0,47,1,0,0,2,failed trend test
+ACLGATI,Logistics Solution Provider,-27.0,38,5,0,0,0,industry not hot
+JUSTDIAL,Internet & Catalogue Retail,-27.0,49,0,0,0,0,industry not hot
+RPSGVENT,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),-27.0,49,0,2,0,5,industry not hot
+VMART,Diversified Retail,-27.0,49,1,2,0,0,industry not hot
+JYOTICNC,Industrial Products,-27.0,49,14,3,0,2,industry not hot
+HERCULES,Industrial Products,-27.0,8,2,0,0,0,industry not hot
+RGL,"Gems, Jewellery And Watches",-27.0,49,4,6,0,0,industry not hot
+XCHANGING,Computers - Software & Consulting,-27.0,33,8,0,0,0,industry not hot
+GARFIBRES,Other Textile Products,-27.0,49,10,0,0,0,industry not hot
+ANTELOPUS,Oil Exploration & Production,-27.0,10,0,0,0,6,no industry / short history
+TIPSMUSIC,Media & Entertainment,-27.0,49,0,0,0,0,industry not hot
+IRB,Civil Construction,-27.0,12,9,0,0,0,failed trend test
+TRITURBINE,Heavy Electrical Equipment,-27.0,49,14,3,0,1,industry not hot
+TIINDIA,Auto Components & Equipments,-27.0,49,25,0,0,0,failed trend test
+GANDHAR,Lubricants,-27.0,49,0,0,0,0,industry not hot
+HITECHCORP,Packaging,-27.0,4,0,0,0,0,industry not hot
+TATACHEM,Commodity Chemicals,-27.0,49,6,0,0,0,industry not hot
+SHK,Specialty Chemicals,-27.0,49,0,2,0,7,industry not hot
+CAMS,"Depositories, Clearing Houses and Other Intermediaries",-27.0,49,0,3,0,0,industry not hot
+JKIPL,"Dealers-Commercial Vehicles, Tractors, Construction Vehicles",-27.0,8,0,0,0,0,no industry / short history
+BOROSCI,Glass - Industrial,-27.0,30,0,14,0,4,industry not hot
+AYMSYNTEX,Other Textile Products,-27.0,19,4,13,4,1,industry not hot
+SIYSIL,Other Textile Products,-27.0,49,10,17,0,0,industry not hot
+INDIANCARD,Other Textile Products,-27.0,6,2,0,0,0,industry not hot
+BHAGCHEM,Pesticides & Agrochemicals,-27.0,49,5,1,0,0,industry not hot
+NAHARSPING,Other Textile Products,-27.0,19,6,0,0,1,industry not hot
+PARKHOTELS,Hotels & Resorts,-27.0,49,18,6,0,0,industry not hot
+EXCELINDUS,Specialty Chemicals,-27.0,40,0,1,0,4,industry not hot
+PVSL,Auto Dealer,-27.0,29,0,3,0,5,industry not hot
+GTPL,TV Broadcasting & Software Production,-27.0,22,0,0,0,0,industry not hot
+SOTL,Lubricants,-28.0,36,0,0,0,0,industry not hot
+OPTIEMUS,Telecom -  Equipment & Accessories,-28.0,49,4,6,0,6,industry not hot
+ENTERO,Pharmacy Retail,-28.0,49,0,7,0,0,industry not hot
+NILKAMAL,Plastic Products - Consumer,-28.0,4,0,0,0,0,industry not hot
+NINSYS,Computers - Software & Consulting,-28.0,7,4,0,0,3,failed trend test
+UNIVASTU,Civil Construction,-28.0,22,8,9,0,0,industry not hot
+TSFINV,Investment Company,-28.0,6,5,0,0,0,no industry / short history
+SASKEN,IT Enabled Services,-28.0,49,17,2,0,6,industry not hot
+KIRLOSIND,Iron & Steel Products,-28.0,45,10,0,0,3,industry not hot
+ARIHANTSUP,"Residential, Commercial Projects",-28.0,43,2,3,0,0,industry not hot
+DOLATALGO,Stockbroking & Allied,-28.0,49,24,0,0,1,industry not hot
+DOLLAR,Garments & Apparels,-28.0,49,9,0,0,0,industry not hot
+GODREJPROP,"Residential, Commercial Projects",-28.0,49,5,0,0,0,industry not hot
+CELLO,Houseware,-28.0,49,0,0,0,0,industry not hot
+ROTO,"Compressors, Pumps & Diesel Engines",-28.0,49,2,2,0,7,industry not hot
+TATATECH,IT Enabled Services,-28.0,49,17,0,0,0,industry not hot
+AVADHSUGAR,Sugar,-28.0,44,0,0,0,0,industry not hot
+BAJAJHCARE,Pharmaceuticals,-28.0,49,7,24,4,0,industry not hot
+SURAKSHA,Healthcare Service Provider,-28.0,38,3,29,0,0,industry not hot
+SJVN,Power Generation,-28.0,49,1,0,0,0,industry not hot
+OBEROIRLTY,"Residential, Commercial Projects",-28.0,49,5,2,0,0,industry not hot
+BBL,Heavy Electrical Equipment,-28.0,49,14,0,0,0,industry not hot
+SOLEX,Other Electrical Equipment,-28.0,8,0,0,0,0,no industry / short history
+JUNIPER,Hotels & Resorts,-28.0,49,18,9,0,0,industry not hot
+GLOBALVECT,Airline,-28.0,9,0,0,0,0,industry not hot
+RBZJEWEL,"Gems, Jewellery And Watches",-28.0,42,4,2,0,0,industry not hot
+MASTERTR,Stockbroking & Allied,-28.0,37,19,31,0,0,industry not hot
+WONDERLA,Amusement Parks/ Other Recreation,-28.0,49,0,0,0,0,industry not hot
+YASHO,Specialty Chemicals,-28.0,47,0,0,0,3,industry not hot
+MAXIND,Holding Company,-28.0,32,17,0,0,0,failed trend test
+ANDHRAPAP,Paper & Paper Products,-29.0,39,0,0,0,0,industry not hot
+OAL,Specialty Chemicals,-29.0,16,0,0,0,1,industry not hot
+NITINSPIN,Other Textile Products,-29.0,49,10,0,0,9,industry not hot
+WESTLIFE,Restaurants,-29.0,49,5,0,0,0,industry not hot
+BRIGADE,"Residential, Commercial Projects",-29.0,49,5,1,0,1,industry not hot
+UNIECOM,Software Products,-29.0,49,10,31,0,0,industry not hot
+SUPREMEIND,Plastic Products - Industrial,-29.0,49,4,0,0,1,industry not hot
+KOPRAN,Pharmaceuticals,-29.0,49,7,0,0,5,industry not hot
+MEDICAMEQ,Pharmaceuticals,-29.0,33,5,0,0,0,industry not hot
+SWIGGY,E-Retail/ E-Commerce,-29.0,49,18,38,0,3,industry not hot
+TCIEXP,Logistics Solution Provider,-29.0,45,5,0,0,0,industry not hot
+POKARNA,Granites & Marbles,-29.0,49,0,12,0,4,industry not hot
+ANUHPHR,Pharmaceuticals,-29.0,9,1,8,0,0,industry not hot
+KRYSTAL,Diversified Commercial Services,-29.0,39,5,12,0,8,industry not hot
+MTNL,Telecom - Cellular & Fixed line services,-29.0,6,0,0,0,0,industry not hot
+RECLTD,Financial Institution,-29.0,49,1,0,0,0,industry not hot
+CYBERTECH,Computers - Software & Consulting,-29.0,22,4,0,0,4,industry not hot
+ELECTHERM,Iron & Steel Products,-29.0,44,10,11,1,10,industry not hot
+ECOSMOBLTY,Road Transport,-29.0,49,0,34,0,13,industry not hot
+ORISSAMINE,Industrial Minerals,-29.0,49,22,0,0,0,industry not hot
+JYOTHYLAB,Household Products,-29.0,49,0,0,0,0,industry not hot
+AFCONS,Civil Construction,-29.0,49,12,38,0,0,industry not hot
+VINYLINDIA,Trading - Chemicals,-29.0,8,0,0,0,0,industry not hot
+BOMDYEING,Other Textile Products,-29.0,49,10,0,0,4,industry not hot
+IGPL,Commodity Chemicals,-29.0,35,6,0,0,0,industry not hot
+INDOCO,Pharmaceuticals,-29.0,45,7,0,0,5,industry not hot
+ASAHISONG,Dyes And Pigments,-29.0,6,0,0,0,0,industry not hot
+5PAISA,Stockbroking & Allied,-29.0,37,24,0,0,0,failed trend test
+TEXRAIL,Railway Wagons,-29.0,49,0,0,0,1,industry not hot
+ASTEC,Pesticides & Agrochemicals,-29.0,46,5,0,0,1,industry not hot
+AKUMS,Pharmaceuticals,-29.0,49,7,30,0,2,industry not hot
+BASF,Specialty Chemicals,-29.0,49,0,0,0,0,industry not hot
+CENTENKA,Other Textile Products,-29.0,30,8,0,0,0,industry not hot
+TBZ,"Gems, Jewellery And Watches",-30.0,49,4,3,0,0,industry not hot
+KRONOX,Specialty Chemicals,-30.0,43,0,22,0,2,industry not hot
+IOB,Public Sector Bank,-30.0,3,0,0,0,0,industry not hot
+THOMASCOTT,Garments & Apparels,-30.0,25,3,12,0,1,industry not hot
+FINPIPE,Plastic Products - Industrial,-30.0,49,4,0,0,1,industry not hot
+KOKUYOCMLN,Stationary,-30.0,18,0,0,0,0,industry not hot
+CINELINE,"Film Production, Distribution & Exhibition",-30.0,1,0,0,0,0,industry not hot
+RITCO,Logistics Solution Provider,-30.0,47,5,3,0,0,industry not hot
+DMCC,Specialty Chemicals,-30.0,27,0,0,0,0,industry not hot
+MONARCH,Stockbroking & Allied,-30.0,49,24,5,0,0,industry not hot
+TOUCHWOOD,Other Consumer Services,-30.0,2,0,0,0,0,industry not hot
+KFINTECH,"Depositories, Clearing Houses and Other Intermediaries",-30.0,49,0,15,0,5,industry not hot
+SATIA,Paper & Paper Products,-30.0,26,0,0,0,0,industry not hot
+ROLEXRINGS,Auto Components & Equipments,-30.0,49,25,0,0,5,failed trend test
+BECTORFOOD,Packaged Foods,-30.0,49,0,1,0,0,industry not hot
+DBOL,Sugar,-30.0,15,0,0,0,6,industry not hot
+FIVESTAR,Non Banking Financial Company (NBFC),-30.0,49,29,0,0,0,failed trend test
+NIBE,Aerospace & Defense,-30.0,40,14,31,8,9,no industry / short history
+CMSINFO,Diversified Commercial Services,-30.0,49,6,0,0,0,industry not hot
+BOROLTD,Houseware,-30.0,49,0,0,0,0,industry not hot
+LXCHEM,Specialty Chemicals,-30.0,49,0,0,0,0,industry not hot
+OSWALGREEN,Investment Company,-30.0,1,0,1,0,0,industry not hot
+CENTRALBK,Public Sector Bank,-30.0,5,0,0,0,0,industry not hot
+RADIANTCMS,Diversified Commercial Services,-31.0,31,1,0,0,0,industry not hot
+INOXWIND,Heavy Electrical Equipment,-31.0,49,14,0,0,0,industry not hot
+PATELRMART,Diversified Retail,-31.0,13,1,5,0,0,no industry / short history
+TECHNOE,Civil Construction,-31.0,49,12,1,0,13,industry not hot
+TAINWALCHM,Plastic Products - Industrial,-31.0,8,1,2,0,0,industry not hot
+BATAINDIA,Footwear,-31.0,49,2,0,0,0,industry not hot
+MEIL,Other Electrical Equipment,-31.0,13,1,4,0,0,no industry / short history
+GKWLIMITED,Investment Company,-31.0,3,3,0,0,0,failed trend test
+PRECOT,Other Textile Products,-31.0,4,1,0,0,1,industry not hot
+BLKASHYAP,Civil Construction,-31.0,42,12,0,0,1,industry not hot
+SPMLINFRA,Civil Construction,-31.0,49,12,8,0,17,industry not hot
+DYCL,Cables - Electricals,-31.0,49,8,22,0,12,industry not hot
+KIRLPNU,"Compressors, Pumps & Diesel Engines",-31.0,49,2,2,0,11,industry not hot
+ADFFOODS,Packaged Foods,-31.0,49,0,3,0,3,industry not hot
+GEEKAYWIRE,Iron & Steel Products,-31.0,2,0,0,0,0,industry not hot
+SAURASHCEM,Cement & Cement Products,-31.0,25,8,3,0,4,failed trend test
+TVTODAY,TV Broadcasting & Software Production,-31.0,33,0,0,0,0,industry not hot
+MASTEK,Computers - Software & Consulting,-31.0,49,12,0,0,0,industry not hot
+GANESHHOUC,"Residential, Commercial Projects",-31.0,34,5,10,0,0,industry not hot
+CERA,Sanitary Ware,-31.0,49,0,0,0,0,industry not hot
+DEEDEV,Industrial Products,-31.0,49,14,24,0,15,industry not hot
+GREAVESCOT,"Compressors, Pumps & Diesel Engines",-31.0,49,2,14,0,0,industry not hot
+GIPCL,Power Generation,-31.0,49,1,0,0,0,industry not hot
+EXPLEOSOL,IT Enabled Services,-31.0,45,13,0,0,8,industry not hot
+MINDTECK,Computers - Software & Consulting,-31.0,32,6,1,0,4,industry not hot
+SELAN,Oil Exploration & Production,-31.0,35,0,1,0,2,industry not hot
+DEEPAKNTR,Specialty Chemicals,-31.0,49,0,0,0,0,industry not hot
+VALIANTLAB,Pharmaceuticals,-32.0,13,2,0,0,1,industry not hot
+SINCLAIR,Hotels & Resorts,-32.0,15,7,5,0,0,industry not hot
+BFUTILITIE,"Road AssetsToll, Annuity, Hybrid-Annuity",-32.0,46,0,1,0,0,industry not hot
+STYRENIX,Specialty Chemicals,-32.0,49,0,22,0,0,industry not hot
+BANSALWIRE,Iron & Steel Products,-32.0,49,10,26,0,0,industry not hot
+ADVENTHTL,Hotels & Resorts,-32.0,3,0,0,0,0,no industry / short history
+JAYSREETEA,Tea & Coffee,-32.0,21,0,0,0,0,industry not hot
+JWL,Railway Wagons,-32.0,49,0,0,0,2,industry not hot
+AWFIS,Diversified Commercial Services,-32.0,49,6,21,0,0,industry not hot
+LINC,Stationary,-32.0,13,0,0,0,2,industry not hot
+BSHSL,Other Agricultural Products,-32.0,5,2,0,0,0,industry not hot
+GRINFRA,Civil Construction,-32.0,49,12,0,0,1,industry not hot
+TIPSFILMS,"Film Production, Distribution & Exhibition",-32.0,4,0,0,0,0,industry not hot
+TRF,Industrial Products,-32.0,26,6,0,0,1,industry not hot
+ARVSMART,"Residential, Commercial Projects",-32.0,49,5,2,0,0,industry not hot
+POLYMED,Medical Equipment & Supplies,-32.0,49,0,5,0,1,industry not hot
+GFLLIMITED,Holding Company,-32.0,5,0,0,0,0,industry not hot
+TOLINS,Tyres & Rubber Products,-32.0,43,0,29,0,5,industry not hot
+MACPOWER,Industrial Products,-32.0,19,3,2,0,2,industry not hot
+SHEMAROO,Media & Entertainment,-32.0,4,0,0,0,0,industry not hot
+DWARKESH,Sugar,-32.0,2,0,0,0,0,industry not hot
+SHAKTIPUMP,"Compressors, Pumps & Diesel Engines",-32.0,49,2,21,0,0,industry not hot
+VIKRAMSOLR,Other Electrical Equipment,-33.0,13,1,5,0,0,no industry / short history
+GUJALKALI,Commodity Chemicals,-33.0,48,6,0,0,5,industry not hot
+AGI,Packaging,-33.0,49,13,0,0,0,industry not hot
+NATCAPSUQ,Pharmaceuticals,-33.0,4,0,4,0,0,industry not hot
+AHL,Holding Company,-33.0,11,6,0,0,0,failed trend test
+ZAGGLE,IT Enabled Services,-33.0,49,17,5,0,1,industry not hot
+ESTER,Packaging,-33.0,47,13,6,0,0,industry not hot
+EVERESTIND,Other Construction Materials,-33.0,16,0,0,0,1,industry not hot
+ZIMLAB,Pharmaceuticals,-33.0,25,2,0,0,7,industry not hot
+KOTHARIPET,Petrochemicals,-33.0,29,0,1,0,0,industry not hot
+SRHHYPOLTD,Commodity Chemicals,-33.0,32,6,1,0,1,failed trend test
+HESTERBIO,Pharmaceuticals,-33.0,25,3,0,0,4,failed trend test
+CARBORUNIV,Abrasives & Bearings,-33.0,49,0,0,0,3,industry not hot
+DIXON,Consumer Electronics,-33.0,49,1,9,0,1,industry not hot
+SPARC,Pharmaceuticals,-33.0,49,7,0,0,11,industry not hot
+ABREL,"Residential, Commercial Projects",-33.0,49,5,0,0,0,industry not hot
+SANDESH,Print Media,-33.0,4,0,0,0,0,industry not hot
+IRIS,Software Products,-33.0,11,2,4,0,2,failed trend test
+PCBL,Carbon Black,-33.0,49,0,1,0,0,industry not hot
+SANOFI,Pharmaceuticals,-33.0,49,7,0,0,0,industry not hot
+TPLPLASTEH,Packaging,-33.0,19,8,1,0,0,industry not hot
+ROSSELLIND,Tea & Coffee,-33.0,3,0,0,0,0,industry not hot
+GOKEX,Garments & Apparels,-34.0,49,9,1,0,0,industry not hot
+BEPL,Petrochemicals,-34.0,49,0,0,0,0,industry not hot
+IMAGICAA,Amusement Parks/ Other Recreation,-34.0,44,0,0,0,0,industry not hot
+AMNPLST,Commodity Chemicals,-34.0,8,3,3,0,0,industry not hot
+STOVEKRAFT,Household Appliances,-34.0,49,1,10,0,0,industry not hot
+VIDHIING,Specialty Chemicals,-34.0,22,0,0,0,0,industry not hot
+LAMBODHARA,Other Textile Products,-34.0,9,1,0,0,0,industry not hot
+ALPA,Pharmaceuticals,-34.0,2,1,0,0,0,failed trend test
+EIEL,Water Supply & Management,-34.0,49,5,38,0,4,industry not hot
+UNIMECH,Aerospace & Defense,-34.0,46,14,37,2,4,industry not hot
+SYMPHONY,Household Appliances,-34.0,49,1,1,0,0,industry not hot
+TTML,Telecom - Cellular & Fixed line services,-34.0,48,0,0,0,2,industry not hot
+KPEL,Power Generation,-34.0,49,1,38,0,10,industry not hot
+WALCHANNAG,Industrial Products,-34.0,49,14,0,0,18,industry not hot
+KSL,Iron & Steel Products,-34.0,49,10,3,0,0,industry not hot
+QUESS,Diversified Commercial Services,-34.0,49,6,0,0,0,industry not hot
+BLS,"Tour, Travel Related Services",-34.0,49,15,1,0,0,industry not hot
+PPLPHARMA,Pharmaceuticals,-35.0,49,7,8,0,0,industry not hot
+CRISIL,Other Financial Services,-35.0,49,0,3,0,1,industry not hot
+ORIENTLTD,Packaging,-35.0,1,1,0,0,0,failed trend test
+POLYPLEX,Packaging,-35.0,49,13,5,0,0,industry not hot
+RTNINDIA,E-Retail/ E-Commerce,-35.0,25,17,0,0,0,failed trend test
+PDSL,Trading - Textile Products,-35.0,49,0,0,0,0,industry not hot
+GULFPETRO,Lubricants,-35.0,2,0,0,0,0,industry not hot
+MVGJL,"Gems, Jewellery And Watches",-35.0,46,4,0,0,0,industry not hot
+SUMMITSEC,Investment Company,-35.0,45,33,3,0,3,industry not hot
+STYL,Financial Technology (Fintech),-35.0,9,0,0,0,0,no industry / short history
+IREDA,Financial Institution,-35.0,49,1,0,0,0,industry not hot
+BCLIND,Breweries & Distilleries,-35.0,1,0,0,0,0,industry not hot
+RELAXO,Footwear,-35.0,49,2,0,0,0,industry not hot
+PONNIERODE,Sugar,-35.0,2,0,0,0,0,industry not hot
+INNOVACAP,Pharmaceuticals,-35.0,49,7,17,2,0,industry not hot
+ADSL,IT Enabled Services,-35.0,49,17,4,0,0,industry not hot
+NATCOPHARM,Pharmaceuticals,-35.0,49,7,1,0,1,industry not hot
+DYNPRO,Specialty Chemicals,-35.0,11,0,0,0,0,industry not hot
+GEOJITFSL,Stockbroking & Allied,-36.0,49,24,1,0,0,industry not hot
+GLOBECIVIL,Civil Construction,-36.0,20,2,11,0,0,industry not hot
+RUPA,Garments & Apparels,-36.0,49,9,0,0,0,industry not hot
+BIRLACABLE,Telecom -  Equipment & Accessories,-36.0,16,4,0,0,3,industry not hot
+ELLEN,Industrial Gases,-36.0,21,0,12,0,0,industry not hot
+XPROINDIA,Packaging,-36.0,49,13,1,0,3,industry not hot
+ARROWGREEN,Packaging,-36.0,33,6,4,0,4,industry not hot
+ANUP,Industrial Products,-36.0,49,14,18,0,0,industry not hot
+EPIGRAL,Specialty Chemicals,-36.0,49,0,4,0,0,industry not hot
+SWANENERGY,Petrochemicals,-36.0,33,0,1,0,0,industry not hot
+HGS,Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO),-36.0,31,0,0,0,0,industry not hot
+CROMPTON,Household Appliances,-36.0,49,1,0,0,0,industry not hot
+EMAMIREAL,"Residential, Commercial Projects",-36.0,2,0,0,0,1,industry not hot
+ANANTRAJ,"Residential, Commercial Projects",-36.0,49,5,3,0,5,industry not hot
+DCW,Petrochemicals,-36.0,49,0,4,0,0,industry not hot
+SHOPERSTOP,Diversified Retail,-36.0,49,1,0,0,0,industry not hot
+DELTACORP,Amusement Parks/ Other Recreation,-37.0,49,0,0,0,0,industry not hot
+KALYANKJIL,"Gems, Jewellery And Watches",-37.0,49,4,2,0,0,industry not hot
+SONAMLTD,Consumer Electronics,-37.0,6,0,2,0,0,industry not hot
+BAJEL,Heavy Electrical Equipment,-37.0,49,14,0,0,10,industry not hot
+EKC,Industrial Products,-37.0,49,14,1,0,1,industry not hot
+ISGEC,Civil Construction,-37.0,49,12,1,0,0,industry not hot
+HBSL,Non Banking Financial Company (NBFC),-37.0,9,4,0,0,0,industry not hot
+NOVAAGRI,Fertilizers,-37.0,16,12,5,0,0,failed trend test
+ACE,Construction Vehicles,-37.0,49,0,0,0,0,industry not hot
+FINCABLES,Cables - Electricals,-37.0,49,8,0,0,7,industry not hot
+BALAMINES,Specialty Chemicals,-37.0,49,0,0,0,14,industry not hot
+PURVA,"Residential, Commercial Projects",-37.0,49,5,0,0,3,industry not hot
+EMIL,Diversified Retail,-37.0,49,1,0,0,0,industry not hot
+NOCIL,Specialty Chemicals,-37.0,49,0,0,0,0,industry not hot
+LAOPALA,Glass - Consumer,-37.0,45,0,0,0,1,industry not hot
+JARO,E-Learning,-37.0,9,0,0,0,0,no industry / short history
+HAPPSTMNDS,Computers - Software & Consulting,-37.0,49,12,0,0,0,industry not hot
+SOMANYCERA,Ceramics,-37.0,36,0,0,0,3,industry not hot
+APOLLOPIPE,Plastic Products - Industrial,-37.0,49,4,0,0,10,industry not hot
+PREMIERENE,Other Electrical Equipment,-38.0,49,16,34,0,0,industry not hot
+UGARSUGAR,Sugar,-38.0,5,0,0,0,0,industry not hot
+GRWRHITECH,Plastic Products - Industrial,-38.0,49,4,12,0,14,industry not hot
+KELLTONTEC,IT Enabled Services,-38.0,28,4,5,0,6,industry not hot
+PITTIENG,Industrial Products,-38.0,49,14,3,0,0,industry not hot
+JTLIND,Iron & Steel Products,-38.0,49,10,0,0,0,industry not hot
+DPWIRES,Iron & Steel Products,-38.0,11,5,0,0,1,industry not hot
+JISLJALEQS,Plastic Products - Industrial,-38.0,36,4,1,0,0,industry not hot
+TVSSCS,Logistics Solution Provider,-38.0,49,5,0,0,0,industry not hot
+GOACARBON,Industrial Minerals,-38.0,36,13,0,0,0,industry not hot
+BAJAJELEC,Household Appliances,-38.0,49,1,0,0,0,industry not hot
+CYIENTDLM,Aerospace & Defense,-38.0,49,16,0,0,0,industry not hot
+CLEAN,Specialty Chemicals,-38.0,49,0,0,0,0,industry not hot
+SIGACHI,Pharmaceuticals,-38.0,7,1,0,0,0,industry not hot
+TRIGYN,Computers - Software & Consulting,-38.0,10,3,0,0,1,industry not hot
+KEC,Civil Construction,-38.0,49,12,3,0,1,industry not hot
+CLSEL,Other Agricultural Products,-38.0,47,20,18,5,0,industry not hot
+VSTL,Iron & Steel Products,-38.0,12,5,0,0,1,industry not hot
+NETWORK18,Media & Entertainment,-39.0,24,0,0,0,0,industry not hot
+GREENPANEL,Plywood Boards/ Laminates,-39.0,49,0,0,0,2,industry not hot
+OMINFRAL,Civil Construction,-39.0,44,12,0,0,0,industry not hot
+EMUDHRA,IT Enabled Services,-39.0,49,17,3,0,0,industry not hot
+AURIONPRO,Computers - Software & Consulting,-39.0,49,12,4,0,0,industry not hot
+GANESHBE,Oil Storage & Transportation,-39.0,36,0,0,0,0,industry not hot
+DTIL,Tea & Coffee,-39.0,1,0,0,0,0,industry not hot
+LINCOLN,Pharmaceuticals,-39.0,43,7,1,0,1,industry not hot
+AARTECH,Heavy Electrical Equipment,-39.0,13,8,2,0,0,failed trend test
+SOFTTECH,Computers - Software & Consulting,-39.0,3,3,1,0,0,failed trend test
+ZODIAC,Civil Construction,-39.0,19,6,0,0,2,industry not hot
+CONCORDBIO,Pharmaceuticals,-39.0,49,7,6,0,0,industry not hot
+CYIENT,IT Enabled Services,-39.0,49,17,0,0,0,industry not hot
+IGARASHI,Auto Components & Equipments,-39.0,49,25,1,0,2,industry not hot
+AARTISURF,Specialty Chemicals,-39.0,3,0,0,0,0,industry not hot
+FOODSIN,Packaged Foods,-39.0,27,0,0,0,3,industry not hot
+DBEIL,Civil Construction,-39.0,33,10,28,0,0,industry not hot
+SWELECTES,Heavy Electrical Equipment,-39.0,34,4,0,0,6,industry not hot
+MARKSANS,Pharmaceuticals,-39.0,49,7,5,0,3,industry not hot
+PRINCEPIPE,Plastic Products - Industrial,-39.0,49,4,0,0,6,industry not hot
+TRENT,Speciality Retail,-40.0,49,6,2,0,0,industry not hot
+HERANBA,Pesticides & Agrochemicals,-40.0,33,5,0,0,8,failed trend test
+NPST,Financial Technology (Fintech),-40.0,30,0,21,0,0,industry not hot
+EMMBI,Packaging,-40.0,10,3,1,0,0,industry not hot
+THEINVEST,Other Financial Services,-40.0,2,0,0,0,0,industry not hot
+CEWATER,Waste Management,-40.0,41,0,32,0,1,no industry / short history
+DONEAR,Other Textile Products,-40.0,26,8,3,0,0,industry not hot
+HIMATSEIDE,Other Textile Products,-40.0,49,10,0,0,0,industry not hot
+HFCL,Telecom - Infrastructure,-40.0,49,0,0,0,9,industry not hot
+ISFT,E-Retail/ E-Commerce,-40.0,2,1,0,0,0,failed trend test
+VRAJ,Sponge Iron,-40.0,16,0,16,0,0,industry not hot
+SONATSOFTW,Computers - Software & Consulting,-40.0,49,12,0,0,1,industry not hot
+WEALTH,Other Financial Services,-40.0,9,0,0,0,0,industry not hot
+BALPHARMA,Pharmaceuticals,-40.0,4,0,0,0,0,industry not hot
+GSLSU,Granites & Marbles,-40.0,45,0,0,0,2,industry not hot
+SIGNPOST,Advertising & Media Agencies,-40.0,36,0,7,0,4,industry not hot
+BESTAGRO,Pesticides & Agrochemicals,-40.0,35,4,0,0,10,industry not hot
+BFINVEST,Holding Company,-40.0,43,24,0,0,0,failed trend test
+SSDL,Garments & Apparels,-40.0,5,1,5,0,0,industry not hot
+NAVKARCORP,Logistics Solution Provider,-40.0,49,5,1,0,2,industry not hot
+IGIL,Diversified Commercial Services,-40.0,47,6,38,0,0,industry not hot
+SPECTRUM,Industrial Products,-40.0,6,2,5,0,2,industry not hot
+SOMICONVEY,Industrial Products,-40.0,2,2,2,0,0,ranked below top 9
+OFSS,Software Products,-40.0,49,10,2,0,0,industry not hot
+KSOLVES,Computers - Software & Consulting,-41.0,44,8,0,0,0,industry not hot
+FAIRCHEMOR,Specialty Chemicals,-41.0,33,0,0,0,0,industry not hot
+ORIENTHOT,Hotels & Resorts,-41.0,49,18,3,0,0,industry not hot
+DENORA,Electrodes & Refractories,-41.0,18,0,0,0,0,industry not hot
+RKEC,Civil Construction,-41.0,2,0,0,0,0,industry not hot
+NCC,Civil Construction,-41.0,49,12,0,0,0,industry not hot
+GALAPREC,Industrial Products,-41.0,40,14,34,0,1,industry not hot
+SHANKARA,Speciality Retail,-41.0,48,6,17,3,20,industry not hot
+SENCO,"Gems, Jewellery And Watches",-41.0,49,4,1,0,1,industry not hot
+KHADIM,Footwear,-41.0,22,2,0,0,0,industry not hot
+SFL,"Furniture, Home Furnishing",-41.0,49,0,0,0,0,industry not hot
+UNICHEMLAB,Pharmaceuticals,-41.0,43,7,5,0,0,industry not hot
+KECL,Other Electrical Equipment,-41.0,47,16,1,0,0,industry not hot
+PGEL,Consumer Electronics,-41.0,49,1,21,0,1,industry not hot
+RKFORGE,Auto Components & Equipments,-41.0,49,25,0,0,0,failed trend test
+HIKAL,Pharmaceuticals,-42.0,49,7,8,0,0,industry not hot
+JINDALSAW,Iron & Steel Products,-42.0,49,10,0,0,7,industry not hot
+PLATIND,Specialty Chemicals,-42.0,49,0,9,0,1,industry not hot
+FIBERWEB,Other Textile Products,-42.0,1,1,1,1,0,picked
+LIBERTSHOE,Footwear,-42.0,26,2,2,0,3,industry not hot
+BPL,Consumer Electronics,-42.0,24,1,0,0,0,industry not hot
+TARSONS,Medical Equipment & Supplies,-42.0,46,0,0,0,3,industry not hot
+IONEXCHANG,Water Supply & Management,-42.0,49,5,0,0,0,industry not hot
+MUFTI,Speciality Retail,-42.0,46,6,0,0,5,industry not hot
+NELCO,Computers Hardware & Equipments,-42.0,49,5,3,0,1,industry not hot
+HITECH,Iron & Steel Products,-42.0,49,10,0,0,0,industry not hot
+NRL,Trading - Metals,-42.0,11,0,0,0,4,industry not hot
+DCI,Computers Hardware & Equipments,-42.0,12,3,3,0,3,failed trend test
+CAPACITE,Civil Construction,-42.0,49,12,3,0,0,industry not hot
+LAGNAM,Other Textile Products,-43.0,3,3,0,0,0,failed trend test
+DIGITIDE,IT Enabled Services,-43.0,24,13,15,0,0,ranked below top 9
+BSL,Other Textile Products,-43.0,3,3,0,0,0,failed trend test
+FOCUS,Consumer Electronics,-43.0,25,1,0,0,6,industry not hot
+PATELENG,Civil Construction,-43.0,2,1,0,0,0,industry not hot
+REDTAPE,Footwear,-43.0,49,2,1,0,0,industry not hot
+PIXTRANS,Rubber,-44.0,49,0,6,0,0,industry not hot
+TTL,Other Textile Products,-44.0,1,1,1,0,0,ranked below top 9
+PREMIERPOL,Plastic Products - Industrial,-44.0,1,0,1,0,0,industry not hot
+ZENTEC,Aerospace & Defense,-44.0,49,16,9,0,13,industry not hot
+UCAL,Auto Components & Equipments,-44.0,3,0,0,0,0,industry not hot
+SNOWMAN,Logistics Solution Provider,-44.0,31,5,0,0,0,industry not hot
+ALBERTDAVD,Pharmaceuticals,-44.0,8,3,0,0,0,industry not hot
+ELECTCAST,Iron & Steel Products,-44.0,49,10,0,0,2,industry not hot
+DCXINDIA,Aerospace & Defense,-44.0,49,16,0,0,4,industry not hot
+TIRUPATIFL,Castings & Forgings,-44.0,1,0,1,0,0,industry not hot
+BALAJEE,Packaging,-44.0,12,5,11,0,0,industry not hot
+SMLT,Iron & Steel Products,-45.0,7,0,0,0,0,industry not hot
+VMSTMT,Iron & Steel Products,-45.0,8,0,0,0,0,no industry / short history
+LIKHITHA,Civil Construction,-45.0,48,12,0,0,0,industry not hot
+NIRAJ,Civil Construction,-45.0,2,0,0,0,0,industry not hot
+DAMCAPITAL,Stockbroking & Allied,-45.0,46,21,37,0,1,industry not hot
+AGARIND,Petrochemicals,-45.0,49,0,1,0,0,industry not hot
+LUXIND,Garments & Apparels,-45.0,49,9,1,0,7,industry not hot
+GRPLTD,Rubber,-45.0,18,0,0,0,0,industry not hot
+WEBELSOLAR,Other Electrical Equipment,-46.0,49,16,17,3,6,industry not hot
+INDOTECH,Heavy Electrical Equipment,-46.0,49,14,8,0,10,industry not hot
+RELINFRA,Integrated Power Utilities,-46.0,48,6,10,0,16,industry not hot
+SHAREINDIA,Stockbroking & Allied,-46.0,49,24,0,0,3,industry not hot
+DHANI,Other Financial Services,-46.0,40,0,6,0,1,industry not hot
+FISCHER,Medical Equipment & Supplies,-46.0,14,0,5,0,0,no industry / short history
+ASHOKA,Civil Construction,-46.0,49,12,5,0,0,industry not hot
+KAYNES,Industrial Products,-46.0,49,14,20,0,9,industry not hot
+RAYMONDREL,"Residential, Commercial Projects",-46.0,21,0,0,0,0,industry not hot
+PLAZACABLE,Cables - Electricals,-46.0,2,2,0,0,0,failed trend test
+REFEX,Waste Management,-46.0,49,0,10,0,0,industry not hot
+BYKE,Hotels & Resorts,-46.0,7,1,3,1,0,industry not hot
+PDMJEPAPER,Paper & Paper Products,-47.0,37,0,4,0,2,industry not hot
+GEMAROMA,Specialty Chemicals,-47.0,13,0,5,0,0,no industry / short history
+REGAAL,Other Agricultural Products,-47.0,14,4,5,1,0,no industry / short history
+TEAMLEASE,Diversified Commercial Services,-47.0,49,6,0,0,0,industry not hot
+NEOGEN,Specialty Chemicals,-47.0,49,0,5,0,6,industry not hot
+BIRLAMONEY,Stockbroking & Allied,-47.0,34,18,5,0,0,industry not hot
+MOREPENLAB,Pharmaceuticals,-47.0,25,4,2,0,0,industry not hot
+ALPHAGEO,Offshore Support Solution Drilling,-48.0,3,0,0,0,0,industry not hot
+RPPINFRA,Civil Construction,-48.0,23,4,3,0,0,industry not hot
+JINDALPOLY,Packaging,-48.0,49,13,3,0,16,industry not hot
+APTECHT,Education,-48.0,41,0,0,0,3,industry not hot
+SUNDRMBRAK,Auto Components & Equipments,-48.0,7,4,3,0,0,failed trend test
+CONFIPET,LPG/CNG/PNG/LNG Supplier,-48.0,27,4,0,0,0,industry not hot
+SULA,Breweries & Distilleries,-48.0,49,15,0,0,0,industry not hot
+CHEMPLASTS,Specialty Chemicals,-48.0,49,0,0,0,0,industry not hot
+HARRMALAYA,Rubber,-48.0,6,0,5,0,0,industry not hot
+CHEMBOND,Specialty Chemicals,-48.0,3,0,0,0,0,industry not hot
+LOKESHMACH,Industrial Products,-48.0,31,9,0,0,10,industry not hot
+TRACXN,Data Processing Services,-48.0,40,0,0,0,0,industry not hot
+MICEL,Other Industrial Products,-48.0,40,16,3,0,10,failed trend test
+MANINFRA,"Residential, Commercial Projects",-48.0,49,5,0,0,0,industry not hot
+UDS,Diversified Commercial Services,-49.0,49,6,0,0,0,industry not hot
+EPACK,Household Appliances,-49.0,49,1,10,0,0,industry not hot
+EMSLIMITED,Waste Management,-49.0,49,0,5,0,0,industry not hot
+PROTEAN,IT Enabled Services,-49.0,40,13,32,0,0,industry not hot
+EMBDL,"Residential, Commercial Projects",-49.0,49,5,0,0,0,industry not hot
+SPENCERS,Diversified Retail,-49.0,24,0,0,0,0,industry not hot
+PAR,Pharmaceuticals,-49.0,4,2,0,0,0,industry not hot
+KAMDHENU,Iron & Steel Products,-49.0,1,0,0,0,0,industry not hot
+BARBEQUE,Restaurants,-49.0,38,5,0,0,0,industry not hot
+TARIL,Heavy Electrical Equipment,-50.0,49,14,4,0,3,industry not hot
+HPAL,Specialty Chemicals,-50.0,5,0,0,0,0,industry not hot
+ROUTE,Other Telecom Services,-50.0,49,0,0,0,0,industry not hot
+NEWGEN,Computers - Software & Consulting,-50.0,49,12,3,0,1,industry not hot
+SALZERELEC,Other Electrical Equipment,-50.0,49,16,6,0,0,industry not hot
+HGINFRA,Civil Construction,-50.0,49,12,0,0,0,industry not hot
+ORIENTCEM,Cement & Cement Products,-50.0,49,16,14,0,0,industry not hot
+PIONEEREMB,Other Textile Products,-50.0,2,2,0,0,0,failed trend test
+RAYMONDLSL,Other Textile Products,-50.0,49,10,34,0,1,ranked below top 9
+WHIRLPOOL,Household Appliances,-51.0,49,1,0,0,5,industry not hot
+E2E,IT Enabled Services,-51.0,49,17,4,1,27,industry not hot
+COHANCE,Pharmaceuticals,-51.0,27,0,0,0,0,industry not hot
+EXICOM,Heavy Electrical Equipment,-51.0,49,14,9,0,8,industry not hot
+DEVIT,IT Enabled Services,-51.0,16,4,0,0,0,industry not hot
+LAXMIDENTL,Medical Equipment & Supplies,-51.0,43,0,34,0,1,no industry / short history
+MBLINFRA,Civil Construction,-51.0,3,1,0,0,0,industry not hot
+GOCOLORS,Speciality Retail,-51.0,49,6,0,0,0,industry not hot
+SHALPAINTS,Paints,-51.0,37,4,0,0,0,industry not hot
+VERTOZ,Advertising & Media Agencies,-51.0,20,0,0,0,0,industry not hot
+RAJOOENG,Industrial Products,-52.0,26,7,17,0,0,industry not hot
+LYKALABS,Pharmaceuticals,-52.0,15,7,0,0,0,industry not hot
+SERVOTECH,Other Electrical Equipment,-52.0,49,16,3,0,3,industry not hot
+SUNCLAY,Auto Components & Equipments,-52.0,49,25,12,0,0,failed trend test
+TRANSWORLD,Shipping,-52.0,21,0,0,0,0,industry not hot
+SUTLEJTEX,Other Textile Products,-52.0,2,2,0,0,0,failed trend test
+SURAJLTD,Iron & Steel Products,-52.0,16,2,11,0,0,industry not hot
+HILINFRA,"Road AssetsToll, Annuity, Hybrid-Annuity",-52.0,15,0,6,0,0,no industry / short history
+NIITLTD,Education,-52.0,49,0,3,0,0,industry not hot
+GENESYS,IT Enabled Services,-52.0,49,17,7,0,0,industry not hot
+PARACABLES,Cables - Electricals,-52.0,27,8,0,0,0,industry not hot
+AVG,Logistics Solution Provider,-52.0,11,1,0,0,0,industry not hot
+STERTOOLS,Auto Components & Equipments,-53.0,49,25,1,0,0,failed trend test
+WENDT,Abrasives & Bearings,-53.0,41,0,0,0,7,industry not hot
+SWSOLAR,Civil Construction,-53.0,49,12,0,0,2,industry not hot
+ODIGMA,IT Enabled Services,-53.0,2,2,0,0,0,no industry / short history
+STANLEY,"Furniture, Home Furnishing",-53.0,48,0,25,0,0,industry not hot
+PPL,Plastic Products - Industrial,-53.0,49,4,0,0,0,industry not hot
+KNRCON,Civil Construction,-53.0,49,12,0,0,0,industry not hot
+SHIVALIK,Pesticides & Agrochemicals,-54.0,45,5,0,0,0,industry not hot
+PRECAM,Auto Components & Equipments,-54.0,49,25,1,0,9,industry not hot
+URAVIDEF,Auto Components & Equipments,-54.0,11,4,0,0,0,industry not hot
+USK,Civil Construction,-54.0,3,2,0,0,0,failed trend test
+MANYAVAR,Speciality Retail,-55.0,49,6,0,0,0,industry not hot
+IITL,Investment Company,-55.0,5,5,0,0,0,failed trend test
+BROOKS,Pharmaceuticals,-56.0,4,0,0,0,0,industry not hot
+FIRSTCRY,E-Retail/ E-Commerce,-56.0,49,18,31,0,0,industry not hot
+SURAJEST,"Residential, Commercial Projects",-57.0,49,5,1,0,0,industry not hot
+ORCHPHARMA,Pharmaceuticals,-58.0,49,7,4,0,0,industry not hot
+JAICORPLTD,Plastic Products - Industrial,-58.0,49,4,0,0,23,industry not hot
+GANECOS,Other Textile Products,-58.0,49,10,3,0,0,industry not hot
+OLAELEC,2/3 Wheelers,-58.0,27,12,18,1,1,industry not hot
+RKSWAMY,Advertising & Media Agencies,-58.0,23,0,9,0,0,industry not hot
+QUICKHEAL,Software Products,-59.0,49,10,1,0,2,industry not hot
+KABRAEXTRU,Industrial Products,-59.0,29,7,1,0,0,industry not hot
+JAIBALAJI,Iron & Steel,-60.0,49,17,0,0,0,industry not hot
+CHEMFAB,Commodity Chemicals,-60.0,13,0,1,0,0,industry not hot
+MOBIKWIK,Financial Technology (Fintech),-60.0,47,0,38,0,0,industry not hot
+HILTON,Castings & Forgings,-60.0,27,0,0,0,1,industry not hot
+DJML,Logistics Solution Provider,-60.0,7,0,2,0,5,industry not hot
+JITFINFRA,Water Supply & Management,-61.0,25,5,0,0,3,industry not hot
+DHRUV,Consulting Services,-61.0,3,0,1,0,0,industry not hot
+PRAJIND,Industrial Products,-61.0,49,14,3,0,0,industry not hot
+INDOUS,Other Agricultural Products,-61.0,11,4,6,0,0,industry not hot
+REPL,Civil Construction,-62.0,6,5,4,1,0,ranked below top 9
+THEMISMED,Pharmaceuticals,-62.0,43,7,0,0,0,industry not hot
+PIGL,Other Electrical Equipment,-62.0,13,4,3,2,2,industry not hot
+TEJASNET,Telecom -  Equipment & Accessories,-62.0,49,4,0,0,0,industry not hot
+JNKINDIA,Industrial Products,-62.0,47,13,16,0,6,industry not hot
+JINDWORLD,Other Textile Products,-63.0,25,8,3,0,0,industry not hot
+RACE,Waste Management,-63.0,6,0,0,0,0,industry not hot
+BALAXI,Pharmaceuticals,-63.0,10,2,0,0,0,industry not hot
+SUYOG,Telecom - Infrastructure,-65.0,44,0,27,0,1,industry not hot
+PAKKA,Paper & Paper Products,-66.0,49,0,0,0,0,industry not hot
+UMAEXPORTS,Trading & Distributors,-66.0,17,2,5,0,0,industry not hot
+MCLOUD,Computers - Software & Consulting,-66.0,34,2,26,2,5,no industry / short history
+ELGIRUBCO,Rubber,-67.0,7,0,3,0,0,industry not hot
+AFFORDABLE,Industrial Products,-69.0,31,12,25,0,0,industry not hot
+ABAN,Offshore Support Solution Drilling,-69.0,4,0,0,0,0,industry not hot
+DREAMFOLKS,Airport & Airport services,-72.0,49,0,0,0,1,industry not hot
+SBGLP,"Residential, Commercial Projects",-73.0,7,0,3,0,0,industry not hot
+RSSOFTWARE,Computers - Software & Consulting,-75.0,4,2,0,0,0,failed trend test
+CAPTRUST,Non Banking Financial Company (NBFC),-80.0,1,1,0,0,0,failed trend test
+VPRPL,Civil Construction,-82.0,49,12,1,0,0,industry not hot
+VLEGOV,IT Enabled Services,-89.0,8,4,5,4,0,picked
+AGSTRA,Financial Technology (Fintech),-94.0,4,0,0,0,0,industry not hot
+GENSOL,Other Electrical Equipment,-97.0,22,8,0,0,0,industry not hot

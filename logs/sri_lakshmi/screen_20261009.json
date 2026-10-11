@@ -1,0 +1,209 @@
+{
+ "screen_id": "20261009",
+ "data_through": "2026-10-09",
+ "created_at": "2026-10-11T10:29:49",
+ "created_note": "V3.1 list rebuilt 2026-10-11 from the same 2026-10-09 data; replaces the V3 list for the Monday 2026-10-12 investment (user decision)",
+ "entry": "next session open after data_through",
+ "hold_td": 126,
+ "cost_rt_pct": "0.5 / 1.0 / 2.0 by liquidity (research_panel.cost_rt)",
+ "exit": "TIME (126 sessions, close); no stops",
+ "sizing": "PAPER",
+ "status": "SLM V3.1 (EXP-2026-10-11-v3-l1-newlist-cost PASS 5/5 with liquidity-scaled costs): live rule for investment from 2026-10-12 by Abhinav's decision; pipeline switches on the 2026-10-16 run",
+ "rule": "V3 with the stock liquidity bar at Rs 1 cr (20-day average traded value; price > Rs 50) instead of Rs 5 cr, plus liquid new listings aged 3-12 months without the 1-year trend test; G1 hot-industry eligibility, model rank, top 9, minus Financial Services and fading-theme-only stocks, no refill",
+ "names": [
+  {
+   "rank": 1,
+   "symbol": "KANORICHEM",
+   "rtw": 9,
+   "industry": "Industrial Products",
+   "close": 174.21,
+   "model_score": 0.9858,
+   "heat_pct": 0.943,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 1,
+   "adv_cr": 1.1,
+   "max_order_inr": 110000,
+   "new_listing": false,
+   "vs_v3_list": "new on V3.1"
+  },
+  {
+   "rank": 2,
+   "symbol": "TIRUPATIFL",
+   "rtw": 8,
+   "industry": "Castings & Forgings",
+   "close": 70.77,
+   "model_score": 0.9794,
+   "heat_pct": 0.843,
+   "P_pct": 0.462,
+   "takeover": false,
+   "g1_rank": 2,
+   "adv_cr": 2.31,
+   "max_order_inr": 231000,
+   "new_listing": false,
+   "vs_v3_list": "new on V3.1"
+  },
+  {
+   "rank": 3,
+   "symbol": "PANACHE",
+   "rtw": 7,
+   "industry": "IT Enabled Services",
+   "close": 617.8,
+   "model_score": 0.9642,
+   "heat_pct": 0.771,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 3,
+   "adv_cr": 1.32,
+   "max_order_inr": 132000,
+   "new_listing": false,
+   "vs_v3_list": "new on V3.1"
+  },
+  {
+   "rank": 4,
+   "symbol": "STLTECH",
+   "rtw": 6,
+   "industry": "Telecom -  Equipment & Accessories",
+   "close": 1015.2,
+   "model_score": 0.9642,
+   "heat_pct": 0.986,
+   "P_pct": 0.795,
+   "takeover": false,
+   "g1_rank": 4,
+   "adv_cr": 194.67,
+   "max_order_inr": 19467000,
+   "new_listing": false,
+   "vs_v3_list": "same"
+  },
+  {
+   "rank": 5,
+   "symbol": "BIRLACABLE",
+   "rtw": 5,
+   "industry": "Telecom -  Equipment & Accessories",
+   "close": 385.2,
+   "model_score": 0.9532,
+   "heat_pct": 0.986,
+   "P_pct": 0.795,
+   "takeover": false,
+   "g1_rank": 5,
+   "adv_cr": 19.99,
+   "max_order_inr": 1999000,
+   "new_listing": false,
+   "vs_v3_list": "same"
+  },
+  {
+   "rank": 6,
+   "symbol": "DEEDEV",
+   "rtw": 4,
+   "industry": "Industrial Products",
+   "close": 604.15,
+   "model_score": 0.9435,
+   "heat_pct": 0.943,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 6,
+   "adv_cr": 12.79,
+   "max_order_inr": 1279000,
+   "new_listing": false,
+   "vs_v3_list": "same"
+  },
+  {
+   "rank": 7,
+   "symbol": "ACSTECH",
+   "rtw": 3,
+   "industry": "IT Enabled Services",
+   "close": 70.4,
+   "model_score": 0.9357,
+   "heat_pct": 0.771,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 7,
+   "adv_cr": 1.53,
+   "max_order_inr": 153000,
+   "new_listing": true,
+   "vs_v3_list": "new on V3.1"
+  },
+  {
+   "rank": 8,
+   "symbol": "IDEAFORGE",
+   "rtw": 2,
+   "industry": "Aerospace & Defense",
+   "close": 668.6,
+   "model_score": 0.927,
+   "heat_pct": 0.829,
+   "P_pct": 0.59,
+   "takeover": false,
+   "g1_rank": 8,
+   "adv_cr": 17.05,
+   "max_order_inr": 1705000,
+   "new_listing": false,
+   "vs_v3_list": "same"
+  },
+  {
+   "rank": 9,
+   "symbol": "JNKINDIA",
+   "rtw": 1,
+   "industry": "Industrial Products",
+   "close": 424.35,
+   "model_score": 0.9169,
+   "heat_pct": 0.943,
+   "P_pct": null,
+   "takeover": false,
+   "g1_rank": 9,
+   "adv_cr": 6.72,
+   "max_order_inr": 672000,
+   "new_listing": false,
+   "vs_v3_list": "same"
+  }
+ ],
+ "reserves": [
+  {
+   "rank": 1,
+   "symbol": "DBOL"
+  },
+  {
+   "rank": 2,
+   "symbol": "LOKESHMACH"
+  },
+  {
+   "rank": 3,
+   "symbol": "AEROENTER"
+  }
+ ],
+ "dropped_financials": [],
+ "dropped_fading_theme": [],
+ "g1_top9": [
+  "KANORICHEM",
+  "TIRUPATIFL",
+  "PANACHE",
+  "STLTECH",
+  "BIRLACABLE",
+  "DEEDEV",
+  "ACSTECH",
+  "IDEAFORGE",
+  "JNKINDIA"
+ ],
+ "vetoed_industries": [
+  "Commodity Chemicals",
+  "Dyes And Pigments",
+  "Garments & Apparels",
+  "Other Textile Products",
+  "Petrochemicals",
+  "Specialty Chemicals"
+ ],
+ "replaces": "not_invested/screen_20261009_v3_original.json",
+ "vs_v3_list": {
+  "dropped": [
+   "LOKESHMACH",
+   "AEROENTER",
+   "ARROWGREEN"
+  ],
+  "added": [
+   "KANORICHEM",
+   "TIRUPATIFL",
+   "PANACHE",
+   "ACSTECH"
+  ]
+ },
+ "max_order_rule": "about 1% of the stock's 20-day average daily traded value"
+}

@@ -1,0 +1,14 @@
+{
+ "dataset": "v31_picks.csv",
+ "producer": "src/agentic/explore_v31_hits_by_year.py",
+ "kind": "exploration, not a registered test",
+ "definitions": "Exploration (not a registered test; changes no rule): V3.1 picks year by year, and why 2025 went wrong.\n\nV3.1 = the rule invested from 2026-10-12: V3 with the Rs 1 cr liquidity bar (price > Rs 50 kept) and new listings aged\n63-251 sessions skipping the trend test (same steps as test_v3_l1_newlist_cost.nl_select). V3 (Rs 5 cr bar, no new\nlistings) is run through the same code as the reference; wiring check: it must equal v3_rule.picks on every week.\nPer pick (phase-0 weekly lists from 2023-01-01): bought at the next session's open. 'hit' = the day's high reached +50%\nwithin 126 sessions; '6m return' = close 126 sessions after entry vs entry; 'market' = plain average of the same 6m return\nover every stock that cleared the Rs 1 cr / Rs 50 bar on that list date (equal-weight market).\nFunnel: every stock-week that cleared the Rs 1 cr bar, tagged with the first V3.1 step that dropped it.\nHits and returns count only entries with a full 126-session window; later 2026 entries are reported to date.\nTop-N sweep: V3.1 baskets cut to the first N names by model rank (N = 1..9), same engine and liquidity-scaled costs as\ntest_v3_l1_newlist_cost (run_cost imported from it), weekly entries from 2019, 5 schedules. Score gradient: pick outcomes by\nrank position and by model-score fifth. Both are look-backs on data already seen: any N or cutoff they suggest must be\nregistered and tested before it changes the rule.\n",
+ "units": {
+  "peak": "fraction (0.5 = +50%) from entry open to the highest high within 126 sessions",
+  "ret": "fraction, close 126 sessions after entry vs entry open",
+  "mkt_ret": "fraction, equal-weight average ret of the Rs 1 cr universe on that list date",
+  "adv": "Rs crore, 20-day average traded value",
+  "ret2025": "percent, close on the last 2025 session vs last 2024 session (or first close if listed in 2025)"
+ },
+ "updated": "2026-10-11T14:21:19"
+}
