@@ -1,0 +1,12 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-11-v3-l1-newlist-cost",
+ "producer": "src/agentic/test_v3_l1_newlist_cost.py",
+ "definitions": "EXP-2026-10-11-v3-l1-newlist-cost (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: the Rs 1 cr liquidity bar (alone, and with new listings after 3 months) beat V3 at a flat 0.5% trading cost.\nDoes it still win when smaller stocks cost more to trade?\nCosts (every arm, every position, charged at entry as the engine does): research_panel.cost_rt on the stock's 20-day average\ntraded value on the list date: 0.5% round trip at >= Rs 5 cr, 1.0% at Rs 1-5 cr, 2.0% below Rs 1 cr. Stress: all doubled.\n  V3c      live rule (Rs 5 cr bar)\n  V3_L1c   Rs 1 cr bar (price > Rs 50 kept), everything else as V3\n  V3_L1Nc  Rs 1 cr bar + new listings aged 63-251 sessions skip the trend test (they must clear the Rs 1 cr bar)\nWindow: weekly entries from 2019-01-01; eras 2019-22 / 2023+; phases 0-4; 126-session hold (copy of run_exit with a\nper-position cost; wiring: at a flat 0.5% it reproduces run_exit exactly). PASS per arm = sp.beats vs V3c at phase 0 and in\n>= 4 of 5. Also reported: calendar years 2023-2026 and the doubled-cost result. SGM_REPRO=1 / SGM_RERUN_TAG as usual.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-11T10:24:34"
+}

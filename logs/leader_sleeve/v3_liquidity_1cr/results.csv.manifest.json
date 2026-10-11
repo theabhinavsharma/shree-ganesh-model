@@ -1,0 +1,28 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-11-v3-liquidity-1cr",
+ "producer": "src/agentic/test_v3_liquidity.py",
+ "definitions": "EXP-2026-10-11-v3-liquidity-1cr (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3 only buys stocks trading >= Rs 5 cr a day on average (20 days) with a price above Rs 50. Does a Rs 1 cr bar\n(price floor kept) pick better?\n  V3     live rule (bar Rs 5 cr)\n  V3_L1  same rule with the bar at Rs 1 cr; industry heat / G1 eligibility, trend test, model rank, top 9 and the financial /\n         fading filters unchanged\nWindow: weekly entries from 2019-01-01; eras 2019-22 / 2023+; phases 0-4; run_exit(\"E0\"), 126-session hold, 0.5% round trip.\nPASS = sp.beats(V3_L1, V3) at phase 0 and in >= 4 of 5. Also reported: calendar years 2023-2026 averaged over 5 schedules.\nBefore any outcome: trust/data_ready.gate(). SGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "small_vs_other": {
+  "small_band_picks": {
+   "n": 1257,
+   "avg": 0.318,
+   "median": 0.221,
+   "hit50": 0.513,
+   "lost30": 0.1
+  },
+  "other_picks": {
+   "n": 1282,
+   "avg": 0.308,
+   "median": 0.134,
+   "hit50": 0.413,
+   "lost30": 0.115
+  }
+ },
+ "updated": "2026-10-11T10:19:37"
+}
