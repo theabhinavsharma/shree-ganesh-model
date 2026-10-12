@@ -115,6 +115,11 @@ def merge_history(G: pd.DataFrame) -> None:
     old["source"] = "corporates-pit"
     od = pd.to_datetime(old["date"], format="%d-%b-%Y %H:%M", errors="coerce")
     old = old[od.isna() | (od < pd.Timestamp("2026-05-01"))]
+    gap = ROOT / "data/raw/pit_gap_2026/pit_corporates_pit_gap.parquet"   # 2026-03-01..05-02: in neither piece (repair_pit_gap_2026.py)
+    if gap.exists():
+        g = pd.read_parquet(gap); g["source"] = "corporates-pit (live store)"
+        g = g[pd.to_datetime(g["date"], format="%d-%b-%Y %H:%M", errors="coerce") > od.max()]
+        old = pd.concat([old, g[[c for c in old.columns if c in g.columns]]], ignore_index=True)
     new = G.drop(columns=["ixbrl_url", "regulation", "fetched"], errors="ignore").copy()
     for c in old.columns:
         if c not in new.columns:

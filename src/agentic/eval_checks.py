@@ -418,6 +418,17 @@ def insider_fresh(ctx: dict) -> dict:
     return _res("PASS" if age <= 5 else "FAIL", str(newest.date()), f"newest disclosure {age} days old")
 
 
+def insider_no_empty_month(ctx: dict) -> dict:
+    """2026-10-12 (INC-2026-10-12-insider-gap-mar-apr-2026): March and April 2026 had no rows at all between the old and the new
+    NSE insider systems, so the model rows read 'no promoter trades' for every stock. Every month from 2019-01 to the last
+    complete month must hold disclosures."""
+    p = pd.read_parquet(ROOT / "data/derived/pit_history.parquet", columns=["date"])
+    m = pd.to_datetime(p["date"], format="%d-%b-%Y %H:%M", errors="coerce").dt.to_period("M").dropna().unique()
+    last = (pd.Timestamp.now().to_period("M") - 1)
+    miss = [str(x) for x in pd.period_range("2019-01", last, freq="M").difference(m)]
+    return _res("PASS" if not miss else "FAIL", len(miss), ("empty months: " + ", ".join(miss[:6])) if miss else f"every month 2019-01..{last} has disclosures")
+
+
 def message_grounded(ctx: dict) -> dict:
     rows = [r for r in _jsonl(ROOT / "logs/outbox/checks.jsonl") if r["kind"] in ("daily", "weekly")]
     if not rows:

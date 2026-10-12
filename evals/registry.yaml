@@ -74,6 +74,16 @@ evals:
     owner: system
     check: insider_fresh
 
+  - id: data.insider_no_empty_month
+    statement: "Every month from January 2019 to last month has promoter / insider trade disclosures in the history file."
+    why: "March and April 2026 fell between NSE's old and new insider systems and were missing for 5 months without any check noticing; the model rows read 'no promoter trades' for every stock in those weeks (INC-2026-10-12-insider-gap-mar-apr-2026)."
+    source_of_truth: "data/derived/pit_history.parquet column date, rebuilt daily by src/agentic/fetch_pit_gg.py merge_history (old history + data/raw/pit_gap_2026 + new system)"
+    threshold: "zero empty months"
+    action: block
+    cadence: daily
+    owner: system
+    check: insider_no_empty_month
+
   - id: data.no_unexplained_cliffs
     statement: "No stock we could buy shows a one-day fall of 45% or more in its whole history unless NSE recorded a corporate action that day or the crash is verified real."
     why: "Unapplied splits, bonuses and special dividends looked like crashes in 62 stocks until 2026-09-30 (renamed companies, Majesco's Rs 974 dividend). Daily checks only looked at new rows, so old history rotted silently."

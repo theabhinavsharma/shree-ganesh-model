@@ -1,0 +1,19 @@
+{
+ "dataset": "pit_corporates_pit_gap.parquet",
+ "producer": "src/agentic/repair_pit_gap_2026.py",
+ "source": "NSE api/corporates-pit (old insider-trading system), copied unchanged from the live store tmp/from_scratch_7d_run/alt/insider_trading_pit.parquet (fetched 2026-05-06)",
+ "window": {
+  "after": "2026-02-28 20:59:00",
+  "before": "2026-05-03 01:25:00",
+  "why": "after the last row of pit_history_pre_gg, before the first row of pit_gg"
+ },
+ "rows": 2107,
+ "rows_by_month": {
+  "2026-03": 1787,
+  "2026-04": 317,
+  "2026-05": 3
+ },
+ "columns": "pit_history columns (date = NSE broadcast time, '%d-%b-%Y %H:%M')",
+ "used_by": "fetch_pit_gg.merge_history",
+ "updated": "2026-10-12T17:26:32"
+}
