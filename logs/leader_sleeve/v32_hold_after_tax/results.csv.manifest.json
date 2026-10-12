@@ -1,0 +1,94 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-13-v32-hold-after-tax",
+ "producer": "src/agentic/test_v32_hold_after_tax.py",
+ "definitions": "EXP-2026-10-13-v32-hold-after-tax (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3.2 sells every lot after 6 months, so every gain is short-term and taxed at 20.8%. Does holding 9 months, or past\n12 months (13.0% long-term tax), leave more money after tax?\nArms: H6 (126 sessions, live), H9 (189), H12 (260 sessions, ~12.5 months). Same V3.2 lists; test_v3_l1_newlist_cost.run_cost with\nsre.HOLD per arm (weekly ladder of HOLD//5+1 slices), dividends counted, payouts as cash, liquidity-scaled costs, list-day close.\nTax (today's rates, every year): held <= 365 days 20.8%, > 365 days 13.0% (cess included, no exemption, no surcharge), charged on\neach lot's gain at its sale and taken from the money that rolls on; a lot's loss offsets later gains in its slice; on the last\ndate open lots are treated as sold. ADOPTION per arm (H9, H12), after tax: beats H6 in both eras, max drawdown not worse by > 2\npoints, at schedule 0 and >= 4 of 5. SGM_REPRO=1: log nothing.\n",
+ "basis": {
+  "pre": "before tax",
+  "post": "after tax, list-day close entry",
+  "post_open": "after tax, bought at the next open"
+ },
+ "phases": {
+  "H9": "0/5",
+  "H12": "0/5"
+ },
+ "bootstrap_after_tax_gap_vs_H6": {
+  "H9": [
+   [
+    -2.1,
+    -5.5,
+    1.7
+   ],
+   [
+    -1.5,
+    -4.5,
+    1.6
+   ],
+   [
+    -1.7,
+    -5.2,
+    2.2
+   ],
+   [
+    -1.4,
+    -4.9,
+    2.4
+   ],
+   [
+    -0.6,
+    -4.5,
+    3.7
+   ]
+  ],
+  "H12": [
+   [
+    -0.5,
+    -4.2,
+    3.8
+   ],
+   [
+    0.4,
+    -3.4,
+    4.5
+   ],
+   [
+    1.3,
+    -3.6,
+    7.3
+   ],
+   [
+    0.8,
+    -3.8,
+    5.8
+   ],
+   [
+    2.1,
+    -3.5,
+    8.6
+   ]
+  ]
+ },
+ "days_held": {
+  "H6": {
+   "min_days": 179,
+   "max_days": 193,
+   "lots_long_term": "0/347"
+  },
+  "H9": {
+   "min_days": 271,
+   "max_days": 288,
+   "lots_long_term": "0/335"
+  },
+  "H12": {
+   "min_days": 378,
+   "max_days": 394,
+   "lots_long_term": "320/320"
+  }
+ },
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-13T02:07:10"
+}
