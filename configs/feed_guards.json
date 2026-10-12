@@ -170,6 +170,11 @@
    "file": "data/derived/order_terms.parquet",
    "date_col": "ts",
    "max_stale_bd": 5
+  },
+  "nsdl_fpi": {
+   "file": "data/derived/nsdl_fpi_daily.parquet",
+   "date_col": "reporting_date",
+   "max_stale_bd": 4
   }
  }
 }

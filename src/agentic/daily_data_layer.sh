@@ -48,6 +48,7 @@ run usdinr_history /usr/bin/python3 src/agentic/fetch_usdinr_history.py   # FRED
 run commodity /usr/bin/python3 src/agentic/fetch_commodity_prices.py
 run global_macro /usr/bin/python3 src/agentic/fetch_global_macro.py
 run fii_dii /usr/bin/python3 src/agentic/fetch_fii_dii.py
+run nsdl_fpi /usr/bin/python3 src/agentic/fetch_nsdl_fpi.py   # NSDL FPI Monitor daily flows, 2015+ (official; current + previous month refetched) (2026-10-12)
 run block_deals /usr/bin/python3 src/agentic/fetch_block_deals.py
 run breadth /usr/bin/python3 src/agentic/fetch_market_breadth.py
 run india_vix /usr/bin/python3 src/agentic/fetch_india_vix.py

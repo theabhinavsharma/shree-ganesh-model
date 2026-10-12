@@ -561,6 +561,31 @@ def pledge_feed(ctx: dict) -> dict:
     return _res(st, f"{len(want) - len(missing)}/{len(want)} months · {recent} events in 30 days",
                 ("months not fetched: " + ", ".join(missing[:12]) if missing else "") + ("" if recent else " · no events in 30 days"))
 
+def nsdl_fpi_feed(ctx: dict) -> dict:
+    """NSDL FPI daily flows (fetch_nsdl_fpi.py): every month since Jan 2015 has its saved NSDL page, every completed month has
+    >= 12 reporting dates, and each date adds up the way NSDL prints it (Equity Sub-total = Stock Exchange + Primary market,
+    Total = sum of the Sub-totals, within Rs 1 crore). Reconciliation is against NSDL's own subtotal rows."""
+    raw = ROOT / "data/raw/nsdl_fpi"; f = ROOT / "data/derived/nsdl_fpi_daily.parquet"
+    if not f.exists():
+        return _res("FAIL", None, "no nsdl_fpi_daily.parquet — run src/agentic/fetch_nsdl_fpi.py")
+    want = [m.strftime("%Y-%m") for m in pd.date_range("2015-01-01", pd.Timestamp.now(), freq="MS")]
+    missing = [m for m in want if not (raw / f"fpi_daily_{m}.html").exists()]
+    D = pd.read_parquet(f); D["reporting_date"] = pd.to_datetime(D["reporting_date"])
+    eq = D[D["asset"] == "Equity"].pivot_table(index="reporting_date", columns="route", values="net_cr", aggfunc="first")
+    bad_eq = eq.index[(eq["Sub-total"] - eq[["Stock Exchange", "Primary market & others"]].sum(axis=1)).abs() > 1.0] if {"Sub-total", "Stock Exchange", "Primary market & others"} <= set(eq.columns) else eq.index
+    sub = D[D["route"] == "Sub-total"].groupby("reporting_date")["net_cr"].sum()
+    tot = D[D["route"] == "Total"].set_index("reporting_date")["net_cr"]
+    j = pd.concat([sub.rename("sub"), tot.rename("tot")], axis=1).dropna()
+    bad_tot = j.index[(j["sub"] - j["tot"]).abs() > 1.0]
+    n = D[D["route"] == "Sub-total"].groupby(D["reporting_date"].dt.to_period("M"))["reporting_date"].nunique()
+    thin = [str(k) for k, v in n.items() if v < 12 and k < pd.Timestamp.now().to_period("M")]
+    ok = not missing and not thin and len(bad_eq) == 0 and len(bad_tot) == 0
+    return _res("PASS" if ok else "WARN", f"{len(want) - len(missing)}/{len(want)} months · {D['reporting_date'].nunique()} dates · last {D['reporting_date'].max().date()}",
+                "; ".join(x for x in (("months not fetched: " + ", ".join(missing[:8])) if missing else "", ("thin months: " + ", ".join(thin[:8])) if thin else "",
+                                      (f"{len(bad_eq)} dates where equity routes do not add up") if len(bad_eq) else "",
+                                      (f"{len(bad_tot)} dates where sub-totals do not add up to Total") if len(bad_tot) else "") if x))
+
+
 def watchdog_alive(ctx: dict) -> dict:
     """The independent watchdog (src/agentic/watchdog.py, launchd com.sgm.watchdog, every 30 min) wrote its heartbeat in the
     last 2 hours. Without it a hung run is silent: the daily run's own checks cannot fire while it is stuck (2026-10-06)."""

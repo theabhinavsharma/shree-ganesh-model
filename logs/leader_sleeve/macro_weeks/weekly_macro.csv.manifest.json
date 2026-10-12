@@ -1,0 +1,110 @@
+{
+ "dataset": "weekly_macro.csv",
+ "producer": "src/agentic/explore_macro_weeks.py",
+ "kind": "exploration",
+ "definitions": "Exploration (not a registered test; changes no rule): do macro readings on the list date go with better or worse V3.1 lists?\n\nList outcome = average 6-month return of a phase-0 weekly V3.1 list after liquidity-scaled costs (finished windows only,\nlogs/leader_sleeve/v31_hits_by_year/v31_picks.csv). Every macro reading is what was known on the list date:\n  india_vix, vix_1m      India VIX close and its change over ~1 month (data/derived/india_vix.parquet)\n  rupee_3m               USD/INR change over 3 months, + = rupee weaker (FRED DEXINUS, by known_from)\n  us10y_3m               US 10-year yield change over 3 months, percentage points (FRED DGS10, by known_from)\n  dollar_3m              broad dollar index change over 3 months (FRED DTWEXBGS, by known_from)\n  brent_3m               Brent crude change over 3 months (FRED DCOILBRENTEU, by known_from)\n  us_vix, spx_vs_200     US VIX and the S&P 500 vs its 200-day average (us_macro_fred.parquet, as of the day before)\n  core_yoy, iip_yoy      latest released year-on-year growth of India's core sector index and IIP general index (by release date)\nReported per era (2019-22, 2023+): rank correlation with the list outcome and the average outcome in the low / high third.\nNeighbouring weekly lists overlap (each 6-month window shares most of its days), so ~15 independent half-years in all.\n",
+ "table": [
+  {
+   "factor": "India VIX (fear) level",
+   "known_share": 1.0,
+   "2019-22 corr": 0.3,
+   "2019-22 low / high third": "+16% / +42%",
+   "2023+ corr": -0.04,
+   "2023+ low / high third": "+35% / +30%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "India VIX change, 1 month",
+   "known_share": 1.0,
+   "2019-22 corr": -0.05,
+   "2019-22 low / high third": "+26% / +26%",
+   "2023+ corr": 0.13,
+   "2023+ low / high third": "+25% / +34%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "rupee weakening, 3 months",
+   "known_share": 1.0,
+   "2019-22 corr": -0.14,
+   "2019-22 low / high third": "+35% / +20%",
+   "2023+ corr": -0.21,
+   "2023+ low / high third": "+43% / +24%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "US 10-year yield change, 3 months",
+   "known_share": 1.0,
+   "2019-22 corr": 0.01,
+   "2019-22 low / high third": "+21% / +26%",
+   "2023+ corr": 0.21,
+   "2023+ low / high third": "+20% / +42%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "dollar index change, 3 months",
+   "known_share": 1.0,
+   "2019-22 corr": -0.27,
+   "2019-22 low / high third": "+41% / +22%",
+   "2023+ corr": -0.06,
+   "2023+ low / high third": "+35% / +28%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "crude oil change, 3 months",
+   "known_share": 1.0,
+   "2019-22 corr": 0.09,
+   "2019-22 low / high third": "+27% / +30%",
+   "2023+ corr": 0.27,
+   "2023+ low / high third": "+24% / +42%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "US VIX level",
+   "known_share": 1.0,
+   "2019-22 corr": 0.33,
+   "2019-22 low / high third": "+13% / +35%",
+   "2023+ corr": -0.12,
+   "2023+ low / high third": "+43% / +29%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "S&P 500 vs its 200-day",
+   "known_share": 1.0,
+   "2019-22 corr": 0.41,
+   "2019-22 low / high third": "+16% / +46%",
+   "2023+ corr": -0.14,
+   "2023+ low / high third": "+43% / +27%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "India core sector growth (latest)",
+   "known_share": 1.0,
+   "2019-22 corr": -0.26,
+   "2019-22 low / high third": "+43% / +20%",
+   "2023+ corr": 0.45,
+   "2023+ low / high third": "+13% / +45%",
+   "same direction, both >= 0.15": false
+  },
+  {
+   "factor": "India IIP growth (latest)",
+   "known_share": 1.0,
+   "2019-22 corr": -0.18,
+   "2019-22 low / high third": "+39% / +23%",
+   "2023+ corr": 0.36,
+   "2023+ low / high third": "+14% / +47%",
+   "same direction, both >= 0.15": false
+  }
+ ],
+ "units": {
+  "list_ret": "fraction, 6-month list return after costs",
+  "rupee_3m": "fraction",
+  "us10y_3m": "percentage points",
+  "dollar_3m": "fraction",
+  "brent_3m": "fraction",
+  "core_yoy": "percent",
+  "iip_yoy": "percent",
+  "india_vix": "index points",
+  "vix_1m": "fraction"
+ },
+ "updated": "2026-10-12T08:10:20"
+}
