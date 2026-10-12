@@ -1,0 +1,297 @@
+{
+ "A": [
+  {
+   "index": 2015,
+   "liquid": 513.0,
+   "t2t": 1.0,
+   "bz": 0.0,
+   "t2t_share%": 0.2
+  },
+  {
+   "index": 2016,
+   "liquid": 614.0,
+   "t2t": 0.0,
+   "bz": 0.0,
+   "t2t_share%": 0.0
+  },
+  {
+   "index": 2017,
+   "liquid": 771.0,
+   "t2t": 7.0,
+   "bz": 0.0,
+   "t2t_share%": 0.9
+  },
+  {
+   "index": 2018,
+   "liquid": 728.0,
+   "t2t": 6.0,
+   "bz": 0.0,
+   "t2t_share%": 0.8
+  },
+  {
+   "index": 2019,
+   "liquid": 560.0,
+   "t2t": 1.0,
+   "bz": 0.0,
+   "t2t_share%": 0.2
+  },
+  {
+   "index": 2020,
+   "liquid": 626.0,
+   "t2t": 4.0,
+   "bz": 0.0,
+   "t2t_share%": 0.6
+  },
+  {
+   "index": 2021,
+   "liquid": 950.0,
+   "t2t": 30.0,
+   "bz": 1.0,
+   "t2t_share%": 3.2
+  },
+  {
+   "index": 2022,
+   "liquid": 1017.0,
+   "t2t": 18.0,
+   "bz": 0.0,
+   "t2t_share%": 1.8
+  },
+  {
+   "index": 2023,
+   "liquid": 1123.0,
+   "t2t": 25.0,
+   "bz": 0.0,
+   "t2t_share%": 2.2
+  },
+  {
+   "index": 2024,
+   "liquid": 1364.0,
+   "t2t": 60.0,
+   "bz": 0.0,
+   "t2t_share%": 4.4
+  },
+  {
+   "index": 2025,
+   "liquid": 1319.0,
+   "t2t": 37.0,
+   "bz": 0.0,
+   "t2t_share%": 2.8
+  },
+  {
+   "index": 2026,
+   "liquid": 1404.0,
+   "t2t": 35.0,
+   "bz": 1.0,
+   "t2t_share%": 2.5
+  }
+ ],
+ "B": {
+  "spells": 5985,
+  "stocks": 1588,
+  "still_open": 532,
+  "median_sessions": 58.0,
+  "p25": 38.0,
+  "p75": 70.0,
+  "back_within_63": 54.8,
+  "back_within_126": 84.0,
+  "back_within_252": 88.9
+ },
+ "B_by_year": {
+  "2016": {
+   "spells": 162,
+   "median_sessions": 23.0
+  },
+  "2017": {
+   "spells": 463,
+   "median_sessions": 52.0
+  },
+  "2018": {
+   "spells": 360,
+   "median_sessions": 55.0
+  },
+  "2019": {
+   "spells": 437,
+   "median_sessions": 56.0
+  },
+  "2020": {
+   "spells": 711,
+   "median_sessions": 42.0
+  },
+  "2021": {
+   "spells": 702,
+   "median_sessions": 57.0
+  },
+  "2022": {
+   "spells": 512,
+   "median_sessions": 52.0
+  },
+  "2023": {
+   "spells": 670,
+   "median_sessions": 66.0
+  },
+  "2024": {
+   "spells": 829,
+   "median_sessions": 65.0
+  },
+  "2025": {
+   "spells": 570,
+   "median_sessions": 64.0
+  },
+  "2026": {
+   "spells": 569,
+   "median_sessions": 64.0
+  }
+ },
+ "C": {
+  "switches": 1467,
+  "pre60_median": 44.3,
+  "pre60_avg": 49.1,
+  "mkt_pre60_avg": 9.7,
+  "frozen_before": 2.2,
+  "frozen_after": 4.3,
+  "after20_median": -5.6,
+  "after20_avg": -3.7,
+  "after20_vs_mkt_avg": -4.8,
+  "after20_lost30": 3.1,
+  "after20_up50": 1.5,
+  "after60_median": -7.3,
+  "after60_avg": -1.6,
+  "after60_vs_mkt_avg": -5.5,
+  "after60_lost30": 10.3,
+  "after60_up50": 5.1,
+  "after126_median": -5.0,
+  "after126_avg": 7.8,
+  "after126_vs_mkt_avg": 1.0,
+  "after126_lost30": 17.4,
+  "after126_up50": 14.0
+ },
+ "C_by_era": [
+  {
+   "era": "2019-22",
+   "n": 397,
+   "pre60_med": 0.47,
+   "post126_med": 0.001,
+   "post126_avg": 0.133,
+   "lost30_126": 0.128,
+   "up50_126": 0.151
+  },
+  {
+   "era": "2023+",
+   "n": 1070,
+   "pre60_med": 0.435,
+   "post126_med": -0.074,
+   "post126_avg": 0.053,
+   "lost30_126": 0.161,
+   "up50_126": 0.112
+  }
+ ],
+ "D": [
+  {
+   "index": 2015,
+   "t2t_frozen%": 3.1,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2016,
+   "t2t_frozen%": 13.4,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2017,
+   "t2t_frozen%": 5.5,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2018,
+   "t2t_frozen%": 9.5,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2019,
+   "t2t_frozen%": 18.8,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2020,
+   "t2t_frozen%": 9.5,
+   "eq_frozen%": 0.4
+  },
+  {
+   "index": 2021,
+   "t2t_frozen%": 8.7,
+   "eq_frozen%": 0.2
+  },
+  {
+   "index": 2022,
+   "t2t_frozen%": 5.2,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2023,
+   "t2t_frozen%": 6.5,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2024,
+   "t2t_frozen%": 7.4,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2025,
+   "t2t_frozen%": 7.7,
+   "eq_frozen%": 0.1
+  },
+  {
+   "index": 2026,
+   "t2t_frozen%": 6.3,
+   "eq_frozen%": 0.1
+  }
+ ],
+ "E": [
+  {
+   "symbol": "KANORICHEM",
+   "in_t2t_since": "2026-05-19",
+   "sessions_so_far": 100,
+   "earlier_spells": 1,
+   "runup_60_before": 18.0,
+   "since_switch": 94.0,
+   "frozen_last20": 1
+  },
+  {
+   "symbol": "TIRUPATIFL",
+   "in_t2t_since": "2026-07-24",
+   "sessions_so_far": 54,
+   "earlier_spells": 4,
+   "runup_60_before": 74.0,
+   "since_switch": -4.0,
+   "frozen_last20": 8
+  },
+  {
+   "symbol": "PANACHE",
+   "in_t2t_since": "2026-07-16",
+   "sessions_so_far": 60,
+   "earlier_spells": 7,
+   "runup_60_before": 37.0,
+   "since_switch": 43.0,
+   "frozen_last20": 1
+  },
+  {
+   "symbol": "STLTECH",
+   "in_t2t_since": "2026-05-14",
+   "sessions_so_far": 103,
+   "earlier_spells": 1,
+   "runup_60_before": 157.0,
+   "since_switch": 140.0,
+   "frozen_last20": 1
+  },
+  {
+   "symbol": "ACSTECH",
+   "in_t2t_since": "2026-08-26",
+   "sessions_so_far": 31,
+   "earlier_spells": 0,
+   "runup_60_before": 54.0,
+   "since_switch": 45.0,
+   "frozen_last20": 8
+  }
+ ]
+}

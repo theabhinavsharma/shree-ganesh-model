@@ -1,0 +1,13 @@
+{
+ "dataset": "results.json",
+ "producer": "src/agentic/explore_t2t.py",
+ "kind": "exploration",
+ "definitions": "Exploration (not a registered test; changes no rule): what trade-for-trade (BE / BZ series) looks like in our data.\n\nSource: the series NSE prints for each stock each day in its bhavcopy (price panel `series`; BE/BZ rows backfilled 2015-2024\non 2026-09-27). EQ = normal rolling settlement; BE / BZ = trade-for-trade (every trade settles by delivery).\nLiquid = 20-day average traded value >= Rs 1 cr and price > Rs 50 the day before (V3.1's bar).\n  A  how many liquid stocks sit in BE / BZ, by year\n  B  spells: a stock's run of consecutive BE/BZ sessions (start = first BE/BZ session after an EQ session, 2016+);\n     how long they last, how many return to EQ within 3 / 6 / 12 months\n  C  around the switch into BE/BZ (liquid at the switch, 2019+): run-up over the 60 sessions before; return over the next\n     20 / 60 / 126 sessions from the first BE close vs the equal-weight liquid market over the same days; share of\n     'frozen' sessions (high == low: the price never moved, usually stuck at its price band) before and after\n  D  frozen sessions: BE/BZ vs EQ liquid stock-days, by year\n  E  the 5 trade-for-trade names on the 2026-10-09 V3.1 list: since when, run-up before the switch, frozen days lately\n",
+ "units": {
+  "pre60": "percent return over the 60 sessions before the first BE/BZ session",
+  "post": "percent from the first BE/BZ close",
+  "frozen": "percent of sessions with high == low",
+  "sessions": "trading sessions"
+ },
+ "updated": "2026-10-12T06:16:20"
+}
