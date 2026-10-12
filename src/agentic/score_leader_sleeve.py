@@ -42,7 +42,19 @@ def _r(v, n=2):
     return None if v is None or pd.isna(v) else round(float(v), n)
 
 
+def _invested(sc: dict) -> dict:
+    """A batch switched to V3.2 after it was saved (DIR/v32_overrides.jsonl, 2026-10-12) is scored on the names bought."""
+    ov = DIR / "v32_overrides.jsonl"
+    if ov.exists():
+        for l in ov.read_text().splitlines():
+            o = json.loads(l)
+            if o.get("screen_id") == sc.get("screen_id"):
+                return dict(sc, names=[n for n in sc["names"] if n["symbol"] in set(o["invested"])])
+    return sc
+
+
 def score_screen(sc: dict, px: pd.DataFrame) -> dict:
+    sc = _invested(sc)
     thru = pd.Timestamp(sc["data_through"])
     rows = []
     for n in sc["names"]:

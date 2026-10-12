@@ -115,6 +115,12 @@ def _pool_weekly(track: str) -> tuple[list[float], str, list[str]]:
         s = json.loads(sl.read_text()).get("sleeve_inr")
         if s:
             extra += [s, s / 26, s / 26 / len(sc["names"])]
+    ov = notify.TRACKS[track] / "v32_overrides.jsonl"          # V3.2 record for a batch whose file predates the rule (2026-10-12)
+    if ov.exists():
+        for l in ov.read_text().splitlines():
+            o = json.loads(l)
+            if o.get("screen_id") == sc["screen_id"]:
+                extra += [o["per_stock_inr"], len(o["invested"]), *o["shares"].values()] + [v for r in o["reserves"] for v in (r["close"], r["limit"])]
     return _nums(f.read_text()) + [float(x) for x in extra], sc["data_through"], [n["symbol"] for n in sc["names"]]
 
 

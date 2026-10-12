@@ -85,3 +85,16 @@ def picks_v31(F1: pd.DataFrame, dates: list, imap: pd.Series, P: pd.DataFrame, c
     """{date: V3.1 picks}: model top `top` of the V3.1 pool, then financials and fading-only names dropped, no refill."""
     g = ranked_v31(F1, dates, imap, P, ctx["G1"], top)
     return {d: [s for s in g[d] if ctx["keep"](s, d)] for d in dates}
+
+
+
+# ---------------------------------------------------------------- V3.2 (live from the 2026-10-12 investment, pipeline from 2026-10-16)
+# V3.1 minus names in the trade-for-trade segment (BE / BZ series) on the list date, NOT refilled. Evidence:
+# EXP-2026-10-12-v31-t2t (V3.1_NOT2T PASS 5/5: 56.7 vs 51.8 %/yr, 2023+ 64.2 vs 54.9, worst fall -38.7 vs -40.0).
+def t2t_flags(symbols: list, d) -> dict:
+    """{symbol: True if its latest series on or before d is BE / BZ} from the price panel (NSE bhavcopy series)."""
+    import research_panel as rp
+    S = pd.read_parquet(rp.PANEL, columns=["symbol", "trade_date", "series"], filters=[("symbol", "in", list(symbols))])
+    S["trade_date"] = pd.to_datetime(S["trade_date"]); S = S[S["trade_date"] <= pd.Timestamp(d)].sort_values("trade_date")
+    last = S.groupby("symbol")["series"].last()
+    return {s: bool(last.get(s) in ("BE", "BZ")) for s in symbols}

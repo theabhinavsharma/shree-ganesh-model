@@ -35,7 +35,7 @@ OUTBOX = ROOT / "logs/outbox"
 CFG = Path.home() / ".config/sgm"
 # Only two tracks (Abhinav, 2026-09-30): Sri Lakshmi (G1 batch Sep 28, V3 from Oct 2) and the Sep 8 production sleeve.
 TRACKS = {"sri_lakshmi": ROOT / "logs/sri_lakshmi", "sleeve": ROOT / "logs/leader_sleeve"}
-LABEL = {"sri_lakshmi": "Sri Lakshmi V3.1", "sleeve": "Production"}
+LABEL = {"sri_lakshmi": "Sri Lakshmi V3.2", "sleeve": "Production"}
 SHORT = {"sri_lakshmi": "SL", "sleeve": "Prod"}
 
 
@@ -272,7 +272,7 @@ def weekend_text(run: dict | None = None) -> str:
         entry = nse_calendar.next_session(sc["data_through"])
         if entry >= pd.Timestamp(now.date()) and sc["names"]:
             st_ = sc.get("status", "")
-            name = "Sri Lakshmi V3.1" if "V3.1" in st_ else "Sri Lakshmi V3" if "V3" in st_ else "Sri Lakshmi G1"
+            name = "Sri Lakshmi V3.2" if "V3.2" in st_ else "Sri Lakshmi V3.1" if "V3.1" in st_ else "Sri Lakshmi V3" if "V3" in st_ else "Sri Lakshmi G1"
             lines += ["", f"🛒 {entry:%a %b %d} at open: buy {', '.join(n['symbol'] for n in sc['names'])} ({name}, list of "
                           f"{pd.Timestamp(sc['data_through']):%b %d}; limits in the Friday sheet)"]
     lines += _heat_lines()
@@ -352,7 +352,7 @@ def weekly_text(track: str) -> str:
     entry = nse_calendar.next_session(sc["data_through"])     # NSE holiday list (a Thu list must not say "buy Fri" on a holiday)
     sell = nse_calendar.add_sessions(entry, 126)
     st = sc.get("status", "")
-    name = LABEL[track] if track != "sri_lakshmi" else ("Sri Lakshmi V3.1" if "V3.1" in st else "Sri Lakshmi V3" if "V3" in st else "Sri Lakshmi G1")
+    name = LABEL[track] if track != "sri_lakshmi" else ("Sri Lakshmi V3.2" if "V3.2" in st else "Sri Lakshmi V3.1" if "V3.1" in st else "Sri Lakshmi V3" if "V3" in st else "Sri Lakshmi G1")
     lines = [f"🛒 {name} · buy {entry:%a %b %d} at open · data {pd.Timestamp(sc['data_through']):%b %d}",
              f"{len(sc['names'])} stocks" + (f" · ₹{per:,.0f} each" if per else " · equal weight"), ""]
     for i, n in enumerate(sc["names"], 1):
@@ -360,7 +360,7 @@ def weekly_text(track: str) -> str:
         q = _shares(per, c)
         lines.append(f"{i}. {n['symbol']}" + (f" · {q} sh" if q else "") + (f" · limit ₹{c * 1.05:,.2f}" if c else "")
                      + (" · ⚑ takeover" if n.get("takeover") else "") + (" · new listing" if n.get("new_listing") else ""))
-    skip = [f"{k} {', '.join(sc[c])}" for k, c in (("financials", "dropped_financials"), ("fading theme", "dropped_fading_theme")) if sc.get(c)]
+    skip = [f"{k} {', '.join(sc[c])}" for k, c in (("financials", "dropped_financials"), ("fading theme", "dropped_fading_theme"), ("trade-for-trade", "skipped_t2t")) if sc.get(c)]
     if skip:
         lines.append("Skipped (not refilled): " + " · ".join(skip))
     thin = [n["symbol"] for n in sc["names"] if n.get("adv_cr") is not None and n["adv_cr"] < 5]   # V3.1: Rs 1-5 cr a day

@@ -152,7 +152,9 @@ def main() -> None:
     print("picks by segment and era (full 6-month windows):\n" + by_era.to_string())
     print("2023+ by year:\n" + by_year.to_string())
     print(f"VERDICT: {', '.join(verdict) + ' PASS' if verdict else 'no pass'}")
-    if os.environ.get("SGM_REPRO") == "1":
+    if os.environ.get("SGM_REPRO") == "1":   # trust/reproduce.py reads this file
+        (OUTDIR / "repro").mkdir(parents=True, exist_ok=True)
+        pd.DataFrame([dict(arm=a, **{k: round(res[a][0][k], 2) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd")}) for a in ARMS]).to_csv(OUTDIR / "repro/results.csv", index=False)
         print("REPRO RUN (not logged)"); return
     OUTDIR.mkdir(parents=True, exist_ok=True)
     pd.DataFrame([dict(arm=a, **{k: round(res[a][0][k], 1) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd")}, **{str(y): yrs_avg[a][y] for y in YEARS},

@@ -1,4 +1,11 @@
-"""SRI LAKSHMI weekly screen — PAPER track (2026-09-29). Rule: V3.1 from the 2026-10-16 run (Abhinav, 2026-10-11).
+"""SRI LAKSHMI weekly screen — PAPER track (2026-09-29). Rule: V3.2 from the 2026-10-16 run (Abhinav, 2026-10-12).
+
+V3.2 = V3.1 minus names in the trade-for-trade segment (BE / BZ series, usually exchange surveillance) on the list date, not
+refilled (EXP-2026-10-12-v31-t2t: 56.7 vs 51.8 %/yr, 2023+ 64.2 vs 54.9, worst fall -38.7 vs -40.0, 5/5). Reserves skip
+trade-for-trade names as well; the skipped names are recorded (skipped_t2t). The 2026-10-09 batch was switched to V3.2 by
+hand on 2026-10-12 after the open (logs/sri_lakshmi/v32_overrides.jsonl; the batch file itself was not rewritten).
+
+V3.1 (2026-10-09 list):
 
 V3.1 = V3 with the stock liquidity bar at Rs 1 cr a day (20-day average traded value; then-traded price > Rs 50 kept) instead
 of Rs 5 cr, plus liquid new listings aged 63-251 sessions without the 1-year trend test (v3_rule.frame_v31 / ranked_v31).
@@ -93,12 +100,14 @@ def main() -> None:
                     adv_cr=round(float(F.loc[sym, "adv"]), 2), max_order_inr=int(round(round(float(F.loc[sym, "adv"]), 2) * 1e5)),
                     new_listing=bool(F.loc[sym, "young"]))
 
+    t2t = v3_rule.t2t_flags(ranked, d)                                      # V3.2: trade-for-trade on the list date
     keep = lambda s: ctx["keep"](s, d)  # noqa: E731
     g1_top = ranked[:top]
     dropped_fin = [s for s in g1_top if fin(s)]
     dropped_fading = [s for s in g1_top if not fin(s) and fading_only(s, d)]
-    names = [dict(row(i, s), g1_rank=g1_top.index(s) + 1) for i, s in enumerate([s for s in g1_top if keep(s)])]   # no refill
-    reserves = [s for s in ranked[top:] if keep(s)][:EXTRA]
+    skipped_t2t = [s for s in g1_top if keep(s) and t2t.get(s)]
+    names = [dict(row(i, s), g1_rank=g1_top.index(s) + 1) for i, s in enumerate([s for s in g1_top if keep(s) and not t2t.get(s)])]   # no refill
+    reserves = [s for s in ranked[top:] if keep(s) and not t2t.get(s)][:EXTRA]
     import nse_calendar
     entry = nse_calendar.next_session(d)
     CDIR.mkdir(parents=True, exist_ok=True)
@@ -114,23 +123,23 @@ def main() -> None:
                           if late else "saved before the entry session"),
             entry="next session open after data_through", hold_td=126, cost_rt_pct="0.5 / 1.0 / 2.0 by liquidity (research_panel.cost_rt)",
             exit="TIME (126 sessions, close); no stops",
-            sizing="PAPER", status="SLM V3.1 (EXP-2026-10-11-v3-l1-newlist-cost PASS 5/5 with liquidity-scaled costs); live rule "
-                                   "from the 2026-10-16 run by Abhinav's decision; paper until the weekly review is signed",
+            sizing="PAPER", status="SLM V3.2 (EXP-2026-10-12-v31-t2t PASS 5/5 on top of V3.1, EXP-2026-10-11-v3-l1-newlist-cost); live rule "
+                                   "from the 2026-10-12 investment by Abhinav's decision; paper until the weekly review is signed",
             rule="V3 with the stock liquidity bar at Rs 1 cr (20-day average traded value; price > Rs 50) instead of Rs 5 cr, plus "
                  "liquid new listings aged 3-12 months without the 1-year trend test; G1 hot-industry eligibility, model rank, "
-                 "top 9, minus Financial Services and fading-theme-only stocks, no refill",
+                 "top 9, minus Financial Services and fading-theme-only stocks, minus trade-for-trade (BE/BZ) names on the list date, no refill",
             max_order_rule="about 1% of the stock's 20-day average daily traded value",
             names=names, reserves=[dict(rank=i + 1, symbol=s) for i, s in enumerate(reserves)],
-            dropped_financials=dropped_fin, dropped_fading_theme=dropped_fading, g1_top9=g1_top,
+            dropped_financials=dropped_fin, dropped_fading_theme=dropped_fading, skipped_t2t=skipped_t2t, g1_top9=g1_top,
             vetoed_industries=sorted(vetoed["industry"]), vs_model_screen=dict(dropped=sorted(set(s1m) - set(ranked[:top])),
                                                                             added=sorted(set(ranked[:top]) - set(s1m)))), indent=1))
         print(f"saved paper batch logs/sri_lakshmi/screen_{d.strftime('%Y%m%d')}.json ({len(names)} names)")
     out = [f"# Sri Lakshmi batch — data through {d.date()}", "",
-           "PAPER. SLM V3.1: model-ranked screen of stocks trading Rs 1 cr+ a day (price above Rs 50; new listings after "
+           "PAPER. SLM V3.2 (V3.1 minus trade-for-trade names): model-ranked screen of stocks trading Rs 1 cr+ a day (price above Rs 50; new listings after "
            "3 months), minus hot industries whose budget money + activity data rank in the bottom 30% (G1), then financial "
            "stocks and stocks tied only to fading themes dropped, no refill. Buy at the next open with a limit, sell at the "
            "close of session 126, no stop. Keep each order under the max order (about 1% of a day's trading).", "",
-           f"Dropped: financials {', '.join(dropped_fin) or 'none'}; fading theme {', '.join(dropped_fading) or 'none'}",
+           f"Dropped: financials {', '.join(dropped_fin) or 'none'}; fading theme {', '.join(dropped_fading) or 'none'}; trade-for-trade {', '.join(skipped_t2t) or 'none'}",
            f"Hot industries vetoed today: {', '.join(sorted(vetoed['industry'])) or 'none'}",
            f"Different from the plain model screen: dropped {', '.join(sorted(set(s1m) - set(ranked[:top]))) or 'none'}; "
            f"added {', '.join(sorted(set(ranked[:top]) - set(s1m))) or 'none'}.", "",
