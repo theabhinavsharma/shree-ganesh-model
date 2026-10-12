@@ -331,6 +331,16 @@ evals:
     owner: system
     check: nsdl_fpi_feed
 
+  - id: data.nsdl_fpi_sector_feed
+    statement: "NSDL's fortnightly sector-wise FPI reports from 2015 on are all parsed, at least 99% add up to NSDL's own Grand Total within Rs 5 crore, and the newest report is at most 25 days old (9 unparsed and 3 off-total reports from 2012-2013 are listed in the manifest; no test uses them)."
+    why: "Input to the sector-tilt test (EXP-2026-10-12-v31-fpi-sector-tilt): which sectors foreign investors are buying or leaving. NSDL changed its sector list around 2022, so a format change must show, not pass silently."
+    source_of_truth: "data/raw/nsdl_fpi_sector/FIIInvestSector_*.html (https://www.fpi.nsdl.co.in/web/Reports/FPI_Fortnightly_Selection.aspx), data/derived/nsdl_fpi_sector.parquet + manifest"
+    threshold: ">= 99% of reports reconcile; 0 unparsed; newest report <= 25 days old"
+    action: warn
+    cadence: daily
+    owner: system
+    check: nsdl_fpi_sector_feed
+
   - id: ops.watchdog_alive
     statement: "The independent watchdog checked in within the last 2 hours (it kills runs stuck over 4 hours and alerts when a daily or weekend message is missing)."
     why: "On 2026-10-05 the Mac lost internet, the daily run hung for over a day, launchd would not start the next runs, and no message or alarm went out until the user noticed (INC-2026-10-06-daily-run-hung-silent)."

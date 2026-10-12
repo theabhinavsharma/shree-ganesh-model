@@ -175,6 +175,11 @@
    "file": "data/derived/nsdl_fpi_daily.parquet",
    "date_col": "reporting_date",
    "max_stale_bd": 4
+  },
+  "nsdl_fpi_sector": {
+   "file": "data/derived/nsdl_fpi_sector.parquet",
+   "date_col": "report_date",
+   "max_stale_bd": 20
   }
  }
 }

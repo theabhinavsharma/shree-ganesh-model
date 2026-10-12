@@ -1,0 +1,72 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-12-v31-fpi-sector-tilt",
+ "producer": "src/agentic/test_v31_fpi_sector_tilt.py",
+ "definitions": "EXP-2026-10-12-v31-fpi-sector-tilt (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: inside each weekly V3.1 list, put more money into names whose sector foreign investors (FPIs) are still\nbuying and less, or nothing, into names whose sector they are selling. The week's total stays the same.\nData: data/derived/nsdl_fpi_sector.parquet (NSDL fortnightly sector-wise FPI reports, official), a report used only from the\nnext report's date. Sector flow = FPI equity net investment over the report's two fortnights / FPI equity holdings at its\nmiddle date, ranked across the report's sectors (Sovereign, Others, Diversified and sectors under Rs 1,000 crore left out).\nIndustry -> sector: configs/industry_to_nsdl_sector.json (new24 / old35, written before any outcome).\nArms: TILT_050_150 (0.5 / 1 / 1.5 by sector third), TILT_075_125, DROP_LOW (bottom-third names dropped, money to the rest;\nkept as is if every name would go). Weights scaled so the list's total is unchanged.\nEngine: run_wcost = test_v3_l1_newlist_cost.run_cost with per-name weights; wiring: equal weights reproduce run_cost exactly.\nPASS per arm: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and in >= 4 of 5; a rule\nchange needs >= 2 of the 3 arms to pass.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "arms_passing": [],
+ "rule_change_candidate": false,
+ "by_sector_third": [
+  {
+   "era": "2019-22",
+   "sector_third": "FPIs buying (top third)",
+   "picks": 571,
+   "avg6m": 0.303,
+   "med6m": 0.189,
+   "hit": 0.41,
+   "lost30": 0.072
+  },
+  {
+   "era": "2019-22",
+   "sector_third": "FPIs selling (bottom third)",
+   "picks": 334,
+   "avg6m": 0.286,
+   "med6m": 0.202,
+   "hit": 0.482,
+   "lost30": 0.093
+  },
+  {
+   "era": "2019-22",
+   "sector_third": "middle / not ranked",
+   "picks": 522,
+   "avg6m": 0.257,
+   "med6m": 0.101,
+   "hit": 0.42,
+   "lost30": 0.149
+  },
+  {
+   "era": "2023+",
+   "sector_third": "FPIs buying (top third)",
+   "picks": 619,
+   "avg6m": 0.336,
+   "med6m": 0.177,
+   "hit": 0.494,
+   "lost30": 0.074
+  },
+  {
+   "era": "2023+",
+   "sector_third": "FPIs selling (bottom third)",
+   "picks": 210,
+   "avg6m": 0.399,
+   "med6m": 0.211,
+   "hit": 0.495,
+   "lost30": 0.133
+  },
+  {
+   "era": "2023+",
+   "sector_third": "middle / not ranked",
+   "picks": 323,
+   "avg6m": 0.275,
+   "med6m": 0.161,
+   "hit": 0.452,
+   "lost30": 0.152
+  }
+ ],
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules",
+  "avg6m": "fraction",
+  "hit": "share reaching +50% within 126 sessions"
+ },
+ "updated": "2026-10-12T08:50:31"
+}

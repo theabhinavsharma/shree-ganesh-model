@@ -586,6 +586,22 @@ def nsdl_fpi_feed(ctx: dict) -> dict:
                                       (f"{len(bad_tot)} dates where sub-totals do not add up to Total") if len(bad_tot) else "") if x))
 
 
+def nsdl_fpi_sector_feed(ctx: dict) -> dict:
+    """NSDL fortnightly sector-wise FPI reports (fetch_nsdl_fpi_sector.py): every report on NSDL's list parsed, >= 99% of reports'
+    sector rows add up to NSDL's Grand Total within Rs 5 crore, and the newest report is at most 25 days old (fortnightly + lag)."""
+    f = ROOT / "data/derived/nsdl_fpi_sector.parquet"; m = f.with_name(f.name + ".manifest.json")
+    if not f.exists() or not m.exists():
+        return _res("FAIL", None, "no nsdl_fpi_sector.parquet — run src/agentic/fetch_nsdl_fpi_sector.py")
+    man = json.loads(m.read_text()); n = man["reports"]
+    recent = lambda name: max([int(y) for y in re.findall(r"(20\d\d)", name.split(":")[0])] or [0]) >= 2015   # noqa: E731 — tests use 2015+; older gaps listed in the manifest
+    off = len([x for x in man["reconciliation"]["reports_off_by_more_than_5cr"] if recent(x)])
+    unparsed = [x for x in man["known_gaps"]["unparsed"] if recent(x)]; newest = pd.Timestamp(man["coverage"][1]); age = (pd.Timestamp.now().normalize() - newest).days
+    ok = (n - off) / n >= 0.99 and not unparsed and age <= 25
+    return _res("PASS" if ok else "WARN", f"{n} reports · newest {newest.date()} ({age} days)",
+                "; ".join(x for x in ((f"{off} reports off the Grand Total") if off else "", (f"{len(unparsed)} unparsed") if unparsed else "",
+                                      (f"newest report {age} days old") if age > 25 else "") if x))
+
+
 def watchdog_alive(ctx: dict) -> dict:
     """The independent watchdog (src/agentic/watchdog.py, launchd com.sgm.watchdog, every 30 min) wrote its heartbeat in the
     last 2 hours. Without it a hung run is silent: the daily run's own checks cannot fire while it is stuck (2026-10-06)."""
