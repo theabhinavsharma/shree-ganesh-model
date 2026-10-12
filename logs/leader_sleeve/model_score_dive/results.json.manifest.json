@@ -1,0 +1,12 @@
+{
+ "dataset": "results.json",
+ "producer": "src/agentic/explore_model_score.py",
+ "kind": "exploration",
+ "definitions": "Exploration (not a registered test; changes no rule): what does the model score tell us about the achievers?\n\nThe score (bakeoff_preds 'ensemble') = average of the within-week percentile ranks of three walk-forward models (LightGBM,\nXGBoost, a small neural net) trained to answer: will this stock's high reach 1.5x its close within the next 95 sessions?\nSo 0.98 means 'ranked above 98% of stocks that week', not '98% likely'. The three models' raw outputs are probabilities.\nOutcome here: y95_next_open (bought at the next open, high reaches +50% within the 95-session window), weeks with a full\nwindow only. Liquid = 20-day traded value >= Rs 1 cr and price > Rs 50 (V3.1's bar).\n  A  score bucket -> share of achievers, all liquid stocks and inside the V3.1 candidate pool, by era and for 2025\n  B  V3.1 picks: do the three models agreeing (lowest of the three ranks) or the score rising over 4 weeks pick achievers?\n  C  the models' own probability level by year (average of LightGBM / XGBoost / net for the top-ranked stocks) vs the\n     achiever rate those stocks actually had: does the absolute level warn of a weak year like 2025?\n",
+ "units": {
+  "hit": "percent of stock-weeks / picks whose high reached +50% (y95 = 95 sessions, hit126 = 126 sessions)",
+  "prob": "percent, average of the three models' predicted probabilities",
+  "ensemble": "within-week percentile 0-1"
+ },
+ "updated": "2026-10-12T05:50:50"
+}

@@ -1,0 +1,161 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-12-v31-t2t",
+ "producer": "src/agentic/test_v31_t2t.py",
+ "definitions": "EXP-2026-10-12-v31-t2t (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: more and more V3.1 picks sit in the trade-for-trade segment (BE/BZ series: delivery only, usually under\nexchange surveillance). Do they do worse, and does leaving them out help?\nArms: V3.1 (frozen copy of the selection) vs V3.1_NOT2T (BE/BZ picks dropped, not refilled) and V3.1_NOT2T_REFILL (dropped and\nrefilled with the next model-ranked names that pass the same filters and are not BE/BZ, up to 20 deep, same count).\nSeries = the stock's series on the list date (latest earlier one if it did not trade that day), from the price panel.\nEngine: test_v3_l1_newlist_cost.run_cost (liquidity-scaled costs), weekly entries 2019+, schedules 0-4.\nPASS per arm: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and in >= 4 of 5.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "t2t_share": {
+  "2019": 0.0,
+  "2020": 0.03,
+  "2021": 0.09,
+  "2022": 0.07,
+  "2023": 0.2,
+  "2024": 0.4,
+  "2025": 0.23,
+  "2026": 0.28
+ },
+ "by_era": [
+  {
+   "era": "2019-22",
+   "seg": "normal",
+   "picks": 1348,
+   "stocks": 281,
+   "avg6m": 0.291,
+   "med6m": 0.159,
+   "hit": 0.429,
+   "lost30": 0.096,
+   "locked_open": 0.009
+  },
+  {
+   "era": "2019-22",
+   "seg": "trade-for-trade",
+   "picks": 79,
+   "stocks": 33,
+   "avg6m": 0.125,
+   "med6m": 0.097,
+   "hit": 0.456,
+   "lost30": 0.253,
+   "locked_open": 0.101
+  },
+  {
+   "era": "2023+",
+   "seg": "normal",
+   "picks": 854,
+   "stocks": 219,
+   "avg6m": 0.359,
+   "med6m": 0.198,
+   "hit": 0.488,
+   "lost30": 0.074,
+   "locked_open": 0.009
+  },
+  {
+   "era": "2023+",
+   "seg": "trade-for-trade",
+   "picks": 298,
+   "stocks": 71,
+   "avg6m": 0.249,
+   "med6m": 0.045,
+   "hit": 0.466,
+   "lost30": 0.201,
+   "locked_open": 0.017
+  }
+ ],
+ "by_year": [
+  {
+   "trade_date": 2023,
+   "seg": "normal",
+   "picks": 308,
+   "stocks": 83,
+   "avg6m": 0.54,
+   "med6m": 0.351,
+   "hit": 0.581,
+   "lost30": 0.019,
+   "locked_open": 0.0
+  },
+  {
+   "trade_date": 2023,
+   "seg": "trade-for-trade",
+   "picks": 77,
+   "stocks": 23,
+   "avg6m": 0.544,
+   "med6m": 0.18,
+   "hit": 0.481,
+   "lost30": 0.026,
+   "locked_open": 0.013
+  },
+  {
+   "trade_date": 2024,
+   "seg": "normal",
+   "picks": 219,
+   "stocks": 59,
+   "avg6m": 0.333,
+   "med6m": 0.212,
+   "hit": 0.571,
+   "lost30": 0.096,
+   "locked_open": 0.032
+  },
+  {
+   "trade_date": 2024,
+   "seg": "trade-for-trade",
+   "picks": 146,
+   "stocks": 39,
+   "avg6m": 0.178,
+   "med6m": 0.034,
+   "hit": 0.555,
+   "lost30": 0.288,
+   "locked_open": 0.021
+  },
+  {
+   "trade_date": 2025,
+   "seg": "normal",
+   "picks": 241,
+   "stocks": 84,
+   "avg6m": 0.071,
+   "med6m": 0.004,
+   "hit": 0.237,
+   "lost30": 0.137,
+   "locked_open": 0.004
+  },
+  {
+   "trade_date": 2025,
+   "seg": "trade-for-trade",
+   "picks": 72,
+   "stocks": 23,
+   "avg6m": 0.08,
+   "med6m": -0.145,
+   "hit": 0.264,
+   "lost30": 0.222,
+   "locked_open": 0.014
+  },
+  {
+   "trade_date": 2026,
+   "seg": "normal",
+   "picks": 86,
+   "stocks": 29,
+   "avg6m": 0.583,
+   "med6m": 0.356,
+   "hit": 0.651,
+   "lost30": 0.035,
+   "locked_open": 0.0
+  },
+  {
+   "trade_date": 2026,
+   "seg": "trade-for-trade",
+   "picks": 3,
+   "stocks": 1,
+   "avg6m": 0.22,
+   "med6m": 0.223,
+   "hit": 0.667,
+   "lost30": 0.0,
+   "locked_open": 0.0
+  }
+ ],
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules",
+  "avg6m": "fraction",
+  "hit": "share reaching +50% within 126 sessions",
+  "locked_open": "share of picks whose entry day opened >= 4.9% above the previous close and never traded below the open"
+ },
+ "updated": "2026-10-12T05:48:43"
+}
