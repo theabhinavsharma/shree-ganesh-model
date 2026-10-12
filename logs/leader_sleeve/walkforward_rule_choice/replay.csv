@@ -1,0 +1,7 @@
+year,held_before,candidates_passing,chosen,chosen_return,v32_return,base_return,naive_best_past,naive_return
+2021,--|old|---,60,FT|1cr10|--P,133.6,118.3,94.0,FT|1cr10|--P,133.6
+2022,FT|1cr10|--P,0,FT|1cr10|--P,0.2,14.1,-1.4,FT|1cr10|-XP,4.6
+2023,FT|1cr10|--P,1,FT|1cr10|-XP,83.5,89.1,75.6,FT|1cr10|-XP,83.5
+2024,FT|1cr10|-XP,0,FT|1cr10|-XP,115.8,149.5,76.5,FT|1cr50|NX-,149.5
+2025,FT|1cr10|-XP,0,FT|1cr10|-XP,-1.2,-1.2,-10.6,FT|1cr50|NX-,-1.2
+2026,FT|1cr10|-XP,0,FT|1cr10|-XP,36.1,38.6,29.1,FT|1cr50|NX-,38.6

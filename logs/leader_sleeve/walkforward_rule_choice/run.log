@@ -1,0 +1,36 @@
+
+=== DATA READINESS · EXP-2026-10-13-walkforward-rule-choice (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ span         industry scores (G1 eligibility)
+  ✅ coverage     promoter-buying signal known for the pool's top-25 names on list dates
+wiring: V3.2 set == v3_rule V3.1 minus trade-for-trade on 372/372 weeks · V3 set == v3_rule.picks on 372/372 weeks
+  12/96 rule sets · 60 distinct runs · 41s
+  24/96 rule sets · 120 distinct runs · 43s
+  36/96 rule sets · 180 distinct runs · 46s
+  48/96 rule sets · 240 distinct runs · 48s
+  60/96 rule sets · 300 distinct runs · 50s
+  72/96 rule sets · 360 distinct runs · 53s
+  84/96 rule sets · 420 distinct runs · 55s
+  96/96 rule sets · 480 distinct runs · 58s
+wiring: V3.2 [56.42, 50.34, 62.69, -38.52] vs promoter-buyers code on the same data [56.42, 50.34, 62.69, -38.52]
+wiring: V3.2_PB [55.71, 50.06, 61.51, -38.89] vs promoter-buyers code on the same data [55.71, 50.06, 61.51, -38.89]
+2021: held --|old|--- · 60 pass · choose FT|1cr10|--P -> +133.6% · V3.2 +118.3% · BASE +94.0% · naive FT|1cr10|--P +133.6%
+2022: held FT|1cr10|--P · 0 pass · choose FT|1cr10|--P -> +0.2% · V3.2 +14.1% · BASE -1.4% · naive FT|1cr10|-XP +4.6%
+2023: held FT|1cr10|--P · 1 pass · choose FT|1cr10|-XP -> +83.5% · V3.2 +89.1% · BASE +75.6% · naive FT|1cr10|-XP +83.5%
+2024: held FT|1cr10|-XP · 0 pass · choose FT|1cr10|-XP -> +115.8% · V3.2 +149.5% · BASE +76.5% · naive FT|1cr50|NX- +149.5%
+2025: held FT|1cr10|-XP · 0 pass · choose FT|1cr10|-XP -> -1.2% · V3.2 -1.2% · BASE -10.6% · naive FT|1cr50|NX- -1.2%
+2026: held FT|1cr10|-XP · 0 pass · choose FT|1cr10|-XP -> +36.1% · V3.2 +38.6% · BASE +29.1% · naive FT|1cr50|NX- +38.6%
+
+=== EXP-2026-10-13-walkforward-rule-choice · 2021..2026-10-12 (year returns = average of 5 schedules) ===
+ year  held_before  candidates_passing       chosen  chosen_return  v32_return  base_return naive_best_past  naive_return
+ 2021   --|old|---                  60 FT|1cr10|--P          133.6       118.3         94.0    FT|1cr10|--P         133.6
+ 2022 FT|1cr10|--P                   0 FT|1cr10|--P            0.2        14.1         -1.4    FT|1cr10|-XP           4.6
+ 2023 FT|1cr10|--P                   1 FT|1cr10|-XP           83.5        89.1         75.6    FT|1cr10|-XP          83.5
+ 2024 FT|1cr10|-XP                   0 FT|1cr10|-XP          115.8       149.5         76.5    FT|1cr50|NX-         149.5
+ 2025 FT|1cr10|-XP                   0 FT|1cr10|-XP           -1.2        -1.2        -10.6    FT|1cr50|NX-          -1.2
+ 2026 FT|1cr10|-XP                   0 FT|1cr10|-XP           36.1        38.6         29.1    FT|1cr50|NX-          38.6
+CAGR 2021-now: V3.2 (hindsight) 61.7 · walk-forward choice 54.7 · naive best-past 60.4 · BASE (no rules) 39.5
+HINDSIGHT PREMIUM: 7.0 pts/yr -> moderate · V3.2 ranks 1 of 96 rule sets on 2019-04..now CAGR (avg of 5 schedules)
+done in 101s
+exit 0
