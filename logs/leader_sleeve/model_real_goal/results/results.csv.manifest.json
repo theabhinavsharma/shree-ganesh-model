@@ -1,0 +1,50 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-13-real-goal-model",
+ "producer": "src/agentic/test_real_goal_model.py",
+ "definitions": "EXP-2026-10-13-real-goal-model (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: can the rules live inside the model? Model NG learns what we actually earn (6-month return from the list-day close,\ndividends and payouts counted, after costs, >= +50%) and sees V3.2's rule ingredients as inputs (trade-for-trade, financial sector,\nfading theme, G1 industry, trend test, new listing). B6 keeps only the liquidity bar and buys NG's top 6.\nArms: V3.2 (live), B6 (PRIMARY: Rs 1 cr ADV + price > 50, top 6 by NG), B9 (top 9), V3.2_NG (V3.2's rules ranked by NG),\nV3.2_C (V3.2's rules ranked by control model C: old target, same 2019 training start).\nModels: logs/leader_sleeve/model_real_goal/model_NG, model_C (model_bakeoff_1p5x.py --train-from 2019-01-01 --years 2021..2026).\nWindow: weekly entries from 2021-01-01, schedules 0-4; eras 2021-22 / 2023+. Engine: test_v3_l1_newlist_cost.run_cost (dividends,\npayouts as cash, liquidity-scaled costs), entry at the signal-day close; next open reported.\nADOPTION: B6 beats live V3.2 (CAGR higher in both eras, max drawdown not worse by > 2 points) at schedule 0 and >= 4 of 5.\nSGM_REPRO=1: log nothing.\n",
+ "phases": {
+  "B6_vs_V3.2": "0/5",
+  "B9_vs_V3.2": "0/5",
+  "B6_vs_V3.2_C": "0/5",
+  "V3.2_NG_vs_V3.2_C": "0/5"
+ },
+ "lists_changed": {
+  "B6": 284,
+  "B9": 284,
+  "V3.2_NG": 280,
+  "V3.2_C": 269
+ },
+ "auc_real_target": {
+  "live": {
+   "2021": 0.679,
+   "2022": 0.594,
+   "2023": 0.589,
+   "2024": 0.617,
+   "2025": 0.607,
+   "2026": 0.58
+  },
+  "NG": {
+   "2021": 0.625,
+   "2022": 0.58,
+   "2023": 0.604,
+   "2024": 0.612,
+   "2025": 0.627,
+   "2026": 0.623
+  },
+  "C": {
+   "2021": 0.663,
+   "2022": 0.583,
+   "2023": 0.595,
+   "2024": 0.612,
+   "2025": 0.607,
+   "2026": 0.594
+  }
+ },
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-13T00:48:28"
+}

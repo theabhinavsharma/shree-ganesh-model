@@ -488,6 +488,7 @@ def _clean(o):
 
 # ---------------------------------------------------------------- main
 def main(argv=None):
+    global H                                                       # --horizon (registered target swaps only)
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--rows", default=str(D / "rows.parquet"), help="anatomy rows (features + labels)")
     ap.add_argument("--out-dir", default=str(D))
@@ -514,11 +515,16 @@ def main(argv=None):
                     "outcome window reaches START or later (2026-10-10: COVID-boom-excluded model, EXP-2026-10-10-model-minus-boom)")
     ap.add_argument("--train-window-years", type=int, default=None, help="N: for test year Y train only on rows dated Y-N-01-01 "
                     "onward (rolling window; registered A/B tests only, EXP-2026-10-12-v32-training-window; default: all rows)")
+    ap.add_argument("--label-col", default="y95", help="rows column used as the training target (registered A/B tests only, "
+                    "EXP-2026-10-13-real-goal-model: y126c50); default y95 = production")
+    ap.add_argument("--horizon", type=int, default=H, help="sessions the target's outcome window spans: the purge keeps every "
+                    "training window ending before the test year (default 95 = y95)")
     ap.add_argument("--seed-offset", type=int, default=0, help="K: shift every random seed by K (row sampling, LightGBM, XGBoost, "
                     "MLP) to measure retrain noise (EXP-2026-10-12-v32-training-window); default 0 = production seeds")
     ap.add_argument("--train-from", default=None, help="YYYY-MM-DD: train only on rows dated on/after this (registered A/B "
                     "tests only; default: all rows = production model)")
     args = ap.parse_args(argv)
+    H = args.horizon
     if args.panel:
         rp.PANEL = Path(args.panel)
     out_dir = Path(args.out_dir); rows_path = Path(args.rows)
@@ -542,6 +548,10 @@ def main(argv=None):
     else:
         S = pd.read_parquet(rows_path)
     S["trade_date"] = pd.to_datetime(S["trade_date"])
+    if args.label_col != "y95":                                   # registered target swap: every 'y95' below is this column
+        if not LEAK_PAT.search(args.label_col):
+            raise SystemExit(f"--label-col {args.label_col}: the leak guard must recognise target names (y<digits>...)")
+        S["y95"] = S[args.label_col]
     drop = {c.strip() for c in args.drop_features.split(",") if c.strip()}
     FEATS, feat_src, feat_info = select_features(man, S, drop)
     for c in [c.strip() for c in args.add_features.split(",") if c.strip()]:
@@ -571,7 +581,7 @@ def main(argv=None):
     say(f"copied sessions: {sess['info']}")
 
     # ---- measured label windows (purge + audit; never features)
-    S = S.join(label_window_ends(S[["symbol", "trade_date"]], cal))
+    S = S.join(label_window_ends(S[["symbol", "trade_date"]], cal, h=H))
     S["label_span_sess"] = (S["row_end_sidx"] - S["sidx"]).where(S["row_end_sidx"] >= 0)   # sessions to the 95th next row
     S["long_span"] = S["label_span_sess"] >= LONG_SPAN
     if args.label_basis == "auto":
