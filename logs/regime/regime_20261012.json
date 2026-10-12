@@ -1,0 +1,2538 @@
+{
+ "date": "2026-10-12",
+ "quarters": [
+  {
+   "quarter": "2019Q1",
+   "lists": 12,
+   "list_ret": 0.04320393212430625,
+   "mkt_ret": -0.09666274249680092,
+   "excess": 0.14620859482290197,
+   "names": 2.8333333333333335,
+   "first": "2019-01-04",
+   "grade": "bad",
+   "fpi_60d_pct": -0.03284530767862302,
+   "india_vix": 16.79,
+   "rupee_3m": -0.043905099536405756,
+   "us10y_3m": -0.5899999999999999,
+   "dollar_3m": 0.01143426284350757,
+   "brent_3m": -0.37706260971328265,
+   "spx_vs_200": -0.10773852545926299,
+   "above200": 0.3238938053097345,
+   "fed_6m": 0.5,
+   "india_rate_6m": 0.5
+  },
+  {
+   "quarter": "2019Q2",
+   "lists": 12,
+   "list_ret": -0.040661313642898746,
+   "mkt_ret": -0.105283956155291,
+   "excess": 0.06462264251239225,
+   "names": 5.0,
+   "first": "2019-04-02",
+   "grade": "bad",
+   "fpi_60d_pct": 0.07939736117293353,
+   "india_vix": 18.005,
+   "rupee_3m": -0.0057487783845932006,
+   "us10y_3m": -0.19999999999999973,
+   "dollar_3m": -0.005461747863151789,
+   "brent_3m": 0.3660272889064662,
+   "spx_vs_200": 0.04006055384832363,
+   "above200": 0.5207373271889401,
+   "fed_6m": 0.25,
+   "india_rate_6m": -0.1875
+  },
+  {
+   "quarter": "2019Q3",
+   "lists": 13,
+   "list_ret": 0.0761800260652483,
+   "mkt_ret": -0.008116125787285553,
+   "excess": 0.08429615185253386,
+   "names": 5.538461538461538,
+   "first": "2019-07-02",
+   "grade": "bad",
+   "fpi_60d_pct": 0.026953789084976112,
+   "india_vix": 14.6025,
+   "rupee_3m": -0.004481063891298098,
+   "us10y_3m": -0.4600000000000004,
+   "dollar_3m": -0.001847111701970272,
+   "brent_3m": -0.05761436016213095,
+   "spx_vs_200": 0.0672576109786549,
+   "above200": 0.5221579961464354,
+   "fed_6m": 0.0,
+   "india_rate_6m": -0.5
+  },
+  {
+   "quarter": "2019Q4",
+   "lists": 12,
+   "list_ret": 0.00040283639988174507,
+   "mkt_ret": -0.17155461852232964,
+   "excess": 0.17195745492221137,
+   "names": 5.0,
+   "first": "2019-10-09",
+   "grade": "bad",
+   "fpi_60d_pct": -0.050894713397190185,
+   "india_vix": 17.83,
+   "rupee_3m": 0.03880379285193292,
+   "us10y_3m": -0.5099999999999998,
+   "dollar_3m": 0.023606090480885022,
+   "brent_3m": -0.10402219140083213,
+   "spx_vs_200": 0.01669679881922237,
+   "above200": 0.36074766355140186,
+   "fed_6m": -0.5,
+   "india_rate_6m": -0.8425000000000002
+  },
+  {
+   "quarter": "2020Q1",
+   "lists": 12,
+   "list_ret": 0.243589845368837,
+   "mkt_ret": 0.07550325699538497,
+   "excess": 0.168086588373452,
+   "names": 7.166666666666667,
+   "first": "2020-01-07",
+   "grade": "ok",
+   "fpi_60d_pct": 0.05566435619630236,
+   "india_vix": 14.7775,
+   "rupee_3m": 0.014112334180073294,
+   "us10y_3m": 0.29000000000000004,
+   "dollar_3m": -0.02189335720266017,
+   "brent_3m": 0.1880602063250465,
+   "spx_vs_200": 0.09155839995308668,
+   "above200": 0.5485008818342152,
+   "fed_6m": -0.75,
+   "india_rate_6m": -0.8499999999999996
+  },
+  {
+   "quarter": "2020Q2",
+   "lists": 12,
+   "list_ret": 0.4830369718129452,
+   "mkt_ret": 0.42138348386700875,
+   "excess": 0.06165348794593637,
+   "names": 8.416666666666666,
+   "first": "2020-04-03",
+   "grade": "great",
+   "fpi_60d_pct": -0.07737582105159764,
+   "india_vix": 60.0525,
+   "rupee_3m": 0.07008690776562942,
+   "us10y_3m": -1.25,
+   "dollar_3m": 0.07494792323515198,
+   "brent_3m": -0.6981357196122298,
+   "spx_vs_200": -0.16401796211736586,
+   "above200": 0.10262008733624454,
+   "fed_6m": -1.75,
+   "india_rate_6m": -0.3199999999999994
+  },
+  {
+   "quarter": "2020Q3",
+   "lists": 13,
+   "list_ret": 0.5861479848730127,
+   "mkt_ret": 0.38846728247854395,
+   "excess": 0.19768070239446878,
+   "names": 8.615384615384615,
+   "first": "2020-07-03",
+   "grade": "great",
+   "fpi_60d_pct": 0.01563465648220878,
+   "india_vix": 26.5075,
+   "rupee_3m": -0.020434896515588163,
+   "us10y_3m": 0.050000000000000044,
+   "dollar_3m": -0.03022940070360769,
+   "brent_3m": 1.1338932806324111,
+   "spx_vs_200": 0.03545439091880942,
+   "above200": 0.4303599374021909,
+   "fed_6m": -1.5,
+   "india_rate_6m": -0.9100000000000001
+  },
+  {
+   "quarter": "2020Q4",
+   "lists": 13,
+   "list_ret": 0.6852568325771317,
+   "mkt_ret": 0.41875832544722985,
+   "excess": 0.26649850712990186,
+   "names": 8.076923076923077,
+   "first": "2020-10-05",
+   "grade": "great",
+   "fpi_60d_pct": 0.024748439302477634,
+   "india_vix": 18.35,
+   "rupee_3m": -0.019122760096282554,
+   "us10y_3m": 0.019999999999999907,
+   "dollar_3m": -0.026059713571759402,
+   "brent_3m": -0.11463187325256297,
+   "spx_vs_200": 0.07605302078336362,
+   "above200": 0.702660406885759,
+   "fed_6m": 0.0,
+   "india_rate_6m": -1.1500000000000004
+  },
+  {
+   "quarter": "2021Q1",
+   "lists": 12,
+   "list_ret": 0.6223916999578482,
+   "mkt_ret": 0.38289496502386805,
+   "excess": 0.23949673493398008,
+   "names": 7.75,
+   "first": "2021-01-06",
+   "grade": "great",
+   "fpi_60d_pct": 0.13270594176624478,
+   "india_vix": 20.46,
+   "rupee_3m": 0.0008209057326584723,
+   "us10y_3m": 0.17999999999999994,
+   "dollar_3m": -0.044925531539456665,
+   "brent_3m": 0.3363499245852186,
+   "spx_vs_200": 0.14738920358869545,
+   "above200": 0.9840686274509803,
+   "fed_6m": 0.0,
+   "india_rate_6m": -0.2400000000000002
+  },
+  {
+   "quarter": "2021Q2",
+   "lists": 12,
+   "list_ret": 0.45669384329767815,
+   "mkt_ret": 0.2813030843040393,
+   "excess": 0.1753907589936389,
+   "names": 8.333333333333334,
+   "first": "2021-04-06",
+   "grade": "ok",
+   "fpi_60d_pct": 0.03880544353382436,
+   "india_vix": 21.215,
+   "rupee_3m": 0.00191387559808609,
+   "us10y_3m": 0.77,
+   "dollar_3m": 0.02195977915848779,
+   "brent_3m": 0.20109104589917237,
+   "spx_vs_200": 0.14608834338351517,
+   "above200": 0.8619402985074627,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2021Q3",
+   "lists": 13,
+   "list_ret": 0.3939394357856851,
+   "mkt_ret": 0.0714446179277116,
+   "excess": 0.3224948178579735,
+   "names": 7.6923076923076925,
+   "first": "2021-07-02",
+   "grade": "ok",
+   "fpi_60d_pct": -0.007310804470208744,
+   "india_vix": 12.84,
+   "rupee_3m": 0.016912165848336214,
+   "us10y_3m": -0.20999999999999996,
+   "dollar_3m": -0.008782395468920567,
+   "brent_3m": 0.20109631949882534,
+   "spx_vs_200": 0.12546026297630064,
+   "above200": 0.958502024291498,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2021Q4",
+   "lists": 12,
+   "list_ret": 0.20889599390937688,
+   "mkt_ret": -0.03154812599932447,
+   "excess": 0.24044411990870132,
+   "names": 8.166666666666666,
+   "first": "2021-10-06",
+   "grade": "ok",
+   "fpi_60d_pct": -0.005239660844472077,
+   "india_vix": 16.3975,
+   "rupee_3m": 0.0,
+   "us10y_3m": 0.10000000000000009,
+   "dollar_3m": 0.016197436523979647,
+   "brent_3m": 0.055910135307633224,
+   "spx_vs_200": 0.04867521477297787,
+   "above200": 0.9004237288135594,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2022Q1",
+   "lists": 13,
+   "list_ret": -0.04756006403692796,
+   "mkt_ret": -0.0006789863660914649,
+   "excess": -0.04688107767083649,
+   "names": 8.615384615384615,
+   "first": "2022-01-03",
+   "grade": "bad",
+   "fpi_60d_pct": -0.06817419623004807,
+   "india_vix": 16.2225,
+   "rupee_3m": 0.0032366824005394257,
+   "us10y_3m": 0.040000000000000036,
+   "dollar_3m": 0.00789649920702784,
+   "brent_3m": -0.02720403022670037,
+   "spx_vs_200": 0.08751062099633766,
+   "above200": 0.7136659436008677,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2022Q2",
+   "lists": 12,
+   "list_ret": 0.10202131684144206,
+   "mkt_ret": 0.10123878375881072,
+   "excess": 0.0007825330826313389,
+   "names": 8.166666666666666,
+   "first": "2022-04-07",
+   "grade": "ok",
+   "fpi_60d_pct": -0.09361445194757301,
+   "india_vix": 19.0225,
+   "rupee_3m": 0.02043010752688157,
+   "us10y_3m": 0.8799999999999999,
+   "dollar_3m": 0.005154907170078049,
+   "brent_3m": 0.22954018782778407,
+   "spx_vs_200": -0.0020651060238597863,
+   "above200": 0.5835866261398176,
+   "fed_6m": 0.25,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2022Q3",
+   "lists": 13,
+   "list_ret": -0.030365674874444273,
+   "mkt_ret": 0.011166070474505548,
+   "excess": -0.04153174534894983,
+   "names": 8.23076923076923,
+   "first": "2022-07-05",
+   "grade": "bad",
+   "fpi_60d_pct": -0.12178207964805172,
+   "india_vix": 20.9725,
+   "rupee_3m": 0.046009016176080664,
+   "us10y_3m": 0.45999999999999996,
+   "dollar_3m": 0.052807699772638994,
+   "brent_3m": 0.12621359223300965,
+   "spx_vs_200": -0.12867822664757278,
+   "above200": 0.3031446540880503,
+   "fed_6m": 1.5,
+   "india_rate_6m": 0.40000000000000036
+  },
+  {
+   "quarter": "2022Q4",
+   "lists": 12,
+   "list_ret": 0.2089367715911039,
+   "mkt_ret": 0.056024838205634996,
+   "excess": 0.15291193338546893,
+   "names": 7.416666666666667,
+   "first": "2022-10-10",
+   "grade": "ok",
+   "fpi_60d_pct": 0.04323039936657021,
+   "india_vix": 18.8125,
+   "rupee_3m": 0.03873817034700311,
+   "us10y_3m": 0.8000000000000003,
+   "dollar_3m": 0.03956111972119647,
+   "brent_3m": -0.13225098727512075,
+   "spx_vs_200": -0.13137461888931934,
+   "above200": 0.5950248756218905,
+   "fed_6m": 2.75,
+   "india_rate_6m": 1.4000000000000004
+  },
+  {
+   "quarter": "2023Q1",
+   "lists": 12,
+   "list_ret": 0.4353838023531333,
+   "mkt_ret": 0.29970729157365855,
+   "excess": 0.1356765107794747,
+   "names": 7.916666666666667,
+   "first": "2023-01-04",
+   "grade": "ok",
+   "fpi_60d_pct": 0.03425041639630118,
+   "india_vix": 14.385,
+   "rupee_3m": 0.015939185875429196,
+   "us10y_3m": 0.1200000000000001,
+   "dollar_3m": -0.039272497212414326,
+   "brent_3m": -0.11380679311865904,
+   "spx_vs_200": -0.04526302458913212,
+   "above200": 0.6207951070336392,
+   "fed_6m": 2.75,
+   "india_rate_6m": 1.5
+  },
+  {
+   "quarter": "2023Q2",
+   "lists": 12,
+   "list_ret": 0.47808278203054383,
+   "mkt_ret": 0.34484889031001575,
+   "excess": 0.13323389172052805,
+   "names": 8.25,
+   "first": "2023-04-03",
+   "grade": "great",
+   "fpi_60d_pct": -0.02390452129298251,
+   "india_vix": 12.935,
+   "rupee_3m": -0.006407156673114089,
+   "us10y_3m": -0.3999999999999999,
+   "dollar_3m": -0.017009592705327314,
+   "brent_3m": -0.043829992755373026,
+   "spx_vs_200": 0.044150832103074134,
+   "above200": 0.41883116883116883,
+   "fed_6m": 1.75,
+   "india_rate_6m": 1.0374999999999996
+  },
+  {
+   "quarter": "2023Q3",
+   "lists": 13,
+   "list_ret": 0.69761381607065,
+   "mkt_ret": 0.2718753280384202,
+   "excess": 0.4257384880322298,
+   "names": 7.769230769230769,
+   "first": "2023-07-03",
+   "grade": "great",
+   "fpi_60d_pct": 0.08305955184679546,
+   "india_vix": 10.8,
+   "rupee_3m": -0.001581700936853614,
+   "us10y_3m": 0.33000000000000007,
+   "dollar_3m": 3.3512008190683673e-06,
+   "brent_3m": -0.05909837100644011,
+   "spx_vs_200": 0.11201123580162542,
+   "above200": 0.7941712204007286,
+   "fed_6m": 0.75,
+   "india_rate_6m": 0.5999999999999996
+  },
+  {
+   "quarter": "2023Q4",
+   "lists": 12,
+   "list_ret": 0.5143956656652913,
+   "mkt_ret": 0.21179793523689697,
+   "excess": 0.3025977304283943,
+   "names": 7.666666666666667,
+   "first": "2023-10-05",
+   "grade": "great",
+   "fpi_60d_pct": 0.009534110477945647,
+   "india_vix": 11.655,
+   "rupee_3m": 0.01573938506588579,
+   "us10y_3m": 0.8700000000000006,
+   "dollar_3m": 0.036763947223389604,
+   "brent_3m": 0.17840745113472378,
+   "spx_vs_200": 0.014256913756143907,
+   "above200": 0.9042277825711821,
+   "fed_6m": 0.5,
+   "india_rate_6m": 0.0625
+  },
+  {
+   "quarter": "2024Q1",
+   "lists": 12,
+   "list_ret": 0.522672193547092,
+   "mkt_ret": 0.21833256061306505,
+   "excess": 0.30433963293402705,
+   "names": 8.5,
+   "first": "2024-01-03",
+   "grade": "great",
+   "fpi_60d_pct": 0.024910328584282937,
+   "india_vix": 14.58,
+   "rupee_3m": 0.0032514450867051625,
+   "us10y_3m": -0.7400000000000002,
+   "dollar_3m": -0.03076604268840233,
+   "brent_3m": -0.16412674048898146,
+   "spx_vs_200": 0.08838456072424794,
+   "above200": 0.9120258272800645,
+   "fed_6m": 0.25,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2024Q2",
+   "lists": 12,
+   "list_ret": 0.5662989038624292,
+   "mkt_ret": 0.15988472390839456,
+   "excess": 0.4064141799540346,
+   "names": 6.916666666666667,
+   "first": "2024-04-02",
+   "grade": "great",
+   "fpi_60d_pct": 0.0012658000455745566,
+   "india_vix": 12.0825,
+   "rupee_3m": 0.0020435148455344443,
+   "us10y_3m": 0.4500000000000002,
+   "dollar_3m": 0.026129700187804916,
+   "brent_3m": 0.10915175698288082,
+   "spx_vs_200": 0.13432257638020495,
+   "above200": 0.7101086048454469,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2024Q3",
+   "lists": 13,
+   "list_ret": 0.032675594815248045,
+   "mkt_ret": -0.1148892304123803,
+   "excess": 0.14756482522762834,
+   "names": 7.0,
+   "first": "2024-07-01",
+   "grade": "bad",
+   "fpi_60d_pct": -0.014073826398171549,
+   "india_vix": 13.8025,
+   "rupee_3m": -0.00011999040076804413,
+   "us10y_3m": 0.16000000000000014,
+   "dollar_3m": 0.026369391277905718,
+   "brent_3m": 0.012649413949170185,
+   "spx_vs_200": 0.12215000495058903,
+   "above200": 0.82,
+   "fed_6m": 0.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2024Q4",
+   "lists": 13,
+   "list_ret": -0.12748860552360958,
+   "mkt_ret": -0.1038762115453301,
+   "excess": -0.02361239397827947,
+   "names": 6.846153846153846,
+   "first": "2024-10-03",
+   "grade": "bad",
+   "fpi_60d_pct": 0.025257275771020993,
+   "india_vix": 11.9875,
+   "rupee_3m": 0.0037125748502995215,
+   "us10y_3m": -0.6399999999999997,
+   "dollar_3m": -0.021878371604861835,
+   "brent_3m": -0.15201631173538743,
+   "spx_vs_200": 0.0887548260776645,
+   "above200": 0.7462006079027356,
+   "fed_6m": -0.5,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2025Q1",
+   "lists": 12,
+   "list_ret": -0.03291017250207303,
+   "mkt_ret": 0.10771056481290231,
+   "excess": -0.14062073731497535,
+   "names": 6.666666666666667,
+   "first": "2025-01-07",
+   "grade": "bad",
+   "fpi_60d_pct": -0.059285181761476916,
+   "india_vix": 15.65,
+   "rupee_3m": 0.02035956661507332,
+   "us10y_3m": 0.6400000000000001,
+   "dollar_3m": 0.051696248640767495,
+   "brent_3m": -0.025844679778113888,
+   "spx_vs_200": 0.07417061078678966,
+   "above200": 0.5244094488188976,
+   "fed_6m": -1.0,
+   "india_rate_6m": 0.0
+  },
+  {
+   "quarter": "2025Q2",
+   "lists": 12,
+   "list_ret": 0.24008578307273187,
+   "mkt_ret": 0.05790200341176663,
+   "excess": 0.18218377966096522,
+   "names": 6.25,
+   "first": "2025-04-04",
+   "grade": "ok",
+   "fpi_60d_pct": -0.07056509286000937,
+   "india_vix": 13.6,
+   "rupee_3m": -0.0036151603498542073,
+   "us10y_3m": -0.54,
+   "dollar_3m": -0.036475645695172365,
+   "brent_3m": -0.05448383733055251,
+   "spx_vs_200": -0.06347721490939429,
+   "above200": 0.1731244847485573,
+   "fed_6m": -0.5,
+   "india_rate_6m": -0.25
+  },
+  {
+   "quarter": "2025Q3",
+   "lists": 13,
+   "list_ret": 0.007205594956597018,
+   "mkt_ret": -0.10982975674015588,
+   "excess": 0.11703535169675289,
+   "names": 7.615384615384615,
+   "first": "2025-07-03",
+   "grade": "bad",
+   "fpi_60d_pct": 0.01755704254776694,
+   "india_vix": 12.45,
+   "rupee_3m": 0.0021047708138448584,
+   "us10y_3m": 0.09999999999999964,
+   "dollar_3m": -0.05600046209441123,
+   "brent_3m": -0.08373236702471853,
+   "spx_vs_200": 0.06642950499602285,
+   "above200": 0.5561752988047809,
+   "fed_6m": 0.0,
+   "india_rate_6m": -0.5
+  },
+  {
+   "quarter": "2025Q4",
+   "lists": 12,
+   "list_ret": 0.09536052160205256,
+   "mkt_ret": -0.0016649035941892962,
+   "excess": 0.09702542519624187,
+   "names": 4.916666666666667,
+   "first": "2025-10-07",
+   "grade": "ok",
+   "fpi_60d_pct": -0.05469115135370261,
+   "india_vix": 10.19,
+   "rupee_3m": 0.040914419695193605,
+   "us10y_3m": -0.16999999999999993,
+   "dollar_3m": 0.008671717620695407,
+   "brent_3m": -0.055469519921160004,
+   "spx_vs_200": 0.11698847096207055,
+   "above200": 0.563915857605178,
+   "fed_6m": -0.25,
+   "india_rate_6m": -0.75
+  },
+  {
+   "quarter": "2026Q1",
+   "lists": 12,
+   "list_ret": 0.5340672059965456,
+   "mkt_ret": 0.16713918736692238,
+   "excess": 0.36692801862962326,
+   "names": 6.75,
+   "first": "2026-01-02",
+   "grade": "great",
+   "fpi_60d_pct": -0.02406632544984391,
+   "india_vix": 9.19,
+   "rupee_3m": 0.01296651257187964,
+   "us10y_3m": 0.05999999999999961,
+   "dollar_3m": -0.0033674517395726467,
+   "brent_3m": -0.07979601019949001,
+   "spx_vs_200": 0.0889291474263798,
+   "above200": 0.4617996604414261,
+   "fed_6m": -0.75,
+   "india_rate_6m": -0.5
+  },
+  {
+   "quarter": "2026Q2",
+   "lists": 1,
+   "list_ret": 0.8474521854167798,
+   "mkt_ret": 0.24920248766504752,
+   "excess": 0.5982496977517323,
+   "names": 8.0,
+   "first": "2026-04-06",
+   "grade": "partial",
+   "fpi_60d_pct": -0.07727132478424448,
+   "india_vix": 25.52,
+   "rupee_3m": 0.03112538768276485,
+   "us10y_3m": 0.17999999999999972,
+   "dollar_3m": 0.00867168481314029,
+   "brent_3m": 1.0255555555555556,
+   "spx_vs_200": -0.009317004930810224,
+   "above200": 0.1868484362469928,
+   "fed_6m": -0.5,
+   "india_rate_6m": -0.25
+  }
+ ],
+ "hold_events": {
+  "2019Q1": [
+   {
+    "date": "2019-02-01",
+    "type": "in_budget",
+    "title": "Interim Budget 2019-20",
+    "verified": false
+   },
+   {
+    "date": "2019-04-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (6.25%)",
+    "verified": true
+   },
+   {
+    "date": "2019-04-11",
+    "type": "in_election",
+    "title": "Lok Sabha 2019 polling begins",
+    "verified": false
+   },
+   {
+    "date": "2019-05-23",
+    "type": "in_election",
+    "title": "Lok Sabha 2019 results: BJP majority",
+    "verified": false
+   },
+   {
+    "date": "2019-07-05",
+    "type": "in_budget",
+    "title": "Union Budget 2019-20: higher surcharge on rich incl. FPIs",
+    "verified": false
+   },
+   {
+    "date": "2019-08-02",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (2.25%)",
+    "verified": true
+   },
+   {
+    "date": "2019-08-05",
+    "type": "in_policy",
+    "title": "Article 370 revoked",
+    "verified": false
+   },
+   {
+    "date": "2019-09-20",
+    "type": "in_policy",
+    "title": "Corporate tax cut to 22% (ordinance)",
+    "verified": false
+   }
+  ],
+  "2019Q2": [
+   {
+    "date": "2019-04-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (6.25%)",
+    "verified": true
+   },
+   {
+    "date": "2019-04-11",
+    "type": "in_election",
+    "title": "Lok Sabha 2019 polling begins",
+    "verified": false
+   },
+   {
+    "date": "2019-05-23",
+    "type": "in_election",
+    "title": "Lok Sabha 2019 results: BJP majority",
+    "verified": false
+   },
+   {
+    "date": "2019-07-05",
+    "type": "in_budget",
+    "title": "Union Budget 2019-20: higher surcharge on rich incl. FPIs",
+    "verified": false
+   },
+   {
+    "date": "2019-08-02",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (2.25%)",
+    "verified": true
+   },
+   {
+    "date": "2019-08-05",
+    "type": "in_policy",
+    "title": "Article 370 revoked",
+    "verified": false
+   },
+   {
+    "date": "2019-09-20",
+    "type": "in_policy",
+    "title": "Corporate tax cut to 22% (ordinance)",
+    "verified": false
+   }
+  ],
+  "2019Q3": [
+   {
+    "date": "2019-07-05",
+    "type": "in_budget",
+    "title": "Union Budget 2019-20: higher surcharge on rich incl. FPIs",
+    "verified": false
+   },
+   {
+    "date": "2019-08-02",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (2.25%)",
+    "verified": true
+   },
+   {
+    "date": "2019-08-05",
+    "type": "in_policy",
+    "title": "Article 370 revoked",
+    "verified": false
+   },
+   {
+    "date": "2019-09-20",
+    "type": "in_policy",
+    "title": "Corporate tax cut to 22% (ordinance)",
+    "verified": false
+   },
+   {
+    "date": "2020-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2020-21: DDT abolished",
+    "verified": false
+   },
+   {
+    "date": "2020-03-11",
+    "type": "global_shock",
+    "title": "WHO declares COVID a pandemic",
+    "verified": false
+   },
+   {
+    "date": "2020-03-24",
+    "type": "in_shock",
+    "title": "National COVID lockdown announced",
+    "verified": false
+   }
+  ],
+  "2019Q4": [
+   {
+    "date": "2020-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2020-21: DDT abolished",
+    "verified": false
+   },
+   {
+    "date": "2020-03-11",
+    "type": "global_shock",
+    "title": "WHO declares COVID a pandemic",
+    "verified": false
+   },
+   {
+    "date": "2020-03-24",
+    "type": "in_shock",
+    "title": "National COVID lockdown announced",
+    "verified": false
+   },
+   {
+    "date": "2020-04-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (4.65%)",
+    "verified": true
+   },
+   {
+    "date": "2020-05-12",
+    "type": "in_policy",
+    "title": "Rs 20 lakh crore Atmanirbhar package announced",
+    "verified": false
+   }
+  ],
+  "2020Q1": [
+   {
+    "date": "2020-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2020-21: DDT abolished",
+    "verified": false
+   },
+   {
+    "date": "2020-03-11",
+    "type": "global_shock",
+    "title": "WHO declares COVID a pandemic",
+    "verified": false
+   },
+   {
+    "date": "2020-03-24",
+    "type": "in_shock",
+    "title": "National COVID lockdown announced",
+    "verified": false
+   },
+   {
+    "date": "2020-04-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (4.65%)",
+    "verified": true
+   },
+   {
+    "date": "2020-05-12",
+    "type": "in_policy",
+    "title": "Rs 20 lakh crore Atmanirbhar package announced",
+    "verified": false
+   }
+  ],
+  "2020Q2": [
+   {
+    "date": "2020-04-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (4.65%)",
+    "verified": true
+   },
+   {
+    "date": "2020-05-12",
+    "type": "in_policy",
+    "title": "Rs 20 lakh crore Atmanirbhar package announced",
+    "verified": false
+   },
+   {
+    "date": "2020-11-03",
+    "type": "global_election",
+    "title": "US presidential election (Biden)",
+    "verified": false
+   }
+  ],
+  "2020Q3": [
+   {
+    "date": "2020-11-03",
+    "type": "global_election",
+    "title": "US presidential election (Biden)",
+    "verified": false
+   },
+   {
+    "date": "2021-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2021-22: capex push",
+    "verified": false
+   }
+  ],
+  "2020Q4": [
+   {
+    "date": "2020-11-03",
+    "type": "global_election",
+    "title": "US presidential election (Biden)",
+    "verified": false
+   },
+   {
+    "date": "2021-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2021-22: capex push",
+    "verified": false
+   },
+   {
+    "date": "2021-04-15",
+    "type": "in_shock",
+    "title": "COVID second wave peaks (Apr-May 2021)",
+    "verified": false
+   },
+   {
+    "date": "2021-05-02",
+    "type": "in_election",
+    "title": "West Bengal, Tamil Nadu, Kerala, Assam, Puducherry results",
+    "verified": false
+   }
+  ],
+  "2021Q1": [
+   {
+    "date": "2021-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2021-22: capex push",
+    "verified": false
+   },
+   {
+    "date": "2021-04-15",
+    "type": "in_shock",
+    "title": "COVID second wave peaks (Apr-May 2021)",
+    "verified": false
+   },
+   {
+    "date": "2021-05-02",
+    "type": "in_election",
+    "title": "West Bengal, Tamil Nadu, Kerala, Assam, Puducherry results",
+    "verified": false
+   }
+  ],
+  "2021Q2": [
+   {
+    "date": "2021-04-15",
+    "type": "in_shock",
+    "title": "COVID second wave peaks (Apr-May 2021)",
+    "verified": false
+   },
+   {
+    "date": "2021-05-02",
+    "type": "in_election",
+    "title": "West Bengal, Tamil Nadu, Kerala, Assam, Puducherry results",
+    "verified": false
+   }
+  ],
+  "2021Q3": [
+   {
+    "date": "2022-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2022-23",
+    "verified": false
+   },
+   {
+    "date": "2022-02-24",
+    "type": "global_shock",
+    "title": "Russia invades Ukraine",
+    "verified": false
+   },
+   {
+    "date": "2022-03-10",
+    "type": "in_election",
+    "title": "UP, Punjab, Uttarakhand, Goa, Manipur results",
+    "verified": false
+   },
+   {
+    "date": "2022-03-18",
+    "type": "global_rate_turn_up",
+    "title": "Fed target turns up (0.50%)",
+    "verified": true
+   }
+  ],
+  "2021Q4": [
+   {
+    "date": "2022-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2022-23",
+    "verified": false
+   },
+   {
+    "date": "2022-02-24",
+    "type": "global_shock",
+    "title": "Russia invades Ukraine",
+    "verified": false
+   },
+   {
+    "date": "2022-03-10",
+    "type": "in_election",
+    "title": "UP, Punjab, Uttarakhand, Goa, Manipur results",
+    "verified": false
+   },
+   {
+    "date": "2022-03-18",
+    "type": "global_rate_turn_up",
+    "title": "Fed target turns up (0.50%)",
+    "verified": true
+   },
+   {
+    "date": "2022-05-01",
+    "type": "in_rate_turn_up",
+    "title": "India call rate turns up (4.65%)",
+    "verified": true
+   }
+  ],
+  "2022Q1": [
+   {
+    "date": "2022-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2022-23",
+    "verified": false
+   },
+   {
+    "date": "2022-02-24",
+    "type": "global_shock",
+    "title": "Russia invades Ukraine",
+    "verified": false
+   },
+   {
+    "date": "2022-03-10",
+    "type": "in_election",
+    "title": "UP, Punjab, Uttarakhand, Goa, Manipur results",
+    "verified": false
+   },
+   {
+    "date": "2022-03-18",
+    "type": "global_rate_turn_up",
+    "title": "Fed target turns up (0.50%)",
+    "verified": true
+   },
+   {
+    "date": "2022-05-01",
+    "type": "in_rate_turn_up",
+    "title": "India call rate turns up (4.65%)",
+    "verified": true
+   }
+  ],
+  "2022Q2": [
+   {
+    "date": "2022-05-01",
+    "type": "in_rate_turn_up",
+    "title": "India call rate turns up (4.65%)",
+    "verified": true
+   }
+  ],
+  "2022Q3": [
+   {
+    "date": "2023-01-24",
+    "type": "in_shock",
+    "title": "Hindenburg report on the Adani group",
+    "verified": false
+   },
+   {
+    "date": "2023-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2023-24",
+    "verified": false
+   },
+   {
+    "date": "2023-03-10",
+    "type": "global_shock",
+    "title": "Silicon Valley Bank collapse",
+    "verified": false
+   }
+  ],
+  "2022Q4": [
+   {
+    "date": "2023-01-24",
+    "type": "in_shock",
+    "title": "Hindenburg report on the Adani group",
+    "verified": false
+   },
+   {
+    "date": "2023-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2023-24",
+    "verified": false
+   },
+   {
+    "date": "2023-03-10",
+    "type": "global_shock",
+    "title": "Silicon Valley Bank collapse",
+    "verified": false
+   }
+  ],
+  "2023Q1": [
+   {
+    "date": "2023-01-24",
+    "type": "in_shock",
+    "title": "Hindenburg report on the Adani group",
+    "verified": false
+   },
+   {
+    "date": "2023-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2023-24",
+    "verified": false
+   },
+   {
+    "date": "2023-03-10",
+    "type": "global_shock",
+    "title": "Silicon Valley Bank collapse",
+    "verified": false
+   }
+  ],
+  "2023Q2": [
+   {
+    "date": "2023-12-03",
+    "type": "in_election",
+    "title": "MP, Rajasthan, Chhattisgarh, Telangana results",
+    "verified": false
+   }
+  ],
+  "2023Q3": [
+   {
+    "date": "2023-12-03",
+    "type": "in_election",
+    "title": "MP, Rajasthan, Chhattisgarh, Telangana results",
+    "verified": false
+   },
+   {
+    "date": "2024-02-01",
+    "type": "in_budget",
+    "title": "Interim Budget 2024-25",
+    "verified": false
+   },
+   {
+    "date": "2024-02-27",
+    "type": "in_market_rule",
+    "title": "Small/mid-cap mutual fund stress tests ordered (AMFI/SEBI); small caps fall in March",
+    "verified": false
+   }
+  ],
+  "2023Q4": [
+   {
+    "date": "2023-12-03",
+    "type": "in_election",
+    "title": "MP, Rajasthan, Chhattisgarh, Telangana results",
+    "verified": false
+   },
+   {
+    "date": "2024-02-01",
+    "type": "in_budget",
+    "title": "Interim Budget 2024-25",
+    "verified": false
+   },
+   {
+    "date": "2024-02-27",
+    "type": "in_market_rule",
+    "title": "Small/mid-cap mutual fund stress tests ordered (AMFI/SEBI); small caps fall in March",
+    "verified": false
+   },
+   {
+    "date": "2024-04-19",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 polling begins",
+    "verified": false
+   },
+   {
+    "date": "2024-06-04",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 results: BJP short of a majority, NDA coalition",
+    "verified": false
+   }
+  ],
+  "2024Q1": [
+   {
+    "date": "2024-02-01",
+    "type": "in_budget",
+    "title": "Interim Budget 2024-25",
+    "verified": false
+   },
+   {
+    "date": "2024-02-27",
+    "type": "in_market_rule",
+    "title": "Small/mid-cap mutual fund stress tests ordered (AMFI/SEBI); small caps fall in March",
+    "verified": false
+   },
+   {
+    "date": "2024-04-19",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 polling begins",
+    "verified": false
+   },
+   {
+    "date": "2024-06-04",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 results: BJP short of a majority, NDA coalition",
+    "verified": false
+   },
+   {
+    "date": "2024-07-23",
+    "type": "in_budget",
+    "title": "Union Budget 2024-25: STCG and LTCG tax raised",
+    "verified": false
+   },
+   {
+    "date": "2024-09-20",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (5.00%)",
+    "verified": true
+   },
+   {
+    "date": "2024-09-24",
+    "type": "global_policy",
+    "title": "China announces large stimulus; money moves from India to China",
+    "verified": false
+   }
+  ],
+  "2024Q2": [
+   {
+    "date": "2024-04-19",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 polling begins",
+    "verified": false
+   },
+   {
+    "date": "2024-06-04",
+    "type": "in_election",
+    "title": "Lok Sabha 2024 results: BJP short of a majority, NDA coalition",
+    "verified": false
+   },
+   {
+    "date": "2024-07-23",
+    "type": "in_budget",
+    "title": "Union Budget 2024-25: STCG and LTCG tax raised",
+    "verified": false
+   },
+   {
+    "date": "2024-09-20",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (5.00%)",
+    "verified": true
+   },
+   {
+    "date": "2024-09-24",
+    "type": "global_policy",
+    "title": "China announces large stimulus; money moves from India to China",
+    "verified": false
+   },
+   {
+    "date": "2024-10-01",
+    "type": "in_market_rule",
+    "title": "SEBI circular tightening index F&O (effective from Nov 20, 2024)",
+    "verified": false
+   },
+   {
+    "date": "2024-10-08",
+    "type": "in_election",
+    "title": "Haryana and J&K results",
+    "verified": false
+   },
+   {
+    "date": "2024-11-05",
+    "type": "global_election",
+    "title": "US presidential election (Trump)",
+    "verified": false
+   },
+   {
+    "date": "2024-11-23",
+    "type": "in_election",
+    "title": "Maharashtra and Jharkhand results",
+    "verified": false
+   }
+  ],
+  "2024Q3": [
+   {
+    "date": "2024-07-23",
+    "type": "in_budget",
+    "title": "Union Budget 2024-25: STCG and LTCG tax raised",
+    "verified": false
+   },
+   {
+    "date": "2024-09-20",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (5.00%)",
+    "verified": true
+   },
+   {
+    "date": "2024-09-24",
+    "type": "global_policy",
+    "title": "China announces large stimulus; money moves from India to China",
+    "verified": false
+   },
+   {
+    "date": "2024-10-01",
+    "type": "in_market_rule",
+    "title": "SEBI circular tightening index F&O (effective from Nov 20, 2024)",
+    "verified": false
+   },
+   {
+    "date": "2024-10-08",
+    "type": "in_election",
+    "title": "Haryana and J&K results",
+    "verified": false
+   },
+   {
+    "date": "2024-11-05",
+    "type": "global_election",
+    "title": "US presidential election (Trump)",
+    "verified": false
+   },
+   {
+    "date": "2024-11-23",
+    "type": "in_election",
+    "title": "Maharashtra and Jharkhand results",
+    "verified": false
+   },
+   {
+    "date": "2025-02-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (6.50%)",
+    "verified": true
+   },
+   {
+    "date": "2025-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2025-26: income tax cut",
+    "verified": false
+   },
+   {
+    "date": "2025-02-08",
+    "type": "in_election",
+    "title": "Delhi results",
+    "verified": false
+   }
+  ],
+  "2024Q4": [
+   {
+    "date": "2024-10-01",
+    "type": "in_market_rule",
+    "title": "SEBI circular tightening index F&O (effective from Nov 20, 2024)",
+    "verified": false
+   },
+   {
+    "date": "2024-10-08",
+    "type": "in_election",
+    "title": "Haryana and J&K results",
+    "verified": false
+   },
+   {
+    "date": "2024-11-05",
+    "type": "global_election",
+    "title": "US presidential election (Trump)",
+    "verified": false
+   },
+   {
+    "date": "2024-11-23",
+    "type": "in_election",
+    "title": "Maharashtra and Jharkhand results",
+    "verified": false
+   },
+   {
+    "date": "2025-02-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (6.50%)",
+    "verified": true
+   },
+   {
+    "date": "2025-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2025-26: income tax cut",
+    "verified": false
+   },
+   {
+    "date": "2025-02-08",
+    "type": "in_election",
+    "title": "Delhi results",
+    "verified": false
+   },
+   {
+    "date": "2025-04-02",
+    "type": "global_policy",
+    "title": "US 'reciprocal' tariffs announced; global sell-off",
+    "verified": false
+   }
+  ],
+  "2025Q1": [
+   {
+    "date": "2025-02-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (6.50%)",
+    "verified": true
+   },
+   {
+    "date": "2025-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2025-26: income tax cut",
+    "verified": false
+   },
+   {
+    "date": "2025-02-08",
+    "type": "in_election",
+    "title": "Delhi results",
+    "verified": false
+   },
+   {
+    "date": "2025-04-02",
+    "type": "global_policy",
+    "title": "US 'reciprocal' tariffs announced; global sell-off",
+    "verified": false
+   },
+   {
+    "date": "2025-09-19",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (4.25%)",
+    "verified": true
+   }
+  ],
+  "2025Q2": [
+   {
+    "date": "2025-04-02",
+    "type": "global_policy",
+    "title": "US 'reciprocal' tariffs announced; global sell-off",
+    "verified": false
+   },
+   {
+    "date": "2025-09-19",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (4.25%)",
+    "verified": true
+   },
+   {
+    "date": "2025-11-14",
+    "type": "in_election",
+    "title": "Bihar results",
+    "verified": false
+   },
+   {
+    "date": "2025-12-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (5.50%)",
+    "verified": true
+   }
+  ],
+  "2025Q3": [
+   {
+    "date": "2025-09-19",
+    "type": "global_rate_turn_down",
+    "title": "Fed target turns down (4.25%)",
+    "verified": true
+   },
+   {
+    "date": "2025-11-14",
+    "type": "in_election",
+    "title": "Bihar results",
+    "verified": false
+   },
+   {
+    "date": "2025-12-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (5.50%)",
+    "verified": true
+   },
+   {
+    "date": "2026-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2026-27",
+    "verified": false
+   }
+  ],
+  "2025Q4": [
+   {
+    "date": "2025-11-14",
+    "type": "in_election",
+    "title": "Bihar results",
+    "verified": false
+   },
+   {
+    "date": "2025-12-01",
+    "type": "in_rate_turn_down",
+    "title": "India call rate turns down (5.50%)",
+    "verified": true
+   },
+   {
+    "date": "2026-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2026-27",
+    "verified": false
+   }
+  ],
+  "2026Q1": [
+   {
+    "date": "2026-02-01",
+    "type": "in_budget",
+    "title": "Union Budget 2026-27",
+    "verified": false
+   },
+   {
+    "date": "2026-09-18",
+    "type": "global_rate_turn_up",
+    "title": "Fed target turns up (4.00%)",
+    "verified": true
+   }
+  ],
+  "2026Q2": [
+   {
+    "date": "2026-09-18",
+    "type": "global_rate_turn_up",
+    "title": "Fed target turns up (4.00%)",
+    "verified": true
+   },
+   {
+    "date": "2026-11-03",
+    "type": "global_election",
+    "title": "US mid-term elections (scheduled)",
+    "verified": false
+   }
+  ]
+ },
+ "repeat_check": [
+  {
+   "type": "in_budget",
+   "occurrences": 10,
+   "dates": "2019-02-01, 2019-07-05, 2020-02-01, 2021-02-01, 2022-02-01, 2023-02-01, 2024-02-01, 2024-07-23, 2025-02-01, 2026-02-01",
+   "before_vs_avg": -8.9,
+   "before_same_side": 60.0,
+   "before_pattern": false,
+   "after_vs_avg": 1.0,
+   "after_same_side": 50.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_election",
+   "occurrences": 9,
+   "dates": "2018-12-11, 2019-04-11, 2021-05-02, 2022-03-10, 2023-12-03, 2024-04-19, 2024-10-08, 2025-02-08, 2025-11-14",
+   "before_vs_avg": -8.3,
+   "before_same_side": 62.0,
+   "before_pattern": false,
+   "after_vs_avg": -8.8,
+   "after_same_side": 56.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_rate_turn_down",
+   "occurrences": 4,
+   "dates": "2019-04-01, 2020-04-01, 2025-02-01, 2025-12-01",
+   "before_vs_avg": -25.0,
+   "before_same_side": 100.0,
+   "before_pattern": false,
+   "after_vs_avg": -4.5,
+   "after_same_side": 50.0,
+   "after_pattern": false
+  },
+  {
+   "type": "global_rate_turn_down",
+   "occurrences": 3,
+   "dates": "2019-08-02, 2024-09-20, 2025-09-19",
+   "before_vs_avg": -23.7,
+   "before_same_side": 100.0,
+   "before_pattern": false,
+   "after_vs_avg": -30.4,
+   "after_same_side": 100.0,
+   "after_pattern": false
+  },
+  {
+   "type": "global_shock",
+   "occurrences": 3,
+   "dates": "2020-03-11, 2022-02-24, 2023-03-10",
+   "before_vs_avg": -15.8,
+   "before_same_side": 67.0,
+   "before_pattern": false,
+   "after_vs_avg": 14.0,
+   "after_same_side": 67.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_shock",
+   "occurrences": 3,
+   "dates": "2020-03-24, 2021-04-15, 2023-01-24",
+   "before_vs_avg": 7.7,
+   "before_same_side": 67.0,
+   "before_pattern": false,
+   "after_vs_avg": 20.1,
+   "after_same_side": 100.0,
+   "after_pattern": false
+  },
+  {
+   "type": "global_election",
+   "occurrences": 2,
+   "dates": "2020-11-03, 2024-11-05",
+   "before_vs_avg": 5.1,
+   "before_same_side": 50.0,
+   "before_pattern": false,
+   "after_vs_avg": -4.2,
+   "after_same_side": 50.0,
+   "after_pattern": false
+  },
+  {
+   "type": "global_policy",
+   "occurrences": 2,
+   "dates": "2024-09-24, 2025-04-02",
+   "before_vs_avg": -26.1,
+   "before_same_side": 100.0,
+   "before_pattern": false,
+   "after_vs_avg": -22.5,
+   "after_same_side": 100.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_market_rule",
+   "occurrences": 2,
+   "dates": "2024-02-27, 2024-10-01",
+   "before_vs_avg": -5.1,
+   "before_same_side": 50.0,
+   "before_pattern": false,
+   "after_vs_avg": -6.5,
+   "after_same_side": 50.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_policy",
+   "occurrences": 2,
+   "dates": "2019-08-05, 2020-05-12",
+   "before_vs_avg": -1.7,
+   "before_same_side": 50.0,
+   "before_pattern": false,
+   "after_vs_avg": -7.6,
+   "after_same_side": 50.0,
+   "after_pattern": false
+  },
+  {
+   "type": "global_rate_turn_up",
+   "occurrences": 1,
+   "dates": "2022-03-18",
+   "before_vs_avg": -33.5,
+   "before_same_side": 100.0,
+   "before_pattern": false,
+   "after_vs_avg": -19.3,
+   "after_same_side": 100.0,
+   "after_pattern": false
+  },
+  {
+   "type": "in_rate_turn_up",
+   "occurrences": 1,
+   "dates": "2022-05-01",
+   "before_vs_avg": -30.6,
+   "before_same_side": 100.0,
+   "before_pattern": false,
+   "after_vs_avg": -16.1,
+   "after_same_side": 100.0,
+   "after_pattern": false
+  }
+ ],
+ "average_list": 0.2767582862642405,
+ "analogs": [
+  {
+   "quarter": "2022Q2",
+   "distance": 2.14,
+   "list_ret": 10.2,
+   "grade": "ok"
+  },
+  {
+   "quarter": "2024Q2",
+   "distance": 2.55,
+   "list_ret": 56.6,
+   "grade": "great"
+  },
+  {
+   "quarter": "2023Q4",
+   "distance": 2.83,
+   "list_ret": 51.4,
+   "grade": "great"
+  }
+ ],
+ "today": {
+  "fpi_60d_pct": -0.03624075156569597,
+  "india_vix": 14.38,
+  "rupee_3m": 0.010280079723067326,
+  "us10y_3m": 0.6600000000000001,
+  "dollar_3m": 0.0073042854795584145,
+  "brent_3m": 0.6873822975517889,
+  "spx_vs_200": 0.0579697383210398,
+  "above200": 0.5003636363636363,
+  "fed_6m": 0.25,
+  "india_rate_6m": 0.0
+ },
+ "upcoming": [
+  {
+   "date": "2026-11-03",
+   "title": "US mid-term elections (scheduled)",
+   "verified": false
+  },
+  {
+   "date": "2027-02-01",
+   "title": "Union Budget 2027-28 (expected date)",
+   "verified": false
+  }
+ ],
+ "recent_tests": [
+  {
+   "id": "EXP-2026-10-07-v3-badnews-veto",
+   "verdict": "no arm passes",
+   "calendar_years": null
+  },
+  {
+   "id": "EXP-2026-10-10-v3-new-pledge-veto",
+   "verdict": "no arm passes",
+   "calendar_years": null
+  },
+  {
+   "id": "EXP-2026-10-10-model-minus-boom",
+   "verdict": "no arm passes",
+   "calendar_years": null
+  },
+  {
+   "id": "EXP-2026-10-10-v3-regime-switch",
+   "verdict": "no arm passes",
+   "calendar_years": {
+    "V3": {
+     "2019": -1.0,
+     "2020": 75.4,
+     "2021": 143.8,
+     "2022": -4.0,
+     "2023": 80.1,
+     "2024": 82.0,
+     "2025": -12.3,
+     "2026": 29.1
+    },
+    "V3_RSKIP": {
+     "2019": 0.0,
+     "2020": 31.0,
+     "2021": 144.0,
+     "2022": -8.3,
+     "2023": 73.2,
+     "2024": 84.2,
+     "2025": -19.1,
+     "2026": -4.7
+    },
+    "V3_REXIT": {
+     "2019": 0.0,
+     "2020": 34.5,
+     "2021": 142.9,
+     "2022": -16.1,
+     "2023": 44.1,
+     "2024": 84.1,
+     "2025": -8.9,
+     "2026": 1.7
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v3-badnews-refill",
+   "verdict": "no arm passes",
+   "calendar_years": null
+  },
+  {
+   "id": "EXP-2026-10-11-v3-new-listings",
+   "verdict": [
+    "V3_NLOPEN"
+   ],
+   "calendar_years": null
+  },
+  {
+   "id": "EXP-2026-10-11-v3-liquidity-1cr",
+   "verdict": [
+    "V3_L1"
+   ],
+   "calendar_years": {
+    "V3": {
+     "2023": 80.9,
+     "2024": 76.1,
+     "2025": -11.6,
+     "2026": 28.4
+    },
+    "V3_L1": {
+     "2023": 79.6,
+     "2024": 123.9,
+     "2025": -6.9,
+     "2026": 31.6
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v3-l1-newlist-cost",
+   "verdict": [
+    "V3_L1c",
+    "V3_L1Nc"
+   ],
+   "calendar_years": {
+    "V3c": {
+     "2023": 80.9,
+     "2024": 76.1,
+     "2025": -11.6,
+     "2026": 28.4
+    },
+    "V3_L1c": {
+     "2023": 78.6,
+     "2024": 122.6,
+     "2025": -7.2,
+     "2026": 31.4
+    },
+    "V3_L1Nc": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v31-inbasket-rank",
+   "verdict": "no pass",
+   "calendar_years": {
+    "V3.1 (all)": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "M_3": {
+     "2023": 82.6,
+     "2024": 140.1,
+     "2025": -11.1,
+     "2026": 35.7
+    },
+    "R1_3": {
+     "2023": 87.6,
+     "2024": 137.0,
+     "2025": -7.4,
+     "2026": 10.5
+    },
+    "R2_3": {
+     "2023": 75.6,
+     "2024": 140.8,
+     "2025": -4.3,
+     "2026": 14.9
+    },
+    "M_4": {
+     "2023": 83.8,
+     "2024": 136.7,
+     "2025": -8.4,
+     "2026": 34.0
+    },
+    "R1_4": {
+     "2023": 87.6,
+     "2024": 127.2,
+     "2025": -5.3,
+     "2026": 17.2
+    },
+    "R2_4": {
+     "2023": 78.2,
+     "2024": 143.1,
+     "2025": -5.0,
+     "2026": 21.0
+    },
+    "M_5": {
+     "2023": 81.6,
+     "2024": 135.1,
+     "2025": -7.4,
+     "2026": 33.4
+    },
+    "R1_5": {
+     "2023": 83.7,
+     "2024": 123.9,
+     "2025": -6.2,
+     "2026": 20.3
+    },
+    "R2_5": {
+     "2023": 77.4,
+     "2024": 128.5,
+     "2025": -7.8,
+     "2026": 25.9
+    },
+    "M_6": {
+     "2023": 83.1,
+     "2024": 139.3,
+     "2025": -9.9,
+     "2026": 32.8
+    },
+    "R1_6": {
+     "2023": 85.1,
+     "2024": 131.4,
+     "2025": -8.0,
+     "2026": 26.5
+    },
+    "R2_6": {
+     "2023": 81.6,
+     "2024": 124.8,
+     "2025": -9.2,
+     "2026": 28.4
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v31-inbasket-rank-known",
+   "verdict": "no pass",
+   "calendar_years": {
+    "V3.1 (all)": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "M_3": {
+     "2023": 82.6,
+     "2024": 140.1,
+     "2025": -11.1,
+     "2026": 35.7
+    },
+    "pe_3": {
+     "2023": 87.2,
+     "2024": 94.3,
+     "2025": -11.9,
+     "2026": 17.6
+    },
+    "sales_yoy_3": {
+     "2023": 92.7,
+     "2024": 114.5,
+     "2025": -8.5,
+     "2026": 60.8
+    },
+    "eps_yoy_3": {
+     "2023": 80.5,
+     "2024": 130.7,
+     "2025": -10.8,
+     "2026": 40.2
+    },
+    "promoter_pct_3": {
+     "2023": 86.9,
+     "2024": 97.0,
+     "2025": -8.9,
+     "2026": 25.4
+    },
+    "avg_delivery_pct_20d_3": {
+     "2023": 75.8,
+     "2024": 121.7,
+     "2025": -18.3,
+     "2026": 29.7
+    },
+    "ret252_3": {
+     "2023": 72.8,
+     "2024": 126.2,
+     "2025": -16.8,
+     "2026": 54.6
+    },
+    "M_4": {
+     "2023": 83.8,
+     "2024": 136.7,
+     "2025": -8.4,
+     "2026": 34.0
+    },
+    "pe_4": {
+     "2023": 80.7,
+     "2024": 94.7,
+     "2025": -12.9,
+     "2026": 22.4
+    },
+    "sales_yoy_4": {
+     "2023": 90.4,
+     "2024": 112.9,
+     "2025": -10.6,
+     "2026": 44.6
+    },
+    "eps_yoy_4": {
+     "2023": 81.4,
+     "2024": 120.1,
+     "2025": -12.4,
+     "2026": 33.6
+    },
+    "promoter_pct_4": {
+     "2023": 78.2,
+     "2024": 107.4,
+     "2025": -3.4,
+     "2026": 25.5
+    },
+    "avg_delivery_pct_20d_4": {
+     "2023": 74.3,
+     "2024": 128.0,
+     "2025": -18.9,
+     "2026": 28.5
+    },
+    "ret252_4": {
+     "2023": 80.6,
+     "2024": 119.1,
+     "2025": -15.4,
+     "2026": 44.4
+    },
+    "M_5": {
+     "2023": 81.6,
+     "2024": 135.1,
+     "2025": -7.4,
+     "2026": 33.4
+    },
+    "pe_5": {
+     "2023": 81.0,
+     "2024": 106.0,
+     "2025": -9.8,
+     "2026": 26.0
+    },
+    "sales_yoy_5": {
+     "2023": 92.8,
+     "2024": 107.8,
+     "2025": -8.5,
+     "2026": 38.1
+    },
+    "eps_yoy_5": {
+     "2023": 82.0,
+     "2024": 114.9,
+     "2025": -13.6,
+     "2026": 33.6
+    },
+    "promoter_pct_5": {
+     "2023": 75.1,
+     "2024": 120.3,
+     "2025": -1.9,
+     "2026": 25.9
+    },
+    "avg_delivery_pct_20d_5": {
+     "2023": 76.4,
+     "2024": 129.9,
+     "2025": -13.1,
+     "2026": 28.3
+    },
+    "ret252_5": {
+     "2023": 80.1,
+     "2024": 120.2,
+     "2025": -13.0,
+     "2026": 40.6
+    },
+    "M_6": {
+     "2023": 83.1,
+     "2024": 139.3,
+     "2025": -9.9,
+     "2026": 32.8
+    },
+    "pe_6": {
+     "2023": 81.7,
+     "2024": 117.7,
+     "2025": -11.0,
+     "2026": 28.6
+    },
+    "sales_yoy_6": {
+     "2023": 93.6,
+     "2024": 113.0,
+     "2025": -9.6,
+     "2026": 34.6
+    },
+    "eps_yoy_6": {
+     "2023": 83.0,
+     "2024": 122.3,
+     "2025": -14.0,
+     "2026": 35.1
+    },
+    "promoter_pct_6": {
+     "2023": 76.4,
+     "2024": 127.4,
+     "2025": -6.4,
+     "2026": 30.4
+    },
+    "avg_delivery_pct_20d_6": {
+     "2023": 80.9,
+     "2024": 135.9,
+     "2025": -11.4,
+     "2026": 28.0
+    },
+    "ret252_6": {
+     "2023": 82.4,
+     "2024": 123.9,
+     "2025": -11.7,
+     "2026": 36.8
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v31-delivery-rank",
+   "verdict": "no pass",
+   "calendar_years": {
+    "V3.1 (all)": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "M_3": {
+     "2023": 82.6,
+     "2024": 140.1,
+     "2025": -11.1,
+     "2026": 35.7
+    },
+    "dl20_3": {
+     "2023": 78.4,
+     "2024": 131.4,
+     "2025": -17.3,
+     "2026": 32.6
+    },
+    "d1v20_3": {
+     "2023": 68.2,
+     "2024": 120.6,
+     "2025": -5.8,
+     "2026": 31.1
+    },
+    "d1v60_3": {
+     "2023": 67.4,
+     "2024": 117.5,
+     "2025": -9.9,
+     "2026": 35.4
+    },
+    "d1v120_3": {
+     "2023": 58.4,
+     "2024": 120.3,
+     "2025": -7.8,
+     "2026": 29.4
+    },
+    "d1v250_3": {
+     "2023": 60.1,
+     "2024": 115.1,
+     "2025": -16.6,
+     "2026": 27.8
+    },
+    "d5v20_3": {
+     "2023": 66.1,
+     "2024": 119.0,
+     "2025": -4.5,
+     "2026": 34.1
+    },
+    "d5v60_3": {
+     "2023": 72.7,
+     "2024": 118.0,
+     "2025": -8.0,
+     "2026": 38.6
+    },
+    "d5v120_3": {
+     "2023": 65.6,
+     "2024": 112.2,
+     "2025": -7.5,
+     "2026": 28.7
+    },
+    "d5v250_3": {
+     "2023": 63.4,
+     "2024": 109.8,
+     "2025": -13.8,
+     "2026": 27.2
+    },
+    "d20v60_3": {
+     "2023": 73.2,
+     "2024": 113.8,
+     "2025": -12.9,
+     "2026": 30.7
+    },
+    "d20v120_3": {
+     "2023": 65.3,
+     "2024": 123.5,
+     "2025": -11.9,
+     "2026": 32.6
+    },
+    "d20v250_3": {
+     "2023": 62.6,
+     "2024": 107.8,
+     "2025": -18.0,
+     "2026": 25.2
+    },
+    "M_4": {
+     "2023": 83.8,
+     "2024": 136.7,
+     "2025": -8.4,
+     "2026": 34.0
+    },
+    "dl20_4": {
+     "2023": 77.5,
+     "2024": 132.7,
+     "2025": -17.1,
+     "2026": 29.8
+    },
+    "d1v20_4": {
+     "2023": 75.2,
+     "2024": 123.8,
+     "2025": -5.7,
+     "2026": 32.1
+    },
+    "d1v60_4": {
+     "2023": 74.9,
+     "2024": 119.4,
+     "2025": -5.8,
+     "2026": 31.7
+    },
+    "d1v120_4": {
+     "2023": 69.2,
+     "2024": 125.7,
+     "2025": -6.8,
+     "2026": 27.3
+    },
+    "d1v250_4": {
+     "2023": 71.5,
+     "2024": 123.1,
+     "2025": -11.7,
+     "2026": 27.2
+    },
+    "d5v20_4": {
+     "2023": 73.1,
+     "2024": 119.1,
+     "2025": -4.6,
+     "2026": 29.7
+    },
+    "d5v60_4": {
+     "2023": 78.0,
+     "2024": 124.1,
+     "2025": -6.6,
+     "2026": 37.4
+    },
+    "d5v120_4": {
+     "2023": 73.7,
+     "2024": 120.4,
+     "2025": -7.7,
+     "2026": 28.0
+    },
+    "d5v250_4": {
+     "2023": 72.8,
+     "2024": 123.4,
+     "2025": -10.6,
+     "2026": 29.0
+    },
+    "d20v60_4": {
+     "2023": 80.3,
+     "2024": 120.5,
+     "2025": -9.4,
+     "2026": 30.5
+    },
+    "d20v120_4": {
+     "2023": 75.4,
+     "2024": 125.8,
+     "2025": -9.0,
+     "2026": 27.5
+    },
+    "d20v250_4": {
+     "2023": 69.2,
+     "2024": 114.3,
+     "2025": -13.8,
+     "2026": 28.9
+    },
+    "M_5": {
+     "2023": 81.6,
+     "2024": 135.1,
+     "2025": -7.4,
+     "2026": 33.4
+    },
+    "dl20_5": {
+     "2023": 77.4,
+     "2024": 133.6,
+     "2025": -12.6,
+     "2026": 27.7
+    },
+    "d1v20_5": {
+     "2023": 77.7,
+     "2024": 125.5,
+     "2025": -6.3,
+     "2026": 33.2
+    },
+    "d1v60_5": {
+     "2023": 78.8,
+     "2024": 123.6,
+     "2025": -5.8,
+     "2026": 36.8
+    },
+    "d1v120_5": {
+     "2023": 76.8,
+     "2024": 124.9,
+     "2025": -6.0,
+     "2026": 33.6
+    },
+    "d1v250_5": {
+     "2023": 77.3,
+     "2024": 123.6,
+     "2025": -9.9,
+     "2026": 31.1
+    },
+    "d5v20_5": {
+     "2023": 79.1,
+     "2024": 124.6,
+     "2025": -4.2,
+     "2026": 30.9
+    },
+    "d5v60_5": {
+     "2023": 81.1,
+     "2024": 122.3,
+     "2025": -4.6,
+     "2026": 37.5
+    },
+    "d5v120_5": {
+     "2023": 79.8,
+     "2024": 120.8,
+     "2025": -5.9,
+     "2026": 31.0
+    },
+    "d5v250_5": {
+     "2023": 77.5,
+     "2024": 121.2,
+     "2025": -8.1,
+     "2026": 28.9
+    },
+    "d20v60_5": {
+     "2023": 79.7,
+     "2024": 124.0,
+     "2025": -7.3,
+     "2026": 35.0
+    },
+    "d20v120_5": {
+     "2023": 79.9,
+     "2024": 124.0,
+     "2025": -6.6,
+     "2026": 30.5
+    },
+    "d20v250_5": {
+     "2023": 74.2,
+     "2024": 122.0,
+     "2025": -10.1,
+     "2026": 29.1
+    },
+    "M_6": {
+     "2023": 83.1,
+     "2024": 139.3,
+     "2025": -9.9,
+     "2026": 32.8
+    },
+    "dl20_6": {
+     "2023": 83.5,
+     "2024": 135.9,
+     "2025": -11.2,
+     "2026": 27.5
+    },
+    "d1v20_6": {
+     "2023": 81.7,
+     "2024": 130.4,
+     "2025": -6.8,
+     "2026": 32.5
+    },
+    "d1v60_6": {
+     "2023": 81.7,
+     "2024": 130.5,
+     "2025": -7.6,
+     "2026": 35.8
+    },
+    "d1v120_6": {
+     "2023": 80.1,
+     "2024": 128.9,
+     "2025": -8.4,
+     "2026": 34.0
+    },
+    "d1v250_6": {
+     "2023": 80.9,
+     "2024": 128.8,
+     "2025": -10.3,
+     "2026": 32.6
+    },
+    "d5v20_6": {
+     "2023": 81.8,
+     "2024": 126.2,
+     "2025": -8.0,
+     "2026": 32.0
+    },
+    "d5v60_6": {
+     "2023": 84.3,
+     "2024": 129.4,
+     "2025": -7.5,
+     "2026": 34.1
+    },
+    "d5v120_6": {
+     "2023": 82.9,
+     "2024": 127.7,
+     "2025": -8.9,
+     "2026": 31.5
+    },
+    "d5v250_6": {
+     "2023": 80.7,
+     "2024": 128.5,
+     "2025": -10.2,
+     "2026": 32.0
+    },
+    "d20v60_6": {
+     "2023": 80.7,
+     "2024": 130.1,
+     "2025": -8.5,
+     "2026": 36.3
+    },
+    "d20v120_6": {
+     "2023": 81.5,
+     "2024": 129.6,
+     "2025": -9.1,
+     "2026": 32.5
+    },
+    "d20v250_6": {
+     "2023": 79.2,
+     "2024": 130.8,
+     "2025": -9.6,
+     "2026": 31.0
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v31-breadth-pause",
+   "verdict": "no pass",
+   "calendar_years": {
+    "V3.1": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "V3.1_PAUSE": {
+     "2023": 75.9,
+     "2024": 129.6,
+     "2025": -19.5,
+     "2026": 1.1
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-11-v31-price10",
+   "verdict": "no pass",
+   "calendar_years": {
+    "V3.1": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "V3.1_P10": {
+     "2023": 80.1,
+     "2024": 107.2,
+     "2025": -12.2,
+     "2026": 28.3
+    },
+    "V3.1_P10_stress": {
+     "2023": 79.6,
+     "2024": 106.6,
+     "2025": -12.3,
+     "2026": 28.2
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-12-v31-t2t",
+   "verdict": [
+    "V3.1_NOT2T"
+   ],
+   "calendar_years": {
+    "V3.1": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "V3.1_NOT2T": {
+     "2023": 85.2,
+     "2024": 159.1,
+     "2025": -0.3,
+     "2026": 32.7
+    },
+    "V3.1_NOT2T_REFILL": {
+     "2023": 83.8,
+     "2024": 107.6,
+     "2025": -3.0,
+     "2026": 34.8
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-12-v31-fpi-sizing",
+   "verdict": "no pass (1/12 arms: ['T_100_150/CATCHUP'])",
+   "calendar_years": {
+    "FLAT/IDLE": {
+     "2023": 85.9,
+     "2024": 128.3,
+     "2025": -11.1,
+     "2026": 33.1
+    },
+    "T_050_150/IDLE": {
+     "2023": 67.6,
+     "2024": 116.5,
+     "2025": -13.5,
+     "2026": 17.2
+    },
+    "T_075_125/IDLE": {
+     "2023": 77.3,
+     "2024": 124.7,
+     "2025": -11.5,
+     "2026": 25.0
+    },
+    "T_000_200/IDLE": {
+     "2023": 49.0,
+     "2024": 99.1,
+     "2025": -17.8,
+     "2026": 0.7
+    },
+    "T_050_100/IDLE": {
+     "2023": 77.9,
+     "2024": 120.9,
+     "2025": -11.1,
+     "2026": 17.3
+    },
+    "T_100_150/IDLE": {
+     "2023": 85.6,
+     "2024": 129.1,
+     "2025": -10.6,
+     "2026": 33.1
+    },
+    "Q_050_150/IDLE": {
+     "2023": 80.2,
+     "2024": 127.0,
+     "2025": -9.5,
+     "2026": 23.6
+    },
+    "FLAT/CATCHUP": {
+     "2023": 85.9,
+     "2024": 128.6,
+     "2025": -11.1,
+     "2026": 33.1
+    },
+    "T_050_150/CATCHUP": {
+     "2023": 75.3,
+     "2024": 122.6,
+     "2025": -11.1,
+     "2026": 28.6
+    },
+    "T_075_125/CATCHUP": {
+     "2023": 79.8,
+     "2024": 126.2,
+     "2025": -10.5,
+     "2026": 30.6
+    },
+    "T_000_200/CATCHUP": {
+     "2023": 66.5,
+     "2024": 113.3,
+     "2025": -11.1,
+     "2026": 24.3
+    },
+    "T_050_100/CATCHUP": {
+     "2023": 78.4,
+     "2024": 121.1,
+     "2025": -9.4,
+     "2026": 28.8
+    },
+    "T_100_150/CATCHUP": {
+     "2023": 86.0,
+     "2024": 129.6,
+     "2025": -10.8,
+     "2026": 32.9
+    },
+    "Q_050_150/CATCHUP": {
+     "2023": 81.4,
+     "2024": 128.5,
+     "2025": -7.9,
+     "2026": 28.5
+    }
+   }
+  },
+  {
+   "id": "EXP-2026-10-12-v31-fpi-sector-tilt",
+   "verdict": "no pass (no arm)",
+   "calendar_years": {
+    "V3.1": {
+     "2023": 82.4,
+     "2024": 128.6,
+     "2025": -9.8,
+     "2026": 33.2
+    },
+    "TILT_050_150": {
+     "2023": 84.7,
+     "2024": 124.5,
+     "2025": -10.0,
+     "2026": 26.4
+    },
+    "TILT_075_125": {
+     "2023": 83.6,
+     "2024": 126.4,
+     "2025": -9.9,
+     "2026": 29.7
+    },
+    "DROP_LOW": {
+     "2023": 83.3,
+     "2024": 124.2,
+     "2025": -9.4,
+     "2026": 22.8
+    }
+   }
+  }
+ ],
+ "telegram_lines": [
+  "\ud83e\udded Regime note \u00b7 Oct 12",
+  "Closest past quarters: 2022Q2 +10%, 2024Q2 +57%, 2023Q4 +51%",
+  "Repeating event patterns: none yet (too few cases)",
+  "Coming up: Nov 03 US mid-term elections (scheduled), Feb 01 Union Budget 2027-28 (expected date)"
+ ]
+}

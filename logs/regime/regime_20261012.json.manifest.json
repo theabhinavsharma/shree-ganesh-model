@@ -1,0 +1,26 @@
+{
+ "dataset": "regime_20261012.json",
+ "producer": "src/agentic/regime_explainer.py",
+ "kind": "exploration",
+ "definitions": "Weekly regime explainer (numbers part). Runs Friday 3 PM IST before the 7:30 PM list (skill sgm-regime-explainer adds the\nnews / government context and sends the phone note). Exploration only: it changes no rule and proposes tests, never adopts them.\n\nWhat it does:\n  1. V3.1 weekly lists since 2019 (v3_rule.frame_v31 / picks_v31, phase-0 weekly dates), each list's 6-month outcome after\n     liquidity-scaled costs (bought at the next open, sold at the close of session 126) and the equal-weight market's 6-month\n     return over the same days (stocks trading >= Rs 1 cr a day, price > Rs 50). Grouped by the quarter bought; quarters\n     ranked great / ok / bad (thirds of the list return).\n  2. Macro picture at each quarter's first list date, only values known by then: FPI 60-day net flow (% of FPI turnover,\n     NSDL), India VIX, rupee / US 10y / dollar / Brent 3-month change, S&P 500 vs its 200-day, share of liquid stocks above\n     their 200-day, Fed target and India call-money rate 6-month change (FRED).\n  3. Events (configs/event_calendar.yaml) and policy-rate moves (derived: Fed target changes; India call rate moves of\n     >= 0.25 pts month on month) that fell while each quarter's lists were held (quarter start .. quarter end + 6 months).\n  4. Repeat check: for every event type, the lists bought in the 90 days before and the 90 days after each occurrence vs\n     the average list. A type is a 'pattern' only with >= 5 occurrences and >= 80% of them on the same side.\n  5. Today: the 3 past quarters whose macro picture is closest (z-scored distance) and what their lists did; upcoming events.\n  6. Registered tests logged in the last 7 days, with the calendar years each arm won or lost.\nOutput: reports/regime/regime_<date>.md, logs/regime/regime_<date>.json (+ manifest; telegram_lines for the phone note).\n",
+ "inputs": [
+  "v3_rule (V3.1)",
+  "price panel",
+  "data/derived/macro_drivers_fred.parquet",
+  "data/derived/india_vix.parquet",
+  "data/derived/us_macro_fred.parquet",
+  "data/derived/nsdl_fpi_daily.parquet",
+  "configs/event_calendar.yaml",
+  "logs/experiments.jsonl"
+ ],
+ "units": {
+  "list_ret": "fraction, 6-month list return after costs",
+  "mkt_ret": "fraction",
+  "excess": "fraction",
+  "fpi_60d_pct": "fraction of FPI turnover",
+  "fed_6m": "percentage points",
+  "india_rate_6m": "percentage points",
+  "before_vs_avg": "percentage points vs the average list"
+ },
+ "updated": "2026-10-12T12:28:50"
+}

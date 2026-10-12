@@ -1,0 +1,67 @@
+# Non-technical events for the weekly regime explainer (src/agentic/regime_explainer.py, skill sgm-regime-explainer).
+# Every event carries the official / primary page it should be checked against. verified: false until a run has opened
+# that source and confirmed the date; the weekly skill verifies any event before it cites it and flips the flag with a note.
+# Policy-rate moves are NOT listed here: they are derived from data (FRED DFEDTARU for the US Fed, OECD call money rate
+# IRSTCI01INM156N for India) by regime_explainer.py.
+# type values: in_election, in_budget, in_policy, in_market_rule, in_shock, global_election, global_shock, global_policy
+# Written 2026-10-12 from general knowledge; dates to be verified against the sources listed.
+events:
+  # ---- India: general (Lok Sabha) elections
+  - {date: 2019-04-11, type: in_election, region: India, title: "Lok Sabha 2019 polling begins", source: "https://eci.gov.in/", verified: false}
+  - {date: 2019-05-23, type: in_election, region: India, title: "Lok Sabha 2019 results: BJP majority", source: "https://results.eci.gov.in/", verified: false}
+  - {date: 2024-04-19, type: in_election, region: India, title: "Lok Sabha 2024 polling begins", source: "https://eci.gov.in/", verified: false}
+  - {date: 2024-06-04, type: in_election, region: India, title: "Lok Sabha 2024 results: BJP short of a majority, NDA coalition", source: "https://results.eci.gov.in/", verified: false}
+  # ---- India: major state election results
+  - {date: 2017-03-11, type: in_election, region: India, title: "UP and four other state results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2018-12-11, type: in_election, region: India, title: "MP, Rajasthan, Chhattisgarh, Telangana, Mizoram results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2021-05-02, type: in_election, region: India, title: "West Bengal, Tamil Nadu, Kerala, Assam, Puducherry results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2022-03-10, type: in_election, region: India, title: "UP, Punjab, Uttarakhand, Goa, Manipur results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2023-12-03, type: in_election, region: India, title: "MP, Rajasthan, Chhattisgarh, Telangana results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2024-10-08, type: in_election, region: India, title: "Haryana and J&K results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2024-11-23, type: in_election, region: India, title: "Maharashtra and Jharkhand results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2025-02-08, type: in_election, region: India, title: "Delhi results", source: "https://eci.gov.in/", verified: false}
+  - {date: 2025-11-14, type: in_election, region: India, title: "Bihar results", source: "https://eci.gov.in/", verified: false}
+  # ---- India: Union Budgets
+  - {date: 2015-02-28, type: in_budget, region: India, title: "Union Budget 2015-16", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2016-02-29, type: in_budget, region: India, title: "Union Budget 2016-17", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2017-02-01, type: in_budget, region: India, title: "Union Budget 2017-18 (first on Feb 1)", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2018-02-01, type: in_budget, region: India, title: "Union Budget 2018-19: LTCG tax on equities brought back", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2019-02-01, type: in_budget, region: India, title: "Interim Budget 2019-20", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2019-07-05, type: in_budget, region: India, title: "Union Budget 2019-20: higher surcharge on rich incl. FPIs", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2020-02-01, type: in_budget, region: India, title: "Union Budget 2020-21: DDT abolished", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2021-02-01, type: in_budget, region: India, title: "Union Budget 2021-22: capex push", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2022-02-01, type: in_budget, region: India, title: "Union Budget 2022-23", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2023-02-01, type: in_budget, region: India, title: "Union Budget 2023-24", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2024-02-01, type: in_budget, region: India, title: "Interim Budget 2024-25", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2024-07-23, type: in_budget, region: India, title: "Union Budget 2024-25: STCG and LTCG tax raised", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2025-02-01, type: in_budget, region: India, title: "Union Budget 2025-26: income tax cut", source: "https://www.indiabudget.gov.in/", verified: false}
+  - {date: 2026-02-01, type: in_budget, region: India, title: "Union Budget 2026-27", source: "https://www.indiabudget.gov.in/", verified: false}
+  # ---- India: policy and shocks
+  - {date: 2016-11-08, type: in_policy, region: India, title: "Demonetisation of Rs 500 / 1000 notes", source: "https://pib.gov.in/", verified: false}
+  - {date: 2017-07-01, type: in_policy, region: India, title: "GST rollout", source: "https://pib.gov.in/", verified: false}
+  - {date: 2018-09-21, type: in_shock, region: India, title: "IL&FS / DHFL credit scare, NBFC sell-off", source: "https://www.rbi.org.in/", verified: false}
+  - {date: 2019-08-05, type: in_policy, region: India, title: "Article 370 revoked", source: "https://pib.gov.in/", verified: false}
+  - {date: 2019-09-20, type: in_policy, region: India, title: "Corporate tax cut to 22% (ordinance)", source: "https://pib.gov.in/", verified: false}
+  - {date: 2020-03-24, type: in_shock, region: India, title: "National COVID lockdown announced", source: "https://pib.gov.in/", verified: false}
+  - {date: 2020-05-12, type: in_policy, region: India, title: "Rs 20 lakh crore Atmanirbhar package announced", source: "https://pib.gov.in/", verified: false}
+  - {date: 2021-04-15, type: in_shock, region: India, title: "COVID second wave peaks (Apr-May 2021)", source: "https://www.mohfw.gov.in/", verified: false}
+  - {date: 2023-01-24, type: in_shock, region: India, title: "Hindenburg report on the Adani group", source: "https://www.sebi.gov.in/", verified: false}
+  # ---- India: market rules (SEBI / exchanges / AMFI)
+  - {date: 2024-02-27, type: in_market_rule, region: India, title: "Small/mid-cap mutual fund stress tests ordered (AMFI/SEBI); small caps fall in March", source: "https://www.amfiindia.com/", verified: false}
+  - {date: 2024-10-01, type: in_market_rule, region: India, title: "SEBI circular tightening index F&O (effective from Nov 20, 2024)", source: "https://www.sebi.gov.in/", verified: false}
+  # ---- Global
+  - {date: 2016-11-08, type: global_election, region: US, title: "US presidential election (Trump)", source: "https://www.fec.gov/", verified: false}
+  - {date: 2020-11-03, type: global_election, region: US, title: "US presidential election (Biden)", source: "https://www.fec.gov/", verified: false}
+  - {date: 2024-11-05, type: global_election, region: US, title: "US presidential election (Trump)", source: "https://www.fec.gov/", verified: false}
+  - {date: 2018-03-22, type: global_policy, region: US, title: "US-China tariff war begins (Section 301 memorandum)", source: "https://ustr.gov/", verified: false}
+  - {date: 2020-03-11, type: global_shock, region: World, title: "WHO declares COVID a pandemic", source: "https://www.who.int/", verified: false}
+  - {date: 2022-02-24, type: global_shock, region: World, title: "Russia invades Ukraine", source: "https://www.un.org/", verified: false}
+  - {date: 2023-03-10, type: global_shock, region: US, title: "Silicon Valley Bank collapse", source: "https://www.fdic.gov/", verified: false}
+  - {date: 2024-09-24, type: global_policy, region: China, title: "China announces large stimulus; money moves from India to China", source: "http://www.pbc.gov.cn/", verified: false}
+  - {date: 2025-04-02, type: global_policy, region: US, title: "US 'reciprocal' tariffs announced; global sell-off", source: "https://www.whitehouse.gov/", verified: false}
+  # ---- scheduled (upcoming; check before relying)
+  - {date: 2026-11-03, type: global_election, region: US, title: "US mid-term elections (scheduled)", source: "https://www.fec.gov/", verified: false}
+  - {date: 2027-02-01, type: in_budget, region: India, title: "Union Budget 2027-28 (expected date)", source: "https://www.indiabudget.gov.in/", verified: false}
+  # ---- added by the first regime run (2026-10-12)
+  - {date: 2026-03-02, type: global_shock, region: World, title: "West Asia conflict: airspace closures, oil supply worries; Brent to ~$127 by end-March", source: "PIB releases from 2026-03-02 (Ministry of Civil Aviation 'Operational Update – Middle East Airspace Situation'; MoPNG 'India Fully Prepared Amid Evolving Situation in the Middle East') in data/derived/pib_releases.parquet; Brent from FRED DCOILBRENTEU", verified: true}
+  - {date: 2026-10-08, type: global_shock, region: World, title: "US-Iran tensions over the Strait of Hormuz lift crude (Brent ~$125-135)", source: "news_feed headlines 2026-10-08/09 (bs_markets, et_news); Brent from FRED DCOILBRENTEU", verified: false}

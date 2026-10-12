@@ -27,6 +27,8 @@ SERIES = {  # FRED id: (name, freq, meaning)
     "DEXINUS": ("usdinr", "D", "INR per USD (Fed H.10)"),
     "DGS10": ("us_10y", "D", "US 10-year Treasury yield, percent"),
     "DTWEXBGS": ("broad_dollar", "D", "Nominal broad US dollar index (Fed)"),
+    "DFEDTARU": ("fed_target_upper", "D", "US Fed funds target range, upper limit, percent (2008-12 on); a change = a Fed decision"),
+    "IRSTCI01INM156N": ("india_call_rate", "M", "India overnight call money rate, percent, monthly (OECD); tracks the RBI repo rate (IMF policy-rate series stops 2022-07)"),
     "PCOPPUSDM": ("copper", "M", "IMF copper, USD/metric ton, monthly average"),
     "PALUMUSDM": ("aluminium", "M", "IMF aluminium, USD/metric ton, monthly average"),
     "PZINCUSDM": ("zinc", "M", "IMF zinc, USD/metric ton, monthly average"),
