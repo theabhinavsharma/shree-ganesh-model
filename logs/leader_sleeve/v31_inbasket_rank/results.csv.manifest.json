@@ -4,100 +4,100 @@
  "producer": "src/agentic/test_v31_inbasket_rank.py",
  "definitions": "EXP-2026-10-11-v31-inbasket-rank (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: within each weekly V3.1 list (up to 9 names, model-ordered), is there one simple parameter (or two) that\norders the names better than the model score, so that buying only the top X after re-ranking earns more?\nCandidates: the 1.5x model's own point-in-time inputs (logs/leader_sleeve/anatomy_1p5x/rows.parquet, phase-0 weekly dates;\nother schedules take the latest earlier row within 7 days). A candidate qualifies only if known for >= 75% of V3.1 picks\nin every year 2019-2026.\nChoice, on 2019-22 lists only: mean within-list Spearman correlation with the 6-month return (next-open entry, 126\nsessions). R1 = the best single parameter, R2 = average rank of the best two. Unknown values rank last; ties by model order.\nArms, X = 3, 4, 5, 6: M_X model-order top X, R1_X, R2_X; plus V3.1 as is. Engine: test_v3_l1_newlist_cost.run_cost\n(liquidity-scaled costs), weekly entries from 2019, schedules 0-4.\nPASS (primary X = 5): vs M_5, 2023+ CAGR higher and max drawdown not worse by > 2 points, at schedule 0 and in >= 4 of 5.\nWiring: M_9 at schedule 0 reproduces V3_L1Nc of EXP-2026-10-11-v3-l1-newlist-cost (51.8 / 48.9 / 54.9 / -40.0).\nThe V3.1 selection below is a frozen copy (same steps as explore_v31_hits_by_year / test_v3_l1_newlist_cost.nl_select).\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
  "chosen": {
-  "R1": "ind_heat_pct",
+  "R1": "dvol60",
   "R2": [
-   "ind_heat_pct",
-   "dvol60"
+   "dvol60",
+   "ind_heat_pct"
   ],
   "direction": {
-   "ind_heat_pct": -1,
-   "dvol60": -1
+   "dvol60": -1,
+   "ind_heat_pct": -1
   }
  },
  "ic_2019_22": {
-  "mcap_cr": -0.049713765287535794,
-  "adv": -0.06785063752276868,
-  "ret60": -0.05775435857403071,
-  "off_high": 0.029714612202725067,
-  "off_low": -0.057298985167837636,
-  "ind_heat_pct": -0.08016332403377112,
-  "rank_in_ind_pct": -0.010907019768557989,
-  "rsi_14_weekly": -0.009940150923757485,
-  "dvol60": -0.07157168878480354,
-  "traded_value_vs_60d": -0.03977361436377829,
-  "pos": -0.03727556596409056
+  "mcap_cr": -0.03614363778298203,
+  "adv": -0.05886026541764247,
+  "ret60": -0.06359614884205046,
+  "off_high": 0.0455772764445646,
+  "off_low": -0.06501431173562322,
+  "ind_heat_pct": -0.09097178265066674,
+  "rank_in_ind_pct": -0.010321532341755021,
+  "rsi_14_weekly": -0.008769190736403849,
+  "dvol60": -0.09466562581316681,
+  "traded_value_vs_60d": -0.06567785584179027,
+  "pos": -0.01720010408535
  },
  "ic_2023p": {
-  "mcap_cr": 0.03680742737346511,
-  "adv": 0.015303983228511524,
-  "ret60": 0.024812818209044636,
-  "off_high": -0.002459753266777909,
-  "off_low": -0.02038035339922133,
-  "ind_heat_pct": -0.0021860842196694116,
-  "rank_in_ind_pct": 0.019909137795715338,
-  "rsi_14_weekly": 0.03784067085953879,
-  "dvol60": -0.02780772686433063,
-  "traded_value_vs_60d": 0.04631626235399819,
-  "pos": -0.07129380053908356
+  "mcap_cr": 0.05344414495357892,
+  "adv": 0.029994010182689428,
+  "ret60": 0.01692123390236598,
+  "off_high": -0.02802251754898667,
+  "off_low": -0.040760706798442646,
+  "ind_heat_pct": 0.018404328117905457,
+  "rank_in_ind_pct": 0.017359539387212655,
+  "rsi_14_weekly": 0.021398622342018565,
+  "dvol60": -0.010661874812818207,
+  "traded_value_vs_60d": 0.048188080263551966,
+  "pos": -0.03333333333333333
  },
  "excluded": {
   "ret252": {
    "2019": 0.64,
    "2020": 0.89,
-   "2021": 0.97,
-   "2022": 0.93,
-   "2023": 0.9,
-   "2024": 0.95,
+   "2021": 0.96,
+   "2022": 0.94,
+   "2023": 0.94,
+   "2024": 0.96,
    "2025": 0.85,
-   "2026": 0.9
+   "2026": 0.91
   },
   "pe": {
-   "2019": 0.53,
-   "2020": 0.71,
-   "2021": 0.79,
-   "2022": 0.66,
+   "2019": 0.52,
+   "2020": 0.7,
+   "2021": 0.78,
+   "2022": 0.68,
    "2023": 0.72,
    "2024": 0.63,
    "2025": 0.66,
    "2026": 0.79
   },
   "sales_yoy": {
-   "2019": 0.43,
+   "2019": 0.44,
    "2020": 0.73,
-   "2021": 0.9,
-   "2022": 0.84,
-   "2023": 0.86,
-   "2024": 0.87,
-   "2025": 0.8,
-   "2026": 0.84
+   "2021": 0.88,
+   "2022": 0.85,
+   "2023": 0.87,
+   "2024": 0.88,
+   "2025": 0.79,
+   "2026": 0.85
   },
   "eps_yoy": {
-   "2019": 0.43,
+   "2019": 0.44,
    "2020": 0.73,
-   "2021": 0.9,
-   "2022": 0.82,
-   "2023": 0.85,
-   "2024": 0.87,
-   "2025": 0.8,
-   "2026": 0.83
+   "2021": 0.88,
+   "2022": 0.83,
+   "2023": 0.86,
+   "2024": 0.88,
+   "2025": 0.79,
+   "2026": 0.84
   },
   "promoter_pct": {
-   "2019": 0.04,
+   "2019": 0.03,
    "2020": 0.04,
-   "2021": 0.16,
-   "2022": 0.78,
-   "2023": 0.79,
-   "2024": 0.8,
+   "2021": 0.15,
+   "2022": 0.79,
+   "2023": 0.77,
+   "2024": 0.81,
    "2025": 0.9,
    "2026": 0.97
   },
   "avg_delivery_pct_20d": {
    "2019": 0.99,
    "2020": 0.96,
-   "2021": 0.88,
+   "2021": 0.89,
    "2022": 0.88,
-   "2023": 0.77,
-   "2024": 0.45,
+   "2023": 0.76,
+   "2024": 0.47,
    "2025": 0.71,
    "2026": 0.63
   }
@@ -108,5 +108,5 @@
   "years": "calendar-year return percent, average of 5 schedules",
   "ic": "mean within-list Spearman correlation with 6-month return"
  },
- "updated": "2026-10-11T14:36:47"
+ "updated": "2026-10-12T16:41:36"
 }

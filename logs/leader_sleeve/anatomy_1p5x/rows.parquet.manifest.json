@@ -4,7 +4,7 @@
   "symbol",
   "trade_date"
  ],
- "rows": 817694,
+ "rows": 819943,
  "columns": {
   "ret5": "1-week return",
   "ret20": "1-month return",
@@ -134,13 +134,13 @@
  ],
  "not_model_features": {
   "age_yrs": "never a model feature (time index)",
-  "profitable": "coverage: min disc-year 0%, min conf-year 62% (< 50%)",
-  "pe": "coverage: min disc-year 0%, min conf-year 62% (< 50%)",
-  "pe_ind": "coverage: min disc-year 0%, min conf-year 62% (< 50%)",
-  "eps_yoy": "coverage: min disc-year 0%, min conf-year 71% (< 50%)",
-  "sales_yoy": "coverage: min disc-year 0%, min conf-year 69% (< 50%)",
-  "loss_to_profit": "coverage: min disc-year 0%, min conf-year 71% (< 50%)",
-  "days_since_results": "coverage: min disc-year 0%, min conf-year 78% (< 50%)",
+  "profitable": "coverage: min disc-year 0%, min conf-year 75% (< 50%)",
+  "pe": "coverage: min disc-year 0%, min conf-year 75% (< 50%)",
+  "pe_ind": "coverage: min disc-year 0%, min conf-year 75% (< 50%)",
+  "eps_yoy": "coverage: min disc-year 0%, min conf-year 82% (< 50%)",
+  "sales_yoy": "coverage: min disc-year 0%, min conf-year 83% (< 50%)",
+  "loss_to_profit": "coverage: min disc-year 0%, min conf-year 82% (< 50%)",
+  "days_since_results": "coverage: min disc-year 0%, min conf-year 93% (< 50%)",
   "last_order_to_rev_90d": "coverage: min disc-year 0%, min conf-year 100% (< 50%)",
   "prom_buys90": "coverage: min disc-year 0%, min conf-year 100% (< 50%)",
   "prom_sells90": "coverage: min disc-year 0%, min conf-year 100% (< 50%)",
@@ -165,9 +165,10 @@
   "no_analyst_labels": false,
   "first_test_year": 2019,
   "no_write": false,
-  "outdir": "logs/leader_sleeve/anatomy_1p5x"
+  "outdir": "/Users/abhinavs./Code/Zoom/logs/leader_sleeve/anatomy_1p5x",
+  "pnl": null
  },
  "experiment": "EXP-2026-09-27-1p5x-anatomy",
  "producer": "src/agentic/anatomy_1p5x.py",
- "updated": "2026-09-30T16:56:35"
+ "updated": "2026-10-12T16:14:38"
 }

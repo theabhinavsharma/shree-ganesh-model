@@ -37,9 +37,10 @@ COLS = ("cagr", "cagr_disc", "cagr_conf", "maxdd")
 
 def logged(exp: str) -> dict:
     last = None
-    for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines():
-        if l.strip().startswith("{"):
-            e = json.loads(l)
+    rows = [json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines() if l.strip().startswith("{")]
+    void = {(v.get("voids_id"), v.get("voids_ts")) for v in rows if str(v.get("id", "")).endswith("-VOID")}   # 2026-10-12
+    for e in rows:
+        if (e.get("id"), e.get("ts")) not in void:
             # the newest numbers logged for these registered rules: the RESULT, or a later RERUN of the same rules on
             # corrected data / rebuilt scores (2026-09-30: comparing only with the pre-fix RESULT would block every week)
             if e.get("id") == exp + "-RESULT" or str(e.get("id", "")).startswith(exp + "-RERUN-"):

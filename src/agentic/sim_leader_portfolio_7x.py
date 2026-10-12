@@ -177,7 +177,8 @@ import pandas as pd
 
 ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
-import research_panel as rp  # noqa: E402
+import research_panel as rp
+import total_return as tr  # noqa: E402
 
 START = "2016-06-01"
 COST = 0.005                      # registered flat round trip (close entry), charged at entry
@@ -264,7 +265,8 @@ def load(symbols: list[str] | None) -> dict:
     px["broad_pnl"] = px["broad"] & (px["msrc"] == "pnl_implied")   # sensitivity: shares known at t only
 
     C = rp.wide(px, "close", cal)
-    R = rp.stitch_renames(rp.gap_aware_returns(C), C)
+    import total_return as tr                          # 2026-10-12: dividends count as gains; big payouts / demergers -> cash
+    R = rp.stitch_renames(rp.gap_aware_returns(C) + tr.dividend_yields(cal, C.columns), C)
     O, H, L = (rp.wide(px, c, cal) for c in ("open", "high", "low"))
     ne = rp.next_open_entry(O, H, L, C)
     prev_c = C.ffill().shift(1)
@@ -291,7 +293,7 @@ def load(symbols: list[str] | None) -> dict:
     return dict(px=px[["symbol", "trade_date", "series", "ret60", "ret252", "core", "broad", "broad_pnl", "msrc"]],
                 cal=cal, fake=fake, n_fake_rows=n_fake_rows, R=R, syms=list(R.columns),
                 Rv=R.to_numpy(), Rclip=R.clip(-CLIP, CLIP).to_numpy(), cidx={s: i for i, s in enumerate(R.columns)},
-                dpos={d: i for i, d in enumerate(cal)}, first_fac=first_fac, nextrow=nextrow,
+                dpos={d: i for i, d in enumerate(cal)}, first_fac=first_fac, nextrow=nextrow, vr=tr.vr_events(cal, R.columns),
                 locked=ne["locked"].to_numpy(dtype=bool), uc_close=uc_close, lc_lock=lc_lock, adv=adv_w,
                 bench_ret=bench_ret, breadth_prev=breadth.shift(1))
 
@@ -374,6 +376,7 @@ def run(D: dict, picks: dict, gate: bool, weekly: list, hold: int, entry: str = 
                     c = rp.cost_rt(pd.Series(D["adv"][i0, cols])).to_numpy()
                     wts = np.where(ok, 1 - c, 1.0) / len(cols)             # skipped name: its share stays cash
                 growth = np.cumprod(1 + seg, axis=0)
+                tr.apply_vr(growth, i0, cols, D.get("vr", {}))            # big payout / demerger held through -> cash
                 growth[:, ~ok] = 1.0
                 path = (growth * wts).sum(axis=1)                          # (BLAS matmul warns spuriously on macOS)
                 v[i0 + 1:end + 1] = cap * path

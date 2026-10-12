@@ -94,7 +94,7 @@ def main() -> None:
     for o in range(5):
         a = run(lists[o], o, base)
         if o == 0:
-            want = (51.8, 48.9, 54.9, -40.0); got = tuple(round(a[k], 1) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd"))
+            want = tuple(round(x, 1) for x in __import__("reproduce").logged("EXP-2026-10-11-v3-l1-newlist-cost")["arms"]["V3_L1Nc"][:4]); got = tuple(round(a[k], 1) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd"))
             print(f"wiring check: V3.1 schedule 0 = {got}, registered V3_L1Nc = {want}", flush=True)
             if got != want:
                 raise SystemExit("wiring check FAILED — no result reported")

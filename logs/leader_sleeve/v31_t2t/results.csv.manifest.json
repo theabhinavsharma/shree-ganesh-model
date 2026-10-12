@@ -6,133 +6,133 @@
  "t2t_share": {
   "2019": 0.0,
   "2020": 0.03,
-  "2021": 0.09,
+  "2021": 0.08,
   "2022": 0.07,
-  "2023": 0.2,
-  "2024": 0.4,
-  "2025": 0.23,
-  "2026": 0.28
+  "2023": 0.21,
+  "2024": 0.37,
+  "2025": 0.22,
+  "2026": 0.26
  },
  "by_era": [
   {
    "era": "2019-22",
    "seg": "normal",
-   "picks": 1348,
-   "stocks": 281,
-   "avg6m": 0.291,
-   "med6m": 0.159,
-   "hit": 0.429,
-   "lost30": 0.096,
-   "locked_open": 0.009
+   "picks": 1349,
+   "stocks": 284,
+   "avg6m": 0.302,
+   "med6m": 0.168,
+   "hit": 0.434,
+   "lost30": 0.092,
+   "locked_open": 0.008
   },
   {
    "era": "2019-22",
    "seg": "trade-for-trade",
-   "picks": 79,
+   "picks": 78,
    "stocks": 33,
-   "avg6m": 0.125,
-   "med6m": 0.097,
-   "hit": 0.456,
-   "lost30": 0.253,
-   "locked_open": 0.101
+   "avg6m": 0.109,
+   "med6m": 0.102,
+   "hit": 0.436,
+   "lost30": 0.295,
+   "locked_open": 0.103
   },
   {
    "era": "2023+",
    "seg": "normal",
-   "picks": 854,
-   "stocks": 219,
-   "avg6m": 0.359,
-   "med6m": 0.198,
-   "hit": 0.488,
-   "lost30": 0.074,
-   "locked_open": 0.009
+   "picks": 867,
+   "stocks": 218,
+   "avg6m": 0.343,
+   "med6m": 0.186,
+   "hit": 0.48,
+   "lost30": 0.082,
+   "locked_open": 0.01
   },
   {
    "era": "2023+",
    "seg": "trade-for-trade",
-   "picks": 298,
+   "picks": 292,
    "stocks": 71,
-   "avg6m": 0.249,
-   "med6m": 0.045,
-   "hit": 0.466,
-   "lost30": 0.201,
-   "locked_open": 0.017
+   "avg6m": 0.341,
+   "med6m": 0.076,
+   "hit": 0.476,
+   "lost30": 0.188,
+   "locked_open": 0.024
   }
  ],
  "by_year": [
   {
    "trade_date": 2023,
    "seg": "normal",
-   "picks": 308,
+   "picks": 306,
    "stocks": 83,
-   "avg6m": 0.54,
-   "med6m": 0.351,
-   "hit": 0.581,
-   "lost30": 0.019,
+   "avg6m": 0.526,
+   "med6m": 0.319,
+   "hit": 0.575,
+   "lost30": 0.02,
    "locked_open": 0.0
   },
   {
    "trade_date": 2023,
    "seg": "trade-for-trade",
-   "picks": 77,
+   "picks": 81,
    "stocks": 23,
-   "avg6m": 0.544,
-   "med6m": 0.18,
-   "hit": 0.481,
-   "lost30": 0.026,
-   "locked_open": 0.013
+   "avg6m": 0.823,
+   "med6m": 0.221,
+   "hit": 0.543,
+   "lost30": 0.012,
+   "locked_open": 0.037
   },
   {
    "trade_date": 2024,
    "seg": "normal",
-   "picks": 219,
-   "stocks": 59,
-   "avg6m": 0.333,
-   "med6m": 0.212,
-   "hit": 0.571,
-   "lost30": 0.096,
-   "locked_open": 0.032
+   "picks": 230,
+   "stocks": 58,
+   "avg6m": 0.309,
+   "med6m": 0.19,
+   "hit": 0.557,
+   "lost30": 0.113,
+   "locked_open": 0.035
   },
   {
    "trade_date": 2024,
    "seg": "trade-for-trade",
-   "picks": 146,
-   "stocks": 39,
-   "avg6m": 0.178,
-   "med6m": 0.034,
-   "hit": 0.555,
-   "lost30": 0.288,
-   "locked_open": 0.021
+   "picks": 137,
+   "stocks": 40,
+   "avg6m": 0.166,
+   "med6m": 0.031,
+   "hit": 0.518,
+   "lost30": 0.299,
+   "locked_open": 0.022
   },
   {
    "trade_date": 2025,
    "seg": "normal",
-   "picks": 241,
-   "stocks": 84,
-   "avg6m": 0.071,
-   "med6m": 0.004,
-   "hit": 0.237,
-   "lost30": 0.137,
+   "picks": 245,
+   "stocks": 83,
+   "avg6m": 0.064,
+   "med6m": -0.004,
+   "hit": 0.229,
+   "lost30": 0.147,
    "locked_open": 0.004
   },
   {
    "trade_date": 2025,
    "seg": "trade-for-trade",
-   "picks": 72,
-   "stocks": 23,
-   "avg6m": 0.08,
-   "med6m": -0.145,
-   "hit": 0.264,
-   "lost30": 0.222,
+   "picks": 70,
+   "stocks": 21,
+   "avg6m": 0.119,
+   "med6m": -0.118,
+   "hit": 0.3,
+   "lost30": 0.186,
    "locked_open": 0.014
   },
   {
    "trade_date": 2026,
    "seg": "normal",
    "picks": 86,
-   "stocks": 29,
-   "avg6m": 0.583,
-   "med6m": 0.356,
+   "stocks": 30,
+   "avg6m": 0.581,
+   "med6m": 0.404,
    "hit": 0.651,
    "lost30": 0.035,
    "locked_open": 0.0
@@ -140,11 +140,11 @@
   {
    "trade_date": 2026,
    "seg": "trade-for-trade",
-   "picks": 3,
-   "stocks": 1,
-   "avg6m": 0.22,
-   "med6m": 0.223,
-   "hit": 0.667,
+   "picks": 4,
+   "stocks": 2,
+   "avg6m": 0.438,
+   "med6m": 0.225,
+   "hit": 0.75,
    "lost30": 0.0,
    "locked_open": 0.0
   }
@@ -157,5 +157,5 @@
   "hit": "share reaching +50% within 126 sessions",
   "locked_open": "share of picks whose entry day opened >= 4.9% above the previous close and never traded below the open"
  },
- "updated": "2026-10-12T05:48:43"
+ "updated": "2026-10-12T16:39:18"
 }

@@ -123,6 +123,10 @@ def main() -> None:
             for p in book:
                 if p["i0"] < i <= p["end"]:
                     p["val"] = p["val"] * (1 + np.nan_to_num(Rv[i, p["cols"]]))
+                    for q, cq in enumerate(p["cols"]):                  # 2026-10-12: big payout / demerger -> cash at the ex-session
+                        for k, f in D.get("vr", {}).get(int(cq), ()):
+                            if k == i and i < p["end"]:
+                                cash += float(p["val"][q]) * (1 - f); p["val"][q] *= f
                 if i >= p["end"]:
                     cash += float(p["val"].sum())
                 else:
@@ -152,7 +156,7 @@ def main() -> None:
     flat0, _ = pooled(0, "FLAT", "IDLE")
     print(f"wiring check 1: V3.1 ladder schedule 0 = {got} (registered 51.8 / 48.9 / 54.9 / -40.0) · wiring check 2: pooled FLAT CAGR {flat0['cagr']:.1f} "
           f"(2019-22 {flat0['cagr_disc']:.1f}, 2023+ {flat0['cagr_conf']:.1f}, maxDD {flat0['maxdd']:.1f})", flush=True)
-    if got != (51.8, 48.9, 54.9, -40.0) or abs(flat0["cagr"] - lad["cagr"]) > 2.0:
+    if got != tuple(round(x, 1) for x in __import__("reproduce").logged("EXP-2026-10-11-v3-l1-newlist-cost")["arms"]["V3_L1Nc"][:4]) or abs(flat0["cagr"] - lad["cagr"]) > 2.0:
         raise SystemExit("wiring check FAILED — no result reported")
 
     lowshare = {lab: round(float(np.mean([mult(d, t) < 1 for d in weeks[0]])), 2) for lab, t in (("tercile low weeks", "T_050_150"), ("fifth low weeks", "Q_050_150"))}

@@ -31,6 +31,7 @@ import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
 import v3_rule  # noqa: E402
+import total_return as tr  # noqa: E402
 
 EXP_ID = "EXP-2026-10-11-v3-l1-newlist-cost"
 OUTDIR = ROOT / "logs/leader_sleeve/v3_l1_newlist_cost"
@@ -62,6 +63,7 @@ def run_cost(D, X, picks, weekly, rule, costs_of):
                 cols = np.array([cidx[n] for n in names])
                 seg = np.nan_to_num(Rv[i0 + 1:end + 1, cols])
                 growth = np.cumprod(1 + seg, axis=0)
+                tr.apply_vr(growth, i0, cols, D.get("vr", {}))            # 2026-10-12: big payout / demerger held through -> cash
                 wts = (1 - np.asarray(costs_of(i0, cols), dtype=float)) / len(cols)
                 vals, held = np.empty_like(growth), np.ones(len(cols))
                 for q, c in enumerate(cols):

@@ -5,11 +5,11 @@
  "definitions": "EXP-2026-10-11-v31-price10 (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3.1 only buys stocks whose actual traded price is above Rs 50 (a floor carried over from the older\nmodels' \"core band\", never tested on its own). Does a Rs 10 floor do better?\nArms: V3.1 (Rs 50, frozen copy of the live selection) vs V3.1_P10 (Rs 10); V3.1_P10_stress = Rs 10 with the round-trip\ncost doubled on positions priced Rs 10-50 at entry (reported, not the pass arm).\nEngine: test_v3_l1_newlist_cost.run_cost (liquidity-scaled costs), weekly entries 2019+, schedules 0-4.\nPASS: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and in >= 4 of 5.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
  "low_price_share": {
   "2019": 0.0,
-  "2020": 0.08,
-  "2021": 0.14,
+  "2020": 0.09,
+  "2021": 0.17,
   "2022": 0.23,
-  "2023": 0.14,
-  "2024": 0.27,
+  "2023": 0.17,
+  "2024": 0.26,
   "2025": 0.09,
   "2026": 0.11
  },
@@ -17,46 +17,46 @@
   {
    "era": "2019-22",
    "band": "Rs 10-50",
-   "picks": 184,
-   "stocks": 60,
-   "avg6m": 0.185,
-   "med6m": -0.062,
-   "hit": 0.429,
-   "lost30": 0.207,
-   "t2t": 0.13
+   "picks": 194,
+   "stocks": 65,
+   "avg6m": 0.175,
+   "med6m": -0.048,
+   "hit": 0.443,
+   "lost30": 0.222,
+   "t2t": 0.113
   },
   {
    "era": "2019-22",
    "band": "above Rs 50",
-   "picks": 1244,
-   "stocks": 258,
+   "picks": 1231,
+   "stocks": 266,
    "avg6m": 0.293,
-   "med6m": 0.162,
-   "hit": 0.432,
-   "lost30": 0.104,
-   "t2t": 0.056
+   "med6m": 0.164,
+   "hit": 0.437,
+   "lost30": 0.103,
+   "t2t": 0.058
   },
   {
    "era": "2023+",
    "band": "Rs 10-50",
-   "picks": 185,
+   "picks": 194,
    "stocks": 50,
-   "avg6m": 0.132,
-   "med6m": 0.087,
-   "hit": 0.351,
+   "avg6m": 0.127,
+   "med6m": 0.079,
+   "hit": 0.309,
    "lost30": 0.108,
-   "t2t": 0.292
+   "t2t": 0.294
   },
   {
    "era": "2023+",
    "band": "above Rs 50",
    "picks": 957,
-   "stocks": 215,
-   "avg6m": 0.339,
-   "med6m": 0.183,
-   "hit": 0.485,
+   "stocks": 211,
+   "avg6m": 0.358,
+   "med6m": 0.176,
+   "hit": 0.489,
    "lost30": 0.113,
-   "t2t": 0.256
+   "t2t": 0.259
   }
  ],
  "units": {
@@ -67,5 +67,5 @@
   "hit": "share reaching +50% within 126 sessions",
   "t2t": "share of picks in the BE/BZ series on the list date"
  },
- "updated": "2026-10-11T19:51:53"
+ "updated": "2026-10-12T16:43:04"
 }

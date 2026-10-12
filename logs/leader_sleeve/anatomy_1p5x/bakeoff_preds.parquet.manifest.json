@@ -2,17 +2,17 @@
  "dataset": "1.5x model bake-off out-of-sample predictions",
  "experiment": "model-bakeoff-1p5x (EXP-2026-09-27-1p5x-anatomy companion)",
  "producer": "src/agentic/model_bakeoff_1p5x.py",
- "rows": 649342,
+ "rows": 651591,
  "key": [
   "symbol",
   "trade_date"
  ],
  "date_range": [
   "2019-01-04",
-  "2026-09-28"
+  "2026-10-06"
  ],
  "inputs": [
-  "logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+  "/Users/abhinavs./Code/Zoom/logs/leader_sleeve/anatomy_1p5x/rows.parquet",
   "/Users/abhinavs./Code/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet"
  ],
  "smoke": false,
@@ -51,5 +51,5 @@
   "fold_train_end": "last training trade_date of the fold that scored this row"
  },
  "units": "scores are probabilities except lgbm_rank (unitless) and ensemble (percentile 0-1); ratios are fractions",
- "updated": "2026-10-01T02:30:29+05:30"
+ "updated": "2026-10-12T16:18:24+05:30"
 }

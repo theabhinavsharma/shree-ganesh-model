@@ -9,32 +9,32 @@
  },
  "loser_catch": {
   "V3_IC": {
-   "dropped": 340,
-   "dropped_lost30": 0.115,
+   "dropped": 326,
+   "dropped_lost30": 0.11,
    "kept_lost30": 0.102,
-   "dropped_hit50": 0.532,
-   "kept_hit50": 0.389,
-   "dropped_avg": 0.393,
+   "dropped_hit50": 0.543,
+   "kept_hit50": 0.382,
+   "dropped_avg": 0.38,
    "kept_avg": 0.257
   },
   "V3_CR": {
-   "dropped": 80,
-   "dropped_lost30": 0.163,
-   "kept_lost30": 0.102,
-   "dropped_hit50": 0.55,
-   "kept_hit50": 0.405,
-   "dropped_avg": 0.171,
-   "kept_avg": 0.28
+   "dropped": 82,
+   "dropped_lost30": 0.171,
+   "kept_lost30": 0.101,
+   "dropped_hit50": 0.537,
+   "kept_hit50": 0.398,
+   "dropped_avg": 0.158,
+   "kept_avg": 0.277
   },
   "V3_LEV": {
-   "dropped": 365,
-   "dropped_lost30": 0.107,
-   "kept_lost30": 0.103,
-   "dropped_hit50": 0.521,
-   "kept_hit50": 0.39,
-   "dropped_avg": 0.385,
+   "dropped": 352,
+   "dropped_lost30": 0.102,
+   "kept_lost30": 0.104,
+   "dropped_hit50": 0.528,
+   "kept_hit50": 0.382,
+   "dropped_avg": 0.371,
    "kept_avg": 0.257
   }
  },
- "updated": "2026-10-04T20:33:58"
+ "updated": "2026-10-12T16:28:31"
 }

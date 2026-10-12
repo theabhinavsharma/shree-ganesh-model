@@ -10,54 +10,54 @@
  "dropped_vs_kept": {
   "V3_NP": {
    "dropped": {
-    "n": 116,
-    "avg": 0.268,
-    "median": 0.138,
-    "hit50": 0.422,
-    "lost30": 0.095
+    "n": 121,
+    "avg": 0.285,
+    "median": 0.142,
+    "hit50": 0.438,
+    "lost30": 0.091
    },
    "kept": {
-    "n": 2329,
-    "avg": 0.265,
-    "median": 0.116,
-    "hit50": 0.409,
+    "n": 2336,
+    "avg": 0.268,
+    "median": 0.111,
+    "hit50": 0.401,
     "lost30": 0.104
    },
-   "dropped_companies": 29,
+   "dropped_companies": 30,
    "top": {
     "WEBELSOLAR": 19,
-    "AXISCADES": 14,
+    "AXISCADES": 15,
     "SERVOTECH": 11,
-    "GRANULES": 7,
-    "MANGCHEFER": 7,
-    "PARADEEP": 7
+    "GRANULES": 9,
+    "GENUSPOWER": 9,
+    "MANGCHEFER": 7
    }
   },
   "V3_NP1": {
    "dropped": {
-    "n": 95,
-    "avg": 0.28,
-    "median": 0.142,
-    "hit50": 0.411,
-    "lost30": 0.116
+    "n": 100,
+    "avg": 0.302,
+    "median": 0.151,
+    "hit50": 0.43,
+    "lost30": 0.1
    },
    "kept": {
-    "n": 2350,
-    "avg": 0.265,
-    "median": 0.116,
-    "hit50": 0.41,
-    "lost30": 0.103
+    "n": 2357,
+    "avg": 0.267,
+    "median": 0.11,
+    "hit50": 0.402,
+    "lost30": 0.104
    },
    "dropped_companies": 22,
    "top": {
-    "AXISCADES": 14,
-    "WEBELSOLAR": 13,
+    "AXISCADES": 15,
+    "WEBELSOLAR": 14,
     "SERVOTECH": 11,
-    "GRANULES": 7,
+    "GRANULES": 9,
     "MANGCHEFER": 7,
-    "PARADEEP": 7
+    "KELLTONTEC": 7
    }
   }
  },
- "updated": "2026-10-10T02:31:39"
+ "updated": "2026-10-12T16:26:46"
 }

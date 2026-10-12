@@ -188,7 +188,21 @@ if not REPRO:
 
 # ---- outcomes
 PX = rp.load_panel(["open", "close"]); Ow = rp.wide(PX, "open", cal); Craw = rp.wide(PX, "close", cal); del PX
+import total_return as tr  # noqa: E402   2026-10-12: dividends reinvested from their ex-session; big payouts / demergers held through -> cash
+DF = (1 + tr.dividend_yields(cal, Craw.columns)).cumprod()
+Ow, Craw = Ow * DF, Craw * DF
+VR = tr.vr_events(cal, Craw.columns)
+
+
 Cw = Craw.ffill(limit=300); On, Cn = Ow.to_numpy(), Cw.to_numpy(); col = {s: i for i, s in enumerate(Ow.columns)}
+
+
+def trade_rel(c: int, a: int, h: int, e: float) -> np.ndarray:
+    """Value path of one trade relative to its entry open, sessions a .. a+h-1, with a big payout / demerger as cash."""
+    p = (Cn[a:a + h, c].astype(float) / e)[:, None]
+    tr.apply_vr(p, a - 1, [c], VR)
+    return p[:, 0]
+
 mk: dict = {}
 
 
@@ -205,9 +219,10 @@ def trades(T: pd.DataFrame, lag: int) -> pd.DataFrame:
         i0 = r.i0 + lag
         if i0 + H > len(cal) or r.symbol not in col:
             continue
-        e, x = On[i0, col[r.symbol]], Cn[i0 + H - 1, col[r.symbol]]
+        e = On[i0, col[r.symbol]]
+        x = trade_rel(col[r.symbol], i0, H, e)[-1] if (np.isfinite(e) and e > 0) else np.nan
         if np.isfinite(e) and e > 0 and np.isfinite(x):
-            rows.append(dict(symbol=r.symbol, i0=i0, date=cal[i0], year=cal[i0].year, ret=x / e - 1 - COST, mkt=market(i0)))
+            rows.append(dict(symbol=r.symbol, i0=i0, date=cal[i0], year=cal[i0].year, ret=x - 1 - COST, mkt=market(i0)))
     return pd.DataFrame(rows)
 
 
@@ -226,7 +241,7 @@ def nav(R: pd.DataFrame) -> tuple[float, float, float, float]:
     rs, no = np.zeros(len(cal)), np.zeros(len(cal))
     for r in R.itertuples():
         c = col[r.symbol]; a = r.i0; b = a + H; e = On[a, c]
-        path = Cn[a:b, c].astype(float); prv = np.concatenate([[e], path[:-1]])
+        path = trade_rel(c, a, b - a, e) * e; prv = np.concatenate([[e], path[:-1]])
         d_ = np.where(np.isfinite(path) & np.isfinite(prv) & (prv > 0), path / prv - 1, 0.0); d_[0] -= COST
         rs[a:b] += d_; no[a:b] += 1
     mkt_d = (Craw / Craw.shift(1) - 1).clip(-0.5, 1.0).mean(axis=1).fillna(0).to_numpy()

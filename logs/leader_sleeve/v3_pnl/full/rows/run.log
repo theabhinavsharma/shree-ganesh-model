@@ -1,0 +1,215 @@
+[   0s] panel stock_daily_facts_adjusted_2015plus.parquet
+[   5s] non-session dates dropped: 0 () · 0 copied panel rows removed
+sessions per year after the drop: 2015 247 · 2016 246 · 2017 248 · 2018 246 · 2019 244 · 2020 251 · 2021 248 · 2022 248 · 2023 245 · 2024 248 · 2025 248 · 2026 185
+[  10s] panel 5,068,173 rows · 3309 symbols · 2904 sessions
+[  17s] weekly sample 817,694 rows · labels on the session calendar
+fundamentals: symbol-quarters with a computable metric, by quarter year and the basis used (con preferred; windows on one basis only):
+              reported  eps_ttm_p:con  eps_ttm_p:sa  eps_yoy:con  eps_yoy:sa  sales_yoy:con  sales_yoy:sa  loss_to_profit:con  loss_to_profit:sa
+quarter_year                                                                                                                                    
+2014              4146              0             0            0           0              0             0                   0                  0
+2015              5729            819          3303          760        2915           1043          2918                 760               2915
+2016              6179            841          3649         1046        3864           1490          3933                1046               3864
+2017              6219           1062          3778         1268        4086           1746          4013                1268               4086
+2018              6415           1522          4168         1586        4201           1869          3928                1586               4201
+2019              6385           2033          3969         2202        3917           2167          3684                2202               3917
+2020              6376           4205          1740         3783        2237           3700          2090                3783               2237
+2021              6814           4209          1687         4393        1724           4290          1613                4393               1724
+2022              6971           4066          1847         4491        1821           4408          1709                4491               1821
+2023              7710           4801          1924         4828        1942           4727          1831                4828               1942
+2024              8194           5574          2087         5483        2087           5350          1934                5483               2087
+2025              7760           4591          1830         5303        1797           5190          1652                5303               1797
+2026              4257           2984           941         2640         963           2629           919                2640                963
+[  24s] fundamentals merged
+[ 162s] events/insiders/blocks/promoter merged
+[ 162s] labelled rows 774,018 · features 63
+
+BASE RATES (%):
+        y95    y63   s95
+era                     
+conf  18.07  10.72  8.55
+disc  20.52  13.47  9.69
+labelled rows whose 95-session window has missing sessions (labels = lower bound), % by year:
+  2016 4.2 · 2017 2.8 · 2018 3.1 · 2019 3.8 · 2020 4.8 · 2021 42.7 · 2022 4.0 · 2023 4.4 · 2024 2.0 · 2025 1.9 · 2026 1.9
+
+=== FEATURE COVERAGE: % of labelled rows where the feature is known, by year (model needs >= 50% every year, both eras) ===
+trade_date              2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026 model
+ret5                     100   100   100   100   100   100   100   100   100   100   100   yes
+ret20                     99    99   100   100   100    99    99    99    99    99    99   yes
+ret60                     98    98    99    99    99    98    98    98    98    98    97   yes
+ret126                    96    96    97    97    98    96    95    96    96    95    93   yes
+ret252                    90    92    94    95    95    92    90    92    92    91    89   yes
+off_high                  98    98    99    99    99    98    98    98    98    98    97   yes
+off_low                   98    98    99    99    99    98    98    98    98    98    97   yes
+dvol20                    99   100   100   100   100    99   100   100   100   100    99   yes
+dvol60                    99    99    99    99    99    99    99    99    99    99    98   yes
+volume_vs_20d             99    99   100   100   100    99    99    99   100    99    99   yes
+volume_vs_60d             98    98    99    99    99    98    98    98    98    98    97   yes
+traded_value_vs_60d       98    98    99    99    99    98    98    98    98    98    97   yes
+delivery_pct              98    95    94    96    94    91    93    90    86    90    95   yes
+avg_delivery_pct_20d      97    93    93    95    92    88    91    88    83    87    93   yes
+delivery_pct_vs_20d       97    93    93    95    92    88    91    88    83    87    93   yes
+rsi_14_daily             100   100   100   100   100   100   100   100   100   100    99   yes
+rsi_14_weekly             98    98    99    98    99    98    98    98    98    98    97   yes
+rsi_14_monthly            70    91    93    94    94    91    89    91    91    90    88   yes
+px_sma50                  98    99    99    99    99    98    99    99    99    98    97   yes
+px_sma200                 94    94    96    96    96    93    92    94    94    93    90   yes
+sma50_200                 94    94    96    96    96    93    92    94    94    93    90   yes
+uc20                     100   100   100   100   100   100   100   100   100   100   100   yes
+up20                     100   100   100   100   100   100   100   100   100   100   100   yes
+log_mcap                 100   100   100   100   100   100   100   100   100   100   100   yes
+log_adv                   99    99   100   100   100    99    99    99   100    99    99   yes
+log_px                   100   100   100   100   100   100   100   100   100   100   100   yes
+age_yrs                   11    18    23    26    30    36    42    46    51    55    59    NO
+ind_heat_pct              81    83    84    86    86    87    89    89    90    91    92   yes
+ind_heat                  81    83    84    86    86    87    89    89    90    91    92   yes
+ind_ret20                 81    83    84    86    86    87    89    89    90    91    92   yes
+ind_breadth               81    83    84    86    86    87    89    89    90    91    92   yes
+ind_n                     98    98    99   100   100   100   100   100   100   100   100   yes
+rank_in_ind_pct           96    96    98    98    99    98    98    98    98    98    97   yes
+profitable                33    32    68    84    84    80    81    78    89    84    72    NO
+pe                        33    32    68    84    84    80    81    78    89    84    72    NO
+pe_ind                    33    32    68    84    84    80    81    78    89    84    72    NO
+eps_yoy                   51    60    79    85    85    83    81    83    87    87    83   yes
+sales_yoy                 56    66    82    83    82    81    79    81    85    85    81   yes
+loss_to_profit            51    60    79    85    85    83    81    83    87    87    83   yes
+days_since_results        62    70    88    90    90    90    91    93    95    94    91   yes
+ev60_open_offer_target    84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_tender_L1            84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_order                84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_client_partner       84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_acquisition          84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_approval_launch      84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_capex                84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_fundraise_pref       84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_fundraise_qip        84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_buyback              84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_rating_up            84   100   100   100   100   100   100   100   100   100   100   yes
+ev60_bonus_split          84   100   100   100   100   100   100   100   100   100   100   yes
+filings30_all             92   100   100   100   100   100   100   100   100   100   100   yes
+last_order_to_rev_90d      0     0    13   100   100   100   100   100   100   100   100    NO
+prom_buys90                0     0     0    75   100   100   100   100   100   100   100    NO
+prom_sells90               0     0     0    75   100   100   100   100   100   100   100    NO
+block_buys60              84   100   100   100   100   100   100   100   100   100    88   yes
+block_sells60             84   100   100   100   100   100   100   100   100   100    88   yes
+promoter_pct               1     1     1     1     2    16    70    72    74    78    79    NO
+prom_delta                 0     1     1     1     1     2    66    71    72    75    77    NO
+mkt_breadth              100   100   100   100   100   100   100   100   100   100   100   yes
+mkt_med_ret20            100   100   100   100   100   100   100   100   100   100   100   yes
+mkt_ew_ret60             100   100   100   100   100   100   100   100   100   100   100   yes
+
+count features: % of labelled rows with a non-zero count, by year
+trade_date              2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
+ev60_open_offer_target   0.2   0.1   0.4   0.5   0.3   0.3   0.4   0.3   0.4   0.4   0.5
+ev60_tender_L1           0.2   0.2   0.3   0.2   0.2   0.2   0.2   0.3   0.4   0.2   0.3
+ev60_order               2.5   2.7   3.1   2.6   2.2   2.8   3.7   3.7   4.6   6.4   7.4
+ev60_client_partner      1.8   2.3   2.4   2.2   2.0   2.5   3.9   3.5   4.4   3.9   3.9
+ev60_acquisition        17.0  17.8  17.4  20.0  15.3   5.0   5.1  20.3  18.9  23.9  14.9
+ev60_approval_launch     4.4   4.8   4.4   4.4   4.2   4.1   4.6   5.0   5.3   6.9   7.0
+ev60_capex               0.2   0.2   0.1   0.2   0.1   0.3   0.4   0.3   0.3   0.4   0.4
+ev60_fundraise_pref      2.7   2.3   1.9   2.0   1.7   1.8   2.6   2.7   3.9   3.6   3.4
+ev60_fundraise_qip       0.3   0.5   0.4   0.3   0.2   0.3   0.2   0.3   1.0   0.8   0.6
+ev60_buyback             0.9   1.1   1.4   1.8   1.1   1.1   1.1   1.0   0.6   0.2   0.3
+ev60_rating_up           0.5   0.3   0.4   0.1   0.2   0.2   2.0   0.2   0.1   0.3   0.3
+ev60_bonus_split         1.1   1.5   1.2   0.9   0.5   1.1   1.5   1.4   2.0   1.4   1.0
+filings30_all           68.2  73.3  77.3  84.3  87.2  87.5  89.8  92.2  94.4  95.2  95.1
+prom_buys90              0.0   0.0   0.0   8.7  12.0   7.7   6.4   5.0   3.6   5.0   5.0
+prom_sells90             0.0   0.0   0.0   4.0   4.7   5.4   3.9   3.9   4.7   3.2   2.1
+block_buys60             0.7   1.0   0.6   1.0   0.7   1.3   1.3   0.7   1.3   1.4   0.9
+block_sells60            0.7   1.0   0.6   1.0   0.7   1.3   1.3   0.7   1.2   1.4   0.9
+
+source rows per year (known date):
+  announcements  2016 57,026 · 2017 65,730 · 2018 76,680 · 2019 93,136 · 2020 101,059 · 2021 117,131 · 2022 136,381 · 2023 161,358 · 2024 183,216 · 2025 174,404 · 2026 135,168
+  pit_promoter   2019 11,465 · 2020 11,153 · 2021 8,713 · 2022 7,141 · 2023 5,746 · 2024 5,906 · 2025 6,287 · 2026 4,059
+  block_deals    2016 183 · 2017 233 · 2018 199 · 2019 374 · 2020 184 · 2021 418 · 2022 543 · 2023 544 · 2024 767 · 2025 767 · 2026 155
+  shareholding   2015 20 · 2016 35 · 2017 52 · 2018 53 · 2019 74 · 2020 101 · 2021 2,669 · 2022 5,862 · 2023 6,297 · 2024 7,186 · 2025 7,724 · 2026 4,067
+
+MODEL FEATURES (54; --model-features covered). Kept out of the model:
+  age_yrs                  never a model feature (time index)
+  profitable               coverage: min disc-year 32%, min conf-year 72% (< 50%)
+  pe                       coverage: min disc-year 32%, min conf-year 72% (< 50%)
+  pe_ind                   coverage: min disc-year 32%, min conf-year 72% (< 50%)
+  last_order_to_rev_90d    coverage: min disc-year 0%, min conf-year 100% (< 50%)
+  prom_buys90              coverage: min disc-year 0%, min conf-year 100% (< 50%)
+  prom_sells90             coverage: min disc-year 0%, min conf-year 100% (< 50%)
+  promoter_pct             coverage: min disc-year 1%, min conf-year 72% (< 50%)
+  prom_delta               coverage: min disc-year 0%, min conf-year 71% (< 50%)
+
+mcap_source of labelled rows: pnl_implied 80.1% · screener_backcast 10.8% · screener_backfill 9.1%
+
+=== PART 1: buckets with lift >= 1.5x in BOTH eras (n >= 300 each), strongest first ===
+off_low                  d10     [     1.56 ..       344]  disc  35.7% (1.75x, n53,213)  conf  29.8% (1.66x, n22,813)  — distance above 52-week low
+ret252                   d10     [     1.12 ..       211]  disc  32.0% (1.57x, n45,997)  conf  28.7% (1.61x, n25,367)  — 12-month return
+px_sma200                d10     [    0.379 ..      47.6]  disc  32.2% (1.58x, n45,644)  conf  27.9% (1.56x, n27,028)  — price vs 200DMA
+ret126                   d10     [    0.607 ..       278]  disc  33.7% (1.65x, n47,397)  conf  27.9% (1.56x, n26,993)  — 6-month return
+sma50_200                d10     [    0.273 ..       2.9]  disc  33.0% (1.63x, n45,565)  conf  27.5% (1.54x, n27,107)  — 50DMA vs 200DMA
+
+=== buckets that SUPPRESS 1.5x (<= 0.5x in both eras) ===
+log_mcap                 d10     [     4.47 ..      6.34]  disc 0.29x  conf 0.42x  — log10 market cap (Rs cr; PIT only where mcap_source == pnl_implied)
+dvol60                   d1      [ 1.55e-05 ..    0.0161]  disc 0.29x  conf 0.40x  — 60d daily volatility
+
+=== ERA-FLIPPERS (>=1.5x in one era, <=1.0x in the other) — not trustworthy ===
+mkt_breadth              d7      disc 0.96x  conf 1.52x
+
+=== SENSITIVITY: the both-era buckets above, on pnl_implied (PIT) mcap rows only ===
+off_low                  d10     all: disc 1.75x conf 1.66x  |  PIT-mcap rows: disc 1.77x (n41,398) conf 1.65x (n22,140)
+ret252                   d10     all: disc 1.57x conf 1.61x  |  PIT-mcap rows: disc 1.59x (n34,391) conf 1.60x (n24,707)
+px_sma200                d10     all: disc 1.58x conf 1.56x  |  PIT-mcap rows: disc 1.62x (n33,343) conf 1.55x (n26,328)
+ret126                   d10     all: disc 1.65x conf 1.56x  |  PIT-mcap rows: disc 1.70x (n34,675) conf 1.55x (n26,254)
+sma50_200                d10     all: disc 1.63x conf 1.54x  |  PIT-mcap rows: disc 1.66x (n33,014) conf 1.53x (n26,416)
+
+=== PART 2: walk-forward LightGBM on 54 features (train: label window ends before Y-01-01; predict Y) ===
+  2019: train 142,262 (<= 2018-08-07) · test 64,964 · base  9.1% · AUC 0.570 · top1% 14.9% (1.6x) · top5% 12.7% (1.4x)
+  2020: train 208,412 (<= 2019-08-06) · test 66,291 · base 38.5% · AUC 0.617 · top1% 65.3% (1.7x) · top5% 59.2% (1.5x)
+  2021: train 273,622 (<= 2020-08-17) · test 72,522 · base 34.5% · AUC 0.673 · top1% 55.6% (1.6x) · top5% 50.8% (1.5x)
+  2022: train 343,754 (<= 2021-08-13) · test 83,878 · base 13.9% · AUC 0.578 · top1% 26.7% (1.9x) · top5% 22.3% (1.6x)
+  2023: train 423,695 (<= 2022-08-12) · test 86,040 · base 28.8% · AUC 0.652 · top1% 61.3% (2.1x) · top5% 51.1% (1.8x)
+  2024: train 507,887 (<= 2023-08-09) · test 94,955 · base 17.2% · AUC 0.643 · top1% 41.0% (2.4x) · top5% 34.0% (2.0x)
+  2025: train 600,130 (<= 2024-08-13) · test 98,613 · base  9.5% · AUC 0.660 · top1% 32.3% (3.4x) · top5% 24.0% (2.5x)
+  2026: train 696,484 (<= 2025-08-12) · test 38,415 · base 18.2% · AUC 0.619 · top1% 24.5% (1.3x) · top5% 26.8% (1.5x)
+  ERA disc [all rows]: AUC 0.612 · base 23.7% · top1% 34.4% (1.5x) · n 287,655
+  ERA conf [all rows]: AUC 0.638 · base 18.1% · top1% 40.1% (2.2x) · n 318,023
+  ERA disc [pnl_implied rows]: AUC 0.611 · base 23.7% · top1% 34.8% (1.5x) · n 277,288
+  ERA conf [pnl_implied rows]: AUC 0.638 · base 18.1% · top1% 39.8% (2.2x) · n 305,185
+
+TOP FEATURES — out-of-sample permutation AUC drop (2023+) and share of model gain:
+  log_mcap                 AUC drop +0.0326 · gain 11.3% — log10 market cap (Rs cr; PIT only where mcap_source == pnl_implied)
+  off_low                  AUC drop +0.0286 · gain  8.9% — distance above 52-week low
+  mkt_ew_ret60             AUC drop +0.0151 · gain 15.7% — MEDIAN stock 60d return, mcap>=50cr (EW mean before the 2026-09-27 audit fix; name kept)
+  dvol60                   AUC drop +0.0091 · gain  6.1% — 60d daily volatility
+  log_px                   AUC drop +0.0077 · gain  6.4% — log10 then-traded (raw) price
+  mkt_breadth              AUC drop +0.0057 · gain  7.3% — share of core-band stocks above 50DMA (same-day close)
+  off_high                 AUC drop +0.0044 · gain  2.0% — distance below 52-week high (0 = at high)
+  days_since_results       AUC drop +0.0029 · gain  1.2% — days since the session the latest quarter's results first became known (either basis)
+  eps_yoy                  AUC drop +0.0028 · gain  2.5% — latest reported quarter EPS YoY vs the same calendar quarter a year earlier, both on one basis (con preferred, else sa), present share basis
+  sales_yoy                AUC drop +0.0022 · gain  3.0% — latest reported quarter sales YoY vs the same calendar quarter a year earlier, both on one basis (con preferred, else sa)
+  log_adv                  AUC drop +0.0017 · gain  2.6% — log10 20d avg traded value (Rs cr)
+  ret126                   AUC drop +0.0015 · gain  1.2% — 6-month return
+  ind_heat_pct             AUC drop +0.0014 · gain  1.3% — industry 60d-return heat percentile
+  rsi_14_monthly           AUC drop +0.0012 · gain  3.6% — RSI monthly
+  ret60                    AUC drop +0.0012 · gain  0.9% — 3-month return
+  dvol20                   AUC drop +0.0012 · gain  0.6% — 20d daily volatility
+  px_sma200                AUC drop +0.0011 · gain  0.9% — price vs 200DMA
+  uc20                     AUC drop +0.0009 · gain  0.1% — upper-circuit closes in last 20d
+  ind_n                    AUC drop +0.0005 · gain  3.6% — industry size (names)
+  ev60_order               AUC drop +0.0005 · gain  0.1% — 'order' filings in last 60d (NaN outside announcement coverage)
+  traded_value_vs_60d      AUC drop +0.0004 · gain  0.1% — today's traded value / 60d avg
+  ret20                    AUC drop +0.0004 · gain  0.3% — 1-month return
+  px_sma50                 AUC drop +0.0003 · gain  0.4% — price vs 50DMA
+  volume_vs_60d            AUC drop +0.0003 · gain  0.1% — today's volume / 60d avg
+  volume_vs_20d            AUC drop +0.0002 · gain  0.1% — today's volume / 20d avg
+
+=== PART 3 [close]: ALL-IN, 100% capital, hold 95 sessions, full rotation, 19 phase offsets (2019-01-01 .. end); signal-day CLOSE, 0.5% round trip (registered) ===
+  MODEL top-10       CAGR median  +27.7% (worst phase +15.0, best +34.9) · disc +19.5% · conf +36.4% · maxDD median -58.9% (worst -70.7%) · Sharpe 0.97
+  MODEL top-20       CAGR median  +26.5% (worst phase +14.3, best +36.8) · disc +17.8% · conf +33.0% · maxDD median -59.7% (worst -67.0%) · Sharpe 1.01
+  BASELINE rule      CAGR median  +26.8% (worst phase +8.0, best +41.9) · disc +27.7% · conf +24.2% · maxDD median -44.4% (worst -63.7%) · Sharpe 0.96
+  G+H rule           CAGR median  +20.3% (worst phase +7.3, best +32.0) · disc +16.9% · conf +19.8% · maxDD median -47.1% (worst -57.2%) · Sharpe 0.89
+  EW liquid market   CAGR median  +16.9% (worst phase +15.7, best +18.8) · disc +16.9% · conf +17.5% · maxDD median -42.3% (worst -44.2%) · Sharpe 0.89
+
+=== PART 3 [next_open]: ALL-IN, 100% capital, hold 95 sessions, full rotation, 19 phase offsets (2019-01-01 .. end); NEXT OPEN, locked entries skipped, ADV-scaled cost ===
+  MODEL top-10       CAGR median  +26.1% (worst phase +16.8, best +35.0) · disc +17.5% · conf +36.5% · maxDD median -57.7% (worst -70.3%) · Sharpe 0.93 · locked skipped 44
+  MODEL top-20       CAGR median  +25.8% (worst phase +14.9, best +36.1) · disc +17.0% · conf +32.7% · maxDD median -59.8% (worst -66.8%) · Sharpe 0.98 · locked skipped 61
+  BASELINE rule      CAGR median  +25.8% (worst phase +9.1, best +42.4) · disc +24.5% · conf +24.8% · maxDD median -44.2% (worst -63.7%) · Sharpe 0.95 · locked skipped 26
+  G+H rule           CAGR median  +20.0% (worst phase +3.3, best +32.6) · disc +15.9% · conf +18.7% · maxDD median -46.6% (worst -58.6%) · Sharpe 0.86 · locked skipped 24
+  EW liquid market   CAGR median  +16.7% (worst phase +15.6, best +19.0) · disc +16.5% · conf +17.4% · maxDD median -42.3% (worst -44.2%) · Sharpe 0.89 · locked skipped 188
+[ 333s] written to logs/leader_sleeve/v3_pnl/full/rows
+[ 333s] ANATOMY COMPLETE

@@ -33,6 +33,7 @@ import research_panel as rp  # noqa: E402
 import sim_leader_portfolio_7x as sp  # noqa: E402
 import sim_screen_rank_exit as sre  # noqa: E402
 import v3_rule  # noqa: E402
+import total_return as tr  # noqa: E402
 from test_v3_l1_newlist_cost import run_cost  # noqa: E402
 
 EXP_ID = "EXP-2026-10-12-v31-fpi-sector-tilt"
@@ -66,6 +67,7 @@ def run_wcost(D, X, picks, weekly, rule, costs_of, weights_of):
                 cols = np.array([cidx[n] for n in names])
                 seg = np.nan_to_num(Rv[i0 + 1:end + 1, cols])
                 growth = np.cumprod(1 + seg, axis=0)
+                tr.apply_vr(growth, i0, cols, D.get("vr", {}))            # 2026-10-12: big payout / demerger held through -> cash
                 w = np.asarray(weights_of(d, names), dtype=float); w = w / w.sum()
                 wts = (1 - np.asarray(costs_of(i0, cols), dtype=float)) * w
                 vals, held = np.empty_like(growth), np.ones(len(cols))
@@ -198,7 +200,7 @@ def main() -> None:
     diff = float(np.nanmax(np.abs(nav_a.to_numpy() - nav_b.to_numpy())))
     base0 = metrics(nav_b); got = tuple(round(base0[k], 1) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd"))
     print(f"wiring check: weighted engine with equal weights vs run_cost max NAV difference {diff:.1e}; V3.1 = {got} (registered 51.8 / 48.9 / 54.9 / -40.0)", flush=True)
-    if diff > 1e-9 or got != (51.8, 48.9, 54.9, -40.0):
+    if diff > 1e-9 or got != tuple(round(x, 1) for x in __import__("reproduce").logged("EXP-2026-10-11-v3-l1-newlist-cost")["arms"]["V3_L1Nc"][:4]):
         raise SystemExit("wiring check FAILED — no result reported")
 
     res, ph = {"V3.1": []}, {a: [] for a in ARMS}

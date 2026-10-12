@@ -95,6 +95,9 @@ def choose(names: list, w: pd.Timestamp, arm: str, sig: dict, top: int = 9) -> l
 def main() -> None:
     t0 = time.time()
     D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores()
+    if os.environ.get("SGM_RERUN_TAG") and os.environ.get("SGM_REPRO") != "1":   # 2026-10-12: a tagged re-run passes the data gate first
+        sys.path.insert(0, str(ROOT / "src/agentic/trust")); import data_ready as _dr  # noqa: E401
+        _dr.rerun_gate(EXP_ID, os.environ["SGM_RERUN_TAG"], D["cal"])
     S = pd.read_parquet(ROOT / "data/derived/industry_scores_policy.parquet"); S["date"] = pd.to_datetime(S["date"])
     G1 = S[(S["heat_pct"] >= 0.70) & ~(S["P_pct"] < 0.30)]
     sig = signals()

@@ -38,6 +38,9 @@ H_MODE = os.environ.get("SGM_POLICY_H") == "1"
 def main() -> None:
     t0 = time.time()
     D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores()
+    if os.environ.get("SGM_RERUN_TAG") and os.environ.get("SGM_REPRO") != "1":   # 2026-10-12: a tagged re-run passes the data gate first
+        sys.path.insert(0, str(ROOT / "src/agentic/trust")); import data_ready as _dr  # noqa: E401
+        _dr.rerun_gate(EXP_ID + ("-H_policy" if H_MODE else ""), os.environ["SGM_RERUN_TAG"], D["cal"])
     S = pd.read_parquet(SCORES); S["date"] = pd.to_datetime(S["date"])
     cal = D["cal"]
     grid = lambda o: [d for d in sp.weekly_grid(cal, o) if d >= pd.Timestamp(tif.START)]  # noqa: E731
@@ -131,7 +134,7 @@ def main() -> None:
         print(f"\nREPRO RUN (not logged) · VERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm passes'}")
         return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-H_policy-RESULT" if H_MODE else "-RESULT"), verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-H_policy" if H_MODE else "") + (f"-RERUN-{os.environ['SGM_RERUN_TAG']}" if os.environ.get("SGM_RERUN_TAG") else "-RESULT"), verdict=passed or "no arm passes",
                                  vs_G1=({k: [R0[k]["vs_G1_phases"], R0[k]["beats_G1"]] for k in ELIG} if H_MODE else None),
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
                                  ic={k: v for k, v in summ.items()}, cols="CAGR, disc, conf, maxDD, phases"), default=str) + "\n")

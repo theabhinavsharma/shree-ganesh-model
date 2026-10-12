@@ -120,6 +120,21 @@ if not same:
 
 # ---------------- data-readiness gate (before any outcome)
 PX = rp.load_panel(["open", "close"]); Ow = rp.wide(PX, "open", cal); Craw = rp.wide(PX, "close", cal); del PX
+import total_return as tr  # noqa: E402   2026-10-12: dividends reinvested from their ex-session; big payouts / demergers held through -> cash
+DF = (1 + tr.dividend_yields(cal, Craw.columns)).cumprod()
+Ow, Craw = Ow * DF, Craw * DF
+VR = tr.vr_events(cal, Craw.columns)
+
+
+Cw = Craw.ffill(limit=300)
+On, Cn = Ow.to_numpy(), Cw.to_numpy()
+
+
+def trade_rel(c: int, a: int, h: int, e: float) -> np.ndarray:
+    """Value path of one trade relative to its entry open, sessions a .. a+h-1, with a big payout / demerger as cash."""
+    p = (Cn[a:a + h, c].astype(float) / e)[:, None]
+    tr.apply_vr(p, a - 1, [c], VR)
+    return p[:, 0]
 Cw = Craw.ffill(limit=300)
 Tw = T[(T["ts"] >= START) & (T["ts"] <= END_ENTRY + pd.Timedelta(days=1))].copy()
 Tw["date"] = [cal[i] for i in Tw["i0"]]; Tw = Tw[(Tw["date"] >= START) & (Tw["date"] <= END_ENTRY) & (Tw["ratio"] >= CUT)]
@@ -157,10 +172,13 @@ def trades(h: int, lag: int) -> pd.DataFrame:
         i0 = r.i0 + lag
         if i0 + h > len(cal) or r.symbol not in col:
             continue
-        e, x = On[i0, col[r.symbol]], Cn[i0 + h - 1, col[r.symbol]]
-        if not (np.isfinite(e) and e > 0 and np.isfinite(x)):
+        e = On[i0, col[r.symbol]]
+        if not (np.isfinite(e) and e > 0):
             continue
-        rows.append(dict(symbol=r.symbol, i0=i0, date=r.date, year=r.date.year, ret=x / e - 1 - COST, typ=typical(i0, h)))
+        x = trade_rel(col[r.symbol], i0, h, e)[-1]
+        if not np.isfinite(x):
+            continue
+        rows.append(dict(symbol=r.symbol, i0=i0, date=r.date, year=r.date.year, ret=x - 1 - COST, typ=typical(i0, h)))
     return pd.DataFrame(rows)
 
 
@@ -179,7 +197,7 @@ def nav(R: pd.DataFrame, h: int) -> tuple[pd.Series, pd.Series]:
     ret_sum = np.zeros(len(cal)); n_open = np.zeros(len(cal))
     for r in R.itertuples():
         c = col[r.symbol]; a = r.i0; b = a + h; e = On[a, c]
-        path = Cn[a:b, c].astype(float); prv = np.concatenate([[e], path[:-1]])
+        path = trade_rel(c, a, b - a, e) * e; prv = np.concatenate([[e], path[:-1]])
         dr_ = np.where(np.isfinite(path) & np.isfinite(prv) & (prv > 0), path / prv - 1, 0.0); dr_[0] -= COST
         ret_sum[a:b] += dr_; n_open[a:b] += 1
     arm = np.where(n_open > 0, ret_sum / np.maximum(n_open, 1), 0.0)

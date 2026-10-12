@@ -112,3 +112,13 @@ def gate(exp_id: str, checks: list[dict], run: str = "RESULT") -> None:
                                      status="READY" if ok else "NOT READY", checks=checks), default=str) + "\n")
     if not ok:
         raise SystemExit(3)
+
+
+def rerun_gate(exp_id: str, run: str, cal) -> None:
+    """Minimal gate for older tests (written before gate() existed) when they are re-run under SGM_RERUN_TAG (2026-10-12
+    cash-flow fix): the price panel's stock-days vs NSE's own bhavcopy, every year the test's calendar covers."""
+    import research_panel as rp
+    px = pd.to_datetime(pd.read_parquet(rp.PANEL, columns=["trade_date"])["trade_date"]); bh = bhav_rows()
+    yrs = range(max(2015, pd.Timestamp(cal[0]).year), pd.Timestamp(cal[-1]).year + 1)
+    gate(exp_id, [completeness("price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)",
+                               px.groupby(px.dt.year).size(), bh.groupby(bh.index.year).sum(), yrs)], run=run)

@@ -3,9 +3,7 @@
  "experiment": "EXP-2026-10-12-v31-fpi-sizing",
  "producer": "src/agentic/test_v31_fpi_sizing.py",
  "definitions": "EXP-2026-10-12-v31-fpi-sizing (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: put more money into a week's V3.1 list when foreign investors (FPIs) have been net buyers, less when they\nhave been net sellers, and see whether that beats equal weekly amounts. Several tilt sizes and two ways of using the cash.\nSignal: FPI equity stock-exchange net flow over the last 60 NSDL reporting dates / their gross turnover over those dates\n(data/derived/nsdl_fpi_daily.parquet, rows used from known_from on). Its percentile on the list date is measured against all\nearlier values since 2015 (expanding window). Tilts (low / mid / high): T_050_150 0.5/1/1.5, T_075_125 0.75/1/1.25,\nT_000_200 0/1/2, T_050_100 0.5/1/1, T_100_150 1/1/1.5 (terciles), Q_050_150 0.5/1/1.5 on bottom / top fifths.\nEngine: one pooled cash account. On each list date invest multiplier x equity/26 (never more than the cash), equal split over\nthe names after the liquidity-scaled round-trip cost, hold 126 sessions on the panel's daily returns, then back to cash.\nCash: IDLE (waits) or CATCHUP (each list date also invests 1/13 of the cash above one normal week's amount).\nPASS per arm vs FLAT (multiplier 1, same cash rule): CAGR higher in both eras and max drawdown not worse by > 2 points, at\nschedule 0 and in >= 4 of 5. FAMILY verdict: sizing is real only if >= 6 of the 12 arms pass.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
- "arms_passing": [
-  "T_100_150/CATCHUP"
- ],
+ "arms_passing": [],
  "family_pass": false,
  "low_week_share": {
   "tercile low weeks": 0.39,
@@ -17,5 +15,5 @@
   "years": "calendar-year return percent, average of 5 schedules",
   "avg_idle_cash_pct": "average cash left uninvested on list dates, percent of equity"
  },
- "updated": "2026-10-12T08:27:19"
+ "updated": "2026-10-12T16:22:19"
 }

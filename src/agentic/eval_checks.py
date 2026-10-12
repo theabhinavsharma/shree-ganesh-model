@@ -517,6 +517,8 @@ def results_data_ready(ctx: dict) -> dict:
     """Every RESULT / RERUN logged from 2026-10-02 on has a DATA-READY line with status READY for the same experiment and
     run, logged earlier the same day (trust/data_ready.gate). Catches a test that computes a verdict without the GIGO gate."""
     L = [json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines() if l.strip().startswith("{")]
+    void = {(v.get("voids_id"), v.get("voids_ts")) for v in L if str(v.get("id", "")).endswith("-VOID")}   # 2026-10-12: append-only corrections
+    L = [e for e in L if (e.get("id"), e.get("ts")) not in void]
     ready = {}
     for e in L:
         if str(e.get("id", "")).endswith("-DATA-READY") and e.get("status") == "READY":
@@ -616,14 +618,11 @@ def value_removal_held(ctx: dict) -> dict:
         for n in sc["names"]:
             hit = ev[(ev["symbol"] == n["symbol"]) & (ev["ex_date"] > d0) & (ev["ex_date"] <= d0 + pd.Timedelta(days=190))]
             live += [f"{n['symbol']} {r.kind} {r.ex_date.date()} (batch {sc['screen_id']})" for r in hit.itertuples()]
-    pk_f = ROOT / "logs/leader_sleeve/v31_hits_by_year/v31_picks.csv"
-    bt = 0
-    if pk_f.exists():
-        pk = pd.read_csv(pk_f, parse_dates=["trade_date"]).merge(ev[["symbol", "ex_date"]], on="symbol")
-        bt = int(((pk["ex_date"] > pk["trade_date"]) & (pk["ex_date"] <= pk["trade_date"] + pd.Timedelta(days=190))).sum())
-    st = "WARN" if live or bt else "PASS"
-    return _res(st, f"{len(live)} live holdings · {bt} backtest pick-weeks held through a payout/demerger",
-                ("live: " + "; ".join(live[:5]) if live else "") + (f"{'; ' if live else ''}backtest engine still reinvests payouts into the stub (see audit_ca_picks.py)" if bt else ""))
+    import total_return as tr                                       # the engines must still carry the fix (2026-10-12)
+    eng = all("tr.apply_vr(" in (ROOT / f"src/agentic/{f}").read_text() for f in ("sim_screen_rank_exit.py", "sim_leader_portfolio_7x.py", "test_v3_l1_newlist_cost.py"))
+    st = "PASS" if eng and not live else ("FAIL" if not eng else "WARN")
+    return _res(st, f"{len(live)} live holdings held through a payout/demerger · engines treat them as cash: {eng}",
+                ("live: " + "; ".join(live[:5]) + " (handle the cash / demerged shares)" if live else "") + ("" if eng else " · an engine lost total_return.apply_vr"))
 
 
 def watchdog_alive(ctx: dict) -> dict:

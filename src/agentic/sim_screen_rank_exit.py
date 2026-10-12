@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from datetime import datetime
@@ -52,7 +53,8 @@ import pandas as pd
 ROOT = Path("/Users/abhinavs./Code/Zoom")
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp  # noqa: E402
-import sim_leader_portfolio_7x as sp  # noqa: E402
+import sim_leader_portfolio_7x as sp
+import total_return as tr  # noqa: E402
 
 EXP_ID = "EXP-2026-09-28-screen-rank-exit"
 PREDS = ROOT / "logs/leader_sleeve/anatomy_1p5x/bakeoff_preds.parquet"
@@ -187,6 +189,7 @@ def run_exit(D: dict, X: dict, picks: dict, weekly: list, rule: str) -> tuple[pd
                 cols = np.array([cidx[n] for n in names])
                 seg = np.nan_to_num(Rv[i0 + 1:end + 1, cols])
                 growth = np.cumprod(1 + seg, axis=0)
+                tr.apply_vr(growth, i0, cols, D.get("vr", {}))            # 2026-10-12: big payout / demerger held through -> cash
                 wts = np.full(len(cols), (1 - sp.COST) / len(cols))
                 vals, held, locked = np.empty_like(growth), np.ones(len(cols)), np.zeros(len(cols))
                 for q, c in enumerate(cols):
@@ -249,6 +252,9 @@ def main() -> None:
     t0 = time.time()
     syms = [s.strip() for s in a.symbols.split(",")] if a.symbols else None
     D = sp.load(syms)
+    if os.environ.get("SGM_RERUN_TAG") and os.environ.get("SGM_REPRO") != "1":   # 2026-10-12: a tagged re-run passes the data gate first
+        sys.path.insert(0, str(ROOT / "src/agentic/trust")); import data_ready as _dr  # noqa: E401
+        _dr.rerun_gate(EXP_ID, os.environ["SGM_RERUN_TAG"], D["cal"])
     X = features(D)
     imap = sp.industry_maps()["analogs"]
     P = model_scores()
@@ -314,7 +320,7 @@ def main() -> None:
         "production runs; `years.json` has calendar-year returns. Definitions and the pass rule are in the manifest and "
         "in src/agentic/sim_screen_rank_exit.py.\n")
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + (f"-RERUN-{os.environ['SGM_RERUN_TAG']}" if os.environ.get("SGM_RERUN_TAG") else "-RESULT"), verdict=passed or "no arm passes",
                                  table={k: [round(r["cagr"], 1), round(r["cagr_disc"], 1), round(r["cagr_conf"], 1),
                                             round(r["maxdd"], 1), r.get("phases_beaten")] for k, r in R.items()},
                                  secondary_2016={k: [round(r["cagr"], 1), round(r["cagr_disc"], 1), round(r["cagr_conf"], 1),

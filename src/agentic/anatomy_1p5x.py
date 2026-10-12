@@ -514,7 +514,26 @@ def main() -> None:
         obs = high_w.notna().astype(float)[::-1].rolling(h, min_periods=1).sum()[::-1].shift(-1)
         S[f"label_obs{tag}"] = obs.to_numpy()[ri, ci]            # observed sessions in the window (audit only)
         del fw, obs
-    say(f"weekly sample {len(S):,} rows · labels on the session calendar")
+    # 2026-10-12 (INC-2026-10-12-payout-reinvested-in-stub): a window holding a big payout / demerger (applied price-only factor
+    # < 0.5) counts the removed value as cash from the ex-session; the adjusted series alone reinvests it in the leftover stub.
+    import total_return as tr
+    vr = tr.vr_events(cal, close_w.columns)
+    Hn, Cn_ = high_w.to_numpy(), close_w.ffill().to_numpy(); n_fix = 0
+    for col, evs in vr.items():
+        rows = np.where(ci == col)[0]
+        for k, f in evs:
+            for h, tag in ((H, "95"), (H2, "63")):
+                hit = rows[(ri[rows] < k) & (ri[rows] >= k - h + 1)]
+                for j in hit:
+                    i0 = ri[j]; w = slice(i0 + 1, min(i0 + 1 + h, len(cal)))
+                    if not np.isfinite(S.at[j, f"fh{tag}"]):
+                        continue
+                    hp = tr.label_path(Hn[w, col] / c0[j], Cn_[w, col] / c0[j], i0, col, {col: [(k, f)]})
+                    S.at[j, f"fh{tag}"] = float(np.nanmax(hp)); n_fix += 1
+                    if tag == "95":
+                        cp = tr.label_path(Cn_[w, col] / c0[j], Cn_[w, col] / c0[j], i0, col, {col: [(k, f)]})
+                        S.at[j, "fc95"] = float(cp[-1])
+    say(f"weekly sample {len(S):,} rows · labels on the session calendar · {n_fix} label windows with a big payout / demerger turned to cash")
 
     # industry (nse4 map)
     sc = pd.read_parquet(DD / "screener_industry.parquet")

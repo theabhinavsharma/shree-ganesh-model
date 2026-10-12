@@ -22,6 +22,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 ROOT = Path("/Users/abhinavs./Code/Zoom")
@@ -64,7 +65,9 @@ def score_screen(sc: dict, px: pd.DataFrame) -> dict:
             rows.append(dict(base, status="PENDING", days=0))
             continue
         e = float(g["open"].iloc[0]); last = float(g["close"].iloc[-1])
-        gross = (last / e - 1) * 100
+        import total_return as tr                                    # 2026-10-12: dividends received count; big payout / demerger -> cash
+        tot = tr.trade_total_return(n["symbol"], g["trade_date"], g["close"], e)
+        gross = (tot if np.isfinite(tot) else last / e - 1) * 100
         rows.append(dict(base, entry_date=str(g["trade_date"].iloc[0].date()), entry=_r(e),
                          last_date=str(g["trade_date"].iloc[-1].date()), last=_r(last),
                          ret_gross=_r(gross), ret_net=_r(gross - _cost(n)),

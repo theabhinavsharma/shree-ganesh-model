@@ -90,6 +90,9 @@ def partial(a: pd.Series, b: pd.Series, z: pd.Series) -> float:
 def main() -> None:
     t0 = time.time()
     D = sp.load(None); X = sre.features(D); imap = sp.industry_maps()["analogs"]; P = sre.model_scores()
+    if os.environ.get("SGM_RERUN_TAG") and os.environ.get("SGM_REPRO") != "1":   # 2026-10-12: a tagged re-run passes the data gate first
+        sys.path.insert(0, str(ROOT / "src/agentic/trust")); import data_ready as _dr  # noqa: E401
+        _dr.rerun_gate(EXP_ID, os.environ["SGM_RERUN_TAG"], D["cal"])
     S = pd.read_parquet(SCORES); S["date"] = pd.to_datetime(S["date"])
     cal = D["cal"]
     grid = lambda o: [d for d in sp.weekly_grid(cal, o) if d >= pd.Timestamp(START)]  # noqa: E731
@@ -177,7 +180,7 @@ def main() -> None:
         print(f"\nREPRO RUN (not logged) · VERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm passes'}")
         return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + (f"-RERUN-{os.environ['SGM_RERUN_TAG']}" if os.environ.get("SGM_RERUN_TAG") else "-RESULT"), verdict=passed or "no arm passes",
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
                                  ic={k: {kk: round(vv, 3) if isinstance(vv, float) and np.isfinite(vv) else vv for kk, vv in v.items()} for k, v in summ.items() if "|ic_F" in k or "|pic_F" in k},
                                  cols="CAGR, disc, conf, maxDD, phases"), default=str) + "\n")

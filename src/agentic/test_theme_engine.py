@@ -129,6 +129,11 @@ def main() -> None:
                   dr.span("theme exposure filings", E["an_dt"], pd.Timestamp(tif.START) - pd.Timedelta(days=365), end)]
         if os.environ.get("SGM_REPRO") != "1":
             dr.gate("EXP-2026-09-30-v3-vs-g1", checks, run=os.environ.get("SGM_RERUN_TAG") or "RESULT")
+            if os.environ.get("SGM_G1T") == "1":                 # 2026-10-12: g1-fade is logged from the same run, so it gets its own gate line
+                dr.gate("EXP-2026-09-30-g1-fade", checks, run=os.environ.get("SGM_RERUN_TAG") or "RESULT")
+    if os.environ.get("SGM_V3_VS_G1") != "1" and os.environ.get("SGM_RERUN_TAG") and os.environ.get("SGM_REPRO") != "1":
+        sys.path.insert(0, str(ROOT / "src/agentic/trust")); import data_ready as _dr  # noqa: E401  2026-10-12: tagged re-run gate
+        _dr.rerun_gate(EXP_ID, os.environ["SGM_RERUN_TAG"], D["cal"])
     R0 = run_phase(0)
     if os.environ.get("SGM_V3_VS_G1") == "1":   # EXP-2026-09-30-v3-vs-g1 (V3 = TFADE) and EXP-2026-09-30-g1-fade (G1T), both vs G1
         vs = ("V3", "G1T")
@@ -150,7 +155,7 @@ def main() -> None:
             fh.write(json.dumps(dict(ts=now, id="EXP-2026-09-30-v3-vs-g1" + (f"-RERUN-{tag}" if tag else "-RESULT"), verdict=["V3"] if ok("V3") else "no arm passes",
                                      note=("same registered test re-run: " + tag) if tag else None, arms=arms("V3"), cols="CAGR, disc, conf, maxDD, phases")) + "\n")
             if os.environ.get("SGM_G1T") == "1":
-                fh.write(json.dumps(dict(ts=now, id="EXP-2026-09-30-g1-fade-RESULT", verdict=["G1T"] if ok("G1T") else "no arm passes",
+                fh.write(json.dumps(dict(ts=now, id="EXP-2026-09-30-g1-fade" + (f"-RERUN-{tag}" if tag else "-RESULT"), verdict=["G1T"] if ok("G1T") else "no arm passes",
                                          arms=arms("G1T"), cols="CAGR, disc, conf, maxDD, phases")) + "\n")
         return
     ph = {k: [bool(sp.beats(R0[k], R0["V2"]))] for k in ARMS}
@@ -177,7 +182,7 @@ def main() -> None:
     if repro:
         print("REPRO RUN (not logged)"); return
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + "-RESULT", verdict=passed or "no arm passes",
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + (f"-RERUN-{os.environ['SGM_RERUN_TAG']}" if os.environ.get("SGM_RERUN_TAG") else "-RESULT"), verdict=passed or "no arm passes",
                                  arms={k: [round(R0[k][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] + [R0[k].get("phases_beaten")] for k in R0},
                                  cols="CAGR, disc, conf, maxDD, phases"), default=str) + "\n")
     print(f"\nVERDICT: {'PASS: ' + ', '.join(passed) if passed else 'no arm beats V2 by the registered rule'} · {time.time() - t0:.0f}s")
