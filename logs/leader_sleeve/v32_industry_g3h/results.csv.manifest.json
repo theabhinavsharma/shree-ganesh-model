@@ -1,0 +1,12 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-12-v32-industry-g3h",
+ "producer": "src/agentic/test_v32_industry_g3.py",
+ "definitions": "EXP-2026-10-12-v32-industry-g3 (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3.2 picks from industries that are hot on price (heat >= 0.70) unless their budget / activity data rank in the\nbottom 30% (G1). Would it pick better from industries that are hot AND in the top half on industry fundamentals (G3: F5_pct >=\n0.50), or the same with the government-press-release pillar (G3H: F5_H_pct >= 0.50)? Everything else is V3.2: Rs 1 cr bar,\nnew listings, model top 9, financial / fading filters, trade-for-trade dropped, no refill. Weekly entries from 2019, schedules\n0-4, test_v3_l1_newlist_cost.run_cost (cash-flow corrected, liquidity-scaled costs), signal-day close (next open reported).\nPASS per arm: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and in >= 4 of 5.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-12T17:20:23"
+}
