@@ -1,5 +1,8 @@
 """V3.2 money path when every weekly list of a year gets new money (2026-10-13; Abhinav: 'mujhe all investments done that year ke
 liye batao - roi then agle saal ke first 6 months tak jayega'). EXPLORATION, no rule changed.
+--roll (Abhinav: 'iss week jo becha usko agle 6M wale cycle mein dalunga'): every list in Y also gets the proceeds of the lot sold
+just before it (the lot bought 26 lists earlier, same year); after Dec 31 nothing new is bought and sales are kept as cash, so
+the year's books close when its last lot is sold, around July of Y+1. Outputs weekly_roll.csv / monthly_roll.csv.
 
 Year Y: Rs 1 lakh of NEW money into every weekly V3.2 list dated in Y (schedule 3, from Apr 2019); each lot is sold at the close
 126 sessions after its list date and its money is kept as cash (not reinvested), so the year is complete when its last lot is
@@ -13,7 +16,7 @@ import numpy as np, pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src/agentic"))
 import research_panel as rp, sim_leader_portfolio_7x as sp, sim_screen_rank_exit as sre, v3_rule  # noqa: E402
-HOLD = 126; OUT = ROOT / "reports/v32_yearly_growth"
+HOLD = 126; OUT = ROOT / "reports/v32_yearly_growth"; ROLL = "--roll" in sys.argv
 
 
 def main():
@@ -54,11 +57,21 @@ def main():
         if cal[last] not in evals:
             evals.append(cal[last])
 
+        cap = [1.0] * len(paths)                                   # money going into each lot: Rs 1 lakh new (+ proceeds if rolled)
+        if ROLL:
+            for k in range(26, len(paths)):
+                i0p, ep, vp = paths[k - 26]
+                assert ep < paths[k][0], "lot k-26 must be sold before list k"
+                cap[k] = 1.0 + cap[k - 26] * vp[-1]
+
         def at(i):
             inp = val = 0.0
-            for i0, e, v in paths:
+            for k, (i0, e, v) in enumerate(paths):
                 if i0 <= i:
-                    inp += 1; val += v[min(i, e) - i0]
+                    inp += 1
+                    if ROLL and k + 26 < len(paths) and paths[k + 26][0] <= i:
+                        continue                                       # its money now sits inside lot k + 26
+                    val += cap[k] * v[min(i, e) - i0]
             return inp, val
         for n, d in enumerate(evals, 1):
             inp, val = at(tpos[d])
@@ -73,7 +86,8 @@ def main():
         inp, val = at(last)
         print(f"{Y}: {len(lots)} lots, Rs {inp:.0f} L in · last sale {cal[last].date()}{'' if done else ' (lots still open: value to date)'} · "
               f"value {val:.1f} L · ROI {(val / inp - 1) * 100:+.1f}% · monthly ROI " + " ".join(f"{x['month'][2:]}:{x['roi_pct']:+.0f}" for x in M if x["year"] == Y), flush=True)
-    pd.DataFrame(W).to_csv(OUT / "weekly_all.csv", index=False); pd.DataFrame(M).to_csv(OUT / "monthly_all.csv", index=False)
+    tag = "roll" if ROLL else "all"
+    pd.DataFrame(W).to_csv(OUT / f"weekly_{tag}.csv", index=False); pd.DataFrame(M).to_csv(OUT / f"monthly_{tag}.csv", index=False)
 
 
 if __name__ == "__main__":

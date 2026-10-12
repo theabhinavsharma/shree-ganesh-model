@@ -36,7 +36,7 @@
     <h1>V3.2 money path by year</h1>
     <p class="vg-take dash-skeleton" id="takeaway">—</p>
     <div class="vg-plan" role="group" aria-label="How the money goes in">
-      <button type="button" id="planAll" aria-pressed="true">New money every week of the year</button>
+      <button type="button" id="planAll" aria-pressed="true">New money every week, sales rolled</button>
       <button type="button" id="planRoll" aria-pressed="false">₹26 lakh over 26 weeks, then rolled</button>
     </div>
   </header>
@@ -66,8 +66,8 @@
   const YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
   const PLANS = {
     all: { wk: 'weekly_all', mo: 'monthly_all', ye: 'yearEndAll', moKey: 'idx', tail: true,
-      noteMoney: 'Each chart is one year: ₹1 lakh of new money into every weekly V3.2 list dated that year (about 50 lists, ₹50 lakh). Each lot is sold 6 months after it was bought and its money waits as cash, so a year is finished only when its last lot is sold, around July of the next year. Value includes trading costs and dividends. 2019 starts in April, when the data starts. Same scale on every chart.',
-      noteRoi: 'Portfolio value ÷ money put in − 1, at each month’s last close, from January to the month the year’s last lot is sold. Each rupee is invested for one 6-month lot, so the final figure is a 6-month return. The dashed line is break-even.' },
+      noteMoney: 'Each chart is one year: ₹1 lakh of new money into every weekly V3.2 list dated that year (about 50 lists, ₹50 lakh), and each lot sold after 6 months goes into that week’s new list too. After December 31 nothing new is bought: lots sold from January to July are kept as cash, so the year’s books close when its last lot is sold. Money put in before July works through two lots, money put in after it through one. Value includes trading costs and dividends. 2019 starts in April, when the data starts. Same scale on every chart.',
+      noteRoi: 'Portfolio value ÷ money put in − 1, at each month’s last close, from January to the month the year’s last lot is sold. The dashed line is break-even.' },
     roll: { wk: 'weekly', mo: 'monthly', ye: 'yearEnd', moKey: 'month', tail: false,
       noteMoney: 'Each chart is a fresh start that year: ₹1 lakh into every weekly V3.2 list for the first 26 lists, so money in stops at ₹26 lakh. Each lot is sold 6 months after purchase and the money goes into that week’s new list, so every rupee works through two lots in the year. Value includes trading costs and dividends. 2019 starts in April. Same scale on every chart.',
       noteRoi: 'Portfolio value ÷ money put in − 1, at each month’s last close. The dashed line is break-even.' }
@@ -218,10 +218,10 @@
       const num = (r, s) => { const e = document.createElement('b'); mark(e, P.ye, 'roi_pct', 'year=' + r.year); e.textContent = s; take.appendChild(e); };
       const done = rows.filter((r) => r.complete && r.year < 2026), now = rows.find((r) => r.year === 2026);
       const best = done.reduce((a, b2) => (b2.roi_pct > a.roi_pct ? b2 : a)), worst = done.reduce((a, b2) => (b2.roi_pct < a.roi_pct ? b2 : a));
-      if (P.tail) add('New money into every weekly list: once each year’s last lot was sold, its money came back between ');
+      if (P.tail) add('New money into every weekly list, with sales rolled into the next list: once each year’s last lot was sold, the money put in that year had returned between ');
       else add('A fresh ₹26 lakh rolled through the year ended the year between ');
       num(worst, pct(worst.roi_pct) + ' (' + worst.year + ')'); add(' and '); num(best, pct(best.roi_pct) + ' (' + best.year + ')');
-      add(P.tail ? ', a 6-month return on each rupee. ' : ', with each rupee working through two lots. ');
+      add(P.tail ? '. ' : ', with each rupee working through two lots. ');
       if (now) { add('2026 so far: '); num(now, pct(now.roi_pct)); add('.'); }
     } else if (ye.status === 'error') { take.classList.remove('dash-skeleton'); take.textContent = ''; }
 
