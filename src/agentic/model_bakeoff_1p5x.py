@@ -512,6 +512,10 @@ def main(argv=None):
                     "features (registered A/B tests only, e.g. EXP-2026-09-30-v3-pnl; default: none = production model)")
     ap.add_argument("--exclude-train", default=None, help="START:END (YYYY-MM-DD): drop training rows dated on/before END whose 95-session "
                     "outcome window reaches START or later (2026-10-10: COVID-boom-excluded model, EXP-2026-10-10-model-minus-boom)")
+    ap.add_argument("--train-window-years", type=int, default=None, help="N: for test year Y train only on rows dated Y-N-01-01 "
+                    "onward (rolling window; registered A/B tests only, EXP-2026-10-12-v32-training-window; default: all rows)")
+    ap.add_argument("--seed-offset", type=int, default=0, help="K: shift every random seed by K (row sampling, LightGBM, XGBoost, "
+                    "MLP) to measure retrain noise (EXP-2026-10-12-v32-training-window); default 0 = production seeds")
     ap.add_argument("--train-from", default=None, help="YYYY-MM-DD: train only on rows dated on/after this (registered A/B "
                     "tests only; default: all rows = production model)")
     args = ap.parse_args(argv)
@@ -692,26 +696,29 @@ def main(argv=None):
         tr = L[L["win_end"] < i0]                              # measured label window ends before the first test session
         if args.train_from:
             tr = tr[tr["trade_date"] >= pd.Timestamp(args.train_from)]
+        if args.train_window_years:
+            tr = tr[tr["trade_date"] >= pd.Timestamp(f"{Y - args.train_window_years}-01-01")]
         if args.exclude_train:                                 # drop rows whose outcome window touches the excluded period
             xa, xb = (pd.Timestamp(x) for x in args.exclude_train.split(":"))
             tr = tr[~((tr["trade_date"] <= xb) & (tr["win_end"] >= int(cal.searchsorted(xa))))]
         te = S[S["year"] == Y]                                 # ALL rows of Y: the point-in-time candidate set
         if te.empty or tr["y95"].nunique() < 2:
             continue
-        sub = tr.sample(min(len(tr), sub_cap), random_state=Y)
+        K = args.seed_offset; rs = dict(random_state=Y + K) if K else {}   # K = 0: production seeds, call unchanged
+        sub = tr.sample(min(len(tr), sub_cap), random_state=Y + K)
         lo = make_pipeline(SimpleImputer(strategy="median"), StandardScaler(), LogisticRegression(max_iter=300, C=0.5))
         lo.fit(sub[FEATS], sub["y95"]); preds["logit"][te.index] = lo.predict_proba(te[FEATS])[:, 1]
         gb = lgb.LGBMClassifier(n_estimators=n_trees, learning_rate=0.03, num_leaves=63, min_child_samples=300, subsample=0.8,
-                                subsample_freq=1, colsample_bytree=0.8, reg_lambda=1.0, verbose=-1)
+                                subsample_freq=1, colsample_bytree=0.8, reg_lambda=1.0, verbose=-1, **rs)
         gb.fit(tr[FEATS], tr["y95"]); preds["lgbm"][te.index] = gb.predict_proba(te[FEATS])[:, 1]
         xg = xgb.XGBClassifier(n_estimators=n_trees, learning_rate=0.03, max_depth=6, subsample=0.8, colsample_bytree=0.8,
-                               min_child_weight=50, tree_method="hist", eval_metric="auc", n_jobs=4)
+                               min_child_weight=50, tree_method="hist", eval_metric="auc", n_jobs=4, **rs)
         xg.fit(tr[FEATS], tr["y95"]); preds["xgb"][te.index] = xg.predict_proba(te[FEATS])[:, 1]
-        mlp_predict, mlp_info = fit_mlp(sub, FEATS, seed=Y, max_epochs=mlp_epochs, patience=mlp_pat)
+        mlp_predict, mlp_info = fit_mlp(sub, FEATS, seed=Y + K, max_epochs=mlp_epochs, patience=mlp_pat)
         preds["mlp"][te.index] = mlp_predict(te)
         trs = tr.sort_values("trade_date")
         rk = lgb.LGBMRanker(n_estimators=n_rank, learning_rate=0.05, num_leaves=63, min_child_samples=300, subsample=0.8,
-                            subsample_freq=1, colsample_bytree=0.8, verbose=-1)
+                            subsample_freq=1, colsample_bytree=0.8, verbose=-1, **rs)
         rk.fit(trs[FEATS], trs["y95"].astype(int), group=trs.groupby("trade_date", sort=True).size().values)
         preds["lgbm_rank"][te.index] = rk.predict(te[FEATS])
         fold_end[te.index] = tr["trade_date"].max()

@@ -1,0 +1,62 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-12-v32-training-window",
+ "producer": "src/agentic/test_v32_promoter_in_model.py",
+ "definitions": "EXP-2026-10-12-v32-training-window (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: does the model pick better for V3.2 if it learns only from recent years, or from every year except the COVID boom?\nArms (each = V3.2 on that model's scores: v3_rule.picks_v31 minus trade-for-trade on the list date, no refill):\n  V3.2       live model (50 features, all rows from 2016)\n  V3.2_R3    model retrained per test year Y on rows dated Y-3-01-01 onward only (rolling 3 years)\n  V3.2_NC    model retrained on 2016+ minus every row whose 95-session outcome window touches 2020-2021\n  V3.2_SEED  noise floor: live recipe with every random seed shifted by 1 (diagnostic, not a candidate)\nWindow: weekly entries from 2019-04-01, schedules 0-4; eras 2019-22 / 2023+. Engine: test_v3_l1_newlist_cost.run_cost\n(dividends counted, big payouts / demergers as cash, liquidity-scaled costs), entry at the signal-day close; next open reported.\nPASS per arm (R3, NC): beats live V3.2 (CAGR higher in both eras, max drawdown not worse by > 2 points) at schedule 0 and in >= 4\nof 5. If the schedule-0 lead in either era is not bigger than SEED's gap from live, it reads 'PASS within retrain noise'.\nModels: logs/leader_sleeve/v32_training_window/model_R3, model_NC, model_SEED. SGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>.\n",
+ "phases": {
+  "V3.2_R3": "0/5",
+  "V3.2_NC": "0/5",
+  "V3.2_SEED": "0/5"
+ },
+ "verdict": {
+  "V3.2_R3": "no pass",
+  "V3.2_NC": "no pass"
+ },
+ "retrain_noise": {
+  "cagr_disc": 0.23667406089313658,
+  "cagr_conf": 0.9725979727803065
+ },
+ "lists_changed": {
+  "V3.2_R3": 333,
+  "V3.2_NC": 282,
+  "V3.2_SEED": 340
+ },
+ "model_weekly_auc": {
+  "V3.2_R3": {
+   "2019": 0.646,
+   "2020": 0.646,
+   "2021": 0.682,
+   "2022": 0.648,
+   "2023": 0.664,
+   "2024": 0.668,
+   "2025": 0.629,
+   "2026": 0.596
+  },
+  "V3.2_NC": {
+   "2019": 0.646,
+   "2020": 0.643,
+   "2021": 0.71,
+   "2022": 0.668,
+   "2023": 0.654,
+   "2024": 0.66,
+   "2025": 0.644,
+   "2026": 0.605
+  },
+  "V3.2_SEED": {
+   "2019": 0.649,
+   "2020": 0.645,
+   "2021": 0.711,
+   "2022": 0.664,
+   "2023": 0.661,
+   "2024": 0.67,
+   "2025": 0.649,
+   "2026": 0.604
+  }
+ },
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-12T19:43:57"
+}
