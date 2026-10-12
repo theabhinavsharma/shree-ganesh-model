@@ -1,0 +1,30 @@
+V3.2: scores 2019-01-04..2026-10-06 · 651,591 rows
+V3.2_A: scores 2021-01-06..2026-10-06 · 520,324 rows
+V3.2_B: scores 2021-01-06..2026-10-06 · 520,324 rows
+
+=== DATA READINESS · EXP-2026-10-12-promoter-in-model (RESULT) · READY ===
+  ✅ coverage     promoter buying / selling filled in the model rows (liquid stocks) from 2019-04
+  ✅ qc           insider history: months 2019-01..last month with disclosures (share)
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         V3.2 model scores
+  ✅ span         V3.2_A model scores
+  ✅ span         V3.2_B model scores
+wiring check: live V3.2 from 2019-04-01 [56.2, 50.3, 62.3, -38.5] vs logged [56.2, 50.3, 62.3, -38.5]
+lists that differ (of 285): A vs live 282 · B vs live 283 · B vs A 281 (403 names) · avg names V3.2 6.0 V3.2_A 5.9 V3.2_B 6.0
+schedule 0: V3.2 47.1/60.6/-36.8 · V3.2_A 52.3/73.1/-32.6 · V3.2_B 46.8/69.4/-29.6 · B beats A False
+schedule 1: V3.2 49.5/63.4/-36.5 · V3.2_A 54.1/68.4/-33.6 · V3.2_B 50.4/66.5/-30.2 · B beats A False
+schedule 2: V3.2 50.9/62.9/-36.0 · V3.2_A 50.1/63.9/-35.7 · V3.2_B 48.6/63.8/-31.1 · B beats A False
+schedule 3: V3.2 48.0/64.7/-33.6 · V3.2_A 48.2/62.4/-34.3 · V3.2_B 46.7/64.7/-30.3 · B beats A False
+schedule 4: V3.2 48.8/62.2/-32.6 · V3.2_A 50.9/65.5/-32.8 · V3.2_B 50.4/66.9/-30.3 · B beats A False
+V3.2_A model weekly AUC by test year: {'2021': 0.677, '2022': 0.65, '2023': 0.664, '2024': 0.672, '2025': 0.642, '2026': 0.605}
+V3.2_B model weekly AUC by test year: {'2021': 0.681, '2022': 0.648, '2023': 0.665, '2024': 0.67, '2025': 0.642, '2026': 0.606}
+
+=== EXP-2026-10-12-promoter-in-model · weekly entries 2021-01-01..2026-10-09 · schedule 0 (years = avg of 5) ===
+V3.2    CAGR  55.8 · 2021-22  47.1 · 2023+  60.6 · maxDD  -36.8 · range 55.8..58.8 · years 2023:+87 2024:+160 2025:-2 2026:+33 · next open 53.8 (45.5/58.3/-36.6)
+V3.2_A  CAGR  65.7 · 2021-22  52.3 · 2023+  73.1 · maxDD  -32.6 · range 57.4..65.7 · years 2023:+104 2024:+162 2025:+2 2026:+26 · next open 63.8 (50.3/71.4/-32.4)
+V3.2_B  CAGR  61.2 · 2021-22  46.8 · 2023+  69.4 · maxDD  -29.6 · range 58.3..61.2 · years 2023:+103 2024:+159 2025:+2 2026:+27 · next open 59.7 (45.1/67.9/-29.4)
+B_vs_A: beats in 0/5 (schedule 0 no)
+B_vs_live: beats in 2/5 (schedule 0 no)
+A_vs_live: beats in 3/5 (schedule 0 yes)
+PROMOTER EFFECT (B vs A): no pass · ADOPTION AS-IS (B also beats live V3.2): no pass
+done in 38s

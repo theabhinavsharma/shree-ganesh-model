@@ -3,12 +3,12 @@
  "experiment": "EXP-2026-10-12-v32-promoter-buyers",
  "producer": "src/agentic/test_v32_promoter_buyers.py",
  "definitions": "EXP-2026-10-12-v32-promoter-buyers (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: on top of V3.2, move names whose promoters bought shares in the market in the last 90 days to the front of the\ncandidate pool (only within the model's top 25), then pick as V3.2 does. Does that beat V3.2?\nArms: V3.2 (pool by model rank -> top 9 -> financial / fading filters -> trade-for-trade dropped, no refill) and V3.2_PB (names\nwith prom_buys90 > 0 and pool rank <= 25 first, in model order; then the same steps). prom_buys90: anatomy rows as of the list\ndate, at most 7 days old. Window: weekly entries from 2019-04-01, schedules 0-4. Engine: test_v3_l1_newlist_cost.run_cost\n(dividends counted, big payouts / demergers as cash, liquidity-scaled costs), entry at the signal-day close; the next-open\nvariant is reported too. PASS: CAGR higher in both eras and max drawdown not worse by > 2 points, at schedule 0 and >= 4 of 5.\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
- "weeks_changed": 248,
- "names_moved_in": 336,
+ "weeks_changed": 256,
+ "names_moved_in": 345,
  "units": {
   "cagr": "percent a year",
   "maxdd": "percent",
   "years": "calendar-year return percent, average of 5 schedules"
  },
- "updated": "2026-10-12T17:15:11"
+ "updated": "2026-10-12T17:40:31"
 }

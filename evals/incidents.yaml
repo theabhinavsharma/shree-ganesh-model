@@ -315,3 +315,23 @@ incidents:
       that value in the stub; any backtest position or label held across one must treat it as cash or hold the demerged shares
       — check raw vs adjusted returns of the best and worst picks (src/agentic/audit_ca_picks.py).
     commit: c2e24fc
+  - id: INC-2026-10-12-insider-gap-mar-apr-2026
+    date: '2026-10-12'
+    title: Insider / promoter disclosures missing for March-April 2026
+    found_by: Claude, data check while setting up EXP-2026-10-12-promoter-in-model (months with zero disclosures)
+    root_cause: When NSE moved insider filings to a new system on 2026-05-01, the new fetcher started at the new system's first
+      filing (May 3) and the old history ended at the last full fetch (Feb 28); the weeks in between were only in the old system's
+      live store, which nothing merged. Freshness checks only looked at the newest date.
+    blast_radius: 'prom_buys90 / prom_sells90 understated on 1,851 / 334 model rows (2026-03-04..07-31). Not a live-model input;
+      V3.2 does not use it. Re-ran EXP-2026-10-04-v3-promoter-signals and EXP-2026-10-12-v32-promoter-buyers (RERUN-pitgap-20261012):
+      verdicts unchanged.'
+    fix: repair_pit_gap_2026.py copies the 2,107 old-system rows for 2026-03-01..05-02 into data/raw/pit_gap_2026/; fetch_pit_gg.merge_history
+      adds them on every daily rebuild; model rows rebuilt.
+    guard_eval: data.insider_no_empty_month
+    skills:
+    - sgm-new-data-source
+    - sgm-triage
+    - sgm-new-idea
+    lesson: When a source moves to a new system, check the handover weeks month by month (no empty month between the old history's
+      last row and the new feed's first); a freshness check only sees the newest date.
+    commit: 585d4f3

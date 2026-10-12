@@ -1,0 +1,40 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-12-promoter-in-model",
+ "producer": "src/agentic/test_v32_promoter_in_model.py",
+ "definitions": "EXP-2026-10-12-promoter-in-model (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: instead of a hand rule that moves promoter buyers up within the model's top 25, let the model itself see promoter\nmarket buying and selling and decide how much they matter. Two models trained identically on rows from April 2019 on (when the\npromoter data starts): A = today's 50 inputs, B = the same + prom_buys90 + prom_sells90. Run V3.2 on each model's scores.\nArms: V3.2 (live model, trained from 2016; reference), V3.2_A, V3.2_B. Selection: v3_rule.picks_v31 minus trade-for-trade on the\nlist date, no refill. Window: weekly entries from 2021-01-01, schedules 0-4; eras 2021-22 / 2023+ (AMENDMENT before any outcome: a\nmodel trained from 2019-04 cannot score 2020, the MLP has no fit block). Engine:\ntest_v3_l1_newlist_cost.run_cost (dividends counted, big payouts / demergers as cash, liquidity-scaled costs), entry at the\nsignal-day close; the next-open variant is reported too.\nPROMOTER EFFECT (the verdict): V3.2_B beats V3.2_A (CAGR higher in both eras, max drawdown not worse by > 2 points) at schedule 0\nand in >= 4 of 5. ADOPTION AS-IS: V3.2_B also beats live V3.2 by the same rule.\nModels: logs/leader_sleeve/promoter_in_model/model_A, model_B (model_bakeoff_1p5x.py --entry close --train-from 2019-04-01).\nSGM_REPRO=1: log nothing. SGM_RERUN_TAG=<tag>: log -RERUN-<tag>.\n",
+ "phases": {
+  "B_vs_A": "0/5",
+  "B_vs_live": "2/5",
+  "A_vs_live": "3/5"
+ },
+ "lists_changed": {
+  "V3.2_A": 282,
+  "V3.2_B": 283,
+  "B_vs_A": 281
+ },
+ "model_weekly_auc": {
+  "V3.2_A": {
+   "2021": 0.677,
+   "2022": 0.65,
+   "2023": 0.664,
+   "2024": 0.672,
+   "2025": 0.642,
+   "2026": 0.605
+  },
+  "V3.2_B": {
+   "2021": 0.681,
+   "2022": 0.648,
+   "2023": 0.665,
+   "2024": 0.67,
+   "2025": 0.642,
+   "2026": 0.606
+  }
+ },
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "years": "calendar-year return percent, average of 5 schedules"
+ },
+ "updated": "2026-10-12T17:45:11"
+}

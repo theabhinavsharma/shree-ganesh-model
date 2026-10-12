@@ -13,8 +13,3 @@ Eras: disc = 2016-2022, conf = 2023+. A finding is only trusted if it holds in b
 Sessions are the panel's dates minus the NSE-holiday dates on which the panel copies every symbol's previous row (75 dates 2020-2026 on the 2026-09-27 backup; list in results.json), so 95 sessions means 95 real sessions in every era.
 
 Limitations: mcap is PIT only for pnl_implied rows; industry is a 2026 label applied to all years; labels on windows with missing sessions are lower bounds; panel-computed rolling columns (SMAs, ADV, volume ratios, RSI, 20d delivery) still include the copied holiday rows; see the module docstring for the 2026-09-27 audit fixes.
-
-## Model bake-off (src/agentic/model_bakeoff_1p5x.py)
-
-- `bakeoff.json` — within-week AUC / top-1% and weekly top-10 tradable hit rate per model, per era and per year, close-entry and next-open entry; fold details and feature coverage by year.
-- `bakeoff_preds.parquet` — every model's out-of-sample score for each test row (see manifest).

@@ -8,6 +8,7 @@
   "data.holidays_match_panel",
   "data.input_chain",
   "data.insider_fresh",
+  "data.insider_no_empty_month",
   "data.manifests",
   "data.no_duplicates",
   "data.no_holiday_copies",
@@ -57,6 +58,7 @@
   "INC-2026-10-02-weekly-freshness-deadlock",
   "INC-2026-10-04-derived-inputs-unscheduled",
   "INC-2026-10-06-daily-run-hung-silent",
+  "INC-2026-10-12-insider-gap-mar-apr-2026",
   "INC-2026-10-12-payout-reinvested-in-stub"
  ],
  "lessons": {
@@ -72,7 +74,8 @@
    "87c6f694905d",
    "a4fcb7e24af1",
    "ab9b6efbe2d1",
-   "b31a1ac5e634"
+   "b31a1ac5e634",
+   "fc2cd9e0bb4e"
   ],
   "sgm-new-data-source": [
    "0cbf0a9bcd58",
@@ -88,7 +91,8 @@
    "ab9b6efbe2d1",
    "b31a1ac5e634",
    "b5686081fc85",
-   "ed436f7092bf"
+   "ed436f7092bf",
+   "fc2cd9e0bb4e"
   ],
   "sgm-new-idea": [
    "0cbf0a9bcd58",
@@ -96,7 +100,8 @@
    "6c6dd865a856",
    "74a5a781ad81",
    "8baf4d91b659",
-   "b5686081fc85"
+   "b5686081fc85",
+   "fc2cd9e0bb4e"
   ],
   "sgm-incident": [
    "a4fcb7e24af1"
