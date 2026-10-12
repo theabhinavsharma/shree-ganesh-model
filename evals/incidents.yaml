@@ -292,3 +292,26 @@ incidents:
     lesson: 'Anything that must happen on a schedule needs an alarm that lives OUTSIDE the job: a watchdog checks for stuck
       runs and missing messages; every step has a wall-clock limit that kills its whole process group.'
     commit: ''
+  - id: INC-2026-10-12-payout-reinvested-in-stub
+    date: '2026-10-12'
+    title: Big payouts and demergers reinvested into the leftover stub in backtests and labels
+    found_by: user asked whether corporate actions could have skewed results; audit_ca_picks.py top-20 raw vs adjusted check
+      (MAJESCO adjusted +837%, raw -89%, no split/bonus)
+    root_cause: price_adjustment_factor_to_present applies a multiplicative price-only factor for special dividends / demergers
+      / schemes; when the factor is tiny (MAJESCO 0.0118 after a Rs 974 payout on a Rs 985 share) the adjusted series assumes
+      the payout is reinvested in the stub, whose later 9x rally became a fake +837% return; one-day-jump checks cannot see
+      it because the adjusted series is continuous
+    blast_radius: 10 of 2,755 V3.1 phase-0 pick-weeks (MAJESCO x7 2020, SHANKARA x3 2025); 34 value-removal events since mid-2018;
+      portfolio CAGR V3.1 51.8->50.2, V3.2 56.7->54.3, V3 41.8->40.1 (2021 +26 pts too high); 199 of 125,912 positive model
+      labels; decisions unchanged (V3.1 > V3 5/5, V3.2 > V3.1)
+    fix: quantified with payouts as cash; engine-level cash treatment + label rebuild + re-run of registered tests proposed
+      to the user; guard eval data.value_removal_held added in c2e24fc
+    guard_eval: data.value_removal_held
+    skills:
+    - sgm-new-idea
+    - sgm-new-data-source
+    - sgm-triage
+    lesson: A price-only factor below 0.5 (payout or demerger moving most of the value out) makes the adjusted series reinvest
+      that value in the stub; any backtest position or label held across one must treat it as cash or hold the demerged shares
+      — check raw vs adjusted returns of the best and worst picks (src/agentic/audit_ca_picks.py).
+    commit: c2e24fc
