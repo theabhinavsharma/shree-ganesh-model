@@ -602,6 +602,30 @@ def nsdl_fpi_sector_feed(ctx: dict) -> dict:
                                       (f"newest report {age} days old") if age > 25 else "") if x))
 
 
+def value_removal_held(ctx: dict) -> dict:
+    """Big payouts / demergers (applied price-only factor < 0.5: most of the company's value leaves as cash or demerged shares).
+    The adjusted series 'reinvests' that value into the leftover stub, so a backtest or label held across one is wrong
+    (INC-2026-10-12-payout-reinvested-in-stub: MAJESCO 2020 +837% instead of ~+40%). WARN when (a) a live Sri Lakshmi batch holds
+    a name through such an event (handle the cash / demerged shares by hand) or (b) V3.1 backtest pick-weeks are still held
+    across one (until the engine treats them as cash)."""
+    po = pd.read_parquet(ROOT / "data/corporate_actions_full_history/normalized/price_only_ca_factors.parquet", columns=["symbol", "ex_date", "price_factor", "applied", "kind"])
+    po["ex_date"] = pd.to_datetime(po["ex_date"]); ev = po[po["applied"] & (po["price_factor"] < 0.5)]
+    live = []
+    for f in sorted((ROOT / "logs/sri_lakshmi").glob("screen_*.json")):
+        sc = json.loads(f.read_text()); d0 = pd.Timestamp(sc["data_through"])
+        for n in sc["names"]:
+            hit = ev[(ev["symbol"] == n["symbol"]) & (ev["ex_date"] > d0) & (ev["ex_date"] <= d0 + pd.Timedelta(days=190))]
+            live += [f"{n['symbol']} {r.kind} {r.ex_date.date()} (batch {sc['screen_id']})" for r in hit.itertuples()]
+    pk_f = ROOT / "logs/leader_sleeve/v31_hits_by_year/v31_picks.csv"
+    bt = 0
+    if pk_f.exists():
+        pk = pd.read_csv(pk_f, parse_dates=["trade_date"]).merge(ev[["symbol", "ex_date"]], on="symbol")
+        bt = int(((pk["ex_date"] > pk["trade_date"]) & (pk["ex_date"] <= pk["trade_date"] + pd.Timedelta(days=190))).sum())
+    st = "WARN" if live or bt else "PASS"
+    return _res(st, f"{len(live)} live holdings · {bt} backtest pick-weeks held through a payout/demerger",
+                ("live: " + "; ".join(live[:5]) if live else "") + (f"{'; ' if live else ''}backtest engine still reinvests payouts into the stub (see audit_ca_picks.py)" if bt else ""))
+
+
 def watchdog_alive(ctx: dict) -> dict:
     """The independent watchdog (src/agentic/watchdog.py, launchd com.sgm.watchdog, every 30 min) wrote its heartbeat in the
     last 2 hours. Without it a hung run is silent: the daily run's own checks cannot fire while it is stuck (2026-10-06)."""

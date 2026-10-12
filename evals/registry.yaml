@@ -341,6 +341,16 @@ evals:
     owner: system
     check: nsdl_fpi_sector_feed
 
+  - id: data.value_removal_held
+    statement: "No live Sri Lakshmi holding goes through a big payout or demerger (applied price-only factor < 0.5) unflagged, and the backtest's exposure to such events is reported until the engine treats them as cash."
+    why: "INC-2026-10-12-payout-reinvested-in-stub: the adjusted series reinvests a 98.8% payout (MAJESCO, Dec 2020) into the leftover stub, turning a ~+40% return into +837% in the backtest and in model labels; the one-day-jump checks cannot see it (the series is smooth)."
+    source_of_truth: "data/corporate_actions_full_history/normalized/price_only_ca_factors.parquet (applied, price_factor < 0.5), logs/sri_lakshmi/screen_*.json, logs/leader_sleeve/v31_hits_by_year/v31_picks.csv"
+    threshold: "0 live holdings through such an event without a note; backtest pick-weeks reported (0 once the engine fix lands)"
+    action: warn
+    cadence: daily
+    owner: system
+    check: value_removal_held
+
   - id: ops.watchdog_alive
     statement: "The independent watchdog checked in within the last 2 hours (it kills runs stuck over 4 hours and alerts when a daily or weekend message is missing)."
     why: "On 2026-10-05 the Mac lost internet, the daily run hung for over a day, launchd would not start the next runs, and no message or alarm went out until the user noticed (INC-2026-10-06-daily-run-hung-silent)."
