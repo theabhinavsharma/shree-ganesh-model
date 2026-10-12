@@ -1,0 +1,3307 @@
+{
+ "2019": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2019-04-05",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 2
+   },
+   {
+    "week": 2,
+    "date": "2019-04-12",
+    "input_lakh": 2.0,
+    "value_lakh": 1.96,
+    "names": 3
+   },
+   {
+    "week": 3,
+    "date": "2019-04-23",
+    "input_lakh": 3.0,
+    "value_lakh": 3.046,
+    "names": 4
+   },
+   {
+    "week": 4,
+    "date": "2019-05-02",
+    "input_lakh": 4.0,
+    "value_lakh": 3.866,
+    "names": 2
+   },
+   {
+    "week": 5,
+    "date": "2019-05-09",
+    "input_lakh": 5.0,
+    "value_lakh": 4.838,
+    "names": 5
+   },
+   {
+    "week": 6,
+    "date": "2019-05-16",
+    "input_lakh": 6.0,
+    "value_lakh": 5.452,
+    "names": 3
+   },
+   {
+    "week": 7,
+    "date": "2019-05-23",
+    "input_lakh": 7.0,
+    "value_lakh": 6.945,
+    "names": 7
+   },
+   {
+    "week": 8,
+    "date": "2019-05-30",
+    "input_lakh": 8.0,
+    "value_lakh": 8.88,
+    "names": 9
+   },
+   {
+    "week": 9,
+    "date": "2019-06-07",
+    "input_lakh": 9.0,
+    "value_lakh": 9.72,
+    "names": 8
+   },
+   {
+    "week": 10,
+    "date": "2019-06-14",
+    "input_lakh": 10.0,
+    "value_lakh": 10.766,
+    "names": 8
+   },
+   {
+    "week": 11,
+    "date": "2019-06-21",
+    "input_lakh": 11.0,
+    "value_lakh": 11.258,
+    "names": 9
+   },
+   {
+    "week": 12,
+    "date": "2019-06-28",
+    "input_lakh": 12.0,
+    "value_lakh": 12.605,
+    "names": 7
+   },
+   {
+    "week": 13,
+    "date": "2019-07-05",
+    "input_lakh": 13.0,
+    "value_lakh": 13.497,
+    "names": 6
+   },
+   {
+    "week": 14,
+    "date": "2019-07-12",
+    "input_lakh": 14.0,
+    "value_lakh": 14.182,
+    "names": 7
+   },
+   {
+    "week": 15,
+    "date": "2019-07-19",
+    "input_lakh": 15.0,
+    "value_lakh": 15.154,
+    "names": 6
+   },
+   {
+    "week": 16,
+    "date": "2019-07-26",
+    "input_lakh": 16.0,
+    "value_lakh": 15.839,
+    "names": 7
+   },
+   {
+    "week": 17,
+    "date": "2019-08-02",
+    "input_lakh": 17.0,
+    "value_lakh": 16.425,
+    "names": 6
+   },
+   {
+    "week": 18,
+    "date": "2019-08-09",
+    "input_lakh": 18.0,
+    "value_lakh": 17.945,
+    "names": 5
+   },
+   {
+    "week": 19,
+    "date": "2019-08-20",
+    "input_lakh": 19.0,
+    "value_lakh": 18.601,
+    "names": 4
+   },
+   {
+    "week": 20,
+    "date": "2019-08-27",
+    "input_lakh": 20.0,
+    "value_lakh": 19.59,
+    "names": 6
+   },
+   {
+    "week": 21,
+    "date": "2019-09-04",
+    "input_lakh": 21.0,
+    "value_lakh": 19.956,
+    "names": 4
+   },
+   {
+    "week": 22,
+    "date": "2019-09-12",
+    "input_lakh": 22.0,
+    "value_lakh": 21.719,
+    "names": 5
+   },
+   {
+    "week": 23,
+    "date": "2019-09-19",
+    "input_lakh": 23.0,
+    "value_lakh": 22.167,
+    "names": 5
+   },
+   {
+    "week": 24,
+    "date": "2019-09-26",
+    "input_lakh": 24.0,
+    "value_lakh": 24.298,
+    "names": 5
+   },
+   {
+    "week": 25,
+    "date": "2019-10-04",
+    "input_lakh": 25.0,
+    "value_lakh": 24.35,
+    "names": 9
+   },
+   {
+    "week": 26,
+    "date": "2019-10-14",
+    "input_lakh": 26.0,
+    "value_lakh": 26.382,
+    "names": 5
+   },
+   {
+    "week": 27,
+    "date": "2019-10-22",
+    "input_lakh": 26.0,
+    "value_lakh": 26.891,
+    "names": 5
+   },
+   {
+    "week": 28,
+    "date": "2019-10-30",
+    "input_lakh": 26.0,
+    "value_lakh": 27.046,
+    "names": 5
+   },
+   {
+    "week": 29,
+    "date": "2019-11-06",
+    "input_lakh": 26.0,
+    "value_lakh": 26.936,
+    "names": 6
+   },
+   {
+    "week": 30,
+    "date": "2019-11-14",
+    "input_lakh": 26.0,
+    "value_lakh": 26.427,
+    "names": 7
+   },
+   {
+    "week": 31,
+    "date": "2019-11-21",
+    "input_lakh": 26.0,
+    "value_lakh": 26.524,
+    "names": 6
+   },
+   {
+    "week": 32,
+    "date": "2019-11-28",
+    "input_lakh": 26.0,
+    "value_lakh": 26.348,
+    "names": 5
+   },
+   {
+    "week": 33,
+    "date": "2019-12-05",
+    "input_lakh": 26.0,
+    "value_lakh": 26.488,
+    "names": 4
+   },
+   {
+    "week": 34,
+    "date": "2019-12-12",
+    "input_lakh": 26.0,
+    "value_lakh": 26.194,
+    "names": 5
+   },
+   {
+    "week": 35,
+    "date": "2019-12-19",
+    "input_lakh": 26.0,
+    "value_lakh": 26.524,
+    "names": 4
+   },
+   {
+    "week": 36,
+    "date": "2019-12-27",
+    "input_lakh": 26.0,
+    "value_lakh": 26.967,
+    "names": 9
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2019-04",
+    "date": "2019-04-30",
+    "input_lakh": 3.0,
+    "value_lakh": 2.893,
+    "roi_pct": -3.6
+   },
+   {
+    "month": "2019-05",
+    "date": "2019-05-31",
+    "input_lakh": 8.0,
+    "value_lakh": 8.744,
+    "roi_pct": 9.3
+   },
+   {
+    "month": "2019-06",
+    "date": "2019-06-28",
+    "input_lakh": 12.0,
+    "value_lakh": 12.605,
+    "roi_pct": 5.0
+   },
+   {
+    "month": "2019-07",
+    "date": "2019-07-31",
+    "input_lakh": 16.0,
+    "value_lakh": 15.373,
+    "roi_pct": -3.9
+   },
+   {
+    "month": "2019-08",
+    "date": "2019-08-30",
+    "input_lakh": 20.0,
+    "value_lakh": 19.175,
+    "roi_pct": -4.1
+   },
+   {
+    "month": "2019-09",
+    "date": "2019-09-30",
+    "input_lakh": 24.0,
+    "value_lakh": 23.829,
+    "roi_pct": -0.7
+   },
+   {
+    "month": "2019-10",
+    "date": "2019-10-31",
+    "input_lakh": 26.0,
+    "value_lakh": 26.999,
+    "roi_pct": 3.8
+   },
+   {
+    "month": "2019-11",
+    "date": "2019-11-29",
+    "input_lakh": 26.0,
+    "value_lakh": 26.719,
+    "roi_pct": 2.8
+   },
+   {
+    "month": "2019-12",
+    "date": "2019-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 27.396,
+    "roi_pct": 5.4
+   }
+  ],
+  "lists": 36,
+  "empty_lists": 0
+ },
+ "2020": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2020-01-03",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 9
+   },
+   {
+    "week": 2,
+    "date": "2020-01-10",
+    "input_lakh": 2.0,
+    "value_lakh": 2.005,
+    "names": 6
+   },
+   {
+    "week": 3,
+    "date": "2020-01-17",
+    "input_lakh": 3.0,
+    "value_lakh": 3.051,
+    "names": 8
+   },
+   {
+    "week": 4,
+    "date": "2020-01-24",
+    "input_lakh": 4.0,
+    "value_lakh": 4.083,
+    "names": 9
+   },
+   {
+    "week": 5,
+    "date": "2020-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 5.067,
+    "names": 8
+   },
+   {
+    "week": 6,
+    "date": "2020-02-07",
+    "input_lakh": 6.0,
+    "value_lakh": 6.033,
+    "names": 8
+   },
+   {
+    "week": 7,
+    "date": "2020-02-14",
+    "input_lakh": 7.0,
+    "value_lakh": 6.949,
+    "names": 8
+   },
+   {
+    "week": 8,
+    "date": "2020-02-24",
+    "input_lakh": 8.0,
+    "value_lakh": 7.891,
+    "names": 9
+   },
+   {
+    "week": 9,
+    "date": "2020-03-02",
+    "input_lakh": 9.0,
+    "value_lakh": 8.313,
+    "names": 9
+   },
+   {
+    "week": 10,
+    "date": "2020-03-09",
+    "input_lakh": 10.0,
+    "value_lakh": 8.81,
+    "names": 8
+   },
+   {
+    "week": 11,
+    "date": "2020-03-17",
+    "input_lakh": 11.0,
+    "value_lakh": 8.412,
+    "names": 7
+   },
+   {
+    "week": 12,
+    "date": "2020-03-24",
+    "input_lakh": 12.0,
+    "value_lakh": 7.744,
+    "names": 3
+   },
+   {
+    "week": 13,
+    "date": "2020-03-31",
+    "input_lakh": 13.0,
+    "value_lakh": 9.579,
+    "names": 5
+   },
+   {
+    "week": 14,
+    "date": "2020-04-09",
+    "input_lakh": 14.0,
+    "value_lakh": 11.72,
+    "names": 6
+   },
+   {
+    "week": 15,
+    "date": "2020-04-20",
+    "input_lakh": 15.0,
+    "value_lakh": 13.014,
+    "names": 8
+   },
+   {
+    "week": 16,
+    "date": "2020-04-27",
+    "input_lakh": 16.0,
+    "value_lakh": 14.563,
+    "names": 9
+   },
+   {
+    "week": 17,
+    "date": "2020-05-05",
+    "input_lakh": 17.0,
+    "value_lakh": 15.219,
+    "names": 9
+   },
+   {
+    "week": 18,
+    "date": "2020-05-12",
+    "input_lakh": 18.0,
+    "value_lakh": 15.856,
+    "names": 9
+   },
+   {
+    "week": 19,
+    "date": "2020-05-19",
+    "input_lakh": 19.0,
+    "value_lakh": 16.711,
+    "names": 9
+   },
+   {
+    "week": 20,
+    "date": "2020-05-27",
+    "input_lakh": 20.0,
+    "value_lakh": 18.454,
+    "names": 9
+   },
+   {
+    "week": 21,
+    "date": "2020-06-03",
+    "input_lakh": 21.0,
+    "value_lakh": 20.735,
+    "names": 9
+   },
+   {
+    "week": 22,
+    "date": "2020-06-10",
+    "input_lakh": 22.0,
+    "value_lakh": 22.179,
+    "names": 9
+   },
+   {
+    "week": 23,
+    "date": "2020-06-17",
+    "input_lakh": 23.0,
+    "value_lakh": 23.925,
+    "names": 9
+   },
+   {
+    "week": 24,
+    "date": "2020-06-24",
+    "input_lakh": 24.0,
+    "value_lakh": 25.223,
+    "names": 9
+   },
+   {
+    "week": 25,
+    "date": "2020-07-01",
+    "input_lakh": 25.0,
+    "value_lakh": 26.76,
+    "names": 9
+   },
+   {
+    "week": 26,
+    "date": "2020-07-08",
+    "input_lakh": 26.0,
+    "value_lakh": 28.603,
+    "names": 9
+   },
+   {
+    "week": 27,
+    "date": "2020-07-15",
+    "input_lakh": 26.0,
+    "value_lakh": 29.125,
+    "names": 9
+   },
+   {
+    "week": 28,
+    "date": "2020-07-22",
+    "input_lakh": 26.0,
+    "value_lakh": 29.986,
+    "names": 8
+   },
+   {
+    "week": 29,
+    "date": "2020-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 30.212,
+    "names": 8
+   },
+   {
+    "week": 30,
+    "date": "2020-08-05",
+    "input_lakh": 26.0,
+    "value_lakh": 32.239,
+    "names": 8
+   },
+   {
+    "week": 31,
+    "date": "2020-08-12",
+    "input_lakh": 26.0,
+    "value_lakh": 33.525,
+    "names": 8
+   },
+   {
+    "week": 32,
+    "date": "2020-08-19",
+    "input_lakh": 26.0,
+    "value_lakh": 34.517,
+    "names": 9
+   },
+   {
+    "week": 33,
+    "date": "2020-08-26",
+    "input_lakh": 26.0,
+    "value_lakh": 36.94,
+    "names": 9
+   },
+   {
+    "week": 34,
+    "date": "2020-09-02",
+    "input_lakh": 26.0,
+    "value_lakh": 35.578,
+    "names": 8
+   },
+   {
+    "week": 35,
+    "date": "2020-09-09",
+    "input_lakh": 26.0,
+    "value_lakh": 34.805,
+    "names": 7
+   },
+   {
+    "week": 36,
+    "date": "2020-09-16",
+    "input_lakh": 26.0,
+    "value_lakh": 37.753,
+    "names": 8
+   },
+   {
+    "week": 37,
+    "date": "2020-09-23",
+    "input_lakh": 26.0,
+    "value_lakh": 36.047,
+    "names": 9
+   },
+   {
+    "week": 38,
+    "date": "2020-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 36.983,
+    "names": 7
+   },
+   {
+    "week": 39,
+    "date": "2020-10-08",
+    "input_lakh": 26.0,
+    "value_lakh": 38.023,
+    "names": 8
+   },
+   {
+    "week": 40,
+    "date": "2020-10-15",
+    "input_lakh": 26.0,
+    "value_lakh": 36.679,
+    "names": 8
+   },
+   {
+    "week": 41,
+    "date": "2020-10-22",
+    "input_lakh": 26.0,
+    "value_lakh": 37.242,
+    "names": 8
+   },
+   {
+    "week": 42,
+    "date": "2020-10-29",
+    "input_lakh": 26.0,
+    "value_lakh": 36.256,
+    "names": 8
+   },
+   {
+    "week": 43,
+    "date": "2020-11-05",
+    "input_lakh": 26.0,
+    "value_lakh": 36.825,
+    "names": 5
+   },
+   {
+    "week": 44,
+    "date": "2020-11-12",
+    "input_lakh": 26.0,
+    "value_lakh": 36.567,
+    "names": 7
+   },
+   {
+    "week": 45,
+    "date": "2020-11-19",
+    "input_lakh": 26.0,
+    "value_lakh": 37.79,
+    "names": 8
+   },
+   {
+    "week": 46,
+    "date": "2020-11-26",
+    "input_lakh": 26.0,
+    "value_lakh": 39.702,
+    "names": 8
+   },
+   {
+    "week": 47,
+    "date": "2020-12-04",
+    "input_lakh": 26.0,
+    "value_lakh": 42.231,
+    "names": 6
+   },
+   {
+    "week": 48,
+    "date": "2020-12-11",
+    "input_lakh": 26.0,
+    "value_lakh": 44.044,
+    "names": 7
+   },
+   {
+    "week": 49,
+    "date": "2020-12-18",
+    "input_lakh": 26.0,
+    "value_lakh": 43.099,
+    "names": 8
+   },
+   {
+    "week": 50,
+    "date": "2020-12-28",
+    "input_lakh": 26.0,
+    "value_lakh": 44.514,
+    "names": 8
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2020-01",
+    "date": "2020-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 5.067,
+    "roi_pct": 1.3
+   },
+   {
+    "month": "2020-02",
+    "date": "2020-02-28",
+    "input_lakh": 8.0,
+    "value_lakh": 7.48,
+    "roi_pct": -6.5
+   },
+   {
+    "month": "2020-03",
+    "date": "2020-03-31",
+    "input_lakh": 13.0,
+    "value_lakh": 9.579,
+    "roi_pct": -26.3
+   },
+   {
+    "month": "2020-04",
+    "date": "2020-04-30",
+    "input_lakh": 16.0,
+    "value_lakh": 14.643,
+    "roi_pct": -8.5
+   },
+   {
+    "month": "2020-05",
+    "date": "2020-05-29",
+    "input_lakh": 20.0,
+    "value_lakh": 18.848,
+    "roi_pct": -5.8
+   },
+   {
+    "month": "2020-06",
+    "date": "2020-06-30",
+    "input_lakh": 24.0,
+    "value_lakh": 25.391,
+    "roi_pct": 5.8
+   },
+   {
+    "month": "2020-07",
+    "date": "2020-07-31",
+    "input_lakh": 26.0,
+    "value_lakh": 30.376,
+    "roi_pct": 16.8
+   },
+   {
+    "month": "2020-08",
+    "date": "2020-08-31",
+    "input_lakh": 26.0,
+    "value_lakh": 34.347,
+    "roi_pct": 32.1
+   },
+   {
+    "month": "2020-09",
+    "date": "2020-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 36.983,
+    "roi_pct": 42.2
+   },
+   {
+    "month": "2020-10",
+    "date": "2020-10-30",
+    "input_lakh": 26.0,
+    "value_lakh": 36.428,
+    "roi_pct": 40.1
+   },
+   {
+    "month": "2020-11",
+    "date": "2020-11-27",
+    "input_lakh": 26.0,
+    "value_lakh": 40.545,
+    "roi_pct": 55.9
+   },
+   {
+    "month": "2020-12",
+    "date": "2020-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 44.64,
+    "roi_pct": 71.7
+   }
+  ],
+  "lists": 50,
+  "empty_lists": 0
+ },
+ "2021": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2021-01-04",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 7
+   },
+   {
+    "week": 2,
+    "date": "2021-01-11",
+    "input_lakh": 2.0,
+    "value_lakh": 2.056,
+    "names": 7
+   },
+   {
+    "week": 3,
+    "date": "2021-01-18",
+    "input_lakh": 3.0,
+    "value_lakh": 2.941,
+    "names": 7
+   },
+   {
+    "week": 4,
+    "date": "2021-01-25",
+    "input_lakh": 4.0,
+    "value_lakh": 3.845,
+    "names": 7
+   },
+   {
+    "week": 5,
+    "date": "2021-02-02",
+    "input_lakh": 5.0,
+    "value_lakh": 4.849,
+    "names": 9
+   },
+   {
+    "week": 6,
+    "date": "2021-02-09",
+    "input_lakh": 6.0,
+    "value_lakh": 5.974,
+    "names": 7
+   },
+   {
+    "week": 7,
+    "date": "2021-02-16",
+    "input_lakh": 7.0,
+    "value_lakh": 7.096,
+    "names": 7
+   },
+   {
+    "week": 8,
+    "date": "2021-02-23",
+    "input_lakh": 8.0,
+    "value_lakh": 8.289,
+    "names": 7
+   },
+   {
+    "week": 9,
+    "date": "2021-03-02",
+    "input_lakh": 9.0,
+    "value_lakh": 9.308,
+    "names": 8
+   },
+   {
+    "week": 10,
+    "date": "2021-03-09",
+    "input_lakh": 10.0,
+    "value_lakh": 10.404,
+    "names": 7
+   },
+   {
+    "week": 11,
+    "date": "2021-03-17",
+    "input_lakh": 11.0,
+    "value_lakh": 11.618,
+    "names": 7
+   },
+   {
+    "week": 12,
+    "date": "2021-03-24",
+    "input_lakh": 12.0,
+    "value_lakh": 12.486,
+    "names": 7
+   },
+   {
+    "week": 13,
+    "date": "2021-04-01",
+    "input_lakh": 13.0,
+    "value_lakh": 14.074,
+    "names": 8
+   },
+   {
+    "week": 14,
+    "date": "2021-04-09",
+    "input_lakh": 14.0,
+    "value_lakh": 15.638,
+    "names": 7
+   },
+   {
+    "week": 15,
+    "date": "2021-04-19",
+    "input_lakh": 15.0,
+    "value_lakh": 15.738,
+    "names": 7
+   },
+   {
+    "week": 16,
+    "date": "2021-04-27",
+    "input_lakh": 16.0,
+    "value_lakh": 17.948,
+    "names": 9
+   },
+   {
+    "week": 17,
+    "date": "2021-05-04",
+    "input_lakh": 17.0,
+    "value_lakh": 19.096,
+    "names": 9
+   },
+   {
+    "week": 18,
+    "date": "2021-05-11",
+    "input_lakh": 18.0,
+    "value_lakh": 21.137,
+    "names": 8
+   },
+   {
+    "week": 19,
+    "date": "2021-05-19",
+    "input_lakh": 19.0,
+    "value_lakh": 22.251,
+    "names": 9
+   },
+   {
+    "week": 20,
+    "date": "2021-05-26",
+    "input_lakh": 20.0,
+    "value_lakh": 24.174,
+    "names": 9
+   },
+   {
+    "week": 21,
+    "date": "2021-06-02",
+    "input_lakh": 21.0,
+    "value_lakh": 25.49,
+    "names": 9
+   },
+   {
+    "week": 22,
+    "date": "2021-06-09",
+    "input_lakh": 22.0,
+    "value_lakh": 26.907,
+    "names": 8
+   },
+   {
+    "week": 23,
+    "date": "2021-06-16",
+    "input_lakh": 23.0,
+    "value_lakh": 28.773,
+    "names": 7
+   },
+   {
+    "week": 24,
+    "date": "2021-06-23",
+    "input_lakh": 24.0,
+    "value_lakh": 30.017,
+    "names": 8
+   },
+   {
+    "week": 25,
+    "date": "2021-06-30",
+    "input_lakh": 25.0,
+    "value_lakh": 32.256,
+    "names": 8
+   },
+   {
+    "week": 26,
+    "date": "2021-07-07",
+    "input_lakh": 26.0,
+    "value_lakh": 34.351,
+    "names": 6
+   },
+   {
+    "week": 27,
+    "date": "2021-07-14",
+    "input_lakh": 26.0,
+    "value_lakh": 35.978,
+    "names": 5
+   },
+   {
+    "week": 28,
+    "date": "2021-07-22",
+    "input_lakh": 26.0,
+    "value_lakh": 38.277,
+    "names": 5
+   },
+   {
+    "week": 29,
+    "date": "2021-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 38.365,
+    "names": 8
+   },
+   {
+    "week": 30,
+    "date": "2021-08-05",
+    "input_lakh": 26.0,
+    "value_lakh": 38.931,
+    "names": 7
+   },
+   {
+    "week": 31,
+    "date": "2021-08-12",
+    "input_lakh": 26.0,
+    "value_lakh": 38.12,
+    "names": 9
+   },
+   {
+    "week": 32,
+    "date": "2021-08-20",
+    "input_lakh": 26.0,
+    "value_lakh": 36.242,
+    "names": 9
+   },
+   {
+    "week": 33,
+    "date": "2021-08-27",
+    "input_lakh": 26.0,
+    "value_lakh": 37.061,
+    "names": 8
+   },
+   {
+    "week": 34,
+    "date": "2021-09-03",
+    "input_lakh": 26.0,
+    "value_lakh": 37.899,
+    "names": 8
+   },
+   {
+    "week": 35,
+    "date": "2021-09-13",
+    "input_lakh": 26.0,
+    "value_lakh": 38.571,
+    "names": 7
+   },
+   {
+    "week": 36,
+    "date": "2021-09-20",
+    "input_lakh": 26.0,
+    "value_lakh": 38.133,
+    "names": 8
+   },
+   {
+    "week": 37,
+    "date": "2021-09-27",
+    "input_lakh": 26.0,
+    "value_lakh": 38.949,
+    "names": 6
+   },
+   {
+    "week": 38,
+    "date": "2021-10-04",
+    "input_lakh": 26.0,
+    "value_lakh": 40.507,
+    "names": 7
+   },
+   {
+    "week": 39,
+    "date": "2021-10-11",
+    "input_lakh": 26.0,
+    "value_lakh": 42.253,
+    "names": 8
+   },
+   {
+    "week": 40,
+    "date": "2021-10-19",
+    "input_lakh": 26.0,
+    "value_lakh": 41.254,
+    "names": 9
+   },
+   {
+    "week": 41,
+    "date": "2021-10-26",
+    "input_lakh": 26.0,
+    "value_lakh": 40.505,
+    "names": 8
+   },
+   {
+    "week": 42,
+    "date": "2021-11-02",
+    "input_lakh": 26.0,
+    "value_lakh": 42.348,
+    "names": 7
+   },
+   {
+    "week": 43,
+    "date": "2021-11-10",
+    "input_lakh": 26.0,
+    "value_lakh": 44.171,
+    "names": 8
+   },
+   {
+    "week": 44,
+    "date": "2021-11-17",
+    "input_lakh": 26.0,
+    "value_lakh": 44.343,
+    "names": 7
+   },
+   {
+    "week": 45,
+    "date": "2021-11-25",
+    "input_lakh": 26.0,
+    "value_lakh": 46.138,
+    "names": 8
+   },
+   {
+    "week": 46,
+    "date": "2021-12-02",
+    "input_lakh": 26.0,
+    "value_lakh": 45.185,
+    "names": 6
+   },
+   {
+    "week": 47,
+    "date": "2021-12-09",
+    "input_lakh": 26.0,
+    "value_lakh": 47.955,
+    "names": 5
+   },
+   {
+    "week": 48,
+    "date": "2021-12-16",
+    "input_lakh": 26.0,
+    "value_lakh": 48.391,
+    "names": 5
+   },
+   {
+    "week": 49,
+    "date": "2021-12-23",
+    "input_lakh": 26.0,
+    "value_lakh": 47.13,
+    "names": 6
+   },
+   {
+    "week": 50,
+    "date": "2021-12-30",
+    "input_lakh": 26.0,
+    "value_lakh": 48.839,
+    "names": 7
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2021-01",
+    "date": "2021-01-29",
+    "input_lakh": 4.0,
+    "value_lakh": 3.717,
+    "roi_pct": -7.1
+   },
+   {
+    "month": "2021-02",
+    "date": "2021-02-26",
+    "input_lakh": 8.0,
+    "value_lakh": 8.171,
+    "roi_pct": 2.1
+   },
+   {
+    "month": "2021-03",
+    "date": "2021-03-31",
+    "input_lakh": 12.0,
+    "value_lakh": 12.63,
+    "roi_pct": 5.2
+   },
+   {
+    "month": "2021-04",
+    "date": "2021-04-30",
+    "input_lakh": 16.0,
+    "value_lakh": 17.991,
+    "roi_pct": 12.4
+   },
+   {
+    "month": "2021-05",
+    "date": "2021-05-31",
+    "input_lakh": 20.0,
+    "value_lakh": 24.392,
+    "roi_pct": 22.0
+   },
+   {
+    "month": "2021-06",
+    "date": "2021-06-30",
+    "input_lakh": 25.0,
+    "value_lakh": 32.256,
+    "roi_pct": 29.0
+   },
+   {
+    "month": "2021-07",
+    "date": "2021-07-30",
+    "input_lakh": 26.0,
+    "value_lakh": 38.444,
+    "roi_pct": 47.9
+   },
+   {
+    "month": "2021-08",
+    "date": "2021-08-31",
+    "input_lakh": 26.0,
+    "value_lakh": 37.38,
+    "roi_pct": 43.8
+   },
+   {
+    "month": "2021-09",
+    "date": "2021-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 39.466,
+    "roi_pct": 51.8
+   },
+   {
+    "month": "2021-10",
+    "date": "2021-10-29",
+    "input_lakh": 26.0,
+    "value_lakh": 40.696,
+    "roi_pct": 56.5
+   },
+   {
+    "month": "2021-11",
+    "date": "2021-11-30",
+    "input_lakh": 26.0,
+    "value_lakh": 44.254,
+    "roi_pct": 70.2
+   },
+   {
+    "month": "2021-12",
+    "date": "2021-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 49.096,
+    "roi_pct": 88.8
+   }
+  ],
+  "lists": 50,
+  "empty_lists": 0
+ },
+ "2022": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2022-01-06",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 7
+   },
+   {
+    "week": 2,
+    "date": "2022-01-13",
+    "input_lakh": 2.0,
+    "value_lakh": 2.084,
+    "names": 7
+   },
+   {
+    "week": 3,
+    "date": "2022-01-20",
+    "input_lakh": 3.0,
+    "value_lakh": 3.272,
+    "names": 8
+   },
+   {
+    "week": 4,
+    "date": "2022-01-28",
+    "input_lakh": 4.0,
+    "value_lakh": 4.006,
+    "names": 8
+   },
+   {
+    "week": 5,
+    "date": "2022-02-04",
+    "input_lakh": 5.0,
+    "value_lakh": 5.256,
+    "names": 8
+   },
+   {
+    "week": 6,
+    "date": "2022-02-11",
+    "input_lakh": 6.0,
+    "value_lakh": 6.062,
+    "names": 9
+   },
+   {
+    "week": 7,
+    "date": "2022-02-18",
+    "input_lakh": 7.0,
+    "value_lakh": 7.038,
+    "names": 9
+   },
+   {
+    "week": 8,
+    "date": "2022-02-25",
+    "input_lakh": 8.0,
+    "value_lakh": 7.651,
+    "names": 9
+   },
+   {
+    "week": 9,
+    "date": "2022-03-07",
+    "input_lakh": 9.0,
+    "value_lakh": 8.856,
+    "names": 8
+   },
+   {
+    "week": 10,
+    "date": "2022-03-14",
+    "input_lakh": 10.0,
+    "value_lakh": 10.645,
+    "names": 7
+   },
+   {
+    "week": 11,
+    "date": "2022-03-22",
+    "input_lakh": 11.0,
+    "value_lakh": 11.954,
+    "names": 7
+   },
+   {
+    "week": 12,
+    "date": "2022-03-29",
+    "input_lakh": 12.0,
+    "value_lakh": 12.776,
+    "names": 8
+   },
+   {
+    "week": 13,
+    "date": "2022-04-05",
+    "input_lakh": 13.0,
+    "value_lakh": 14.739,
+    "names": 8
+   },
+   {
+    "week": 14,
+    "date": "2022-04-12",
+    "input_lakh": 14.0,
+    "value_lakh": 15.766,
+    "names": 9
+   },
+   {
+    "week": 15,
+    "date": "2022-04-21",
+    "input_lakh": 15.0,
+    "value_lakh": 17.446,
+    "names": 8
+   },
+   {
+    "week": 16,
+    "date": "2022-04-28",
+    "input_lakh": 16.0,
+    "value_lakh": 17.626,
+    "names": 8
+   },
+   {
+    "week": 17,
+    "date": "2022-05-06",
+    "input_lakh": 17.0,
+    "value_lakh": 16.866,
+    "names": 6
+   },
+   {
+    "week": 18,
+    "date": "2022-05-13",
+    "input_lakh": 18.0,
+    "value_lakh": 16.178,
+    "names": 8
+   },
+   {
+    "week": 19,
+    "date": "2022-05-20",
+    "input_lakh": 19.0,
+    "value_lakh": 18.426,
+    "names": 8
+   },
+   {
+    "week": 20,
+    "date": "2022-05-27",
+    "input_lakh": 20.0,
+    "value_lakh": 17.976,
+    "names": 8
+   },
+   {
+    "week": 21,
+    "date": "2022-06-03",
+    "input_lakh": 21.0,
+    "value_lakh": 19.909,
+    "names": 8
+   },
+   {
+    "week": 22,
+    "date": "2022-06-10",
+    "input_lakh": 22.0,
+    "value_lakh": 20.954,
+    "names": 9
+   },
+   {
+    "week": 23,
+    "date": "2022-06-17",
+    "input_lakh": 23.0,
+    "value_lakh": 20.264,
+    "names": 7
+   },
+   {
+    "week": 24,
+    "date": "2022-06-24",
+    "input_lakh": 24.0,
+    "value_lakh": 20.985,
+    "names": 9
+   },
+   {
+    "week": 25,
+    "date": "2022-07-01",
+    "input_lakh": 25.0,
+    "value_lakh": 22.184,
+    "names": 9
+   },
+   {
+    "week": 26,
+    "date": "2022-07-08",
+    "input_lakh": 26.0,
+    "value_lakh": 23.933,
+    "names": 8
+   },
+   {
+    "week": 27,
+    "date": "2022-07-15",
+    "input_lakh": 26.0,
+    "value_lakh": 23.993,
+    "names": 8
+   },
+   {
+    "week": 28,
+    "date": "2022-07-22",
+    "input_lakh": 26.0,
+    "value_lakh": 24.942,
+    "names": 8
+   },
+   {
+    "week": 29,
+    "date": "2022-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 25.046,
+    "names": 7
+   },
+   {
+    "week": 30,
+    "date": "2022-08-05",
+    "input_lakh": 26.0,
+    "value_lakh": 25.57,
+    "names": 9
+   },
+   {
+    "week": 31,
+    "date": "2022-08-16",
+    "input_lakh": 26.0,
+    "value_lakh": 26.193,
+    "names": 7
+   },
+   {
+    "week": 32,
+    "date": "2022-08-23",
+    "input_lakh": 26.0,
+    "value_lakh": 26.839,
+    "names": 9
+   },
+   {
+    "week": 33,
+    "date": "2022-08-30",
+    "input_lakh": 26.0,
+    "value_lakh": 27.845,
+    "names": 8
+   },
+   {
+    "week": 34,
+    "date": "2022-09-07",
+    "input_lakh": 26.0,
+    "value_lakh": 28.885,
+    "names": 7
+   },
+   {
+    "week": 35,
+    "date": "2022-09-14",
+    "input_lakh": 26.0,
+    "value_lakh": 28.91,
+    "names": 7
+   },
+   {
+    "week": 36,
+    "date": "2022-09-21",
+    "input_lakh": 26.0,
+    "value_lakh": 28.328,
+    "names": 3
+   },
+   {
+    "week": 37,
+    "date": "2022-09-28",
+    "input_lakh": 26.0,
+    "value_lakh": 26.779,
+    "names": 5
+   },
+   {
+    "week": 38,
+    "date": "2022-10-06",
+    "input_lakh": 26.0,
+    "value_lakh": 27.96,
+    "names": 4
+   },
+   {
+    "week": 39,
+    "date": "2022-10-13",
+    "input_lakh": 26.0,
+    "value_lakh": 27.693,
+    "names": 8
+   },
+   {
+    "week": 40,
+    "date": "2022-10-20",
+    "input_lakh": 26.0,
+    "value_lakh": 28.114,
+    "names": 6
+   },
+   {
+    "week": 41,
+    "date": "2022-10-28",
+    "input_lakh": 26.0,
+    "value_lakh": 28.083,
+    "names": 6
+   },
+   {
+    "week": 42,
+    "date": "2022-11-04",
+    "input_lakh": 26.0,
+    "value_lakh": 29.39,
+    "names": 7
+   },
+   {
+    "week": 43,
+    "date": "2022-11-14",
+    "input_lakh": 26.0,
+    "value_lakh": 29.733,
+    "names": 5
+   },
+   {
+    "week": 44,
+    "date": "2022-11-21",
+    "input_lakh": 26.0,
+    "value_lakh": 28.172,
+    "names": 7
+   },
+   {
+    "week": 45,
+    "date": "2022-11-28",
+    "input_lakh": 26.0,
+    "value_lakh": 29.196,
+    "names": 6
+   },
+   {
+    "week": 46,
+    "date": "2022-12-05",
+    "input_lakh": 26.0,
+    "value_lakh": 29.267,
+    "names": 6
+   },
+   {
+    "week": 47,
+    "date": "2022-12-12",
+    "input_lakh": 26.0,
+    "value_lakh": 29.053,
+    "names": 6
+   },
+   {
+    "week": 48,
+    "date": "2022-12-19",
+    "input_lakh": 26.0,
+    "value_lakh": 29.16,
+    "names": 6
+   },
+   {
+    "week": 49,
+    "date": "2022-12-26",
+    "input_lakh": 26.0,
+    "value_lakh": 27.066,
+    "names": 6
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2022-01",
+    "date": "2022-01-31",
+    "input_lakh": 4.0,
+    "value_lakh": 4.031,
+    "roi_pct": 0.8
+   },
+   {
+    "month": "2022-02",
+    "date": "2022-02-28",
+    "input_lakh": 8.0,
+    "value_lakh": 7.712,
+    "roi_pct": -3.6
+   },
+   {
+    "month": "2022-03",
+    "date": "2022-03-31",
+    "input_lakh": 12.0,
+    "value_lakh": 12.865,
+    "roi_pct": 7.2
+   },
+   {
+    "month": "2022-04",
+    "date": "2022-04-29",
+    "input_lakh": 16.0,
+    "value_lakh": 17.233,
+    "roi_pct": 7.7
+   },
+   {
+    "month": "2022-05",
+    "date": "2022-05-31",
+    "input_lakh": 20.0,
+    "value_lakh": 18.688,
+    "roi_pct": -6.6
+   },
+   {
+    "month": "2022-06",
+    "date": "2022-06-30",
+    "input_lakh": 24.0,
+    "value_lakh": 21.367,
+    "roi_pct": -11.0
+   },
+   {
+    "month": "2022-07",
+    "date": "2022-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 25.046,
+    "roi_pct": -3.7
+   },
+   {
+    "month": "2022-08",
+    "date": "2022-08-30",
+    "input_lakh": 26.0,
+    "value_lakh": 27.845,
+    "roi_pct": 7.1
+   },
+   {
+    "month": "2022-09",
+    "date": "2022-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 27.304,
+    "roi_pct": 5.0
+   },
+   {
+    "month": "2022-10",
+    "date": "2022-10-31",
+    "input_lakh": 26.0,
+    "value_lakh": 27.875,
+    "roi_pct": 7.2
+   },
+   {
+    "month": "2022-11",
+    "date": "2022-11-30",
+    "input_lakh": 26.0,
+    "value_lakh": 29.022,
+    "roi_pct": 11.6
+   },
+   {
+    "month": "2022-12",
+    "date": "2022-12-30",
+    "input_lakh": 26.0,
+    "value_lakh": 28.171,
+    "roi_pct": 8.3
+   }
+  ],
+  "lists": 49,
+  "empty_lists": 0
+ },
+ "2023": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2023-01-02",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 4
+   },
+   {
+    "week": 2,
+    "date": "2023-01-09",
+    "input_lakh": 2.0,
+    "value_lakh": 1.992,
+    "names": 6
+   },
+   {
+    "week": 3,
+    "date": "2023-01-16",
+    "input_lakh": 3.0,
+    "value_lakh": 2.979,
+    "names": 6
+   },
+   {
+    "week": 4,
+    "date": "2023-01-23",
+    "input_lakh": 4.0,
+    "value_lakh": 4.115,
+    "names": 5
+   },
+   {
+    "week": 5,
+    "date": "2023-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 4.953,
+    "names": 8
+   },
+   {
+    "week": 6,
+    "date": "2023-02-07",
+    "input_lakh": 6.0,
+    "value_lakh": 5.748,
+    "names": 7
+   },
+   {
+    "week": 7,
+    "date": "2023-02-14",
+    "input_lakh": 7.0,
+    "value_lakh": 6.634,
+    "names": 9
+   },
+   {
+    "week": 8,
+    "date": "2023-02-21",
+    "input_lakh": 8.0,
+    "value_lakh": 7.529,
+    "names": 9
+   },
+   {
+    "week": 9,
+    "date": "2023-02-28",
+    "input_lakh": 9.0,
+    "value_lakh": 8.209,
+    "names": 9
+   },
+   {
+    "week": 10,
+    "date": "2023-03-08",
+    "input_lakh": 10.0,
+    "value_lakh": 9.729,
+    "names": 9
+   },
+   {
+    "week": 11,
+    "date": "2023-03-15",
+    "input_lakh": 11.0,
+    "value_lakh": 10.354,
+    "names": 9
+   },
+   {
+    "week": 12,
+    "date": "2023-03-22",
+    "input_lakh": 12.0,
+    "value_lakh": 11.766,
+    "names": 8
+   },
+   {
+    "week": 13,
+    "date": "2023-03-29",
+    "input_lakh": 13.0,
+    "value_lakh": 12.611,
+    "names": 8
+   },
+   {
+    "week": 14,
+    "date": "2023-04-10",
+    "input_lakh": 14.0,
+    "value_lakh": 14.532,
+    "names": 9
+   },
+   {
+    "week": 15,
+    "date": "2023-04-18",
+    "input_lakh": 15.0,
+    "value_lakh": 16.081,
+    "names": 9
+   },
+   {
+    "week": 16,
+    "date": "2023-04-25",
+    "input_lakh": 16.0,
+    "value_lakh": 17.13,
+    "names": 9
+   },
+   {
+    "week": 17,
+    "date": "2023-05-03",
+    "input_lakh": 17.0,
+    "value_lakh": 18.517,
+    "names": 9
+   },
+   {
+    "week": 18,
+    "date": "2023-05-10",
+    "input_lakh": 18.0,
+    "value_lakh": 19.468,
+    "names": 9
+   },
+   {
+    "week": 19,
+    "date": "2023-05-17",
+    "input_lakh": 19.0,
+    "value_lakh": 20.689,
+    "names": 9
+   },
+   {
+    "week": 20,
+    "date": "2023-05-24",
+    "input_lakh": 20.0,
+    "value_lakh": 22.067,
+    "names": 6
+   },
+   {
+    "week": 21,
+    "date": "2023-05-31",
+    "input_lakh": 21.0,
+    "value_lakh": 24.129,
+    "names": 6
+   },
+   {
+    "week": 22,
+    "date": "2023-06-07",
+    "input_lakh": 22.0,
+    "value_lakh": 26.438,
+    "names": 4
+   },
+   {
+    "week": 23,
+    "date": "2023-06-14",
+    "input_lakh": 23.0,
+    "value_lakh": 27.542,
+    "names": 5
+   },
+   {
+    "week": 24,
+    "date": "2023-06-21",
+    "input_lakh": 24.0,
+    "value_lakh": 29.331,
+    "names": 3
+   },
+   {
+    "week": 25,
+    "date": "2023-06-28",
+    "input_lakh": 25.0,
+    "value_lakh": 30.321,
+    "names": 7
+   },
+   {
+    "week": 26,
+    "date": "2023-07-06",
+    "input_lakh": 26.0,
+    "value_lakh": 31.774,
+    "names": 7
+   },
+   {
+    "week": 27,
+    "date": "2023-07-13",
+    "input_lakh": 26.0,
+    "value_lakh": 32.748,
+    "names": 6
+   },
+   {
+    "week": 28,
+    "date": "2023-07-20",
+    "input_lakh": 26.0,
+    "value_lakh": 32.811,
+    "names": 6
+   },
+   {
+    "week": 29,
+    "date": "2023-07-27",
+    "input_lakh": 26.0,
+    "value_lakh": 33.296,
+    "names": 5
+   },
+   {
+    "week": 30,
+    "date": "2023-08-03",
+    "input_lakh": 26.0,
+    "value_lakh": 33.478,
+    "names": 5
+   },
+   {
+    "week": 31,
+    "date": "2023-08-10",
+    "input_lakh": 26.0,
+    "value_lakh": 33.96,
+    "names": 4
+   },
+   {
+    "week": 32,
+    "date": "2023-08-18",
+    "input_lakh": 26.0,
+    "value_lakh": 33.158,
+    "names": 7
+   },
+   {
+    "week": 33,
+    "date": "2023-08-25",
+    "input_lakh": 26.0,
+    "value_lakh": 33.015,
+    "names": 7
+   },
+   {
+    "week": 34,
+    "date": "2023-09-01",
+    "input_lakh": 26.0,
+    "value_lakh": 34.783,
+    "names": 6
+   },
+   {
+    "week": 35,
+    "date": "2023-09-08",
+    "input_lakh": 26.0,
+    "value_lakh": 35.966,
+    "names": 6
+   },
+   {
+    "week": 36,
+    "date": "2023-09-15",
+    "input_lakh": 26.0,
+    "value_lakh": 35.706,
+    "names": 5
+   },
+   {
+    "week": 37,
+    "date": "2023-09-25",
+    "input_lakh": 26.0,
+    "value_lakh": 35.356,
+    "names": 6
+   },
+   {
+    "week": 38,
+    "date": "2023-10-03",
+    "input_lakh": 26.0,
+    "value_lakh": 36.144,
+    "names": 6
+   },
+   {
+    "week": 39,
+    "date": "2023-10-10",
+    "input_lakh": 26.0,
+    "value_lakh": 37.711,
+    "names": 7
+   },
+   {
+    "week": 40,
+    "date": "2023-10-17",
+    "input_lakh": 26.0,
+    "value_lakh": 39.45,
+    "names": 4
+   },
+   {
+    "week": 41,
+    "date": "2023-10-25",
+    "input_lakh": 26.0,
+    "value_lakh": 36.017,
+    "names": 4
+   },
+   {
+    "week": 42,
+    "date": "2023-11-01",
+    "input_lakh": 26.0,
+    "value_lakh": 38.044,
+    "names": 3
+   },
+   {
+    "week": 43,
+    "date": "2023-11-08",
+    "input_lakh": 26.0,
+    "value_lakh": 39.311,
+    "names": 5
+   },
+   {
+    "week": 44,
+    "date": "2023-11-16",
+    "input_lakh": 26.0,
+    "value_lakh": 39.92,
+    "names": 4
+   },
+   {
+    "week": 45,
+    "date": "2023-11-23",
+    "input_lakh": 26.0,
+    "value_lakh": 40.729,
+    "names": 7
+   },
+   {
+    "week": 46,
+    "date": "2023-12-01",
+    "input_lakh": 26.0,
+    "value_lakh": 40.942,
+    "names": 7
+   },
+   {
+    "week": 47,
+    "date": "2023-12-08",
+    "input_lakh": 26.0,
+    "value_lakh": 42.161,
+    "names": 8
+   },
+   {
+    "week": 48,
+    "date": "2023-12-15",
+    "input_lakh": 26.0,
+    "value_lakh": 42.864,
+    "names": 7
+   },
+   {
+    "week": 49,
+    "date": "2023-12-22",
+    "input_lakh": 26.0,
+    "value_lakh": 43.173,
+    "names": 6
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2023-01",
+    "date": "2023-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 4.953,
+    "roi_pct": -0.9
+   },
+   {
+    "month": "2023-02",
+    "date": "2023-02-28",
+    "input_lakh": 9.0,
+    "value_lakh": 8.209,
+    "roi_pct": -8.8
+   },
+   {
+    "month": "2023-03",
+    "date": "2023-03-31",
+    "input_lakh": 13.0,
+    "value_lakh": 12.912,
+    "roi_pct": -0.7
+   },
+   {
+    "month": "2023-04",
+    "date": "2023-04-28",
+    "input_lakh": 16.0,
+    "value_lakh": 17.332,
+    "roi_pct": 8.3
+   },
+   {
+    "month": "2023-05",
+    "date": "2023-05-31",
+    "input_lakh": 21.0,
+    "value_lakh": 24.129,
+    "roi_pct": 14.9
+   },
+   {
+    "month": "2023-06",
+    "date": "2023-06-30",
+    "input_lakh": 25.0,
+    "value_lakh": 30.372,
+    "roi_pct": 21.5
+   },
+   {
+    "month": "2023-07",
+    "date": "2023-07-31",
+    "input_lakh": 26.0,
+    "value_lakh": 33.397,
+    "roi_pct": 28.5
+   },
+   {
+    "month": "2023-08",
+    "date": "2023-08-31",
+    "input_lakh": 26.0,
+    "value_lakh": 34.186,
+    "roi_pct": 31.5
+   },
+   {
+    "month": "2023-09",
+    "date": "2023-09-29",
+    "input_lakh": 26.0,
+    "value_lakh": 36.013,
+    "roi_pct": 38.5
+   },
+   {
+    "month": "2023-10",
+    "date": "2023-10-31",
+    "input_lakh": 26.0,
+    "value_lakh": 38.336,
+    "roi_pct": 47.4
+   },
+   {
+    "month": "2023-11",
+    "date": "2023-11-30",
+    "input_lakh": 26.0,
+    "value_lakh": 40.692,
+    "roi_pct": 56.5
+   },
+   {
+    "month": "2023-12",
+    "date": "2023-12-29",
+    "input_lakh": 26.0,
+    "value_lakh": 43.508,
+    "roi_pct": 67.3
+   }
+  ],
+  "lists": 49,
+  "empty_lists": 0
+ },
+ "2024": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2024-01-01",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 3
+   },
+   {
+    "week": 2,
+    "date": "2024-01-08",
+    "input_lakh": 2.0,
+    "value_lakh": 1.993,
+    "names": 6
+   },
+   {
+    "week": 3,
+    "date": "2024-01-15",
+    "input_lakh": 3.0,
+    "value_lakh": 3.036,
+    "names": 6
+   },
+   {
+    "week": 4,
+    "date": "2024-01-20",
+    "input_lakh": 4.0,
+    "value_lakh": 4.209,
+    "names": 6
+   },
+   {
+    "week": 5,
+    "date": "2024-01-30",
+    "input_lakh": 5.0,
+    "value_lakh": 5.625,
+    "names": 6
+   },
+   {
+    "week": 6,
+    "date": "2024-02-06",
+    "input_lakh": 6.0,
+    "value_lakh": 6.868,
+    "names": 6
+   },
+   {
+    "week": 7,
+    "date": "2024-02-13",
+    "input_lakh": 7.0,
+    "value_lakh": 7.602,
+    "names": 6
+   },
+   {
+    "week": 8,
+    "date": "2024-02-20",
+    "input_lakh": 8.0,
+    "value_lakh": 9.086,
+    "names": 7
+   },
+   {
+    "week": 9,
+    "date": "2024-02-27",
+    "input_lakh": 9.0,
+    "value_lakh": 9.915,
+    "names": 5
+   },
+   {
+    "week": 10,
+    "date": "2024-03-05",
+    "input_lakh": 10.0,
+    "value_lakh": 10.503,
+    "names": 5
+   },
+   {
+    "week": 11,
+    "date": "2024-03-13",
+    "input_lakh": 11.0,
+    "value_lakh": 9.738,
+    "names": 4
+   },
+   {
+    "week": 12,
+    "date": "2024-03-20",
+    "input_lakh": 12.0,
+    "value_lakh": 11.194,
+    "names": 8
+   },
+   {
+    "week": 13,
+    "date": "2024-03-28",
+    "input_lakh": 13.0,
+    "value_lakh": 12.749,
+    "names": 6
+   },
+   {
+    "week": 14,
+    "date": "2024-04-05",
+    "input_lakh": 14.0,
+    "value_lakh": 15.378,
+    "names": 6
+   },
+   {
+    "week": 15,
+    "date": "2024-04-15",
+    "input_lakh": 15.0,
+    "value_lakh": 15.809,
+    "names": 4
+   },
+   {
+    "week": 16,
+    "date": "2024-04-23",
+    "input_lakh": 16.0,
+    "value_lakh": 17.964,
+    "names": 4
+   },
+   {
+    "week": 17,
+    "date": "2024-04-30",
+    "input_lakh": 17.0,
+    "value_lakh": 19.085,
+    "names": 2
+   },
+   {
+    "week": 18,
+    "date": "2024-05-08",
+    "input_lakh": 18.0,
+    "value_lakh": 19.692,
+    "names": 1
+   },
+   {
+    "week": 19,
+    "date": "2024-05-15",
+    "input_lakh": 19.0,
+    "value_lakh": 21.221,
+    "names": 5
+   },
+   {
+    "week": 20,
+    "date": "2024-05-22",
+    "input_lakh": 20.0,
+    "value_lakh": 22.649,
+    "names": 4
+   },
+   {
+    "week": 21,
+    "date": "2024-05-29",
+    "input_lakh": 21.0,
+    "value_lakh": 22.417,
+    "names": 6
+   },
+   {
+    "week": 22,
+    "date": "2024-06-05",
+    "input_lakh": 22.0,
+    "value_lakh": 22.715,
+    "names": 5
+   },
+   {
+    "week": 23,
+    "date": "2024-06-12",
+    "input_lakh": 23.0,
+    "value_lakh": 26.954,
+    "names": 6
+   },
+   {
+    "week": 24,
+    "date": "2024-06-20",
+    "input_lakh": 24.0,
+    "value_lakh": 30.041,
+    "names": 5
+   },
+   {
+    "week": 25,
+    "date": "2024-06-27",
+    "input_lakh": 25.0,
+    "value_lakh": 30.56,
+    "names": 6
+   },
+   {
+    "week": 26,
+    "date": "2024-07-04",
+    "input_lakh": 26.0,
+    "value_lakh": 34.186,
+    "names": 4
+   },
+   {
+    "week": 27,
+    "date": "2024-07-11",
+    "input_lakh": 26.0,
+    "value_lakh": 36.629,
+    "names": 4
+   },
+   {
+    "week": 28,
+    "date": "2024-07-19",
+    "input_lakh": 26.0,
+    "value_lakh": 37.247,
+    "names": 6
+   },
+   {
+    "week": 29,
+    "date": "2024-07-26",
+    "input_lakh": 26.0,
+    "value_lakh": 38.959,
+    "names": 8
+   },
+   {
+    "week": 30,
+    "date": "2024-08-02",
+    "input_lakh": 26.0,
+    "value_lakh": 40.608,
+    "names": 6
+   },
+   {
+    "week": 31,
+    "date": "2024-08-09",
+    "input_lakh": 26.0,
+    "value_lakh": 40.976,
+    "names": 7
+   },
+   {
+    "week": 32,
+    "date": "2024-08-19",
+    "input_lakh": 26.0,
+    "value_lakh": 40.388,
+    "names": 4
+   },
+   {
+    "week": 33,
+    "date": "2024-08-26",
+    "input_lakh": 26.0,
+    "value_lakh": 41.862,
+    "names": 4
+   },
+   {
+    "week": 34,
+    "date": "2024-09-02",
+    "input_lakh": 26.0,
+    "value_lakh": 41.449,
+    "names": 4
+   },
+   {
+    "week": 35,
+    "date": "2024-09-09",
+    "input_lakh": 26.0,
+    "value_lakh": 41.708,
+    "names": 2
+   },
+   {
+    "week": 36,
+    "date": "2024-09-16",
+    "input_lakh": 26.0,
+    "value_lakh": 42.856,
+    "names": 2
+   },
+   {
+    "week": 37,
+    "date": "2024-09-23",
+    "input_lakh": 26.0,
+    "value_lakh": 43.615,
+    "names": 1
+   },
+   {
+    "week": 38,
+    "date": "2024-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 44.137,
+    "names": 2
+   },
+   {
+    "week": 39,
+    "date": "2024-10-08",
+    "input_lakh": 26.0,
+    "value_lakh": 42.135,
+    "names": 1
+   },
+   {
+    "week": 40,
+    "date": "2024-10-15",
+    "input_lakh": 26.0,
+    "value_lakh": 44.212,
+    "names": 3
+   },
+   {
+    "week": 41,
+    "date": "2024-10-22",
+    "input_lakh": 26.0,
+    "value_lakh": 40.042,
+    "names": 1
+   },
+   {
+    "week": 42,
+    "date": "2024-10-29",
+    "input_lakh": 26.0,
+    "value_lakh": 38.998,
+    "names": 1
+   },
+   {
+    "week": 43,
+    "date": "2024-11-05",
+    "input_lakh": 26.0,
+    "value_lakh": 42.309,
+    "names": 3
+   },
+   {
+    "week": 44,
+    "date": "2024-11-12",
+    "input_lakh": 26.0,
+    "value_lakh": 45.195,
+    "names": 3
+   },
+   {
+    "week": 45,
+    "date": "2024-11-21",
+    "input_lakh": 26.0,
+    "value_lakh": 45.963,
+    "names": 5
+   },
+   {
+    "week": 46,
+    "date": "2024-11-28",
+    "input_lakh": 26.0,
+    "value_lakh": 49.987,
+    "names": 5
+   },
+   {
+    "week": 47,
+    "date": "2024-12-05",
+    "input_lakh": 26.0,
+    "value_lakh": 51.873,
+    "names": 7
+   },
+   {
+    "week": 48,
+    "date": "2024-12-12",
+    "input_lakh": 26.0,
+    "value_lakh": 53.372,
+    "names": 2
+   },
+   {
+    "week": 49,
+    "date": "2024-12-19",
+    "input_lakh": 26.0,
+    "value_lakh": 54.255,
+    "names": 4
+   },
+   {
+    "week": 50,
+    "date": "2024-12-27",
+    "input_lakh": 26.0,
+    "value_lakh": 52.07,
+    "names": 3
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2024-01",
+    "date": "2024-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 5.767,
+    "roi_pct": 15.3
+   },
+   {
+    "month": "2024-02",
+    "date": "2024-02-29",
+    "input_lakh": 9.0,
+    "value_lakh": 9.703,
+    "roi_pct": 7.8
+   },
+   {
+    "month": "2024-03",
+    "date": "2024-03-28",
+    "input_lakh": 13.0,
+    "value_lakh": 12.749,
+    "roi_pct": -1.9
+   },
+   {
+    "month": "2024-04",
+    "date": "2024-04-30",
+    "input_lakh": 17.0,
+    "value_lakh": 19.085,
+    "roi_pct": 12.3
+   },
+   {
+    "month": "2024-05",
+    "date": "2024-05-31",
+    "input_lakh": 21.0,
+    "value_lakh": 22.474,
+    "roi_pct": 7.0
+   },
+   {
+    "month": "2024-06",
+    "date": "2024-06-28",
+    "input_lakh": 25.0,
+    "value_lakh": 31.008,
+    "roi_pct": 24.0
+   },
+   {
+    "month": "2024-07",
+    "date": "2024-07-31",
+    "input_lakh": 26.0,
+    "value_lakh": 40.26,
+    "roi_pct": 54.8
+   },
+   {
+    "month": "2024-08",
+    "date": "2024-08-30",
+    "input_lakh": 26.0,
+    "value_lakh": 41.86,
+    "roi_pct": 61.0
+   },
+   {
+    "month": "2024-09",
+    "date": "2024-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 44.137,
+    "roi_pct": 69.8
+   },
+   {
+    "month": "2024-10",
+    "date": "2024-10-31",
+    "input_lakh": 26.0,
+    "value_lakh": 41.181,
+    "roi_pct": 58.4
+   },
+   {
+    "month": "2024-11",
+    "date": "2024-11-29",
+    "input_lakh": 26.0,
+    "value_lakh": 50.536,
+    "roi_pct": 94.4
+   },
+   {
+    "month": "2024-12",
+    "date": "2024-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 52.597,
+    "roi_pct": 102.3
+   }
+  ],
+  "lists": 50,
+  "empty_lists": 0
+ },
+ "2025": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2025-01-03",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 4
+   },
+   {
+    "week": 2,
+    "date": "2025-01-10",
+    "input_lakh": 2.0,
+    "value_lakh": 1.881,
+    "names": 3
+   },
+   {
+    "week": 3,
+    "date": "2025-01-17",
+    "input_lakh": 3.0,
+    "value_lakh": 2.873,
+    "names": 5
+   },
+   {
+    "week": 4,
+    "date": "2025-01-24",
+    "input_lakh": 4.0,
+    "value_lakh": 3.688,
+    "names": 5
+   },
+   {
+    "week": 5,
+    "date": "2025-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 4.459,
+    "names": 2
+   },
+   {
+    "week": 6,
+    "date": "2025-02-07",
+    "input_lakh": 6.0,
+    "value_lakh": 5.299,
+    "names": 5
+   },
+   {
+    "week": 7,
+    "date": "2025-02-14",
+    "input_lakh": 7.0,
+    "value_lakh": 5.545,
+    "names": 7
+   },
+   {
+    "week": 8,
+    "date": "2025-02-21",
+    "input_lakh": 8.0,
+    "value_lakh": 6.437,
+    "names": 9
+   },
+   {
+    "week": 9,
+    "date": "2025-03-03",
+    "input_lakh": 9.0,
+    "value_lakh": 6.858,
+    "names": 9
+   },
+   {
+    "week": 10,
+    "date": "2025-03-10",
+    "input_lakh": 10.0,
+    "value_lakh": 8.323,
+    "names": 9
+   },
+   {
+    "week": 11,
+    "date": "2025-03-18",
+    "input_lakh": 11.0,
+    "value_lakh": 9.565,
+    "names": 3
+   },
+   {
+    "week": 12,
+    "date": "2025-03-25",
+    "input_lakh": 12.0,
+    "value_lakh": 10.989,
+    "names": 4
+   },
+   {
+    "week": 13,
+    "date": "2025-04-02",
+    "input_lakh": 13.0,
+    "value_lakh": 12.037,
+    "names": 5
+   },
+   {
+    "week": 14,
+    "date": "2025-04-09",
+    "input_lakh": 14.0,
+    "value_lakh": 12.102,
+    "names": 3
+   },
+   {
+    "week": 15,
+    "date": "2025-04-21",
+    "input_lakh": 15.0,
+    "value_lakh": 14.507,
+    "names": 5
+   },
+   {
+    "week": 16,
+    "date": "2025-04-28",
+    "input_lakh": 16.0,
+    "value_lakh": 15.226,
+    "names": 5
+   },
+   {
+    "week": 17,
+    "date": "2025-05-06",
+    "input_lakh": 17.0,
+    "value_lakh": 15.55,
+    "names": 5
+   },
+   {
+    "week": 18,
+    "date": "2025-05-13",
+    "input_lakh": 18.0,
+    "value_lakh": 17.415,
+    "names": 4
+   },
+   {
+    "week": 19,
+    "date": "2025-05-20",
+    "input_lakh": 19.0,
+    "value_lakh": 18.987,
+    "names": 6
+   },
+   {
+    "week": 20,
+    "date": "2025-05-27",
+    "input_lakh": 20.0,
+    "value_lakh": 20.436,
+    "names": 6
+   },
+   {
+    "week": 21,
+    "date": "2025-06-03",
+    "input_lakh": 21.0,
+    "value_lakh": 21.722,
+    "names": 6
+   },
+   {
+    "week": 22,
+    "date": "2025-06-10",
+    "input_lakh": 22.0,
+    "value_lakh": 23.041,
+    "names": 6
+   },
+   {
+    "week": 23,
+    "date": "2025-06-17",
+    "input_lakh": 23.0,
+    "value_lakh": 23.687,
+    "names": 6
+   },
+   {
+    "week": 24,
+    "date": "2025-06-24",
+    "input_lakh": 24.0,
+    "value_lakh": 24.483,
+    "names": 5
+   },
+   {
+    "week": 25,
+    "date": "2025-07-01",
+    "input_lakh": 25.0,
+    "value_lakh": 26.255,
+    "names": 5
+   },
+   {
+    "week": 26,
+    "date": "2025-07-08",
+    "input_lakh": 26.0,
+    "value_lakh": 27.197,
+    "names": 7
+   },
+   {
+    "week": 27,
+    "date": "2025-07-15",
+    "input_lakh": 26.0,
+    "value_lakh": 27.839,
+    "names": 6
+   },
+   {
+    "week": 28,
+    "date": "2025-07-22",
+    "input_lakh": 26.0,
+    "value_lakh": 28.117,
+    "names": 6
+   },
+   {
+    "week": 29,
+    "date": "2025-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 28.096,
+    "names": 6
+   },
+   {
+    "week": 30,
+    "date": "2025-08-05",
+    "input_lakh": 26.0,
+    "value_lakh": 27.752,
+    "names": 7
+   },
+   {
+    "week": 31,
+    "date": "2025-08-12",
+    "input_lakh": 26.0,
+    "value_lakh": 26.937,
+    "names": 8
+   },
+   {
+    "week": 32,
+    "date": "2025-08-20",
+    "input_lakh": 26.0,
+    "value_lakh": 27.378,
+    "names": 7
+   },
+   {
+    "week": 33,
+    "date": "2025-08-28",
+    "input_lakh": 26.0,
+    "value_lakh": 27.132,
+    "names": 8
+   },
+   {
+    "week": 34,
+    "date": "2025-09-04",
+    "input_lakh": 26.0,
+    "value_lakh": 28.138,
+    "names": 6
+   },
+   {
+    "week": 35,
+    "date": "2025-09-11",
+    "input_lakh": 26.0,
+    "value_lakh": 27.993,
+    "names": 5
+   },
+   {
+    "week": 36,
+    "date": "2025-09-18",
+    "input_lakh": 26.0,
+    "value_lakh": 28.302,
+    "names": 6
+   },
+   {
+    "week": 37,
+    "date": "2025-09-25",
+    "input_lakh": 26.0,
+    "value_lakh": 28.481,
+    "names": 3
+   },
+   {
+    "week": 38,
+    "date": "2025-10-03",
+    "input_lakh": 26.0,
+    "value_lakh": 28.23,
+    "names": 4
+   },
+   {
+    "week": 39,
+    "date": "2025-10-10",
+    "input_lakh": 26.0,
+    "value_lakh": 28.645,
+    "names": 4
+   },
+   {
+    "week": 40,
+    "date": "2025-10-17",
+    "input_lakh": 26.0,
+    "value_lakh": 28.302,
+    "names": 3
+   },
+   {
+    "week": 41,
+    "date": "2025-10-27",
+    "input_lakh": 26.0,
+    "value_lakh": 28.099,
+    "names": 1
+   },
+   {
+    "week": 42,
+    "date": "2025-11-03",
+    "input_lakh": 26.0,
+    "value_lakh": 28.112,
+    "names": 4
+   },
+   {
+    "week": 43,
+    "date": "2025-11-11",
+    "input_lakh": 26.0,
+    "value_lakh": 27.549,
+    "names": 4
+   },
+   {
+    "week": 44,
+    "date": "2025-11-18",
+    "input_lakh": 26.0,
+    "value_lakh": 28.182,
+    "names": 2
+   },
+   {
+    "week": 45,
+    "date": "2025-11-25",
+    "input_lakh": 26.0,
+    "value_lakh": 27.676,
+    "names": 3
+   },
+   {
+    "week": 46,
+    "date": "2025-12-02",
+    "input_lakh": 26.0,
+    "value_lakh": 28.187,
+    "names": 4
+   },
+   {
+    "week": 47,
+    "date": "2025-12-09",
+    "input_lakh": 26.0,
+    "value_lakh": 28.044,
+    "names": 4
+   },
+   {
+    "week": 48,
+    "date": "2025-12-16",
+    "input_lakh": 26.0,
+    "value_lakh": 28.782,
+    "names": 4
+   },
+   {
+    "week": 49,
+    "date": "2025-12-23",
+    "input_lakh": 26.0,
+    "value_lakh": 30.247,
+    "names": 3
+   },
+   {
+    "week": 50,
+    "date": "2025-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 31.088,
+    "names": 5
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2025-01",
+    "date": "2025-01-31",
+    "input_lakh": 5.0,
+    "value_lakh": 4.459,
+    "roi_pct": -10.8
+   },
+   {
+    "month": "2025-02",
+    "date": "2025-02-28",
+    "input_lakh": 8.0,
+    "value_lakh": 5.967,
+    "roi_pct": -25.4
+   },
+   {
+    "month": "2025-03",
+    "date": "2025-03-28",
+    "input_lakh": 12.0,
+    "value_lakh": 10.868,
+    "roi_pct": -9.4
+   },
+   {
+    "month": "2025-04",
+    "date": "2025-04-30",
+    "input_lakh": 16.0,
+    "value_lakh": 14.935,
+    "roi_pct": -6.7
+   },
+   {
+    "month": "2025-05",
+    "date": "2025-05-30",
+    "input_lakh": 20.0,
+    "value_lakh": 20.871,
+    "roi_pct": 4.4
+   },
+   {
+    "month": "2025-06",
+    "date": "2025-06-30",
+    "input_lakh": 24.0,
+    "value_lakh": 25.452,
+    "roi_pct": 6.0
+   },
+   {
+    "month": "2025-07",
+    "date": "2025-07-31",
+    "input_lakh": 26.0,
+    "value_lakh": 28.128,
+    "roi_pct": 8.2
+   },
+   {
+    "month": "2025-08",
+    "date": "2025-08-29",
+    "input_lakh": 26.0,
+    "value_lakh": 27.335,
+    "roi_pct": 5.1
+   },
+   {
+    "month": "2025-09",
+    "date": "2025-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 27.543,
+    "roi_pct": 5.9
+   },
+   {
+    "month": "2025-10",
+    "date": "2025-10-31",
+    "input_lakh": 26.0,
+    "value_lakh": 27.951,
+    "roi_pct": 7.5
+   },
+   {
+    "month": "2025-11",
+    "date": "2025-11-28",
+    "input_lakh": 26.0,
+    "value_lakh": 28.0,
+    "roi_pct": 7.7
+   },
+   {
+    "month": "2025-12",
+    "date": "2025-12-31",
+    "input_lakh": 26.0,
+    "value_lakh": 31.088,
+    "roi_pct": 19.6
+   }
+  ],
+  "lists": 50,
+  "empty_lists": 0
+ },
+ "2026": {
+  "weekly": [
+   {
+    "week": 1,
+    "date": "2026-01-07",
+    "input_lakh": 1.0,
+    "value_lakh": 1.0,
+    "names": 5
+   },
+   {
+    "week": 2,
+    "date": "2026-01-14",
+    "input_lakh": 2.0,
+    "value_lakh": 1.927,
+    "names": 8
+   },
+   {
+    "week": 3,
+    "date": "2026-01-22",
+    "input_lakh": 3.0,
+    "value_lakh": 2.892,
+    "names": 6
+   },
+   {
+    "week": 4,
+    "date": "2026-01-30",
+    "input_lakh": 4.0,
+    "value_lakh": 3.862,
+    "names": 5
+   },
+   {
+    "week": 5,
+    "date": "2026-02-06",
+    "input_lakh": 5.0,
+    "value_lakh": 5.002,
+    "names": 5
+   },
+   {
+    "week": 6,
+    "date": "2026-02-13",
+    "input_lakh": 6.0,
+    "value_lakh": 6.059,
+    "names": 6
+   },
+   {
+    "week": 7,
+    "date": "2026-02-20",
+    "input_lakh": 7.0,
+    "value_lakh": 7.284,
+    "names": 8
+   },
+   {
+    "week": 8,
+    "date": "2026-02-27",
+    "input_lakh": 8.0,
+    "value_lakh": 8.096,
+    "names": 8
+   },
+   {
+    "week": 9,
+    "date": "2026-03-09",
+    "input_lakh": 9.0,
+    "value_lakh": 8.614,
+    "names": 9
+   },
+   {
+    "week": 10,
+    "date": "2026-03-16",
+    "input_lakh": 10.0,
+    "value_lakh": 9.064,
+    "names": 8
+   },
+   {
+    "week": 11,
+    "date": "2026-03-23",
+    "input_lakh": 11.0,
+    "value_lakh": 9.963,
+    "names": 6
+   },
+   {
+    "week": 12,
+    "date": "2026-04-01",
+    "input_lakh": 12.0,
+    "value_lakh": 11.355,
+    "names": 6
+   },
+   {
+    "week": 13,
+    "date": "2026-04-09",
+    "input_lakh": 13.0,
+    "value_lakh": 13.254,
+    "names": 5
+   },
+   {
+    "week": 14,
+    "date": "2026-04-17",
+    "input_lakh": 14.0,
+    "value_lakh": 15.538,
+    "names": 8
+   },
+   {
+    "week": 15,
+    "date": "2026-04-24",
+    "input_lakh": 15.0,
+    "value_lakh": 16.261,
+    "names": 6
+   },
+   {
+    "week": 16,
+    "date": "2026-05-04",
+    "input_lakh": 16.0,
+    "value_lakh": 18.338,
+    "names": 5
+   },
+   {
+    "week": 17,
+    "date": "2026-05-11",
+    "input_lakh": 17.0,
+    "value_lakh": 19.669,
+    "names": 5
+   },
+   {
+    "week": 18,
+    "date": "2026-05-18",
+    "input_lakh": 18.0,
+    "value_lakh": 19.725,
+    "names": 7
+   },
+   {
+    "week": 19,
+    "date": "2026-05-25",
+    "input_lakh": 19.0,
+    "value_lakh": 22.263,
+    "names": 4
+   },
+   {
+    "week": 20,
+    "date": "2026-06-02",
+    "input_lakh": 20.0,
+    "value_lakh": 23.261,
+    "names": 3
+   },
+   {
+    "week": 21,
+    "date": "2026-06-09",
+    "input_lakh": 21.0,
+    "value_lakh": 24.777,
+    "names": 5
+   },
+   {
+    "week": 22,
+    "date": "2026-06-16",
+    "input_lakh": 22.0,
+    "value_lakh": 26.596,
+    "names": 2
+   },
+   {
+    "week": 23,
+    "date": "2026-06-23",
+    "input_lakh": 23.0,
+    "value_lakh": 28.005,
+    "names": 3
+   },
+   {
+    "week": 24,
+    "date": "2026-07-01",
+    "input_lakh": 24.0,
+    "value_lakh": 29.26,
+    "names": 4
+   },
+   {
+    "week": 25,
+    "date": "2026-07-08",
+    "input_lakh": 25.0,
+    "value_lakh": 30.383,
+    "names": 3
+   },
+   {
+    "week": 26,
+    "date": "2026-07-15",
+    "input_lakh": 26.0,
+    "value_lakh": 32.534,
+    "names": 2
+   },
+   {
+    "week": 27,
+    "date": "2026-07-22",
+    "input_lakh": 26.0,
+    "value_lakh": 31.196,
+    "names": 4
+   },
+   {
+    "week": 28,
+    "date": "2026-07-29",
+    "input_lakh": 26.0,
+    "value_lakh": 31.036,
+    "names": 4
+   },
+   {
+    "week": 29,
+    "date": "2026-08-05",
+    "input_lakh": 26.0,
+    "value_lakh": 32.706,
+    "names": 3
+   },
+   {
+    "week": 30,
+    "date": "2026-08-12",
+    "input_lakh": 26.0,
+    "value_lakh": 33.723,
+    "names": 6
+   },
+   {
+    "week": 31,
+    "date": "2026-08-19",
+    "input_lakh": 26.0,
+    "value_lakh": 34.088,
+    "names": 8
+   },
+   {
+    "week": 32,
+    "date": "2026-08-26",
+    "input_lakh": 26.0,
+    "value_lakh": 34.195,
+    "names": 1
+   },
+   {
+    "week": 33,
+    "date": "2026-09-02",
+    "input_lakh": 26.0,
+    "value_lakh": 34.768,
+    "names": 7
+   },
+   {
+    "week": 34,
+    "date": "2026-09-09",
+    "input_lakh": 26.0,
+    "value_lakh": 35.81,
+    "names": 6
+   },
+   {
+    "week": 35,
+    "date": "2026-09-17",
+    "input_lakh": 26.0,
+    "value_lakh": 35.434,
+    "names": 7
+   },
+   {
+    "week": 36,
+    "date": "2026-09-24",
+    "input_lakh": 26.0,
+    "value_lakh": 36.023,
+    "names": 5
+   },
+   {
+    "week": 37,
+    "date": "2026-10-01",
+    "input_lakh": 26.0,
+    "value_lakh": 36.701,
+    "names": 5
+   },
+   {
+    "week": 38,
+    "date": "2026-10-09",
+    "input_lakh": 26.0,
+    "value_lakh": 37.068,
+    "names": 3
+   }
+  ],
+  "monthly": [
+   {
+    "month": "2026-01",
+    "date": "2026-01-30",
+    "input_lakh": 4.0,
+    "value_lakh": 3.862,
+    "roi_pct": -3.4
+   },
+   {
+    "month": "2026-02",
+    "date": "2026-02-27",
+    "input_lakh": 8.0,
+    "value_lakh": 8.096,
+    "roi_pct": 1.2
+   },
+   {
+    "month": "2026-03",
+    "date": "2026-03-30",
+    "input_lakh": 11.0,
+    "value_lakh": 9.859,
+    "roi_pct": -10.4
+   },
+   {
+    "month": "2026-04",
+    "date": "2026-04-30",
+    "input_lakh": 15.0,
+    "value_lakh": 17.037,
+    "roi_pct": 13.6
+   },
+   {
+    "month": "2026-05",
+    "date": "2026-05-29",
+    "input_lakh": 19.0,
+    "value_lakh": 22.285,
+    "roi_pct": 17.3
+   },
+   {
+    "month": "2026-06",
+    "date": "2026-06-30",
+    "input_lakh": 23.0,
+    "value_lakh": 27.957,
+    "roi_pct": 21.6
+   },
+   {
+    "month": "2026-07",
+    "date": "2026-07-31",
+    "input_lakh": 26.0,
+    "value_lakh": 31.283,
+    "roi_pct": 20.3
+   },
+   {
+    "month": "2026-08",
+    "date": "2026-08-31",
+    "input_lakh": 26.0,
+    "value_lakh": 34.318,
+    "roi_pct": 32.0
+   },
+   {
+    "month": "2026-09",
+    "date": "2026-09-30",
+    "input_lakh": 26.0,
+    "value_lakh": 36.773,
+    "roi_pct": 41.4
+   },
+   {
+    "month": "2026-10",
+    "date": "2026-10-12",
+    "input_lakh": 26.0,
+    "value_lakh": 37.583,
+    "roi_pct": 44.6
+   }
+  ],
+  "lists": 38,
+  "empty_lists": 0
+ }
+}

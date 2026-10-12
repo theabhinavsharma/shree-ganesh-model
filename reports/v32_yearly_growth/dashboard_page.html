@@ -1,0 +1,250 @@
+<style>
+  .vg { display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); }
+  .vg-head h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+  .vg-take { color: var(--color-fg-muted); font-size: var(--cds-font-size-body); margin: var(--cds-gap-xs) 0 0; max-width: 72ch; line-height: 1.5; }
+  .vg-take b { font-weight: var(--cds-font-weight-medium); color: var(--color-fg); font-variant-numeric: tabular-nums; }
+  .vg-sec h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+  .vg-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 var(--cds-gap-sm); max-width: 78ch; line-height: 1.5; }
+  .vg-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: var(--cds-gap-md); }
+  .vg-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .vg-sw { width: 14px; height: 0; border-top: 2px solid; display: inline-block; }
+  .vg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: var(--cds-gap-md); }
+  .vg-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+  .vg-card h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .vg-sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; margin-top: 2px; min-height: 1.2em; }
+  .vg-sub b { font-weight: var(--cds-font-weight-medium); color: var(--color-fg); }
+  .vg-chart { position: relative; min-height: 190px; margin-top: var(--cds-gap-sm); }
+  .vg-chart svg { display: block; overflow: visible; }
+  .vg-chart text { fill: var(--color-fg-muted); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .vg-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius);
+            box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; font-variant-numeric: tabular-nums; z-index: 2; }
+  .vg-tip .d { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .vg-tip .r { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .vg-fail { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-xs); min-height: 190px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .vg-fail i { width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); display: inline-block; }
+  .vg-foot { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); max-width: 78ch; line-height: 1.5; margin: 0; }
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="vg">
+  <header class="vg-head" id="top">
+    <h1>V3.2 money path by year</h1>
+    <p class="vg-take dash-skeleton" id="takeaway" data-source="yearEnd">—</p>
+  </header>
+
+  <section class="vg-sec" id="money">
+    <h2>Money in vs portfolio value, week by week</h2>
+    <p class="vg-note">Each chart is a fresh start that year: ₹1 lakh into every weekly V3.2 list for the first 26 lists, so money in stops at ₹26 lakh. Each lot is sold 6 months after purchase and the money goes into that week's new list. Value includes trading costs and dividends. 2019 starts in April, when the data starts; 2026 runs to the latest list. Same scale on every chart.</p>
+    <div class="vg-legend" aria-hidden="true">
+      <span><i class="vg-sw" style="border-color: var(--cds-chart-muted)"></i>Money put in</span>
+      <span><i class="vg-sw" id="swValue"></i>Portfolio value</span>
+    </div>
+    <div class="vg-grid" id="moneyGrid"></div>
+  </section>
+
+  <section class="vg-sec" id="roi">
+    <h2>Return on money put in, month by month</h2>
+    <p class="vg-note">Portfolio value ÷ money put in − 1, at each month's last close. Same scale on every chart; the dashed line is break-even.</p>
+    <div class="vg-grid" id="roiGrid"></div>
+  </section>
+
+  <p class="vg-foot">Backtest of the V3.2 rule: lists rebuilt with today's data and model, bought at the list-day close (buying at Monday's open was about 2–2.5 points a year lower), liquidity-scaled trading costs of 0.5–2% per round trip, dividends counted, before tax. The rule was chosen after seeing these years, so the future should come in lower.</p>
+</div>
+
+<script>
+(function () {
+  const YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const lakh = (v) => '₹' + d3.format('.1f')(v) + ' L';
+  const pct = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('.1f')(Math.abs(v)) + '%';
+  const fmtDate = (s) => d3.utcFormat('%b %-d, %Y')(new Date(s));
+  document.getElementById('swValue').style.borderColor = dash.colors[0];
+
+  dash.calc('yearEnd', {
+    inputs: ['weekly'],
+    title: 'Year-end money and value',
+    description: 'Last weekly list of each year: money put in, portfolio value and return on the money put in.',
+    fn: (weekly) => {
+      const by = d3.group(weekly, (r) => Number(r.year));
+      return Array.from(by, ([year, rows]) => {
+        const last = rows.reduce((a, r) => (Number(r.week) > Number(a.week) ? r : a));
+        const inp = Number(last.input_lakh), val = Number(last.value_lakh);
+        return { year, date: last.date, input_lakh: inp, value_lakh: val, roi_pct: Math.round((val / inp - 1) * 1000) / 10 };
+      });
+    }
+  });
+
+  // build the 16 cards once
+  const moneyGrid = document.getElementById('moneyGrid'), roiGrid = document.getElementById('roiGrid');
+  const cards = {};
+  for (const y of YEARS) {
+    const m = document.createElement('article'); m.className = 'vg-card'; m.id = 'money-' + y;
+    m.innerHTML = '<h3></h3><div class="vg-sub"></div><div class="vg-chart dash-skeleton" data-source="weekly"></div>';
+    m.querySelector('h3').textContent = y === 2019 ? '2019 (from April)' : y === 2026 ? '2026 so far' : String(y);
+    moneyGrid.appendChild(m);
+    const r = document.createElement('article'); r.className = 'vg-card'; r.id = 'roi-' + y;
+    r.innerHTML = '<h3></h3><div class="vg-sub"></div><div class="vg-chart dash-skeleton" data-source="monthly"></div>';
+    r.querySelector('h3').textContent = m.querySelector('h3').textContent;
+    roiGrid.appendChild(r);
+    cards[y] = { m, r };
+  }
+
+  function measure(svg, labels) {
+    const t = svg.append('text').attr('x', -9999);
+    let w = 0;
+    for (const s of labels) { t.text(s); w = Math.max(w, t.node().getComputedTextLength()); }
+    t.remove();
+    return w;
+  }
+
+  function tipAt(box, tip, px, py) {
+    const bw = box.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
+    let left = px + 12; if (left + tw > bw) left = px - tw - 12; if (left < 0) left = 0;
+    let top = py - th - 8; if (top < 0) top = py + 12;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+
+  function fail(box) { box.classList.remove('dash-skeleton'); box.innerHTML = '<div class="vg-fail"><i></i>Failed to load</div>'; }
+
+  function moneyChart(box, rows, yMax) {
+    box.classList.remove('dash-skeleton'); box.innerHTML = '';
+    const W = Math.max(240, box.clientWidth), H = 190, mt = 8, mb = 22, mr = 8;
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img');
+    const y = d3.scaleLinear([0, yMax], [H - mb, mt]);
+    const ticks = y.ticks(4);
+    const ml = measure(svg, ticks.map((t) => '₹' + t + ' L')) + 8;
+    const x = d3.scaleLinear([1, 52], [ml, W - mr]);
+    const g = svg.append('g');
+    g.selectAll('line.gy').data(ticks).join('line').attr('x1', ml).attr('x2', W - mr).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
+      .attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', 1);
+    g.selectAll('text.ty').data(ticks).join('text').attr('x', ml - 6).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text((t) => '₹' + t + ' L');
+    g.selectAll('text.tx').data([1, 13, 26, 39, 52]).join('text').attr('x', (t) => x(t)).attr('y', H - 6).attr('text-anchor', (t, i) => (i === 0 ? 'start' : i === 4 ? 'end' : 'middle')).text((t) => 'wk ' + t);
+    g.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', H - mb).attr('y2', H - mb).attr('stroke', 'var(--cds-chart-axis)');
+    const line = (k) => d3.line().x((r) => x(r.week)).y((r) => y(r[k]));
+    svg.append('path').datum(rows).attr('d', line('input')).attr('fill', 'none').attr('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    svg.append('path').datum(rows).attr('d', line('value')).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    const dot = svg.append('circle').attr('r', 3.5).attr('fill', dash.colors[0]).style('display', 'none');
+    const dot2 = svg.append('circle').attr('r', 3).attr('fill', 'var(--cds-chart-muted)').style('display', 'none');
+    const tip = document.createElement('div'); tip.className = 'vg-tip'; tip.hidden = true; box.appendChild(tip);
+    svg.append('rect').attr('x', ml).attr('y', mt).attr('width', W - mr - ml).attr('height', H - mb - mt).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [mx] = d3.pointer(ev); const wk = x.invert(mx);
+        const r = rows.reduce((a, b) => (Math.abs(b.week - wk) < Math.abs(a.week - wk) ? b : a));
+        dot.style('display', null).attr('cx', x(r.week)).attr('cy', y(r.value)); dot2.style('display', null).attr('cx', x(r.week)).attr('cy', y(r.input));
+        tip.hidden = false; tip.innerHTML = '';
+        const d = document.createElement('div'); d.className = 'd'; d.textContent = 'List ' + r.week + ' · ' + fmtDate(r.date); tip.appendChild(d);
+        for (const [c, n, v] of [[dash.colors[0], 'Value', lakh(r.value)], ['var(--cds-chart-muted)', 'Money in', lakh(r.input)], [null, 'Return', pct((r.value / r.input - 1) * 100)]]) {
+          const row = document.createElement('div'); row.className = 'r';
+          if (c) { const s = document.createElement('i'); s.className = 'vg-sw'; s.style.borderColor = c; row.appendChild(s); }
+          row.appendChild(document.createTextNode(n + ' ' + v)); tip.appendChild(row);
+        }
+        const k = box.clientWidth / W; tipAt(box, tip, x(r.week) * k, y(r.value) * k);
+      })
+      .on('pointerleave', () => { tip.hidden = true; dot.style('display', 'none'); dot2.style('display', 'none'); });
+  }
+
+  function roiChart(box, rows, lo, hi) {
+    box.classList.remove('dash-skeleton'); box.innerHTML = '';
+    const W = Math.max(240, box.clientWidth), H = 190, mt = 8, mb = 22, mr = 8;
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img');
+    const y = d3.scaleLinear([lo, hi], [H - mb, mt]);
+    const ticks = y.ticks(5);
+    const ml = measure(svg, ticks.map((t) => pct(t).replace('.0', ''))) + 8;
+    const x = d3.scaleLinear([1, 12], [ml + 6, W - mr - 6]);
+    const g = svg.append('g');
+    g.selectAll('line.gy').data(ticks.filter((t) => t !== 0)).join('line').attr('x1', ml).attr('x2', W - mr).attr('y1', (t) => y(t)).attr('y2', (t) => y(t))
+      .attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', 1);
+    g.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', y(0)).attr('y2', y(0)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
+    g.selectAll('text.ty').data(ticks).join('text').attr('x', ml - 6).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').text((t) => pct(t).replace('.0', ''));
+    g.selectAll('text.tx').data([1, 4, 7, 10, 12]).join('text').attr('x', (t) => x(t)).attr('y', H - 6).attr('text-anchor', 'middle').text((t) => MONTHS[t - 1]);
+    g.append('line').attr('x1', ml).attr('x2', W - mr).attr('y1', H - mb).attr('y2', H - mb).attr('stroke', 'var(--cds-chart-axis)');
+    svg.append('path').datum(rows).attr('d', d3.line().x((r) => x(r.month)).y((r) => y(r.roi))).attr('fill', 'none').attr('stroke', dash.colors[0])
+      .attr('stroke-width', 2).attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round');
+    svg.selectAll('circle.p').data(rows).join('circle').attr('cx', (r) => x(r.month)).attr('cy', (r) => y(r.roi)).attr('r', 2.5)
+      .attr('fill', (r) => (r.roi < 0 ? 'var(--cds-chart-status-critical)' : dash.colors[0]));
+    const last = rows[rows.length - 1];
+    const tip = document.createElement('div'); tip.className = 'vg-tip'; tip.hidden = true; box.appendChild(tip);
+    const ring = svg.append('circle').attr('r', 5).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 1.5).style('display', 'none');
+    svg.append('rect').attr('x', ml).attr('y', mt).attr('width', W - mr - ml).attr('height', H - mb - mt).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [mx] = d3.pointer(ev); const mo = x.invert(mx);
+        const r = rows.reduce((a, b) => (Math.abs(b.month - mo) < Math.abs(a.month - mo) ? b : a));
+        ring.style('display', null).attr('cx', x(r.month)).attr('cy', y(r.roi));
+        tip.hidden = false; tip.innerHTML = '';
+        const d = document.createElement('div'); d.className = 'd'; d.textContent = MONTHS[r.month - 1] + ' ' + r.year + ' · close ' + fmtDate(r.date); tip.appendChild(d);
+        for (const t of ['Return ' + pct(r.roi), 'Value ' + lakh(r.value) + ' on ' + lakh(r.input) + ' put in']) { const row = document.createElement('div'); row.textContent = t; tip.appendChild(row); }
+        const k = box.clientWidth / W; tipAt(box, tip, x(r.month) * k, y(r.roi) * k);
+      })
+      .on('pointerleave', () => { tip.hidden = true; ring.style('display', 'none'); });
+    return last;
+  }
+
+  function setMark(el, field, year) { el.setAttribute('data-source', 'yearEnd'); el.setAttribute('data-field', field); el.setAttribute('data-where', 'year=' + year); }
+
+  dash.onData(() => {
+    const wk = dash.data('weekly'), mo = dash.data('monthly'), ye = dash.data('yearEnd');
+    const take = document.getElementById('takeaway');
+
+    // ---- week-by-week money charts
+    if (wk.status === 'ok') {
+      const all = wk.data.map((r) => ({ year: Number(r.year), week: Number(r.week), date: r.date, input: Number(r.input_lakh), value: Number(r.value_lakh) }));
+      const yMax = d3.max(all, (r) => Math.max(r.value, r.input)) * 1.06;
+      const yNice = d3.scaleLinear([0, yMax], [0, 1]).nice().domain()[1];
+      for (const y of YEARS) moneyChart(cards[y].m.querySelector('.vg-chart'), all.filter((r) => r.year === y).sort((a, b) => a.week - b.week), yNice);
+    } else {
+      for (const y of YEARS) { const b = cards[y].m.querySelector('.vg-chart'); if (wk.status === 'error' || wk.status === 'connect') fail(b); else { b.innerHTML = ''; b.classList.add('dash-skeleton'); } }
+    }
+
+    // ---- year-end line under each money chart, and the takeaway
+    if (ye.status === 'ok') {
+      const rows = ye.data;
+      for (const y of YEARS) {
+        const r = rows.find((x) => x.year === y); const sub = cards[y].m.querySelector('.vg-sub'); sub.innerHTML = '';
+        if (!r) continue;
+        sub.appendChild(document.createTextNode('Last list ' + fmtDate(r.date) + ': '));
+        const v = document.createElement('b'); setMark(v, 'value_lakh', y); v.textContent = lakh(r.value_lakh); sub.appendChild(v);
+        sub.appendChild(document.createTextNode(' on ' + lakh(r.input_lakh) + ' put in, '));
+        const p = document.createElement('b'); setMark(p, 'roi_pct', y); p.textContent = pct(r.roi_pct); sub.appendChild(p);
+      }
+      const full = rows.filter((r) => r.year > 2019 && r.year < 2026);
+      const best = full.reduce((a, b) => (b.roi_pct > a.roi_pct ? b : a)), worst = full.reduce((a, b) => (b.roi_pct < a.roi_pct ? b : a));
+      const now = rows.find((r) => r.year === 2026), y19 = rows.find((r) => r.year === 2019);
+      take.classList.remove('dash-skeleton'); take.innerHTML = '';
+      const add = (t) => take.appendChild(document.createTextNode(t));
+      const num = (r, f, s) => { const b = document.createElement('b'); setMark(b, f, r.year); b.textContent = s; take.appendChild(b); };
+      const allUp = full.every((r) => r.roi_pct > 0);
+      add((allUp ? 'Starting fresh in any full year, the ₹26 lakh put in was worth more than that by the last list of December. ' : 'By the last list of December, not every year was above the money put in. ') + 'Best: ' + best.year + ' at ');
+      num(best, 'roi_pct', pct(best.roi_pct)); add('. Weakest: ' + worst.year + ' at '); num(worst, 'roi_pct', pct(worst.roi_pct));
+      if (y19) { add(' (2019, from April: '); num(y19, 'roi_pct', pct(y19.roi_pct)); add(')'); }
+      if (now) { add('. 2026 so far: '); num(now, 'roi_pct', pct(now.roi_pct)); }
+      add('.');
+    } else if (ye.status === 'error') { take.classList.remove('dash-skeleton'); take.textContent = ''; }
+
+    // ---- month-by-month return charts
+    if (mo.status === 'ok') {
+      const all = mo.data.map((r) => ({ year: Number(r.year), month: Number(r.month), date: r.date, input: Number(r.input_lakh), value: Number(r.value_lakh), roi: Number(r.roi_pct) }));
+      const sc = d3.scaleLinear([Math.min(0, d3.min(all, (r) => r.roi)) * 1.1, d3.max(all, (r) => r.roi) * 1.06], [0, 1]).nice();
+      const [lo, hi] = sc.domain();
+      for (const y of YEARS) {
+        const rows = all.filter((r) => r.year === y).sort((a, b) => a.month - b.month);
+        const box = cards[y].r.querySelector('.vg-chart'); const sub = cards[y].r.querySelector('.vg-sub'); sub.innerHTML = '';
+        const last = roiChart(box, rows, lo, hi);
+        if (last) {
+          sub.appendChild(document.createTextNode(MONTHS[last.month - 1] + ' close: '));
+          const b = document.createElement('b'); b.setAttribute('data-source', 'monthly'); b.setAttribute('data-field', 'roi_pct'); b.setAttribute('data-where', 'year=' + y + '&month=' + last.month);
+          b.textContent = pct(last.roi); sub.appendChild(b);
+          const worstM = rows.reduce((a, b2) => (b2.roi < a.roi ? b2 : a));
+          if (worstM.roi < 0) {
+            sub.appendChild(document.createTextNode(' · lowest '));
+            const w = document.createElement('b'); w.setAttribute('data-source', 'monthly'); w.setAttribute('data-field', 'roi_pct'); w.setAttribute('data-where', 'year=' + y + '&month=' + worstM.month);
+            w.textContent = pct(worstM.roi) + ' (' + MONTHS[worstM.month - 1] + ')'; sub.appendChild(w);
+          }
+        }
+      }
+    } else {
+      for (const y of YEARS) { const b = cards[y].r.querySelector('.vg-chart'); if (mo.status === 'error' || mo.status === 'connect') fail(b); else { b.innerHTML = ''; b.classList.add('dash-skeleton'); } }
+    }
+  });
+})();
+</script>
