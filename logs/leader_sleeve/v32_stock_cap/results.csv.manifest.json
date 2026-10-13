@@ -1,0 +1,8 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-14-v32-stock-cap",
+ "producer": "src/agentic/test_v32_stock_cap.py",
+ "definitions": "EXP-2026-10-14-v32-stock-cap (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3.2 buys the same names week after week, so one stock can grow to ~20% of the money. Arms: no cap, 15% cap, 10%\ncap, checked at purchase only (winners are never trimmed): a name already near the cap gets only the room left, the rest of that\nweek's lot goes equally to the list's other names; money that fits nowhere stays as cash in the lot. Chronological 26-slice ladder\n(126-session hold, liquidity-scaled entry costs, dividends via Rv, first big payout / demerger in the hold as cash, list-day close).\nPASS per cap vs no cap: CAGR higher in both eras, max drawdown not worse by > 2 points, at schedule 0 and >= 4 of 5.\nDiagnostic: do repeat picks do better? Each pick's 6-month return after costs by how many of the previous 25 lists had it.\n",
+ "contents": "one row per arm, schedule 0; years = average of 5 schedules; biggest_stock = largest single-stock share of the portfolio at any purchase date",
+ "updated": "2026-10-14T04:29:44"
+}
