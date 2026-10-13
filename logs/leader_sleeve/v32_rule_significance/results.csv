@@ -1,0 +1,8 @@
+rule,grade,cagr_without,gap_min,gap_max,proven_schedules,lists_changed
+policy_veto,UNPROVEN,55.3,-0.4,0.9,0,186
+hot_industry,LIKELY,46.5,4.7,7.9,0,372
+financials,PROVEN,52.3,1.9,2.8,5,112
+fading,PROVEN,52.3,2.2,2.8,4,157
+liquidity_1cr,PROVEN,39.6,9.6,12.2,5,350
+new_listings,UNPROVEN,54.4,0.6,1.7,0,199
+t2t,LIKELY,52.4,1.3,3.6,0,193

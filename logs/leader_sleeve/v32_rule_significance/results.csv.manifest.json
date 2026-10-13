@@ -1,0 +1,12 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-14-v32-rule-significance",
+ "producer": "src/agentic/test_v32_rule_significance.py",
+ "definitions": "EXP-2026-10-14-v32-rule-significance (registered before any outcome was computed). MEASUREMENT.\n\nPlain English: which of V3.2's rules are statistically proven? Remove one rule at a time and measure how much V3.2 loses, with a\nblock-bootstrap 95% range (126-session blocks) per weekly schedule. Grades: PROVEN (range above 0 in >= 4 of 5 schedules), LIKELY\n(>= 80% of draws above 0 in >= 4 of 5), UNPROVEN, HURTS (range below 0 in >= 4 of 5).\n",
+ "v32_cagr": 56.2,
+ "units": {
+  "cagr_without": "percent a year, avg of 5 schedules",
+  "gap": "V3.2 minus variant, annualised growth points"
+ },
+ "updated": "2026-10-14T04:25:58"
+}
