@@ -335,3 +335,22 @@ incidents:
     lesson: When a source moves to a new system, check the handover weeks month by month (no empty month between the old history's
       last row and the new feed's first); a freshness check only sees the newest date.
     commit: 585d4f3
+  - id: INC-2026-10-13-monday-feeds-stale
+    date: '2026-10-13'
+    title: Monday feeds (fundamentals, security master) stale 11 trading days
+    found_by: Daily QC warning data.every_feed_guarded (Oct 9-13), raised by the user ('qc fix hua?')
+    root_cause: (1) The 45-min per-step limit added 2026-10-06 is shorter than the Screener fundamentals fetch (~77 min), which
+      wrote only at the end, so every Monday it was killed with nothing saved. (2) build_security_master warmed its NSE session
+      with referer 'https://www.nseindia.com/' (trailing slash), so the session's allowance for NSE's 403 on the bare home page
+      never applied and one 403 failed the step.
+    blast_radius: Not used by V3.2 picks (only the rename list feeds the new-listing flag); market-cap backfill and old reports
+      read the fundamentals. Warnings only, no blocked run.
+    fix: Security master fetches nsearchives CSVs with build_session() like the bhavcopy downloader; fundamentals saves every
+      50 stocks, resumes, and runs Saturdays after the weekend note with a 2.5 h limit.
+    guard_eval: data.every_feed_guarded
+    skills:
+    - sgm-triage
+    - sgm-new-data-source
+    lesson: When adding a time limit to every step, compare it with each step's normal duration first, and make long fetches
+      save as they go; a QC warning that repeats for a week is a failure, not a warning.
+    commit: 39442a6
