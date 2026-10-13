@@ -125,7 +125,11 @@ def _fetch_refs() -> dict[str, pd.DataFrame]:
     from src.ingest.nse.api import _request_headers, _request_with_retries
     from src.ingest.nse.session import build_session
     CACHE.mkdir(parents=True, exist_ok=True)
-    s = build_session(warm=True, referer="https://www.nseindia.com/")
+    # 2026-10-13: these three files are public CSVs on nsearchives, fetched like the authoritative bhavcopy downloader
+    # (src/ingest/nse/fetch_bhavcopy.py: build_session(), no home-page warm-up). The old warm-up used the referer
+    # "https://www.nseindia.com/" (trailing slash), so session.warmup_session's allowance for NSE's 403 on the bare home page
+    # (NSE_HOME_URL has no slash) never applied and one 403 failed the whole step on 2026-10-12.
+    s = build_session()
     for k, u in URLS.items():
         p = CACHE / f"{k}.csv"
         try:

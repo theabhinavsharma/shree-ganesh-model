@@ -209,6 +209,10 @@ def weekend(R: Run) -> int:
         R.stage("ORDERS", ["/bin/bash", "-c", "set -e; /usr/bin/python3 src/agentic/refresh_announcements.py; "
                            "/usr/bin/python3 src/agentic/daily_orders_industry.py"], 3600)   # a failure shows as a stale digest
     ok = R.message("daily", notify.weekend_text(run=R.rec), send_as="weekend")
+    if not R.smoke and datetime.now().weekday() == 5:
+        # 2026-10-13: Screener.in fundamentals (1,200 stocks, ~77 min) moved here from the Monday data layer, where the 45-min
+        # step limit cut it off every week with nothing saved. Runs after the note is sent; saves every 50 stocks and resumes.
+        R.stage("FUNDAMENTALS", [PY, "-c", "import sys; sys.path.insert(0, 'src/agentic'); import fetch_screener_fundamentals as m; m.main(1200)"], 9000)
     return R.finish("sent" if ok else "message held", 0 if ok else 1)
 
 

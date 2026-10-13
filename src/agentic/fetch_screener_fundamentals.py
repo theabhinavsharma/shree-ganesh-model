@@ -196,6 +196,18 @@ def get_top_symbols(n: int) -> list[str]:
     return snap["symbol"].astype(str).tolist()
 
 
+def _save(rows: list) -> None:
+    """Merge fetched rows into OUT (one row per symbol and fetch date)."""
+    df = pd.DataFrame(rows)
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    if OUT.exists():
+        merged = pd.concat([pd.read_parquet(OUT), df], ignore_index=True).drop_duplicates(["symbol", "fetch_date"], keep="last")
+    else:
+        merged = df
+    merged.to_parquet(OUT, index=False)
+    print(f"    saved {len(df)} rows ({len(merged):,} in file)", flush=True)
+
+
 def main(top_n: int = 200) -> None:
     print(f"== fetch_screener_fundamentals  top-{top_n} ==")
     syms = get_top_symbols(top_n)
@@ -203,6 +215,13 @@ def main(top_n: int = 200) -> None:
     opener = _opener()
     rows = []
     started = time.time()
+    today = date.today().isoformat()
+    if OUT.exists():                                  # resume (2026-10-13): skip symbols already fetched today
+        have = pd.read_parquet(OUT, columns=["symbol", "fetch_date"])
+        done = set(have.loc[have["fetch_date"].astype(str) == today, "symbol"])
+        if done:
+            print(f"  resuming: {len(done)} already fetched today")
+            syms = [s for s in syms if s not in done]
     for i, sym in enumerate(syms, 1):
         try:
             row = fetch_one(opener, sym)
@@ -216,23 +235,19 @@ def main(top_n: int = 200) -> None:
         except Exception as e:
             print(f"  [{i}/{len(syms)}] {sym} FAIL {type(e).__name__}: {str(e)[:120]}")
         if i % LONG_BREAK_EVERY == 0:
+            if rows:                                  # save progress (2026-10-13): a time limit no longer loses the whole run
+                _save(rows); rows = []
             print(f"    [break] {LONG_BREAK_SEC}s …")
             time.sleep(LONG_BREAK_SEC)
         else:
             time.sleep(DELAY)
 
-    if not rows:
+    if rows:
+        _save(rows)
+    if not OUT.exists():
         print("no rows fetched")
         return
-
-    df = pd.DataFrame(rows)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    if OUT.exists():
-        old = pd.read_parquet(OUT)
-        merged = pd.concat([old, df], ignore_index=True).drop_duplicates(["symbol", "fetch_date"], keep="last")
-    else:
-        merged = df
-    merged.to_parquet(OUT, index=False)
+    merged = pd.read_parquet(OUT)
     print(f"\nwrote {OUT}: {len(merged):,} rows × {len(merged.columns)} cols")
     print(f"\nField coverage:")
     cov = merged.notna().mean().sort_values(ascending=False)
