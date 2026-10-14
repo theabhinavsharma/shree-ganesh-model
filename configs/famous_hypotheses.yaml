@@ -8,11 +8,51 @@
   data: prices (have)
   status: done
   result: "EXP-2026-10-15-minervini-vcp: no. VCP names have fewer losers but fewer +50% winners; in the pool's top 25 they did worse (-6.8 pts, 95% -11.6..-1.9); V3.2 overlay 56.0 vs 56.4, 0/5"
+- id: in_orderbook_to_mcap
+  who: Indian small-cap commentary 2023-25 (DSIJ and others on railway / defence / infra names; e.g. Man Industries, NBCC)
+  claim: order book bigger than the market cap means the market is underpricing years of revenue
+  data: stated order books + point-in-time market cap (have); NOT the same as order book / revenue (EXP-2026-09-28-order-backlog)
+  status: next
+- id: in_promoter_warrants
+  who: Indian small-cap folklore 2023-25
+  claim: promoters taking warrants / preferential shares at a premium signals confidence
+  data: NSE announcements text 2016+ (have; needs careful word-boundary parsing)
+  status: queued
+- id: in_fno_inclusion
+  who: Indian market practice (NSE adding a stock to futures & options)
+  claim: F&O entry brings new flows and re-rates the stock
+  data: derivatives bhavcopy history (check)
+  status: queued
+- id: in_bonus_issue
+  who: Indian retail favourite
+  claim: bonus issues precede multibagger runs
+  data: corporate actions store (have)
+  status: queued
+- id: in_maheshwari_dividend_leader
+  who: Basant Maheshwari (The Thoughtful Investor; PMS approach)
+  claim: growing sector leaders that pay dividends (cash proves the profits are real)
+  data: dividends + market cap rank within industry (have)
+  status: queued
+- id: in_kedia_small_size
+  who: Vijay Kedia (SMILE - the 'S')
+  claim: small companies (e.g. Rs 500 cr) have room to grow 10x
+  data: market cap (have); the other SMILE letters are qualitative
+  status: queued
+- id: in_sme_migration
+  who: Ashish Kacholia's SME focus / Indian practice
+  claim: SME-platform companies moving to the main board re-rate
+  data: migration announcements (have); SME price history before migration (missing)
+  status: queued
+- id: in_coffee_can
+  who: Saurabh Mukherjea (Coffee Can Investing, 2018)
+  claim: 10%+ revenue growth and 15%+ ROCE every year for 10 years
+  data: point-in-time ROCE history missing
+  status: needs-data
 - id: darvas_box
   who: Nicolas Darvas (How I Made $2,000,000 in the Stock Market, 1960)
   claim: buy when price breaks out of a tight 'box' to a new high on rising volume
   data: prices (have)
-  status: next
+  status: queued
 - id: weinstein_stage2
   who: Stan Weinstein (Secrets for Profiting in Bull and Bear Markets, 1988)
   claim: buy the Stage 2 breakout - price crosses above a rising 30-week average on heavy volume
