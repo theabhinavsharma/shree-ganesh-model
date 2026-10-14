@@ -13,7 +13,8 @@
   who: follow-up lead from EXP-2026-10-15-promoter-pref-premium (seen after that test - needs its own registration)
   claim: any promoter preferential allotment in the last 90 days, whatever the price
   data: insider disclosures (have)
-  status: queued
+  status: done
+  result: "EXP-2026-10-15-promoter-pref-any: no. Top-25 average +53.9% vs +23.0% but not significant (95% -7..+66, a few big winners); V3.2 overlay 56.1 vs 56.4, 0/5"
 - id: in_orderbook_to_mcap
   who: Indian small-cap commentary 2023-25 (DSIJ and others on railway / defence / infra names; e.g. Man Industries, NBCC)
   claim: order book bigger than the market cap means the market is underpricing years of revenue

@@ -1,6 +1,6 @@
 """Famous-hypothesis tests that flag stocks (configs/famous_hypotheses.yaml; each REGISTERED in logs/experiments.jsonl first).
 
-Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size
+Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any
 Plain English: for a flag (e.g. 'promoter took preferential shares at a premium in the last 90 days', 'market cap <= Rs 1,000 cr'):
 A (evidence) - each stock's 6-month return after costs on every weekly list since Apr 2019, flagged vs not, in all liquid stocks,
 the V3.1 pool and the pool's top 25; verdict = top-25 weekly gap with a block-bootstrap (26-week blocks) 95% range above 0.
@@ -17,7 +17,8 @@ import data_ready as dr, eval_checks, research_panel as rp, sim_leader_portfolio
 from test_v3_l1_newlist_cost import run_cost  # noqa: E402
 START, HOLD = pd.Timestamp("2019-04-01"), 126
 HYP = {"promoter_pref_premium": dict(exp="EXP-2026-10-15-promoter-pref-premium", main="PREM", extra="PREF"),
-       "kedia_small_size": dict(exp="EXP-2026-10-15-kedia-small-size", main="SMALL", extra="SMALL500")}
+       "kedia_small_size": dict(exp="EXP-2026-10-15-kedia-small-size", main="SMALL", extra="SMALL500"),
+       "promoter_pref_any": dict(exp="EXP-2026-10-15-promoter-pref-any", main="PREF", extra="PREM")}
 
 
 def promoter_flags(cal, tpos):
@@ -79,7 +80,7 @@ def main(key):
     Px = pd.to_datetime(pd.read_parquet(rp.PANEL, columns=["trade_date"])["trade_date"]); bh = dr.bhav_rows()
     checks = [dr.completeness("price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)", Px.groupby(Px.dt.year).size(), bh.groupby(bh.index.year).sum(), range(2018, cal[-1].year + 1)),
               dr.span("model scores", P["trade_date"], pd.Timestamp("2019-01-01"), cal[-1] - pd.Timedelta(days=10))]
-    if key == "promoter_pref_premium":
+    if key.startswith("promoter_pref"):
         flags, info, m = promoter_flags(cal, tpos)
         em = eval_checks.insider_no_empty_month({}); nmon = len(pd.period_range("2019-01", pd.Timestamp.now().to_period("M") - 1, freq="M"))
         checks += [dr.qc("insider history: months 2019-01..last month with disclosures (share)", 1.0 - float(em["value"]) / nmon, 1.0),
