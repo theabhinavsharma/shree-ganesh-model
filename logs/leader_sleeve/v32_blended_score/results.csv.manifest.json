@@ -1,0 +1,8 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-15-v32-blended-score",
+ "producer": "src/agentic/test_v32_blended_score.py",
+ "definitions": "EXP-2026-10-15-v32-blended-score (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: instead of 'hot industries only, then the best model scores', rank every trend-passing liquid stock by\nB = industry heat x stock model score. B9 = top 9 by B; BT63 = every stock with B >= 0.63 (0.70 x 0.90). Then V3.2's filters, no\nrefill. PASS per arm vs V3.2: both eras, max drawdown not worse by > 2 points, schedule 0 and >= 4 of 5.\n",
+ "contents": "one row per arm, schedule 0; years = average of 5 schedules",
+ "updated": "2026-10-15T03:59:03"
+}
