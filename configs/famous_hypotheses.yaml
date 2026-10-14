@@ -1,3 +1,4 @@
+# Order = prior ranking 2026-10-15 (judgement from first principles + related past tests, not results); 'next' is tested first.
 # Famous multibagger hypotheses: one a day (Abhinav 2026-10-15: "1 hypothesis a day ... with mention and proof and first
 # principle thinking"). Each item is REGISTERED in logs/experiments.jsonl before it is tested (evidence part + V3.2 overlay),
 # reported with who said it, the first-principles reason, and the numbers. Attributions are checked at test time.
@@ -21,8 +22,8 @@
 - id: in_fno_inclusion
   who: Indian market practice (NSE adding a stock to futures & options)
   claim: F&O entry brings new flows and re-rates the stock
-  data: derivatives bhavcopy history (check)
-  status: queued
+  data: F&O bhavcopy only from 2024-05 locally (470 days); needs a backfill from NSE archives for 2016-2024
+  status: needs-data
 - id: in_bonus_issue
   who: Indian retail favourite
   claim: bonus issues precede multibagger runs
@@ -78,6 +79,7 @@
   claim: their new disclosed stakes become multibaggers
   data: superstar holdings feed (check point-in-time depth first)
   status: queued
+  related: "EXP-2026-09-30-bulk-buyers BK (known-investor bulk-deal buys first): no pass, 1/5"
 - id: small_equity
   who: Indian retail folklore
   claim: small equity capital / low free float stocks become multibaggers (little supply)
@@ -91,8 +93,9 @@
 - id: mf_sponsorship
   who: William O'Neil (CAN SLIM "I") / Indian MF tracking
   claim: rising mutual-fund ownership precedes big moves
-  data: AMFI monthly portfolios (check history depth)
-  status: queued
+  data: shareholding detail (have)
+  status: done
+  result: "already tested as EXP-2026-09-30-shp-detail MFUP / FIIUP / DIIUP (fund stake +0.5 pts last quarter): no pass"
 - id: turnaround
   who: Peter Lynch's 'turnarounds' category
   claim: loss-making to profitable companies re-rate sharply
