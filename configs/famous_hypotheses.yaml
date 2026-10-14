@@ -62,12 +62,14 @@
   who: Nicolas Darvas (How I Made $2,000,000 in the Stock Market, 1960)
   claim: buy when price breaks out of a tight 'box' to a new high on rising volume
   data: prices (have)
-  status: next
+  status: done
+  result: "EXP-2026-10-15-darvas-box: no. Helps across all liquid stocks (+15.3% vs +11.0% avg 6m, 36% vs 45% lose) but not inside our pool; top 25 -1.2 pts (95% -7.1..+4.2); overlays 55.6 (1/5) / pool-wide 43.2 vs 56.4"
 - id: weinstein_stage2
   who: Stan Weinstein (Secrets for Profiting in Bull and Bear Markets, 1988)
   claim: buy the Stage 2 breakout - price crosses above a rising 30-week average on heavy volume
   data: prices (have)
-  status: queued
+  status: done
+  result: "EXP-2026-10-15-weinstein-stage2: no. All liquid +14.0% vs +11.0%; in the top 25 worse (+16.8% vs +24.1%, median +4.6% vs +12.7%, 46% lose); overlays 54.1 / 45.6 vs 56.4"
 - id: oneil_canslim_c
   who: William O'Neil (How to Make Money in Stocks, CAN SLIM)
   claim: "C" - current quarter EPS up 25%+ with sales growing; the single most important CAN SLIM letter

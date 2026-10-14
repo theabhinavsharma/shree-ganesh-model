@@ -1,0 +1,4 @@
+group,n,share,avg,med,hit50,lost,o_avg,o_med,o_hit50,o_lost
+STAGE2 · all liquid stocks,11552,3.25,14.0,6.3,13.6,41.6,11.0,3.8,12.1,44.6
+STAGE2 · V3.1 pool,1632,5.18,15.0,6.1,15.6,42.6,16.0,7.5,16.8,41.1
+STAGE2 · pool top 25,429,5.41,16.8,4.6,17.9,45.7,24.1,12.7,23.0,37.0

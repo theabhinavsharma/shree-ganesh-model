@@ -1,0 +1,112 @@
+{
+ "dataset": "evidence.csv",
+ "experiment": "EXP-2026-10-15-weinstein-stage2",
+ "producer": "src/agentic/test_famous_overlay.py weinstein_stage2",
+ "definitions": "Famous-hypothesis tests that flag stocks (configs/famous_hypotheses.yaml; each REGISTERED in logs/experiments.jsonl first).\n\nUsage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap | darvas_box | weinstein_stage2\nPlain English: for a flag (e.g. 'promoter took preferential shares at a premium in the last 90 days', 'market cap <= Rs 1,000 cr'):\nA (evidence) - each stock's 6-month return after costs on every weekly list since Apr 2019, flagged vs not, in all liquid stocks,\nthe V3.1 pool and the pool's top 25; verdict = top-25 weekly gap with a block-bootstrap (26-week blocks) 95% range above 0.\nB (adoption) - flagged names first within the pool's top 25, then V3.2 (filters, trade-for-trade drop, no refill); sp.beats vs V3.2\nat schedule 0 and >= 4 of 5 (test_v3_l1_newlist_cost.run_cost). The registration holds each flag's exact definition.\n",
+ "units": {
+  "avg": "6-month return after costs, percent",
+  "hit50": "percent of stocks at +50% or more after 6 months",
+  "lost": "percent below 0"
+ },
+ "v32": {
+  "V3.2": [
+   {
+    "cagr": 56.39075611488782,
+    "cagr_disc": 50.340799590977035,
+    "cagr_conf": 62.6099886526418,
+    "maxdd": -38.5188509368725
+   },
+   {
+    "cagr": 56.9910979699418,
+    "cagr_disc": 49.44306948145025,
+    "cagr_conf": 64.820574095394,
+    "maxdd": -38.80149728593564
+   },
+   {
+    "cagr": 56.85560440110196,
+    "cagr_disc": 50.691200977855424,
+    "cagr_conf": 63.18706381955539,
+    "maxdd": -37.8988267427622
+   },
+   {
+    "cagr": 56.268764971053244,
+    "cagr_disc": 48.87261197039794,
+    "cagr_conf": 63.923217224657634,
+    "maxdd": -37.36316798045718
+   },
+   {
+    "cagr": 55.26339958945676,
+    "cagr_disc": 47.71009947455913,
+    "cagr_conf": 63.11475537364646,
+    "maxdd": -38.666566683299074
+   }
+  ],
+  "V3.2_STAGE2": [
+   {
+    "cagr": 54.11913706999012,
+    "cagr_disc": 48.545711196054064,
+    "cagr_conf": 59.83360314260726,
+    "maxdd": -38.35535501975079
+   },
+   {
+    "cagr": 55.399726350978185,
+    "cagr_disc": 49.91828401935881,
+    "cagr_conf": 61.0105493526067,
+    "maxdd": -38.67169181644646
+   },
+   {
+    "cagr": 55.56041041667634,
+    "cagr_disc": 49.820849132237946,
+    "cagr_conf": 61.44089749947332,
+    "maxdd": -37.91998795797345
+   },
+   {
+    "cagr": 54.587286871408324,
+    "cagr_disc": 48.05735987881867,
+    "cagr_conf": 61.30960531633354,
+    "maxdd": -37.131163507429456
+   },
+   {
+    "cagr": 54.727648237402285,
+    "cagr_disc": 47.482168686722325,
+    "cagr_conf": 62.244727584448015,
+    "maxdd": -38.44225793069834
+   }
+  ],
+  "V3.2_STAGE2_POOL": [
+   {
+    "cagr": 45.564710555908896,
+    "cagr_disc": 48.88467439097415,
+    "cagr_conf": 42.355886783799,
+    "maxdd": -37.915172279616435
+   },
+   {
+    "cagr": 45.301615999698775,
+    "cagr_disc": 49.18815236779288,
+    "cagr_conf": 41.56222078113456,
+    "maxdd": -37.65385563123742
+   },
+   {
+    "cagr": 43.42608598970481,
+    "cagr_disc": 48.78171417839363,
+    "cagr_conf": 38.3291811706618,
+    "maxdd": -37.212311004762135
+   },
+   {
+    "cagr": 45.498993371079855,
+    "cagr_disc": 47.761917328530345,
+    "cagr_conf": 43.30108348637314,
+    "maxdd": -36.62828729814087
+   },
+   {
+    "cagr": 41.820123206491886,
+    "cagr_disc": 46.80223220624025,
+    "cagr_conf": 37.05837337784803,
+    "maxdd": -38.1005323707093
+   }
+  ]
+ },
+ "phases": "0/5",
+ "info": {},
+ "updated": "2026-10-15T05:21:51"
+}

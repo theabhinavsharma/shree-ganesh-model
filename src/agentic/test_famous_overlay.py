@@ -1,6 +1,6 @@
 """Famous-hypothesis tests that flag stocks (configs/famous_hypotheses.yaml; each REGISTERED in logs/experiments.jsonl first).
 
-Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap
+Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap | darvas_box | weinstein_stage2
 Plain English: for a flag (e.g. 'promoter took preferential shares at a premium in the last 90 days', 'market cap <= Rs 1,000 cr'):
 A (evidence) - each stock's 6-month return after costs on every weekly list since Apr 2019, flagged vs not, in all liquid stocks,
 the V3.1 pool and the pool's top 25; verdict = top-25 weekly gap with a block-bootstrap (26-week blocks) 95% range above 0.
@@ -19,7 +19,9 @@ START, HOLD = pd.Timestamp("2019-04-01"), 126
 HYP = {"promoter_pref_premium": dict(exp="EXP-2026-10-15-promoter-pref-premium", main="PREM", extra="PREF"),
        "kedia_small_size": dict(exp="EXP-2026-10-15-kedia-small-size", main="SMALL", extra="SMALL500"),
        "promoter_pref_any": dict(exp="EXP-2026-10-15-promoter-pref-any", main="PREF", extra="PREM"),
-       "orderbook_mcap": dict(exp="EXP-2026-10-15-orderbook-to-mcap", main="OBM1", extra="OBM2", pool=True)}
+       "orderbook_mcap": dict(exp="EXP-2026-10-15-orderbook-to-mcap", main="OBM1", extra="OBM2", pool=True),
+       "darvas_box": dict(exp="EXP-2026-10-15-darvas-box", main="DARVAS", extra="DARVAS", pool=True),
+       "weinstein_stage2": dict(exp="EXP-2026-10-15-weinstein-stage2", main="STAGE2", extra="STAGE2", pool=True)}
 
 
 def promoter_flags(cal, tpos):
@@ -75,6 +77,28 @@ def orderbook_flags(mc):
     return {"OBM1": lambda s, d: obm(s, d) >= 1, "OBM2": lambda s, d: obm(s, d) >= 2}, info, err, B
 
 
+def price_flags(D, cal, kind):
+    """Breakout flags from adjusted panel prices / volumes (registered definitions): FLAG[session, column] = a breakout in the
+    last 5 sessions. Returns (flag function, known matrix)."""
+    L = rp.load_panel(["high", "low", "close", "total_traded_qty"])
+    W = {c: rp.wide(L, c, cal).reindex(columns=D["syms"]) for c in ("high", "low", "close", "total_traded_qty")}; del L
+    vol50 = W["total_traded_qty"].rolling(50, min_periods=40).mean().shift(1)
+    if kind == "DARVAS":
+        top = W["high"].rolling(20, min_periods=15).max().shift(1); bot = W["low"].rolling(20, min_periods=15).min().shift(1)
+        hi252 = W["high"].rolling(252, min_periods=200).max().shift(1)
+        day = ((top - bot) / top <= 0.15) & (top >= 0.95 * hi252) & (W["close"] > top) & (W["total_traded_qty"] >= 1.5 * vol50)
+        known = top.notna() & hi252.notna() & vol50.notna()
+    else:
+        sma = W["close"].rolling(150, min_periods=140).mean(); top60 = W["high"].rolling(60, min_periods=50).max().shift(1)
+        flat = (sma.shift(1) / sma.shift(60) - 1).abs() < 0.10
+        day = flat & (W["close"] > top60) & (W["close"] > sma) & (sma > sma.shift(5)) & (W["total_traded_qty"] >= 2.0 * vol50)
+        known = sma.shift(60).notna() & top60.notna() & vol50.notna()
+    F = day.fillna(False).astype(int).rolling(5, min_periods=1).max().to_numpy().astype(bool)
+    K = known.to_numpy(); tpos = {d: i for i, d in enumerate(cal)}; cidx = D["cidx"]
+    f = lambda s, d: (s in cidx) and bool(F[tpos[d], cidx[s]])  # noqa: E731
+    return f, (lambda s, d: (s in cidx) and bool(K[tpos[d], cidx[s]]))
+
+
 def size_flags():
     A = pd.read_parquet(ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet", columns=["symbol", "trade_date", "mcap_cr"])
     A["trade_date"] = pd.to_datetime(A["trade_date"]); A = A.dropna(subset=["mcap_cr"])
@@ -113,6 +137,10 @@ def main(key):
         checks += [dr.qc("insider history: months 2019-01..last month with disclosures (share)", 1.0 - float(em["value"]) / nmon, 1.0),
                    dr.qc("promoter preferential rows with a usable implied price (share)", info["price_usable"], 0.7),
                    dr.span("promoter preferential disclosures", m["d"], pd.Timestamp("2019-04-30"), cal[-1] - pd.Timedelta(days=60))]
+    elif key in ("darvas_box", "weinstein_stage2"):
+        f, kn = price_flags(D, cal, H["main"]); flags = {H["main"]: f}; info = {}
+        K = pd.DataFrame([dict(d=d, known=(1.0 if kn(s, d) else np.nan)) for s, d in zip(liq["symbol"], liq["trade_date"])])
+        checks += [dr.coverage("breakout inputs (prices, volumes, averages) known for liquid stocks on list dates", K, "d", ["known"], range(START.year, cal[-1].year + 1))]
     elif key == "orderbook_mcap":
         _, mc = size_flags(); flags, info, err, Bk = orderbook_flags(mc)
         for d in weeks[0][::4]:                                       # sample list dates for the extraction-error share
