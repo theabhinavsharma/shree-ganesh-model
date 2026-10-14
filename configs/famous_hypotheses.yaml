@@ -9,6 +9,11 @@
   data: prices (have)
   status: done
   result: "EXP-2026-10-15-minervini-vcp: no. VCP names have fewer losers but fewer +50% winners; in the pool's top 25 they did worse (-6.8 pts, 95% -11.6..-1.9); V3.2 overlay 56.0 vs 56.4, 0/5"
+- id: in_promoter_any_preferential
+  who: follow-up lead from EXP-2026-10-15-promoter-pref-premium (seen after that test - needs its own registration)
+  claim: any promoter preferential allotment in the last 90 days, whatever the price
+  data: insider disclosures (have)
+  status: queued
 - id: in_orderbook_to_mcap
   who: Indian small-cap commentary 2023-25 (DSIJ and others on railway / defence / infra names; e.g. Man Industries, NBCC)
   claim: order book bigger than the market cap means the market is underpricing years of revenue
@@ -17,8 +22,9 @@
 - id: in_promoter_warrants
   who: Indian small-cap folklore 2023-25
   claim: promoters taking warrants / preferential shares at a premium signals confidence
-  data: NSE announcements text 2016+ (have; needs careful word-boundary parsing)
-  status: queued
+  data: insider disclosures (promoter 'Preferential Offer', implied price = value / quantity)
+  status: done
+  result: "EXP-2026-10-15-promoter-pref-premium: no. Premium allotments (250 rows, 92 companies) did WORSE in the pool (avg +5.7% vs +16.0%, 54% lost); top-25 evidence not enough data (17 weeks); V3.2 overlay 56.4 vs 56.4, 1/5. Lead, not tested: ANY promoter preferential allotment in the top 25 averaged +53.9% vs +23.0% (95% range -7..+66, not significant)"
 - id: in_fno_inclusion
   who: Indian market practice (NSE adding a stock to futures & options)
   claim: F&O entry brings new flows and re-rates the stock
@@ -38,7 +44,8 @@
   who: Vijay Kedia (SMILE - the 'S')
   claim: small companies (e.g. Rs 500 cr) have room to grow 10x
   data: market cap (have); the other SMILE letters are qualitative
-  status: queued
+  status: done
+  result: "EXP-2026-10-15-kedia-small-size: no. Small caps (<= Rs 1,000 cr) beat in the whole market (+50% hit 16.7% vs 11.3%) but not among our top 25 (gap +0.9, 95% -5.7..+7.8); V3.2 overlay 55.0 vs 56.4, 0/5"
 - id: in_sme_migration
   who: Ashish Kacholia's SME focus / Indian practice
   claim: SME-platform companies moving to the main board re-rate
