@@ -1,0 +1,100 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-15-promoter-pref-universe",
+ "producer": "src/agentic/test_promoter_pref_universe.py",
+ "definitions": "EXP-2026-10-15-promoter-pref-universe (registered in logs/experiments.jsonl before any outcome of these rules was computed).\n\nPlain English: rank from the start with 'promoter took a preferential allotment in the last 90 days' (PREF) as the first key.\nU1 = PREF names among ALL liquid stocks first (any industry, no trend test), then V3.2's ranked pool; U3 = PREF first within V3.2's\nwhole candidate pool; S = PREF names only (top 9 by model score, cash if none). Then V3.2's filters, no refill.\nPASS per arm vs V3.2: both eras, max drawdown not worse by > 2 points, schedule 0 and >= 4 of 5.\n",
+ "phases": {
+  "U1": "0/5",
+  "U3": "0/5",
+  "S": "0/5"
+ },
+ "bootstrap": {
+  "U1": [
+   [
+    -9.5,
+    -21.3,
+    2.4
+   ],
+   [
+    -11.0,
+    -23.3,
+    0.9
+   ],
+   [
+    -10.2,
+    -22.2,
+    1.8
+   ],
+   [
+    -9.9,
+    -22.1,
+    2.1
+   ],
+   [
+    -9.2,
+    -22.3,
+    3.7
+   ]
+  ],
+  "U3": [
+   [
+    -1.8,
+    -3.8,
+    -0.0
+   ],
+   [
+    -1.1,
+    -3.2,
+    1.1
+   ],
+   [
+    -1.5,
+    -4.5,
+    1.0
+   ],
+   [
+    -0.6,
+    -3.4,
+    2.1
+   ],
+   [
+    -1.3,
+    -3.8,
+    0.9
+   ]
+  ],
+  "S": [
+   [
+    -19.5,
+    -38.8,
+    0.8
+   ],
+   [
+    -20.5,
+    -40.3,
+    0.0
+   ],
+   [
+    -19.8,
+    -39.0,
+    0.1
+   ],
+   [
+    -19.4,
+    -38.9,
+    1.2
+   ],
+   [
+    -18.2,
+    -38.2,
+    3.0
+   ]
+  ]
+ },
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "pref_share": "percent of a list's names that are PREF"
+ },
+ "updated": "2026-10-15T04:15:00"
+}
