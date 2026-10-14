@@ -1,0 +1,8 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-15-stock-only-score",
+ "producer": "src/agentic/test_stock_only_score.py",
+ "definitions": "EXP-2026-10-15-stock-only-score (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: the live model score already contains industry heat (6 industry inputs). A stock-only model (same recipe, those 6\ninputs dropped; logs/leader_sleeve/stock_only_model) lets industry enter only once. Arms: V3.2 (hot gate + live score), V3.2_SO\n(hot gate + stock-only score), BSO9 (top 9 by industry heat x stock-only score, all scored industries). Then V3.2's filters, no\nrefill. PASS per arm vs V3.2: both eras, max drawdown not worse by > 2 points, schedule 0 and >= 4 of 5.\n",
+ "contents": "one row per arm, schedule 0; years = average of 5 schedules",
+ "updated": "2026-10-15T04:07:27"
+}

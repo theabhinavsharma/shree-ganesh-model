@@ -1,0 +1,49 @@
+[04:03:05] copied sessions: {'status': 'checked', 'panel': '/Users/abhinavs./Code/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet', 'copy_dates': 0, 'copy_dates_by_year': {}, 'partially_copied_dates': 0, 'unparsed_source_dates': 0, 'kept_misdated_special_sessions': {}}
+[04:03:06] label basis: session {'candidate_rows': 47454, 'sampled_symbols': 150, 'sampled_rows': 4280, 'panel': '/Users/abhinavs./Code/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet', 'discriminating_rows': 346, 'match_rows': 0.0, 'match_session': 1.0}
+[04:03:06] rows 819,943 (labelled 776,182, last labelled week 2026-09-21, last evaluated week 2026-05-20) · features 44 [manifest.features]
+
+LABEL WINDOWS by year (labelled rows; label basis = session; long-span = 95 rows over >= 105 sessions):
+      labelled  gappy_window_share  long_span_share  y95_long_span  y95_other
+2016   51061.0               0.031            0.006         11.644     20.847
+2017   55034.0               0.019            0.008          5.128     21.326
+2018   62245.0               0.022            0.005          8.904      5.164
+2019   64966.0               0.030            0.006         11.765      9.048
+2020   66289.0               0.040            0.002          9.816     38.567
+2021   72517.0               0.420            0.004         38.583     34.451
+2022   83878.0               0.032            0.009         13.866     13.827
+2023   86040.0               0.036            0.025         42.463     28.427
+2024   94962.0               0.013            0.007         16.916     17.156
+2025   98596.0               0.009            0.004         11.667      9.467
+2026   40594.0               0.012            0.003         11.811     18.141
+[04:03:12] checks: {'raw_close_join_share': 1.0, 'copied_sessions': {'status': 'checked', 'panel': '/Users/abhinavs./Code/Zoom/data/derived/stock_daily_facts_adjusted_2015plus.parquet', 'copy_dates': 0, 'copy_dates_by_year': {}, 'partially_copied_dates': 0, 'unparsed_source_dates': 0, 'kept_misdated_special_sessions': {}, 'test_weeks': 384, 'test_weeks_on_copied_session': [], 'test_weeks_before_copied_session': []}, 'tradable_vs_rows_core_disagree_share': 0.0, 'log_px_not_raw_basis_share': 0.0, 'rows_price_level_basis': 'then-traded', 'price_level_features_used': ['log_px'], 'stale_adjusted_price_features': False, 'label_basis': 'session', 'stale_row_counted_labels': False, 'unknown_row_window_rows': 0}
+
+FEATURE COVERAGE differs strongly by year (share of labelled rows; NaN/zero may mean 'no data', not 'no event'):
+  non-zero share:
+trade_date        2016  2017  2018  2019  2020  2021  2022  2023  2024  2025  2026
+ev60_acquisition  0.17  0.18  0.17   0.2  0.15  0.05  0.05   0.2  0.19  0.24  0.17
+ev60_rating_up    0.01  0.00  0.00   0.0  0.00  0.00  0.02   0.0  0.00  0.00  0.00
+[04:03:29] fold 2019: train 142,262 (<= 2018-08-06) test 64,968 · MLP best epoch 2/7 (val wk-AUC 0.687) · row windows reaching 2019: old cut 70, session purge 91, applied 91
+[04:03:48] fold 2020: train 208,412 (<= 2019-08-06) test 66,299 · MLP best epoch 1/6 (val wk-AUC 0.653) · row windows reaching 2020: old cut 81, session purge 116, applied 116
+[04:04:10] fold 2021: train 273,624 (<= 2020-08-14) test 72,526 · MLP best epoch 1/6 (val wk-AUC 0.648) · row windows reaching 2021: old cut 42, session purge 53, applied 53
+[04:04:34] fold 2022: train 343,747 (<= 2021-08-09) test 83,881 · MLP best epoch 1/6 (val wk-AUC 0.667) · row windows reaching 2022: old cut 53, session purge 61, applied 61
+[04:05:01] fold 2023: train 423,690 (<= 2022-08-10) test 86,050 · MLP best epoch 3/8 (val wk-AUC 0.685) · row windows reaching 2023: old cut 226, session purge 243, applied 243
+[04:05:30] fold 2024: train 507,882 (<= 2023-08-07) test 94,967 · MLP best epoch 3/8 (val wk-AUC 0.656) · row windows reaching 2024: old cut 427, session purge 481, applied 481
+[04:06:01] fold 2025: train 600,132 (<= 2024-08-13) test 98,601 · MLP best epoch 3/8 (val wk-AUC 0.649) · row windows reaching 2025: old cut 424, session purge 458, applied 458
+[04:06:32] fold 2026: train 696,465 (<= 2025-08-07) test 84,299 · MLP best epoch 1/6 (val wk-AUC 0.662) · row windows reaching 2026: old cut 354, session purge 365, applied 365
+
+MODEL        era   wkAUC  wkTop1%  lift | close-entry wk10 hit% [lo..hi] lift (unlab) exLS hit% (long-span picks) | next-open wk10 hit% lift exLS
+logit        disc  0.652   34.5%  1.44x |   22.2% [22.2..22.2] 1.48x (0) exLS  22.2% (0) |  21.9% 1.50x exLS  21.9%
+logit        conf  0.618   26.2%  1.42x |   26.0% [26.0..26.0] 1.85x (0) exLS  25.8% (27) |  25.1% 1.80x exLS  24.9%
+lgbm         disc  0.663   41.1%  1.71x |   26.0% [26.0..26.0] 1.74x (0) exLS  26.0% (3) |  24.9% 1.70x exLS  24.9%
+lgbm         conf  0.654   37.6%  2.03x |   30.9% [30.9..31.0] 2.19x (1) exLS  31.0% (30) |  30.1% 2.15x exLS  30.1%
+xgb          disc  0.665   43.3%  1.81x |   28.4% [28.4..28.4] 1.89x (0) exLS  28.4% (3) |  27.3% 1.87x exLS  27.4%
+xgb          conf  0.654   38.0%  2.06x |   29.8% [29.8..29.9] 2.12x (1) exLS  30.0% (31) |  28.9% 2.07x exLS  29.1%
+mlp          disc  0.658   40.1%  1.67x |   25.1% [25.1..25.1] 1.67x (0) exLS  25.1% (2) |  24.4% 1.67x exLS  24.4%
+mlp          conf  0.643   34.9%  1.89x |   28.7% [28.7..28.7] 2.04x (1) exLS  29.0% (19) |  28.0% 2.01x exLS  28.3%
+lgbm_rank    disc  0.664   40.2%  1.68x |   27.1% [27.1..27.1] 1.81x (0) exLS  27.1% (3) |  26.2% 1.80x exLS  26.3%
+lgbm_rank    conf  0.650   36.4%  1.97x |   30.9% [30.9..30.9] 2.19x (0) exLS  30.8% (40) |  30.2% 2.17x exLS  30.0%
+ensemble     disc  0.669   43.5%  1.81x |   27.7% [27.7..27.7] 1.85x (0) exLS  27.7% (4) |  26.8% 1.83x exLS  26.9%
+ensemble     conf  0.654   37.6%  2.04x |   30.4% [30.4..30.4] 2.16x (1) exLS  30.5% (25) |  29.2% 2.09x exLS  29.4%
+[04:06:38] saved logs/leader_sleeve/stock_only_model/bakeoff.json and bakeoff_preds.parquet (651,591 rows)
+BAKEOFF COMPLETE
+exit 0
