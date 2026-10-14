@@ -1,0 +1,15 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-15-v32-heat-mix",
+ "producer": "src/agentic/test_v32_heat_mix.py",
+ "definitions": "EXP-2026-10-15-v32-heat-mix (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: V3.2 gives all 9 weekly slots to hot industries. Give mid- and cold-heat industries a few slots for their best stocks:\n7-2-0, 6-2-1, 5-3-1 (hot-mid-cold). Tiers by industry heat_pct that week: HOT = G1 (>= 0.70, policy pillar not < 0.30), MID 0.40-0.70,\nCOLD < 0.40 (policy veto everywhere). Within a tier: liquid stocks (Rs 1 cr, > Rs 50) passing the trend test (or new-listing\nexemption), ranked by model score, top-N; unfilled mid / cold slots go to the next hot names; then V3.2's filters, no refill.\nPASS per arm vs V3.2: both eras, max drawdown not worse by > 2 points, schedule 0 and >= 4 of 5. Also: slot-level 6-month returns.\n",
+ "contents": "one row per mix, schedule 0; years = average of 5 schedules",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent",
+  "avg": "percent",
+  "hit50": "percent of picks at +50% or more",
+  "lost": "percent of picks below 0"
+ },
+ "updated": "2026-10-15T03:55:41"
+}
