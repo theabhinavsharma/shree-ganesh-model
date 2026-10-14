@@ -1,0 +1,79 @@
+{
+ "dataset": "evidence.csv",
+ "experiment": "EXP-2026-10-15-minervini-vcp",
+ "producer": "src/agentic/test_minervini_vcp.py",
+ "definitions": "EXP-2026-10-15-minervini-vcp (registered in logs/experiments.jsonl before any outcome was computed). Daily famous-hypothesis #1.\n\nPlain English: Mark Minervini's Volatility Contraction Pattern - a stock near its high whose pullbacks keep getting shallower while\nvolume dries up. Does it pick multibaggers, and does it improve V3.2?\nVCP (fixed): last 60 sessions in 3 blocks of 20, range = (max high - min low) / max high; range1 > range2 > range3, range3 <= 10%,\nclose >= 85% of the 252-session high, mean volume last 10 <= 0.8 x mean last 50 (adjusted panel prices / volumes).\nA (evidence): 6-month return after costs, VCP vs not, in all liquid stocks / the V3.1 pool / the pool's top 25; criterion = top-25\nweekly mean difference with a block-bootstrap (26-week blocks) 95% range above 0.\nB (adoption): VCP names first within the pool's top 25, then V3.2 (filters, trade-for-trade drop, no refill); sp.beats vs V3.2 at\nschedule 0 and >= 4 of 5. SGM_REPRO=1: log nothing.\n",
+ "units": {
+  "avg": "6-month return after costs, percent",
+  "_50": "percent of stocks reaching +50% in 6 months",
+  "lost": "percent of stocks below 0"
+ },
+ "v32": {
+  "V3.2": [
+   {
+    "cagr": 56.39075611488782,
+    "cagr_disc": 50.340799590977035,
+    "cagr_conf": 62.6099886526418,
+    "maxdd": -38.5188509368725
+   },
+   {
+    "cagr": 56.9910979699418,
+    "cagr_disc": 49.44306948145025,
+    "cagr_conf": 64.820574095394,
+    "maxdd": -38.80149728593564
+   },
+   {
+    "cagr": 56.85560440110196,
+    "cagr_disc": 50.691200977855424,
+    "cagr_conf": 63.18706381955539,
+    "maxdd": -37.8988267427622
+   },
+   {
+    "cagr": 56.268764971053244,
+    "cagr_disc": 48.87261197039794,
+    "cagr_conf": 63.923217224657634,
+    "maxdd": -37.36316798045718
+   },
+   {
+    "cagr": 55.26339958945676,
+    "cagr_disc": 47.71009947455913,
+    "cagr_conf": 63.11475537364646,
+    "maxdd": -38.666566683299074
+   }
+  ],
+  "V3.2_VCP": [
+   {
+    "cagr": 56.04509411259227,
+    "cagr_disc": 49.781268691034406,
+    "cagr_conf": 62.49389133732783,
+    "maxdd": -38.33449069539196
+   },
+   {
+    "cagr": 56.173059342169985,
+    "cagr_disc": 48.68771720303749,
+    "cagr_conf": 63.93629968279644,
+    "maxdd": -39.108007087648325
+   },
+   {
+    "cagr": 56.08950399711554,
+    "cagr_disc": 50.04508951321087,
+    "cagr_conf": 62.294028357463404,
+    "maxdd": -38.22828653603957
+   },
+   {
+    "cagr": 55.8322791156322,
+    "cagr_disc": 48.43138483550364,
+    "cagr_conf": 63.49293978076882,
+    "maxdd": -37.57114595445983
+   },
+   {
+    "cagr": 54.98471032758809,
+    "cagr_disc": 47.3881901249936,
+    "cagr_conf": 62.88401677462596,
+    "maxdd": -38.90236458265189
+   }
+  ]
+ },
+ "phases": "0/5",
+ "updated": "2026-10-15T03:14:33"
+}

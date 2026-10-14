@@ -1,0 +1,4 @@
+group,vcp_n,other_n,vcp_share,vcp_avg,other_avg,vcp_med,other_med,vcp_50,other_50,vcp_lost,other_lost,weekly_gap
+all liquid stocks,4020,351120,1.1,11.1,11.1,7.1,3.8,9.1,12.2,38.7,44.6,
+V3.1 pool,306,31210,1.0,13.2,16.0,12.4,7.3,9.2,16.8,30.4,41.3,
+pool top 25,35,7901,0.4,6.5,23.8,8.7,12.4,8.6,22.8,42.9,37.5,"[-6.76, -11.61, -1.91, 31]"

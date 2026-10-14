@@ -1,0 +1,75 @@
+# Famous multibagger hypotheses: one a day (Abhinav 2026-10-15: "1 hypothesis a day ... with mention and proof and first
+# principle thinking"). Each item is REGISTERED in logs/experiments.jsonl before it is tested (evidence part + V3.2 overlay),
+# reported with who said it, the first-principles reason, and the numbers. Attributions are checked at test time.
+# status: done | next | queued | needs-data (no point-in-time history we can test on)
+- id: minervini_vcp
+  who: Mark Minervini (Trade Like a Stock Market Wizard, 2013)
+  claim: Volatility Contraction Pattern - shallower pullbacks, volume drying up, near the high, then breakout
+  data: prices (have)
+  status: done
+  result: "EXP-2026-10-15-minervini-vcp: no. VCP names have fewer losers but fewer +50% winners; in the pool's top 25 they did worse (-6.8 pts, 95% -11.6..-1.9); V3.2 overlay 56.0 vs 56.4, 0/5"
+- id: darvas_box
+  who: Nicolas Darvas (How I Made $2,000,000 in the Stock Market, 1960)
+  claim: buy when price breaks out of a tight 'box' to a new high on rising volume
+  data: prices (have)
+  status: next
+- id: weinstein_stage2
+  who: Stan Weinstein (Secrets for Profiting in Bull and Bear Markets, 1988)
+  claim: buy the Stage 2 breakout - price crosses above a rising 30-week average on heavy volume
+  data: prices (have)
+  status: queued
+- id: oneil_canslim_c
+  who: William O'Neil (How to Make Money in Stocks, CAN SLIM)
+  claim: "C" - current quarter EPS up 25%+ with sales growing; the single most important CAN SLIM letter
+  data: quarterly P&L 2018+ (have)
+  status: queued
+- id: lynch_peg
+  who: Peter Lynch (One Up on Wall Street, 1989)
+  claim: tenbaggers come from growth bought cheap - P/E divided by earnings growth (PEG) below 1
+  data: P/E + EPS growth from quarterly P&L (have)
+  status: queued
+- id: george_hwang_52w
+  who: Thomas George & Chuan-Yang Hwang (Journal of Finance, 2004)
+  claim: nearness to the 52-week high predicts returns better than past return itself
+  data: prices (have)
+  status: queued
+- id: superstar_new_stakes
+  who: Indian retail folklore - follow Ashish Kacholia / Vijay Kedia / Dolly Khanna new 1%+ stakes
+  claim: their new disclosed stakes become multibaggers
+  data: superstar holdings feed (check point-in-time depth first)
+  status: queued
+- id: small_equity
+  who: Indian retail folklore
+  claim: small equity capital / low free float stocks become multibaggers (little supply)
+  data: shares outstanding over time (check)
+  status: queued
+- id: operating_leverage
+  who: common analyst framing (margin expansion drives earnings faster than sales)
+  claim: profit margin rising year on year while sales grow
+  data: quarterly P&L (have)
+  status: queued
+- id: mf_sponsorship
+  who: William O'Neil (CAN SLIM "I") / Indian MF tracking
+  claim: rising mutual-fund ownership precedes big moves
+  data: AMFI monthly portfolios (check history depth)
+  status: queued
+- id: turnaround
+  who: Peter Lynch's 'turnarounds' category
+  claim: loss-making to profitable companies re-rate sharply
+  data: quarterly P&L (have)
+  status: queued
+- id: mayer_100baggers
+  who: Christopher Mayer (100 Baggers, 2015) after Thomas Phelps (100 to 1 in the Stock Market, 1972)
+  claim: small size + high return on equity sustained and reinvested + owner-operators ('twin engines')
+  data: point-in-time ROE history missing
+  status: needs-data
+- id: agrawal_qglp
+  who: Raamdeo Agrawal / Motilal Oswal Wealth Creation Studies
+  claim: Quality, Growth, Longevity, Price
+  data: point-in-time balance sheet missing
+  status: needs-data
+- id: kedia_smile
+  who: Vijay Kedia
+  claim: SMILE - Small size, Medium experience, Large aspiration, Extra-large market potential
+  data: qualitative (no testable history)
+  status: needs-data
