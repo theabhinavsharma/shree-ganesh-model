@@ -1,6 +1,6 @@
 """Famous-hypothesis tests that flag stocks (configs/famous_hypotheses.yaml; each REGISTERED in logs/experiments.jsonl first).
 
-Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any
+Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap
 Plain English: for a flag (e.g. 'promoter took preferential shares at a premium in the last 90 days', 'market cap <= Rs 1,000 cr'):
 A (evidence) - each stock's 6-month return after costs on every weekly list since Apr 2019, flagged vs not, in all liquid stocks,
 the V3.1 pool and the pool's top 25; verdict = top-25 weekly gap with a block-bootstrap (26-week blocks) 95% range above 0.
@@ -18,7 +18,8 @@ from test_v3_l1_newlist_cost import run_cost  # noqa: E402
 START, HOLD = pd.Timestamp("2019-04-01"), 126
 HYP = {"promoter_pref_premium": dict(exp="EXP-2026-10-15-promoter-pref-premium", main="PREM", extra="PREF"),
        "kedia_small_size": dict(exp="EXP-2026-10-15-kedia-small-size", main="SMALL", extra="SMALL500"),
-       "promoter_pref_any": dict(exp="EXP-2026-10-15-promoter-pref-any", main="PREF", extra="PREM")}
+       "promoter_pref_any": dict(exp="EXP-2026-10-15-promoter-pref-any", main="PREF", extra="PREM"),
+       "orderbook_mcap": dict(exp="EXP-2026-10-15-orderbook-to-mcap", main="OBM1", extra="OBM2", pool=True)}
 
 
 def promoter_flags(cal, tpos):
@@ -46,6 +47,32 @@ def promoter_flags(cal, tpos):
             return i > 0 and (dd - a[i - 1]) <= np.timedelta64(90, "D")
         return f
     return {"PREM": flag("PREM"), "PREF": flag("PREF")}, info, m
+
+
+def orderbook_flags(mc):
+    """OBM = latest stated order book (median of statements within 45 days of the latest one, filed before 15:30 IST on the
+    list date, latest within 120 days) / point-in-time market cap. OBM > 20 = extraction error (NaN, counted)."""
+    B = pd.read_parquet(ROOT / "data/derived/order_book_filings.parquet", columns=["symbol", "filed", "backlog_cr"])
+    B["filed"] = pd.to_datetime(B["filed"], errors="coerce"); B = B[(B["backlog_cr"] >= 1) & B["filed"].notna()].sort_values("filed")
+    per = {s: (g["filed"].values, g["backlog_cr"].to_numpy(float)) for s, g in B.groupby("symbol")}
+    cache, err = {}, [0, 0]
+    def obm(s, d):
+        k = (s, d)
+        if k in cache:
+            return cache[k]
+        a = per.get(s); r = np.nan
+        if a is not None:
+            cut = np.datetime64(pd.Timestamp(d) + pd.Timedelta(hours=15, minutes=30)); i = np.searchsorted(a[0], cut, side="left")
+            if i > 0 and a[0][i - 1] >= np.datetime64(pd.Timestamp(d) - pd.Timedelta(days=120)):
+                j = np.searchsorted(a[0], a[0][i - 1] - np.timedelta64(45, "D"), side="right"); book = float(np.median(a[1][j:i])); m = mc(s, d)
+                if np.isfinite(m) and m > 0:
+                    r = book / m; err[1] += 1
+                    if r > 20:
+                        err[0] += 1; r = np.nan
+        cache[k] = r
+        return r
+    info = dict(statements=len(B), companies=int(B["symbol"].nunique()), first=str(B["filed"].min().date()), last=str(B["filed"].max().date()))
+    return {"OBM1": lambda s, d: obm(s, d) >= 1, "OBM2": lambda s, d: obm(s, d) >= 2}, info, err, B
 
 
 def size_flags():
@@ -86,6 +113,14 @@ def main(key):
         checks += [dr.qc("insider history: months 2019-01..last month with disclosures (share)", 1.0 - float(em["value"]) / nmon, 1.0),
                    dr.qc("promoter preferential rows with a usable implied price (share)", info["price_usable"], 0.7),
                    dr.span("promoter preferential disclosures", m["d"], pd.Timestamp("2019-04-30"), cal[-1] - pd.Timedelta(days=60))]
+    elif key == "orderbook_mcap":
+        _, mc = size_flags(); flags, info, err, Bk = orderbook_flags(mc)
+        for d in weeks[0][::4]:                                       # sample list dates for the extraction-error share
+            for s in liq.loc[liq["trade_date"] == d, "symbol"]:
+                flags["OBM1"](s, d)
+        info["error_share"] = round(err[0] / max(1, err[1]), 4); info["valued"] = err[1]
+        checks += [dr.span("order-book statements", Bk["filed"], pd.Timestamp("2016-06-30"), cal[-1] - pd.Timedelta(days=60)),
+                   dr.qc("order books that are plausible (<= 20x market cap) among valued stock-dates", 1 - info["error_share"], 0.9)]
     else:
         flags, mc = size_flags(); info = {}
         K = pd.DataFrame([dict(d=d, known=(1.0 if pd.notna(mc(s, d)) else np.nan)) for s, d in zip(liq["symbol"], liq["trade_date"])])
@@ -147,15 +182,26 @@ def main(key):
     same = sum(L0[d] == ref[d] for d in weeks[0]); print(f"wiring check: V3.2 rebuilt == v3_rule on {same}/{len(weeks[0])} weeks", flush=True)
     if same < len(weeks[0]):
         raise SystemExit("wiring check FAILED — no result reported")
-    arm = f"V3.2_{H['main']}"; res, ph, changed = {"V3.2": [], arm: []}, [], 0
+    def lists_pool(o):
+        R = v3_rule.ranked_v31(F1, weeks[o], imap, P, ctx["G1"], 10000); out = {}
+        for d in weeks[o]:
+            pool = R[d]; fl = [s for s in pool if main_f(s, d)]; pool = fl + [s for s in pool if s not in set(fl)]
+            out[d] = [s for s in pool[:9] if ctx["keep"](s, d) and not t2t(s, d)]
+        return out
+    arm = f"V3.2_{H['main']}"; arm2 = f"V3.2_{H['main']}_POOL"
+    res, ph, changed = {"V3.2": [], arm: [], **({arm2: []} if H.get("pool") else {})}, [], 0
+    ph2 = []
     for o in range(5):
         a, b = lists(o, False), lists(o, True)
         if o == 0:
             changed = int(sum(a[d] != b[d] for d in weeks[o]))
-        for k, pk in (("V3.2", a), (arm, b)):
+        arms_o = [("V3.2", a), (arm, b)] + ([(arm2, lists_pool(o))] if H.get("pool") else [])
+        for k, pk in arms_o:
             mt = sp.metrics(run_cost(D, X, pk, weeks[o], "E0", cost)[0]); res[k].append({c: float(mt[c]) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")})
         ph.append(bool(sp.beats(res[arm][o], res["V3.2"][o])))
-    b_pass = bool(ph[0] and sum(ph) >= 4)
+        if H.get("pool"):
+            ph2.append(bool(sp.beats(res[arm2][o], res["V3.2"][o])))
+    b_pass = bool(ph[0] and sum(ph) >= 4); b2_pass = bool(ph2 and ph2[0] and sum(ph2) >= 4)
 
     print(f"\n=== {EXP_ID} · weekly lists {START.date()}..{cal[-1].date()} · {info} ===")
     for k, e in evid.items():
@@ -165,6 +211,8 @@ def main(key):
     for k in res:
         r = res[k][0]; print(f"{k:12s} CAGR {r['cagr']:5.1f} · 2019-22 {r['cagr_disc']:5.1f} · 2023+ {r['cagr_conf']:5.1f} · maxDD {r['maxdd']:6.1f} · range {min(x['cagr'] for x in res[k]):.1f}..{max(x['cagr'] for x in res[k]):.1f}")
     print(f"B: {arm} beats V3.2 in {sum(ph)}/5 · lists changed {changed}/{len(weeks[0])} · {'PASS' if b_pass else 'no pass'}")
+    if H.get("pool"):
+        print(f"B2: {arm2} beats V3.2 in {sum(ph2)}/5 · {'PASS' if b2_pass else 'no pass'}")
     if os.environ.get("SGM_REPRO") == "1":
         return
     OUTDIR.mkdir(parents=True, exist_ok=True); now = datetime.now().isoformat(timespec="seconds")
@@ -173,7 +221,7 @@ def main(key):
         units=dict(avg="6-month return after costs, percent", hit50="percent of stocks at +50% or more after 6 months", lost="percent below 0"), v32=res, phases=f"{sum(ph)}/5", info=info, updated=now), indent=1, default=str))
     (OUTDIR / "README.md").write_text(f"# {EXP_ID}\n\nEvidence ({H['main']}, pool top 25): {a_text}. V3.2 overlay: {'PASS' if b_pass else 'no pass'}. evidence.csv + manifest.\n")
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
-        fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-RESULT" if not os.environ.get("SGM_RERUN_TAG") else "-RERUN-" + os.environ["SGM_RERUN_TAG"]), evidence_pass=a_pass, evidence_text=a_text, verdict=[arm] if b_pass else "no pass", evidence=evid, info=info,
+        fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-RESULT" if not os.environ.get("SGM_RERUN_TAG") else "-RERUN-" + os.environ["SGM_RERUN_TAG"]), evidence_pass=a_pass, evidence_text=a_text, verdict=([arm] if b_pass else []) + ([arm2] if b2_pass else []) or "no pass", evidence=evid, info=info, phases_pool=(f"{sum(ph2)}/5" if ph2 else None),
                                  arms={k: [round(res[k][0][c], 1) for c in ("cagr", "cagr_disc", "cagr_conf", "maxdd")] for k in res}, phases=f"{sum(ph)}/5", lists_changed=changed), default=str) + "\n")
     print(f"done in {time.time() - t0:.0f}s")
 
