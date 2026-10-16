@@ -35,8 +35,10 @@
   "trust.claims_sourced",
   "trust.claude_golden",
   "trust.lessons_intact",
+  "trust.live_rule_verdicts",
   "trust.results_data_ready",
-  "trust.results_reproduce"
+  "trust.results_reproduce",
+  "trust.verdict_changes"
  ],
  "incidents": [
   "INC-2026-09-24-cron-tcc",
@@ -60,7 +62,8 @@
   "INC-2026-10-06-daily-run-hung-silent",
   "INC-2026-10-12-insider-gap-mar-apr-2026",
   "INC-2026-10-12-payout-reinvested-in-stub",
-  "INC-2026-10-13-monday-feeds-stale"
+  "INC-2026-10-13-monday-feeds-stale",
+  "INC-2026-10-16-reproduce-blocks-on-market-drift"
  ],
  "lessons": {
   "sgm-triage": [
@@ -68,6 +71,7 @@
    "2987603fa8a9",
    "2c8359f77256",
    "2f64673d94d0",
+   "476b39f271b0",
    "5aa9d5bd31ba",
    "66b8a60a2591",
    "6c6dd865a856",
@@ -100,6 +104,7 @@
   "sgm-new-idea": [
    "0cbf0a9bcd58",
    "1fbf4df71236",
+   "476b39f271b0",
    "6c6dd865a856",
    "74a5a781ad81",
    "8baf4d91b659",

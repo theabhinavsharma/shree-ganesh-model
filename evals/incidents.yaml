@@ -354,3 +354,22 @@ incidents:
     lesson: When adding a time limit to every step, compare it with each step's normal duration first, and make long fetches
       save as they go; a QC warning that repeats for a week is a failure, not a warning.
     commit: 39442a6
+  - id: INC-2026-10-16-reproduce-blocks-on-market-drift
+    date: '2026-10-16'
+    title: Friday buy list blocked two weeks running by the reproduce gate reacting to market movement
+    found_by: Weekly run stopped at the weekly analysis check on 2026-10-09 and 2026-10-16 (7:54 PM IST); user asked why the
+      list did not come
+    root_cause: trust.results_reproduce compared this week's re-run of the registered tests with numbers logged the previous
+      week; a week of prices plus the model-score rebuild moves them 1.6-3.6 points, beyond the 1-point drift allowance, and
+      the V3.2 test's wiring check chained the failure. The gate required numbers that only exist after the week's data is in.
+    blast_radius: No list sent at the scheduled time on Oct 9 and Oct 16 (sent by hand at 01:57 and 22:32 IST after re-runs).
+      Picks themselves were unaffected.
+    fix: RERUN stage re-runs the registered tests on the week's data before the gate; trust.live_rule_verdicts blocks only if
+      V3.1/V3.2 stop winning; trust.verdict_changes warns on other verdict changes; REPRODUCE compares with the fresh numbers.
+    guard_eval: trust.live_rule_verdicts
+    skills:
+    - sgm-triage
+    - sgm-new-idea
+    lesson: 'A check that compares results across weeks must separate code drift from data drift: re-run on this week''s data
+      first, block on verdict flips of the live rule, and reproduce against the fresh numbers.'
+    commit: '9466883'
