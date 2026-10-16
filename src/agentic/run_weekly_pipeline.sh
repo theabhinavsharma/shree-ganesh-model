@@ -269,9 +269,10 @@ step "4.5. SIMPLICITY AUDIT + RECREATION KIT"
   && log "  ✅ recreation kit regenerated (SHOWCASE.html inventory current)" \
   || log "  ⚠ recreation kit failed — see $LOG_DIR/${TS}_kit.log"
 
-# Sync showcase to deploy dir so the next `vercel --prod` ships the current inventory
-cp SHOWCASE.html shreeganeshmodel-deploy/index.html 2>/dev/null \
-  && log "  ✅ showcase synced to deploy dir" \
+# Sync showcase to the site's "Older Models" tab so the next `vercel --prod` ships the current inventory
+# (since 2026-10-16 the home page index.html is SGM Data World and must not be overwritten)
+/usr/bin/python3 src/agentic/sync_showcase.py >/dev/null 2>&1 \
+  && log "  ✅ showcase synced to deploy dir (older-models/)" \
   || log "  ⚠ showcase sync failed"
 
 # ---------------- 5. Git commit + push ----------------
@@ -282,7 +283,7 @@ if [ $DRY_RUN -eq 1 ]; then
   log "▸ DRY RUN — skipping git operations"
 else
   git add "$BASKET_FILE" reports/basket_report_${DATE}.md reports/daily_actions_*.md logs/miss_learnings.jsonl logs/coverage_backtest_since_april.json data/derived/missed_winner_classifier.parquet \
-          SHOWCASE.html shreeganeshmodel-deploy/index.html assets/recreation_manifest.json \
+          SHOWCASE.html shreeganeshmodel-deploy/older-models/index.html assets/recreation_manifest.json \
           reports/simplicity_audit.md reports/freshness_status.md \
           logs/simplicity_metrics.jsonl logs/debt_ledger.jsonl 2>/dev/null || true
 

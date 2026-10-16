@@ -33,6 +33,26 @@ A 3D world you can fly through that explains the whole SGM automation. Every inp
 - `world.html` is the page source (published as the claude.ai artifact https://claude.ai/artifact/4AqJRp1Dc1hMtAn2giYB4P; republish this file to keep the same link).
 - Local preview: `.claude/launch.json` entry `sgm-world` (python http.server on port 8793 serving this folder).
 
+## Direction change (user, 2026-10-16 night): realistic world on the website
+- v1 (toy globe artifact) stays as a backup link. The main build is now a **realistic Earth** on shreeganeshmodel.vercel.app (home page). The old 15D/5% showcase moves to an **Older Models** tab (`/older-models/`).
+- Engine: CesiumJS. Google Photorealistic 3D Tiles near the ground (key on the user's Google Cloud, locked to the site, daily cap). NASA imagery for the globe.
+- Real time of day: real day, evening and night. From space, the real sun line (terminator) and city lights; near the ground, a colour grade by the local sun.
+- Detail by zoom:
+  - space: data streaks on routes;
+  - country: bot swarms;
+  - street: bots running real roads (OpenStreetMap routes);
+  - building: tap for the card.
+- Bots: little orange Claude-style bots in T-shirts with their country's flag (IN, US, DE, AE), plus astrobots for any real satellite feed later (none today). Built by a parallel agent: `docs/sgm-world/bots/`, models in `shreeganeshmodel-deploy/assets/bots/`.
+- Journey: a "Start the journey" button plays the user's drawn frames (placeholder 4 steps until the drawings arrive), then free exploring.
+
+## Realistic-world milestones
+- [x] R0 Site restructure: world is `index.html`, showcase at `/older-models/` (weekly sync script), top-right "Older Models" link.
+- [ ] R1 Test run: real-time globe and street level at NSE, one bot route, phone check. (Code done; waiting on the Google key and the bot models.)
+- [ ] R2 Journey from the user's drawings, plus free explore.
+- [ ] R3 Every source at its real building, its route and the zoom layers.
+- [ ] R4 Laptop workshop, boss giant, money lane.
+- [ ] Deploy to production only after the user says yes.
+
 ## Progress log
 - 2026-10-16: plan written; M1 started.
 - 2026-10-16: M1 done and published (version 1).
@@ -44,3 +64,4 @@ A 3D world you can fly through that explains the whole SGM automation. Every inp
     4. Phone: layout checked at 375px; tilted island views work.
     5. One look: toy diorama throughout.
   - Known gaps: the laptop interior is not built (M2); boss giant and scroll story are waiting for the user's photo and drawings.
+- 2026-10-16 late: R0 done. R1 code works locally: the night side over India from space; BKC street map with the NSE label at OpenStreetMap's node; night grade. Google billing is waiting on the user (no billing account existed). Bot models are being built by a parallel agent.
