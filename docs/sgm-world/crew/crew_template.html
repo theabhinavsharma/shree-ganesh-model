@@ -1,0 +1,493 @@
+<title>SGM Crew</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: the theatre (one character's journey playing as a relay, with its profile beside it) on top, the whole crew
+   lined up below in groups. One dark look on purpose: it matches the night-sky Data World this page belongs to. */
+:root {
+  color-scheme: dark;
+  --sky: #0a0f1a;
+  --panel: #131b2b;
+  --panel-2: #1a2438;
+  --line: #27334d;
+  --ink: #f2ece4;
+  --ink-2: #a9b2c4;
+  --amber: #ffc21a;     /* the data baton */
+  --orange: #e8875c;    /* the bots */
+  --cyan: #4fd8ff;      /* messages */
+  --green: #7dff6a;     /* money */
+  --font-display: "Fredoka", "Avenir Next Rounded", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--sky); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 34px; }
+header { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: end; justify-content: space-between; }
+header > div { min-width: 0; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(30px, 4.6vw, 44px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-2); max-width: 60ch; }
+.toplink { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 15px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+.toplink:hover { border-color: var(--orange); }
+
+.theater { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.stage { border-radius: 16px; border: 1px solid var(--line); overflow: hidden; background: var(--panel); display: grid; }
+.stage-view { position: relative; aspect-ratio: 16 / 9; background: linear-gradient(180deg, #1c2a46 0%, #2c3c60 55%, #22304a 100%); }
+.stage-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.slabel { position: absolute; left: 0; top: 0; transform: translate(-50%, -100%); white-space: nowrap; font-family: var(--font-display); font-weight: 600;
+  font-size: 13px; padding: 3px 8px; border-radius: 8px; background: rgba(10, 15, 26, 0.78); border: 1px solid var(--line); }
+.caption { display: grid; gap: 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); min-height: 92px; align-content: start; }
+.caption p { margin: 0; font-size: 15px; }
+.caption .meta { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--amber); }
+.dots i.done { background: #8a6d1d; }
+.replay { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.replay:hover { border-color: var(--amber); }
+
+.profile { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; display: grid; gap: 12px; }
+.profile .who { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.profile h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.1; }
+.chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
+.role { color: var(--ink-2); font-size: 13.5px; margin: -6px 0 0; }
+.says { margin: 0; padding: 10px 12px; border-radius: 12px; background: rgba(232, 135, 92, 0.14); font-size: 14.5px; }
+.profile dl { margin: 0; display: grid; gap: 10px; }
+.profile dt { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+.profile dd { margin: 2px 0 0; font-size: 14.5px; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.links button { font: inherit; font-size: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.links button:hover { border-color: var(--orange); }
+.links .arrow { color: var(--ink-2); font-size: 12px; align-self: center; }
+
+.group h2 { font-family: var(--font-display); font-weight: 600; font-size: 21px; margin: 0 0 2px; }
+.group p { margin: 0 0 12px; color: var(--ink-2); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.card { font: inherit; color: var(--ink); text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 0 0 8px; cursor: pointer; display: grid; overflow: hidden; }
+.card:hover { border-color: var(--orange); }
+.card[aria-pressed="true"] { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber) inset; }
+.card:focus-visible, .links button:focus-visible, .replay:focus-visible, .toplink:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.card .view { aspect-ratio: 1 / 1; width: 100%; background: radial-gradient(circle at 50% 70%, #24314d, #141c2c 70%); }
+.card b { font-family: var(--font-display); font-weight: 600; font-size: 15px; margin-top: 4px; }
+.card small { color: var(--ink-2); font-size: 11.5px; padding: 0 6px; line-height: 1.3; }
+#groups { display: grid; gap: 30px; }
+#gl { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.loading { color: var(--ink-2); font-size: 13px; }
+@media (max-width: 860px) { .theater { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .caption p { font-size: 14px; } .stage-view { aspect-ratio: 4 / 3; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>The SGM crew</h1>
+      <p class="lede">Every character that carries the data behind your Friday list. Tap one to watch its whole journey: where it starts, who it hands the crate to, and where it ends up.</p>
+    </div>
+    <a class="toplink" id="worldLink" href="/">Back to the Data World</a>
+  </header>
+
+  <section class="theater" aria-label="Journey">
+    <div class="stage" id="stage">
+      <div class="stage-view" id="stageView"><div class="stage-labels" id="slabels"></div></div>
+      <div class="caption"><p id="cap">Loading the crew…</p><div class="meta"><div class="dots" id="dots"></div><button class="replay" id="replay" type="button">Watch again</button></div></div>
+    </div>
+    <aside class="profile" id="profile" aria-live="polite"><p class="loading">Loading…</p></aside>
+  </section>
+
+  <div id="groups"></div>
+</div>
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<script>__DATA__</script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const D = window.SGM_DATA, BOT = Object.fromEntries(D.BOTS.map(b => [b.id, b])), ST = Object.fromEntries(D.STATIONS.map(s => [s.id, s]));
+const COUNTRY = { IN: "India", US: "USA", DE: "Germany", AE: "UAE" };
+if (location.protocol.startsWith("http") && !location.hostname.endsWith("vercel.app") && location.hostname !== "localhost") document.getElementById("worldLink").hidden = true;
+
+/* ---------------------------------------------------------------- the characters */
+const flagOf = id => D.FLAG[BOT[id].st];
+const EXTRA = {   // characters that aren't data bots
+  tanker: { name: "Ship 1", file: "props/tanker_oil.glb", chip: "Oil tanker", role: "Carries world prices from the US East Coast to Mumbai",
+    says: "I carry Fed's crate of oil and world prices across the Atlantic and the Red Sea to Mumbai.", brings: "Fed's crate: oil, metal and crop prices, the dollar and US rates",
+    from: "The US East Coast cable station", means: "In real life this data crosses the sea through undersea fibre cables in a fraction of a second. The tanker is the cartoon of that, and a reminder that India's oil itself arrives by ship.", when: "During every 6:45 PM run" },
+  container: { name: "Ship 2", file: "props/container_ship.glb", chip: "Container ship", role: "Carries data from California across the Pacific to Chennai",
+    says: "I bring Claude's Friday note and the world's headlines across the Pacific to Chennai.", brings: "Claude's Friday note and Gnews's world headlines", from: "The San Francisco coast",
+    means: "Real route: undersea cables across the Pacific and through Singapore, simplified here.", when: "During the runs; Fridays for Claude's note" },
+  sub: { name: "Submarine", file: "props/submarine.glb", chip: "Undersea cable", role: "Marks the undersea cable from Marseille to Mumbai",
+    says: "I carry Euro's exchange rates under the sea from Marseille to Mumbai.", brings: "Euro's crate: daily exchange rates", from: "Marseille, where Europe's cables meet the sea",
+    means: "Most of India's internet arrives through cables on the sea floor that land in Mumbai and Chennai.", when: "During every 6:45 PM run" },
+  laptop: { name: "Your laptop", file: "props/laptop_giant.glb", chip: "Bengaluru", role: "Where every crate ends up",
+    says: "Every weekday at 6:45 PM all the crates arrive here and I check them. On Fridays at 7:30 PM I hand them to the ML bots.", brings: "Every crate from every bot",
+    from: "All the bots, through Bengaluru", means: "21 data checks run after every daily run. If a check fails, the list is held back and you get a failure message instead.", when: "Weekdays 6:45 PM; Fridays 7:30 PM" },
+  ml: { name: "ML bots", file: "props/bot_ML.glb", anim: "hammer", chip: "Inside the laptop", role: "Turn the data into the Friday list",
+    says: "We hammer the data into model scores, find the hot industries and run the V3.2 rule.", brings: "The Friday buy list",
+    from: "Your laptop", means: "Three models score every stock. The V3.2 rule keeps hot industries, ₹1 cr a day of trading, the trend test and the top 9, then drops financials, fading-theme names and trade-for-trade names.", when: "Fridays 7:30 PM" },
+  me: { name: "You", file: "props/me_figure.glb", anim: "wave", chip: "The boss", role: "Decides and places the order",
+    says: "I read the Friday list, sign the Saturday review and place the Monday order before the market opens.", brings: "The decision", from: "Your phone",
+    means: "Nothing is bought without you. Each weekly batch is held for about 6 months, then sold, and the money rolls into that week's new batch.", when: "Friday evening, Saturday, Monday morning" },
+  rupee: { name: "₹ note", file: "props/rupee_note.glb", chip: "Money", role: "Your money's round trip",
+    says: "I go from your SBI account into a weekly batch of stocks, sit there for about 6 months, and come back to roll into the next batch.", brings: "Your money (no amounts shown here)",
+    from: "Your SBI account", means: "Money moves only when you place the order. A batch is sold after 126 trading days, about 6 months.", when: "Mondays at the market open" }
+};
+function charInfo(id) {
+  if (EXTRA[id]) return Object.assign({ id }, EXTRA[id]);
+  const b = BOT[id], L = D.LAYMAN[id] || {}, flag = flagOf(id);
+  return { id, name: b.name, file: `bots/bot_${flag}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: L.brings, from: L.from, means: L.means, when: b.when,
+           anim: id === "dalal" ? "idle" : undefined };
+}
+const GROUPS = [
+  ["Data bots", "They fetch the data every weekday at 6:45 PM, all at the same time.", ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews", "dalal"]],
+  ["Messengers and helpers", "They write notes, carry messages, keep time and keep watch.", ["claude", "pigeon", "clock", "watch", "drive", "paisa"]],
+  ["Vehicles", "The cartoon of the undersea cables that bring data from abroad.", ["tanker", "container", "sub"]],
+  ["At home in Bengaluru", "Where the data turns into your Friday list, and your money moves.", ["laptop", "ml", "me", "rupee"]]
+];
+const PARALLEL = {
+  fetch: ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews"],
+  ships: ["tanker", "container", "sub"], friday: ["claude", "laptop", "ml", "pigeon", "clock"], money: ["paisa", "rupee", "me"], watch: ["clock", "watch", "pigeon"]
+};
+function parallelOf(id) {
+  const g = Object.entries(PARALLEL).find(([, ids]) => ids.includes(id));
+  if (!g) return { text: "", ids: [] };
+  const text = { fetch: "All the data bots run at once, every weekday at 6:45 PM.", ships: "The three crossings run during the same evening run.",
+                 friday: "These work together on Fridays.", money: "These move together on Mondays.", watch: "These keep the system running around the clock." }[g[0]];
+  return { text, ids: g[1].filter(x => x !== id) };
+}
+
+/* ---------------------------------------------------------------- journeys (relay legs). move = carrier runs/sails to the next stop; work = something happens at the current stop */
+const L = "Your laptop, Bengaluru", PHONE = "Your phone";
+const tailList = use => [{ work: "laptop", text: "Your laptop checks every crate: 21 data checks after the 6:45 PM run." },
+  { work: "ml", text: use }, { who: "pigeon", to: PHONE, text: "Friday 7:30 PM: Pigeon carries the buy list to your phone on Telegram." },
+  { work: "me", text: "You read the list, sign the Saturday review and place the Monday order." }];
+const tailContext = text => [{ work: "laptop", text }];
+const JOURNEYS = {
+  fed: { start: "St. Louis Fed (FRED)", legs: [{ who: "fed", to: "US East Coast", text: "Fed picks up oil, metal and crop prices, the dollar and US rates, and runs to the coast." },
+    { who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries the crate across the Atlantic and the Red Sea. In real life: undersea fibre cable, in a fraction of a second." },
+    { who: "courier", to: L, text: "A courier runs it from Mumbai to your laptop in Bengaluru." },
+    ...tailList("Friday: the ML bots mark which commodity themes are rising or fading. Stocks tied only to fading themes are dropped.")] },
+  euro: { start: "European Central Bank, Frankfurt", legs: [{ who: "euro", to: "Marseille", text: "Euro picks up the day's exchange rates and runs to the Mediterranean coast." },
+    { who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine (the undersea cable) carries them to Mumbai." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." },
+    ...tailContext("Exchange rates are kept as market context for research. They don't pick stocks.")] },
+  claude: { start: "Anthropic, San Francisco", legs: [{ who: "claude", to: "San Francisco coast", text: "Every Friday afternoon Claude reads world prices, foreign money flows and news, and writes a short note on the market." },
+    { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings the note across the Pacific to Chennai." },
+    { who: "courier", to: L, text: "A courier runs it to your laptop." },
+    ...tailContext("The note is saved with the week's reports, ready before the 7:30 PM list.")] },
+  gnews: { start: "Google News, California", legs: [{ who: "gnews", to: "San Francisco coast", text: "Gnews gathers the world's headlines." },
+    { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings them across the Pacific to Chennai." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("A world mood score, kept as background. It doesn't pick stocks.")] },
+  bhav: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "bhav", to: L, text: "Bhav picks up today's price of every NSE stock and runs it to your laptop." },
+    ...tailList("Friday: prices feed the trend test, the ₹1 cr-a-day bar and the model's scores. The top 9 in hot industries make the list.")] },
+  split: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "split", to: L, text: "Splitty brings the day's splits, bonuses and dividends." },
+    { work: "laptop", text: "Old prices are adjusted, so a 1:10 split never looks like a 90% crash." },
+    ...tailList("Friday: the clean prices feed the trend test and the model.").slice(1)] },
+  filer: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "filer", to: L, text: "Filer reads what companies filed today: order wins, results, letters of intent." },
+    ...tailList("Friday: filings show which themes each company is tied to. Stocks tied only to fading themes are dropped. Big orders also go in your daily note.")] },
+  promo: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "promo", to: L, text: "Promo notes which owners bought their own shares and who pledged them." },
+    { work: "laptop", text: "Kept for research. Pledge alerts go in your daily note." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the 6:45 PM daily note to your phone." }, { work: "me", text: "You read the daily note." }] },
+  tally: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "tally", to: L, text: "Tally counts today's buying and selling, the big deals, India VIX and the market holidays." },
+    { work: "laptop", text: "Market context. The holiday list decides your buy and sell days." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the daily note, with the right dates, to your phone." }, { work: "me", text: "You read it." }] },
+  nsdl: { start: "NSDL, Mumbai", legs: [{ who: "nsdl", to: L, text: "Videshi tracks foreign money going into or out of Indian shares." },
+    ...tailContext("Kept as market context. Claude reads these flows for the Friday market note.")] },
+  amfi: { start: "AMFI, Mumbai", legs: [{ who: "amfi", to: L, text: "Mutu reads how much money Indian mutual funds manage." }, ...tailContext("Kept as market context. It doesn't pick stocks.")] },
+  khabri: { start: "News desks, Mumbai", legs: [{ who: "khabri", to: L, text: "Khabri skims Economic Times and Moneycontrol." }, ...tailContext("A news mood score, background only.")] },
+  khabri2: { start: "News desks, New Delhi", legs: [{ who: "khabri2", to: L, text: "Khabri Jr brings Business Standard and Mint headlines." }, ...tailContext("A news mood score, background only.")] },
+  sarkari: { start: "PIB, next to Parliament", legs: [{ who: "sarkari", to: L, text: "Sarkari reads every government press release and runs to your laptop." },
+    ...tailList("Friday: the policy score shows which industries the government keeps pushing. A hot industry the government is cooling on is vetoed.")] },
+  screeny: { start: "screener.in (website)", legs: [{ who: "screeny", to: L, text: "Screeny says which industry each company belongs to." },
+    ...tailList("Friday: the industry map is how the hot industries are found.")] },
+  tikki: { start: "tickertape.in (website)", legs: [{ who: "tikki", to: L, text: "Tikki notes what well-known investors hold." }, ...tailContext("Research only. It doesn't decide picks.")] },
+  dalal: { start: "BSE, Dalal Street", legs: [{ work: "sleep", text: "Dalal is asleep. BSE has blocked our requests since Sep 30, and only one watch-list ever used it." }] },
+  pigeon: { start: L, legs: [{ who: "pigeon", to: "Telegram", sea: true, text: "Pigeon takes your messages to Telegram." },
+    { who: "pigeon", to: PHONE, text: "Telegram delivers them to your phone: the daily note, the Friday list and any alarm." }, { work: "me", text: "You read them." }] },
+  clock: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: Clock starts the run and every data bot sets off at once." },
+    { work: "ml", text: "Fridays 7:30 PM: Clock starts the buy-list run." }, { who: "pigeon", to: PHONE, text: "Pigeon delivers the result." }, { work: "me", text: "You read it." }] },
+  watch: { start: L, legs: [{ work: "laptop", text: "Every 30 minutes Watchdog checks that no run is stuck and that your messages went out." },
+    { who: "pigeon", to: PHONE, text: "If something is wrong, an alarm reaches your phone." }, { work: "me", text: "You know before it costs anything." }] },
+  drive: { start: L, legs: [{ who: "drive", to: "Google Drive", sea: true, text: "Backup carries a copy of your work to Google Drive." },
+    { work: "end", text: "If the laptop breaks, nothing is lost." }] },
+  paisa: { start: "Your SBI account", money: true, legs: [{ who: "rupee", to: "You", text: "Your salary lands in SBI. Part of it goes to the weekly batch." },
+    { who: "rupee", to: "Your broker", text: "Monday, before 9:15 AM: you place the order for the pre-open auction." },
+    { who: "rupee", to: "NSE", text: "The broker buys the week's stocks at the opening price." },
+    { who: "rupee", to: "Held 6 months", text: "Each batch is held for 126 trading days, about 6 months." },
+    { who: "rupee", to: "Back to you", text: "Then it's sold, and the money rolls into that week's new batch." }] },
+  tanker: { start: "US East Coast", legs: [{ who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries Fed's crate of world prices across the Atlantic and the Red Sea." },
+    { who: "courier", to: L, text: "A courier runs it to your laptop." }, ...tailList("Friday: commodity themes, rising or fading.").slice(0, 2)] },
+  container: { start: "San Francisco coast", legs: [{ who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 carries Claude's note and world headlines across the Pacific." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Saved for Friday.")] },
+  sub: { start: "Marseille", legs: [{ who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine carries Euro's exchange rates along the sea floor." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Kept as market context.")] },
+  laptop: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: every crate arrives and 21 data checks run." },
+    { work: "ml", text: "Fridays 7:30 PM: the laptop hands the data to the ML bots." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the buy list to your phone." }, { work: "me", text: "You decide." }] },
+  ml: { start: L, legs: [{ work: "ml", text: "Three models score every stock." }, { work: "ml", text: "They find the hot industries and the rising and fading themes." },
+    { work: "ml", text: "The V3.2 rule: hot industry, ₹1 cr a day, the trend test, top 9, then drop financials, fading-theme and trade-for-trade names." },
+    { work: "ml", text: "Six earlier tests are re-run to make sure nothing broke." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the list to your phone." }, { work: "me", text: "You decide." }] },
+  me: { start: PHONE, legs: [{ work: "me", text: "Friday evening: the buy list arrives on your phone." }, { work: "me", text: "Saturday: you sign the review." },
+    { who: "rupee", to: "Your broker", text: "Monday, before the market opens: you place the order." },
+    { who: "rupee", to: "Held 6 months", text: "The batch is held for about 6 months." }, { who: "rupee", to: "Back to you", text: "Then it's sold and the money rolls into the next batch." }] },
+  rupee: null
+};
+JOURNEYS.rupee = JOURNEYS.paisa;
+const CARRIER_NAME = { courier: "a courier", pigeon: "Pigeon", tanker: "Ship 1", container: "Ship 2", sub: "the submarine", rupee: "the ₹ note" };
+function batonIds(id) {
+  const j = JOURNEYS[id], out = [];
+  j.legs.forEach(l => { const k = l.who || (l.work === "laptop" ? "laptop" : l.work === "ml" ? "ml" : l.work === "me" ? "me" : null);
+    if (k && k !== id && k !== "courier" && (BOT[k] || EXTRA[k]) && !out.includes(k)) out.push(k); });
+  return out;
+}
+
+/* ---------------------------------------------------------------- models */
+const loader = new GLTFLoader(), cache = {};
+const ASSETS = "assets/", MODEL_EXT = ".glb";        // the claude.ai preview serves the same models as embedded glTF JSON
+async function fetchModel(file) {
+  if (MODEL_EXT === ".glb") return loader.loadAsync(ASSETS + file);
+  // preview: rebuild the binary model in memory from the glTF JSON (no extra network requests, so it works inside claude.ai)
+  const gj = await (await fetch(ASSETS + file.replace(/\.glb$/, MODEL_EXT))).json();
+  const b64 = gj.buffers[0].uri.split(",")[1], bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  delete gj.buffers[0].uri;
+  const enc = new TextEncoder(), pad = n => (4 - n % 4) % 4;
+  let js = enc.encode(JSON.stringify(gj)); js = Uint8Array.from([...js, ...new Array(pad(js.length)).fill(0x20)]);
+  const binP = Uint8Array.from([...bin, ...new Array(pad(bin.length)).fill(0)]);
+  const total = 12 + 8 + js.length + 8 + binP.length, out = new ArrayBuffer(total), dv = new DataView(out), u8 = new Uint8Array(out);
+  dv.setUint32(0, 0x46546C67, true); dv.setUint32(4, 2, true); dv.setUint32(8, total, true);
+  dv.setUint32(12, js.length, true); dv.setUint32(16, 0x4E4F534A, true); u8.set(js, 20);
+  const o = 20 + js.length; dv.setUint32(o, binP.length, true); dv.setUint32(o + 4, 0x004E4942, true); u8.set(binP, o + 8);
+  return loader.parseAsync(out, "");
+}
+function loadGLB(file) { return cache[file] || (cache[file] = fetchModel(file)); }
+async function instance(file) {
+  const g = await loadGLB(file), root = g.scene.clone(true), mixer = new THREE.AnimationMixer(root), actions = {};
+  g.animations.forEach(a => { actions[a.name] = mixer.clipAction(a); });
+  return { root, mixer, actions, play(name) { Object.entries(actions).forEach(([n, a]) => { if (n === name) a.reset().play(); else a.stop(); }); } };
+}
+function lights(scene) {
+  scene.add(new THREE.HemisphereLight(0xfff1e2, 0x2a3350, 1.3));
+  const d = new THREE.DirectionalLight(0xffffff, 1.8); d.position.set(3, 6, 5); scene.add(d);
+}
+
+/* ---------------------------------------------------------------- one renderer, many views (each card and the stage draw into their own rectangle) */
+const canvas = document.getElementById("gl");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setClearColor(0x000000, 0);
+const views = [];
+function resize() { renderer.setSize(window.innerWidth, window.innerHeight, false); }
+window.addEventListener("resize", resize); resize();
+
+/* roster cards */
+const groupsEl = document.getElementById("groups");
+GROUPS.forEach(([title, note, ids]) => {
+  const sec = document.createElement("section"); sec.className = "group";
+  sec.innerHTML = `<h2>${title}</h2><p>${note}</p><div class="grid"></div>`;
+  const grid = sec.querySelector(".grid");
+  ids.forEach(id => {
+    const c = charInfo(id), btn = document.createElement("button");
+    btn.type = "button"; btn.className = "card"; btn.dataset.id = id; btn.setAttribute("aria-pressed", "false");
+    btn.innerHTML = `<div class="view"></div><b>${c.name}</b><small>${c.chip || ""}</small>`;
+    btn.addEventListener("click", () => select(id, true));
+    grid.appendChild(btn);
+    const scene = new THREE.Scene(); lights(scene);
+    const cam = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
+    const v = { el: btn.querySelector(".view"), scene, cam, mixers: [] }; views.push(v);
+    instance(c.file).then(m => {
+      const box = new THREE.Box3().setFromObject(m.root), size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
+      m.root.position.sub(center); m.root.position.y += size.y / 2 - size.y * 0.05;
+      if (EXTRA[id] && ["tanker", "container", "sub"].includes(id)) m.root.rotation.y = -0.9; else m.root.rotation.y = 0.45;
+      scene.add(m.root);
+      const r = Math.max(size.x, size.y, size.z);
+      cam.position.set(r * 0.6, r * 0.8, r * 2.15); cam.lookAt(0, size.y * 0.48, 0);
+      m.play(id === "ml" ? "hammer" : id === "me" ? "wave" : "idle"); v.mixers.push(m.mixer);
+    }).catch(() => {});
+  });
+  groupsEl.appendChild(sec);
+});
+
+/* ---------------------------------------------------------------- the stage: a relay track built for the selected character */
+const stageEl = document.getElementById("stageView"), labelsEl = document.getElementById("slabels"), capEl = document.getElementById("cap"), dotsEl = document.getElementById("dots");
+const stage = { el: stageEl, scene: null, cam: new THREE.PerspectiveCamera(36, 1.6, 0.05, 400), mixers: [], focus: new THREE.Vector3(), play: null };
+views.push(stage);
+const SCALE = { tanker: 0.5, container: 0.5, sub: 0.55, rupee: 1.0, laptop: 1.5, ml: 0.85, me: 2.1 };
+const CRATE_Y = { tanker: 1.2, container: 1.9, sub: 1.3, rupee: null };
+let build = 0;
+async function buildStage(id) {
+  const my = ++build, j = JOURNEYS[id];
+  const scene = new THREE.Scene(); lights(scene); scene.fog = new THREE.Fog(0x22304d, 30, 80);
+  const mixers = []; labelsEl.innerHTML = "";
+  // stops along the track
+  const stops = [{ name: j.start, x: 0 }];
+  j.legs.forEach(l => { if (l.to) stops.push({ name: l.to, x: stops[stops.length - 1].x + (l.sea ? 12 : 7.5), sea: !!l.sea }); });
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x5b6b3e, roughness: 0.95 }), seaMat = new THREE.MeshStandardMaterial({ color: 0x1f6f9a, roughness: 0.5, emissive: 0x0b2a40 });
+  const extent = stops[stops.length - 1].x;
+  const land0 = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); land0.position.set(-3, -0.15, 0); scene.add(land0);
+  for (let i = 1; i < stops.length; i++) {
+    const a = stops[i - 1].x, b = stops[i].x, len = b - a;
+    const seg = new THREE.Mesh(new THREE.BoxGeometry(len, stops[i].sea ? 0.2 : 0.3, 5), stops[i].sea ? seaMat : floorMat);
+    seg.position.set(a + len / 2, stops[i].sea ? -0.3 : -0.15, 0); scene.add(seg);
+  }
+  const landEnd = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); landEnd.position.set(extent + 3, -0.15, 0); scene.add(landEnd);
+  // a glowing path line along the track
+  const path = new THREE.Mesh(new THREE.BoxGeometry(extent + 2, 0.02, 0.12), new THREE.MeshBasicMaterial({ color: j.money ? 0x7dff6a : 0xffc21a }));
+  path.position.set(extent / 2, 0.03, 1.2); scene.add(path);
+  // signposts + labels
+  stops.forEach(s => {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.6, 6), new THREE.MeshStandardMaterial({ color: 0xd8cfc0 })); post.position.set(s.x, 0.8, -1.6); scene.add(post);
+    const sign = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 0.06), new THREE.MeshStandardMaterial({ color: 0xe8875c })); sign.position.set(s.x, 1.55, -1.6); scene.add(sign);
+    const el = document.createElement("div"); el.className = "slabel"; el.textContent = s.name; labelsEl.appendChild(el); s.el = el;
+  });
+  // props at home stops
+  const props = {};
+  const laptopStop = stops.find(s => s.name === L), phoneStop = stops.find(s => s.name === PHONE);
+  const needLaptop = laptopStop || j.legs.some(l => l.work === "laptop" || l.work === "ml");
+  const lapX = laptopStop ? laptopStop.x : 0;
+  if (needLaptop) {
+    const lap = await instance(EXTRA.laptop.file); lap.root.scale.setScalar(SCALE.laptop); lap.root.position.set(lapX, 0, -0.9); lap.play("idle"); scene.add(lap.root); mixers.push(lap.mixer); props.laptop = lap;
+    props.ml = [];
+    for (let k = 0; k < 3; k++) { const m = await instance(EXTRA.ml.file); m.root.scale.setScalar(SCALE.ml); m.root.position.set(lapX - 2.1 + k * 0.9 + (k === 2 ? 2.4 : 0), 0, 0.2 - (k % 2) * 0.5); m.root.rotation.y = k === 2 ? -0.6 : 0.6; m.play("idle"); scene.add(m.root); mixers.push(m.mixer); props.ml.push(m); }
+  }
+  const needMe = phoneStop || j.legs.some(l => l.work === "me") || ["You", "Back to you"].some(n => stops.find(s => s.name === n));
+  if (needMe) {
+    const meStop = phoneStop || stops.find(s => s.name === "You") || stops[0];
+    const me = await instance(EXTRA.me.file); me.root.scale.setScalar(SCALE.me); me.root.position.set(meStop.x + 0.6, 0, -1.4); me.root.rotation.y = -0.3; me.play("idle"); scene.add(me.root); mixers.push(me.mixer); props.me = me;
+    if (phoneStop) { const ph = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.9, 0.08), new THREE.MeshStandardMaterial({ color: 0x1b1b22 }));
+      const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.78), new THREE.MeshBasicMaterial({ color: 0x4fd8ff })); scr.position.z = 0.045; ph.add(body, scr); ph.position.set(phoneStop.x - 0.9, 0.75, 0.3); ph.rotation.y = 0.3; scene.add(ph); }
+  }
+  if (my !== build) return;
+  // carriers wait at the stop where their leg begins
+  const legs = [], byWho = {};
+  let stopIdx = 0;
+  for (const l of j.legs) {
+    const leg = Object.assign({}, l);
+    if (l.to) {
+      const from = stops[stopIdx], to = stops[stopIdx + 1]; stopIdx++;
+      leg.from = from.x; leg.toX = to.x;
+      const key = l.who === "courier" ? "courier" : l.who;
+      if (!byWho[key + "@" + from.x]) {
+        const file = l.who === "courier" ? "bots/bot_IN.glb" : (EXTRA[l.who] ? EXTRA[l.who].file : `bots/bot_${flagOf(l.who)}.glb`);
+        const m = await instance(file); const s = SCALE[l.who] || 1;
+        m.root.scale.setScalar(s); m.root.rotation.y = Math.PI / 2; m.root.position.set(from.x, l.sea ? -0.15 : 0, l.sea ? 0.2 : 0.6);
+        m.play("idle"); scene.add(m.root); mixers.push(m.mixer); byWho[key + "@" + from.x] = m;
+        // a carrier that keeps going (same who, next leg) reuses this instance
+      }
+      leg.m = byWho[key + "@" + from.x]; byWho[key + "@" + to.x] = leg.m;
+      leg.sea = !!l.sea; leg.dur = l.sea ? 3.2 : 2.2;
+    } else { leg.dur = 2.6; leg.at = stops[stopIdx].x; }
+    legs.push(leg);
+  }
+  // the selected character stands at its starting stop when it isn't one of the runners (Dalal, Clock, Watchdog, Paisa...)
+  if (!j.legs.some(l => l.who === id) && !["laptop", "ml", "me", "rupee"].includes(id)) {
+    const c = charInfo(id), m = await instance(c.file); m.root.scale.setScalar(SCALE[id] || 1); m.root.rotation.y = 0.5;
+    m.root.position.set(stops[0].x - 1.4, 0, 0.9); m.play("idle"); scene.add(m.root); mixers.push(m.mixer);
+  }
+  if (my !== build) return;
+  // the baton
+  let crate = null;
+  if (!j.money) { crate = await instance("props/data_crate.glb"); crate.root.scale.setScalar(0.75); crate.play("idle"); scene.add(crate.root); mixers.push(crate.mixer); }
+  if (my !== build) return;
+  stage.scene = scene; stage.mixers = mixers; stage.stops = stops; stage.legs = legs; stage.crate = crate; stage.props = props; stage.id = id;
+  dotsEl.innerHTML = legs.map(() => "<i></i>").join("");
+  startPlay();
+}
+function startPlay() {
+  const s = stage; s.t = 0; s.leg = -1; s.done = false;
+  s.legs.forEach(l => { if (l.m) { l.m.root.position.x = l.from; l.m.play("idle"); } });
+  s.focus.set(s.stops[0].x, 0, 0);
+}
+function crateOn(m, who) {
+  const y = CRATE_Y[who] !== undefined ? CRATE_Y[who] : 1.25;
+  return new THREE.Vector3(m.root.position.x, y === null ? -99 : y, m.root.position.z);
+}
+function stepStage(dt) {
+  const s = stage; if (!s.scene || s.done) return;
+  s.t += dt;
+  let acc = 0, i = 0; while (i < s.legs.length && s.t > acc + s.legs[i].dur + 0.5) { acc += s.legs[i].dur + 0.5; i++; }
+  if (i >= s.legs.length) { s.done = true; capEl.textContent = "That's the whole journey. Tap another character, or watch again."; setDots(s.legs.length); return; }
+  const leg = s.legs[i], local = Math.min(1, Math.max(0, (s.t - acc) / leg.dur));
+  if (i !== s.leg) {                                    // a new leg starts: caption, animations, the previous carrier rests
+    if (s.leg >= 0 && s.legs[s.leg].m) s.legs[s.leg].m.play("idle");
+    s.leg = i; capEl.textContent = leg.text; setDots(i);
+    if (leg.m) leg.m.play(leg.sea ? "idle" : "run");
+    if (leg.work === "me" && s.props.me) s.props.me.play("wave");
+    if (leg.work === "ml" && s.props.ml) s.props.ml.forEach(m => m.play("hammer"));
+  }
+  if (leg.m) {
+    const e = local < 0.5 ? 2 * local * local : 1 - Math.pow(-2 * local + 2, 2) / 2;
+    leg.m.root.position.x = leg.from + (leg.toX - leg.from) * e;
+    if (leg.sea) leg.m.root.position.y = -0.15 + Math.sin(s.t * 3) * 0.05;
+    s.focus.x += (leg.m.root.position.x - s.focus.x) * Math.min(1, dt * 4);
+    if (s.crate) s.crate.root.position.copy(crateOn(leg.m, leg.who));
+  } else {
+    const x = leg.at;
+    s.focus.x += (x - s.focus.x) * Math.min(1, dt * 4);
+    if (s.crate) {
+      let target;
+      if (leg.work === "laptop" && s.props.laptop) target = new THREE.Vector3(x, 1.9 - local * 1.2, -0.9);
+      else if (leg.work === "ml" && s.props.ml) target = new THREE.Vector3(x - 1.2, 1.6 + Math.sin(s.t * 6) * 0.15, -0.1);
+      else if (leg.work === "me" && s.props.me) target = new THREE.Vector3(s.props.me.root.position.x, 3.6 + Math.sin(s.t * 3) * 0.1, -1.2);
+      else target = s.crate.root.position.clone();
+      s.crate.root.position.lerp(target, Math.min(1, dt * 5));
+    }
+  }
+}
+function setDots(i) { [...dotsEl.children].forEach((d, k) => { d.className = k < i ? "done" : k === i ? "on" : ""; }); }
+document.getElementById("replay").addEventListener("click", () => { if (stage.scene) startPlay(); });
+
+/* ---------------------------------------------------------------- profile + selection */
+const profileEl = document.getElementById("profile");
+function chips(ids) { return ids.map(x => `<button type="button" data-go="${x}">${charInfo(x).name}</button>`).join(""); }
+function select(id, scrollUp) {
+  document.querySelectorAll(".card").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.id === id)));
+  const c = charInfo(id), par = parallelOf(id), baton = batonIds(id);
+  profileEl.innerHTML = `<div class="who"><h2>${c.name}</h2>${c.chip ? `<span class="chip">${c.chip}</span>` : ""}</div>
+    <p class="role">${c.role}</p><p class="says">“${c.says}”</p>
+    <dl><div><dt>What I bring</dt><dd>${c.brings || "—"}</dd></div><div><dt>Where I get it</dt><dd>${c.from || "—"}</dd></div>
+    <div><dt>What it means</dt><dd>${c.means || "—"}</dd></div><div><dt>When</dt><dd>${c.when || "—"}</dd></div>
+    ${baton.length ? `<div><dt>Passes the baton to</dt><dd class="links">${baton.map((b, k) => (k ? '<span class="arrow">→</span>' : "") + `<button type="button" data-go="${b}">${charInfo(b).name}</button>`).join("")}</dd></div>` : ""}
+    ${par.ids.length ? `<div><dt>Running at the same time</dt><dd>${par.text}<div class="links">${chips(par.ids)}</div></dd></div>` : ""}</dl>`;
+  profileEl.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go, true)));
+  capEl.textContent = `Setting up ${c.name}'s journey…`;
+  buildStage(id);
+  if (scrollUp) stageEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+/* ---------------------------------------------------------------- loop */
+const clock = new THREE.Clock(), tmp = new THREE.Vector3();
+function frame() {
+  const dt = Math.min(0.05, clock.getDelta());
+  views.forEach(v => v.mixers.forEach(m => m.update(dt)));
+  stepStage(dt);
+  renderer.setScissorTest(false); renderer.clear(); renderer.setScissorTest(true);
+  const H = window.innerHeight;
+  for (const v of views) {
+    if (!v.scene) continue;
+    const r = v.el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > H || r.width < 2) continue;
+    const y = H - r.bottom;
+    renderer.setViewport(r.left, y, r.width, r.height); renderer.setScissor(r.left, y, r.width, r.height);
+    v.cam.aspect = r.width / r.height; v.cam.updateProjectionMatrix();
+    if (v === stage) {
+      const fx = stage.focus.x, phone = window.innerWidth < 640;
+      v.cam.position.set(fx + 1.2, phone ? 5.2 : 4.4, phone ? 13 : 10.5); v.cam.lookAt(fx + 1.2, 0.9, 0);
+      stage.stops && stage.stops.forEach(s => {          // signpost labels follow the camera
+        tmp.set(s.x, 2.05, -1.6).project(v.cam);
+        const inView = tmp.z < 1 && tmp.x > -1.1 && tmp.x < 1.1;
+        s.el.style.display = inView ? "" : "none";
+        s.el.style.transform = `translate(${(tmp.x + 1) / 2 * r.width}px, ${(1 - tmp.y) / 2 * r.height}px) translate(-50%, -100%)`;
+      });
+    }
+    renderer.render(v.scene, v.cam);
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+const ALL = new Set(GROUPS.flatMap(g => g[2]));
+const first = location.hash.slice(1);                 // /crew.html#fed opens Fed's journey
+select(ALL.has(first) ? first : "fed", false);
+</script>

@@ -1,0 +1,690 @@
+<title>SGM Crew</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: the theatre (one character's journey playing as a relay, with its profile beside it) on top, the whole crew
+   lined up below in groups. One dark look on purpose: it matches the night-sky Data World this page belongs to. */
+:root {
+  color-scheme: dark;
+  --sky: #0a0f1a;
+  --panel: #131b2b;
+  --panel-2: #1a2438;
+  --line: #27334d;
+  --ink: #f2ece4;
+  --ink-2: #a9b2c4;
+  --amber: #ffc21a;     /* the data baton */
+  --orange: #e8875c;    /* the bots */
+  --cyan: #4fd8ff;      /* messages */
+  --green: #7dff6a;     /* money */
+  --font-display: "Fredoka", "Avenir Next Rounded", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--sky); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 34px; }
+header { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: end; justify-content: space-between; }
+header > div { min-width: 0; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(30px, 4.6vw, 44px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-2); max-width: 60ch; }
+.toplink { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 15px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+.toplink:hover { border-color: var(--orange); }
+
+.theater { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.stage { border-radius: 16px; border: 1px solid var(--line); overflow: hidden; background: var(--panel); display: grid; }
+.stage-view { position: relative; aspect-ratio: 16 / 9; background: linear-gradient(180deg, #1c2a46 0%, #2c3c60 55%, #22304a 100%); }
+.stage-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.slabel { position: absolute; left: 0; top: 0; transform: translate(-50%, -100%); white-space: nowrap; font-family: var(--font-display); font-weight: 600;
+  font-size: 13px; padding: 3px 8px; border-radius: 8px; background: rgba(10, 15, 26, 0.78); border: 1px solid var(--line); }
+.caption { display: grid; gap: 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); min-height: 92px; align-content: start; }
+.caption p { margin: 0; font-size: 15px; }
+.caption .meta { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; }
+.dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--amber); }
+.dots i.done { background: #8a6d1d; }
+.replay { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.replay:hover { border-color: var(--amber); }
+
+.profile { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; display: grid; gap: 12px; }
+.profile .who { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.profile h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.1; }
+.chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
+.role { color: var(--ink-2); font-size: 13.5px; margin: -6px 0 0; }
+.says { margin: 0; padding: 10px 12px; border-radius: 12px; background: rgba(232, 135, 92, 0.14); font-size: 14.5px; }
+.profile dl { margin: 0; display: grid; gap: 10px; }
+.profile dt { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+.profile dd { margin: 2px 0 0; font-size: 14.5px; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.links button { font: inherit; font-size: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.links button:hover { border-color: var(--orange); }
+.links .arrow { color: var(--ink-2); font-size: 12px; align-self: center; }
+
+.group h2 { font-family: var(--font-display); font-weight: 600; font-size: 21px; margin: 0 0 2px; }
+.group p { margin: 0 0 12px; color: var(--ink-2); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.card { font: inherit; color: var(--ink); text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 0 0 8px; cursor: pointer; display: grid; overflow: hidden; }
+.card:hover { border-color: var(--orange); }
+.card[aria-pressed="true"] { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber) inset; }
+.card:focus-visible, .links button:focus-visible, .replay:focus-visible, .toplink:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.card .view { aspect-ratio: 1 / 1; width: 100%; background: radial-gradient(circle at 50% 70%, #24314d, #141c2c 70%); }
+.card b { font-family: var(--font-display); font-weight: 600; font-size: 15px; margin-top: 4px; }
+.card small { color: var(--ink-2); font-size: 11.5px; padding: 0 6px; line-height: 1.3; }
+#groups { display: grid; gap: 30px; }
+#gl { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.loading { color: var(--ink-2); font-size: 13px; }
+@media (max-width: 860px) { .theater { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .caption p { font-size: 14px; } .stage-view { aspect-ratio: 4 / 3; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>The SGM crew</h1>
+      <p class="lede">Every character that carries the data behind your Friday list. Tap one to watch its whole journey: where it starts, who it hands the crate to, and where it ends up.</p>
+    </div>
+    <a class="toplink" id="worldLink" href="/">Back to the Data World</a>
+  </header>
+
+  <section class="theater" aria-label="Journey">
+    <div class="stage" id="stage">
+      <div class="stage-view" id="stageView"><div class="stage-labels" id="slabels"></div></div>
+      <div class="caption"><p id="cap">Loading the crew…</p><div class="meta"><div class="dots" id="dots"></div><button class="replay" id="replay" type="button">Watch again</button></div></div>
+    </div>
+    <aside class="profile" id="profile" aria-live="polite"><p class="loading">Loading…</p></aside>
+  </section>
+
+  <div id="groups"></div>
+</div>
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<script>
+/* SGM Data World content: every source the daily run fetches (36 guarded feeds in configs/feed_guards.json), grouped by
+   publisher. Station coordinates are the publisher's city; `building` is set only where the exact building was checked on
+   OpenStreetMap. No amounts or personal details. */
+window.SGM_DATA = (function () {
+"use strict";
+const DAILY = "Weekdays 6:45 PM IST (if missed: 9:45 PM, then 7:15 AM)";
+const STATIONS = [
+  { id: "blr", name: "Bengaluru", sub: "your laptop", real: [12.97, 77.59], at: [10.6, 83.2], alt: 1.7, r: 1.15, kind: "home",
+    about: "Your laptop. Every crate on this globe ends up here. Two production lines run inside it: the daily line at 6:45 PM (fetch the feeds, run the data checks, send the daily note) and the Friday line at 7:30 PM (model scores, industry heat, themes, the V3.2 list, re-running the registered tests, then Telegram). The inside view comes next." },
+  { id: "bom", name: "Mumbai", sub: "NSE · NSDL · AMFI · news", real: [19.07, 72.88], at: [17.2, 65.2], alt: 1.8, r: 1.2, kind: "source",
+    about: "Most of the data starts here. NSE sits in Bandra Kurla Complex, NSDL in Lower Parel and BSE on Dalal Street. The files themselves are served from cloud and CDN servers, so the pin marks who publishes the data, not a server room." },
+  { id: "del", name: "New Delhi", sub: "PIB · news", real: [28.61, 77.21], at: [31.2, 76.4], alt: 2.0, r: 0.85, kind: "source",
+    about: "The Press Information Bureau publishes every government press release. We read them to score which industries the government is pushing. Business Standard and Mint headlines also come from Delhi." },
+  { id: "web", name: "On the web", sub: "screener.in · tickertape.in", real: null, at: [24.5, 89.5], alt: 3.0, r: 0.8, kind: "web",
+    about: "Two websites we read. We have not confirmed which city each company works from, so this island has no pin on the map." },
+  { id: "stl", name: "St. Louis", sub: "FRED, St. Louis Fed", real: [38.63, -90.2], at: [38.63, -90.2], alt: 1.6, r: 0.9, kind: "source",
+    about: "FRED is the Federal Reserve Bank of St. Louis's free data library. It gives us world prices: crude oil, gas, metals, crops, the dollar, the rupee and US interest rates." },
+  { id: "fra", name: "Frankfurt", sub: "ECB exchange rates", real: [50.11, 8.68], at: [50.11, 8.68], alt: 1.6, r: 0.8, kind: "source",
+    about: "The European Central Bank publishes daily reference exchange rates. We read them through the free Frankfurter API." },
+  { id: "mtv", name: "California", sub: "Google News · Google Drive", real: [37.39, -122.08], at: [37.39, -122.08], alt: 1.6, r: 0.85, kind: "source",
+    about: "Google News gives us world headlines for a mood score. Google Drive keeps the backups. The pin marks Google's head office in Mountain View." },
+  { id: "dxb", name: "Dubai", sub: "Telegram", real: [25.2, 55.27], at: [26.4, 53.0], alt: 1.6, r: 0.75, kind: "out",
+    about: "Telegram, the company headquartered in Dubai, carries your phone messages: the 6:45 PM daily note, the Friday buy list and any failure alert." }
+];
+const BOTS = [
+  // Mumbai
+  { id: "bhav", st: "bom", name: "Bhav", hat: "hard", pants: 0x35588a, use: "live", role: "Price fetcher, NSE",
+    says: "Every weekday evening I collect NSE's official bhavcopy: one row per stock with its open, high, low and close.",
+    carries: ["Daily prices for every NSE stock since 2015", "Each stock's series, so trade-for-trade (BE/BZ) names can be dropped"],
+    from: ["nsearchives.nseindia.com"], when: DAILY, writes: "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+    used: "Everything in V3.2: the trend test, the ₹1 cr liquidity bar, the model's inputs and every return." },
+  { id: "split", st: "bom", name: "Splitty", hat: "cap", hatColor: 0x4f8a4f, pants: 0x5a4a7a, use: "live", role: "Corporate actions, NSE",
+    says: "When a stock splits 1:10 I fix its old prices, so a split never looks like a 90% crash.",
+    carries: ["Splits, bonuses and dividends", "Price adjustment factors"], from: ["www.nseindia.com", "nsearchives.nseindia.com"], when: DAILY,
+    writes: "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet", used: "Keeps every price in V3.2 honest after splits and bonuses." },
+  { id: "filer", st: "bom", name: "Filer", hat: "cap", hatColor: 0x7a4f9a, pants: 0x2f6b6b, use: "live", role: "Company filings, NSE",
+    says: "I read what companies file with NSE: order wins, results, letters of intent. I note the rupee amounts.",
+    carries: ["Corporate announcements and their archive", "Order amounts and terms", "Quarterly profit and loss", "Event ledger"],
+    from: ["www.nseindia.com"], when: DAILY, writes: "data/derived/announcements_historical.parquet, order_amounts.parquet, pnl_quarterly.parquet",
+    used: "Which themes a company is exposed to (V3.2's fading-theme drop), and the order lines in your daily note." },
+  { id: "promo", st: "bom", name: "Promo", hat: "peak", hatColor: 0x2c3e66, pants: 0x6b4e2e, use: "ctx", role: "Promoter watcher, NSE",
+    says: "I watch the owners: which promoters bought shares, and who pledged theirs.", carries: ["Insider trades", "Promoter pledges"],
+    from: ["www.nseindia.com"], when: DAILY, writes: "data/derived/pit_history.parquet, pledge_events.parquet", used: "Research tests and pledge alerts." },
+  { id: "tally", st: "bom", name: "Tally", hat: "hard", hatColor: 0xf0a640, pants: 0x3c3c3c, use: "ctx", role: "Market counter, NSE",
+    says: "I count who bought and sold today, the big block deals, India VIX, and which days the market is shut.",
+    carries: ["FII and DII flows", "Block deals", "India VIX", "NSE trading holidays"], from: ["www.nseindia.com"], when: DAILY,
+    writes: "data/derived/fii_dii_flows.parquet, block_deals.parquet, india_vix.parquet, nse_holidays.parquet",
+    used: "Market context. The holiday list sets your buy and sell days." },
+  { id: "nsdl", st: "bom", name: "Videshi", hat: "beret", hatColor: 0x1f4f6f, pants: 0x7a6a3a, use: "ctx", role: "Foreign money tracker, NSDL",
+    says: "I track how much foreign investors put into or pull out of Indian shares, every day and by sector.",
+    carries: ["FPI daily flows", "FPI flows by sector (fortnightly)"], from: ["www.fpi.nsdl.co.in"], when: DAILY,
+    writes: "data/derived/nsdl_fpi_daily.parquet, nsdl_fpi_sector.parquet", used: "The weekly regime note." },
+  { id: "amfi", st: "bom", name: "Mutu", hat: "cap", hatColor: 0xb0623a, pants: 0x35588a, use: "ctx", role: "Mutual fund reader, AMFI",
+    says: "I read how much money mutual funds manage and where.", carries: ["Mutual fund assets"], from: ["www.amfiindia.com"], when: DAILY,
+    writes: "data/derived/amfi_mf_aum.parquet", used: "Market context." },
+  { id: "khabri", st: "bom", name: "Khabri", hat: "cap", hatColor: 0xb43b3b, pants: 0x444444, use: "ctx", role: "News reader, Mumbai papers",
+    says: "I skim Economic Times and Moneycontrol headlines and broker recommendations.", carries: ["News headlines", "Broker recommendations"],
+    from: ["economictimes.indiatimes.com", "www.moneycontrol.com"], when: DAILY, writes: "data/derived/news_feed.parquet, broker_recos.parquet",
+    used: "A news mood score for context." },
+  { id: "dalal", st: "bom", name: "Dalal", hat: "night", pants: 0x5d5d5d, use: "off", sleeping: true, role: "BSE, asleep",
+    says: "Zzz. Only the CIAN watcher used me, and BSE has blocked our requests since Sep 30.", carries: ["Nothing at the moment"],
+    from: ["bseindia.com"], when: "Not running", writes: "—", used: "Not used by V3.2." },
+  // Delhi
+  { id: "sarkari", st: "del", name: "Sarkari", hat: "peak", hatColor: 0xf3efe6, pants: 0x2f4f7f, use: "live", role: "Government press releases, PIB",
+    says: "I read every government press release and count which industries the government keeps talking about.",
+    carries: ["PIB press releases"], from: ["www.pib.gov.in"], when: DAILY, writes: "data/derived/pib_releases.parquet",
+    used: "The policy score behind V3.2's policy veto, and how strong each government theme is." },
+  { id: "khabri2", st: "del", name: "Khabri Jr", hat: "cap", hatColor: 0x3a6fa8, pants: 0x6b4e2e, use: "ctx", role: "News reader, Delhi papers",
+    says: "I bring Business Standard and Mint headlines to the same news pile.", carries: ["News headlines"],
+    from: ["www.business-standard.com", "www.livemint.com"], when: DAILY, writes: "data/derived/news_feed.parquet", used: "A news mood score for context." },
+  // web
+  { id: "screeny", st: "web", name: "Screeny", hat: "cap", hatColor: 0x1d6b73, pants: 0x4a4a6a, use: "live", role: "Industry labels, screener.in",
+    says: "I tell everyone which industry a company belongs to. Saturdays I also bring company fundamentals.",
+    carries: ["NSE four-level industry for each stock", "Company fundamentals (Saturdays)"], from: ["www.screener.in"], when: "Industry labels with the daily run; fundamentals Saturdays",
+    writes: "data/derived/screener_industry.parquet, screener_fundamentals.parquet", used: "The industry map V3.2 uses to find hot industries." },
+  { id: "tikki", st: "web", name: "Tikki", hat: "cap", hatColor: 0x8a5a9a, pants: 0x2f6b6b, use: "ctx", role: "Big investors' holdings, tickertape.in",
+    says: "I note what well-known investors hold.", carries: ["Superstar investor holdings"], from: ["www.tickertape.in"], when: DAILY,
+    writes: "data/derived/superstar_holdings.parquet", used: "Research only." },
+  // abroad
+  { id: "fed", st: "stl", name: "Fed", hat: "top", pants: 0x3b3b55, use: "live", role: "World prices, FRED",
+    says: "I send the world's prices: crude, gas, copper, aluminium, zinc, nickel, iron ore, sugar, cotton, wheat, the dollar and US rates.",
+    carries: ["Commodity prices", "USD/INR history", "Dollar index, US yields, S&P 500, US VIX"], from: ["fred.stlouisfed.org"], when: DAILY,
+    writes: "data/derived/macro_drivers_fred.parquet, commodity_prices.parquet, global_rates.parquet, usdinr_history.parquet",
+    used: "Commodity themes (rising or fading) in V3.2, and the weekly regime note." },
+  { id: "euro", st: "fra", name: "Euro", hat: "beret", hatColor: 0x2c3e66, pants: 0x6b5a3a, use: "ctx", role: "Exchange rates, ECB",
+    says: "I bring the official euro, pound, yen and dollar rates against the rupee.", carries: ["Daily reference exchange rates"],
+    from: ["api.frankfurter.app"], when: DAILY, writes: "data/derived/macro_timeseries.parquet", used: "Market context." },
+  { id: "gnews", st: "mtv", name: "Gnews", hat: "cap", hatColor: 0x3a8a5a, pants: 0x35588a, use: "ctx", role: "World headlines, Google News",
+    says: "I gather world headlines so we can tell if the global mood is calm or scared.", carries: ["Global headlines"],
+    from: ["news.google.com"], when: DAILY, writes: "data/derived/global_macro_sentiment.parquet", used: "A global mood score for context." },
+  { id: "drive", st: "mtv", name: "Backup", hat: "hard", hatColor: 0x8fb7d8, pants: 0x4a4a4a, use: "msg", role: "Backups, Google Drive",
+    says: "I keep copies of your work in Google Drive, so one broken laptop can't lose it.", carries: ["Backups from the laptop"],
+    from: ["Google Drive (My Drive / SGM backups)"], when: "After the runs", writes: "Google Drive", used: "Safety copy, not an input." },
+  { id: "pigeon", st: "dxb", name: "Pigeon", hat: "headset", pants: 0x2f6fae, use: "msg", role: "Your messages, Telegram",
+    says: "I carry the 6:45 PM daily note, the Friday buy list and any failure alert to your phone.", carries: ["Messages from the laptop"],
+    from: ["api.telegram.org"], when: "After each run", writes: "Your phone", used: "How results reach you." },
+  // Bengaluru
+  { id: "clock", st: "blr", name: "Clock", hat: "peak", hatColor: 0x1d6b73, pants: 0x3b3b55, use: "msg", role: "Scheduler, your laptop",
+    says: "I start the runs: weekdays 6:45 PM, Fridays 7:30 PM for the buy list, weekends 11:30 AM and 7:30 PM.",
+    carries: ["The timetable"], from: ["macOS launchd"], when: "Always on", writes: "logs/runs/", used: "Starts every job, so nothing needs a manual click." },
+  { id: "watch", st: "blr", name: "Watchdog", hat: "peak", hatColor: 0x222a3a, pants: 0x5a4a3a, use: "msg", role: "Watchdog, your laptop",
+    says: "Every 30 minutes I check that no run is stuck and that your messages went out. If not, I raise the alarm.",
+    carries: ["Run health"], from: ["the laptop's own logs"], when: "Every 30 minutes", writes: "logs/runs/watchdog_state.json", used: "Catches stuck or silent runs." },
+  { id: "paisa", st: "blr", name: "Paisa", hat: "cap", hatColor: 0xd4a43a, pants: 0x2f4f7f, use: "msg", role: "Your SBI account",
+    says: "Your salary lands with me. The money lane to the broker and back comes in a later version.", carries: ["Salary (no amounts shown here)"],
+    from: ["SBI"], when: "Monthly", writes: "—", used: "Funds the weekly batches." }
+];
+const USE_TEXT = { live: "Feeds the live rule (V3.2)", msg: "Messages and running the system", ctx: "Context and research", off: "Not in use" };
+const USE_COLOR = { live: 0x3a8752, msg: 0x2f6fae, ctx: 0xc08a3a, off: 0x978b82 };
+// Claude writes the Friday regime note (scheduled task, Fridays 3 PM IST); Anthropic is based in San Francisco
+STATIONS.push({ id: "sfo", name: "San Francisco", sub: "Claude, by Anthropic", real: [37.79, -122.40], at: [37.79, -122.40], alt: 1.6, r: 0.8, kind: "source",
+  about: "Claude is the AI made by Anthropic in San Francisco. Every Friday it writes a short note on what kind of market we're in, before the buy list goes out." });
+BOTS.push({ id: "claude", st: "sfo", name: "Claude", hat: "cap", pants: 0x3b3b55, use: "msg", role: "Friday market note, Claude",
+  says: "Every Friday I read world prices, foreign money flows and the news, and write a short note on what kind of market we're in.",
+  carries: ["The Friday regime note"], from: ["claude.ai"], when: "Fridays 3 PM IST", writes: "reports/regime/", used: "Context for the Friday list; it doesn't pick stocks." });
+
+// Plain-language card text (the user's ask, 2026-10-17): what I bring, where from, what it means, and where to go next.
+// next = the closest bot that uses or is affected by this data; cta = a company list (world/companies.json) or, when no
+// list fits, the second-closest bot.
+const LAYMAN = {
+  bhav: { brings: "Today's price of every stock on NSE", from: "NSE, the National Stock Exchange in Mumbai",
+    means: "The price is what people paid for one share today. Watching prices over weeks shows which companies keep climbing, which is the main thing our model looks for.",
+    next: ["split", "Check the split-fixer bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  split: { brings: "Stock splits, bonus shares and dividends", from: "NSE company announcements",
+    means: "When a company splits one share into ten, the price falls tenfold overnight but nobody loses money. This bot fixes old prices so the model isn't fooled.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "filer", "Check the orders and profits bot"] },
+  filer: { brings: "New orders and quarterly profits that companies announce", from: "Companies' own filings on NSE",
+    means: "A big new order or a jump in profit often means more business ahead. These are the companies' own words, filed with the exchange.",
+    next: ["promo", "Check the owners bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  promo: { brings: "When company owners buy or pledge their own shares", from: "NSE disclosures",
+    means: "If the people who run a company buy more of its shares, they're betting on it. If they pledge shares to borrow money, that can be a warning sign.",
+    next: ["filer", "Check the orders and profits bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  tally: { brings: "Who bought and sold the market today, big deals, the fear index and market holidays", from: "NSE",
+    means: "Shows whether big investors are buying or selling India, how nervous the market is (India VIX), and which days the market is shut. Those days set your buy and sell dates.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  nsdl: { brings: "Foreign investors' money going into or out of Indian shares", from: "NSDL, Mumbai",
+    means: "When foreign funds pour money into India, prices tend to rise; when they pull out, prices tend to fall. We read it daily, and by sector every two weeks.",
+    next: ["euro", "Check the exchange-rate bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  amfi: { brings: "How much money Indian mutual funds manage", from: "AMFI, the mutual fund association",
+    means: "Mutual funds hold the savings of millions of Indians. More money in funds means steady buying power for shares.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "khabri", "Check the news bot"] },
+  khabri: { brings: "Business headlines and brokers' tips", from: "Economic Times and Moneycontrol",
+    means: "A quick read of the news mood. Lots of scary headlines usually means a nervous market. It's background only; it doesn't pick stocks.",
+    next: ["gnews", "Check the world-news bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  dalal: { brings: "Nothing right now", from: "BSE, Dalal Street",
+    means: "BSE is India's other stock exchange. We only used it for one watch-list, and BSE has blocked our requests since Sep 30.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  sarkari: { brings: "Every government press release", from: "PIB, the government's press office in New Delhi, next to Parliament",
+    means: "When the government keeps talking about an industry, such as railways, defence or solar, orders and money often follow. We count those mentions to see which industries it is pushing.",
+    next: ["filer", "Check the orders bot"], cta: ["list", "govt", "Check industries in the government's news"] },
+  khabri2: { brings: "Business headlines from Delhi papers", from: "Business Standard and Mint",
+    means: "Same as the Mumbai news bot: background mood, not stock picks.",
+    next: ["khabri", "Check the Mumbai news bot"], cta: ["bot", "gnews", "Check the world-news bot"] },
+  screeny: { brings: "Which industry each company is in, plus company accounts", from: "screener.in",
+    means: "To spot hot industries we first need to know which industry each company belongs to. On Saturdays it also brings company accounts.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "sarkari", "Check the government bot"] },
+  tikki: { brings: "What well-known investors own", from: "tickertape.in",
+    means: "Shows which shares famous investors hold. We keep it for research; it doesn't decide picks.",
+    next: ["amfi", "Check the mutual-fund bot"], cta: ["bot", "nsdl", "Check the foreign-money bot"] },
+  fed: { brings: "Oil, metal and crop prices, the dollar and US interest rates", from: "FRED, the St. Louis Fed's free data library",
+    means: "It's oil: what the world's machines and cars run on. Its price decides whether bringing in raw material for your goods costs a lot or a little, which changes companies' costs and profits. Metals and crops work the same way for steel makers, sugar mills and textile firms.",
+    next: ["filer", "Check the profit bot"], cta: ["list", "oil", "Check oil and fuel companies in India"] },
+  euro: { brings: "Daily exchange rates: the rupee against the dollar, euro, pound and yen", from: "The European Central Bank in Frankfurt (via the free Frankfurter service)",
+    means: "When the rupee weakens, companies that sell abroad and get paid in dollars earn more rupees, like IT and pharma exporters. Companies that import pay more.",
+    next: ["filer", "Check the profit bot"], cta: ["list", "exporters", "Check companies that earn in dollars"] },
+  gnews: { brings: "World headlines", from: "Google News",
+    means: "A quick read of the world's mood. A scary week abroad often makes Indian markets nervous too.",
+    next: ["khabri", "Check the India news bot"], cta: ["bot", "nsdl", "Check the foreign-money bot"] },
+  drive: { brings: "Backups of your work", from: "Your laptop", means: "Keeps a copy in Google Drive so a broken laptop loses nothing.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "watch", "Check the watchdog bot"] },
+  pigeon: { brings: "Your messages: the daily note and the Friday buy list", from: "Your laptop, sent through Telegram",
+    means: "Everything the system decides reaches you as a short message on your phone.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "watch", "Check the watchdog bot"] },
+  clock: { brings: "The timetable", from: "Your laptop", means: "Starts every job on time, so nobody has to remember to click anything.",
+    next: ["watch", "Check the watchdog bot"], cta: ["bot", "pigeon", "Check the messenger bot"] },
+  watch: { brings: "Health checks on every run", from: "Your laptop", means: "Every half hour it checks that nothing is stuck and that your messages went out.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "pigeon", "Check the messenger bot"] },
+  paisa: { brings: "Your salary", from: "Your SBI account", means: "Your salary lands in SBI; part of it goes into the weekly batches of stocks.",
+    next: ["pigeon", "Check the messenger bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  claude: { brings: "The Friday market note", from: "Claude, the AI made by Anthropic in San Francisco",
+    means: "Every Friday afternoon Claude reads world prices, foreign money flows and news, then writes a short note on what kind of market we're in and which past periods it resembles.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "fed", "Check the world-prices bot"] }
+};
+// country of origin for the bots' flag T-shirts
+const FLAG = { bom: "IN", del: "IN", web: "IN", blr: "IN", stl: "US", mtv: "US", sfo: "US", fra: "DE", dxb: "AE" };
+// exact buildings checked on OpenStreetMap (Nominatim), 2026-10-16
+const BUILDINGS = {
+  nse: { name: "National Stock Exchange · Exchange Plaza", st: "bom", lon: 72.8598629, lat: 19.0601927, note: "OpenStreetMap office node, G Block, Bandra Kurla Complex" },
+  pib: { name: "PIB · National Media Centre (next to Parliament)", st: "del", lon: 77.2169618, lat: 28.6182232, note: "OpenStreetMap, Raisina Road; Parliament House is about 700 m west" },
+  sbi: { name: "SBI head office · State Bank Bhavan", st: "bom", lon: 72.8254442, lat: 18.9261941, note: "OpenStreetMap, Nariman Point" }
+};
+// Bengaluru is shown at a public landmark (Vidhana Soudha), never a home address
+const HOME = { name: "Your laptop · Bengaluru", lon: 77.5907, lat: 12.9796, note: "Shown at Vidhana Soudha, a public landmark" };
+return { DAILY, STATIONS, BOTS, USE_TEXT, USE_COLOR, FLAG, BUILDINGS, HOME, LAYMAN };
+})();
+
+</script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+const D = window.SGM_DATA, BOT = Object.fromEntries(D.BOTS.map(b => [b.id, b])), ST = Object.fromEntries(D.STATIONS.map(s => [s.id, s]));
+const COUNTRY = { IN: "India", US: "USA", DE: "Germany", AE: "UAE" };
+if (location.protocol.startsWith("http") && !location.hostname.endsWith("vercel.app") && location.hostname !== "localhost") document.getElementById("worldLink").hidden = true;
+
+/* ---------------------------------------------------------------- the characters */
+const flagOf = id => D.FLAG[BOT[id].st];
+const EXTRA = {   // characters that aren't data bots
+  tanker: { name: "Ship 1", file: "props/tanker_oil.glb", chip: "Oil tanker", role: "Carries world prices from the US East Coast to Mumbai",
+    says: "I carry Fed's crate of oil and world prices across the Atlantic and the Red Sea to Mumbai.", brings: "Fed's crate: oil, metal and crop prices, the dollar and US rates",
+    from: "The US East Coast cable station", means: "In real life this data crosses the sea through undersea fibre cables in a fraction of a second. The tanker is the cartoon of that, and a reminder that India's oil itself arrives by ship.", when: "During every 6:45 PM run" },
+  container: { name: "Ship 2", file: "props/container_ship.glb", chip: "Container ship", role: "Carries data from California across the Pacific to Chennai",
+    says: "I bring Claude's Friday note and the world's headlines across the Pacific to Chennai.", brings: "Claude's Friday note and Gnews's world headlines", from: "The San Francisco coast",
+    means: "Real route: undersea cables across the Pacific and through Singapore, simplified here.", when: "During the runs; Fridays for Claude's note" },
+  sub: { name: "Submarine", file: "props/submarine.glb", chip: "Undersea cable", role: "Marks the undersea cable from Marseille to Mumbai",
+    says: "I carry Euro's exchange rates under the sea from Marseille to Mumbai.", brings: "Euro's crate: daily exchange rates", from: "Marseille, where Europe's cables meet the sea",
+    means: "Most of India's internet arrives through cables on the sea floor that land in Mumbai and Chennai.", when: "During every 6:45 PM run" },
+  laptop: { name: "Your laptop", file: "props/laptop_giant.glb", chip: "Bengaluru", role: "Where every crate ends up",
+    says: "Every weekday at 6:45 PM all the crates arrive here and I check them. On Fridays at 7:30 PM I hand them to the ML bots.", brings: "Every crate from every bot",
+    from: "All the bots, through Bengaluru", means: "21 data checks run after every daily run. If a check fails, the list is held back and you get a failure message instead.", when: "Weekdays 6:45 PM; Fridays 7:30 PM" },
+  ml: { name: "ML bots", file: "props/bot_ML.glb", anim: "hammer", chip: "Inside the laptop", role: "Turn the data into the Friday list",
+    says: "We hammer the data into model scores, find the hot industries and run the V3.2 rule.", brings: "The Friday buy list",
+    from: "Your laptop", means: "Three models score every stock. The V3.2 rule keeps hot industries, ₹1 cr a day of trading, the trend test and the top 9, then drops financials, fading-theme names and trade-for-trade names.", when: "Fridays 7:30 PM" },
+  me: { name: "You", file: "props/me_figure.glb", anim: "wave", chip: "The boss", role: "Decides and places the order",
+    says: "I read the Friday list, sign the Saturday review and place the Monday order before the market opens.", brings: "The decision", from: "Your phone",
+    means: "Nothing is bought without you. Each weekly batch is held for about 6 months, then sold, and the money rolls into that week's new batch.", when: "Friday evening, Saturday, Monday morning" },
+  rupee: { name: "₹ note", file: "props/rupee_note.glb", chip: "Money", role: "Your money's round trip",
+    says: "I go from your SBI account into a weekly batch of stocks, sit there for about 6 months, and come back to roll into the next batch.", brings: "Your money (no amounts shown here)",
+    from: "Your SBI account", means: "Money moves only when you place the order. A batch is sold after 126 trading days, about 6 months.", when: "Mondays at the market open" }
+};
+function charInfo(id) {
+  if (EXTRA[id]) return Object.assign({ id }, EXTRA[id]);
+  const b = BOT[id], L = D.LAYMAN[id] || {}, flag = flagOf(id);
+  return { id, name: b.name, file: `bots/bot_${flag}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: L.brings, from: L.from, means: L.means, when: b.when,
+           anim: id === "dalal" ? "idle" : undefined };
+}
+const GROUPS = [
+  ["Data bots", "They fetch the data every weekday at 6:45 PM, all at the same time.", ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews", "dalal"]],
+  ["Messengers and helpers", "They write notes, carry messages, keep time and keep watch.", ["claude", "pigeon", "clock", "watch", "drive", "paisa"]],
+  ["Vehicles", "The cartoon of the undersea cables that bring data from abroad.", ["tanker", "container", "sub"]],
+  ["At home in Bengaluru", "Where the data turns into your Friday list, and your money moves.", ["laptop", "ml", "me", "rupee"]]
+];
+const PARALLEL = {
+  fetch: ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews"],
+  ships: ["tanker", "container", "sub"], friday: ["claude", "laptop", "ml", "pigeon", "clock"], money: ["paisa", "rupee", "me"], watch: ["clock", "watch", "pigeon"]
+};
+function parallelOf(id) {
+  const g = Object.entries(PARALLEL).find(([, ids]) => ids.includes(id));
+  if (!g) return { text: "", ids: [] };
+  const text = { fetch: "All the data bots run at once, every weekday at 6:45 PM.", ships: "The three crossings run during the same evening run.",
+                 friday: "These work together on Fridays.", money: "These move together on Mondays.", watch: "These keep the system running around the clock." }[g[0]];
+  return { text, ids: g[1].filter(x => x !== id) };
+}
+
+/* ---------------------------------------------------------------- journeys (relay legs). move = carrier runs/sails to the next stop; work = something happens at the current stop */
+const L = "Your laptop, Bengaluru", PHONE = "Your phone";
+const tailList = use => [{ work: "laptop", text: "Your laptop checks every crate: 21 data checks after the 6:45 PM run." },
+  { work: "ml", text: use }, { who: "pigeon", to: PHONE, text: "Friday 7:30 PM: Pigeon carries the buy list to your phone on Telegram." },
+  { work: "me", text: "You read the list, sign the Saturday review and place the Monday order." }];
+const tailContext = text => [{ work: "laptop", text }];
+const JOURNEYS = {
+  fed: { start: "St. Louis Fed (FRED)", legs: [{ who: "fed", to: "US East Coast", text: "Fed picks up oil, metal and crop prices, the dollar and US rates, and runs to the coast." },
+    { who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries the crate across the Atlantic and the Red Sea. In real life: undersea fibre cable, in a fraction of a second." },
+    { who: "courier", to: L, text: "A courier runs it from Mumbai to your laptop in Bengaluru." },
+    ...tailList("Friday: the ML bots mark which commodity themes are rising or fading. Stocks tied only to fading themes are dropped.")] },
+  euro: { start: "European Central Bank, Frankfurt", legs: [{ who: "euro", to: "Marseille", text: "Euro picks up the day's exchange rates and runs to the Mediterranean coast." },
+    { who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine (the undersea cable) carries them to Mumbai." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." },
+    ...tailContext("Exchange rates are kept as market context for research. They don't pick stocks.")] },
+  claude: { start: "Anthropic, San Francisco", legs: [{ who: "claude", to: "San Francisco coast", text: "Every Friday afternoon Claude reads world prices, foreign money flows and news, and writes a short note on the market." },
+    { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings the note across the Pacific to Chennai." },
+    { who: "courier", to: L, text: "A courier runs it to your laptop." },
+    ...tailContext("The note is saved with the week's reports, ready before the 7:30 PM list.")] },
+  gnews: { start: "Google News, California", legs: [{ who: "gnews", to: "San Francisco coast", text: "Gnews gathers the world's headlines." },
+    { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings them across the Pacific to Chennai." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("A world mood score, kept as background. It doesn't pick stocks.")] },
+  bhav: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "bhav", to: L, text: "Bhav picks up today's price of every NSE stock and runs it to your laptop." },
+    ...tailList("Friday: prices feed the trend test, the ₹1 cr-a-day bar and the model's scores. The top 9 in hot industries make the list.")] },
+  split: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "split", to: L, text: "Splitty brings the day's splits, bonuses and dividends." },
+    { work: "laptop", text: "Old prices are adjusted, so a 1:10 split never looks like a 90% crash." },
+    ...tailList("Friday: the clean prices feed the trend test and the model.").slice(1)] },
+  filer: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "filer", to: L, text: "Filer reads what companies filed today: order wins, results, letters of intent." },
+    ...tailList("Friday: filings show which themes each company is tied to. Stocks tied only to fading themes are dropped. Big orders also go in your daily note.")] },
+  promo: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "promo", to: L, text: "Promo notes which owners bought their own shares and who pledged them." },
+    { work: "laptop", text: "Kept for research. Pledge alerts go in your daily note." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the 6:45 PM daily note to your phone." }, { work: "me", text: "You read the daily note." }] },
+  tally: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "tally", to: L, text: "Tally counts today's buying and selling, the big deals, India VIX and the market holidays." },
+    { work: "laptop", text: "Market context. The holiday list decides your buy and sell days." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the daily note, with the right dates, to your phone." }, { work: "me", text: "You read it." }] },
+  nsdl: { start: "NSDL, Mumbai", legs: [{ who: "nsdl", to: L, text: "Videshi tracks foreign money going into or out of Indian shares." },
+    ...tailContext("Kept as market context. Claude reads these flows for the Friday market note.")] },
+  amfi: { start: "AMFI, Mumbai", legs: [{ who: "amfi", to: L, text: "Mutu reads how much money Indian mutual funds manage." }, ...tailContext("Kept as market context. It doesn't pick stocks.")] },
+  khabri: { start: "News desks, Mumbai", legs: [{ who: "khabri", to: L, text: "Khabri skims Economic Times and Moneycontrol." }, ...tailContext("A news mood score, background only.")] },
+  khabri2: { start: "News desks, New Delhi", legs: [{ who: "khabri2", to: L, text: "Khabri Jr brings Business Standard and Mint headlines." }, ...tailContext("A news mood score, background only.")] },
+  sarkari: { start: "PIB, next to Parliament", legs: [{ who: "sarkari", to: L, text: "Sarkari reads every government press release and runs to your laptop." },
+    ...tailList("Friday: the policy score shows which industries the government keeps pushing. A hot industry the government is cooling on is vetoed.")] },
+  screeny: { start: "screener.in (website)", legs: [{ who: "screeny", to: L, text: "Screeny says which industry each company belongs to." },
+    ...tailList("Friday: the industry map is how the hot industries are found.")] },
+  tikki: { start: "tickertape.in (website)", legs: [{ who: "tikki", to: L, text: "Tikki notes what well-known investors hold." }, ...tailContext("Research only. It doesn't decide picks.")] },
+  dalal: { start: "BSE, Dalal Street", legs: [{ work: "sleep", text: "Dalal is asleep. BSE has blocked our requests since Sep 30, and only one watch-list ever used it." }] },
+  pigeon: { start: L, legs: [{ who: "pigeon", to: "Telegram", sea: true, text: "Pigeon takes your messages to Telegram." },
+    { who: "pigeon", to: PHONE, text: "Telegram delivers them to your phone: the daily note, the Friday list and any alarm." }, { work: "me", text: "You read them." }] },
+  clock: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: Clock starts the run and every data bot sets off at once." },
+    { work: "ml", text: "Fridays 7:30 PM: Clock starts the buy-list run." }, { who: "pigeon", to: PHONE, text: "Pigeon delivers the result." }, { work: "me", text: "You read it." }] },
+  watch: { start: L, legs: [{ work: "laptop", text: "Every 30 minutes Watchdog checks that no run is stuck and that your messages went out." },
+    { who: "pigeon", to: PHONE, text: "If something is wrong, an alarm reaches your phone." }, { work: "me", text: "You know before it costs anything." }] },
+  drive: { start: L, legs: [{ who: "drive", to: "Google Drive", sea: true, text: "Backup carries a copy of your work to Google Drive." },
+    { work: "end", text: "If the laptop breaks, nothing is lost." }] },
+  paisa: { start: "Your SBI account", money: true, legs: [{ who: "rupee", to: "You", text: "Your salary lands in SBI. Part of it goes to the weekly batch." },
+    { who: "rupee", to: "Your broker", text: "Monday, before 9:15 AM: you place the order for the pre-open auction." },
+    { who: "rupee", to: "NSE", text: "The broker buys the week's stocks at the opening price." },
+    { who: "rupee", to: "Held 6 months", text: "Each batch is held for 126 trading days, about 6 months." },
+    { who: "rupee", to: "Back to you", text: "Then it's sold, and the money rolls into that week's new batch." }] },
+  tanker: { start: "US East Coast", legs: [{ who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries Fed's crate of world prices across the Atlantic and the Red Sea." },
+    { who: "courier", to: L, text: "A courier runs it to your laptop." }, ...tailList("Friday: commodity themes, rising or fading.").slice(0, 2)] },
+  container: { start: "San Francisco coast", legs: [{ who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 carries Claude's note and world headlines across the Pacific." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Saved for Friday.")] },
+  sub: { start: "Marseille", legs: [{ who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine carries Euro's exchange rates along the sea floor." },
+    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Kept as market context.")] },
+  laptop: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: every crate arrives and 21 data checks run." },
+    { work: "ml", text: "Fridays 7:30 PM: the laptop hands the data to the ML bots." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the buy list to your phone." }, { work: "me", text: "You decide." }] },
+  ml: { start: L, legs: [{ work: "ml", text: "Three models score every stock." }, { work: "ml", text: "They find the hot industries and the rising and fading themes." },
+    { work: "ml", text: "The V3.2 rule: hot industry, ₹1 cr a day, the trend test, top 9, then drop financials, fading-theme and trade-for-trade names." },
+    { work: "ml", text: "Six earlier tests are re-run to make sure nothing broke." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the list to your phone." }, { work: "me", text: "You decide." }] },
+  me: { start: PHONE, legs: [{ work: "me", text: "Friday evening: the buy list arrives on your phone." }, { work: "me", text: "Saturday: you sign the review." },
+    { who: "rupee", to: "Your broker", text: "Monday, before the market opens: you place the order." },
+    { who: "rupee", to: "Held 6 months", text: "The batch is held for about 6 months." }, { who: "rupee", to: "Back to you", text: "Then it's sold and the money rolls into the next batch." }] },
+  rupee: null
+};
+JOURNEYS.rupee = JOURNEYS.paisa;
+const CARRIER_NAME = { courier: "a courier", pigeon: "Pigeon", tanker: "Ship 1", container: "Ship 2", sub: "the submarine", rupee: "the ₹ note" };
+function batonIds(id) {
+  const j = JOURNEYS[id], out = [];
+  j.legs.forEach(l => { const k = l.who || (l.work === "laptop" ? "laptop" : l.work === "ml" ? "ml" : l.work === "me" ? "me" : null);
+    if (k && k !== id && k !== "courier" && (BOT[k] || EXTRA[k]) && !out.includes(k)) out.push(k); });
+  return out;
+}
+
+/* ---------------------------------------------------------------- models */
+const loader = new GLTFLoader(), cache = {};
+const ASSETS = "assets/", MODEL_EXT = ".gltf.json";        // the claude.ai preview serves the same models as embedded glTF JSON
+async function fetchModel(file) {
+  if (MODEL_EXT === ".glb") return loader.loadAsync(ASSETS + file);
+  // preview: rebuild the binary model in memory from the glTF JSON (no extra network requests, so it works inside claude.ai)
+  const gj = await (await fetch(ASSETS + file.replace(/\.glb$/, MODEL_EXT))).json();
+  const b64 = gj.buffers[0].uri.split(",")[1], bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  delete gj.buffers[0].uri;
+  const enc = new TextEncoder(), pad = n => (4 - n % 4) % 4;
+  let js = enc.encode(JSON.stringify(gj)); js = Uint8Array.from([...js, ...new Array(pad(js.length)).fill(0x20)]);
+  const binP = Uint8Array.from([...bin, ...new Array(pad(bin.length)).fill(0)]);
+  const total = 12 + 8 + js.length + 8 + binP.length, out = new ArrayBuffer(total), dv = new DataView(out), u8 = new Uint8Array(out);
+  dv.setUint32(0, 0x46546C67, true); dv.setUint32(4, 2, true); dv.setUint32(8, total, true);
+  dv.setUint32(12, js.length, true); dv.setUint32(16, 0x4E4F534A, true); u8.set(js, 20);
+  const o = 20 + js.length; dv.setUint32(o, binP.length, true); dv.setUint32(o + 4, 0x004E4942, true); u8.set(binP, o + 8);
+  return loader.parseAsync(out, "");
+}
+function loadGLB(file) { return cache[file] || (cache[file] = fetchModel(file)); }
+async function instance(file) {
+  const g = await loadGLB(file), root = g.scene.clone(true), mixer = new THREE.AnimationMixer(root), actions = {};
+  g.animations.forEach(a => { actions[a.name] = mixer.clipAction(a); });
+  return { root, mixer, actions, play(name) { Object.entries(actions).forEach(([n, a]) => { if (n === name) a.reset().play(); else a.stop(); }); } };
+}
+function lights(scene) {
+  scene.add(new THREE.HemisphereLight(0xfff1e2, 0x2a3350, 1.3));
+  const d = new THREE.DirectionalLight(0xffffff, 1.8); d.position.set(3, 6, 5); scene.add(d);
+}
+
+/* ---------------------------------------------------------------- one renderer, many views (each card and the stage draw into their own rectangle) */
+const canvas = document.getElementById("gl");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setClearColor(0x000000, 0);
+const views = [];
+function resize() { renderer.setSize(window.innerWidth, window.innerHeight, false); }
+window.addEventListener("resize", resize); resize();
+
+/* roster cards */
+const groupsEl = document.getElementById("groups");
+GROUPS.forEach(([title, note, ids]) => {
+  const sec = document.createElement("section"); sec.className = "group";
+  sec.innerHTML = `<h2>${title}</h2><p>${note}</p><div class="grid"></div>`;
+  const grid = sec.querySelector(".grid");
+  ids.forEach(id => {
+    const c = charInfo(id), btn = document.createElement("button");
+    btn.type = "button"; btn.className = "card"; btn.dataset.id = id; btn.setAttribute("aria-pressed", "false");
+    btn.innerHTML = `<div class="view"></div><b>${c.name}</b><small>${c.chip || ""}</small>`;
+    btn.addEventListener("click", () => select(id, true));
+    grid.appendChild(btn);
+    const scene = new THREE.Scene(); lights(scene);
+    const cam = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
+    const v = { el: btn.querySelector(".view"), scene, cam, mixers: [] }; views.push(v);
+    instance(c.file).then(m => {
+      const box = new THREE.Box3().setFromObject(m.root), size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
+      m.root.position.sub(center); m.root.position.y += size.y / 2 - size.y * 0.05;
+      if (EXTRA[id] && ["tanker", "container", "sub"].includes(id)) m.root.rotation.y = -0.9; else m.root.rotation.y = 0.45;
+      scene.add(m.root);
+      const r = Math.max(size.x, size.y, size.z);
+      cam.position.set(r * 0.6, r * 0.8, r * 2.15); cam.lookAt(0, size.y * 0.48, 0);
+      m.play(id === "ml" ? "hammer" : id === "me" ? "wave" : "idle"); v.mixers.push(m.mixer);
+    }).catch(() => {});
+  });
+  groupsEl.appendChild(sec);
+});
+
+/* ---------------------------------------------------------------- the stage: a relay track built for the selected character */
+const stageEl = document.getElementById("stageView"), labelsEl = document.getElementById("slabels"), capEl = document.getElementById("cap"), dotsEl = document.getElementById("dots");
+const stage = { el: stageEl, scene: null, cam: new THREE.PerspectiveCamera(36, 1.6, 0.05, 400), mixers: [], focus: new THREE.Vector3(), play: null };
+views.push(stage);
+const SCALE = { tanker: 0.5, container: 0.5, sub: 0.55, rupee: 1.0, laptop: 1.5, ml: 0.85, me: 2.1 };
+const CRATE_Y = { tanker: 1.2, container: 1.9, sub: 1.3, rupee: null };
+let build = 0;
+async function buildStage(id) {
+  const my = ++build, j = JOURNEYS[id];
+  const scene = new THREE.Scene(); lights(scene); scene.fog = new THREE.Fog(0x22304d, 30, 80);
+  const mixers = []; labelsEl.innerHTML = "";
+  // stops along the track
+  const stops = [{ name: j.start, x: 0 }];
+  j.legs.forEach(l => { if (l.to) stops.push({ name: l.to, x: stops[stops.length - 1].x + (l.sea ? 12 : 7.5), sea: !!l.sea }); });
+  const floorMat = new THREE.MeshStandardMaterial({ color: 0x5b6b3e, roughness: 0.95 }), seaMat = new THREE.MeshStandardMaterial({ color: 0x1f6f9a, roughness: 0.5, emissive: 0x0b2a40 });
+  const extent = stops[stops.length - 1].x;
+  const land0 = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); land0.position.set(-3, -0.15, 0); scene.add(land0);
+  for (let i = 1; i < stops.length; i++) {
+    const a = stops[i - 1].x, b = stops[i].x, len = b - a;
+    const seg = new THREE.Mesh(new THREE.BoxGeometry(len, stops[i].sea ? 0.2 : 0.3, 5), stops[i].sea ? seaMat : floorMat);
+    seg.position.set(a + len / 2, stops[i].sea ? -0.3 : -0.15, 0); scene.add(seg);
+  }
+  const landEnd = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); landEnd.position.set(extent + 3, -0.15, 0); scene.add(landEnd);
+  // a glowing path line along the track
+  const path = new THREE.Mesh(new THREE.BoxGeometry(extent + 2, 0.02, 0.12), new THREE.MeshBasicMaterial({ color: j.money ? 0x7dff6a : 0xffc21a }));
+  path.position.set(extent / 2, 0.03, 1.2); scene.add(path);
+  // signposts + labels
+  stops.forEach(s => {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.6, 6), new THREE.MeshStandardMaterial({ color: 0xd8cfc0 })); post.position.set(s.x, 0.8, -1.6); scene.add(post);
+    const sign = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 0.06), new THREE.MeshStandardMaterial({ color: 0xe8875c })); sign.position.set(s.x, 1.55, -1.6); scene.add(sign);
+    const el = document.createElement("div"); el.className = "slabel"; el.textContent = s.name; labelsEl.appendChild(el); s.el = el;
+  });
+  // props at home stops
+  const props = {};
+  const laptopStop = stops.find(s => s.name === L), phoneStop = stops.find(s => s.name === PHONE);
+  const needLaptop = laptopStop || j.legs.some(l => l.work === "laptop" || l.work === "ml");
+  const lapX = laptopStop ? laptopStop.x : 0;
+  if (needLaptop) {
+    const lap = await instance(EXTRA.laptop.file); lap.root.scale.setScalar(SCALE.laptop); lap.root.position.set(lapX, 0, -0.9); lap.play("idle"); scene.add(lap.root); mixers.push(lap.mixer); props.laptop = lap;
+    props.ml = [];
+    for (let k = 0; k < 3; k++) { const m = await instance(EXTRA.ml.file); m.root.scale.setScalar(SCALE.ml); m.root.position.set(lapX - 2.1 + k * 0.9 + (k === 2 ? 2.4 : 0), 0, 0.2 - (k % 2) * 0.5); m.root.rotation.y = k === 2 ? -0.6 : 0.6; m.play("idle"); scene.add(m.root); mixers.push(m.mixer); props.ml.push(m); }
+  }
+  const needMe = phoneStop || j.legs.some(l => l.work === "me") || ["You", "Back to you"].some(n => stops.find(s => s.name === n));
+  if (needMe) {
+    const meStop = phoneStop || stops.find(s => s.name === "You") || stops[0];
+    const me = await instance(EXTRA.me.file); me.root.scale.setScalar(SCALE.me); me.root.position.set(meStop.x + 0.6, 0, -1.4); me.root.rotation.y = -0.3; me.play("idle"); scene.add(me.root); mixers.push(me.mixer); props.me = me;
+    if (phoneStop) { const ph = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.9, 0.08), new THREE.MeshStandardMaterial({ color: 0x1b1b22 }));
+      const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.78), new THREE.MeshBasicMaterial({ color: 0x4fd8ff })); scr.position.z = 0.045; ph.add(body, scr); ph.position.set(phoneStop.x - 0.9, 0.75, 0.3); ph.rotation.y = 0.3; scene.add(ph); }
+  }
+  if (my !== build) return;
+  // carriers wait at the stop where their leg begins
+  const legs = [], byWho = {};
+  let stopIdx = 0;
+  for (const l of j.legs) {
+    const leg = Object.assign({}, l);
+    if (l.to) {
+      const from = stops[stopIdx], to = stops[stopIdx + 1]; stopIdx++;
+      leg.from = from.x; leg.toX = to.x;
+      const key = l.who === "courier" ? "courier" : l.who;
+      if (!byWho[key + "@" + from.x]) {
+        const file = l.who === "courier" ? "bots/bot_IN.glb" : (EXTRA[l.who] ? EXTRA[l.who].file : `bots/bot_${flagOf(l.who)}.glb`);
+        const m = await instance(file); const s = SCALE[l.who] || 1;
+        m.root.scale.setScalar(s); m.root.rotation.y = Math.PI / 2; m.root.position.set(from.x, l.sea ? -0.15 : 0, l.sea ? 0.2 : 0.6);
+        m.play("idle"); scene.add(m.root); mixers.push(m.mixer); byWho[key + "@" + from.x] = m;
+        // a carrier that keeps going (same who, next leg) reuses this instance
+      }
+      leg.m = byWho[key + "@" + from.x]; byWho[key + "@" + to.x] = leg.m;
+      leg.sea = !!l.sea; leg.dur = l.sea ? 3.2 : 2.2;
+    } else { leg.dur = 2.6; leg.at = stops[stopIdx].x; }
+    legs.push(leg);
+  }
+  // the selected character stands at its starting stop when it isn't one of the runners (Dalal, Clock, Watchdog, Paisa...)
+  if (!j.legs.some(l => l.who === id) && !["laptop", "ml", "me", "rupee"].includes(id)) {
+    const c = charInfo(id), m = await instance(c.file); m.root.scale.setScalar(SCALE[id] || 1); m.root.rotation.y = 0.5;
+    m.root.position.set(stops[0].x - 1.4, 0, 0.9); m.play("idle"); scene.add(m.root); mixers.push(m.mixer);
+  }
+  if (my !== build) return;
+  // the baton
+  let crate = null;
+  if (!j.money) { crate = await instance("props/data_crate.glb"); crate.root.scale.setScalar(0.75); crate.play("idle"); scene.add(crate.root); mixers.push(crate.mixer); }
+  if (my !== build) return;
+  stage.scene = scene; stage.mixers = mixers; stage.stops = stops; stage.legs = legs; stage.crate = crate; stage.props = props; stage.id = id;
+  dotsEl.innerHTML = legs.map(() => "<i></i>").join("");
+  startPlay();
+}
+function startPlay() {
+  const s = stage; s.t = 0; s.leg = -1; s.done = false;
+  s.legs.forEach(l => { if (l.m) { l.m.root.position.x = l.from; l.m.play("idle"); } });
+  s.focus.set(s.stops[0].x, 0, 0);
+}
+function crateOn(m, who) {
+  const y = CRATE_Y[who] !== undefined ? CRATE_Y[who] : 1.25;
+  return new THREE.Vector3(m.root.position.x, y === null ? -99 : y, m.root.position.z);
+}
+function stepStage(dt) {
+  const s = stage; if (!s.scene || s.done) return;
+  s.t += dt;
+  let acc = 0, i = 0; while (i < s.legs.length && s.t > acc + s.legs[i].dur + 0.5) { acc += s.legs[i].dur + 0.5; i++; }
+  if (i >= s.legs.length) { s.done = true; capEl.textContent = "That's the whole journey. Tap another character, or watch again."; setDots(s.legs.length); return; }
+  const leg = s.legs[i], local = Math.min(1, Math.max(0, (s.t - acc) / leg.dur));
+  if (i !== s.leg) {                                    // a new leg starts: caption, animations, the previous carrier rests
+    if (s.leg >= 0 && s.legs[s.leg].m) s.legs[s.leg].m.play("idle");
+    s.leg = i; capEl.textContent = leg.text; setDots(i);
+    if (leg.m) leg.m.play(leg.sea ? "idle" : "run");
+    if (leg.work === "me" && s.props.me) s.props.me.play("wave");
+    if (leg.work === "ml" && s.props.ml) s.props.ml.forEach(m => m.play("hammer"));
+  }
+  if (leg.m) {
+    const e = local < 0.5 ? 2 * local * local : 1 - Math.pow(-2 * local + 2, 2) / 2;
+    leg.m.root.position.x = leg.from + (leg.toX - leg.from) * e;
+    if (leg.sea) leg.m.root.position.y = -0.15 + Math.sin(s.t * 3) * 0.05;
+    s.focus.x += (leg.m.root.position.x - s.focus.x) * Math.min(1, dt * 4);
+    if (s.crate) s.crate.root.position.copy(crateOn(leg.m, leg.who));
+  } else {
+    const x = leg.at;
+    s.focus.x += (x - s.focus.x) * Math.min(1, dt * 4);
+    if (s.crate) {
+      let target;
+      if (leg.work === "laptop" && s.props.laptop) target = new THREE.Vector3(x, 1.9 - local * 1.2, -0.9);
+      else if (leg.work === "ml" && s.props.ml) target = new THREE.Vector3(x - 1.2, 1.6 + Math.sin(s.t * 6) * 0.15, -0.1);
+      else if (leg.work === "me" && s.props.me) target = new THREE.Vector3(s.props.me.root.position.x, 3.6 + Math.sin(s.t * 3) * 0.1, -1.2);
+      else target = s.crate.root.position.clone();
+      s.crate.root.position.lerp(target, Math.min(1, dt * 5));
+    }
+  }
+}
+function setDots(i) { [...dotsEl.children].forEach((d, k) => { d.className = k < i ? "done" : k === i ? "on" : ""; }); }
+document.getElementById("replay").addEventListener("click", () => { if (stage.scene) startPlay(); });
+
+/* ---------------------------------------------------------------- profile + selection */
+const profileEl = document.getElementById("profile");
+function chips(ids) { return ids.map(x => `<button type="button" data-go="${x}">${charInfo(x).name}</button>`).join(""); }
+function select(id, scrollUp) {
+  document.querySelectorAll(".card").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.id === id)));
+  const c = charInfo(id), par = parallelOf(id), baton = batonIds(id);
+  profileEl.innerHTML = `<div class="who"><h2>${c.name}</h2>${c.chip ? `<span class="chip">${c.chip}</span>` : ""}</div>
+    <p class="role">${c.role}</p><p class="says">“${c.says}”</p>
+    <dl><div><dt>What I bring</dt><dd>${c.brings || "—"}</dd></div><div><dt>Where I get it</dt><dd>${c.from || "—"}</dd></div>
+    <div><dt>What it means</dt><dd>${c.means || "—"}</dd></div><div><dt>When</dt><dd>${c.when || "—"}</dd></div>
+    ${baton.length ? `<div><dt>Passes the baton to</dt><dd class="links">${baton.map((b, k) => (k ? '<span class="arrow">→</span>' : "") + `<button type="button" data-go="${b}">${charInfo(b).name}</button>`).join("")}</dd></div>` : ""}
+    ${par.ids.length ? `<div><dt>Running at the same time</dt><dd>${par.text}<div class="links">${chips(par.ids)}</div></dd></div>` : ""}</dl>`;
+  profileEl.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go, true)));
+  capEl.textContent = `Setting up ${c.name}'s journey…`;
+  buildStage(id);
+  if (scrollUp) stageEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+/* ---------------------------------------------------------------- loop */
+const clock = new THREE.Clock(), tmp = new THREE.Vector3();
+function frame() {
+  const dt = Math.min(0.05, clock.getDelta());
+  views.forEach(v => v.mixers.forEach(m => m.update(dt)));
+  stepStage(dt);
+  renderer.setScissorTest(false); renderer.clear(); renderer.setScissorTest(true);
+  const H = window.innerHeight;
+  for (const v of views) {
+    if (!v.scene) continue;
+    const r = v.el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > H || r.width < 2) continue;
+    const y = H - r.bottom;
+    renderer.setViewport(r.left, y, r.width, r.height); renderer.setScissor(r.left, y, r.width, r.height);
+    v.cam.aspect = r.width / r.height; v.cam.updateProjectionMatrix();
+    if (v === stage) {
+      const fx = stage.focus.x, phone = window.innerWidth < 640;
+      v.cam.position.set(fx + 1.2, phone ? 5.2 : 4.4, phone ? 13 : 10.5); v.cam.lookAt(fx + 1.2, 0.9, 0);
+      stage.stops && stage.stops.forEach(s => {          // signpost labels follow the camera
+        tmp.set(s.x, 2.05, -1.6).project(v.cam);
+        const inView = tmp.z < 1 && tmp.x > -1.1 && tmp.x < 1.1;
+        s.el.style.display = inView ? "" : "none";
+        s.el.style.transform = `translate(${(tmp.x + 1) / 2 * r.width}px, ${(1 - tmp.y) / 2 * r.height}px) translate(-50%, -100%)`;
+      });
+    }
+    renderer.render(v.scene, v.cam);
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+const ALL = new Set(GROUPS.flatMap(g => g[2]));
+const first = location.hash.slice(1);                 // /crew.html#fed opens Fed's journey
+select(ALL.has(first) ? first : "fed", false);
+</script>
