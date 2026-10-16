@@ -1,27 +1,30 @@
-# Simplicity Audit — 2026-10-10T02:28:12
+# Simplicity Audit — 2026-10-16T23:01:19
 
-**Scanned**: 347 files · 77,973 LOC · **260 findings**
+**Scanned**: 410 files · 87,840 LOC · **278 findings**
 
 Policy: stdlib-first, simplest correct solution, no speculative abstraction.
 Findings are candidates for deletion/simplification — audit never auto-rewrites.
 
-## Dead functions (defined, never referenced anywhere) — 23
+## Dead functions (defined, never referenced anywhere) — 26
 
 - `src/agentic/build_data_inventory_report.py` **year_counts** — line 9
 - `src/agentic/build_mcap_pit.py` **rename_successors** — line 228
 - `src/agentic/build_news_event_features.py` **load_news** — line 75
 - `src/agentic/eval_checks.py` **ranking_lift** — line 178
 - `src/agentic/eval_checks.py` **preregistered** — line 192
-- `src/agentic/eval_checks.py` **drive_checksums** — line 282
-- `src/agentic/eval_checks.py` **weekly_pick_review** — line 315
-- `src/agentic/eval_checks.py` **no_unexplained_cliffs** — line 345
-- `src/agentic/eval_checks.py` **renames_mapped** — line 359
-- `src/agentic/eval_checks.py` **insider_fresh** — line 389
-- `src/agentic/eval_checks.py` **message_grounded** — line 398
-- `src/agentic/eval_checks.py` **claims_sourced** — line 407
-- `src/agentic/eval_checks.py` **claude_golden** — line 432
-- `src/agentic/eval_checks.py` **every_feed_guarded** — line 443
-- `src/agentic/eval_checks.py` **pledge_feed** — line 527
+- `src/agentic/eval_checks.py` **drive_checksums** — line 305
+- `src/agentic/eval_checks.py` **weekly_pick_review** — line 338
+- `src/agentic/eval_checks.py` **no_unexplained_cliffs** — line 368
+- `src/agentic/eval_checks.py` **renames_mapped** — line 382
+- `src/agentic/eval_checks.py` **insider_fresh** — line 412
+- `src/agentic/eval_checks.py` **message_grounded** — line 432
+- `src/agentic/eval_checks.py` **claims_sourced** — line 441
+- `src/agentic/eval_checks.py` **claude_golden** — line 503
+- `src/agentic/eval_checks.py` **every_feed_guarded** — line 514
+- `src/agentic/eval_checks.py` **pledge_feed** — line 600
+- `src/agentic/eval_checks.py` **nsdl_fpi_feed** — line 614
+- `src/agentic/eval_checks.py` **nsdl_fpi_sector_feed** — line 639
+- `src/agentic/eval_checks.py` **value_removal_held** — line 655
 - `src/agentic/fetch_forex_macro.py` **stooq_csv** — line 51
 - `src/ingest/fundamentals/interface.py` **load_fundamentals** — line 24
 - `src/ingest/nse/normalize.py` **read_bhavcopy_csv_text** — line 57
@@ -34,7 +37,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 ## Dead classes — 0
 
 
-## Unused imports — 95
+## Unused imports — 99
 
 - `src/agentic/ab_event_features_15d.py` **sys** — from sys
 - `src/agentic/ab_event_rules_15d.py` **re** — from re
@@ -54,6 +57,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/build_confluence_picks.py` **np** — from numpy
 - `src/agentic/build_event_polarity.py` **np** — from numpy
 - `src/agentic/build_handoff.py` **json** — from json
+- `src/agentic/build_rows_real_goal.py` **tr** — from total_return
 - `src/agentic/build_status_dashboard.py` **subprocess** — from subprocess
 - `src/agentic/build_symbol_isin_history.py` **sys** — from sys
 - `src/agentic/compute_feature_importance.py` **np** — from numpy
@@ -64,6 +68,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/explore_hitter_waves.py` **np** — from numpy
 - `src/agentic/explore_pnl_winners.py` **sys** — from sys
 - `src/agentic/explore_regime_universe.py` **html** — from html
+- `src/agentic/explore_v32_lumpsum.py` **E** — from explore_v32_yearly_realistic
 - `src/agentic/factor_evaluator.py` **stats** — from scipy
 - `src/agentic/factor_registry.py` **field** — from dataclasses
 - `src/agentic/fetch_amfi_mf_holdings.py` **time** — from time
@@ -78,6 +83,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/fetch_fundamentals.py` **sys** — from sys
 - `src/agentic/fetch_global_macro.py` **timedelta** — from datetime
 - `src/agentic/fetch_news_per_symbol.py` **re** — from re
+- `src/agentic/fetch_nsdl_fpi.py` **sys** — from sys
 - `src/agentic/fetch_pnl_history.py` **ET** — from xml
 - `src/agentic/fetch_pnl_old_format.py` **shutil** — from shutil
 - `src/agentic/fetch_reddit.py` **hashlib** — from hashlib
@@ -93,15 +99,12 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/find_multibagger_today.py` **np** — from numpy
 - `src/agentic/generate_event_driven_today.py` **timedelta** — from datetime
 - `src/agentic/generate_event_driven_today.py` **np** — from numpy
-- `src/agentic/generate_pro_brief.py` **np** — from numpy
-- `src/agentic/generate_trade_plan.py` **np** — from numpy
-- `src/agentic/hypothesis_agent.py` **pd** — from pandas
-- … and 35 more
+- … and 39 more
 
 ## Single-method stateless classes (should be functions) — 0
 
 
-## Trivial wrappers (single-call bodies) — 57
+## Trivial wrappers (single-call bodies) — 60
 
 - `src/agentic/ab_event_features_15d.py` **had** — line 138
 - `src/agentic/ab_valuation_3h.py` **fwd** — line 135
@@ -119,6 +122,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/engine_replay.py` **lgbm** — line 54
 - `src/agentic/engine_replay.py` **xgbm** — line 60
 - `src/agentic/eval_checks.py` **_res** — line 28
+- `src/agentic/explore_v3_streak_by_week.py` **stats** — line 54
 - `src/agentic/fetch_announcements_historical.py` **has_chunk** — line 65
 - `src/agentic/fetch_budget_capex.py` **fy_start** — line 224
 - `src/agentic/fetch_iip_core.py` **ym** — line 329
@@ -136,11 +140,13 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/mine_industry_contagion.py` **fwd** — line 37
 - `src/agentic/nse_symbols.py` **now** — line 36
 - `src/agentic/pocket_search_leader.py` **cut** — line 102
+- `src/agentic/repair_pit_gap_2026.py` **_d** — line 26
 - `src/agentic/research_queue.py` **has_code** — line 43
 - `src/agentic/sim_allin_matrix.py` **fixed_offsets** — line 337
 - `src/agentic/sim_leader_cell_v2.py` **_norm** — line 125
-- `src/agentic/sim_leader_portfolio_7x.py` **_period** — line 478
+- `src/agentic/sim_leader_portfolio_7x.py` **_period** — line 481
 - `src/agentic/sweep_horizon_2x_year.py` **fwd_max** — line 40
+- `src/agentic/test_v3_badnews_refill.py` **beats** — line 56
 - `src/agentic/test_v3_badnews_veto.py` **beats** — line 55
 - `src/agentic/trust/data_ready.py` **qc** — line 61
 - `src/analysis/week7_15pct_cluster_rerank_compare.py` **_make_relaxed_rule** — line 83
@@ -161,7 +167,7 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/report/weekly_portfolio_report.py` **_default_target_date** — line 55
 - `src/utils/data_catalog.py` **sidecar_manifest_path** — line 120
 
-## Duplicated function bodies (shape-identical) — 36
+## Duplicated function bodies (shape-identical) — 41
 
 - `2 copies` **build_panel** — src/agentic/ab_test_event_features.py:build_panel, src/agentic/ab_test_event_polarity.py:build_panel
 - `2 copies` **c2** — src/agentic/ab_vol_gate.py:c2, src/agentic/ab_zscore_bands.py:c2
@@ -170,14 +176,19 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `2 copies` **load_oof** — src/agentic/backtest_event_driven.py:load_oof, src/agentic/backtest_event_window.py:load_oof
 - `4 copies` **build_panel** — src/agentic/backtest_multibagger_strategy.py:build_panel, src/agentic/find_achievable_targets.py:build_panel, src/agentic/find_multibagger_targets.py:build_panel, src/agentic/find_multibagger_today.py:build_panel
 - `3 copies` **build_target** — src/agentic/backtest_multibagger_strategy.py:build_target, src/agentic/find_multibagger_targets.py:build_target, src/agentic/find_multibagger_today.py:build_target
-- `3 copies` **ttm** — src/agentic/explore_big_order_winners.py:ttm, src/agentic/test_big_order_annual.py:ttm, src/agentic/test_big_order_hold.py:ttm
+- `4 copies` **ttm** — src/agentic/explore_big_order_winners.py:ttm, src/agentic/explore_order_annual_cutoffs.py:ttm, src/agentic/test_big_order_annual.py:ttm, src/agentic/test_big_order_hold.py:ttm
 - `2 copies` **typical** — src/agentic/explore_big_order_winners.py:typical, src/agentic/test_big_order_hold.py:typical
+- `2 copies` **ic_weak** — src/agentic/explore_strategies_2025.py:ic_weak, src/agentic/explore_yearly_scoreboard.py:ic_weak
+- `2 copies` **pb** — src/agentic/explore_strategies_2025.py:pb, src/agentic/explore_yearly_scoreboard.py:pb
+- `2 copies` **pr** — src/agentic/explore_strategies_2025.py:pr, src/agentic/explore_yearly_scoreboard.py:pr
 - `2 copies` **fred_csv** — src/agentic/fetch_commodity_prices.py:fred_csv, src/agentic/fetch_global_rates.py:fred_csv
 - `2 copies` **tag_symbols** — src/agentic/fetch_reddit.py:tag_symbols, src/agentic/fetch_youtube.py:tag_symbols
 - `2 copies` **get_top_symbols** — src/agentic/fetch_screener_fundamentals.py:get_top_symbols, src/agentic/fetch_stock_fii_dii.py:get_top_symbols
 - `2 copies` **main** — src/agentic/hypothesis_agent.py:main, src/agentic/hypothesis_agent_macro.py:main
 - `2 copies` **sha256_file** — src/agentic/make_full_archive.py:sha256_file, src/agentic/trust/restore_check.py:sha
-- `2 copies` **model_scores** — src/agentic/sim_screen_rank_exit.py:model_scores, src/agentic/test_v3_pnl.py:scores
+- `6 copies` **model_scores** — src/agentic/sim_screen_rank_exit.py:model_scores, src/agentic/test_real_goal_model.py:scores, src/agentic/test_v32_promoter_in_model.py:scores, src/agentic/test_v32_training_window.py:scores
+- `2 copies` **trade_rel** — src/agentic/test_big_order_annual.py:trade_rel, src/agentic/test_big_order_hold.py:trade_rel
+- `2 copies` **era_metrics** — src/agentic/test_v3_badnews_refill.py:era_metrics, src/agentic/test_v3_badnews_veto.py:era_metrics
 - `2 copies` **_select_daily_top_n** — src/analysis/day1_5pct_model.py:_select_daily_top_n, src/analysis/day1_model_challenger.py:_select_daily_top_n
 - `2 copies` **_evaluate_rf_metrics** — src/analysis/day1_random_forest_quick_compare.py:_evaluate_rf_metrics, src/analysis/week7_random_forest_quick_compare.py:_evaluate_rf_metrics
 - `2 copies` **_fit_predict_classifier** — src/analysis/day1_random_forest_quick_compare.py:_fit_predict_classifier, src/analysis/week7_random_forest_quick_compare.py:_fit_predict_classifier
@@ -222,20 +233,20 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 
 ## Files > 800 LOC (split candidates) — 12
 
-- `src/agentic/anatomy_1p5x.py` **** — 930 LOC
+- `src/agentic/anatomy_1p5x.py` **** — 949 LOC
 - `src/agentic/build_dashboard.py` **** — 1114 LOC
 - `src/agentic/fetch_budget_capex.py` **** — 1003 LOC
 - `src/agentic/fetch_iip_core.py` **** — 2001 LOC
 - `src/agentic/fetch_pib_releases.py` **** — 902 LOC
-- `src/agentic/model_bakeoff_1p5x.py` **** — 872 LOC
-- `src/agentic/sim_leader_portfolio_7x.py` **** — 815 LOC
+- `src/agentic/model_bakeoff_1p5x.py` **** — 894 LOC
+- `src/agentic/sim_leader_portfolio_7x.py` **** — 818 LOC
 - `src/agentic/test_hot_order_combo.py` **** — 882 LOC
 - `src/analysis/week7_15pct_cluster_rerank_compare.py` **** — 886 LOC
 - `src/analysis/week7_15pct_random_forest_allnames.py` **** — 923 LOC
 - `src/analysis/week7_5pct_gbm_allnames_macro_veto.py` **** — 1054 LOC
 - `src/report/production_weekly_run.py` **** — 989 LOC
 
-## Functions nested > 5 deep — 20
+## Functions nested > 5 deep — 23
 
 - `src/agentic/build_mcap_pit.py` **rename_links** — depth>5
 - `src/agentic/build_price_only_ca_factors.py` **main** — depth>5
@@ -254,6 +265,9 @@ Findings are candidates for deletion/simplification — audit never auto-rewrite
 - `src/agentic/sim_screen_rank_exit.py` **run_exit** — depth>5
 - `src/agentic/simplicity_auditor.py` **audit** — depth>5
 - `src/agentic/test_hot_order_combo.py` **simulate** — depth>5
+- `src/agentic/test_v31_fpi_sector_tilt.py` **run_wcost** — depth>5
+- `src/agentic/test_v31_fpi_sizing.py` **main** — depth>5
+- `src/agentic/test_v3_l1_newlist_cost.py` **run_cost** — depth>5
 - `src/agentic/trust/claim_check.py` **read_session** — depth>5
 - `src/agentic/update_pnl_incremental.py` **main** — depth>5
 - `src/analysis/week7_15pct_meta_rerank_compare.py` **_run_single_model** — depth>5
