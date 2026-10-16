@@ -21,8 +21,10 @@ weekly  launchd (com.sgm.weekly): Friday 7:30 PM ET, Saturday 9 AM ET retry, or 
                    failure is reported; the screen itself refuses scores more than 7 days old)
   THEMES           fetch_announcements_historical (resume) -> fetch_fred_drivers -> build_themes (V3's fading-theme filter)
   SRI LAKSHMI      build_industry_scores -> build_policy_scores -> screen_sri_lakshmi -> score_sri_lakshmi (blocks on failure)
-  REPRODUCE        trust/reproduce.py: registered results re-run from the committed code
-  GATE analysis    output.*, pit.model_scores_current, model.*, strategy.*, trust.results_reproduce + this week's batch exists
+  RERUN            trust/rerun_registered.py: registered tests re-run on this week's data (blocks if one cannot run; 2026-10-16)
+  REPRODUCE        trust/reproduce.py: the same tests again from the committed code, compared with the fresh RERUN numbers
+  GATE analysis    output.*, pit.model_scores_current, model.*, strategy.*, trust.results_reproduce, trust.live_rule_verdicts,
+                   trust.verdict_changes (warn) + this week's batch exists
   MESSAGE          the Sri Lakshmi G1 order sheet, through the output gate (only G1 and the Sep 8 production sleeve are tracked, 2026-09-30)
   15D PIPELINE     run_weekly_pipeline.sh --skip-fetch (the separate 15D/5% basket thread, last so it cannot hold Sri Lakshmi up)
 weekend launchd (com.sgm.weekend): Saturday and Sunday 11:30 AM ET, retry 7:30 PM (Abhinav 2026-10-04: "let's not skip
@@ -63,7 +65,8 @@ GATES = {
     "data": ["data.", "pit.filings_after_period", "prov.", "ops.daily_run_happened"],
     "analysis_daily": ["output.screens_immutable", "output.one_screen_per_week", "output.paper_scored"],
     "analysis_weekly": ["output.screens_immutable", "output.one_screen_per_week", "output.paper_scored",
-                        "pit.model_scores_current", "model.", "strategy.", "trust.results_reproduce"],
+                        "pit.model_scores_current", "model.", "strategy.", "trust.results_reproduce",
+                        "trust.live_rule_verdicts", "trust.verdict_changes"],
 }
 
 
@@ -241,6 +244,10 @@ def weekly(R: Run) -> int:
         if not R.stage("SRI LAKSHMI", ["/bin/bash", "-c", "set -e; for s in build_industry_scores build_policy_scores "
                        "screen_sri_lakshmi score_sri_lakshmi; do nice -n 10 /usr/bin/python3 src/agentic/$s.py; done"], 2 * 3600):
             return R.stop("the Sri Lakshmi screen", [dict(id="stage.sri_lakshmi", detail=f"see {R.rec['stages'][-1]['log']}")])
+        # 2026-10-16: re-run the registered tests on this week's data first; REPRODUCE then compares with these fresh numbers,
+        # so a week of market movement no longer blocks the list (Oct 9, Oct 16) while verdict flips still do.
+        if not R.stage("RERUN", ["nice", "-n", "10", PY, "src/agentic/trust/rerun_registered.py"], 2 * 3600):
+            return R.stop("the weekly re-run of the registered tests", [dict(id="stage.rerun_registered", detail=f"see {R.rec['stages'][-1]['log']}")])
         R.stage("REPRODUCE", ["nice", "-n", "10", PY, "src/agentic/trust/reproduce.py"], 2 * 3600)
     block = R.gate("analysis_weekly", "weekly")
     f = notify._latest("screen_*.json", notify.TRACKS["sri_lakshmi"])

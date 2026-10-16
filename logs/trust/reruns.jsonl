@@ -1,0 +1,6 @@
+{"ts": "2026-10-16T22:43:00", "exp": "EXP-2026-09-29-industry-fundamentals", "tag": "weekly-20261016", "ok": true, "secs": 40, "detail": "verdict no arm passes"}
+{"ts": "2026-10-16T22:43:41", "exp": "EXP-2026-09-29-industry-policy", "tag": "weekly-20261016", "ok": true, "secs": 41, "detail": "verdict ['G1']"}
+{"ts": "2026-10-16T22:45:13", "exp": "EXP-2026-09-30-sector-shrink", "tag": "weekly-20261016", "ok": true, "secs": 92, "detail": "verdict no arm passes"}
+{"ts": "2026-10-16T22:45:44", "exp": "EXP-2026-09-30-theme-engine", "tag": "weekly-20261016", "ok": true, "secs": 31, "detail": "verdict ['TFADE']"}
+{"ts": "2026-10-16T22:46:30", "exp": "EXP-2026-10-11-v3-l1-newlist-cost", "tag": "weekly-20261016", "ok": true, "secs": 46, "detail": "verdict ['V3_L1c', 'V3_L1Nc']"}
+{"ts": "2026-10-16T22:47:25", "exp": "EXP-2026-10-12-v31-t2t", "tag": "weekly-20261016", "ok": true, "secs": 55, "detail": "verdict ['V3.1_NOT2T', 'V3.1_NOT2T_REFILL']"}

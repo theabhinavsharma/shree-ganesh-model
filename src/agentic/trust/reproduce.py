@@ -6,6 +6,8 @@ arm's return per year, per period and worst fall with the RESULT line in logs/ex
   REPRODUCED      all numbers within 0.1 point
   DRIFTED         within 1 point, and the price data has been refreshed since the result was logged
   NOT REPRODUCED  anything else
+In the Friday run this follows trust/rerun_registered.py (2026-10-16), so it compares with numbers logged minutes earlier on
+the same data: it catches edited code and non-determinism, while a week of market movement no longer blocks the list.
 Usage: /usr/bin/python3 src/agentic/trust/reproduce.py [EXP-ID ...]   (default: every experiment listed in TESTS)
 Log: logs/trust/reproductions.jsonl
 """
@@ -32,6 +34,10 @@ TESTS = {   # experiment id -> (script, results.csv written in repro mode)
     "EXP-2026-10-12-v31-t2t": ("src/agentic/test_v31_t2t.py", "logs/leader_sleeve/v31_t2t/repro/results.csv"),   # V3.2 = V3.1 minus trade-for-trade, live from 2026-10-12
 }
 ENV = {"EXP-2026-09-30-sector-shrink": {"SGM_SHRINK": "1"}}      # extra environment a test needs
+# 2026-10-16: the arms the live rule (V3.2) stands on. Each Friday the run re-runs TESTS on the week's data first
+# (trust/rerun_registered.py); trust.live_rule_verdicts blocks the list if one of these arms stops passing.
+LIVE_ARMS = {"EXP-2026-10-11-v3-l1-newlist-cost": "V3_L1Nc",     # V3.1 beats V3
+             "EXP-2026-10-12-v31-t2t": "V3.1_NOT2T"}              # V3.2 beats V3.1
 COLS = ("cagr", "cagr_disc", "cagr_conf", "maxdd")
 
 

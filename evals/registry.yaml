@@ -253,12 +253,32 @@ evals:
   - id: trust.results_reproduce
     statement: "Re-running each registered test from the committed code gives the logged numbers again."
     why: "A result that only existed in one chat session is not a result. This catches edited code, lost data and copy-paste errors."
-    source_of_truth: "logs/trust/reproductions.jsonl (src/agentic/trust/reproduce.py) vs RESULT lines in logs/experiments.jsonl"
+    source_of_truth: "logs/trust/reproductions.jsonl (src/agentic/trust/reproduce.py) vs the newest RESULT / RERUN line in logs/experiments.jsonl (from 2026-10-16 the Friday run's own RERUN stage, same data)"
     threshold: "every test REPRODUCED (within 0.1 point) or DRIFTED (within 1 point after a data refresh); re-checked within 35 days"
     action: block
     cadence: weekly
     owner: system
     check: results_reproduce
+
+  - id: trust.live_rule_verdicts
+    statement: "The registered tests the live rule stands on still pass on this week's data: V3.1 beats V3 (EXP-2026-10-11-v3-l1-newlist-cost, V3_L1Nc) and V3.2 beats V3.1 (EXP-2026-10-12-v31-t2t, V3.1_NOT2T)."
+    why: "Added 2026-10-16. The Friday run re-runs the registered tests on the week's data before the list (trust/rerun_registered.py). Market movement shifts the numbers every week; what must not change silently is whether the rule we invest with still wins (INC-2026-10-16-reproduce-blocks-on-market-drift)."
+    source_of_truth: "newest RESULT / RERUN line per test in logs/experiments.jsonl; arms in src/agentic/trust/reproduce.py LIVE_ARMS"
+    threshold: "every live arm in its test's newest verdict"
+    action: block
+    cadence: weekly
+    owner: system
+    check: live_rule_verdicts
+
+  - id: trust.verdict_changes
+    statement: "No registered verdict changed since the previous run; any change is listed so it is looked at, not missed."
+    why: "Added 2026-10-16. Verdicts that are not the live rule's own (e.g. the financials drop on the old G1 base went from 5/5 to 2/5 on Oct 16) should be seen without blocking the list."
+    source_of_truth: "logs/experiments.jsonl: newest RESULT / RERUN line vs the newest line of an earlier run, for every test in reproduce.TESTS"
+    threshold: "no change (a change is a warning)"
+    action: warn
+    cadence: weekly
+    owner: system
+    check: verdict_changes
 
   - id: trust.claude_golden
     statement: "A fresh Claude session answers the golden questions about this system correctly, including saying 'that does not exist' to trap questions."

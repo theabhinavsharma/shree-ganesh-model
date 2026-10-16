@@ -97,7 +97,9 @@ QC_LABEL = {"data.coverage": "Every stock has a price for the day", "data.freshn
             "data.no_duplicates": "No duplicate rows", "data.no_holiday_copies": "No copied / stale price days",
             "data.ca_before_prices": "Corporate actions loaded before prices", "data.manifests": "Every data file documented",
             "pit.filings_after_period": "No future-dated filings", "prov.external_rows_sourced": "Government data rows have sources",
-            "prov.order_amount_grounded": "Order amounts match the filing text", "ops.daily_run_happened": "Run happened for today"}
+            "prov.order_amount_grounded": "Order amounts match the filing text", "ops.daily_run_happened": "Run happened for today",
+            "trust.results_reproduce": "Tests give the same numbers again", "trust.live_rule_verdicts": "V3.2 still beats V3.1 (and V3.1 beats V3) on this week's data",
+            "trust.verdict_changes": "A registered test's verdict changed", "stage.rerun_registered": "Weekly re-run of the registered tests"}
 ICON = {"PASS": "✅", "FAIL": "❌", "WARN": "⚠️", "PENDING": "⏳", "SKIP": "·"}
 NSE_FILINGS = "https://www.nseindia.com/companies-listing/corporate-filings-announcements"
 LINK = re.compile(r"📄 (https?://\S+)")

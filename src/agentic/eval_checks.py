@@ -463,6 +463,43 @@ def results_reproduce(ctx: dict) -> dict:
     return _res("WARN" if old else "PASS", worst, f"{len(last)} tests, worst gap {worst} pts" + (f"; stale: {', '.join(old)}" if old else ""))
 
 
+def _registered_lines() -> tuple:
+    """(reproduce module, {exp: [RESULT / RERUN lines, oldest first, VOIDed lines dropped]}) for reproduce.TESTS."""
+    sys.path.insert(0, str(ROOT / "src/agentic/trust"))
+    import reproduce
+    L = [json.loads(l) for l in (ROOT / "logs/experiments.jsonl").read_text().splitlines() if l.strip().startswith("{")]
+    void = {(v.get("voids_id"), v.get("voids_ts")) for v in L if str(v.get("id", "")).endswith("-VOID")}
+    out = {e: [r for r in L if (r.get("id"), r.get("ts")) not in void and (r.get("id") == e + "-RESULT" or str(r.get("id", "")).startswith(e + "-RERUN-"))]
+           for e in reproduce.TESTS}
+    return reproduce, out
+
+
+def live_rule_verdicts(ctx: dict) -> dict:
+    """2026-10-16: the arms the live rule stands on (reproduce.LIVE_ARMS) pass in their newest logged result."""
+    reproduce, lines = _registered_lines(); bad, info = [], []
+    for exp, arm in reproduce.LIVE_ARMS.items():
+        if not lines.get(exp):
+            bad.append(exp); info.append(f"{arm}: no result logged"); continue
+        r = lines[exp][-1]; v = r.get("verdict"); ok = isinstance(v, list) and arm in v
+        info.append(f"{arm} {'passes' if ok else 'NO LONGER PASSES'} ({r['id'][len(exp) + 1:]}, {r['ts'][:10]})")
+        if not ok:
+            bad.append(f"{exp}: {arm}")
+    return _res("FAIL" if bad else "PASS", len(bad), "; ".join(info))
+
+
+def verdict_changes(ctx: dict) -> dict:
+    """2026-10-16: registered verdicts that differ from the previous run's (newest line vs the newest line of another run)."""
+    _, lines = _registered_lines(); changed = []
+    for exp, rs in lines.items():
+        if len(rs) < 2:
+            continue
+        tag = lambda r: r["id"].split("-RERUN-")[-1] if "-RERUN-" in r["id"] else "RESULT"  # noqa: E731
+        prev = [r for r in rs if tag(r) != tag(rs[-1])]
+        if prev and prev[-1].get("verdict") != rs[-1].get("verdict"):
+            changed.append(f"{exp[4:]}: {prev[-1].get('verdict')} ({tag(prev[-1])}) -> {rs[-1].get('verdict')} ({tag(rs[-1])})")
+    return _res("WARN" if changed else "PASS", len(changed), "; ".join(changed) or "no verdict changed")
+
+
 def claude_golden(ctx: dict) -> dict:
     auth = re.compile(r"Failed to authenticate|authentication_error|/login|Invalid API key")
     runs = [r for r in _jsonl(ROOT / "logs/trust/golden_runs.jsonl")      # a run where the CLI was logged out graded nothing
