@@ -1,0 +1,162 @@
+<title>SGM Data World Storyboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column of the journey in order (drawings 1-5), then explore mode, the cast and what changes; screenshots full width.
+   Single dark look on purpose: it matches the night-sky world it previews. */
+:root {
+  color-scheme: dark;
+  --sky: #070b14;        /* page ground, the space around the globe */
+  --panel: #121a28;
+  --line: #24304a;
+  --ink: #f2ece4;
+  --ink-2: #aab3c5;
+  --amber: #ffc21a;      /* the data paths on the globe */
+  --orange: #e8875c;     /* the bots */
+  --font-display: "Fredoka", "Avenir Next Rounded", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+body { margin: 0; background: var(--sky); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 56px; }
+header { display: grid; gap: 12px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 5vw, 48px); line-height: 1.05; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-2); max-width: 62ch; font-size: 17px; }
+.status { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: 14px; font-weight: 600; }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 28px; margin: 0 0 6px; text-wrap: balance; }
+.section-note { margin: 0 0 24px; color: var(--ink-2); max-width: 62ch; }
+.steps { display: grid; gap: 44px; counter-reset: step; }
+.step { display: grid; gap: 14px; }
+.step-head { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+.num { font-family: var(--font-display); font-weight: 600; font-size: 15px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--orange); color: #1d130e; }
+.step h3 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 2px 0 4px; }
+.step p { margin: 0; max-width: 64ch; }
+.moves { color: var(--ink-2); font-size: 14.5px; }
+.moves b { color: var(--amber); font-weight: 600; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); background: #000; }
+figcaption { margin-top: 6px; font-size: 13.5px; color: var(--ink-2); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pair > * { min-width: 0; }
+.trio { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; align-items: start; }
+.trio > * { min-width: 0; }
+.stack { display: grid; gap: 12px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }
+.panel ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 8px; }
+.panel h3 { font-family: var(--font-display); font-weight: 600; font-size: 20px; margin: 0; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cols > * { min-width: 0; }
+footer { color: var(--ink-2); font-size: 15px; border-top: 1px solid var(--line); padding-top: 20px; }
+footer b { color: var(--ink); }
+@media (max-width: 700px) { .pair, .trio, .cols { grid-template-columns: 1fr; } .wrap { gap: 44px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>SGM Data World</h1>
+    <p class="lede">A rough preview of the new home page for shreeganeshmodel.vercel.app: a real Earth where little bots carry every input of the model to a laptop in Bengaluru. These are real screenshots of the build on the laptop, step by step, following your drawings.</p>
+    <span class="status"><i></i>Not live. The site shows the old page until you say go.</span>
+  </header>
+
+  <section>
+    <h2>The journey</h2>
+    <p class="section-note">Plays when a visitor taps <b>Start the journey</b>. Each step waits for <b>Next</b>; anyone can skip to exploring.</p>
+    <div class="steps">
+
+      <article class="step">
+        <div class="step-head"><span class="num">1</span><div>
+          <h3>Meet the crew</h3>
+          <p>Seven bots line up in lanes, like your drawing: each lane shows the bot's name, the data it brings and its home country, and each bot wears that country's flag as its T-shirt.</p>
+          <p class="moves"><b>Moves:</b> on <b>Go!</b> they all start running to the right and off the screen, then the Earth takes over.</p>
+        </div></div>
+        <figure><img src="img/1-crew-lineup.jpg" alt="Seven bots in running lanes, labelled Bhav, Sarkari, Fed, Euro, Gnews, Claude and Pigeon with what they bring and their country"></figure>
+      </article>
+
+      <article class="step">
+        <div class="step-head"><span class="num">2</span><div>
+          <h3>Zoom out: they set off from home</h3>
+          <p>Several camera angles. Fed runs out of the St. Louis Fed with oil and world prices toward the US East Coast; Euro leaves the European Central Bank in Frankfurt for the coast at Marseille.</p>
+          <p class="moves"><b>Moves:</b> bots run along glowing amber paths and leave a trail; the sky is the real sky at the moment you visit (daytime in St. Louis, night in Frankfurt here).</p>
+        </div></div>
+        <div class="pair">
+          <figure><img src="img/2a-st-louis.jpg" alt="Daytime view over the US Midwest with the Fed bot running from St. Louis toward the East Coast on an amber path"><figcaption>St. Louis, 2:07 pm local time</figcaption></figure>
+          <figure><img src="img/2b-frankfurt.jpg" alt="Night view of Europe with city lights and the Euro bot leaving Frankfurt"><figcaption>Frankfurt, 9:08 pm local time</figcaption></figure>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-head"><span class="num">3</span><div>
+          <h3>They board the ships</h3>
+          <p>Ship 1, an oil tanker, carries oil and world prices across the Atlantic and the Red Sea to Mumbai; the submarine marks the undersea cable. Ship 2, a container ship, brings Claude's Friday note and world headlines across the Pacific to Chennai.</p>
+          <p class="moves"><b>Moves:</b> ships sail the routes and leave a white wake. In real life the data travels through undersea fibre cables; the ships are the cartoon of that, and routes are simplified.</p>
+        </div></div>
+        <div class="pair">
+          <figure><img src="img/3a-atlantic.jpg" alt="Whole Earth with the real day-night line, amber cable routes from St. Louis and Frankfurt to Mumbai"><figcaption>Atlantic and Red Sea routes, with the real line between day and night</figcaption></figure>
+          <figure><img src="img/3b-pacific.jpg" alt="Pacific view with the container ship Ship 2 on its route toward India"><figcaption>Ship 2 crossing toward Chennai</figcaption></figure>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-head"><span class="num">4</span><div>
+          <h3>India</h3>
+          <p>Ship 1 docks in Mumbai and Ship 2 in Chennai. NSE in Mumbai adds today's stock prices; PIB in New Delhi, next to Parliament, adds government news. Every path heads to Bengaluru.</p>
+          <p class="moves"><b>Moves:</b> couriers fly the paths with their crates; cyan paths carry your Telegram messages, green paths carry money.</p>
+        </div></div>
+        <figure><img src="img/4-india.jpg" alt="India at night with city lights, glowing paths from Mumbai, Delhi and Dubai to Bengaluru, bots and a rupee note on the way"><figcaption>India at 12:38 am: the real night, with city lights</figcaption></figure>
+      </article>
+
+      <article class="step">
+        <div class="step-head"><span class="num">5</span><div>
+          <h3>Bengaluru</h3>
+          <p>You, as the giant beside the laptop with the stocks chart, while ML bots with hammers turn the data into the Friday list. Money moves between your SBI account (head office, Mumbai) and your stocks.</p>
+          <p class="moves"><b>Moves:</b> you wave, the ML bots hammer, ₹ notes fly both ways. Shown at Vidhana Soudha, a public landmark, never a home address.</p>
+        </div></div>
+        <figure><img src="img/5-bengaluru.jpg" alt="Bengaluru with the waving figure and the giant laptop, money and data paths from Mumbai and Dubai arriving"></figure>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Exploring on your own</h2>
+    <p class="section-note">After the journey, or straight from the home screen. Fly to any city, zoom down to Google's real 3D buildings, and tap any bot.</p>
+    <div class="stack">
+      <figure><img src="img/6-bkc-3d.jpg" alt="Google photorealistic 3D view of Bandra Kurla Complex at night with the NSE Exchange Plaza label"><figcaption>Bandra Kurla Complex in Google's 3D map at midnight, NSE marked. The price bots run the real roads out of BKC.</figcaption></figure>
+      <div class="trio">
+        <figure><img src="img/7-card.jpg" alt="Bot card for Fed: what I bring, where I get it, what it means, and two buttons"><figcaption>Every bot card, in plain words: what I bring, where I get it, what it means. Two buttons: the next related bot, and a company list.</figcaption></figure>
+        <figure><img src="img/8-company-list.png" alt="List of oil and fuel companies in India, biggest first"><figcaption>Oil and fuel companies in India, from our own data</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The cast</h2>
+    <p class="section-note">Built as small 3D models so they work on a phone.</p>
+    <div class="stack">
+      <figure><img src="img/10-crew.png" alt="Row of bots in India, US, Germany and UAE flag T-shirts, plus an astronaut bot, with and without data crates"><figcaption>The bots in full-flag T-shirts (India, USA, Germany, UAE) and the astrobot for any future satellite data</figcaption></figure>
+      <figure><img src="img/9-props.png" alt="Oil tanker, container ship, submarine, giant laptop, the ME figure, ML bot, rupee notes and data crate"><figcaption>Oil tanker, container ship, submarine, the laptop, you (from your sketch; your photo will refine it), the ML bot, ₹ notes and the data crate</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="cols">
+    <div class="panel">
+      <h3>What changes on the live site</h3>
+      <ul>
+        <li>The home page becomes this world.</li>
+        <li>The current page (the 15D/5% showcase) moves to <b>Older Models</b>, linked at the top right, with a link back.</li>
+        <li>Nothing else on the site changes. The Friday pipeline now refreshes Older Models instead of the home page.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Not in these pictures</h3>
+      <ul>
+        <li>The motion: running bots, sailing ships, trails, the waving figure.</li>
+        <li>The sky changes with the real time of day when someone visits.</li>
+        <li>Phone layout still to check on a real phone.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>Tell me what to change, or say <b>go live</b> and I'll publish it, then open the live site to confirm it loads, including Google's 3D buildings.</footer>
+</div>

@@ -20,7 +20,7 @@ function steps() {
   const P = W.PHONE();
   return [
     { text: "Meet the crew. Every evening at 6:45 PM these bots fetch the data behind your Friday list.", lineup: true, next: "Go!" },
-    { text: "They set off from home. Fed runs out of the St. Louis Fed with oil and world prices.", go: () => W.flyTo(-83, 31, P ? 1.3e6 : 9e5, 10, -42, 3.5) },
+    { text: "They set off from home. Fed runs out of the St. Louis Fed with oil and world prices.", go: () => W.flyTo(-87.5, 32, P ? 1.3e6 : 9e5, 18, -42, 3.5) },
     { text: "Euro leaves the European Central Bank in Frankfurt with exchange rates.", go: () => W.flyTo(6, 38.5, P ? 1.1e6 : 8e5, 0, -45, 4) },
     { text: "At the coast they board the ships. Ship 1 carries oil and world prices across the Atlantic and the Red Sea; the submarine marks the undersea cable.", go: () => W.flyTo(0, 28, P ? 26e6 : 18e6, 0, -90, 4) },
     { text: "From California, Ship 2 brings Claude's Friday note and world headlines across the Pacific.", go: () => W.flyTo(160, 18, P ? 28e6 : 22e6, 0, -90, 4) },
