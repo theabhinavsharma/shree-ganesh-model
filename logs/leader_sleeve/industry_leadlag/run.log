@@ -1,0 +1,42 @@
+
+=== DATA READINESS · EXP-2026-10-16-industry-leadlag (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ span         industry scores
+  ✅ coverage     4-week periods with >= 20 industries of >= 5 liquid members
+  ✅ coverage     weekly list dates with industry scores
+periods 133 · industries 189 · industries with >= 5 liquid members per period: median 58
+map 2019: periods 35 · pairs tested 1362 · significant links 0 (followers 0, + 0 / - 0)
+map 2020: periods 48 · pairs tested 1612 · significant links 0 (followers 0, + 0 / - 0)
+map 2021: periods 60 · pairs tested 1800 · significant links 0 (followers 0, + 0 / - 0)
+map 2022: periods 73 · pairs tested 2384 · significant links 0 (followers 0, + 0 / - 0)
+map 2023: periods 85 · pairs tested 2970 · significant links 0 (followers 0, + 0 / - 0)
+map 2024: periods 97 · pairs tested 3719 · significant links 0 (followers 0, + 0 / - 0)
+map 2025: periods 110 · pairs tested 4868 · significant links 0 (followers 0, + 0 / - 0)
+map 2026: periods 122 · pairs tested 5838 · significant links 0 (followers 0, + 0 / - 0)
+/Users/abhinavs./Code/Zoom/src/agentic/test_industry_leadlag.py:71: RuntimeWarning: Mean of empty slice.
+  return out, float(r[LIQ[i0]].mean()), cnt
+/Users/abhinavs./Library/Python/3.9/lib/python/site-packages/numpy/_core/_methods.py:138: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+wiring check: empty link set (G1 only) == v3_rule V3.1 minus trade-for-trade on 373/373 weeks
+schedule 0: V3.2 50.3/61.9/-38.5 · E1A 50.3/61.9/-38.5
+schedule 1: V3.2 49.4/64.0/-38.8 · E1A 49.4/64.0/-38.8
+schedule 2: V3.2 50.7/62.3/-37.9 · E1A 50.7/62.3/-37.9
+schedule 3: V3.2 48.9/63.1/-37.4 · E1A 48.9/63.1/-37.4
+schedule 4: V3.2 47.7/62.3/-38.7 · E1A 47.7/62.3/-38.7
+
+=== EXP-2026-10-16-industry-leadlag · weekly entries 2019-04-01..2026-10-15 ===
+Part A · lead score vs next 4 weeks, rank correlation per week (out of sample):
+  weeks with >= 5 scored industries 0/369 · mean IC +nan (95% +nan..+nan) · 2019-22 +nan · 2023+ +nan · no pass
+  own 4-week momentum IC, same industries +nan · all industries +0.075
+  by year:
+Empty DataFrame
+Columns: [mean, size]
+Index: []
+  link persistence: 2020: 0 links, 0 kept · 2021: 0 links, 0 kept · 2022: 0 links, 0 kept · 2023: 0 links, 0 kept · 2024: 0 links, 0 kept · 2025: 0 links, 0 kept · 2026: 0 links, 0 kept
+Part B · E1A (G1 + about-to-get-hot industries) vs V3.2, schedule 0 (years = avg of 5):
+  V3.2 CAGR  56.0 · 2019-22  50.3 · 2023+  61.9 · maxDD  -38.5 · range 54.9..56.6 · years 2023:+89 2024:+150 2025:-1 2026:+36 · next open 53.9
+  E1A  CAGR  56.0 · 2019-22  50.3 · 2023+  61.9 · maxDD  -38.5 · range 54.9..56.6 · years 2023:+89 2024:+150 2025:-1 2026:+36 · next open 53.9
+  E1A vs V3.2: beats in 0/5 · gap +0.0 pts/yr (95% +0.0..+0.0) · range excludes 0 in 0/5 · no pass
+  what changed: {"weeks": 373, "weeks_with_added_industry": 0, "lists_changed": 0, "picks_from_added": {"picks": 0, "avg6m": null}, "picks_pushed_out": {"picks": 0, "avg6m": null}, "v32_all_picks": {"picks": 2293, "avg6m": 31.1}, "share_of_E1A_picks_from_added": 0.0, "added_with_negative_score": 0, "added_rows": 0}
+done in 39s

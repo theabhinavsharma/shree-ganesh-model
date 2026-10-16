@@ -1,0 +1,12 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-16-industry-leadlag",
+ "producer": "src/agentic/test_industry_leadlag.py",
+ "definitions": "EXP-2026-10-16-industry-leadlag (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: do some industries' moves predict OTHER industries' next month, beyond those industries' own momentum and\nthe market? Each January a lead-lag map is found from earlier years only (every ordered industry pair, regression of the\nfollower's next 4 weeks on the leader's past 4 weeks, controlling for the follower's own past 4 weeks and the market's;\nBenjamini-Hochberg false discovery rate q <= 0.10). Through that year the map gives each follower a lead score\n(sum of beta x leader's past-4-week return).\nPart A (evidence): weekly rank correlation (IC) of lead score vs the industry's realised next 4 weeks, out of sample.\nPart B (adoption): E1A = V3.2 with industries 'about to get hot' (lead score top 10%, heat_pct < 0.70, not policy-vetoed)\nadded to the G1 gate. PASS vs V3.2: both eras, maxDD not worse by > 2 points, schedule 0 and >= 4 of 5.\nIndustry return = equal-weight total return of its liquid members (Rs 1 cr ADV, price > Rs 50) at the window start,\nindustries with >= 5 such members; market = equal-weight all liquid stocks. Industry map = today's (as V3.2's).\n",
+ "contents": "one row per arm, schedule 0; years = average of 5 schedules",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-10-16T14:05:22"
+}
