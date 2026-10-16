@@ -758,11 +758,11 @@ def build_bot(code, carry):
             # goal-post arms that clear the round helmet
             add_box(m, m_shirt, (s * 0.035, 0.0, 0), (0.105, 0.12, 0.17), bevel=0.025)
             m_trim = M("suit_trim", COL["suit_trim"])
-            add_box(m, m_shirt, (s * 0.085, 0.05, 0), (0.13, 0.11, 0.12), bevel=0.03)
+            add_box(m, m_shirt, (s * 0.085, 0.05, 0), (0.13, 0.11, 0.12))
             add_box(m, m_shirt, (s * 0.12, 0.40, 0), (0.105, 0.64, 0.12), bevel=0.03)
-            add_box(m, m_trim, (s * 0.12, 0.36, 0), (0.12, 0.07, 0.135), bevel=0.02)       # elbow joint
+            add_box(m, m_trim, (s * 0.12, 0.36, 0), (0.12, 0.07, 0.135))       # elbow joint
             add_box(m, m_shirt, (s * 0.035, 0.72, 0), (0.26, 0.11, 0.12), bevel=0.03)
-            add_box(m, M("glove", COL["glove"]), (s * -0.095, 0.72, 0), (0.08, 0.12, 0.13), bevel=0.02)
+            add_box(m, M("glove", COL["glove"]), (s * -0.095, 0.72, 0), (0.08, 0.12, 0.13))
         return m
 
     # --- hierarchy
@@ -780,7 +780,7 @@ def build_bot(code, carry):
         helmet = Mesh("helmet")
         m_glass = M("glass", COL["glass"], rough=0.06, alpha=0.24)
         th = math.degrees(math.acos((HELMET["cut"] - HELMET["cy"]) / HELMET["R"]))
-        add_dome(helmet, m_glass, (0, HELMET["cy"] - HIP_Y, 0), HELMET["R"], 24, 12, th)
+        add_dome(helmet, m_glass, (0, HELMET["cy"] - HIP_Y, 0), HELMET["R"], 20, 10, th)
         torso.add(Node("helmet", mesh=helmet))
 
         pack = Mesh("jetpack")
@@ -789,9 +789,9 @@ def build_bot(code, carry):
         m_tank, m_noz = M("tank", COL["tank"]), M("nozzle", COL["nozzle"])
         tz = pz - 0.09
         for s in (1, -1):
-            add_cyl(pack, m_tank, (s * 0.095, 0.465 - HIP_Y, tz), 0.065, 0.065, 0.29, 12)
-            add_cyl(pack, m_tank, (s * 0.095, 0.62 - HIP_Y, tz), 0.065, 0.035, 0.03, 12, caps=(False, True))
-            add_cyl(pack, m_noz, (s * 0.095, 0.295 - HIP_Y, tz), 0.052, 0.040, 0.05, 12)
+            add_cyl(pack, m_tank, (s * 0.095, 0.465 - HIP_Y, tz), 0.065, 0.065, 0.29, 10)
+            add_cyl(pack, m_tank, (s * 0.095, 0.62 - HIP_Y, tz), 0.065, 0.035, 0.03, 10, caps=(False, True))
+            add_cyl(pack, m_noz, (s * 0.095, 0.295 - HIP_Y, tz), 0.052, 0.040, 0.05, 10)
         jet = torso.add(Node("jetpack", mesh=pack))
         flame = Mesh("flame")
         add_cyl(flame, M("flame", COL["flame"], rough=1.0, emissive=COL["flame_glow"]),
@@ -879,18 +879,237 @@ def build_anims(root, carry, astro):
     chans.append(("eyes", "scale", blink_t, blink_v))
     out["idle"] = chans
 
+    out.update(action_clips(carry, astro))
+    out = fill_coverage(root, out)
     for clip in out.values():
         for n, _, _, _ in clip:
             assert n in nodes, n
     return out
 
+
+# ------------------------------------------------------------------ action clips
+# crouch / throw / catch / jump / cheer. Legs have no knees, so a knee bend is the
+# hips dropping while both legs scale down in y from the hip pivot (feet stay on the
+# ground). Carry bots keep the crate in their raised hands; in "throw" they fling it
+# forward (it flies off and shrinks away at the very end so the app can hand over to
+# a free-flying data_crate), and in "catch" it flies in from the front into the hands.
+
+ACTION_TIMES = {"crouch": (0.25, 6), "throw": (0.5, 12), "catch": (0.5, 12), "jump": (0.6, 15), "cheer": (1.0, 20)}
+ONE_SHOT = ("crouch", "throw", "catch")     # not loops: may end in a different pose than they start
+
+
+def _ease(u):
+    u = min(max(u, 0.0), 1.0)
+    return u * u * (3 - 2 * u)
+
+
+def kf(t, keys):
+    """Smoothstep between (time, value) keys."""
+    if t <= keys[0][0]:
+        return keys[0][1]
+    for (t0, v0), (t1, v1) in zip(keys, keys[1:]):
+        if t <= t1:
+            return v0 + (v1 - v0) * _ease((t - t0) / (t1 - t0))
+    return keys[-1][1]
+
+
+def sample_clip(T, N, fn, loop=True):
+    """fn(t) -> {(node, path): value}. loop=True: the last key repeats the first exactly."""
+    times = [round(T * i / N, 6) for i in range(N + 1)]
+    ch = {}
+    for i in range(N + 1):
+        t = T * ((i % N) if loop else i) / N
+        for key, v in fn(t).items():
+            ch.setdefault(key, []).append(tuple(round(x, 6) for x in v))
+    return [(n, path, times, vals) for (n, path), vals in ch.items()]
+
+
+def bot_pose(carry, astro, dy=0.0, leg_rx=0.0, yaw=0.0, pitch=0.0, roll=0.0, sy=1.0, eye=1.0,
+             arm_l=(0.0, 0.0), arm_r=(0.0, 0.0), carry_a=0.0, crate=None, flame=0.6):
+    """One frame of a bot pose. arm_l / arm_r: (raise about Z beyond the rest tilt, pitch about X);
+    for carry bots both arms pitch together by carry_a. crate: (pos, rot quat, scale) or None = in hands."""
+    leg_s = (HIP_Y + dy) / HIP_Y if dy < 0 else 1.0
+    sxz = 1.0 / math.sqrt(sy)
+    d = {("hips", "translation"): (0.0, HIP_Y + dy, 0.0),
+         ("leg_L", "rotation"): q_axis(X_AX, leg_rx), ("leg_R", "rotation"): q_axis(X_AX, leg_rx),
+         ("leg_L", "translation"): (LEG_X, 0.0, 0.0), ("leg_R", "translation"): (-LEG_X, 0.0, 0.0),
+         ("leg_L", "scale"): (1.0, leg_s, 1.0), ("leg_R", "scale"): (1.0, leg_s, 1.0),
+         ("torso", "rotation"): q_ypr(yaw=yaw, pitch=pitch, roll=roll),
+         ("torso", "scale"): (sxz, sy, sxz),
+         ("eyes", "scale"): (1.0, eye, 1.0)}
+    if carry:
+        q = q_axis(X_AX, carry_a)
+        d[("arm_L", "rotation")] = q
+        d[("arm_R", "rotation")] = q
+        if crate is None:
+            crate = (crate_hold(astro, carry_a), q, 1.0)
+        d[("crate", "translation")] = crate[0]
+        d[("crate", "rotation")] = crate[1]
+        d[("crate", "scale")] = (crate[2],) * 3
+    else:
+        d[("arm_L", "rotation")] = q_mul(q_axis(Z_AX, ARM_TILT + arm_l[0]), q_axis(X_AX, arm_l[1]))
+        d[("arm_R", "rotation")] = q_mul(q_axis(Z_AX, -ARM_TILT - arm_r[0]), q_axis(X_AX, arm_r[1]))
+    if astro:
+        d[("flame_L", "scale")] = (0.8 + 0.2 * flame, flame, 0.8 + 0.2 * flame)
+        d[("flame_R", "scale")] = (0.8 + 0.2 * flame, flame, 0.8 + 0.2 * flame)
+    return d
+
+
+def crate_hold(astro, a):
+    """Torso-local crate centre when the raised arms are pitched by a degrees about the shoulders."""
+    piv = ARM_Y - HIP_Y
+    r = CRATE_BOTTOM["astro" if astro else "bot"] + CRATE["h"] / 2 - HIP_Y - piv
+    ra = math.radians(a)
+    return (0.0, piv + r * math.cos(ra), r * math.sin(ra))
+
+
+def action_clips(carry, astro):
+    P = lambda **kw: bot_pose(carry, astro, **kw)   # noqa: E731
+    out = {}
+
+    def crouch(t):
+        u = _ease(t / 0.25)
+        return P(dy=-0.05 * u, pitch=16.0 * u, sy=1.0 - 0.08 * u, eye=1.0 - 0.25 * u,
+                 arm_l=(4.0 * u, 35.0 * u), arm_r=(4.0 * u, 35.0 * u), carry_a=-8.0 * u, flame=0.6 + 0.4 * u)
+
+    def throw(t):
+        pitch = kf(t, [(0.0, 0.0), (0.16, -8.0), (0.28, 12.0), (0.5, 0.0)])
+        dy = kf(t, [(0.0, 0.0), (0.16, -0.03), (0.28, 0.02), (0.42, 0.0)])
+        if carry:
+            a = kf(t, [(0.0, 0.0), (0.15, -25.0), (0.3, 75.0), (0.4, 30.0), (0.5, 0.0)])
+            tr = 0.24
+            crate = None
+            if t > tr:
+                a_r = kf(tr, [(0.0, 0.0), (0.15, -25.0), (0.3, 75.0), (0.4, 30.0), (0.5, 0.0)])
+                p0 = crate_hold(astro, a_r)
+                dt = t - tr
+                pos = (0.0, p0[1] + 2.2 * dt - 3.5 * dt * dt, p0[2] + 3.6 * dt)
+                rot = q_axis(X_AX, a_r + 540.0 * dt)
+                crate = (pos, rot, 1.0 - _ease((t - 0.42) / 0.08))
+            return P(dy=dy, pitch=pitch, carry_a=a, crate=crate, eye=0.9)
+        x = kf(t, [(0.0, 0.0), (0.16, 45.0), (0.3, -130.0), (0.38, -110.0), (0.5, 0.0)])
+        return P(dy=dy, pitch=pitch, eye=kf(t, [(0.0, 1.0), (0.25, 0.8), (0.5, 1.0)]),
+                 arm_l=(6.0, x), arm_r=(6.0, x))
+
+    def catch(t):
+        dy = kf(t, [(0.0, 0.0), (0.2, 0.0), (0.28, -0.05), (0.5, 0.0)])
+        sy = kf(t, [(0.0, 1.0), (0.2, 1.0), (0.28, 0.93), (0.5, 1.0)])
+        pitch = kf(t, [(0.0, 0.0), (0.2, -4.0), (0.3, 6.0), (0.5, 0.0)])
+        eye = kf(t, [(0.0, 1.0), (0.15, 1.15), (0.3, 0.8), (0.5, 1.0)])
+        if carry:
+            a = kf(t, [(0.0, 60.0), (0.2, 30.0), (0.45, 0.0), (0.5, 0.0)])
+            crate = None
+            if t < 0.2:
+                hc = crate_hold(astro, 30.0)
+                dt = t - 0.2
+                pos = (0.0, hc[1] - 1.0 * dt - 3.0 * dt * dt, hc[2] - 3.2 * dt)
+                crate = (pos, q_axis(X_AX, 30.0 + 400.0 * dt), 1.0)
+            return P(dy=dy, sy=sy, pitch=pitch, eye=eye, carry_a=a, crate=crate)
+        x = kf(t, [(0.0, 0.0), (0.15, -150.0), (0.3, -125.0), (0.5, 0.0)])
+        return P(dy=dy, sy=sy, pitch=pitch, eye=eye, arm_l=(10.0, x), arm_r=(10.0, x))
+
+    def jump(t):
+        if t < 0.12:
+            u = _ease(t / 0.12)
+            dy, sy, rx = -0.05 * u, 1.0 - 0.08 * u, 0.0
+        elif t < 0.42:
+            u = (t - 0.12) / 0.30
+            dy, sy, rx = 0.35 * 4 * u * (1 - u), 1.0 + 0.06 * math.sin(math.pi * u), 14.0 * math.sin(math.pi * u)
+        elif t < 0.5:
+            u = math.sin(math.pi * (t - 0.42) / 0.16)
+            dy, sy, rx = -0.06 * u, 1.0 - 0.12 * u, 0.0
+        else:
+            u = _ease((t - 0.5) / 0.1)
+            dy, sy, rx = -0.06 * (1 - u) * 0.0, 1.0, 0.0
+        x = kf(t, [(0.0, 0.0), (0.12, 30.0), (0.22, -150.0), (0.42, -120.0), (0.5, 0.0)])
+        a = kf(t, [(0.0, 0.0), (0.12, -10.0), (0.25, 10.0), (0.42, 0.0)])
+        boost = kf(t, [(0.0, 0.6), (0.12, 0.8), (0.18, 1.6), (0.32, 1.0), (0.45, 0.6)])
+        return P(dy=dy, sy=sy, leg_rx=rx, pitch=kf(t, [(0.0, 0.0), (0.12, 10.0), (0.25, -4.0), (0.46, 8.0), (0.6, 0.0)]),
+                 eye=kf(t, [(0.0, 1.0), (0.12, 0.8), (0.25, 1.15), (0.46, 0.7), (0.6, 1.0)]),
+                 arm_l=(8.0, x), arm_r=(8.0, x), carry_a=a, flame=boost)
+
+    def cheer(t):
+        w = 2 * math.pi * t
+        hop = abs(math.sin(w))                       # two hops a second
+        dy = 0.06 * hop - 0.03 * max(0.0, 1.0 - 4 * hop) ** 2
+        wave = math.sin(2 * w)
+        return P(dy=dy, sy=1.0 - 0.06 * max(0.0, 1.0 - 4 * hop) + 0.03 * hop, roll=5.0 * math.sin(w),
+                 yaw=4.0 * math.sin(w + 0.7), eye=0.45,
+                 arm_l=(132.0 + 14.0 * wave, -10.0), arm_r=(132.0 - 14.0 * wave, -10.0),
+                 carry_a=8.0 * math.sin(2 * w), flame=0.9 + 0.4 * hop)
+
+    for name, fn in (("crouch", crouch), ("throw", throw), ("catch", catch), ("jump", jump), ("cheer", cheer)):
+        T, N = ACTION_TIMES[name]
+        loop = not (name in ONE_SHOT and (carry or name == "crouch"))
+        out[name] = sample_clip(T, N, fn, loop=loop)
+    return out
+
+
+def fill_coverage(root, clips):
+    """Give every clip the same (node, path) set: a channel a clip lacks is held at the
+    node's rest value. Existing channels are untouched, so run / idle move exactly as before."""
+    nodes = {n.name: n for n in root.walk()}
+    want = []
+    for clip in clips.values():
+        for n, path, _, _ in clip:
+            if (n, path) not in want:
+                want.append((n, path))
+    out = {}
+    for name, clip in clips.items():
+        have = {(n, path) for n, path, _, _ in clip}
+        dur = max(ts[-1] for _, _, ts, _ in clip)
+        extra = []
+        for n, path in want:
+            if (n, path) not in have:
+                node = nodes[n]
+                v = {"translation": node.t, "rotation": node.r, "scale": node.s}[path]
+                extra.append((n, path, [0.0, dur], [tuple(v), tuple(v)]))
+        out[name] = list(clip) + extra
+    return out
+
 # ------------------------------------------------------------------ glTF writer
+
+def f32s(x):
+    """Shortest decimal that reads back as the same float32 (keeps the JSON small)."""
+    for p in range(1, 10):
+        v = float("%.*g" % (p, x))
+        if struct.unpack("<f", struct.pack("<f", v))[0] == x:
+            return v
+    return x
+
 
 class Writer:
     def __init__(self):
         self.bin = bytearray()
         self.views, self.accessors = [], []
         self._time_cache = {}
+        self.anim = bytearray()          # animation keys share one bufferView
+        self._anim_acc = []
+
+    def anim_floats(self, rows, typ, minmax=False):
+        nc = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4}[typ]
+        flat = []
+        for r in rows:
+            if nc == 1:
+                flat.append(r)
+            else:
+                flat.extend(r)
+        data = struct.pack("<%df" % len(flat), *flat)
+        f32 = struct.unpack("<%df" % len(flat), data)
+        a = {"bufferView": -1, "byteOffset": len(self.anim), "componentType": 5126, "count": len(rows), "type": typ}
+        if minmax:
+            a["min"] = [f32s(min(f32[k::nc])) for k in range(nc)]
+            a["max"] = [f32s(max(f32[k::nc])) for k in range(nc)]
+        self.anim += data
+        self.accessors.append(a)
+        self._anim_acc.append(a)
+        return len(self.accessors) - 1
+
+    def close_anim(self):
+        if self.anim:
+            v = self.view(bytes(self.anim))
+            for a in self._anim_acc:
+                a["bufferView"] = v
 
     def view(self, data, target=None):
         while len(self.bin) % 4:
@@ -914,8 +1133,8 @@ class Writer:
         f32 = struct.unpack("<%df" % len(flat), data)
         a = {"bufferView": self.view(data, target), "componentType": 5126, "count": len(rows), "type": typ}
         if minmax:
-            a["min"] = [min(f32[k::nc]) for k in range(nc)]
-            a["max"] = [max(f32[k::nc]) for k in range(nc)]
+            a["min"] = [f32s(min(f32[k::nc])) for k in range(nc)]
+            a["max"] = [f32s(max(f32[k::nc])) for k in range(nc)]
         self.accessors.append(a)
         return len(self.accessors) - 1
 
@@ -929,7 +1148,7 @@ class Writer:
     def times(self, ts):
         key = tuple(ts)
         if key not in self._time_cache:
-            self._time_cache[key] = self.floats(list(ts), "SCALAR", minmax=True)
+            self._time_cache[key] = self.anim_floats(list(ts), "SCALAR", minmax=True)
         return self._time_cache[key]
 
 
@@ -998,10 +1217,11 @@ def write_glb(path, name, root, mats, textures, anims):
                 vals, typ = fixed, "VEC4"
             else:
                 typ = "VEC3"
-            samplers.append({"input": w.times(ts), "output": w.floats(vals, typ), "interpolation": "LINEAR"})
+            samplers.append({"input": w.times(ts), "output": w.anim_floats(vals, typ), "interpolation": "LINEAR"})
             channels.append({"sampler": len(samplers) - 1, "target": {"node": node_index[node], "path": tpath}})
         gl["animations"].append({"name": aname, "channels": channels, "samplers": samplers})
 
+    w.close_anim()
     while len(w.bin) % 4:
         w.bin.append(0)
     gl["bufferViews"] = w.views
@@ -1035,7 +1255,7 @@ def _mm(a, b):
     return [[sum(a[i][k] * b[k][j] for k in range(4)) for j in range(4)] for i in range(4)]
 
 
-def validate(path, required=("run", "idle"), max_bytes=None, max_tris=None):
+def validate(path, required=("run", "idle"), max_bytes=None, max_tris=None, oneshot=(), ground=True):
     """Parse a .glb back and check structure. Returns a stats dict; raises on error."""
     max_bytes = MAX_BYTES if max_bytes is None else max_bytes
     max_tris = MAX_TRIS if max_tris is None else max_tris
@@ -1105,7 +1325,7 @@ def validate(path, required=("run", "idle"), max_bytes=None, max_tris=None):
             gap = max(abs(x - y) for x, y in zip(first, last))
             if nc == 4:
                 gap = min(gap, max(abs(x + y) for x, y in zip(first, last)))
-            if gap > 1e-5:
+            if gap > 1e-5 and a["name"] not in oneshot:
                 errs.append("%s: %s.%s not seamless" % (a["name"], gl["nodes"][ch["target"]["node"]]["name"],
                                                         ch["target"]["path"]))
             dur = max(dur, ts[-1])
@@ -1142,7 +1362,7 @@ def validate(path, required=("run", "idle"), max_bytes=None, max_tris=None):
         errs.append("file too big: %d bytes" % len(data))
     if tris > max_tris:
         errs.append("too many triangles: %d" % tris)
-    if abs(lo[1]) > 1e-3:
+    if ground and abs(lo[1]) > 1e-3:
         errs.append("feet not on y=0 (min y %.4f)" % lo[1])
     if errs:
         raise SystemExit("%s: %s" % (path.name, "; ".join(errs)))
@@ -1173,7 +1393,7 @@ def main():
         files = sorted(OUT_DIR.glob("bot_*.glb"))
     print("%-22s %8s %6s %6s  %-24s %s" % ("file", "bytes", "tris", "nodes", "animations (s)", "rest bbox (w x h x d)"))
     for f in files:
-        st = validate(f)
+        st = validate(f, required=("run", "idle") + tuple(ACTION_TIMES), oneshot=ONE_SHOT)
         lo, hi = st["bbox"]
         an = ", ".join("%s %.2f" % kv for kv in st["anims"].items())
         print("%-22s %8d %6d %6d  %-24s %.2f x %.2f x %.2f (min y %.3f)" % (

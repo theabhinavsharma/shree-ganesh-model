@@ -4,8 +4,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600&display=swap">
 <style>
-/* Layout: the theatre (one character's journey playing as a relay, with its profile beside it) on top, the whole crew
-   lined up below in groups. One dark look on purpose: it matches the night-sky Data World this page belongs to. */
+/* Layout: the journey stage is the hero with a short character card beside it; under it a slim strip of tiny characters;
+   the whole crew opens in a liquid-glass sheet. One dark look on purpose: it matches the night-sky Data World. */
 :root {
   color-scheme: dark;
   --sky: #0a0f1a;
@@ -14,89 +14,137 @@
   --line: #27334d;
   --ink: #f2ece4;
   --ink-2: #a9b2c4;
-  --amber: #ffc21a;     /* the data baton */
+  --amber: #ffc21a;     /* data */
   --orange: #e8875c;    /* the bots */
   --cyan: #4fd8ff;      /* messages */
   --green: #7dff6a;     /* money */
   --font-display: "Fredoka", "Avenir Next Rounded", system-ui, sans-serif;
   --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+[hidden] { display: none !important; }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--sky); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
-.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 34px; }
-header { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: end; justify-content: space-between; }
+body { margin: 0; background: radial-gradient(120% 80% at 50% 0%, #142038 0%, var(--sky) 60%); background-color: var(--sky); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; min-height: 100%; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 22px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 18px; }
+header { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
 header > div { min-width: 0; }
-h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(30px, 4.6vw, 44px); line-height: 1.05; margin: 0 0 6px; text-wrap: balance; }
-.lede { margin: 0; color: var(--ink-2); max-width: 60ch; }
-.toplink { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 8px 15px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.05; margin: 0 0 4px; text-wrap: balance; }
+.lede { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 64ch; }
+.toplink { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 13px; white-space: nowrap; }
 .toplink:hover { border-color: var(--orange); }
 
-.theater { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 16px; align-items: start; }
-.stage { border-radius: 16px; border: 1px solid var(--line); overflow: hidden; background: var(--panel); display: grid; }
-.stage-view { position: relative; aspect-ratio: 16 / 9; background: linear-gradient(180deg, #1c2a46 0%, #2c3c60 55%, #22304a 100%); }
-.stage-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.slabel { position: absolute; left: 0; top: 0; transform: translate(-50%, -100%); white-space: nowrap; font-family: var(--font-display); font-weight: 600;
-  font-size: 13px; padding: 3px 8px; border-radius: 8px; background: rgba(10, 15, 26, 0.78); border: 1px solid var(--line); }
-.caption { display: grid; gap: 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); min-height: 92px; align-content: start; }
+.theater { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 14px; align-items: start; }
+.stage { border-radius: 18px; border: 1px solid var(--line); overflow: hidden; background: var(--panel); display: grid; min-width: 0; }
+.stage-view { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: linear-gradient(180deg, #2a3f6a 0%, #3d5a86 46%, #5c7aa3 60%, #2b3c5c 100%); }
+.stage-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 13; }   /* above the 3D canvas */
+.slabel { position: absolute; left: 0; top: 0; white-space: nowrap; font-family: var(--font-display); font-weight: 600; font-size: 12.5px; padding: 3px 9px; border-radius: 9px;
+  color: var(--ink); background: rgba(10, 15, 26, 0.72); border: 1px solid rgba(255,255,255,0.16); transition: border-color .3s; }
+.slabel.passed { border-color: rgba(125,255,106,.7); }
+.caption { display: grid; gap: 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); min-height: 84px; align-content: start; }
 .caption p { margin: 0; font-size: 15px; }
 .caption .meta { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
 .dots { display: flex; gap: 5px; flex-wrap: wrap; }
 .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-.dots i.on { background: var(--amber); }
+.dots i.on { background: var(--amber); box-shadow: 0 0 0 3px rgba(255,194,26,.18); }
 .dots i.done { background: #8a6d1d; }
-.replay { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
-.replay:hover { border-color: var(--amber); }
+.btn { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.btn:hover { border-color: var(--amber); }
 
-.profile { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; display: grid; gap: 12px; }
-.profile .who { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.profile h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.1; }
-.chip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
-.role { color: var(--ink-2); font-size: 13.5px; margin: -6px 0 0; }
-.says { margin: 0; padding: 10px 12px; border-radius: 12px; background: rgba(232, 135, 92, 0.14); font-size: 14.5px; }
-.profile dl { margin: 0; display: grid; gap: 10px; }
-.profile dt { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
-.profile dd { margin: 2px 0 0; font-size: 14.5px; }
-.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-.links button { font: inherit; font-size: 13px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.profile { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.profile .who { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.profile h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; line-height: 1.1; }
+.chip { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); }
+.role { color: var(--ink-2); font-size: 13px; margin: -6px 0 0; }
+.says { margin: 0; padding: 9px 11px; border-radius: 12px; background: rgba(232, 135, 92, 0.14); font-size: 14px; }
+.profile dl { margin: 0; display: grid; gap: 8px; }
+.profile dt { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+.profile dd { margin: 2px 0 0; font-size: 13.5px; }
+.links { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; align-items: center; }
+.links button { font: inherit; font-size: 12.5px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; cursor: pointer; }
 .links button:hover { border-color: var(--orange); }
-.links .arrow { color: var(--ink-2); font-size: 12px; align-self: center; }
+.links .arrow { color: var(--ink-2); font-size: 11px; }
+.profile details summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); }
+.profile details dl { margin-top: 8px; }
 
-.group h2 { font-family: var(--font-display); font-weight: 600; font-size: 21px; margin: 0 0 2px; }
-.group p { margin: 0 0 12px; color: var(--ink-2); font-size: 14px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
-.card { font: inherit; color: var(--ink); text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 0 0 8px; cursor: pointer; display: grid; overflow: hidden; }
-.card:hover { border-color: var(--orange); }
-.card[aria-pressed="true"] { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber) inset; }
-.card:focus-visible, .links button:focus-visible, .replay:focus-visible, .toplink:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
-.card .view { aspect-ratio: 1 / 1; width: 100%; background: radial-gradient(circle at 50% 70%, #24314d, #141c2c 70%); }
-.card b { font-family: var(--font-display); font-weight: 600; font-size: 15px; margin-top: 4px; }
-.card small { color: var(--ink-2); font-size: 11.5px; padding: 0 6px; line-height: 1.3; }
-#groups { display: grid; gap: 30px; }
-#gl { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
-.loading { color: var(--ink-2); font-size: 13px; }
-@media (max-width: 860px) { .theater { grid-template-columns: 1fr; } }
-@media (max-width: 480px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .caption p { font-size: 14px; } .stage-view { aspect-ratio: 4 / 3; } }
+/* the slim crew strip */
+.strip { display: grid; gap: 8px; min-width: 0; }
+.strip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; }
+.strip-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 18px; margin: 0; }
+.strip-head h2 button { all: unset; cursor: pointer; }
+.strip-head h2 button:hover { color: var(--amber); }
+.strip-head span { color: var(--ink-2); font-size: 13px; display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.strip-list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; scroll-snap-type: x proximity; }
+.mini { flex: 0 0 auto; width: 70px; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0 0 5px; cursor: pointer; display: grid; justify-items: center; scroll-snap-align: start; }
+.mini:hover { border-color: var(--orange); }
+.mini[aria-pressed="true"] { border-color: var(--amber); box-shadow: 0 0 0 1px var(--amber) inset; }
+.mini .view { width: 100%; aspect-ratio: 1 / 1; }
+.mini b { font-size: 11px; font-weight: 600; line-height: 1.1; max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* liquid-glass sheet with the whole crew */
+.backdrop { position: fixed; inset: 0; z-index: 10; background: rgba(4, 7, 13, 0.35); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.sheet { position: fixed; z-index: 11; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(820px, calc(100% - 32px)); max-height: min(84vh, 860px);
+  display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden; border-radius: 30px;
+  background: linear-gradient(140deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 38%, rgba(160,190,255,0.08) 100%);
+  backdrop-filter: blur(30px) saturate(185%); -webkit-backdrop-filter: blur(30px) saturate(185%);
+  border: 1px solid rgba(255,255,255,0.24);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(255,255,255,0.08), inset 0 0 40px rgba(255,255,255,0.05), 0 40px 90px rgba(0,0,0,0.5); }
+.sheet::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(120% 60% at 20% -10%, rgba(255,255,255,0.22), transparent 55%); }
+.sheet-head { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px 10px; }
+.sheet-head h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; margin: 0; }
+.sheet-head p { margin: 2px 0 0; color: var(--ink-2); font-size: 13px; }
+.close { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: var(--ink); font-size: 18px; cursor: pointer; flex: none; }
+.sheet-body { position: relative; overflow-y: auto; padding: 4px 22px 22px; display: grid; gap: 16px; align-content: start; }
+.sgroup h3 { font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: .02em; margin: 0 0 6px; color: var(--ink-2); }
+.rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px; }
+.row { font: inherit; color: var(--ink); text-align: left; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; align-items: center; padding: 6px 10px 6px 6px; border-radius: 14px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); cursor: pointer; }
+.row:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); }
+.row .view { width: 40px; height: 40px; border-radius: 10px; background: rgba(0,0,0,0.18); }
+.row b { font-family: var(--font-display); font-weight: 600; font-size: 14px; display: block; line-height: 1.15; }
+.row b small { font-family: var(--font-body); font-weight: 500; color: var(--ink-2); }
+.row span { font-size: 12px; color: var(--ink-2); line-height: 1.3; display: block; }
+.mini:focus-visible, .row:focus-visible, .links button:focus-visible, .btn:focus-visible, .toplink:focus-visible, .close:focus-visible, #openAll:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+#gl { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 12; }
+@media (max-width: 900px) { .theater { display: contents; } .stage { order: 1; } .strip { order: 2; } .profile { order: 3; } }   /* phones: stage, then the crew strip, then the card */
+@media (max-width: 560px) {
+  .stage-view { aspect-ratio: 4 / 3; } .caption p { font-size: 14px; }
+  .sheet { left: 0; right: 0; bottom: 0; top: auto; transform: none; width: 100%; max-height: 86vh; border-radius: 28px 28px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .sheet-head, .sheet-body { padding-left: 16px; padding-right: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .slabel { transition: none; } }
 </style>
 
 <div class="wrap">
   <header>
     <div>
       <h1>The SGM crew</h1>
-      <p class="lede">Every character that carries the data behind your Friday list. Tap one to watch its whole journey: where it starts, who it hands the crate to, and where it ends up.</p>
+      <p class="lede">Pick a character and watch its whole journey: where it starts, who it throws the crate to, and where it ends up.</p>
     </div>
     <a class="toplink" id="worldLink" href="/">Back to the Data World</a>
   </header>
 
   <section class="theater" aria-label="Journey">
-    <div class="stage" id="stage">
+    <div class="stage">
       <div class="stage-view" id="stageView"><div class="stage-labels" id="slabels"></div></div>
-      <div class="caption"><p id="cap">Loading the crew…</p><div class="meta"><div class="dots" id="dots"></div><button class="replay" id="replay" type="button">Watch again</button></div></div>
+      <div class="caption"><p id="cap">Loading the crew…</p><div class="meta"><div class="dots" id="dots"></div><button class="btn" id="replay" type="button">Watch again</button></div></div>
     </div>
-    <aside class="profile" id="profile" aria-live="polite"><p class="loading">Loading…</p></aside>
+    <aside class="profile" id="profile" aria-live="polite"><p class="role">Loading…</p></aside>
   </section>
 
-  <div id="groups"></div>
+  <section class="strip" aria-label="The crew">
+    <div class="strip-head">
+      <h2><button type="button" id="openAll">Meet the crew →</button></h2>
+      <span>Tap anyone to watch their journey <button class="btn" type="button" id="openAll2">What does everyone do?</button></span>
+    </div>
+    <div class="strip-list" id="strip"></div>
+  </section>
 </div>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<section class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-head"><div><h2 id="sheetTitle">The whole crew</h2><p>What each one brings, in one line. Tap one to watch its journey.</p></div><button class="close" id="closeSheet" type="button" aria-label="Close">×</button></div>
+  <div class="sheet-body" id="sheetBody"></div>
+</section>
 <canvas id="gl" aria-hidden="true"></canvas>
 
 <script>
@@ -302,11 +350,12 @@ return { DAILY, STATIONS, BOTS, USE_TEXT, USE_COLOR, FLAG, BUILDINGS, HOME, LAYM
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-const D = window.SGM_DATA, BOT = Object.fromEntries(D.BOTS.map(b => [b.id, b])), ST = Object.fromEntries(D.STATIONS.map(s => [s.id, s]));
+const D = window.SGM_DATA, BOT = Object.fromEntries(D.BOTS.map(b => [b.id, b]));
 const COUNTRY = { IN: "India", US: "USA", DE: "Germany", AE: "UAE" };
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (location.protocol.startsWith("http") && !location.hostname.endsWith("vercel.app") && location.hostname !== "localhost") document.getElementById("worldLink").hidden = true;
 
-/* ---------------------------------------------------------------- the characters */
+/* ================================================================ the characters (bot text comes from world/data.js) */
 const flagOf = id => D.FLAG[BOT[id].st];
 const EXTRA = {   // characters that aren't data bots
   tanker: { name: "Ship 1", file: "props/tanker_oil.glb", chip: "Oil tanker", role: "Carries world prices from the US East Coast to Mumbai",
@@ -321,10 +370,10 @@ const EXTRA = {   // characters that aren't data bots
   laptop: { name: "Your laptop", file: "props/laptop_giant.glb", chip: "Bengaluru", role: "Where every crate ends up",
     says: "Every weekday at 6:45 PM all the crates arrive here and I check them. On Fridays at 7:30 PM I hand them to the ML bots.", brings: "Every crate from every bot",
     from: "All the bots, through Bengaluru", means: "21 data checks run after every daily run. If a check fails, the list is held back and you get a failure message instead.", when: "Weekdays 6:45 PM; Fridays 7:30 PM" },
-  ml: { name: "ML bots", file: "props/bot_ML.glb", anim: "hammer", chip: "Inside the laptop", role: "Turn the data into the Friday list",
+  ml: { name: "ML bots", file: "props/bot_ML.glb", chip: "Inside the laptop", role: "Hammer the data into the Friday list",
     says: "We hammer the data into model scores, find the hot industries and run the V3.2 rule.", brings: "The Friday buy list",
     from: "Your laptop", means: "Three models score every stock. The V3.2 rule keeps hot industries, ₹1 cr a day of trading, the trend test and the top 9, then drops financials, fading-theme names and trade-for-trade names.", when: "Fridays 7:30 PM" },
-  me: { name: "You", file: "props/me_figure.glb", anim: "wave", chip: "The boss", role: "Decides and places the order",
+  me: { name: "You", file: "props/me_figure.glb", chip: "The boss", role: "Decides and places the order",
     says: "I read the Friday list, sign the Saturday review and place the Monday order before the market opens.", brings: "The decision", from: "Your phone",
     means: "Nothing is bought without you. Each weekly batch is held for about 6 months, then sold, and the money rolls into that week's new batch.", when: "Friday evening, Saturday, Monday morning" },
   rupee: { name: "₹ note", file: "props/rupee_note.glb", chip: "Money", role: "Your money's round trip",
@@ -333,16 +382,16 @@ const EXTRA = {   // characters that aren't data bots
 };
 function charInfo(id) {
   if (EXTRA[id]) return Object.assign({ id }, EXTRA[id]);
-  const b = BOT[id], L = D.LAYMAN[id] || {}, flag = flagOf(id);
-  return { id, name: b.name, file: `bots/bot_${flag}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: L.brings, from: L.from, means: L.means, when: b.when,
-           anim: id === "dalal" ? "idle" : undefined };
+  const b = BOT[id], LM = D.LAYMAN[id] || {}, flag = flagOf(id);
+  return { id, name: b.name, file: `bots/bot_${flag}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: LM.brings, from: LM.from, means: LM.means, when: b.when };
 }
 const GROUPS = [
-  ["Data bots", "They fetch the data every weekday at 6:45 PM, all at the same time.", ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews", "dalal"]],
-  ["Messengers and helpers", "They write notes, carry messages, keep time and keep watch.", ["claude", "pigeon", "clock", "watch", "drive", "paisa"]],
-  ["Vehicles", "The cartoon of the undersea cables that bring data from abroad.", ["tanker", "container", "sub"]],
-  ["At home in Bengaluru", "Where the data turns into your Friday list, and your money moves.", ["laptop", "ml", "me", "rupee"]]
+  ["Data bots · leave together at 6:45 PM", ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews", "dalal"]],
+  ["Messengers and helpers", ["claude", "pigeon", "clock", "watch", "drive", "paisa"]],
+  ["Vehicles", ["tanker", "container", "sub"]],
+  ["At home in Bengaluru", ["laptop", "ml", "me", "rupee"]]
 ];
+const ALL = GROUPS.flatMap(g => g[1]);
 const PARALLEL = {
   fetch: ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews"],
   ships: ["tanker", "container", "sub"], friday: ["claude", "laptop", "ml", "pigeon", "clock"], money: ["paisa", "rupee", "me"], watch: ["clock", "watch", "pigeon"]
@@ -350,212 +399,305 @@ const PARALLEL = {
 function parallelOf(id) {
   const g = Object.entries(PARALLEL).find(([, ids]) => ids.includes(id));
   if (!g) return { text: "", ids: [] };
-  const text = { fetch: "All the data bots run at once, every weekday at 6:45 PM.", ships: "The three crossings run during the same evening run.",
+  const text = { fetch: "All the data bots leave at once, every weekday at 6:45 PM.", ships: "The three crossings happen in the same evening run.",
                  friday: "These work together on Fridays.", money: "These move together on Mondays.", watch: "These keep the system running around the clock." }[g[0]];
   return { text, ids: g[1].filter(x => x !== id) };
 }
 
-/* ---------------------------------------------------------------- journeys (relay legs). move = carrier runs/sails to the next stop; work = something happens at the current stop */
-const L = "Your laptop, Bengaluru", PHONE = "Your phone";
-const tailList = use => [{ work: "laptop", text: "Your laptop checks every crate: 21 data checks after the 6:45 PM run." },
+/* ================================================================ journeys. A leg with `to` = the carrier runs or sails to the next stop; `work` = something happens at this stop */
+const LAP = "Your laptop, Bengaluru", PHONE = "Your phone";
+const tailList = use => [{ work: "laptop", text: "The crate drops into your laptop. 21 data checks tick off one by one." },
   { work: "ml", text: use }, { who: "pigeon", to: PHONE, text: "Friday 7:30 PM: Pigeon carries the buy list to your phone on Telegram." },
-  { work: "me", text: "You read the list, sign the Saturday review and place the Monday order." }];
+  { work: "me", text: "Your phone buzzes. You read the list, sign the Saturday review and place the Monday order." }];
 const tailContext = text => [{ work: "laptop", text }];
-const JOURNEYS = {
-  fed: { start: "St. Louis Fed (FRED)", legs: [{ who: "fed", to: "US East Coast", text: "Fed picks up oil, metal and crop prices, the dollar and US rates, and runs to the coast." },
-    { who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries the crate across the Atlantic and the Red Sea. In real life: undersea fibre cable, in a fraction of a second." },
-    { who: "courier", to: L, text: "A courier runs it from Mumbai to your laptop in Bengaluru." },
-    ...tailList("Friday: the ML bots mark which commodity themes are rising or fading. Stocks tied only to fading themes are dropped.")] },
-  euro: { start: "European Central Bank, Frankfurt", legs: [{ who: "euro", to: "Marseille", text: "Euro picks up the day's exchange rates and runs to the Mediterranean coast." },
+const J = {
+  fed: { start: "St. Louis Fed", legs: [{ who: "fed", to: "US East Coast", text: "Fed picks up oil, metal and crop prices, the dollar and US rates, and runs to the coast." },
+    { who: "tanker", to: "Mumbai cable landing", sea: true, text: "Fed throws the crate aboard Ship 1, which carries it across the Atlantic and the Red Sea. In real life: undersea fibre cable, in a fraction of a second." },
+    { who: "courier", to: LAP, text: "A courier catches it in Mumbai and runs it to your laptop in Bengaluru." },
+    ...tailList("Friday, on the anvil: the ML bots hammer out which commodity themes are rising or fading. Stocks tied only to fading themes are dropped.")] },
+  euro: { start: "European Central Bank", legs: [{ who: "euro", to: "Marseille", text: "Euro picks up the day's exchange rates and runs to the Mediterranean coast." },
     { who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine (the undersea cable) carries them to Mumbai." },
-    { who: "courier", to: L, text: "A courier runs them to your laptop." },
-    ...tailContext("Exchange rates are kept as market context for research. They don't pick stocks.")] },
-  claude: { start: "Anthropic, San Francisco", legs: [{ who: "claude", to: "San Francisco coast", text: "Every Friday afternoon Claude reads world prices, foreign money flows and news, and writes a short note on the market." },
+    { who: "courier", to: LAP, text: "A courier runs them to your laptop." }, ...tailContext("Exchange rates are kept as market context for research. They don't pick stocks.")] },
+  claude: { start: "Anthropic, San Francisco", legs: [{ who: "claude", to: "San Francisco coast", text: "Friday afternoon: Claude reads world prices, foreign money flows and news, and writes a short note on the market." },
     { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings the note across the Pacific to Chennai." },
-    { who: "courier", to: L, text: "A courier runs it to your laptop." },
-    ...tailContext("The note is saved with the week's reports, ready before the 7:30 PM list.")] },
+    { who: "courier", to: LAP, text: "A courier runs it to your laptop." }, ...tailContext("The note is saved with the week's reports, ready before the 7:30 PM list.")] },
   gnews: { start: "Google News, California", legs: [{ who: "gnews", to: "San Francisco coast", text: "Gnews gathers the world's headlines." },
     { who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 brings them across the Pacific to Chennai." },
-    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("A world mood score, kept as background. It doesn't pick stocks.")] },
-  bhav: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "bhav", to: L, text: "Bhav picks up today's price of every NSE stock and runs it to your laptop." },
-    ...tailList("Friday: prices feed the trend test, the ₹1 cr-a-day bar and the model's scores. The top 9 in hot industries make the list.")] },
-  split: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "split", to: L, text: "Splitty brings the day's splits, bonuses and dividends." },
+    { who: "courier", to: LAP, text: "A courier runs them to your laptop." }, ...tailContext("A world mood score, kept as background. It doesn't pick stocks.")] },
+  bhav: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "bhav", to: LAP, text: "Bhav grabs today's price of every NSE stock and runs it to your laptop." },
+    ...tailList("Friday, on the anvil: prices are hammered into the trend test, the ₹1 cr-a-day bar and the model's scores. The top 9 in hot industries make the list.")] },
+  split: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "split", to: LAP, text: "Splitty brings the day's splits, bonuses and dividends." },
     { work: "laptop", text: "Old prices are adjusted, so a 1:10 split never looks like a 90% crash." },
-    ...tailList("Friday: the clean prices feed the trend test and the model.").slice(1)] },
-  filer: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "filer", to: L, text: "Filer reads what companies filed today: order wins, results, letters of intent." },
-    ...tailList("Friday: filings show which themes each company is tied to. Stocks tied only to fading themes are dropped. Big orders also go in your daily note.")] },
-  promo: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "promo", to: L, text: "Promo notes which owners bought their own shares and who pledged them." },
+    ...tailList("Friday, on the anvil: the clean prices are hammered into the trend test and the model.").slice(1)] },
+  filer: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "filer", to: LAP, text: "Filer reads what companies filed today: order wins, results, letters of intent." },
+    ...tailList("Friday, on the anvil: filings show which themes each company is tied to. Stocks tied only to fading themes are dropped. Big orders also go in your daily note.")] },
+  promo: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "promo", to: LAP, text: "Promo notes which owners bought their own shares and who pledged them." },
     { work: "laptop", text: "Kept for research. Pledge alerts go in your daily note." },
-    { who: "pigeon", to: PHONE, text: "Pigeon carries the 6:45 PM daily note to your phone." }, { work: "me", text: "You read the daily note." }] },
-  tally: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "tally", to: L, text: "Tally counts today's buying and selling, the big deals, India VIX and the market holidays." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the 6:45 PM daily note to your phone." }, { work: "me", text: "Your phone buzzes with the daily note." }] },
+  tally: { start: "NSE, Bandra Kurla Complex", legs: [{ who: "tally", to: LAP, text: "Tally counts today's buying and selling, the big deals, India VIX and the market holidays." },
     { work: "laptop", text: "Market context. The holiday list decides your buy and sell days." },
-    { who: "pigeon", to: PHONE, text: "Pigeon carries the daily note, with the right dates, to your phone." }, { work: "me", text: "You read it." }] },
-  nsdl: { start: "NSDL, Mumbai", legs: [{ who: "nsdl", to: L, text: "Videshi tracks foreign money going into or out of Indian shares." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the daily note, with the right dates, to your phone." }, { work: "me", text: "Your phone buzzes." }] },
+  nsdl: { start: "NSDL, Mumbai", legs: [{ who: "nsdl", to: LAP, text: "Videshi tracks foreign money going into or out of Indian shares." },
     ...tailContext("Kept as market context. Claude reads these flows for the Friday market note.")] },
-  amfi: { start: "AMFI, Mumbai", legs: [{ who: "amfi", to: L, text: "Mutu reads how much money Indian mutual funds manage." }, ...tailContext("Kept as market context. It doesn't pick stocks.")] },
-  khabri: { start: "News desks, Mumbai", legs: [{ who: "khabri", to: L, text: "Khabri skims Economic Times and Moneycontrol." }, ...tailContext("A news mood score, background only.")] },
-  khabri2: { start: "News desks, New Delhi", legs: [{ who: "khabri2", to: L, text: "Khabri Jr brings Business Standard and Mint headlines." }, ...tailContext("A news mood score, background only.")] },
-  sarkari: { start: "PIB, next to Parliament", legs: [{ who: "sarkari", to: L, text: "Sarkari reads every government press release and runs to your laptop." },
-    ...tailList("Friday: the policy score shows which industries the government keeps pushing. A hot industry the government is cooling on is vetoed.")] },
-  screeny: { start: "screener.in (website)", legs: [{ who: "screeny", to: L, text: "Screeny says which industry each company belongs to." },
-    ...tailList("Friday: the industry map is how the hot industries are found.")] },
-  tikki: { start: "tickertape.in (website)", legs: [{ who: "tikki", to: L, text: "Tikki notes what well-known investors hold." }, ...tailContext("Research only. It doesn't decide picks.")] },
+  amfi: { start: "AMFI, Mumbai", legs: [{ who: "amfi", to: LAP, text: "Mutu reads how much money Indian mutual funds manage." }, ...tailContext("Kept as market context. It doesn't pick stocks.")] },
+  khabri: { start: "News desks, Mumbai", legs: [{ who: "khabri", to: LAP, text: "Khabri skims Economic Times and Moneycontrol." }, ...tailContext("A news mood score, background only.")] },
+  khabri2: { start: "News desks, New Delhi", legs: [{ who: "khabri2", to: LAP, text: "Khabri Jr brings Business Standard and Mint headlines." }, ...tailContext("A news mood score, background only.")] },
+  sarkari: { start: "PIB, next to Parliament", legs: [{ who: "sarkari", to: LAP, text: "Sarkari reads every government press release and runs to your laptop." },
+    ...tailList("Friday, on the anvil: the policy score shows which industries the government keeps pushing. A hot industry the government is cooling on is vetoed.")] },
+  screeny: { start: "screener.in", legs: [{ who: "screeny", to: LAP, text: "Screeny says which industry each company belongs to." },
+    ...tailList("Friday, on the anvil: the industry map is how the hot industries are found.")] },
+  tikki: { start: "tickertape.in", legs: [{ who: "tikki", to: LAP, text: "Tikki notes what well-known investors hold." }, ...tailContext("Research only. It doesn't decide picks.")] },
   dalal: { start: "BSE, Dalal Street", legs: [{ work: "sleep", text: "Dalal is asleep. BSE has blocked our requests since Sep 30, and only one watch-list ever used it." }] },
-  pigeon: { start: L, legs: [{ who: "pigeon", to: "Telegram", sea: true, text: "Pigeon takes your messages to Telegram." },
-    { who: "pigeon", to: PHONE, text: "Telegram delivers them to your phone: the daily note, the Friday list and any alarm." }, { work: "me", text: "You read them." }] },
-  clock: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: Clock starts the run and every data bot sets off at once." },
-    { work: "ml", text: "Fridays 7:30 PM: Clock starts the buy-list run." }, { who: "pigeon", to: PHONE, text: "Pigeon delivers the result." }, { work: "me", text: "You read it." }] },
-  watch: { start: L, legs: [{ work: "laptop", text: "Every 30 minutes Watchdog checks that no run is stuck and that your messages went out." },
+  pigeon: { start: LAP, legs: [{ who: "pigeon", to: "Telegram", sea: true, text: "Pigeon flies your messages to Telegram." },
+    { who: "pigeon", to: PHONE, text: "Telegram delivers them to your phone: the daily note, the Friday list and any alarm." }, { work: "me", text: "Your phone buzzes." }] },
+  clock: { start: LAP, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: Clock rings and every data bot sets off at once." },
+    { work: "ml", text: "Fridays 7:30 PM: Clock starts the buy-list run." }, { who: "pigeon", to: PHONE, text: "Pigeon delivers the result." }, { work: "me", text: "Your phone buzzes." }] },
+  watch: { start: LAP, legs: [{ work: "laptop", text: "Every 30 minutes Watchdog checks that no run is stuck and that your messages went out." },
     { who: "pigeon", to: PHONE, text: "If something is wrong, an alarm reaches your phone." }, { work: "me", text: "You know before it costs anything." }] },
-  drive: { start: L, legs: [{ who: "drive", to: "Google Drive", sea: true, text: "Backup carries a copy of your work to Google Drive." },
-    { work: "end", text: "If the laptop breaks, nothing is lost." }] },
+  drive: { start: LAP, legs: [{ who: "drive", to: "Google Drive", sea: true, text: "Backup flies a copy of your work to Google Drive." }, { work: "end", text: "If the laptop breaks, nothing is lost." }] },
   paisa: { start: "Your SBI account", money: true, legs: [{ who: "rupee", to: "You", text: "Your salary lands in SBI. Part of it goes to the weekly batch." },
     { who: "rupee", to: "Your broker", text: "Monday, before 9:15 AM: you place the order for the pre-open auction." },
     { who: "rupee", to: "NSE", text: "The broker buys the week's stocks at the opening price." },
-    { who: "rupee", to: "Held 6 months", text: "Each batch is held for 126 trading days, about 6 months." },
+    { who: "rupee", to: "Held 6 months", text: "Each batch is held for 126 trading days, about 6 months. Watch the months count up." },
     { who: "rupee", to: "Back to you", text: "Then it's sold, and the money rolls into that week's new batch." }] },
   tanker: { start: "US East Coast", legs: [{ who: "tanker", to: "Mumbai cable landing", sea: true, text: "Ship 1 carries Fed's crate of world prices across the Atlantic and the Red Sea." },
-    { who: "courier", to: L, text: "A courier runs it to your laptop." }, ...tailList("Friday: commodity themes, rising or fading.").slice(0, 2)] },
+    { who: "courier", to: LAP, text: "A courier catches it and runs it to your laptop." }, ...tailList("Friday, on the anvil: commodity themes, rising or fading.").slice(0, 2)] },
   container: { start: "San Francisco coast", legs: [{ who: "container", to: "Chennai cable landing", sea: true, text: "Ship 2 carries Claude's note and world headlines across the Pacific." },
-    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Saved for Friday.")] },
+    { who: "courier", to: LAP, text: "A courier runs them to your laptop." }, ...tailContext("Saved for Friday.")] },
   sub: { start: "Marseille", legs: [{ who: "sub", to: "Mumbai cable landing", sea: true, text: "The submarine carries Euro's exchange rates along the sea floor." },
-    { who: "courier", to: L, text: "A courier runs them to your laptop." }, ...tailContext("Kept as market context.")] },
-  laptop: { start: L, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: every crate arrives and 21 data checks run." },
-    { work: "ml", text: "Fridays 7:30 PM: the laptop hands the data to the ML bots." },
-    { who: "pigeon", to: PHONE, text: "Pigeon carries the buy list to your phone." }, { work: "me", text: "You decide." }] },
-  ml: { start: L, legs: [{ work: "ml", text: "Three models score every stock." }, { work: "ml", text: "They find the hot industries and the rising and fading themes." },
-    { work: "ml", text: "The V3.2 rule: hot industry, ₹1 cr a day, the trend test, top 9, then drop financials, fading-theme and trade-for-trade names." },
-    { work: "ml", text: "Six earlier tests are re-run to make sure nothing broke." },
+    { who: "courier", to: LAP, text: "A courier runs them to your laptop." }, ...tailContext("Kept as market context.")] },
+  laptop: { start: LAP, legs: [{ work: "laptop", text: "Weekdays 6:45 PM: every crate drops in and 21 data checks tick off." },
+    { work: "ml", text: "Fridays 7:30 PM: the ML bots hammer the data into the buy list." },
     { who: "pigeon", to: PHONE, text: "Pigeon carries the list to your phone." }, { work: "me", text: "You decide." }] },
-  me: { start: PHONE, legs: [{ work: "me", text: "Friday evening: the buy list arrives on your phone." }, { work: "me", text: "Saturday: you sign the review." },
+  ml: { start: LAP, legs: [{ work: "ml", text: "Three models score every stock." }, { work: "ml", text: "They find the hot industries and the rising and fading themes." },
+    { work: "ml", text: "The V3.2 rule: hot industry, ₹1 cr a day, the trend test, top 9, then drop financials, fading-theme and trade-for-trade names." },
+    { work: "ml", text: "Six earlier tests are re-run to make sure nothing broke. The list is ready." },
+    { who: "pigeon", to: PHONE, text: "Pigeon carries the list to your phone." }, { work: "me", text: "You decide." }] },
+  me: { start: PHONE, legs: [{ work: "me", text: "Friday evening: your phone buzzes with the buy list." }, { work: "me", text: "Saturday: you sign the review." },
     { who: "rupee", to: "Your broker", text: "Monday, before the market opens: you place the order." },
-    { who: "rupee", to: "Held 6 months", text: "The batch is held for about 6 months." }, { who: "rupee", to: "Back to you", text: "Then it's sold and the money rolls into the next batch." }] },
-  rupee: null
+    { who: "rupee", to: "Held 6 months", text: "The batch is held for about 6 months." }, { who: "rupee", to: "Back to you", text: "Then it's sold and the money rolls into the next batch." }] }
 };
-JOURNEYS.rupee = JOURNEYS.paisa;
-const CARRIER_NAME = { courier: "a courier", pigeon: "Pigeon", tanker: "Ship 1", container: "Ship 2", sub: "the submarine", rupee: "the ₹ note" };
+J.rupee = J.paisa;
 function batonIds(id) {
-  const j = JOURNEYS[id], out = [];
-  j.legs.forEach(l => { const k = l.who || (l.work === "laptop" ? "laptop" : l.work === "ml" ? "ml" : l.work === "me" ? "me" : null);
+  const out = [];
+  J[id].legs.forEach(l => { const k = l.who || (["laptop", "ml", "me"].includes(l.work) ? l.work : null);
     if (k && k !== id && k !== "courier" && (BOT[k] || EXTRA[k]) && !out.includes(k)) out.push(k); });
   return out;
 }
 
-/* ---------------------------------------------------------------- models */
+/* ================================================================ loading models */
 const loader = new GLTFLoader(), cache = {};
 const ASSETS = "assets/", MODEL_EXT = ".gltf.json";        // the claude.ai preview serves the same models as embedded glTF JSON
 async function fetchModel(file) {
   if (MODEL_EXT === ".glb") return loader.loadAsync(ASSETS + file);
-  // preview: rebuild the binary model in memory from the glTF JSON (no extra network requests, so it works inside claude.ai)
   const gj = await (await fetch(ASSETS + file.replace(/\.glb$/, MODEL_EXT))).json();
   const b64 = gj.buffers[0].uri.split(",")[1], bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
   delete gj.buffers[0].uri;
   const enc = new TextEncoder(), pad = n => (4 - n % 4) % 4;
   let js = enc.encode(JSON.stringify(gj)); js = Uint8Array.from([...js, ...new Array(pad(js.length)).fill(0x20)]);
   const binP = Uint8Array.from([...bin, ...new Array(pad(bin.length)).fill(0)]);
-  const total = 12 + 8 + js.length + 8 + binP.length, out = new ArrayBuffer(total), dv = new DataView(out), u8 = new Uint8Array(out);
+  const total = 28 + js.length + binP.length, out = new ArrayBuffer(total), dv = new DataView(out), u8 = new Uint8Array(out);
   dv.setUint32(0, 0x46546C67, true); dv.setUint32(4, 2, true); dv.setUint32(8, total, true);
   dv.setUint32(12, js.length, true); dv.setUint32(16, 0x4E4F534A, true); u8.set(js, 20);
   const o = 20 + js.length; dv.setUint32(o, binP.length, true); dv.setUint32(o + 4, 0x004E4942, true); u8.set(binP, o + 8);
   return loader.parseAsync(out, "");
 }
-function loadGLB(file) { return cache[file] || (cache[file] = fetchModel(file)); }
-async function instance(file) {
+const loadGLB = file => cache[file] || (cache[file] = fetchModel(file));
+async function instance(file, opts = {}) {
   const g = await loadGLB(file), root = g.scene.clone(true), mixer = new THREE.AnimationMixer(root), actions = {};
   g.animations.forEach(a => { actions[a.name] = mixer.clipAction(a); });
-  return { root, mixer, actions, play(name) { Object.entries(actions).forEach(([n, a]) => { if (n === name) a.reset().play(); else a.stop(); }); } };
+  if (opts.shadow) root.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  let current = null;
+  return { root, mixer, actions, has: n => !!actions[n],
+    play(name, once) { const a = actions[name]; if (!a) return false;
+      if (current && current !== a) current.fadeOut(0.12);
+      a.reset(); a.setLoop(once ? THREE.LoopOnce : THREE.LoopRepeat); a.clampWhenFinished = !!once; a.fadeIn(0.12).play(); current = a; return true; } };
 }
-function lights(scene) {
-  scene.add(new THREE.HemisphereLight(0xfff1e2, 0x2a3350, 1.3));
-  const d = new THREE.DirectionalLight(0xffffff, 1.8); d.position.set(3, 6, 5); scene.add(d);
+async function tryInstance(file, opts) { try { return await instance(file, opts); } catch (e) { return null; } }   // a set piece that isn't built yet is simply left out
+function lights(scene, shadows) {
+  scene.add(new THREE.HemisphereLight(0xfff1e2, 0x2a3350, 1.25));
+  const d = new THREE.DirectionalLight(0xfff4e6, 1.9); d.position.set(4, 9, 6);
+  if (shadows) { d.castShadow = true; d.shadow.mapSize.set(2048, 2048); d.shadow.bias = -0.0005; Object.assign(d.shadow.camera, { left: -14, right: 14, top: 10, bottom: -6, near: 0.5, far: 40 }); scene.add(d.target); }
+  scene.add(d); return d;
 }
 
-/* ---------------------------------------------------------------- one renderer, many views (each card and the stage draw into their own rectangle) */
+/* ================================================================ one renderer, many views (stage + tiny thumbnails) */
 const canvas = document.getElementById("gl");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.setClearColor(0x000000, 0);
-const views = [];
-function resize() { renderer.setSize(window.innerWidth, window.innerHeight, false); }
+renderer.setClearColor(0x000000, 0); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const resize = () => renderer.setSize(window.innerWidth, window.innerHeight, false);
 window.addEventListener("resize", resize); resize();
-
-/* roster cards */
-const groupsEl = document.getElementById("groups");
-GROUPS.forEach(([title, note, ids]) => {
-  const sec = document.createElement("section"); sec.className = "group";
-  sec.innerHTML = `<h2>${title}</h2><p>${note}</p><div class="grid"></div>`;
-  const grid = sec.querySelector(".grid");
-  ids.forEach(id => {
-    const c = charInfo(id), btn = document.createElement("button");
-    btn.type = "button"; btn.className = "card"; btn.dataset.id = id; btn.setAttribute("aria-pressed", "false");
-    btn.innerHTML = `<div class="view"></div><b>${c.name}</b><small>${c.chip || ""}</small>`;
-    btn.addEventListener("click", () => select(id, true));
-    grid.appendChild(btn);
-    const scene = new THREE.Scene(); lights(scene);
-    const cam = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
-    const v = { el: btn.querySelector(".view"), scene, cam, mixers: [] }; views.push(v);
-    instance(c.file).then(m => {
-      const box = new THREE.Box3().setFromObject(m.root), size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
-      m.root.position.sub(center); m.root.position.y += size.y / 2 - size.y * 0.05;
-      if (EXTRA[id] && ["tanker", "container", "sub"].includes(id)) m.root.rotation.y = -0.9; else m.root.rotation.y = 0.45;
-      scene.add(m.root);
-      const r = Math.max(size.x, size.y, size.z);
-      cam.position.set(r * 0.6, r * 0.8, r * 2.15); cam.lookAt(0, size.y * 0.48, 0);
-      m.play(id === "ml" ? "hammer" : id === "me" ? "wave" : "idle"); v.mixers.push(m.mixer);
-    }).catch(() => {});
-  });
-  groupsEl.appendChild(sec);
+const views = [];
+function thumbView(el, id, clip, inSheet) {
+  const c = charInfo(id), scene = new THREE.Scene(); lights(scene, false);
+  const cam = new THREE.PerspectiveCamera(30, 1, 0.01, 200), v = { el, scene, cam, mixers: [], clip, sheet: inSheet };
+  views.push(v);
+  tryInstance(c.file).then(m => { if (!m) return;
+    const box = new THREE.Box3().setFromObject(m.root), size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
+    m.root.position.sub(center); m.root.position.y += size.y / 2;
+    m.root.rotation.y = ["tanker", "container", "sub"].includes(id) ? -0.9 : 0.45; scene.add(m.root);
+    const r = Math.max(size.x, size.y, size.z); cam.position.set(r * 0.6, r * 0.75, r * 2.2); cam.lookAt(0, size.y * 0.5, 0);
+    m.play(id === "ml" ? "hammer" : id === "me" ? "wave" : "idle"); v.mixers.push(m.mixer); });
+}
+// the slim strip
+const stripEl = document.getElementById("strip");
+ALL.forEach(id => {
+  const c = charInfo(id), b = document.createElement("button");
+  b.type = "button"; b.className = "mini"; b.dataset.id = id; b.title = `${c.name}: ${c.role}`; b.setAttribute("aria-pressed", "false");
+  b.innerHTML = `<div class="view"></div><b>${c.name}</b>`; b.addEventListener("click", () => select(id, true));
+  stripEl.appendChild(b); thumbView(b.querySelector(".view"), id, stripEl, false);
 });
+// the liquid-glass sheet
+const sheet = document.getElementById("sheet"), backdrop = document.getElementById("backdrop"), sheetBody = document.getElementById("sheetBody");
+GROUPS.forEach(([title, ids]) => {
+  const g = document.createElement("div"); g.className = "sgroup"; g.innerHTML = `<h3>${title}</h3><div class="rows"></div>`;
+  ids.forEach(id => { const c = charInfo(id), r = document.createElement("button"); r.type = "button"; r.className = "row";
+    r.innerHTML = `<div class="view"></div><div><b>${c.name}${c.chip ? ` <small>· ${c.chip}</small>` : ""}</b><span>${c.brings || c.role}</span></div>`;
+    r.addEventListener("click", () => { closeSheet(); select(id, true); }); g.querySelector(".rows").appendChild(r); thumbView(r.querySelector(".view"), id, sheetBody, true); });
+  sheetBody.appendChild(g);
+});
+let sheetOpen = false, opener = null;
+function openSheet(e) { opener = e && e.currentTarget; sheet.hidden = false; backdrop.hidden = false; labelsEl.hidden = true; sheetOpen = true; sheetBody.scrollTop = 0; document.getElementById("closeSheet").focus(); }
+function closeSheet() { sheet.hidden = true; backdrop.hidden = true; labelsEl.hidden = false; sheetOpen = false; if (opener) opener.focus({ preventScroll: true }); }
+["openAll", "openAll2"].forEach(i => document.getElementById(i).addEventListener("click", openSheet));
+document.getElementById("closeSheet").addEventListener("click", closeSheet); backdrop.addEventListener("click", closeSheet);
+window.addEventListener("keydown", e => { if (e.key === "Escape" && sheetOpen) closeSheet(); });
 
-/* ---------------------------------------------------------------- the stage: a relay track built for the selected character */
-const stageEl = document.getElementById("stageView"), labelsEl = document.getElementById("slabels"), capEl = document.getElementById("cap"), dotsEl = document.getElementById("dots");
-const stage = { el: stageEl, scene: null, cam: new THREE.PerspectiveCamera(36, 1.6, 0.05, 400), mixers: [], focus: new THREE.Vector3(), play: null };
-views.push(stage);
-const SCALE = { tanker: 0.5, container: 0.5, sub: 0.55, rupee: 1.0, laptop: 1.5, ml: 0.85, me: 2.1 };
-const CRATE_Y = { tanker: 1.2, container: 1.9, sub: 1.3, rupee: null };
-let build = 0;
-async function buildStage(id) {
-  const my = ++build, j = JOURNEYS[id];
-  const scene = new THREE.Scene(); lights(scene); scene.fog = new THREE.Fog(0x22304d, 30, 80);
-  const mixers = []; labelsEl.innerHTML = "";
-  // stops along the track
-  const stops = [{ name: j.start, x: 0 }];
-  j.legs.forEach(l => { if (l.to) stops.push({ name: l.to, x: stops[stops.length - 1].x + (l.sea ? 12 : 7.5), sea: !!l.sea }); });
-  const floorMat = new THREE.MeshStandardMaterial({ color: 0x5b6b3e, roughness: 0.95 }), seaMat = new THREE.MeshStandardMaterial({ color: 0x1f6f9a, roughness: 0.5, emissive: 0x0b2a40 });
-  const extent = stops[stops.length - 1].x;
-  const land0 = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); land0.position.set(-3, -0.15, 0); scene.add(land0);
-  for (let i = 1; i < stops.length; i++) {
-    const a = stops[i - 1].x, b = stops[i].x, len = b - a;
-    const seg = new THREE.Mesh(new THREE.BoxGeometry(len, stops[i].sea ? 0.2 : 0.3, 5), stops[i].sea ? seaMat : floorMat);
-    seg.position.set(a + len / 2, stops[i].sea ? -0.3 : -0.15, 0); scene.add(seg);
+/* ================================================================ particles: dust, wake, splash, bubbles, sparks, rings, confetti */
+const GEO = { puff: new THREE.IcosahedronGeometry(0.12, 0), cube: new THREE.BoxGeometry(0.07, 0.07, 0.07), ring: new THREE.TorusGeometry(0.4, 0.04, 6, 24), ball: new THREE.SphereGeometry(0.06, 8, 6), page: new THREE.PlaneGeometry(0.3, 0.22) };
+const parts = [];
+function emit(scene, at, o) {
+  for (let i = 0; i < (o.n || 1); i++) {
+    const m = new THREE.Mesh(GEO[o.shape || "puff"], new THREE.MeshBasicMaterial({ color: Array.isArray(o.color) ? o.color[i % o.color.length] : o.color, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+    m.position.copy(at); if (o.jitter) m.position.add(new THREE.Vector3((Math.random() - .5) * o.jitter, (Math.random() - .5) * o.jitter * .4, (Math.random() - .5) * o.jitter));
+    if (o.shape === "ring") m.rotation.x = Math.PI / 2;
+    const s = o.spread || 0, v = new THREE.Vector3((Math.random() - .5) * s + (o.vx || 0), (o.up || 0) + Math.random() * (o.upRand || 0), (Math.random() - .5) * s);
+    scene.add(m); parts.push({ m, v, age: 0, life: o.life || 0.6, size: o.size || 1, grow: o.grow || 0, grav: o.grav || 0, spin: o.spin || 0, scene });
   }
-  const landEnd = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), floorMat); landEnd.position.set(extent + 3, -0.15, 0); scene.add(landEnd);
-  // a glowing path line along the track
-  const path = new THREE.Mesh(new THREE.BoxGeometry(extent + 2, 0.02, 0.12), new THREE.MeshBasicMaterial({ color: j.money ? 0x7dff6a : 0xffc21a }));
-  path.position.set(extent / 2, 0.03, 1.2); scene.add(path);
-  // signposts + labels
+}
+function updateParts(dt) {
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i]; p.age += dt; const k = p.age / p.life;
+    if (k >= 1) { p.scene.remove(p.m); p.m.material.dispose(); parts.splice(i, 1); continue; }
+    p.v.y -= p.grav * dt; p.m.position.addScaledVector(p.v, dt);
+    p.m.scale.setScalar(p.size * (1 + p.grow * k)); p.m.material.opacity = 1 - k * k; if (p.spin) { p.m.rotation.x += p.spin * dt; p.m.rotation.y += p.spin * dt; }
+  }
+}
+
+/* ================================================================ little signs drawn on canvas: laptop ticks, phone notification, months held */
+function textPlane(w, h, draw) {
+  const c = document.createElement("canvas"); c.width = 512; c.height = Math.round(512 * h / w); const ctx = c.getContext("2d");
+  const box = { width: 256, height: c.height / 2 };   // draw in a 256-wide box at 2x for crisp text
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
+  mesh.userData.redraw = (...a) => { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, c.width, c.height); ctx.setTransform(2, 0, 0, 2, 0, 0); draw(ctx, box, ...a); tex.needsUpdate = true; };
+  mesh.userData.redraw(0); return mesh;
+}
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function badge(ctx, c, fill, ink, text, size) { roundRect(ctx, 6, 6, c.width - 12, c.height - 12, 22); ctx.fillStyle = fill; ctx.fill();
+  ctx.fillStyle = ink; ctx.textAlign = "center"; ctx.textBaseline = "middle"; fitFont(ctx, text, size, c.width - 30, 600); ctx.fillText(text, c.width / 2, c.height / 2 + 1); }
+function fitFont(ctx, text, size, maxW, weight) { do { ctx.font = `${weight} ${size}px Figtree, sans-serif`; size -= 1; } while (ctx.measureText(text).width > maxW && size > 8); }
+
+/* ================================================================ the stage */
+const stageEl = document.getElementById("stageView"), labelsEl = document.getElementById("slabels"), capEl = document.getElementById("cap"), dotsEl = document.getElementById("dots");
+const stage = { el: stageEl, scene: null, cam: new THREE.PerspectiveCamera(34, 1.6, 0.05, 400), mixers: [], focus: new THREE.Vector3(), shake: 0, zoom: 1 };
+views.push(stage);
+const SCALE = { tanker: 0.5, container: 0.5, sub: 0.55, rupee: 1.0, laptop: 1.25, ml: 0.85, me: 2.0 };
+const CRATE_Y = { tanker: 1.2, container: 1.9, sub: 1.3 };
+const FLY = new Set(["pigeon", "drive"]);              // these fly over the water instead of sailing
+// each stop's toy set piece and its local tree (palms in India, oaks in the US and Europe); missing pieces are skipped
+const SET = { "St. Louis Fed": ["fed_stl", "oak"], "European Central Bank": ["ecb_tower", "oak"], "NSE, Bandra Kurla Complex": ["nse_plaza", "palm"], "NSE": ["nse_plaza", "palm"],
+  "PIB, next to Parliament": ["pib_office", "palm"], "US East Coast": ["port_crane", "oak"], "San Francisco coast": ["port_crane", "oak"], "Marseille": ["port_crane", "oak"],
+  "Mumbai cable landing": ["cable_landing", "palm"], "Chennai cable landing": ["cable_landing", "palm"], "Telegram": ["telegram_tower", "palm"],
+  "Your SBI account": ["sbi_bank", "palm"], "Your broker": ["broker_desk", "palm"], "Held 6 months": ["calendar", "palm"], "Back to you": ["sbi_bank", "palm"],
+  "NSDL, Mumbai": [null, "palm"], "AMFI, Mumbai": [null, "palm"], "News desks, Mumbai": [null, "palm"], "News desks, New Delhi": [null, "palm"], "BSE, Dalal Street": [null, "palm"],
+  "Anthropic, San Francisco": [null, "oak"], "Google News, California": [null, "oak"], "Google Drive": [null, "oak"], "screener.in": [null, "palm"], "tickertape.in": [null, "palm"] };
+let build = 0;
+const easeIO = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+function stopsSeaAt(stops, x) { for (let i = 1; i < stops.length; i++) if (stops[i].sea && x > stops[i - 1].x + 2.5 && x < stops[i].x - 2.5) return true; return false; }
+async function buildStage(id) {
+  const my = ++build, j = J[id];
+  const scene = new THREE.Scene(), sun = lights(scene, true); scene.fog = new THREE.Fog(0x4a6690, 26, 70);
+  const mixers = [], props = {};
+  // stops along the track: land legs are short, sea legs long, so the eye reads the distance
+  const stops = [{ name: j.start, x: 0 }];
+  j.legs.forEach(l => { if (l.to) stops.push({ name: l.to, x: stops[stops.length - 1].x + (l.sea ? 13 : 8), sea: !!l.sea }); });
+  const end = stops[stops.length - 1].x;
+  // ground: raised grass blocks for land, moving water between coasts
+  const grass = new THREE.MeshStandardMaterial({ color: 0x6f9a52, roughness: 0.95 }), dirt = new THREE.MeshStandardMaterial({ color: 0x8a6a48, roughness: 1 });
+  const water = new THREE.MeshStandardMaterial({ color: 0x2f8fb8, roughness: 0.25, metalness: 0.1, transparent: true, opacity: 0.92 });
+  const waves = [];
+  const landBlock = (x0, x1) => { const w = x1 - x0, g = new THREE.Mesh(new THREE.BoxGeometry(w, 0.35, 7), grass); g.position.set((x0 + x1) / 2, -0.175, -0.5); g.receiveShadow = true; scene.add(g);
+    const d = new THREE.Mesh(new THREE.BoxGeometry(w, 1.2, 7), dirt); d.position.set((x0 + x1) / 2, -0.95, -0.5); scene.add(d); };
+  let x0 = -8;
+  for (let i = 1; i < stops.length; i++) {
+    if (!stops[i].sea) continue;
+    landBlock(x0, stops[i - 1].x + 2.5);
+    const a = stops[i - 1].x + 2.5, b = stops[i].x - 2.5, geo = new THREE.PlaneGeometry(b - a + 0.2, 7, Math.ceil((b - a) * 2), 14);
+    geo.rotateX(-Math.PI / 2); const w = new THREE.Mesh(geo, water); w.position.set((a + b) / 2, -0.45, -0.5); w.receiveShadow = true; scene.add(w);
+    const bed = new THREE.Mesh(new THREE.BoxGeometry(b - a + 0.2, 1.0, 7), new THREE.MeshStandardMaterial({ color: 0x173f5a })); bed.position.set((a + b) / 2, -1.2, -0.5); scene.add(bed);
+    waves.push({ geo, base: geo.attributes.position.array.slice() }); x0 = b;
+  }
+  landBlock(x0, end + 8);
+  // the route: a dashed line in the journey's colour (amber data, green money), and a checkpoint flag at every stop
+  const dashMat = new THREE.MeshBasicMaterial({ color: j.money ? 0x7dff6a : 0xffc21a });
+  for (let x = -1; x < end + 1; x += 0.9) { const d = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.02, 0.09), dashMat); d.position.set(x, stopsSeaAt(stops, x) ? -0.35 : 0.02, 1.4); scene.add(d); }
+  labelsEl.innerHTML = "";
   stops.forEach(s => {
-    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.6, 6), new THREE.MeshStandardMaterial({ color: 0xd8cfc0 })); post.position.set(s.x, 0.8, -1.6); scene.add(post);
-    const sign = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 0.06), new THREE.MeshStandardMaterial({ color: 0xe8875c })); sign.position.set(s.x, 1.55, -1.6); scene.add(sign);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.3, 6), new THREE.MeshStandardMaterial({ color: 0xeeeeee })); pole.position.set(s.x + 1.2, 0.65, 1.5); pole.castShadow = true;
+    const fg = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.5, -0.15, 0), new THREE.Vector3(0, -0.3, 0)]); fg.computeVertexNormals();
+    const flag = new THREE.Mesh(fg, new THREE.MeshStandardMaterial({ color: 0xe8875c, side: THREE.DoubleSide })); flag.position.set(s.x + 1.23, 1.28, 1.5); scene.add(pole, flag); s.flag = flag;
     const el = document.createElement("div"); el.className = "slabel"; el.textContent = s.name; labelsEl.appendChild(el); s.el = el;
   });
-  // props at home stops
-  const props = {};
-  const laptopStop = stops.find(s => s.name === L), phoneStop = stops.find(s => s.name === PHONE);
-  const needLaptop = laptopStop || j.legs.some(l => l.work === "laptop" || l.work === "ml");
-  const lapX = laptopStop ? laptopStop.x : 0;
-  if (needLaptop) {
-    const lap = await instance(EXTRA.laptop.file); lap.root.scale.setScalar(SCALE.laptop); lap.root.position.set(lapX, 0, -0.9); lap.play("idle"); scene.add(lap.root); mixers.push(lap.mixer); props.laptop = lap;
+  // set pieces and dressing
+  const place = async (file, x, z, s, ry) => { const m = await tryInstance(file, { shadow: true }); if (!m) return null; m.root.scale.setScalar(s || 1); m.root.position.set(x, 0, z); m.root.rotation.y = ry || 0; m.play("idle"); scene.add(m.root); mixers.push(m.mixer); return m; };
+  for (const [k, s] of stops.entries()) {
+    const set = SET[s.name] || [null, "palm"];
+    if (set[0]) { const m = await place(`sets/${set[0]}.glb`, s.x - 0.4, -2.9, 1, 0); if (m && m.has("work")) m.play("work"); if (m && set[0] === "calendar") props.calendar = m; }
+    if (set[0] === "port_crane") await place("sets/cable_landing.glb", s.x + 2.2, -1.6, 0.8, -0.4);
+    await place(set[1] === "oak" ? "sets/oak_tree.glb" : "sets/palm_tree.glb", s.x - 3.1, -1.4, 0.9, k);
+    await place(k % 2 ? "sets/bench.glb" : "sets/rock.glb", s.x + 3.2, -2.4, 0.8, k % 2 ? -0.3 : k * 1.3);
+    if (k % 2 === 0) await place("sets/lamp_post.glb", s.x + 2.1, 0.9, 1, 0);
+  }
+  const lapStop = stops.find(s => s.name === LAP);
+  if (lapStop || j.legs.some(l => l.work === "laptop" || l.work === "ml")) {
+    const lapX = (lapStop || stops[0]).x;
+    const desk = await place("sets/desk.glb", lapX, -1.1, 1.2, 0);
+    const deskTop = desk ? 0.8 * 1.2 : 0;
+    const lap = await tryInstance(EXTRA.laptop.file, { shadow: true });
+    if (lap) { lap.root.scale.setScalar(SCALE.laptop); lap.root.position.set(lapX, deskTop, -1.1); lap.play("idle"); scene.add(lap.root); mixers.push(lap.mixer); props.laptop = lap; }
+    props.deskTop = deskTop; props.lapX = lapX;
+    const ticks = textPlane(1.7, 0.5, (ctx, c, n) => badge(ctx, c, "rgba(10,40,24,0.9)", "#7dff6a", `✓ ${n} of 21 checks`, 34));
+    ticks.position.set(lapX, deskTop + 2.4, -0.4); ticks.visible = false; scene.add(ticks); props.ticks = ticks;
+    // the anvil the ML bots hammer on
+    const anvil = await place("sets/anvil.glb", lapX - 2.6, 0.3, 1, 0.3);
+    if (!anvil) { const a = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.5, 0.45), new THREE.MeshStandardMaterial({ color: 0x3a3f4a, metalness: 0.5, roughness: 0.4 })); a.position.set(lapX - 2.6, 0.25, 0.3); a.castShadow = true; scene.add(a); }
+    props.anvil = { x: lapX - 2.6, y: anvil ? 0.75 : 0.5, z: 0.3 }; props.anvilM = anvil;
     props.ml = [];
-    for (let k = 0; k < 3; k++) { const m = await instance(EXTRA.ml.file); m.root.scale.setScalar(SCALE.ml); m.root.position.set(lapX - 2.1 + k * 0.9 + (k === 2 ? 2.4 : 0), 0, 0.2 - (k % 2) * 0.5); m.root.rotation.y = k === 2 ? -0.6 : 0.6; m.play("idle"); scene.add(m.root); mixers.push(m.mixer); props.ml.push(m); }
+    // three ML bots round the anvil; from (+0.415, 0, -0.464) facing +z the hammer face lands on the anvil top, so each bot is that offset turned about the anvil
+    for (const th of [Math.PI / 2, 0, -Math.PI / 4])   /* nobody stands between the camera and the anvil */ { const m = await tryInstance(EXTRA.ml.file, { shadow: true }); if (!m) continue;
+      const ox = 0.415, oz = -0.464; m.root.position.set(props.anvil.x + ox * Math.cos(th) + oz * Math.sin(th), 0, props.anvil.z - ox * Math.sin(th) + oz * Math.cos(th)); m.root.rotation.y = th;
+      m.play("idle"); scene.add(m.root); mixers.push(m.mixer); props.ml.push(m); }
   }
-  const needMe = phoneStop || j.legs.some(l => l.work === "me") || ["You", "Back to you"].some(n => stops.find(s => s.name === n));
-  if (needMe) {
-    const meStop = phoneStop || stops.find(s => s.name === "You") || stops[0];
-    const me = await instance(EXTRA.me.file); me.root.scale.setScalar(SCALE.me); me.root.position.set(meStop.x + 0.6, 0, -1.4); me.root.rotation.y = -0.3; me.play("idle"); scene.add(me.root); mixers.push(me.mixer); props.me = me;
-    if (phoneStop) { const ph = new THREE.Group(); const body = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.9, 0.08), new THREE.MeshStandardMaterial({ color: 0x1b1b22 }));
-      const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.78), new THREE.MeshBasicMaterial({ color: 0x4fd8ff })); scr.position.z = 0.045; ph.add(body, scr); ph.position.set(phoneStop.x - 0.9, 0.75, 0.3); ph.rotation.y = 0.3; scene.add(ph); }
+  const phoneStop = stops.find(s => s.name === PHONE), youStop = stops.find(s => s.name === "You");
+  if (phoneStop || youStop || j.legs.some(l => l.work === "me")) {
+    const mx = (phoneStop || youStop || stops[stops.length - 1]).x;
+    const me = await tryInstance(EXTRA.me.file, { shadow: true });
+    if (me) { me.root.scale.setScalar(SCALE.me); me.root.position.set(mx + 1.3, 0, -1.6); me.root.rotation.y = -0.35; me.play("idle"); scene.add(me.root); mixers.push(me.mixer); props.me = me; }
+    if (phoneStop || j.legs.some(l => l.work === "me")) {
+      let ph = await place("sets/phone_stand.glb", mx - 0.1, -0.5, 1, 0.35);
+      if (!ph) { const g = new THREE.Group(), body = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.3, 0.1), new THREE.MeshStandardMaterial({ color: 0x1b1b22 }));
+        const scr = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 1.15), new THREE.MeshBasicMaterial({ color: 0x163a5a })); scr.position.z = 0.055; body.castShadow = true; g.add(body, scr); g.position.set(mx - 0.1, 0.8, -0.5); g.rotation.y = 0.35; scene.add(g);
+        ph = { root: g, play: () => false, has: () => false }; }
+      const notif = textPlane(1.6, 0.55, (ctx, c, on) => { if (!on) return; roundRect(ctx, 4, 4, c.width - 8, c.height - 8, 24); ctx.fillStyle = "rgba(255,255,255,0.96)"; ctx.fill();
+        ctx.fillStyle = "#1d2a44"; ctx.textAlign = "left"; ctx.textBaseline = "alphabetic"; fitFont(ctx, "Telegram · SGM", 24, c.width - 40, 600); ctx.fillText("Telegram · SGM", 20, 36); fitFont(ctx, on, 24, c.width - 40, 500); ctx.fillText(on, 20, 66); });
+      notif.position.set(mx - 0.1, 2.25, -0.3); notif.scale.setScalar(0.01); scene.add(notif); props.phone = ph; props.notif = notif;
+    }
   }
+  const heldStop = stops.find(s => s.name === "Held 6 months");
+  if (heldStop) { const cal = textPlane(1.5, 0.6, (ctx, c, n) => badge(ctx, c, "rgba(255,255,255,0.95)", "#1d2a44", n ? `Month ${n} of 6` : "Hold 6 months", 36));
+    cal.position.set(heldStop.x, 2.6, -1.2); scene.add(cal); props.cal = cal; props.heldX = heldStop.x; }
   if (my !== build) return;
   // carriers wait at the stop where their leg begins
   const legs = [], byWho = {};
@@ -563,120 +705,235 @@ async function buildStage(id) {
   for (const l of j.legs) {
     const leg = Object.assign({}, l);
     if (l.to) {
-      const from = stops[stopIdx], to = stops[stopIdx + 1]; stopIdx++;
-      leg.from = from.x; leg.toX = to.x;
-      const key = l.who === "courier" ? "courier" : l.who;
-      if (!byWho[key + "@" + from.x]) {
+      const k0 = stopIdx, from = stops[stopIdx], to = stops[stopIdx + 1]; stopIdx++;
+      leg.toStop = stopIdx; leg.fly = FLY.has(l.who); leg.ship = l.sea && !leg.fly;
+      const key = l.who + "@" + from.x;
+      if (!byWho[key]) {
         const file = l.who === "courier" ? "bots/bot_IN.glb" : (EXTRA[l.who] ? EXTRA[l.who].file : `bots/bot_${flagOf(l.who)}.glb`);
-        const m = await instance(file); const s = SCALE[l.who] || 1;
-        m.root.scale.setScalar(s); m.root.rotation.y = Math.PI / 2; m.root.position.set(from.x, l.sea ? -0.15 : 0, l.sea ? 0.2 : 0.6);
-        m.play("idle"); scene.add(m.root); mixers.push(m.mixer); byWho[key + "@" + from.x] = m;
-        // a carrier that keeps going (same who, next leg) reuses this instance
+        const m = await tryInstance(file, { shadow: true }); if (!m) continue;
+        m.base = SCALE[l.who] || 1; m.root.scale.setScalar(m.base); m.root.rotation.y = Math.PI / 2;
+        const waitX = leg.ship ? from.x + 4 : (k0 === 0 && from.name !== LAP && from.name !== PHONE) ? from.x - 0.6 : from.x + 2.0;
+        m.home = new THREE.Vector3(waitX, leg.ship ? -0.5 : l.who === "rupee" ? 0.7 : 0, leg.ship ? 0.6 : 0.9); m.cx = waitX;
+        m.root.position.copy(m.home); m.play("idle"); scene.add(m.root); mixers.push(m.mixer); byWho[key] = m;
       }
-      leg.m = byWho[key + "@" + from.x]; byWho[key + "@" + to.x] = leg.m;
-      leg.sea = !!l.sea; leg.dur = l.sea ? 3.2 : 2.2;
-    } else { leg.dur = 2.6; leg.at = stops[stopIdx].x; }
+      leg.m = byWho[key]; byWho[l.who + "@" + to.x] = leg.m;
+      leg.sx = leg.m.cx; leg.ex = leg.ship ? to.x - 4.5 : to.x - 1.5; leg.m.cx = leg.ex;
+      leg.dur = l.sea ? 3.6 : 2.4;
+    } else { leg.dur = l.work === "ml" ? 3.6 : l.work === "laptop" ? 3.0 : 2.6; leg.at = stops[stopIdx].x; }
     legs.push(leg);
   }
-  // the selected character stands at its starting stop when it isn't one of the runners (Dalal, Clock, Watchdog, Paisa...)
+  legs.forEach((l, k) => { l.lastMl = l.work === "ml" && !(legs[k + 1] && legs[k + 1].work === "ml"); });
+  // the selected character stands at its start when it isn't one of the runners
   if (!j.legs.some(l => l.who === id) && !["laptop", "ml", "me", "rupee"].includes(id)) {
-    const c = charInfo(id), m = await instance(c.file); m.root.scale.setScalar(SCALE[id] || 1); m.root.rotation.y = 0.5;
-    m.root.position.set(stops[0].x - 1.4, 0, 0.9); m.play("idle"); scene.add(m.root); mixers.push(m.mixer);
+    const m = await tryInstance(charInfo(id).file, { shadow: true });
+    if (m) { m.root.position.set(stops[0].x - 1.6, 0, 1.0); m.root.rotation.y = 0.5; m.play("idle"); scene.add(m.root); mixers.push(m.mixer);
+      if (id === "dalal") { m.root.rotation.set(0, 0.3, 1.45); m.root.position.y = 0.3; props.sleeper = m; } }
   }
+  // the baton: a data crate, which becomes the Friday list after the anvil
+  const crate = j.money ? null : await tryInstance("props/data_crate.glb", { shadow: true });
+  if (crate) { crate.root.scale.setScalar(0.7); scene.add(crate.root); mixers.push(crate.mixer); }
+  let list = null;
+  if (crate && legs.some(l => l.work === "ml")) { list = await tryInstance("sets/list_scroll.glb", { shadow: true });
+    if (!list) { const g = new THREE.Group(), paper = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.56, 0.03), new THREE.MeshStandardMaterial({ color: 0xf4ead2 })); paper.castShadow = true; g.add(paper);
+      for (let i = 0; i < 6; i++) { const ln = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.025, 0.032), new THREE.MeshBasicMaterial({ color: 0x8a7d63 })); ln.position.set(0, 0.17 - i * 0.07, 0.002); g.add(ln); }
+      list = { root: g, mixer: null, play: () => false, has: () => false }; }
+    list.root.visible = false; scene.add(list.root); if (list.mixer) mixers.push(list.mixer); }
   if (my !== build) return;
-  // the baton
-  let crate = null;
-  if (!j.money) { crate = await instance("props/data_crate.glb"); crate.root.scale.setScalar(0.75); crate.play("idle"); scene.add(crate.root); mixers.push(crate.mixer); }
-  if (my !== build) return;
-  stage.scene = scene; stage.mixers = mixers; stage.stops = stops; stage.legs = legs; stage.crate = crate; stage.props = props; stage.id = id;
+  Object.assign(stage, { scene, sun, mixers, stops, legs, crate, list, props, waves, id, j });
   dotsEl.innerHTML = legs.map(() => "<i></i>").join("");
   startPlay();
 }
 function startPlay() {
-  const s = stage; s.t = 0; s.leg = -1; s.done = false;
-  s.legs.forEach(l => { if (l.m) { l.m.root.position.x = l.from; l.m.play("idle"); } });
-  s.focus.set(s.stops[0].x, 0, 0);
+  const s = stage; s.t = 0; s.leg = -1; s.done = false; s.dustT = 0; s.tick = 0; s.month = 0; s.pend = []; s.lastBeat = 0; s.sleepT = 0;
+  const seen = new Set();
+  s.legs.forEach(l => { if (l.m && !seen.has(l.m)) { seen.add(l.m); l.m.root.position.copy(l.m.home); l.m.root.rotation.set(0, Math.PI / 2, 0); l.m.root.scale.setScalar(l.m.base); l.m.play("idle"); } });
+  s.stops.forEach(st => { st.flag.material.color.set(0xe8875c); st.el.classList.remove("passed"); });
+  const p = s.props;
+  if (s.list) s.list.root.visible = false;
+  if (s.crate) { s.crate.root.visible = true; s.crate.root.scale.setScalar(0.7); s.crate.root.rotation.set(0, 0, 0); }
+  if (p.ticks) p.ticks.visible = false; if (p.notif) { p.notif.scale.setScalar(0.01); p.notif.userData.redraw(""); }
+  if (p.cal) p.cal.userData.redraw(0); if (p.ml) p.ml.forEach(m => m.play("idle")); if (p.me) p.me.play("idle");
+  s.focus.set(s.stops[0].x + 1, 0, 0); s.zoom = 1;
+  s.batonPos = new THREE.Vector3(s.stops[0].x - 1.1, 0.25, 0.9);   // the crate starts on the ground at the first stop and gets picked up
+  if (s.crate) s.crate.root.position.copy(s.batonPos);
 }
-function crateOn(m, who) {
-  const y = CRATE_Y[who] !== undefined ? CRATE_Y[who] : 1.25;
-  return new THREE.Vector3(m.root.position.x, y === null ? -99 : y, m.root.position.z);
+function batonOn(leg) {
+  const p = leg.m.root.position, y = CRATE_Y[leg.who] !== undefined ? CRATE_Y[leg.who] : 1.25;
+  return new THREE.Vector3(p.x + (leg.ship ? 0.6 : 0), p.y + y + (leg.ship ? 0.5 : 0), p.z);
 }
+const later = (s, m, clip, after, once) => s.pend.push({ m, clip, at: s.t + after, once });
+const PRE = 0.85;                                      // each leg opens with a throw: carrier to carrier, into the laptop, onto the anvil, onto the phone
 function stepStage(dt) {
-  const s = stage; if (!s.scene || s.done) return;
+  const s = stage; if (!s.scene) return;
+  const now = performance.now();
+  s.waves.forEach(w => { const a = w.geo.attributes.position, b = w.base;
+    for (let i = 0; i < a.count; i++) { const x = b[i * 3], z = b[i * 3 + 2]; a.array[i * 3 + 1] = Math.sin(x * 1.4 + now / 600) * 0.06 + Math.cos(z * 1.9 + now / 750) * 0.05; }
+    a.needsUpdate = true; });
+  if (s.props.sleeper) { s.sleepT -= dt; if (s.sleepT <= 0) { s.sleepT = 0.7; emit(s.scene, s.props.sleeper.root.position.clone().add(new THREE.Vector3(0.2, 0.6, 0)), { shape: "ball", color: 0xbfd6ff, life: 1.6, size: 1.4, grow: 1.5, up: 0.5, vx: 0.15 }); } }
+  if (s.done) return;
   s.t += dt;
-  let acc = 0, i = 0; while (i < s.legs.length && s.t > acc + s.legs[i].dur + 0.5) { acc += s.legs[i].dur + 0.5; i++; }
-  if (i >= s.legs.length) { s.done = true; capEl.textContent = "That's the whole journey. Tap another character, or watch again."; setDots(s.legs.length); return; }
-  const leg = s.legs[i], local = Math.min(1, Math.max(0, (s.t - acc) / leg.dur));
-  if (i !== s.leg) {                                    // a new leg starts: caption, animations, the previous carrier rests
-    if (s.leg >= 0 && s.legs[s.leg].m) s.legs[s.leg].m.play("idle");
+  for (let k = s.pend.length - 1; k >= 0; k--) if (s.t >= s.pend[k].at) { const q = s.pend[k]; q.m.play(q.clip, q.once); s.pend.splice(k, 1); }
+  let acc = 0, i = 0; while (i < s.legs.length && s.t > acc + PRE + s.legs[i].dur + 0.35) { acc += PRE + s.legs[i].dur + 0.35; i++; }
+  if (i >= s.legs.length) { finish(); return; }
+  const leg = s.legs[i], tl = s.t - acc, pre = Math.min(1, tl / PRE), local = Math.min(1, Math.max(0, (tl - PRE) / leg.dur)), p = s.props;
+  const carry = () => (s.list && s.list.root.visible) ? s.list : s.crate;
+  if (i !== s.leg) {                                    // a new leg starts: caption, dots, the throw
+    const prev = s.legs[s.leg];
+    if (prev && prev.to) { const st = s.stops[prev.toStop]; st.flag.material.color.set(0x7dff6a); st.el.classList.add("passed"); emit(s.scene, new THREE.Vector3(st.x + 1.45, 1.2, 1.5), { shape: "cube", color: 0x7dff6a, n: 8, life: 0.6, up: 1.5, spread: 1.2, grav: 3 }); }
+    if (prev && prev.m) {                               // the last carrier settles exactly at its stop, then throws
+      const m = prev.m; m.root.position.x = prev.ex; m.root.position.y = m.home.y; m.root.rotation.set(0, Math.PI / 2, 0); m.root.scale.setScalar(m.base); m.squash = 0;
+      if (m !== leg.m && m.play("throw", true)) later(s, m, "idle", 0.6); else m.play("idle"); }
     s.leg = i; capEl.textContent = leg.text; setDots(i);
-    if (leg.m) leg.m.play(leg.sea ? "idle" : "run");
-    if (leg.work === "me" && s.props.me) s.props.me.play("wave");
-    if (leg.work === "ml" && s.props.ml) s.props.ml.forEach(m => m.play("hammer"));
+    s.throwFrom = s.batonPos.clone(); s.caught = false;
+    if (leg.m && (!prev || prev.m !== leg.m)) leg.m.play("crouch", true);
+    if (leg.work === "laptop" && p.ticks) { p.ticks.visible = true; s.tick = 0; p.ticks.userData.redraw(0); }
+    if (leg.work === "ml" && s.list && s.list.root.visible) { s.list.root.visible = false; if (s.crate) s.crate.root.visible = true; }   // more hammering: back to raw material
+    if (leg.who === "rupee" || leg.work === "end") { if (s.crate) s.crate.root.visible = false; if (s.list) s.list.root.visible = false; }
   }
-  if (leg.m) {
-    const e = local < 0.5 ? 2 * local * local : 1 - Math.pow(-2 * local + 2, 2) / 2;
-    leg.m.root.position.x = leg.from + (leg.toX - leg.from) * e;
-    if (leg.sea) leg.m.root.position.y = -0.15 + Math.sin(s.t * 3) * 0.05;
-    s.focus.x += (leg.m.root.position.x - s.focus.x) * Math.min(1, dt * 4);
-    if (s.crate) s.crate.root.position.copy(crateOn(leg.m, leg.who));
-  } else {
-    const x = leg.at;
-    s.focus.x += (x - s.focus.x) * Math.min(1, dt * 4);
-    if (s.crate) {
-      let target;
-      if (leg.work === "laptop" && s.props.laptop) target = new THREE.Vector3(x, 1.9 - local * 1.2, -0.9);
-      else if (leg.work === "ml" && s.props.ml) target = new THREE.Vector3(x - 1.2, 1.6 + Math.sin(s.t * 6) * 0.15, -0.1);
-      else if (leg.work === "me" && s.props.me) target = new THREE.Vector3(s.props.me.root.position.x, 3.6 + Math.sin(s.t * 3) * 0.1, -1.2);
-      else target = s.crate.root.position.clone();
-      s.crate.root.position.lerp(target, Math.min(1, dt * 5));
+  // where the baton is heading this leg
+  let target = null;
+  if (leg.m) target = batonOn(leg);
+  else if (leg.work === "laptop") target = new THREE.Vector3(leg.at, (p.deskTop || 0) + 1.0, -0.85);
+  else if (leg.work === "ml" && p.anvil) target = new THREE.Vector3(p.anvil.x, p.anvil.y + 0.22, p.anvil.z);
+  else if (leg.work === "me" && p.phone) target = new THREE.Vector3(p.phone.root.position.x, 2.0, -0.1);
+  const c = carry();
+  // 1) the throw: a gravity arc with spin
+  if (c && c.root.visible && target && tl < PRE && leg.who !== "rupee") {
+    const k = easeIO(pre), q = s.throwFrom.clone().lerp(target, k); q.y += Math.sin(Math.PI * k) * (1.0 + s.throwFrom.distanceTo(target) * 0.22);
+    c.root.position.copy(q); c.root.rotation.x += dt * 9; c.root.rotation.z += dt * 6;
+  }
+  // 2) the catch: a flash ring, a squash, then off it goes
+  if (tl >= PRE && !s.caught) {
+    s.caught = true;
+    if (c && c.root.visible && target) { c.root.rotation.set(0, 0, 0); emit(s.scene, target, { shape: "ring", color: 0xffc21a, life: 0.45, grow: 2.2, size: 0.7 }); }
+    if (leg.m) { const caughtClip = leg.m.play("catch", true); if (!leg.ship) leg.m.squash = 1; later(s, leg.m, leg.ship ? "idle" : "run", caughtClip ? 0.3 : 0); }
+    if (leg.work === "ml" && p.ml) { p.ml.forEach(m => m.play("hammer")); s.lastBeat = 0.59; }   // the swing lands at the start of each 0.6 s loop
+    if (leg.work === "me") { if (p.phone && p.phone.has("buzz")) p.phone.play("buzz", true); s.buzzT = 0;
+      if (p.notif) p.notif.userData.redraw(s.list && s.list.root.visible ? "Your buy list is ready" : "Today's note is here");
+      if (p.me) { if (p.me.play("jump", true)) later(s, p.me, "wave", 0.7); else p.me.play("wave"); } }
+  }
+  // 3) the leg itself
+  if (leg.m && tl >= PRE) {
+    const e = easeIO(local), m = leg.m;
+    if (leg.ship) { m.root.position.y = -0.5 + Math.sin(s.t * 2.6) * 0.06; m.root.rotation.z = Math.sin(s.t * 2.1) * 0.05; m.root.rotation.x = Math.sin(s.t * 1.7) * 0.03; }
+    else if (leg.fly) m.root.position.y = Math.sin(Math.PI * e) * 1.6;
+    else if (leg.who === "rupee") { m.root.position.y = 0.7 + Math.sin(s.t * 5) * 0.15; m.root.rotation.x = Math.sin(s.t * 9) * 0.5; m.root.rotation.z = Math.cos(s.t * 7) * 0.3; }
+    else m.root.rotation.z = -0.12 * Math.sin(Math.PI * e);   // lean into the run
+    m.root.position.x = leg.sx + (leg.ex - leg.sx) * e;
+    m.squash = Math.max(0, (m.squash || 0) - dt * 3);
+    const q = Math.sin(m.squash * Math.PI) * 0.16; m.root.scale.set(m.base * (1 + q), m.base * (1 - q), m.base * (1 + q));
+    if (c && c.root.visible) { c.root.position.copy(batonOn(leg)).add(new THREE.Vector3(0, leg.ship ? 0 : Math.abs(Math.sin(s.t * 14)) * 0.06, 0)); if (c === s.list) c.root.rotation.y += dt; }
+    s.batonPos = batonOn(leg);
+    s.dustT -= dt;                                      // dust at the feet, wake and bow splash for ships, bubbles for the submarine, sparkle for money
+    if (s.dustT <= 0 && local > 0.02 && local < 0.98) {
+      s.dustT = leg.ship ? 0.05 : 0.07;
+      const at = m.root.position.clone();
+      if (leg.who === "rupee") emit(s.scene, at, { shape: "cube", color: 0x7dff6a, life: 0.5, up: 0.4, spread: 0.6, size: 0.7 });
+      else if (leg.fly) emit(s.scene, at.add(new THREE.Vector3(-0.3, 0.6, 0)), { shape: "ball", color: 0x4fd8ff, life: 0.6, size: 1, grow: 0.5 });
+      else if (!leg.sea) emit(s.scene, at.add(new THREE.Vector3(-0.25, 0.05, 0)), { color: 0xd9c49a, life: 0.55, grow: 2.2, size: 0.7, up: 0.35, spread: 0.4, jitter: 0.2 });
+      else if (leg.who === "sub") emit(s.scene, at.add(new THREE.Vector3(-1.6, 0.1, 0)), { shape: "ball", color: 0xbdefff, life: 1.1, grow: 0.6, up: 0.9, spread: 0.3, jitter: 0.4 });
+      else { emit(s.scene, at.clone().add(new THREE.Vector3(-2.6, 0.05, (Math.random() - .5) * 0.8)), { color: 0xffffff, life: 1.0, grow: 2.5, size: 0.8, spread: 0.5, vx: -0.3 });
+             if (Math.random() < 0.5) emit(s.scene, at.clone().add(new THREE.Vector3(2.9, 0.15, 0)), { color: 0xeaf7ff, life: 0.5, size: 0.6, up: 1.2, spread: 0.9, grav: 4 }); }
+    }
+    if (leg.to === "Held 6 months" && p.cal) { const n = Math.min(6, 1 + Math.floor(local * 6)); if (n !== s.month) { s.month = n; p.cal.userData.redraw(n);
+        emit(s.scene, p.cal.position.clone(), { shape: "page", color: 0xffffff, life: 0.9, up: 0.6, spread: 1, grav: 1.5, spin: 6 });
+        if (p.calendar && p.calendar.has("flip")) p.calendar.play("flip", true); } }
+    s.focus.x += (m.root.position.x + 1.6 - s.focus.x) * Math.min(1, dt * 3);    // the camera leads a little ahead of the runner
+    s.zoom += (1 - s.zoom) * Math.min(1, dt * 2);
+  } else if (!leg.m) {
+    const fx = leg.work === "ml" && p.anvil ? p.anvil.x + 0.8 : leg.at;
+    s.focus.x += (fx - s.focus.x) * Math.min(1, dt * 3); s.zoom += ((leg.work === "sleep" || leg.work === "end" ? 0.9 : 0.72) - s.zoom) * Math.min(1, dt * 2);   // closer during work
+    if (leg.work === "laptop" && tl >= PRE) {           // the crate sinks into the laptop; the checks tick off one by one
+      if (s.crate && s.crate.root.visible) { const k = Math.min(1, (tl - PRE) / 0.5); s.crate.root.scale.setScalar(0.7 * (1 - k)); s.crate.root.position.y = (p.deskTop || 0) + 1.0 - k * 0.5; if (k >= 1) s.crate.root.visible = false; }
+      const n = Math.min(21, Math.floor(local * 24));
+      if (n !== s.tick && p.ticks) { s.tick = n; p.ticks.userData.redraw(n);
+        if (n > 0) emit(s.scene, new THREE.Vector3(leg.at + (Math.random() - .5) * 1.4, (p.deskTop || 0) + 2.0, -0.3), { shape: "cube", color: 0x7dff6a, life: 0.6, up: 1.2, size: 1.2 }); }
+      s.batonPos = new THREE.Vector3(leg.at, (p.deskTop || 0) + 1.3, -0.85);
+    }
+    if (leg.work === "ml" && p.anvil && tl >= PRE) {    // hammer blows: squash, sparks, a small shake; on the last blow the crate becomes the Friday list
+      if (p.ticks) p.ticks.visible = false;
+      const top = new THREE.Vector3(p.anvil.x, p.anvil.y + 0.22, p.anvil.z);
+      if (s.crate && !(s.list && s.list.root.visible)) { s.crate.root.visible = true; }
+      const beat = (tl - PRE) % 0.6, impact = beat < s.lastBeat; s.lastBeat = beat;
+      if (!leg.lastMl || local < 0.8 || !s.list) {
+        if (s.crate) { s.crate.root.position.copy(top); s.crate.root.rotation.set(0, 0, 0); const sq = Math.max(0, 1 - beat / 0.18) * 0.35; s.crate.root.scale.set(0.7 * (1 + sq), 0.7 * (1 - sq), 0.7 * (1 + sq)); }
+        if (impact && p.anvilM) p.anvilM.play("hit", true);
+        if (impact) { emit(s.scene, top.clone().add(new THREE.Vector3(0, 0.2, 0)), { shape: "cube", color: [0xffc21a, 0xff8a3d, 0xfff1b0], n: 12, life: 0.45, up: 2.6, upRand: 1.6, spread: 3.4, grav: 9, spin: 12, size: 1 }); s.shake = 0.12; }
+        s.batonPos = top.clone();
+      } else {
+        if (s.crate && s.crate.root.visible) { s.crate.root.visible = false; emit(s.scene, top, { color: 0xffffff, n: 12, life: 0.6, grow: 2.5, size: 0.9, spread: 2, up: 0.6 }); }
+        s.list.root.visible = true; s.list.root.position.copy(top).add(new THREE.Vector3(0, 0.5 + Math.sin(s.t * 3) * 0.05, 0)); s.list.root.rotation.y += dt * 1.5;
+        s.batonPos = s.list.root.position.clone();
+      }
+    }
+    if (leg.work === "me" && tl >= PRE) {                // the phone buzzes and pops a notification; the list floats up to you
+      s.buzzT = (s.buzzT || 0) + dt;
+      if (p.notif) { const k = Math.min(1, s.buzzT / 0.35); p.notif.scale.setScalar(Math.max(0.01, k + Math.sin(k * Math.PI) * 0.15)); }
+      if (p.phone && !p.phone.has("buzz")) p.phone.root.rotation.z = Math.sin(s.t * 45) * 0.06 * Math.max(0, 1 - s.buzzT / 0.9);
+      if (c && c.root.visible) { c.root.position.lerp(new THREE.Vector3(p.me ? p.me.root.position.x - 0.55 : leg.at, 1.9, -0.9), Math.min(1, dt * 3)); c.root.rotation.y += dt; s.batonPos = c.root.position.clone(); }
     }
   }
+}
+function finish() {
+  const s = stage; if (s.done) return; s.done = true;
+  const last = s.legs[s.legs.length - 1];
+  if (last && last.to) { const st = s.stops[last.toStop]; st.flag.material.color.set(0x7dff6a); st.el.classList.add("passed"); }
+  if (last && last.m) last.m.play("idle");
+  setDots(s.legs.length);
+  capEl.textContent = "That's the whole journey. Pick someone else from the crew below, or watch again.";
+  const at = last && last.m ? last.m.root.position.clone().add(new THREE.Vector3(0, 1.6, 0)) : new THREE.Vector3(s.focus.x, 2.5, 0);
+  if (!(last && last.work === "sleep")) emit(s.scene, at, { shape: "cube", color: [0xffc21a, 0x4fd8ff, 0x7dff6a, 0xe8875c, 0xffffff], n: 40, life: 1.4, up: 3.2, upRand: 2, spread: 4, grav: 5, spin: 8, size: 1.3 });
+  if (s.props.me) { if (!s.props.me.play("cheer", true)) s.props.me.play("wave"); }
 }
 function setDots(i) { [...dotsEl.children].forEach((d, k) => { d.className = k < i ? "done" : k === i ? "on" : ""; }); }
 document.getElementById("replay").addEventListener("click", () => { if (stage.scene) startPlay(); });
 
-/* ---------------------------------------------------------------- profile + selection */
+/* ================================================================ the character card (short; details fold away) */
 const profileEl = document.getElementById("profile");
-function chips(ids) { return ids.map(x => `<button type="button" data-go="${x}">${charInfo(x).name}</button>`).join(""); }
 function select(id, scrollUp) {
-  document.querySelectorAll(".card").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.id === id)));
+  document.querySelectorAll(".mini").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.id === id)));
   const c = charInfo(id), par = parallelOf(id), baton = batonIds(id);
   profileEl.innerHTML = `<div class="who"><h2>${c.name}</h2>${c.chip ? `<span class="chip">${c.chip}</span>` : ""}</div>
     <p class="role">${c.role}</p><p class="says">“${c.says}”</p>
-    <dl><div><dt>What I bring</dt><dd>${c.brings || "—"}</dd></div><div><dt>Where I get it</dt><dd>${c.from || "—"}</dd></div>
-    <div><dt>What it means</dt><dd>${c.means || "—"}</dd></div><div><dt>When</dt><dd>${c.when || "—"}</dd></div>
-    ${baton.length ? `<div><dt>Passes the baton to</dt><dd class="links">${baton.map((b, k) => (k ? '<span class="arrow">→</span>' : "") + `<button type="button" data-go="${b}">${charInfo(b).name}</button>`).join("")}</dd></div>` : ""}
-    ${par.ids.length ? `<div><dt>Running at the same time</dt><dd>${par.text}<div class="links">${chips(par.ids)}</div></dd></div>` : ""}</dl>`;
+    <dl><div><dt>What it means</dt><dd>${c.means || "—"}</dd></div>
+    ${baton.length ? `<div><dt>Hands the crate to</dt><dd class="links">${baton.map((b, k) => (k ? '<span class="arrow">→</span>' : "") + `<button type="button" data-go="${b}">${charInfo(b).name}</button>`).join("")}</dd></div>` : ""}</dl>
+    <details><summary>More: what, where, when, who runs alongside</summary><dl>
+      <div><dt>What I bring</dt><dd>${c.brings || "—"}</dd></div><div><dt>Where I get it</dt><dd>${c.from || "—"}</dd></div><div><dt>When</dt><dd>${c.when || "—"}</dd></div>
+      ${par.ids.length ? `<div><dt>Running at the same time</dt><dd>${par.text}<div class="links">${par.ids.map(x => `<button type="button" data-go="${x}">${charInfo(x).name}</button>`).join("")}</div></dd></div>` : ""}</dl></details>`;
   profileEl.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => select(b.dataset.go, true)));
   capEl.textContent = `Setting up ${c.name}'s journey…`;
   buildStage(id);
-  if (scrollUp) stageEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  const mini = stripEl.querySelector(`[data-id="${id}"]`);
+  if (mini) stripEl.scrollTo({ left: mini.offsetLeft - stripEl.clientWidth / 2 + mini.offsetWidth / 2, behavior: REDUCED ? "auto" : "smooth" });
+  if (scrollUp) stageEl.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "nearest" });
 }
 
-/* ---------------------------------------------------------------- loop */
+/* ================================================================ frame loop */
 const clock = new THREE.Clock(), tmp = new THREE.Vector3();
 function frame() {
-  const dt = Math.min(0.05, clock.getDelta());
-  views.forEach(v => v.mixers.forEach(m => m.update(dt)));
-  stepStage(dt);
+  const dt = Math.min(0.05, clock.getDelta()) * (REDUCED ? 0.5 : 1);
+  views.forEach(v => v.mixers.forEach(m => m && m.update(dt)));
+  stepStage(dt); updateParts(dt);
+  stage.shake = Math.max(0, stage.shake - dt * 0.6);
   renderer.setScissorTest(false); renderer.clear(); renderer.setScissorTest(true);
-  const H = window.innerHeight;
+  const W = window.innerWidth, H = window.innerHeight;
   for (const v of views) {
-    if (!v.scene) continue;
+    if (!v.scene || (sheetOpen ? !v.sheet : v.sheet)) continue;   // with the sheet open only its thumbnails draw
     const r = v.el.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > H || r.width < 2) continue;
-    const y = H - r.bottom;
-    renderer.setViewport(r.left, y, r.width, r.height); renderer.setScissor(r.left, y, r.width, r.height);
+    let L = Math.max(0, r.left), T = Math.max(0, r.top), R = Math.min(W, r.right), B = Math.min(H, r.bottom);
+    if (v.clip) { const cr = v.clip.getBoundingClientRect(); L = Math.max(L, cr.left); T = Math.max(T, cr.top); R = Math.min(R, cr.right); B = Math.min(B, cr.bottom); }
+    if (R - L < 1 || B - T < 1) continue;
+    renderer.setViewport(r.left, H - r.bottom, r.width, r.height); renderer.setScissor(L, H - B, R - L, B - T);
     v.cam.aspect = r.width / r.height; v.cam.updateProjectionMatrix();
     if (v === stage) {
-      const fx = stage.focus.x, phone = window.innerWidth < 640;
-      v.cam.position.set(fx + 1.2, phone ? 5.2 : 4.4, phone ? 13 : 10.5); v.cam.lookAt(fx + 1.2, 0.9, 0);
-      stage.stops && stage.stops.forEach(s => {          // signpost labels follow the camera
-        tmp.set(s.x, 2.05, -1.6).project(v.cam);
-        const inView = tmp.z < 1 && tmp.x > -1.1 && tmp.x < 1.1;
-        s.el.style.display = inView ? "" : "none";
-        s.el.style.transform = `translate(${(tmp.x + 1) / 2 * r.width}px, ${(1 - tmp.y) / 2 * r.height}px) translate(-50%, -100%)`;
+      const phone = W < 640, z = (phone ? 14 : 11) * stage.zoom, fx = stage.focus.x;
+      const sx = (Math.random() - .5) * stage.shake, sy = (Math.random() - .5) * stage.shake;
+      v.cam.position.set(fx + sx, (phone ? 6 : 4.8) * (0.7 + 0.3 * stage.zoom) + sy, z); v.cam.lookAt(fx, 1.0, -0.6);
+      if (stage.sun) { stage.sun.position.set(fx + 4, 9, 6); stage.sun.target.position.set(fx, 0, 0); }
+      if (stage.stops) stage.stops.forEach(s => {
+        tmp.set(s.x + 1.2, 1.75, 1.5).project(v.cam);
+        s.el.style.display = tmp.z < 1 && tmp.x > -1.2 && tmp.x < 1.2 ? "" : "none";
+        s.el.style.transform = `translate(${(tmp.x + 1) / 2 * r.width}px, ${(1 - tmp.y) / 2 * r.height}px) translate(-50%, -110%)`;
       });
     }
     renderer.render(v.scene, v.cam);
@@ -684,7 +941,7 @@ function frame() {
   requestAnimationFrame(frame);
 }
 frame();
-const ALL = new Set(GROUPS.flatMap(g => g[2]));
 const first = location.hash.slice(1);                 // /crew.html#fed opens Fed's journey
-select(ALL.has(first) ? first : "fed", false);
+select(ALL.includes(first) ? first : "fed", false);
+window.SGM_CREW = { stage, select, replay: startPlay };   // for checking frames by hand
 </script>

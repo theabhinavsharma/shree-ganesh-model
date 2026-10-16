@@ -303,6 +303,7 @@ def arc(cx, cy, rx, ry, a0, a1, n):
 # Glyphs in a unit box (x right, y down). Only the characters the props print.
 GLYPHS = {
     "M": [[(0.08, 1), (0.08, 0), (0.5, 0.62), (0.92, 0), (0.92, 1)]],
+    "N": [[(0.12, 1), (0.12, 0), (0.88, 1), (0.88, 0)]],
     "E": [[(0.86, 0), (0.12, 0), (0.12, 1), (0.86, 1)], [(0.12, 0.5), (0.72, 0.5)]],
     "S": [[(0.88, 0.15), (0.68, 0.02), (0.34, 0.02), (0.13, 0.15), (0.13, 0.35), (0.3, 0.46), (0.7, 0.54),
            (0.88, 0.65), (0.88, 0.85), (0.68, 0.98), (0.32, 0.98), (0.1, 0.85)]],
@@ -316,7 +317,7 @@ GLYPHS = {
     "R": [[(0.06, 0.03), (0.94, 0.03)], [(0.06, 0.31), (0.94, 0.31)],   # "R" = the rupee sign
           arc(0.44, 0.3, 0.33, 0.27, -90, 90, 12) + [(0.1, 0.57), (0.74, 1.0)]],
 }
-ASPECT = {"M": 0.78, "E": 0.6, "S": 0.62, "T": 0.66, "O": 0.7, "C": 0.62, "K": 0.62, "5": 0.6, "0": 0.6, "R": 0.72}
+ASPECT = {"N": 0.66, "M": 0.78, "E": 0.6, "S": 0.62, "T": 0.66, "O": 0.7, "C": 0.62, "K": 0.62, "5": 0.6, "0": 0.6, "R": 0.72}
 
 
 def text_width(text, h, gap=0.22):
@@ -751,10 +752,10 @@ def build_ml_bot():
         return m
 
     hammer = Mesh("hammer")
-    add_box(hammer, M("wood", "#9C6B3E"), (0, 0, 0.13), (0.035, 0.035, 0.36), bevel=0.008)
+    add_box(hammer, M("wood", "#9C6B3E"), (0, 0, 0.18), (0.035, 0.035, 0.46), bevel=0.008)
     add_box(hammer, M("grip", "#8E2B2B"), (0, 0, 0.0), (0.045, 0.045, 0.1), bevel=0.01)
-    add_box(hammer, M("steel", "#8E96A0", rough=0.45), (0, 0.0, 0.31), (0.07, 0.19, 0.08), bevel=0.015)
-    add_box(hammer, M("steel_dark", "#5E656E", rough=0.45), (0, -0.095, 0.31), (0.075, 0.03, 0.085), bevel=0.008)
+    add_box(hammer, M("steel", "#8E96A0", rough=0.45), (0, 0.0, 0.40), (0.07, 0.19, 0.08), bevel=0.015)
+    add_box(hammer, M("steel_dark", "#5E656E", rough=0.45), (0, -0.095, 0.40), (0.075, 0.03, 0.085), bevel=0.008)
 
     root = Node("bot_ML")
     hips = root.add(Node("hips", t=(0.0, HY, 0.0), mesh=hips_mesh))
@@ -791,18 +792,20 @@ def build_ml_bot():
     def ease_io(u):
         return u * u * (3 - 2 * u)
 
+    IMPACT, TOP = -55.0, -160.0     # at -55 deg the hammer face lands at y ~0.75 (anvil top), 0.46 ahead
+
     def swing(t):
-        """Right-arm pitch: impact at t=0 (-20 deg), lift to -150, hold, strike down."""
+        """Right-arm pitch: impact at t=0, lift overhead, hold, strike down (accelerating)."""
         if t < 0.36:
-            return -20.0 - 130.0 * ease_io(t / 0.36)
+            return IMPACT + (TOP - IMPACT) * ease_io(t / 0.36)
         if t < 0.42:
-            return -150.0 - 4.0 * math.sin(math.pi * (t - 0.36) / 0.06)
+            return TOP - 4.0 * math.sin(math.pi * (t - 0.36) / 0.06)
         u = (t - 0.42) / 0.18
-        return -150.0 + 130.0 * u ** 3
+        return TOP + (IMPACT - TOP) * u ** 3
 
     def hammer_clip(p, t):
         a = swing(t)
-        k = (a + 20.0) / -130.0                      # 0 at impact, 1 at the top of the lift
+        k = (a - IMPACT) / (TOP - IMPACT)            # 0 at impact, 1 at the top of the lift
         hit = max(0.0, 1.0 - t / 0.1) if t < 0.1 else 0.0
         lean = 7.0 * (1 - k) - 3.0 * k
         return common({
@@ -815,7 +818,9 @@ def build_ml_bot():
         })
 
     anims = {"idle": clip(2.0, 60, idle), "hammer": clip(0.6, 36, hammer_clip)}
-    return "bot_ML", root, M.d, textures, anims, ("idle", "hammer")
+    anims.update(bb.action_clips(False, False))       # crouch, throw, catch, jump, cheer
+    anims = bb.fill_coverage(root, anims)
+    return "bot_ML", root, M.d, textures, anims, ("idle", "hammer") + tuple(bb.ACTION_TIMES)
 
 # ------------------------------------------------------------------ the owner's toy figure
 
@@ -911,8 +916,9 @@ def build_me():
     add_ico(fore, m_skin, (0.0, -0.115, 0.0), 0.04, subdiv=1)
 
     root = Node("me_figure")
-    root.add(Node("legs", mesh=legs))
-    body = root.add(Node("body", t=(0.0, BY, 0.0)))
+    rig = root.add(Node("rig"))                       # whole-figure hop / squash from the feet
+    rig.add(Node("legs", mesh=legs))
+    body = rig.add(Node("body", t=(0.0, BY, 0.0)))
     body.add(Node("tshirt", mesh=tshirt))
     headn = body.add(Node("head", t=(0.0, HY - BY, 0.0), mesh=head))
     headn.add(Node("face", mesh=face))
@@ -943,8 +949,46 @@ def build_me():
                 ("forearm_L", "rotation"): q_axis(X_AX, -10.0),
                 ("forearm_R", "rotation"): q_axis(Z_AX, -52.0 + 26.0 * w)}
 
-    anims = {"idle": clip(2.4, 48, idle), "wave": clip(1.2, 36, wave)}
-    return "me_figure", root, M.d, [("tshirt_ME", tex)], anims, ("idle", "wave")
+    kf, ease = bb.kf, bb._ease
+
+    def jump(p, t):
+        if t < 0.12:
+            y, sy = 0.0, 1.0 - 0.08 * ease(t / 0.12)
+        elif t < 0.42:
+            u = (t - 0.12) / 0.30
+            y, sy = 0.3 * 4 * u * (1 - u), 1.0 + 0.05 * math.sin(math.pi * u)
+        elif t < 0.5:
+            y, sy = 0.0, 1.0 - 0.1 * math.sin(math.pi * (t - 0.42) / 0.16)
+        else:
+            y, sy = 0.0, 1.0
+        sh = kf(t, [(0.0, 7.0), (0.12, -4.0), (0.22, 150.0), (0.42, 125.0), (0.55, 7.0), (0.6, 7.0)])
+        el = kf(t, [(0.0, -8.0), (0.12, 10.0), (0.22, -20.0), (0.45, -15.0), (0.6, -8.0)])
+        return {("rig", "translation"): (0.0, y, 0.0),
+                ("rig", "scale"): (1.0 / math.sqrt(sy), sy, 1.0 / math.sqrt(sy)),
+                ("body", "rotation"): q_ypr(pitch=kf(t, [(0.0, 0.0), (0.12, 10.0), (0.25, -4.0), (0.46, 6.0), (0.6, 0.0)])),
+                ("body", "scale"): (1.0, 1.0, 1.0),
+                ("head", "rotation"): q_ypr(pitch=kf(t, [(0.0, 0.0), (0.12, 8.0), (0.25, -10.0), (0.46, 6.0), (0.6, 0.0)])),
+                ("arm_L", "rotation"): q_axis(Z_AX, sh), ("arm_R", "rotation"): q_axis(Z_AX, -sh),
+                ("forearm_L", "rotation"): q_axis(X_AX, el), ("forearm_R", "rotation"): q_axis(X_AX, el)}
+
+    def cheer(p, t):
+        hop = abs(math.sin(p))                        # two hops a second
+        w = math.sin(2 * p)
+        sy = 1.0 - 0.06 * max(0.0, 1.0 - 4 * hop)
+        return {("rig", "translation"): (0.0, 0.05 * hop, 0.0),
+                ("rig", "scale"): (1.0 / math.sqrt(sy), sy, 1.0 / math.sqrt(sy)),
+                ("body", "rotation"): q_ypr(yaw=3.0 * math.sin(p + 0.5), roll=4.0 * math.sin(p)),
+                ("body", "scale"): (1.0, 1.0, 1.0),
+                ("head", "rotation"): q_ypr(pitch=-6.0, roll=-5.0 * math.sin(p)),
+                ("arm_L", "rotation"): q_axis(Z_AX, 148.0 + 8.0 * w),
+                ("arm_R", "rotation"): q_axis(Z_AX, -148.0 + 8.0 * w),
+                ("forearm_L", "rotation"): q_axis(Z_AX, 18.0 * w),
+                ("forearm_R", "rotation"): q_axis(Z_AX, 18.0 * w)}
+
+    anims = {"idle": clip(2.4, 48, idle), "wave": clip(1.2, 36, wave),
+             "jump": clip(0.6, 15, jump), "cheer": clip(1.0, 20, cheer)}
+    anims = bb.fill_coverage(root, anims)
+    return "me_figure", root, M.d, [("tshirt_ME", tex)], anims, ("idle", "wave", "jump", "cheer")
 
 # ------------------------------------------------------------------ giant laptop
 
@@ -1169,11 +1213,11 @@ def main():
         write_glb(path, name, root, mats, textures, anims)
         jobs.append((path, required))
     if args.check:
-        req = {"bot_ML": ("idle", "hammer"), "me_figure": ("idle", "wave")}
+        req = {"bot_ML": ("idle", "hammer") + tuple(bb.ACTION_TIMES), "me_figure": ("idle", "wave", "jump", "cheer")}
         jobs = [(p, req.get(p.stem, ("idle",))) for p in sorted(OUT_DIR.glob("*.glb"))]
     print("%-20s %8s %6s %6s  %-26s %s" % ("file", "bytes", "tris", "nodes", "animations (s)", "rest bbox (w x h x d)"))
     for path, required in jobs:
-        st = validate(path, required=required, max_bytes=MAX_BYTES, max_tris=MAX_TRIS)
+        st = validate(path, required=required, max_bytes=MAX_BYTES, max_tris=MAX_TRIS, oneshot=bb.ONE_SHOT)
         lo, hi = st["bbox"]
         an = ", ".join("%s %.2f" % kv for kv in st["anims"].items())
         print("%-20s %8d %6d %6d  %-26s %.2f x %.2f x %.2f (min y %.3f)" % (
