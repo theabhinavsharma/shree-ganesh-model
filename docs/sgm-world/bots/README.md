@@ -129,3 +129,49 @@ Notes:
 | `palm_tree.glb`, `oak_tree.glb`, `rock.glb`, `lamp_post.glb`, `bench.glb`, `bush.glb` | Dressing; the trees and the bush sway in `idle` | |
 
 The cable landing, rock, bush and trees dip a little below y = 0 on purpose (water and ground contact), so they're validated without the y = 0 rule.
+
+## Crew: one bot per character
+
+`build_crew.py` makes one model per crew character: the same bot, the country tee for its station, the pants colour from `world/data.js`, and its own quirk. Each quirk is a head or face piece that hints at the job, usually with a prop in the right hand.
+
+```sh
+python3 docs/sgm-world/bots/build_crew.py                 # all 23 characters x 2 files, then validate them
+python3 docs/sgm-world/bots/build_crew.py --only dalal,fed
+```
+
+The output is `shreeganeshmodel-deploy/assets/bots/bot_<id>.glb` and `bot_<id>_carry.glb` (46 files). Every file is under 150 KB and 1,800 triangles, and keeps all seven clips with the base names and timings: `run`, `idle`, `crouch`, `throw`, `catch`, `jump`, `cheer`. The generic `bot_IN/US/DE/AE(_carry).glb` and astro files stay unchanged as fallbacks.
+
+Station decides the tee: bom / del / web / blr = IN, stl / mtv / sfo = US, fra = DE, dxb = AE. The courier wears an IN tee.
+
+| id | Tee | Quirk (head) | Prop (right hand) | Carry variant |
+|---|---|---|---|---|
+| bhav | IN | green trader's visor | ticker tape | tape put away |
+| split | IN | two-tone spiky hair (pink / cyan) | big scissors | put away |
+| filer | IN | thick round black glasses | file folder | folder on the crate |
+| promo | IN | top hat + monocle | — | crate on the top hat |
+| tally | IN | red headband with tails | abacus | abacus on the crate |
+| nsdl (Videshi) | IN | mirrored blue aviators | small globe | globe on the crate |
+| amfi (Mutu) | IN | teal beanie with pompom | piggy bank | piggy on the crate |
+| khabri | IN | charcoal fedora with press card | microphone | put away |
+| khabri2 | IN | big orange headphones | rolled newspaper | newspaper on the crate |
+| sarkari | IN | peaked official's cap with gold badge | rubber stamp | stamp on the crate |
+| screeny | IN | VR goggles | VR controller | put away |
+| tikki | IN | khaki bucket hat | binoculars | put away |
+| dalal | IN | nightcap | pillow (left hand) | `idle` = lying asleep (see below) |
+| fed | US | cowboy hat | mini oil drum | drum on the crate |
+| euro | DE | round amber-tinted glasses + EU-blue scarf | big € coin | coin on the crate |
+| gnews | US | satellite dish on the head | — | crate on the dish |
+| drive (Backup) | US | cloud hat | cardboard box | box on the crate |
+| pigeon | AE | grey rounded head, beak, orange eye rings, green/purple neck, little wings | envelope | put away |
+| clock | IN | alarm-clock bells + hammer; wind-up key on the back | — | crate on the bells |
+| watch (Watchdog) | IN | floppy dog ears, snout and nose, red collar | flashlight | put away |
+| paisa | IN | pink star sunglasses | coin purse | purse on the crate |
+| claude | US | tortoiseshell half-moon reading glasses | quill (right) + Friday note (left) | note on the crate |
+| courier | IN | yellow delivery cap + messenger bag across the body | — | — |
+
+How it works:
+- Head pieces are a `quirk` child of `torso`, and props are `prop` / `prop_l` children of the arms (or of `crate` on carry files). They move with the body in every clip.
+- When a character wears a hat, its carry file balances the crate on top of the hat (`lift` in the table in `build_crew.py`). The raised arms stretch to match, and `throw` / `catch` use the raised crate position.
+- **Dalal** sleeps in `idle`: a `sleeper` node lays him on his back across the view, a pillow appears under his head, his eyes shut, he breathes slowly, and blue Z's rise. Every other clip has him awake and standing, holding the pillow.
+- The quirks avoid ethnic or religious headwear, caricatures and brand marks.
+- `quirks_row.png` in this folder shows all 23 side by side, rendered in two halves and stitched together.

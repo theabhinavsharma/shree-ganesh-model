@@ -594,7 +594,7 @@ CRATE_BOTTOM = {"bot": 0.995, "astro": 1.245}
 HELMET = dict(cy=0.83, R=0.41, cut=0.69)
 
 
-def material(name, hexcol, rough=0.8, emissive=None, alpha=None, texture=None):
+def material(name, hexcol, rough=0.8, emissive=None, alpha=None, texture=None, double=False):
     m = {"name": name,
          "pbrMetallicRoughness": {"baseColorFactor": lin(hexcol) + [1.0 if alpha is None else alpha],
                                   "metallicFactor": 0.0, "roughnessFactor": rough}}
@@ -605,6 +605,8 @@ def material(name, hexcol, rough=0.8, emissive=None, alpha=None, texture=None):
         m["emissiveFactor"] = lin(emissive)
     if alpha is not None:
         m["alphaMode"] = "BLEND"
+    if double:
+        m["doubleSided"] = True
     return m
 
 
@@ -681,9 +683,13 @@ class Node:
             yield from c.walk()
 
 
-def build_bot(code, carry):
+def build_bot(code, carry, ident=None, pants=None, quirk=None, lift=0.0):
+    """code: flag (IN/US/DE/AE) or astro. ident/pants/quirk make a per-character bot
+    (see build_crew.py): quirk(M, root, nodes, carry) adds accessory nodes and may
+    return {clip name: channels} overrides (e.g. a lying-down idle). lift raises the
+    carried crate (and stretches the raised arms) so it can sit on top of a hat."""
     astro = code == "astro"
-    name = "bot_%s%s" % (code, "_carry" if carry else "")
+    name = "bot_%s%s" % (ident or code, "_carry" if carry else "")
     mats = {}
 
     def M(key, hexcol, **kw):
@@ -704,7 +710,7 @@ def build_bot(code, carry):
         m_shirt = M("tee_sleeve", sol["sleeve"])          # sleeves: a matching flag colour
         m_tee_top = M("tee_shoulder", sol["top"])
         m_tee_hem = M("tee_hem", sol["hem"])
-    m_pants = M("pants", PANTS[code])
+    m_pants = M("pants", pants or PANTS[code])
     m_shoe = M("boot" if astro else "shoe", COL["boot"] if astro else COL["shoe"])
     m_sole = M("sole", COL["sole"])
 
@@ -752,8 +758,8 @@ def build_bot(code, carry):
                 add_box(m, M("glove", COL["glove"]), (s * 0.04, -0.19, 0), (0.095, 0.07, 0.11), bevel=0.02)
         elif not astro:
             add_box(m, m_shirt, (s * 0.035, 0.0, 0), (0.105, 0.12, 0.17), bevel=0.025)
-            add_box(m, m_body, (s * 0.045, 0.24, 0), (0.09, 0.40, 0.105), bevel=0.025)
-            add_box(m, m_body, (s * -0.06, 0.47, 0), (0.15, 0.10, 0.12), bevel=0.03)   # hand grips crate side
+            add_box(m, m_body, (s * 0.045, 0.24 + lift / 2, 0), (0.09, 0.40 + lift, 0.105), bevel=0.025)
+            add_box(m, m_body, (s * -0.06, 0.47 + lift, 0), (0.15, 0.10, 0.12), bevel=0.03)   # hand grips crate side
         else:
             # goal-post arms that clear the round helmet
             add_box(m, m_shirt, (s * 0.035, 0.0, 0), (0.105, 0.12, 0.17), bevel=0.025)
@@ -801,10 +807,15 @@ def build_bot(code, carry):
                          r=(0.0, 0.0, 0.0, 1.0), mesh=flame))
 
     if carry:
-        bottom = CRATE_BOTTOM["astro" if astro else "bot"]
+        bottom = CRATE_BOTTOM["astro" if astro else "bot"] + lift
         torso.add(Node("crate", t=(0.0, bottom + CRATE["h"] / 2 - HIP_Y, 0.0), mesh=crate_mesh(M)))
 
-    return name, root, mats, textures, build_anims(root, carry, astro)
+    overrides = quirk(M, root, {n.name: n for n in root.walk()}, carry) if quirk else None
+    anims = build_anims(root, carry, astro, lift)
+    if overrides:
+        anims.update(overrides)
+        anims = fill_coverage(root, anims)
+    return name, root, mats, textures, anims
 
 # ------------------------------------------------------------------ animation
 
@@ -812,7 +823,7 @@ def _times(T, N):
     return [round(T * i / N, 6) for i in range(N + 1)]
 
 
-def build_anims(root, carry, astro):
+def build_anims(root, carry, astro, lift=0.0):
     nodes = {n.name: n for n in root.walk()}
     out = {}
 
@@ -879,7 +890,7 @@ def build_anims(root, carry, astro):
     chans.append(("eyes", "scale", blink_t, blink_v))
     out["idle"] = chans
 
-    out.update(action_clips(carry, astro))
+    out.update(action_clips(carry, astro, lift))
     out = fill_coverage(root, out)
     for clip in out.values():
         for n, _, _, _ in clip:
@@ -925,7 +936,7 @@ def sample_clip(T, N, fn, loop=True):
 
 
 def bot_pose(carry, astro, dy=0.0, leg_rx=0.0, yaw=0.0, pitch=0.0, roll=0.0, sy=1.0, eye=1.0,
-             arm_l=(0.0, 0.0), arm_r=(0.0, 0.0), carry_a=0.0, crate=None, flame=0.6):
+             arm_l=(0.0, 0.0), arm_r=(0.0, 0.0), carry_a=0.0, crate=None, flame=0.6, lift=0.0):
     """One frame of a bot pose. arm_l / arm_r: (raise about Z beyond the rest tilt, pitch about X);
     for carry bots both arms pitch together by carry_a. crate: (pos, rot quat, scale) or None = in hands."""
     leg_s = (HIP_Y + dy) / HIP_Y if dy < 0 else 1.0
@@ -942,7 +953,7 @@ def bot_pose(carry, astro, dy=0.0, leg_rx=0.0, yaw=0.0, pitch=0.0, roll=0.0, sy=
         d[("arm_L", "rotation")] = q
         d[("arm_R", "rotation")] = q
         if crate is None:
-            crate = (crate_hold(astro, carry_a), q, 1.0)
+            crate = (crate_hold(astro, carry_a, lift), q, 1.0)
         d[("crate", "translation")] = crate[0]
         d[("crate", "rotation")] = crate[1]
         d[("crate", "scale")] = (crate[2],) * 3
@@ -955,16 +966,16 @@ def bot_pose(carry, astro, dy=0.0, leg_rx=0.0, yaw=0.0, pitch=0.0, roll=0.0, sy=
     return d
 
 
-def crate_hold(astro, a):
+def crate_hold(astro, a, lift=0.0):
     """Torso-local crate centre when the raised arms are pitched by a degrees about the shoulders."""
     piv = ARM_Y - HIP_Y
-    r = CRATE_BOTTOM["astro" if astro else "bot"] + CRATE["h"] / 2 - HIP_Y - piv
+    r = CRATE_BOTTOM["astro" if astro else "bot"] + lift + CRATE["h"] / 2 - HIP_Y - piv
     ra = math.radians(a)
     return (0.0, piv + r * math.cos(ra), r * math.sin(ra))
 
 
-def action_clips(carry, astro):
-    P = lambda **kw: bot_pose(carry, astro, **kw)   # noqa: E731
+def action_clips(carry, astro, lift=0.0):
+    P = lambda **kw: bot_pose(carry, astro, lift=lift, **kw)   # noqa: E731
     out = {}
 
     def crouch(t):
@@ -981,7 +992,7 @@ def action_clips(carry, astro):
             crate = None
             if t > tr:
                 a_r = kf(tr, [(0.0, 0.0), (0.15, -25.0), (0.3, 75.0), (0.4, 30.0), (0.5, 0.0)])
-                p0 = crate_hold(astro, a_r)
+                p0 = crate_hold(astro, a_r, lift)
                 dt = t - tr
                 pos = (0.0, p0[1] + 2.2 * dt - 3.5 * dt * dt, p0[2] + 3.6 * dt)
                 rot = q_axis(X_AX, a_r + 540.0 * dt)
@@ -1000,7 +1011,7 @@ def action_clips(carry, astro):
             a = kf(t, [(0.0, 60.0), (0.2, 30.0), (0.45, 0.0), (0.5, 0.0)])
             crate = None
             if t < 0.2:
-                hc = crate_hold(astro, 30.0)
+                hc = crate_hold(astro, 30.0, lift)
                 dt = t - 0.2
                 pos = (0.0, hc[1] - 1.0 * dt - 3.0 * dt * dt, hc[2] - 3.2 * dt)
                 crate = (pos, q_axis(X_AX, 30.0 + 400.0 * dt), 1.0)

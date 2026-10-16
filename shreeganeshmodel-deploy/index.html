@@ -51,11 +51,23 @@
   <div class="lanes"></div>
 </section>
 
+<section id="chase" class="chase" hidden aria-live="polite">
+  <div class="chase-track"><i id="chaseProgress"></i></div>
+  <p id="chaseText"></p>
+  <div id="chaseEnd" class="row" hidden>
+    <button id="chaseAgain" class="pill primary" type="button">Watch again</button>
+    <button id="chaseOther" class="pill" type="button">Watch another</button>
+    <button id="chaseExplore" class="pill" type="button">Explore on my own</button>
+  </div>
+  <button id="chaseSkip" class="chase-skip" type="button">Skip</button>
+</section>
+<div id="chaseCurtain" class="curtain" hidden><p>Getting the map ready…</p></div>
 <nav id="chips" class="chips" hidden aria-label="Fly to"></nav>
 <aside id="card" class="card" hidden aria-live="polite"></aside>
 <div id="note" class="note" hidden></div>
 
 <script src="world/app.js"></script>
+<script src="world/chase.js"></script>
 <script src="world/journey.js"></script>
 </body>
 </html>

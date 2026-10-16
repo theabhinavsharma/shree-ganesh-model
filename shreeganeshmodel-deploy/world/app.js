@@ -6,6 +6,7 @@
 const C = window.Cesium, D = window.SGM_DATA, CFG = window.SGM_CONFIG || {};
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const PHONE = () => window.innerWidth <= 640;
+const RECORD = location.search.includes("record");     // frame-by-frame capture for previews (world/chase.js drives the frames)
 const $ = id => document.getElementById(id);
 const LOW = 250000;                                   // below this height (m) the street-level city shows
 const TZ = { bom: "Asia/Kolkata", del: "Asia/Kolkata", web: "Asia/Kolkata", blr: "Asia/Kolkata", stl: "America/Chicago",
@@ -20,7 +21,8 @@ const gibs = (layer, ext) => new C.UrlTemplateImageryProvider({
 const viewer = new C.Viewer("cesium", {
   baseLayer: new C.ImageryLayer(gibs("BlueMarble_NextGeneration", "jpeg")),
   animation: false, timeline: false, baseLayerPicker: false, geocoder: false, homeButton: false, sceneModePicker: false,
-  navigationHelpButton: false, fullscreenButton: false, infoBox: false, selectionIndicator: false, shouldAnimate: true
+  navigationHelpButton: false, fullscreenButton: false, infoBox: false, selectionIndicator: false, shouldAnimate: true,
+  contextOptions: RECORD ? { webgl: { preserveDrawingBuffer: true } } : undefined
 });
 const scene = viewer.scene, camera = viewer.camera, globe = scene.globe;
 const dayLayer = viewer.imageryLayers.get(0); dayLayer.dayAlpha = 1; dayLayer.nightAlpha = 0.04;
@@ -31,6 +33,8 @@ streetLayer.show = false;                              // stand-in only when Goo
 globe.enableLighting = true; globe.showGroundAtmosphere = true; globe.baseColor = C.Color.fromCssColorString("#0b1a2a");
 scene.skyAtmosphere.show = true; scene.fog.enabled = true;
 viewer.clock.currentTime = C.JulianDate.now(); viewer.clock.multiplier = 1; viewer.clock.shouldAnimate = true;
+const AT = new URLSearchParams(location.search).get("at");   // ?at=2026-10-17T06:30:00Z shows the sky at that moment (previews only)
+if (AT) { try { viewer.clock.currentTime = C.JulianDate.fromIso8601(AT); } catch (e) {} }
 camera.setView({ destination: C.Cartesian3.fromDegrees(72, 16, PHONE() ? 26e6 : 19e6) });
 
 /* ---------------------------------------------------------------- Google Photorealistic 3D Tiles (lazy: only near the ground) */
@@ -39,7 +43,9 @@ function ensureTileset() {
   if (tileset || tilesetTried || !CFG.googleKey) return;
   tilesetTried = true;
   C.GoogleMaps.defaultApiKey = CFG.googleKey;
-  C.createGooglePhotorealistic3DTileset(undefined, { showCreditsOnScreen: true, maximumScreenSpaceError: PHONE() ? 24 : 16 })
+  C.createGooglePhotorealistic3DTileset(undefined, { showCreditsOnScreen: true, maximumScreenSpaceError: PHONE() ? 24 : 16,
+    // when recording, time stands still between frames, so the "wait until the camera stops" loading tricks would never fire
+    foveatedScreenSpaceError: !RECORD, cullRequestsWhileMoving: !RECORD, cacheBytes: RECORD ? 3e9 : undefined })
     .then(ts => { tileset = ts; scene.primitives.add(ts); })
     .catch(err => showNote("Google's 3D city didn't load (" + (err && err.message || err) + "). Showing the satellite globe instead."));
 }
@@ -120,11 +126,14 @@ function seaPath(wps) {                                  // [lat, lon] sea waypo
   for (let i = 0; i < wps.length - 1; i++) pts = pts.concat(geo([wps[i][1], wps[i][0]], [wps[i + 1][1], wps[i + 1][0]], 14, 0, 0, 0).slice(i ? 1 : 0));
   return pts;
 }
+const routeEnts = [];
 function drawRoute(pts, color, width) {
-  viewer.entities.add({ polyline: { positions: pts, width: width || 5, arcType: C.ArcType.NONE,
+  routeEnts.push(viewer.entities.add({ polyline: { positions: pts, width: width || 5, arcType: C.ArcType.NONE,
     material: new C.PolylineGlowMaterialProperty({ glowPower: 0.22, taperPower: 1, color: color.withAlpha(0.95) }),
-    distanceDisplayCondition: new C.DistanceDisplayCondition(0, 5e7) } });
+    distanceDisplayCondition: new C.DistanceDisplayCondition(0, 5e7) } }));
 }
+let ambient = true;                                    // the always-running movers and routes; hidden while a follow-cam journey plays
+function setAmbient(on) { ambient = on; routeEnts.forEach(e => { e.show = on; }); }
 function pathOf(pts) {
   const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + C.Cartesian3.distance(pts[i - 1], pts[i]));
   return { pts, cum, len: cum[cum.length - 1] };
@@ -140,7 +149,8 @@ async function loadModel(urls, opts) {
   return null;
 }
 async function addMover(o) {
-  const model = await loadModel(o.urls, { scale: o.scale || 1, minimumPixelSize: o.minPx || 0, id: o.pick });
+  const own = o.who ? [BOTS_DIR + `bot_${o.who}_carry.glb`] : [];   // the character's own look first, its country's bot as the fallback
+  const model = await loadModel(own.concat(o.urls), { scale: o.scale || 1, minimumPixelSize: o.minPx || 0, id: o.pick });
   if (!model) return null;
   model.readyEvent.addEventListener(() => { try { model.activeAnimations.add({ name: o.anim || "run", loop: C.ModelAnimationLoop.REPEAT, multiplier: o.animSpeed || 1 }); } catch (e) {} });
   const m = Object.assign({ model, path: pathOf(o.pts), trail: [], lastTrail: 0, lastU: 0, pos: o.pts[0] }, o);
@@ -172,7 +182,7 @@ function updateMovers(secs, camH) {
     m.pos = p;
     HPR.heading = headingAt(a, b) - Math.PI / 2;       // models face +Z, which Cesium turns to +X (east at heading 0)
     C.Transforms.headingPitchRollToFixedFrame(p, HPR, C.Ellipsoid.WGS84, undefined, m.model.modelMatrix);
-    const vis = camH >= (m.minH || 0) && camH <= (m.maxH || Infinity);
+    const vis = ambient && camH >= (m.minH || 0) && camH <= (m.maxH || Infinity);
     m.model.show = vis; if (m.trailEntity) m.trailEntity.show = vis; if (m.labelEntity) m.labelEntity.show = vis;
     if (m.trailColor && secs - m.lastTrail > 0.12) {
       m.lastTrail = secs; m.trail.push(C.Cartesian3.clone(p)); if (m.trail.length > (m.trailN || 60)) m.trail.shift();
@@ -220,21 +230,21 @@ const BOTS_DIR = "assets/bots/", PROPS = "assets/props/";
 const carry = f => [BOTS_DIR + `bot_${f}_carry.glb`];
 async function buildMovers() {
   const M = [
-    { urls: carry("US"), pts: ROUTES.fedRun, secs: 14, minPx: 54, scale: 2000, pick: { bot: "fed" }, trailColor: AMBER, label: "Fed · world prices", labelMax: 1.2e7, maxH: 3e7 },
-    { urls: carry("DE"), pts: ROUTES.euroRun, secs: 9, minPx: 54, scale: 2000, pick: { bot: "euro" }, trailColor: AMBER, label: "Euro · exchange rates", labelMax: 1.2e7, maxH: 3e7 },
-    { urls: carry("US"), pts: ROUTES.claudeRun, secs: 6, minPx: 54, scale: 800, pick: { bot: "claude" }, trailColor: AMBER, label: "Claude · Friday note", labelMax: 1.2e7, maxH: 3e7 },
-    { urls: carry("US"), pts: ROUTES.gnewsRun, secs: 7, minPx: 48, scale: 800, pick: { bot: "gnews" }, trailColor: AMBER, maxH: 3e7 },
+    { urls: carry("US"), pts: ROUTES.fedRun, who: "fed", secs: 14, minPx: 54, scale: 2000, pick: { bot: "fed" }, trailColor: AMBER, label: "Fed · world prices", labelMax: 1.2e7, maxH: 3e7 },
+    { urls: carry("DE"), pts: ROUTES.euroRun, who: "euro", secs: 9, minPx: 54, scale: 2000, pick: { bot: "euro" }, trailColor: AMBER, label: "Euro · exchange rates", labelMax: 1.2e7, maxH: 3e7 },
+    { urls: carry("US"), pts: ROUTES.claudeRun, who: "claude", secs: 6, minPx: 54, scale: 800, pick: { bot: "claude" }, trailColor: AMBER, label: "Claude · Friday note", labelMax: 1.2e7, maxH: 3e7 },
+    { urls: carry("US"), pts: ROUTES.gnewsRun, who: "gnews", secs: 7, minPx: 48, scale: 800, pick: { bot: "gnews" }, trailColor: AMBER, maxH: 3e7 },
     { urls: [PROPS + "tanker_oil.glb", PROPS + "ship_cargo.glb", ...carry("US")], pts: ROUTES.atlantic, secs: 70, minPx: 90, scale: 25000, anim: "idle", pick: { ship: "tanker" },
       trailColor: WAKE, trailWidth: 8, trailN: 90, label: "Ship 1 · oil and world prices", labelMax: 3e7 },
     { urls: [PROPS + "submarine.glb", ...carry("DE")], pts: ROUTES.med, secs: 55, delay: 8, minPx: 70, scale: 18000, anim: "idle", pick: { ship: "sub" },
       trailColor: CYAN, trailN: 80, label: "Submarine · the undersea cable", labelMax: 3e7 },
     { urls: [PROPS + "container_ship.glb", PROPS + "ship_cargo.glb", ...carry("US")], pts: ROUTES.pacific, secs: 90, minPx: 90, scale: 30000, anim: "idle", pick: { ship: "container" },
       trailColor: WAKE, trailWidth: 8, trailN: 100, label: "Ship 2 · Claude's note and world headlines", labelMax: 3e7 },
-    { urls: carry("IN"), pts: ROUTES.nseToBlr, secs: 6, minPx: 46, scale: 900, pick: { bot: "bhav" }, trailColor: AMBER, maxH: 1.5e7 },
-    { urls: carry("IN"), pts: ROUTES.pibToBlr, secs: 8, delay: 2, minPx: 46, scale: 900, pick: { bot: "sarkari" }, trailColor: AMBER, label: "Sarkari · government news", labelMax: 9e6, maxH: 1.5e7 },
-    { urls: carry("IN"), pts: ROUTES.mumToBlr, secs: 6, delay: 3, minPx: 42, scale: 900, pick: { bot: "fed" }, trailColor: AMBER, maxH: 1.5e7 },
-    { urls: carry("IN"), pts: ROUTES.chennaiToBlr, secs: 5, delay: 1, minPx: 42, scale: 900, pick: { bot: "claude" }, trailColor: AMBER, maxH: 1.5e7 },
-    { urls: carry("AE"), pts: ROUTES.tgOut.concat(ROUTES.tgBack.slice(1)), secs: 12, minPx: 44, scale: 900, pick: { bot: "pigeon" }, trailColor: CYAN, label: "Pigeon · your messages", labelMax: 9e6, maxH: 1.5e7 },
+    { urls: carry("IN"), pts: ROUTES.nseToBlr, who: "bhav", secs: 6, minPx: 46, scale: 900, pick: { bot: "bhav" }, trailColor: AMBER, maxH: 1.5e7 },
+    { urls: carry("IN"), pts: ROUTES.pibToBlr, who: "sarkari", secs: 8, delay: 2, minPx: 46, scale: 900, pick: { bot: "sarkari" }, trailColor: AMBER, label: "Sarkari · government news", labelMax: 9e6, maxH: 1.5e7 },
+    { urls: carry("IN"), pts: ROUTES.mumToBlr, who: "courier", secs: 6, delay: 3, minPx: 42, scale: 900, pick: { bot: "fed" }, trailColor: AMBER, maxH: 1.5e7 },
+    { urls: carry("IN"), pts: ROUTES.chennaiToBlr, who: "courier", secs: 5, delay: 1, minPx: 42, scale: 900, pick: { bot: "claude" }, trailColor: AMBER, maxH: 1.5e7 },
+    { urls: carry("AE"), pts: ROUTES.tgOut.concat(ROUTES.tgBack.slice(1)), who: "pigeon", secs: 12, minPx: 44, scale: 900, pick: { bot: "pigeon" }, trailColor: CYAN, label: "Pigeon · your messages", labelMax: 9e6, maxH: 1.5e7 },
     { urls: [PROPS + "rupee_note.glb", PROPS + "data_crate.glb"], pts: ROUTES.moneyIn, secs: 7, minPx: 40, scale: 2500, anim: "idle", pick: { money: "in" }, trailColor: MONEY, label: "₹ salary from SBI", labelMax: 6e6, maxH: 1.2e7 },
     { urls: [PROPS + "rupee_note.glb", PROPS + "data_crate.glb"], pts: ROUTES.moneyOut, secs: 7, delay: 3.5, minPx: 40, scale: 2500, anim: "idle", pick: { money: "out" }, trailColor: MONEY, maxH: 1.2e7 }
   ];
@@ -243,7 +253,7 @@ async function buildMovers() {
   try {
     const j = await (await fetch("world/routes/nse_bkc_exit.json")).json();
     const pts = j.coordinates.map(([lon, lat]) => C.Cartesian3.fromDegrees(lon, lat, 0));
-    for (let k = 0; k < 3; k++) await addMover({ urls: carry("IN"), pts, secs: 48, delay: k * 16, pause: 0.3, minPx: 26, scale: 7, ground: "bkc", pick: { bot: "bhav" }, trailColor: AMBER, trailN: 40, maxH: 60000 });
+    for (let k = 0; k < 3; k++) await addMover({ urls: carry("IN"), pts, secs: 48, who: "bhav", delay: k * 16, pause: 0.3, minPx: 26, scale: 7, ground: "bkc", pick: { bot: "bhav" }, trailColor: AMBER, trailN: 40, maxH: 60000 });
   } catch (e) { /* route missing */ }
   // Bengaluru: you, the laptop and the ML bots (shown at a public landmark, never a home)
   const h = D.HOME;
@@ -271,6 +281,7 @@ function botCard(id) {
       <div><dt>What it means</dt><dd>${esc(L.means || b.used)}</dd></div>
     </dl>
     <div class="ctas">
+      ${window.SGM_CHASE && window.SGM_CHASE.has(id) ? `<button type="button" class="cta primary" data-follow="${id}">Watch ${esc(b.name)}'s journey →</button>` : ""}
       ${L.next ? `<button type="button" class="cta" data-bot="${L.next[0]}">${esc(L.next[1])} →</button>` : ""}
       ${cta ? (cta[0] === "list" ? `<button type="button" class="cta" data-list="${cta[1]}">${esc(cta[2])} →</button>`
                                  : `<button type="button" class="cta" data-bot="${cta[1]}">${esc(cta[2])} →</button>`) : ""}
@@ -315,6 +326,7 @@ function openCard(html) {
   card.querySelector(".close").addEventListener("click", closeCard);
   card.querySelectorAll("[data-bot]").forEach(btn => btn.addEventListener("click", () => showBot(btn.dataset.bot, true)));
   card.querySelectorAll("[data-list]").forEach(btn => btn.addEventListener("click", () => openCard(listCard(btn.dataset.list, currentBot))));
+  card.querySelectorAll("[data-follow]").forEach(btn => btn.addEventListener("click", () => { closeCard(); window.SGM_CHASE.play(btn.dataset.follow); }));
 }
 function closeCard() { $("card").hidden = true; document.body.classList.remove("card-open"); }
 function showBot(id, fly) {
@@ -410,7 +422,11 @@ scene.preRender.addEventListener((sc, time) => {
 
 /* ---------------------------------------------------------------- hooks for the journey and deep links */
 window.SGM_WORLD = { viewer, C, D, flyTo, flyBuilding, startExplore, showBot, openCard, closeCard, simpleCard, GROUND, PHONE, REDUCED,
-                     showCaption: t => { $("captionText").textContent = t; $("caption").hidden = false; } };
+                     showCaption: t => { $("captionText").textContent = t; $("caption").hidden = false; },
+                     // for the follow-cam journeys (world/chase.js)
+                     chase: { loadModel, headingAt, seaPath, SEA, P, AMBER, CYAN, WAKE, setAmbient, RECORD, LOW, tileset: () => tileset, ensureTileset, staticModels: () => statics.map(x => x.model),
+                              playStatic: (prop, name, once) => statics.filter(x => x.pick && x.pick.prop === prop).forEach(x => { try { x.model.activeAnimations.removeAll();
+                                x.model.activeAnimations.add({ name, loop: once ? C.ModelAnimationLoop.NONE : C.ModelAnimationLoop.REPEAT }); } catch (e) {} }) } };
 function routeHash() {                                  // #nse jumps to NSE, #explore skips the intro
   if (location.hash === "#nse") { startExplore(); flyBuilding(NSE.lon, NSE.lat, PHONE() ? 1400 : 1100, 15, -26, 0, "bkc"); }
   else if (location.hash === "#explore") startExplore();

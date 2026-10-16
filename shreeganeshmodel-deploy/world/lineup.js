@@ -30,7 +30,7 @@ function play(crew) {
     const loader = new GLTFLoader(), bots = [];
     labels.innerHTML = "";
     await Promise.all(crew.map(async (c, i) => {
-      const g = await loader.loadAsync(`assets/bots/bot_${c.flag}.glb`);
+      const g = await loader.loadAsync(`assets/bots/bot_${c.id}.glb`).catch(() => loader.loadAsync(`assets/bots/bot_${c.flag}.glb`));   // own look, else the country's bot
       const root = g.scene; root.scale.setScalar(1.15); root.rotation.y = 0.75; root.position.set(0, 0, i * gap);   // three-quarter view: faces the camera, ready to run right
       root.traverse(o => { if (o.isMesh) o.castShadow = true; });
       scene.add(root);

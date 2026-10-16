@@ -383,7 +383,7 @@ const EXTRA = {   // characters that aren't data bots
 function charInfo(id) {
   if (EXTRA[id]) return Object.assign({ id }, EXTRA[id]);
   const b = BOT[id], LM = D.LAYMAN[id] || {}, flag = flagOf(id);
-  return { id, name: b.name, file: `bots/bot_${flag}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: LM.brings, from: LM.from, means: LM.means, when: b.when };
+  return { id, name: b.name, file: `bots/bot_${id}.glb`, flag, chip: COUNTRY[flag], role: b.role, says: b.says, brings: LM.brings, from: LM.from, means: LM.means, when: b.when };
 }
 const GROUPS = [
   ["Data bots · leave together at 6:45 PM", ["bhav", "split", "filer", "promo", "tally", "nsdl", "amfi", "khabri", "khabri2", "sarkari", "screeny", "tikki", "fed", "euro", "gnews", "dalal"]],
@@ -709,7 +709,7 @@ async function buildStage(id) {
       leg.toStop = stopIdx; leg.fly = FLY.has(l.who); leg.ship = l.sea && !leg.fly;
       const key = l.who + "@" + from.x;
       if (!byWho[key]) {
-        const file = l.who === "courier" ? "bots/bot_IN.glb" : (EXTRA[l.who] ? EXTRA[l.who].file : `bots/bot_${flagOf(l.who)}.glb`);
+        const file = l.who === "courier" ? "bots/bot_courier.glb" : (EXTRA[l.who] ? EXTRA[l.who].file : `bots/bot_${l.who}.glb`);
         const m = await tryInstance(file, { shadow: true }); if (!m) continue;
         m.base = SCALE[l.who] || 1; m.root.scale.setScalar(m.base); m.root.rotation.y = Math.PI / 2;
         const waitX = leg.ship ? from.x + 4 : (k0 === 0 && from.name !== LAP && from.name !== PHONE) ? from.x - 0.6 : from.x + 2.0;
@@ -727,7 +727,7 @@ async function buildStage(id) {
   if (!j.legs.some(l => l.who === id) && !["laptop", "ml", "me", "rupee"].includes(id)) {
     const m = await tryInstance(charInfo(id).file, { shadow: true });
     if (m) { m.root.position.set(stops[0].x - 1.6, 0, 1.0); m.root.rotation.y = 0.5; m.play("idle"); scene.add(m.root); mixers.push(m.mixer);
-      if (id === "dalal") { m.root.rotation.set(0, 0.3, 1.45); m.root.position.y = 0.3; props.sleeper = m; } }
+    }
   }
   // the baton: a data crate, which becomes the Friday list after the anvil
   const crate = j.money ? null : await tryInstance("props/data_crate.glb", { shadow: true });

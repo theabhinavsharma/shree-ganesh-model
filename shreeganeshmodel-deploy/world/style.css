@@ -18,6 +18,7 @@ html, body { height: 100%; margin: 0; background: #05070c; color: var(--ink); fo
 .cesium-viewer-bottom { z-index: 1; }
 .cesium-widget-credits { font-size: 10px; }
 button { font: inherit; cursor: pointer; }
+[hidden] { display: none !important; }   /* hidden always wins over a component's display */
 
 .brand { position: fixed; z-index: 2; top: calc(env(safe-area-inset-top, 0px) + 14px); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; }
 .brand h1 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(22px, 3.2vw, 32px); letter-spacing: -0.01em; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
@@ -100,3 +101,16 @@ body:has(.lineup:not([hidden])) .brand h1, body:has(.lineup:not([hidden])) .sun 
 .cos { margin: 4px 0 0; padding-left: 22px; display: grid; gap: 6px; }
 .cos li b { display: block; font-size: 14px; font-weight: 600; }
 .cos li span { font-size: 12px; color: var(--ink-2); }
+
+/* follow-cam journey: a slim caption bar with progress at the bottom, a curtain while the 3D map loads */
+.chase { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+  width: min(620px, calc(100% - 32px)); box-sizing: border-box; padding: 14px 52px 14px 18px; border-radius: 18px;
+  background: var(--panel); border: 1px solid var(--panel-edge); backdrop-filter: blur(10px); }
+.chase p { margin: 0; font-size: 15.5px; line-height: 1.45; min-height: 2.9em; }
+.chase .row { margin-top: 12px; justify-content: flex-start; }
+.chase-track { position: absolute; left: 18px; right: 18px; top: 0; height: 3px; border-radius: 3px; overflow: hidden; background: rgba(255,255,255,.12); }
+.chase-track i { display: block; height: 100%; background: #ffc21a; transform-origin: left; transform: scaleX(0); }
+.chase-skip { position: absolute; top: 10px; right: 10px; border: 1px solid var(--panel-edge); background: transparent; color: var(--ink-2); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; }
+.curtain { position: fixed; inset: 0; z-index: 2; display: grid; place-items: center; background: #05070c; }
+.curtain p { font-family: var(--font-display); font-size: 18px; color: var(--ink-2); }
+.cta.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
