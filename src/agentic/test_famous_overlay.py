@@ -190,7 +190,7 @@ def main(key):
         K = pd.DataFrame([dict(d=d, known=(1.0 if pd.notna(mc(s, d)) else np.nan)) for s, d in zip(liq["symbol"], liq["trade_date"])])
         checks += [dr.coverage("market cap known for liquid stocks on list dates", K, "d", ["known"], range(START.year, cal[-1].year + 1))]
     if os.environ.get("SGM_REPRO") != "1":
-        dr.gate(EXP_ID, checks, run="RESULT")
+        dr.gate(EXP_ID, checks, run=os.environ.get("SGM_RERUN_TAG") or "RESULT")   # 2026-10-16: a rerun's gate carries its tag (trust.results_data_ready)
     del Px
     main_f, extra_f = flags[H["main"]], flags[H["extra"]]
 
