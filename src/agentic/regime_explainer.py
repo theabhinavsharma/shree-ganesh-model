@@ -89,8 +89,13 @@ def main() -> None:
         M[name] = (now / then - 1) if kind == "pct" else (now - then)
     v = pd.read_parquet(ROOT / "data/derived/india_vix.parquet"); v["date"] = pd.to_datetime(v["date"])
     M["india_vix"] = asof(idx - pd.Timedelta(days=1), v.set_index("date")["vix_close"])
-    um = pd.read_parquet(ROOT / "data/derived/us_macro_fred.parquet"); um["trade_date"] = pd.to_datetime(um["trade_date"])
-    spx = um.set_index("trade_date")["spx"].dropna().sort_index(); M["spx_vs_200"] = asof(idx - pd.Timedelta(days=1), spx / spx.rolling(200).mean() - 1)
+    # 2026-10-16: was data/derived/us_macro_fred.parquet, a one-off copy that stopped on 2026-07-23 (no builder). global_rates.parquet
+    # holds the same FRED series (identical on the overlap), refreshed daily by fetch_global_macro.py and guarded in feed_guards.json.
+    um = pd.read_parquet(ROOT / "data/derived/global_rates.parquet"); um["trade_date"] = pd.to_datetime(um["trade_date"])
+    spx = um.set_index("trade_date")["spx"].dropna().sort_index()
+    if spx.index[-1] < cal[-1] - pd.Timedelta(days=7):
+        raise SystemExit(f"S&P 500 input stale: last {spx.index[-1].date()} vs prices {cal[-1].date()} (global_rates.parquet) — no note on stale data")
+    M["spx_vs_200"] = asof(idx - pd.Timedelta(days=1), spx / spx.rolling(200).mean() - 1)
     Fp = pd.read_parquet(ROOT / "data/derived/nsdl_fpi_daily.parquet")
     se = Fp[(Fp["asset"] == "Equity") & (Fp["route"] == "Stock Exchange")].copy(); se["known_from"] = pd.to_datetime(se["known_from"])
     se = se.sort_values("known_from"); g = se["gross_purchases_cr"] + se["gross_sales_cr"]
@@ -215,7 +220,7 @@ def main() -> None:
                telegram_lines=tele)
     (LOG / f"regime_{stamp}.json").write_text(json.dumps(out, indent=1, default=str))
     (LOG / f"regime_{stamp}.json.manifest.json").write_text(json.dumps(dict(dataset=f"regime_{stamp}.json", producer="src/agentic/regime_explainer.py", kind="exploration",
-        definitions=__doc__, inputs=["v3_rule (V3.1)", "price panel", "data/derived/macro_drivers_fred.parquet", "data/derived/india_vix.parquet", "data/derived/us_macro_fred.parquet",
+        definitions=__doc__, inputs=["v3_rule (V3.1)", "price panel", "data/derived/macro_drivers_fred.parquet", "data/derived/india_vix.parquet", "data/derived/global_rates.parquet (spx)",
                                      "data/derived/nsdl_fpi_daily.parquet", "configs/event_calendar.yaml", "logs/experiments.jsonl"],
         units=dict(list_ret="fraction, 6-month list return after costs", mkt_ret="fraction", excess="fraction", fpi_60d_pct="fraction of FPI turnover",
                    fed_6m="percentage points", india_rate_6m="percentage points", before_vs_avg="percentage points vs the average list"),

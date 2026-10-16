@@ -7,7 +7,7 @@ logs/leader_sleeve/v31_hits_by_year/v31_picks.csv). Every macro reading is what 
   us10y_3m               US 10-year yield change over 3 months, percentage points (FRED DGS10, by known_from)
   dollar_3m              broad dollar index change over 3 months (FRED DTWEXBGS, by known_from)
   brent_3m               Brent crude change over 3 months (FRED DCOILBRENTEU, by known_from)
-  us_vix, spx_vs_200     US VIX and the S&P 500 vs its 200-day average (us_macro_fred.parquet, as of the day before)
+  us_vix, spx_vs_200     US VIX and the S&P 500 vs its 200-day average (FRED via global_rates.parquet, as of the day before)
   core_yoy, iip_yoy      latest released year-on-year growth of India's core sector index and IIP general index (by release date)
 Reported per era (2019-22, 2023+): rank correlation with the list outcome and the average outcome in the low / high third.
 Neighbouring weekly lists overlap (each 6-month window shares most of its days), so ~15 independent half-years in all.
@@ -46,7 +46,7 @@ def main() -> None:
         s = fr[fr["series"] == ser].groupby("known_from")["value"].last()
         now, then = asof(d, s), asof(d - pd.DateOffset(months=3), s).to_numpy()
         M[name] = (now / then - 1) if kind == "pct" else (now - then)
-    um = pd.read_parquet(ROOT / "data/derived/us_macro_fred.parquet"); um["trade_date"] = pd.to_datetime(um["trade_date"])
+    um = pd.read_parquet(ROOT / "data/derived/global_rates.parquet"); um["trade_date"] = pd.to_datetime(um["trade_date"])
     um = um.set_index("trade_date").sort_index()
     M["us_vix"] = asof(d - pd.Timedelta(days=1), um["us_vix"]).to_numpy()
     spx = um["spx"].dropna(); spx200 = spx / spx.rolling(200).mean() - 1
