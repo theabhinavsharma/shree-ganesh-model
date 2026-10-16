@@ -1,0 +1,46 @@
+# SGM Data World — plan and progress
+
+## End goal
+A 3D world you can fly through that explains the whole SGM automation. Every input starts at its real place on a real Earth. Little orange bots carry it to the laptop in Bengaluru, where worker bots turn it into the Friday list. A money lane shows salary (SBI) → broker → stocks → back. Scrolling tells the story; dragging lets you explore; clicking any bot tells you its job.
+
+## Decisions (user, 2026-10-16)
+- Style: toy diorama (reference 3) for the globe and cities; isometric workshop (closer to reference 2) inside the laptop.
+- The user is the boss bot: a giant behind the laptop, toy-styled from a photo the user will send.
+- Scroll story comes from the user's own drawings (one frame per scroll step). Build it after the drawings arrive.
+- Fixed explainer first. Live green/red status from real runs is a later option.
+
+## Quality bar (check every milestone against this)
+1. Truthful: only feeds that exist in the repo (configs/feed_guards.json, daily_data_layer.sh). Pins sit at the publisher's city; anything unverified gets no city. Ships and tunnels are labelled as a cartoon of undersea cables.
+2. Private: no rupee amounts, holdings or personal data on the page.
+3. Clear before clever: a first-time viewer understands "data comes from here, goes there" within 10 seconds.
+4. Smooth on a phone: no stutter, readable cards, tap targets big enough.
+5. One look: toy diorama outside, isometric workshop inside. No neon, no mixed styles.
+
+## Milestones
+- [x] M1 Base world: real-coastline globe, floating city islands tethered to their real spots, bots with outfits, couriers and ships moving data, click a bot or island for its card, fly-to buttons.
+- [ ] M2 Inside the laptop: isometric workshop with the 6:45 PM daily line and the Friday 7:30 PM line (checks, model scores, heat, themes, V3.2 rails, test re-runs, Telegram).
+- [ ] M3 Boss giant: the user's toy figure behind the laptop.
+- [ ] M4 Scroll story: chapters from the user's drawings.
+- [ ] M5 Money lane: SBI → broker → Monday pre-open order → 26 weekly slices → sale → roll-over.
+- [ ] M6 (optional) Live status colours from the daily run.
+
+## Not doing (scope guard)
+- No extra decoration that doesn't explain a step (no particle storms, no random effects).
+- No made-up sources, cities or numbers.
+- No new data fetching for the page itself.
+
+## Files
+- `world.html` is the page source (published as the claude.ai artifact https://claude.ai/artifact/4AqJRp1Dc1hMtAn2giYB4P; republish this file to keep the same link).
+- Local preview: `.claude/launch.json` entry `sgm-world` (python http.server on port 8793 serving this folder).
+
+## Progress log
+- 2026-10-16: plan written; M1 started.
+- 2026-10-16: M1 done and published (version 1).
+  - What it has: real coastlines (the ECharts 4.9 world map, land only, no borders), 8 floating islands (7 tethered to their real cities; the web island has no pin), 21 station bots, 8 couriers, 2 ships on the simplified undersea-cable routes, the Telegram plane, click cards, fly-to buttons, and the About card with the honesty notes.
+  - Quality-bar check:
+    1. Truthful: every bot maps to a feed in the repo. screener.in and tickertape.in have no city pin (unverified). BSE is shown asleep.
+    2. Private: no amounts.
+    3. Clear: labels never overlap.
+    4. Phone: layout checked at 375px; tilted island views work.
+    5. One look: toy diorama throughout.
+  - Known gaps: the laptop interior is not built (M2); boss giant and scroll story are waiting for the user's photo and drawings.

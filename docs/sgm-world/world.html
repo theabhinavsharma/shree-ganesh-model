@@ -1,0 +1,863 @@
+<title>SGM Data World</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: one full-screen 3D globe; a quiet title top-left, fly-to chips along the bottom, a card that opens on the right (bottom sheet on phones). */
+:root {
+  --sky-1: #f6e2cd;   /* warm peach sky */
+  --sky-2: #d6e6e2;   /* misty teal horizon */
+  --ink: #2b2521;
+  --ink-2: #6b6058;
+  --panel: #fffaf3;
+  --panel-edge: #e8d6c1;
+  --accent: #1d6b73;  /* deep teal for controls */
+  --accent-ink: #ffffff;
+  --live: #3a8752;    /* feeds the live rule */
+  --msg: #2f6fae;     /* messages */
+  --ctx: #9a6a2c;     /* context and research */
+  --off: #978b82;     /* not in use */
+  --font-display: "Fredoka", "Avenir Next Rounded", "Nunito", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky-1: #2a2337; --sky-2: #15242b; --ink: #f4ece3; --ink-2: #b8aca2; --panel: #221d27; --panel-edge: #3b3242;
+    --accent: #6cc2c8; --accent-ink: #0e1c1f; --live: #72c38b; --msg: #7fb3e6; --ctx: #e0ad62; --off: #8d8389; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --sky-1: #2a2337; --sky-2: #15242b; --ink: #f4ece3; --ink-2: #b8aca2; --panel: #221d27; --panel-edge: #3b3242;
+  --accent: #6cc2c8; --accent-ink: #0e1c1f; --live: #72c38b; --msg: #7fb3e6; --ctx: #e0ad62; --off: #8d8389; color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5;
+  background: radial-gradient(120% 90% at 30% 10%, var(--sky-1), var(--sky-2));
+}
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; }
+.ui { position: fixed; z-index: 2; }
+header.ui {
+  top: calc(env(safe-area-inset-top, 0px) + 14px); left: max(16px, env(safe-area-inset-left, 0px));
+  max-width: min(440px, calc(100% - 140px)); pointer-events: none;
+}
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 4vw, 38px); line-height: 1.05; margin: 0 0 6px; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 0; color: var(--ink-2); font-size: 14px; max-width: 38ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 10px; font-size: 12px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+#aboutBtn {
+  top: calc(env(safe-area-inset-top, 0px) + 14px); right: max(16px, env(safe-area-inset-right, 0px));
+}
+button { font: inherit; cursor: pointer; }
+.pill {
+  border: 1px solid var(--panel-edge); background: var(--panel); color: var(--ink); border-radius: 999px;
+  padding: 7px 14px; font-size: 13px; font-weight: 500; white-space: nowrap;
+}
+.pill:hover { border-color: var(--accent); }
+.pill:focus-visible, .card button:focus-visible, .card a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pill[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+nav.ui {
+  left: 0; right: 0; bottom: 0; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; pointer-events: auto; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.hint { font-size: 12px; color: var(--ink-2); pointer-events: none; }
+.label {
+  position: fixed; left: 0; top: 0; z-index: 1; pointer-events: auto; cursor: pointer; transform: translate(-50%, -100%);
+  font-family: var(--font-display); font-weight: 600; font-size: 13px; line-height: 1.1; color: var(--ink);
+  background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--panel-edge); border-radius: 10px;
+  padding: 4px 9px 5px; white-space: nowrap; text-align: center; transition: opacity .25s;
+}
+.label small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 11px; color: var(--ink-2); }
+.label.minor { font-size: 11px; padding: 2px 7px; font-family: var(--font-body); font-weight: 500; color: var(--ink-2); }
+#tip {
+  position: fixed; z-index: 3; pointer-events: none; transform: translate(12px, 12px); background: var(--ink); color: var(--panel);
+  font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap;
+}
+#bubble {
+  position: fixed; z-index: 3; pointer-events: none; transform: translate(-50%, calc(-100% - 14px)); max-width: min(260px, 70vw);
+  background: var(--panel); color: var(--ink); border: 1px solid var(--panel-edge); border-radius: 14px; padding: 9px 12px;
+  font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(40, 25, 10, .14);
+}
+#bubble::after {
+  content: ""; position: absolute; left: 50%; bottom: -7px; width: 12px; height: 12px; background: var(--panel);
+  border-right: 1px solid var(--panel-edge); border-bottom: 1px solid var(--panel-edge); transform: translateX(-50%) rotate(45deg);
+}
+.card {
+  position: fixed; z-index: 4; top: calc(env(safe-area-inset-top, 0px) + 64px); right: max(16px, env(safe-area-inset-right, 0px));
+  width: min(380px, calc(100% - 32px)); max-height: calc(100% - 170px); overflow-y: auto;
+  background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 18px; padding: 18px 18px 16px;
+  box-shadow: 0 14px 40px rgba(40, 25, 10, .18);
+}
+.card h2 { font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1.1; margin: 0 34px 4px 0; text-wrap: balance; }
+.card .role { color: var(--ink-2); font-size: 13px; margin: 0 0 10px; }
+.card .close { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--panel-edge); background: transparent; color: var(--ink); font-size: 18px; line-height: 1; }
+.card blockquote { margin: 0 0 14px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 9%, var(--panel)); font-size: 14px; }
+.card dl { margin: 0; display: grid; grid-template-columns: 1fr; gap: 10px; }
+.card dt { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+.card dd { margin: 2px 0 0; font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+.card ul { margin: 2px 0 0; padding-left: 18px; }
+.card li { margin: 1px 0; }
+.card a { color: var(--accent); }
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid currentColor; margin-bottom: 10px; }
+.tag.live { color: var(--live); } .tag.msg { color: var(--msg); } .tag.ctx { color: var(--ctx); } .tag.off { color: var(--off); }
+.botlist { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.botlist button { border: 1px solid var(--panel-edge); background: transparent; color: var(--ink); border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+.botlist button:hover { border-color: var(--accent); }
+.note { font-size: 12.5px; color: var(--ink-2); margin-top: 12px; }
+#loading { position: fixed; inset: 0; display: grid; place-items: center; z-index: 5; font-family: var(--font-display); font-size: 18px; color: var(--ink-2); pointer-events: none; }
+@media (max-width: 640px) {
+  header.ui { max-width: calc(100% - 110px); }
+  header p { font-size: 13px; }
+  .legend { display: none; }
+  .card { top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); right: max(16px, env(safe-area-inset-right, 0px)); max-height: 58%; border-radius: 18px; }
+}
+@media (max-width: 640px) { body.card-open header.ui { opacity: 0; } }
+body.compact .label small { display: none; }
+header.ui { transition: opacity .2s; }
+@media (prefers-reduced-motion: reduce) { .label, header.ui { transition: none; } }
+</style>
+
+<canvas id="scene" tabindex="0" aria-label="3D globe showing where SGM's data comes from"></canvas>
+<div id="loading">Building the world…</div>
+
+<header class="ui">
+  <h1>SGM Data World</h1>
+  <p>Every number in your Friday list starts somewhere on this globe. Tap a bot or an island to see what it does.</p>
+  <div class="legend" aria-label="Legend">
+    <span><i class="dot" style="background:var(--live)"></i>feeds the live rule</span>
+    <span><i class="dot" style="background:var(--msg)"></i>messages</span>
+    <span><i class="dot" style="background:var(--ctx)"></i>context and research</span>
+    <span><i class="dot" style="background:var(--off)"></i>not in use</span>
+  </div>
+</header>
+<button class="ui pill" id="aboutBtn" type="button">About this map</button>
+
+<nav class="ui" aria-label="Fly to">
+  <div class="chips" id="chips"></div>
+  <div class="hint" id="hint">Drag to spin · pinch or scroll to zoom · tap a bot</div>
+</nav>
+
+<div id="tip" hidden></div>
+<div id="bubble" hidden></div>
+<aside class="card" id="card" hidden aria-live="polite"></aside>
+
+<script>window.echarts = { registerMap: function (name, geo) { if (name === "world") window.__WORLD = geo; } };</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+"use strict";
+const R = 10, DEG = Math.PI / 180;
+const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ------------------------------------------------------------------ content (from the repo: configs/feed_guards.json,
+   src/agentic/daily_data_layer.sh, the launchd schedules; 36 guarded feeds) */
+const DAILY = "Weekdays 6:45 PM IST (if missed: 9:45 PM, then 7:15 AM)";
+const STATIONS = [
+  { id: "blr", name: "Bengaluru", sub: "your laptop", real: [12.97, 77.59], at: [10.6, 83.2], alt: 1.7, r: 1.15, kind: "home",
+    about: "Your laptop. Every crate on this globe ends up here. Two production lines run inside it: the daily line at 6:45 PM (fetch the feeds, run the data checks, send the daily note) and the Friday line at 7:30 PM (model scores, industry heat, themes, the V3.2 list, re-running the registered tests, then Telegram). The inside view comes next." },
+  { id: "bom", name: "Mumbai", sub: "NSE · NSDL · AMFI · news", real: [19.07, 72.88], at: [17.2, 65.2], alt: 1.8, r: 1.2, kind: "source",
+    about: "Most of the data starts here. NSE sits in Bandra Kurla Complex, NSDL in Lower Parel and BSE on Dalal Street. The files themselves are served from cloud and CDN servers, so the pin marks who publishes the data, not a server room." },
+  { id: "del", name: "New Delhi", sub: "PIB · news", real: [28.61, 77.21], at: [31.2, 76.4], alt: 2.0, r: 0.85, kind: "source",
+    about: "The Press Information Bureau publishes every government press release. We read them to score which industries the government is pushing. Business Standard and Mint headlines also come from Delhi." },
+  { id: "web", name: "On the web", sub: "screener.in · tickertape.in", real: null, at: [24.5, 89.5], alt: 3.0, r: 0.8, kind: "web",
+    about: "Two websites we read. We have not confirmed which city each company works from, so this island has no pin on the map." },
+  { id: "stl", name: "St. Louis", sub: "FRED, St. Louis Fed", real: [38.63, -90.2], at: [38.63, -90.2], alt: 1.6, r: 0.9, kind: "source",
+    about: "FRED is the Federal Reserve Bank of St. Louis's free data library. It gives us world prices: crude oil, gas, metals, crops, the dollar, the rupee and US interest rates." },
+  { id: "fra", name: "Frankfurt", sub: "ECB exchange rates", real: [50.11, 8.68], at: [50.11, 8.68], alt: 1.6, r: 0.8, kind: "source",
+    about: "The European Central Bank publishes daily reference exchange rates. We read them through the free Frankfurter API." },
+  { id: "mtv", name: "California", sub: "Google News · Google Drive", real: [37.39, -122.08], at: [37.39, -122.08], alt: 1.6, r: 0.85, kind: "source",
+    about: "Google News gives us world headlines for a mood score. Google Drive keeps the backups. The pin marks Google's head office in Mountain View." },
+  { id: "dxb", name: "Dubai", sub: "Telegram", real: [25.2, 55.27], at: [26.4, 53.0], alt: 1.6, r: 0.75, kind: "out",
+    about: "Telegram, the company headquartered in Dubai, carries your phone messages: the 6:45 PM daily note, the Friday buy list and any failure alert." }
+];
+const BOTS = [
+  // Mumbai
+  { id: "bhav", st: "bom", name: "Bhav", hat: "hard", pants: 0x35588a, use: "live", role: "Price fetcher, NSE",
+    says: "Every weekday evening I collect NSE's official bhavcopy: one row per stock with its open, high, low and close.",
+    carries: ["Daily prices for every NSE stock since 2015", "Each stock's series, so trade-for-trade (BE/BZ) names can be dropped"],
+    from: ["nsearchives.nseindia.com"], when: DAILY, writes: "data/derived/stock_daily_facts_adjusted_2015plus.parquet",
+    used: "Everything in V3.2: the trend test, the ₹1 cr liquidity bar, the model's inputs and every return." },
+  { id: "split", st: "bom", name: "Splitty", hat: "cap", hatColor: 0x4f8a4f, pants: 0x5a4a7a, use: "live", role: "Corporate actions, NSE",
+    says: "When a stock splits 1:10 I fix its old prices, so a split never looks like a 90% crash.",
+    carries: ["Splits, bonuses and dividends", "Price adjustment factors"], from: ["www.nseindia.com", "nsearchives.nseindia.com"], when: DAILY,
+    writes: "data/corporate_actions_full_history/normalized/stock_corporate_actions.parquet", used: "Keeps every price in V3.2 honest after splits and bonuses." },
+  { id: "filer", st: "bom", name: "Filer", hat: "cap", hatColor: 0x7a4f9a, pants: 0x2f6b6b, use: "live", role: "Company filings, NSE",
+    says: "I read what companies file with NSE: order wins, results, letters of intent. I note the rupee amounts.",
+    carries: ["Corporate announcements and their archive", "Order amounts and terms", "Quarterly profit and loss", "Event ledger"],
+    from: ["www.nseindia.com"], when: DAILY, writes: "data/derived/announcements_historical.parquet, order_amounts.parquet, pnl_quarterly.parquet",
+    used: "Which themes a company is exposed to (V3.2's fading-theme drop), and the order lines in your daily note." },
+  { id: "promo", st: "bom", name: "Promo", hat: "peak", hatColor: 0x2c3e66, pants: 0x6b4e2e, use: "ctx", role: "Promoter watcher, NSE",
+    says: "I watch the owners: which promoters bought shares, and who pledged theirs.", carries: ["Insider trades", "Promoter pledges"],
+    from: ["www.nseindia.com"], when: DAILY, writes: "data/derived/pit_history.parquet, pledge_events.parquet", used: "Research tests and pledge alerts." },
+  { id: "tally", st: "bom", name: "Tally", hat: "hard", hatColor: 0xf0a640, pants: 0x3c3c3c, use: "ctx", role: "Market counter, NSE",
+    says: "I count who bought and sold today, the big block deals, India VIX, and which days the market is shut.",
+    carries: ["FII and DII flows", "Block deals", "India VIX", "NSE trading holidays"], from: ["www.nseindia.com"], when: DAILY,
+    writes: "data/derived/fii_dii_flows.parquet, block_deals.parquet, india_vix.parquet, nse_holidays.parquet",
+    used: "Market context. The holiday list sets your buy and sell days." },
+  { id: "nsdl", st: "bom", name: "Videshi", hat: "beret", hatColor: 0x1f4f6f, pants: 0x7a6a3a, use: "ctx", role: "Foreign money tracker, NSDL",
+    says: "I track how much foreign investors put into or pull out of Indian shares, every day and by sector.",
+    carries: ["FPI daily flows", "FPI flows by sector (fortnightly)"], from: ["www.fpi.nsdl.co.in"], when: DAILY,
+    writes: "data/derived/nsdl_fpi_daily.parquet, nsdl_fpi_sector.parquet", used: "The weekly regime note." },
+  { id: "amfi", st: "bom", name: "Mutu", hat: "cap", hatColor: 0xb0623a, pants: 0x35588a, use: "ctx", role: "Mutual fund reader, AMFI",
+    says: "I read how much money mutual funds manage and where.", carries: ["Mutual fund assets"], from: ["www.amfiindia.com"], when: DAILY,
+    writes: "data/derived/amfi_mf_aum.parquet", used: "Market context." },
+  { id: "khabri", st: "bom", name: "Khabri", hat: "cap", hatColor: 0xb43b3b, pants: 0x444444, use: "ctx", role: "News reader, Mumbai papers",
+    says: "I skim Economic Times and Moneycontrol headlines and broker recommendations.", carries: ["News headlines", "Broker recommendations"],
+    from: ["economictimes.indiatimes.com", "www.moneycontrol.com"], when: DAILY, writes: "data/derived/news_feed.parquet, broker_recos.parquet",
+    used: "A news mood score for context." },
+  { id: "dalal", st: "bom", name: "Dalal", hat: "night", pants: 0x5d5d5d, use: "off", sleeping: true, role: "BSE, asleep",
+    says: "Zzz. Only the CIAN watcher used me, and BSE has blocked our requests since Sep 30.", carries: ["Nothing at the moment"],
+    from: ["bseindia.com"], when: "Not running", writes: "—", used: "Not used by V3.2." },
+  // Delhi
+  { id: "sarkari", st: "del", name: "Sarkari", hat: "peak", hatColor: 0xf3efe6, pants: 0x2f4f7f, use: "live", role: "Government press releases, PIB",
+    says: "I read every government press release and count which industries the government keeps talking about.",
+    carries: ["PIB press releases"], from: ["www.pib.gov.in"], when: DAILY, writes: "data/derived/pib_releases.parquet",
+    used: "The policy score behind V3.2's policy veto, and how strong each government theme is." },
+  { id: "khabri2", st: "del", name: "Khabri Jr", hat: "cap", hatColor: 0x3a6fa8, pants: 0x6b4e2e, use: "ctx", role: "News reader, Delhi papers",
+    says: "I bring Business Standard and Mint headlines to the same news pile.", carries: ["News headlines"],
+    from: ["www.business-standard.com", "www.livemint.com"], when: DAILY, writes: "data/derived/news_feed.parquet", used: "A news mood score for context." },
+  // web
+  { id: "screeny", st: "web", name: "Screeny", hat: "cap", hatColor: 0x1d6b73, pants: 0x4a4a6a, use: "live", role: "Industry labels, screener.in",
+    says: "I tell everyone which industry a company belongs to. Saturdays I also bring company fundamentals.",
+    carries: ["NSE four-level industry for each stock", "Company fundamentals (Saturdays)"], from: ["www.screener.in"], when: "Industry labels with the daily run; fundamentals Saturdays",
+    writes: "data/derived/screener_industry.parquet, screener_fundamentals.parquet", used: "The industry map V3.2 uses to find hot industries." },
+  { id: "tikki", st: "web", name: "Tikki", hat: "cap", hatColor: 0x8a5a9a, pants: 0x2f6b6b, use: "ctx", role: "Big investors' holdings, tickertape.in",
+    says: "I note what well-known investors hold.", carries: ["Superstar investor holdings"], from: ["www.tickertape.in"], when: DAILY,
+    writes: "data/derived/superstar_holdings.parquet", used: "Research only." },
+  // abroad
+  { id: "fed", st: "stl", name: "Fed", hat: "top", pants: 0x3b3b55, use: "live", role: "World prices, FRED",
+    says: "I send the world's prices: crude, gas, copper, aluminium, zinc, nickel, iron ore, sugar, cotton, wheat, the dollar and US rates.",
+    carries: ["Commodity prices", "USD/INR history", "Dollar index, US yields, S&P 500, US VIX"], from: ["fred.stlouisfed.org"], when: DAILY,
+    writes: "data/derived/macro_drivers_fred.parquet, commodity_prices.parquet, global_rates.parquet, usdinr_history.parquet",
+    used: "Commodity themes (rising or fading) in V3.2, and the weekly regime note." },
+  { id: "euro", st: "fra", name: "Euro", hat: "beret", hatColor: 0x2c3e66, pants: 0x6b5a3a, use: "ctx", role: "Exchange rates, ECB",
+    says: "I bring the official euro, pound, yen and dollar rates against the rupee.", carries: ["Daily reference exchange rates"],
+    from: ["api.frankfurter.app"], when: DAILY, writes: "data/derived/macro_timeseries.parquet", used: "Market context." },
+  { id: "gnews", st: "mtv", name: "Gnews", hat: "cap", hatColor: 0x3a8a5a, pants: 0x35588a, use: "ctx", role: "World headlines, Google News",
+    says: "I gather world headlines so we can tell if the global mood is calm or scared.", carries: ["Global headlines"],
+    from: ["news.google.com"], when: DAILY, writes: "data/derived/global_macro_sentiment.parquet", used: "A global mood score for context." },
+  { id: "drive", st: "mtv", name: "Backup", hat: "hard", hatColor: 0x8fb7d8, pants: 0x4a4a4a, use: "msg", role: "Backups, Google Drive",
+    says: "I keep copies of your work in Google Drive, so one broken laptop can't lose it.", carries: ["Backups from the laptop"],
+    from: ["Google Drive (My Drive / SGM backups)"], when: "After the runs", writes: "Google Drive", used: "Safety copy, not an input." },
+  { id: "pigeon", st: "dxb", name: "Pigeon", hat: "headset", pants: 0x2f6fae, use: "msg", role: "Your messages, Telegram",
+    says: "I carry the 6:45 PM daily note, the Friday buy list and any failure alert to your phone.", carries: ["Messages from the laptop"],
+    from: ["api.telegram.org"], when: "After each run", writes: "Your phone", used: "How results reach you." },
+  // Bengaluru
+  { id: "clock", st: "blr", name: "Clock", hat: "peak", hatColor: 0x1d6b73, pants: 0x3b3b55, use: "msg", role: "Scheduler, your laptop",
+    says: "I start the runs: weekdays 6:45 PM, Fridays 7:30 PM for the buy list, weekends 11:30 AM and 7:30 PM.",
+    carries: ["The timetable"], from: ["macOS launchd"], when: "Always on", writes: "logs/runs/", used: "Starts every job, so nothing needs a manual click." },
+  { id: "watch", st: "blr", name: "Watchdog", hat: "peak", hatColor: 0x222a3a, pants: 0x5a4a3a, use: "msg", role: "Watchdog, your laptop",
+    says: "Every 30 minutes I check that no run is stuck and that your messages went out. If not, I raise the alarm.",
+    carries: ["Run health"], from: ["the laptop's own logs"], when: "Every 30 minutes", writes: "logs/runs/watchdog_state.json", used: "Catches stuck or silent runs." },
+  { id: "paisa", st: "blr", name: "Paisa", hat: "cap", hatColor: 0xd4a43a, pants: 0x2f4f7f, use: "msg", role: "Your SBI account",
+    says: "Your salary lands with me. The money lane to the broker and back comes in a later version.", carries: ["Salary (no amounts shown here)"],
+    from: ["SBI"], when: "Monthly", writes: "—", used: "Funds the weekly batches." }
+];
+const USE_TEXT = { live: "Feeds the live rule (V3.2)", msg: "Messages and running the system", ctx: "Context and research", off: "Not in use" };
+const USE_COLOR = { live: 0x3a8752, msg: 0x2f6fae, ctx: 0xc08a3a, off: 0x978b82 };
+
+/* ------------------------------------------------------------------ helpers */
+function ll(lat, lon, r) {
+  const phi = (90 - lat) * DEG, th = (lon + 180) * DEG;
+  return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(th), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(th));
+}
+const MATS = {};
+function mat(color, opts) {
+  const key = color + JSON.stringify(opts || {});
+  if (!MATS[key]) MATS[key] = new THREE.MeshStandardMaterial(Object.assign({ color, roughness: 0.85, metalness: 0, flatShading: true }, opts || {}));
+  return MATS[key];
+}
+function box(w, h, d, color, opts) { return new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(color, opts)); }
+function cyl(rt, rb, h, seg, color, opts) { return new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat(color, opts)); }
+function orientUp(obj, normal) { obj.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal.clone().normalize()); }
+function slerpDir(a, b, t) {
+  const q = new THREE.Quaternion().setFromUnitVectors(a.clone().normalize(), b.clone().normalize());
+  return a.clone().normalize().applyQuaternion(new THREE.Quaternion().slerp(q, t));
+}
+const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+/* ------------------------------------------------------------------ renderer, camera, controls */
+const canvas = document.getElementById("scene");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 400);
+const HOME = () => ll(20, 66, window.innerWidth <= 640 ? 46 : 32);   // India in the middle; phones stand further back
+camera.position.copy(HOME());
+scene.add(camera);
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.08; controls.enablePan = false;
+controls.minDistance = R + 2.6; controls.maxDistance = 70; controls.rotateSpeed = 0.45; controls.zoomSpeed = 0.7;
+
+scene.add(new THREE.HemisphereLight(0xfff3e4, 0x6f7c88, 0.72));
+const sun = new THREE.DirectionalLight(0xfff6ea, 0.62); sun.position.set(9, 12, 7); camera.add(sun);
+scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+
+/* ------------------------------------------------------------------ the Earth (real coastlines, land only, no borders) */
+function decodeWorld(json) {
+  if (!json || !json.features) return null;
+  if (json.UTF8Encoding) {
+    const scale = json.UTF8Scale || 1024;
+    const dec = (str, off) => {
+      const out = []; let px = off[0], py = off[1];
+      for (let i = 0; i < str.length; i += 2) {
+        let x = str.charCodeAt(i) - 64, y = str.charCodeAt(i + 1) - 64;
+        x = (x >> 1) ^ (-(x & 1)); y = (y >> 1) ^ (-(y & 1));
+        x += px; y += py; px = x; py = y; out.push([x / scale, y / scale]);
+      }
+      return out;
+    };
+    json.features.forEach(f => {
+      const g = f.geometry; if (!g || !g.encodeOffsets) return;
+      g.coordinates = g.coordinates.map((c, i) => g.type === "Polygon" ? dec(c, g.encodeOffsets[i])
+        : c.map((ring, j) => dec(ring, g.encodeOffsets[i][j])));
+    });
+    json.UTF8Encoding = false;
+  }
+  const polys = [];
+  json.features.forEach(f => {
+    const g = f.geometry; if (!g) return;
+    if (g.type === "Polygon") polys.push(g.coordinates);
+    else if (g.type === "MultiPolygon") g.coordinates.forEach(p => polys.push(p));
+  });
+  return polys;
+}
+function earthTexture(polys) {
+  const maxT = renderer.capabilities.maxTextureSize || 4096;
+  const W = Math.min(4096, maxT), H = W / 2;
+  const toX = lon => (lon + 180) / 360 * W, toY = lat => (90 - lat) / 180 * H;
+  const ocean = document.createElement("canvas"); ocean.width = W; ocean.height = H;
+  const o = ocean.getContext("2d");
+  const og = o.createLinearGradient(0, 0, 0, H);
+  og.addColorStop(0, "#9fcfd3"); og.addColorStop(0.5, "#86bfc8"); og.addColorStop(1, "#9fcfd3");
+  o.fillStyle = og; o.fillRect(0, 0, W, H);
+  // soft ripple stipple
+  o.fillStyle = "rgba(255,255,255,0.10)";
+  for (let i = 0; i < 2600; i++) { o.fillRect(Math.random() * W, Math.random() * H, W / 900, W / 2400); }
+  if (!polys) { return new THREE.CanvasTexture(ocean); }
+  const land = document.createElement("canvas"); land.width = W; land.height = H;
+  const l = land.getContext("2d");
+  const rings = polys.map(p => p.map(ring => {
+    let prev = null; const pts = [];
+    ring.forEach(([lon, lat]) => { if (prev !== null) { while (lon - prev > 180) lon -= 360; while (lon - prev < -180) lon += 360; } prev = lon; pts.push([toX(lon), toY(lat)]); });
+    return pts;
+  }));
+  function drawPolys(ctx, fill, stroke, lw) {
+    ctx.fillStyle = fill; ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.lineJoin = "round";
+    rings.forEach(poly => [-W, 0, W].forEach(off => {
+      ctx.beginPath();
+      poly.forEach(pts => pts.forEach(([x, y], i) => i ? ctx.lineTo(x + off, y) : ctx.moveTo(x + off, y)));
+      ctx.closePath(); ctx.fill("evenodd"); if (lw) ctx.stroke();
+    }));
+  }
+  drawPolys(l, "#ead6a8", "#ead6a8", W / 520);          // sandy coast rim
+  drawPolys(l, "#9cc57c", "#9cc57c", W / 2600);         // land; same-colour stroke hides seams, so no borders show
+  l.globalCompositeOperation = "source-atop";
+  for (let i = 0; i < 5000; i++) { l.fillStyle = Math.random() < 0.5 ? "rgba(70,110,60,0.12)" : "rgba(255,255,230,0.12)"; l.fillRect(Math.random() * W, Math.random() * H, W / 1300, W / 1300); }
+  const snowN = l.createLinearGradient(0, toY(80), 0, toY(60)); snowN.addColorStop(0, "#f6f3ee"); snowN.addColorStop(0.55, "rgba(246,243,238,0.9)"); snowN.addColorStop(1, "rgba(246,243,238,0)");
+  l.fillStyle = snowN; l.fillRect(0, 0, W, toY(60));
+  l.fillStyle = "#f6f3ee"; l.fillRect(0, toY(-60), W, H - toY(-60));
+  // composite: shallow-water glow, a soft drop shadow, then the land
+  o.save(); o.shadowColor = "rgba(205,236,232,0.95)"; o.shadowBlur = W / 160; o.drawImage(land, 0, 0); o.restore();
+  o.save(); o.shadowColor = "rgba(40,70,80,0.35)"; o.shadowBlur = W / 900; o.shadowOffsetX = W / 2000; o.shadowOffsetY = W / 1400; o.drawImage(land, 0, 0); o.restore();
+  const tex = new THREE.CanvasTexture(ocean);
+  tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  return tex;
+}
+const polys = decodeWorld(window.__WORLD);
+const globe = new THREE.Mesh(new THREE.SphereGeometry(R, 128, 96), new THREE.MeshStandardMaterial({ map: earthTexture(polys), roughness: 1, metalness: 0 }));
+globe.name = "globe";
+scene.add(globe);
+const halo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new THREE.ShaderMaterial({
+  side: THREE.BackSide, transparent: true, depthWrite: false, uniforms: { c: { value: new THREE.Color(0xe4f4f2) } },
+  vertexShader: "varying vec3 n; varying vec3 v; void main(){ n = normalize(normalMatrix*normal); vec4 mv = modelViewMatrix*vec4(position,1.0); v = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }",
+  fragmentShader: "uniform vec3 c; varying vec3 n; varying vec3 v; void main(){ float f = pow(1.0 - abs(dot(n, v)), 3.0); gl_FragColor = vec4(c, f * 0.3); }"
+}));
+scene.add(halo);
+
+/* ------------------------------------------------------------------ clouds (floating, low poly) */
+const clouds = new THREE.Group(); scene.add(clouds);
+const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, flatShading: true, transparent: true, opacity: 0.94 });
+[[48, -30], [-8, -25], [5, 150], [-35, 70], [55, 125], [-15, -110], [62, 20], [-42, 0], [10, -150]].forEach(([la, lo], i) => {
+  const c = new THREE.Group();
+  const puffs = [[0, 0, 0, 0.55], [0.55, -0.08, 0.1, 0.42], [-0.55, -0.1, -0.05, 0.4], [0.2, 0.22, -0.1, 0.38], [-0.2, 0.15, 0.2, 0.34]];
+  puffs.forEach(([x, y, z, r]) => { const p = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), cloudMat); p.position.set(x, y, z); c.add(p); });
+  c.scale.set(1, 0.55, 0.8);
+  c.position.copy(ll(la, lo, R + 1.15 + (i % 3) * 0.25)); orientUp(c, c.position); c.rotateY(i * 1.3);
+  clouds.add(c);
+});
+
+/* ------------------------------------------------------------------ bots */
+const ORANGE = 0xd9774f;
+function makeHat(type, color) {
+  const h = new THREE.Group();
+  if (type === "hard") {
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(color || 0xf2c230));
+    const brim = cyl(0.26, 0.26, 0.03, 14, color || 0xf2c230); h.add(dome, brim);
+  } else if (type === "cap") {
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(0.19, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(color));
+    const visor = box(0.24, 0.025, 0.16, color); visor.position.set(0, 0.0, 0.2); h.add(dome, visor);
+  } else if (type === "peak") {
+    const top = cyl(0.21, 0.17, 0.12, 14, color); top.position.y = 0.07;
+    const band = cyl(0.175, 0.175, 0.05, 14, 0x1b1b22); band.position.y = 0.0;
+    const visor = box(0.22, 0.02, 0.12, 0x1b1b22); visor.position.set(0, -0.01, 0.17); h.add(top, band, visor);
+  } else if (type === "top") {
+    const crown = cyl(0.13, 0.13, 0.26, 14, 0x222226); crown.position.y = 0.14;
+    const brim = cyl(0.24, 0.24, 0.025, 16, 0x222226); const band = cyl(0.135, 0.135, 0.05, 14, 0xb03a3a); band.position.y = 0.05; h.add(crown, brim, band);
+  } else if (type === "beret") {
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 8), mat(color)); b.scale.set(1.15, 0.38, 1.15); b.position.y = 0.04; b.rotation.z = 0.25; h.add(b);
+  } else if (type === "sailor") {
+    const c = cyl(0.17, 0.17, 0.09, 14, 0xffffff); c.position.y = 0.04; const band = cyl(0.172, 0.172, 0.03, 14, 0x24406b); band.position.y = 0.02; h.add(c, band);
+  } else if (type === "headset") {
+    const arc = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.025, 6, 16, Math.PI), mat(0x2a2a30)); arc.rotation.y = Math.PI / 2;
+    const e1 = box(0.06, 0.1, 0.1, 0x2a2a30); e1.position.set(0.22, -0.06, 0); const e2 = e1.clone(); e2.position.x = -0.22; h.add(arc, e1, e2);
+  } else if (type === "night") {
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.34, 10), mat(0x5a6fa8)); cone.position.y = 0.14; cone.rotation.z = 0.5;
+    const pom = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), mat(0xffffff)); pom.position.set(-0.15, 0.27, 0); h.add(cone, pom);
+  }
+  return h;
+}
+function makeBot(o) {
+  const g = new THREE.Group();
+  const inner = new THREE.Group(); g.add(inner);
+  const body = box(0.46, 0.36, 0.36, o.color || ORANGE); body.position.y = 0.36; inner.add(body);
+  const pants = box(0.47, 0.12, 0.37, o.pants || 0x35588a); pants.position.y = 0.21; inner.add(pants);
+  const eyeMat = 0x2a1f1a;
+  if (o.sleeping) {
+    const e1 = box(0.1, 0.02, 0.02, eyeMat); e1.position.set(0.1, 0.4, 0.185); const e2 = e1.clone(); e2.position.x = -0.1; inner.add(e1, e2);
+  } else {
+    const e1 = box(0.06, 0.09, 0.02, eyeMat); e1.position.set(0.1, 0.4, 0.185); const e2 = e1.clone(); e2.position.x = -0.1; inner.add(e1, e2);
+  }
+  const legs = [];
+  [[0.14, 0.1], [-0.14, 0.1], [0.14, -0.1], [-0.14, -0.1]].forEach(([x, z]) => {
+    const leg = box(0.07, 0.15, 0.07, o.color || ORANGE); leg.geometry.translate(0, -0.075, 0); leg.position.set(x, 0.15, z); inner.add(leg); legs.push(leg);
+  });
+  const a1 = box(0.08, 0.08, 0.1, o.color || ORANGE); a1.position.set(0.27, 0.36, 0); const a2 = a1.clone(); a2.position.x = -0.27; inner.add(a1, a2);
+  if (o.hat) { const hat = makeHat(o.hat, o.hatColor); hat.position.y = 0.54; inner.add(hat); }
+  if (o.crate) {
+    const cr = box(0.24, 0.2, 0.24, o.crate); cr.position.y = 0.7; if (o.hat) cr.position.y = 0.86;
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(cr.geometry), new THREE.LineBasicMaterial({ color: 0x5a3d22 }));
+    cr.add(edges); inner.add(cr);
+  }
+  if (o.jet) {
+    const pack = box(0.22, 0.24, 0.1, 0x6d7480); pack.position.set(0, 0.36, -0.23); inner.add(pack);
+    const flame = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.22, 8), new THREE.MeshBasicMaterial({ color: 0xffa940 }));
+    flame.rotation.x = Math.PI; flame.position.set(0, 0.13, -0.23); inner.add(flame); g.userData.flame = flame;
+  }
+  const hit = new THREE.Mesh(new THREE.SphereGeometry(0.55, 8, 6), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+  hit.position.y = 0.4; g.add(hit); hit.userData.pick = g;
+  g.userData.legs = legs; g.userData.inner = inner; g.userData.hit = hit;
+  return g;
+}
+
+/* ------------------------------------------------------------------ islands, buildings and labels */
+const stationObjs = {}, pickables = [globe], labels = [];
+let laptopObj = null;
+function building(kind) {
+  const b = new THREE.Group();
+  const win = (w, h, d, c, x, z, rows) => { const m = box(w, h, d, c); m.position.set(x, h / 2, z); b.add(m);
+    for (let r = 0; r < rows; r++) { const s = box(w * 0.82, 0.03, d + 0.01, 0xbfe0e6, { roughness: 0.4 }); s.position.set(x, 0.12 + r * (h - 0.16) / Math.max(1, rows - 1), z); b.add(s); } return m; };
+  if (kind === "nse") { win(0.55, 0.9, 0.42, 0xd8d2c8, 0.05, -0.05, 6); const sign = box(0.3, 0.12, 0.03, 0x1d6b73); sign.position.set(0.05, 0.98, 0.17); b.add(sign); }
+  if (kind === "bse") { const t = win(0.3, 1.15, 0.3, 0xa9a39b, 0, 0, 8); t.material = mat(0x9c958d); }
+  if (kind === "office") { win(0.38, 0.45, 0.3, 0xe7d9c3, 0, 0, 3); }
+  if (kind === "kiosk") { const k = box(0.26, 0.22, 0.2, 0xc94f3d); k.position.y = 0.11; const roof = box(0.34, 0.04, 0.26, 0xf3e7d2); roof.position.y = 0.25; b.add(k, roof); }
+  if (kind === "pib") { win(0.7, 0.32, 0.4, 0xf1ebe0, 0, 0, 2); const dome = new THREE.Mesh(new THREE.SphereGeometry(0.17, 14, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(0xe6d3b3)); dome.position.y = 0.32; b.add(dome); }
+  if (kind === "fed") { const base = box(0.75, 0.08, 0.45, 0xeee6d8); base.position.y = 0.04; b.add(base);
+    for (let i = 0; i < 5; i++) { const c = cyl(0.035, 0.035, 0.36, 8, 0xf5efe4); c.position.set(-0.28 + i * 0.14, 0.26, 0.16); b.add(c); }
+    const body = box(0.68, 0.36, 0.28, 0xe9e0d0); body.position.set(0, 0.26, -0.06); const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.42, 0.18, 3), mat(0xd9cdb8)); roof.rotation.set(Math.PI / 2, Math.PI / 2, 0); roof.scale.set(1.0, 1, 0.5); roof.position.y = 0.52; b.add(body, roof); }
+  if (kind === "ecb") { const a = win(0.2, 1.0, 0.22, 0x9fb7c4, -0.12, 0, 7); a.rotation.z = 0.05; const c = win(0.2, 0.92, 0.22, 0x9fb7c4, 0.13, 0.04, 7); c.rotation.z = -0.05; }
+  if (kind === "campus") { win(0.7, 0.28, 0.4, 0xf0e8dc, 0, 0, 2); const t = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.3, 6), mat(0x6ea35c)); t.position.set(0.35, 0.15, 0.25); b.add(t); }
+  if (kind === "tower") { const t = cyl(0.06, 0.12, 0.9, 8, 0xe8e2d8); t.position.y = 0.45; const dish = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2.5), mat(0xf5f5f5, { side: THREE.DoubleSide }));
+    dish.position.set(0, 0.85, 0.05); dish.rotation.x = -1.0; const hut = box(0.32, 0.22, 0.26, 0x7fa8c9); hut.position.set(0.18, 0.11, 0.1); b.add(t, dish, hut); }
+  if (kind === "browser") { const p = box(0.95, 0.62, 0.05, 0xf8f4ee); p.position.y = 0.5; const bar = box(0.95, 0.1, 0.06, 0xd9cfc2); bar.position.y = 0.76;
+    b.add(p, bar); [0, 1, 2].forEach(i => { const d = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 6), mat([0xd9634f, 0xe2b13c, 0x5aa55a][i])); d.position.set(-0.4 + i * 0.07, 0.76, 0.04); b.add(d); });
+    [0, 1, 2].forEach(i => { const ln = box(0.6 - i * 0.12, 0.035, 0.06, 0xc9d8da); ln.position.set(-0.1 + i * 0.06, 0.6 - i * 0.12, 0.01); b.add(ln); }); }
+  if (kind === "laptop") { const base = box(1.1, 0.06, 0.72, 0xbfc3c8, { roughness: 0.5 }); base.position.y = 0.03;
+    const keys = box(0.9, 0.01, 0.36, 0x8f949b); keys.position.set(0, 0.065, 0.08);
+    const lid = new THREE.Group(); const shell = box(1.1, 0.72, 0.04, 0xbfc3c8, { roughness: 0.5 }); shell.position.y = 0.36;
+    const scr = box(1.0, 0.62, 0.01, 0x22313a, { emissive: 0x16323a, roughness: 0.3 }); scr.position.set(0, 0.36, 0.026);
+    lid.add(shell, scr); lid.position.set(0, 0.06, -0.36); lid.rotation.x = -0.28;
+    for (let i = 0; i < 4; i++) { const ln = box(0.5 - i * 0.08, 0.03, 0.012, [0x7fd1c8, 0xf2b45c, 0x9ad07c, 0xe68a6a][i], { emissive: [0x2f6f68, 0x6f4a18, 0x3f6a2c, 0x6a3626][i] }); ln.position.set(-0.18 + i * 0.03, 0.56 - i * 0.12, 0.034); lid.add(ln); }
+    b.add(base, keys, lid); b.userData.screen = scr; }
+  if (kind === "sbi") { win(0.34, 0.5, 0.3, 0x2f6aa8, 0, 0, 3); }
+  if (kind === "tree") { const t = cyl(0.03, 0.04, 0.16, 6, 0x7a5233); t.position.y = 0.08; const c = new THREE.Mesh(new THREE.IcosahedronGeometry(0.13, 0), mat(0x6fa85a)); c.position.y = 0.24; b.add(t, c); }
+  return b;
+}
+const LAYOUT = {
+  bom: [["nse", -0.2, -0.35], ["bse", 0.55, -0.45], ["office", -0.65, 0.2], ["office", 0.62, 0.35], ["kiosk", 0.05, 0.62], ["tree", -0.75, -0.55]],
+  del: [["pib", 0, -0.25], ["kiosk", 0.45, 0.35], ["tree", -0.5, 0.35], ["tree", -0.55, -0.4]],
+  web: [["browser", 0, -0.2]],
+  stl: [["fed", 0, -0.2], ["tree", 0.55, 0.4], ["tree", -0.55, 0.4]],
+  fra: [["ecb", 0, -0.2], ["tree", 0.45, 0.35]],
+  mtv: [["campus", 0, -0.2], ["tree", -0.5, 0.4], ["tree", 0.55, 0.45]],
+  dxb: [["tower", 0, -0.15]],
+  blr: [["laptop", 0, -0.15], ["sbi", 0.75, 0.45], ["tree", -0.8, 0.45], ["tree", -0.75, -0.55], ["tree", 0.85, -0.4]]
+};
+STATIONS.forEach(s => {
+  const center = ll(s.at[0], s.at[1], R + s.alt);
+  const g = new THREE.Group(); g.position.copy(center); orientUp(g, center);
+  const island = new THREE.Group(); g.add(island);
+  const dirt = cyl(s.r, s.r * 0.72, 0.42, 9, 0x9c6b45); dirt.position.y = -0.27;
+  const grass = cyl(s.r * 1.02, s.r * 1.0, 0.12, 9, s.kind === "web" ? 0xe9e1d4 : 0x8fc06b); grass.position.y = -0.03;
+  const rock = new THREE.Mesh(new THREE.ConeGeometry(s.r * 0.7, s.r * 0.75, 7), mat(0x7b5537)); rock.rotation.x = Math.PI; rock.position.y = -0.48 - s.r * 0.37;
+  island.add(dirt, grass, rock);
+  (LAYOUT[s.id] || []).forEach(([kind, x, z]) => {
+    const b = building(kind); b.position.set(x * s.r, 0.03, z * s.r); island.add(b);
+    if (kind === "bse") b.traverse(m => { if (m.material) m.material = mat(0xa39d96); });
+    if (kind === "laptop") laptopObj = b;
+  });
+  const hit = new THREE.Mesh(new THREE.CylinderGeometry(s.r * 1.05, s.r * 0.7, 0.9, 10), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+  hit.position.y = -0.2; hit.userData.station = s; island.add(hit); pickables.push(hit);
+  scene.add(g);
+  if (s.real) {
+    const ground = ll(s.real[0], s.real[1], R + 0.02);
+    const pin = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.035, 6, 20), mat(0xd9774f)); pin.position.copy(ground); orientUp(pin, ground); pin.rotateX(Math.PI / 2); scene.add(pin);
+    const bottom = center.clone().add(center.clone().normalize().multiplyScalar(-0.5 - s.r * 0.75));
+    const geo = new THREE.BufferGeometry().setFromPoints([bottom, ground]);
+    const line = new THREE.Line(geo, new THREE.LineDashedMaterial({ color: 0x8a6a4a, dashSize: 0.12, gapSize: 0.09, transparent: true, opacity: 0.8 }));
+    line.computeLineDistances(); scene.add(line);
+  }
+  const el = document.createElement("div"); el.className = "label"; el.innerHTML = `${s.name}<small>${s.sub}</small>`;
+  el.addEventListener("click", () => select({ station: s }));
+  document.body.appendChild(el);
+  labels.push({ el, anchor: center.clone().add(center.clone().normalize().multiplyScalar(1.25)), normal: center.clone().normalize() });
+  stationObjs[s.id] = { s, g, center };
+});
+function minorLabel(text, lat, lon) {
+  const p = ll(lat, lon, R + 0.25), el = document.createElement("div"); el.className = "label minor"; el.textContent = text; el.style.pointerEvents = "none";
+  document.body.appendChild(el); labels.push({ el, anchor: p, normal: p.clone().normalize(), minor: true });
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), mat(0xffffff)); dot.position.copy(ll(lat, lon, R + 0.03)); scene.add(dot);
+}
+
+/* bots on islands */
+const botObjs = [];
+const byStation = {};
+BOTS.forEach(b => { (byStation[b.st] = byStation[b.st] || []).push(b); });
+Object.keys(byStation).forEach(sid => {
+  const st = stationObjs[sid], list = byStation[sid];
+  list.forEach((b, i) => {
+    const bot = makeBot({ hat: b.hat, hatColor: b.hatColor, pants: b.pants, sleeping: b.sleeping });
+    bot.scale.setScalar(0.52); bot.userData.info = b; bot.userData.hit.userData.pick = bot;
+    const n = list.length, rad = st.s.r * (n > 4 ? 0.55 + 0.18 * (i % 2) : 0.55);
+    bot.userData.walk = b.sleeping ? null : { rad, ang: (i / n) * Math.PI * 2, speed: (0.18 + 0.06 * (i % 3)) * (i % 2 ? -1 : 1) };
+    if (b.sleeping) { bot.position.set(0.55 * st.s.r, 0.03, -0.1 * st.s.r); bot.rotation.y = -0.6; bot.userData.inner.rotation.z = 0.25; }
+    st.g.add(bot); botObjs.push(bot); pickables.push(bot.userData.hit);
+  });
+});
+
+/* ------------------------------------------------------------------ routes: couriers (flying), ships (sea), the Telegram plane */
+const movers = [];
+function arcPath(a, b, altA, altB, bump, n) {
+  const pts = [];
+  const ang = a.clone().normalize().angleTo(b.clone().normalize());
+  for (let i = 0; i <= n; i++) { const t = i / n; const d = slerpDir(a, b, t); pts.push(d.multiplyScalar(R + altA + (altB - altA) * t + bump * (0.4 + ang * 1.8) * Math.sin(Math.PI * t))); }
+  return pts;
+}
+function seaPath(wps) {
+  const pts = [];
+  for (let i = 0; i < wps.length - 1; i++) {
+    const a = ll(wps[i][0], wps[i][1], 1), b = ll(wps[i + 1][0], wps[i + 1][1], 1);
+    for (let k = 0; k < 16; k++) pts.push(slerpDir(a, b, k / 16).multiplyScalar(R + 0.04));
+  }
+  const last = wps[wps.length - 1]; pts.push(ll(last[0], last[1], R + 0.04));
+  return pts;
+}
+function polyline(pts) {
+  const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
+  return { pts, cum, len: cum[cum.length - 1], at(u) { const L = u * this.len; let i = 1; while (i < this.cum.length - 1 && this.cum[i] < L) i++;
+    const t = (L - this.cum[i - 1]) / Math.max(1e-6, this.cum[i] - this.cum[i - 1]); return this.pts[i - 1].clone().lerp(this.pts[i], t); } };
+}
+function drawRoute(pts, color, opacity) {
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const line = new THREE.Line(geo, new THREE.LineDashedMaterial({ color, dashSize: 0.18, gapSize: 0.14, transparent: true, opacity }));
+  line.computeLineDistances(); scene.add(line); return line;
+}
+function stationTop(id) { const s = stationObjs[id]; return s.center.clone().add(s.center.clone().normalize().multiplyScalar(0.1)); }
+const COURIER = {
+  name: "Courier", role: "Carries crates to your laptop", use: "live",
+  says: "I fly these crates to your laptop. In real life the bytes take a few milliseconds through fibre-optic cable. I'm the slow, cute version.",
+  carries: ["Whatever the station's bots fetched today"], from: ["the station I fly from"], when: "During each run", writes: "your laptop", used: "Moves data; doesn't change it."
+};
+const SAILOR = {
+  name: "Sailor", role: "Undersea cable, drawn as a ship", use: "live",
+  says: "Data from the US and Europe crosses the sea through fibre cables on the sea floor. Most of India's cables land in Mumbai. I'm the cartoon of that.",
+  carries: ["FRED prices", "ECB exchange rates"], from: ["US East Coast", "Marseille"], when: "During each run", writes: "Mumbai cable landing, then on to your laptop", used: "Moves data; doesn't change it."
+};
+function addCourier(path, crate, dur, delay, info, hat) {
+  const bot = makeBot({ hat: hat || "hard", crate, jet: true, pants: 0x3b4a66 }); bot.scale.setScalar(0.5);
+  bot.userData.info = Object.assign({}, COURIER, info); bot.userData.hit.userData.pick = bot;
+  scene.add(bot); botObjs.push(bot); pickables.push(bot.userData.hit);
+  movers.push({ obj: bot, path: polyline(path), dur, delay, kind: "fly" });
+}
+const blrTop = stationTop("blr");
+const CRATE = { nse: 0xe8b45c, gov: 0xe27b61, web: 0x9ab7d6, fred: 0xd9c169, news: 0xc9a0d8, back: 0xb7a6e0 };
+// domestic
+[["bom", CRATE.nse, 9, 0, "Mumbai"], ["bom", CRATE.nse, 9, 4.5, "Mumbai"], ["del", CRATE.gov, 10, 2, "New Delhi"], ["web", CRATE.web, 9, 6, "the web island"]].forEach(([sid, c, d, dl, nm]) => {
+  const p = arcPath(stationTop(sid), blrTop, 0.25, 0.25, 0.6, 60).map((v, i, a) => v);
+  drawRoute(p, 0xb5876a, 0.55);
+  addCourier(p, c, d, dl, { name: "Courier", role: `Carries crates from ${nm} to your laptop`, from: [nm] });
+});
+// abroad by air to the coast, by sea to Mumbai, by air to Bengaluru
+const NJ = [40.2, -73.9], MRS = [43.3, 5.37], MUM_LAND = [19.1, 72.8];
+const usSea = [[40.2, -73.6], [39.5, -60], [38, -40], [37, -20], [36, -9], [35.95, -5.6], [37.5, 2], [37.3, 11], [35, 20], [33.5, 28], [31.4, 32.4], [29.8, 32.6], [27.5, 34], [22, 37.8], [16, 41.5], [12.6, 43.3], [12.2, 48], [13.5, 53], [16, 60], [18.5, 67], [19.0, 72.6]];
+const euSea = [[43.1, 5.4], [40.5, 6.5], [37.6, 10.5], [35, 20], [33.5, 28], [31.4, 32.4], [29.8, 32.6], [27.5, 34], [22, 37.8], [16, 41.5], [12.6, 43.3], [12.2, 48], [13.5, 53], [16, 60], [18.5, 67], [19.0, 72.6]];
+const usPath = seaPath(usSea), euPath = seaPath(euSea);
+drawRoute(usPath, 0xffffff, 0.75); drawRoute(euPath, 0xffffff, 0.75);
+const p1 = arcPath(stationTop("stl"), ll(NJ[0], NJ[1], R + 0.3), 0.25, 0.05, 0.5, 40); drawRoute(p1, 0xb5876a, 0.55);
+addCourier(p1, CRATE.fred, 7, 1, { name: "Courier", role: "Carries FRED crates from St. Louis to the US East Coast cable station", from: ["St. Louis"] });
+const p2 = arcPath(stationTop("fra"), ll(MRS[0], MRS[1], R + 0.3), 0.25, 0.05, 0.4, 30); drawRoute(p2, 0xb5876a, 0.55);
+addCourier(p2, CRATE.fred, 6, 3, { name: "Courier", role: "Carries ECB crates from Frankfurt to the Marseille cable station", from: ["Frankfurt"] });
+const p3 = arcPath(ll(MUM_LAND[0], MUM_LAND[1], R + 0.3), blrTop, 0.05, 0.25, 0.5, 40); drawRoute(p3, 0xb5876a, 0.55);
+addCourier(p3, CRATE.fred, 6, 2, { name: "Courier", role: "Carries the crates that arrived by sea from Mumbai to your laptop", from: ["Mumbai cable landing"] });
+const p4 = arcPath(stationTop("mtv"), blrTop, 0.25, 0.25, 0.9, 120); drawRoute(p4, 0xb5876a, 0.45);
+addCourier(p4, CRATE.news, 16, 5, { name: "Courier", role: "Carries world headlines from California to your laptop", from: ["California"] });
+minorLabel("US East Coast cables", NJ[0], NJ[1]); minorLabel("Marseille cables", MRS[0], MRS[1]); minorLabel("Mumbai cable landing", MUM_LAND[0] + 1.2, MUM_LAND[1] - 1.2);
+
+function makeShip() {
+  const s = new THREE.Group();
+  const hull = box(0.34, 0.12, 1.0, 0x8a4b3a); hull.position.y = 0.06;
+  const bow = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.3, 4), mat(0x8a4b3a)); bow.rotation.x = Math.PI / 2; bow.rotation.y = Math.PI / 4; bow.scale.set(1, 1, 0.5); bow.position.set(0, 0.06, 0.62);
+  const deck = box(0.3, 0.02, 0.95, 0xe9e1d2); deck.position.y = 0.13;
+  const cabin = box(0.24, 0.16, 0.22, 0xf5f0e6); cabin.position.set(0, 0.22, -0.3);
+  const stack = cyl(0.04, 0.05, 0.14, 8, 0xd9774f); stack.position.set(0, 0.36, -0.33);
+  s.add(hull, bow, deck, cabin, stack);
+  [[0, 0.2, 0.05], [0, 0.2, 0.3], [0, 0.34, 0.17]].forEach(([x, y, z], i) => { const c = box(0.2, 0.13, 0.2, [CRATE.fred, CRATE.nse, CRATE.web][i]); c.position.set(x, y, z); s.add(c); });
+  const sailor = makeBot({ hat: "sailor", pants: 0x24406b }); sailor.scale.setScalar(0.38); sailor.position.set(0, 0.14, -0.08); s.add(sailor);
+  sailor.userData.info = SAILOR; sailor.userData.hit.userData.pick = sailor; pickables.push(sailor.userData.hit); botObjs.push(sailor);
+  return s;
+}
+[[usPath, 34, 0], [euPath, 26, 9]].forEach(([p, d, dl]) => { const ship = makeShip(); ship.scale.setScalar(0.7); scene.add(ship); movers.push({ obj: ship, path: polyline(p), dur: d, delay: dl, kind: "sea" }); });
+
+// Telegram paper plane: laptop -> Dubai -> back to your phone
+const planeGeo = new THREE.BufferGeometry();
+planeGeo.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, 0.35, -0.22, 0, -0.2, 0, 0.04, -0.12, 0, 0, 0.35, 0, 0.04, -0.12, 0.22, 0, -0.2, 0, 0, 0.35, 0, -0.08, -0.15, 0, 0.04, -0.12], 3));
+planeGeo.computeVertexNormals();
+const plane = new THREE.Mesh(planeGeo, new THREE.MeshStandardMaterial({ color: 0xf7f7f2, side: THREE.DoubleSide, flatShading: true }));
+scene.add(plane);
+const tgOut = arcPath(blrTop, stationTop("dxb"), 0.25, 0.25, 0.7, 50), tgBack = arcPath(stationTop("dxb"), blrTop, 0.25, 0.25, 0.4, 50);
+drawRoute(tgOut, 0x2f6fae, 0.6); drawRoute(tgBack, 0x2f6fae, 0.35);
+movers.push({ obj: plane, path: polyline(tgOut.concat(tgBack)), dur: 11, delay: 0, kind: "plane" });
+plane.userData.pick = plane; plane.userData.info = BOTS.find(b => b.id === "pigeon");
+const planeHit = new THREE.Mesh(new THREE.SphereGeometry(0.45, 8, 6), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
+plane.add(planeHit); planeHit.userData.pick = plane; pickables.push(planeHit);
+
+/* ------------------------------------------------------------------ selection, cards, fly-to */
+const cardEl = document.getElementById("card"), bubble = document.getElementById("bubble"), tip = document.getElementById("tip");
+const headerEl = document.querySelector("header.ui"), navChips = document.getElementById("chips"), aboutEl = document.getElementById("aboutBtn");
+let selected = null;
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function hostLink(h) { return /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(h) ? `<a href="https://${esc(h)}" target="_blank" rel="noopener">${esc(h)}</a>` : esc(h); }
+function botCard(b, st) {
+  return `<button class="close" type="button" aria-label="Close">×</button>
+  <h2>${esc(b.name)}</h2><p class="role">${esc(b.role)}${st ? " · " + esc(st.name) : ""}</p>
+  <span class="tag ${b.use}">${esc(USE_TEXT[b.use])}</span>
+  <blockquote>“${esc(b.says)}”</blockquote>
+  <dl>
+    <div><dt>What I carry</dt><dd><ul>${b.carries.map(c => `<li>${esc(c)}</li>`).join("")}</ul></dd></div>
+    <div><dt>Picked up from</dt><dd>${b.from.map(hostLink).join(", ")}</dd></div>
+    <div><dt>When</dt><dd>${esc(b.when)}</dd></div>
+    <div><dt>Drops it at</dt><dd class="mono">${esc(b.writes)}</dd></div>
+    <div><dt>Used for</dt><dd>${esc(b.used)}</dd></div>
+  </dl>`;
+}
+function stationCard(s) {
+  const bots = byStation[s.id] || [];
+  const pin = s.real ? `Pinned at ${s.real[0].toFixed(2)}°, ${s.real[1].toFixed(2)}° (the publisher's city). The island floats above it so nearby islands don't overlap.` : "No pin: we haven't confirmed where this company works from.";
+  return `<button class="close" type="button" aria-label="Close">×</button>
+  <h2>${esc(s.name)}</h2><p class="role">${esc(s.sub)}</p>
+  <p style="margin:0 0 12px">${esc(s.about)}</p>
+  ${bots.length ? `<dl><div><dt>Bots here</dt><dd class="botlist">${bots.map(b => `<button type="button" data-bot="${b.id}">${esc(b.name)}</button>`).join("")}</dd></div></dl>` : ""}
+  <p class="note">${esc(pin)}</p>`;
+}
+function aboutCard() {
+  return `<button class="close" type="button" aria-label="Close">×</button>
+  <h2>About this map</h2><p class="role">Base world · version 1 · Oct 16, 2026</p>
+  <p style="margin:0 0 10px">This globe shows where the data behind the Sri Lakshmi list comes from and how it reaches your laptop. It lists the feeds the daily run actually fetches (36 guarded feeds in the repo), grouped by who publishes them.</p>
+  <dl>
+    <div><dt>Pins</dt><dd>Each pin marks the city of the organisation that publishes the data. The files are served from cloud and CDN servers, wherever those happen to be.</dd></div>
+    <div><dt>Ships and couriers</dt><dd>A cartoon. Data really travels as light through fibre cables, including undersea cables that land in Mumbai, and arrives in milliseconds. Routes are simplified.</dd></div>
+    <div><dt>Colours</dt><dd><span style="color:var(--live)">Green</span> feeds the live V3.2 rule, <span style="color:var(--msg)">blue</span> is messages and running the system, <span style="color:var(--ctx)">amber</span> is context and research, <span style="color:var(--off)">grey</span> is not in use.</dd></div>
+    <div><dt>Not shown</dt><dd>No rupee amounts, holdings or personal details.</dd></div>
+    <div><dt>Coming next</dt><dd>The workshop inside the laptop, you as the boss behind it, the scroll story from your drawings, and the money lane from SBI to your stocks.</dd></div>
+  </dl>`;
+}
+function openCard(html) {
+  cardEl.innerHTML = html; cardEl.hidden = false; document.body.classList.add("card-open");
+  cardEl.querySelector(".close").addEventListener("click", clearSelection);
+  cardEl.querySelectorAll("[data-bot]").forEach(btn => btn.addEventListener("click", () => {
+    const bot = botObjs.find(o => o.userData.info && o.userData.info.id === btn.dataset.bot); if (bot) select({ bot });
+  }));
+}
+function clearSelection() { selected = null; cardEl.hidden = true; document.body.classList.remove("card-open"); bubble.hidden = true; setChip(null); }
+function select(sel) {
+  if (sel.bot) {
+    const info = sel.bot.userData.info, st = info.st ? stationObjs[info.st] : null;
+    selected = { bot: sel.bot }; openCard(botCard(info, st && st.s)); bubble.textContent = info.says; bubble.hidden = false;
+    const wp = new THREE.Vector3(); sel.bot.getWorldPosition(wp);
+    if (st) focusOn(st.center, st.s.r * 3.4 + 1.6); else if (!sel.bot.parent || sel.bot.parent === scene) flyTo(wp, Math.max(camera.position.length(), R + 9));
+  } else if (sel.station) {
+    selected = { station: sel.station }; openCard(stationCard(sel.station)); bubble.hidden = true;
+    focusOn(stationObjs[sel.station.id].center, sel.station.r * 3.6 + 1.8); setChip(sel.station.id);
+  }
+}
+let flight = null, focus = null;
+function flyCam(toPos, toTarget, dur) {
+  flight = { from: camera.position.clone(), fromT: controls.target.clone(), toPos, toTarget, t: 0, dur: REDUCED ? 0.01 : (dur || 1.7) };
+}
+function flyTo(point, dist) {                       // whole-globe view along a direction
+  focus = null; flyCam(point.clone().normalize().multiplyScalar(dist), new THREE.Vector3());
+}
+function focusOn(center, d) {                       // tilted diorama view of one island
+  const n = center.clone().normalize();
+  // stand south of the island looking north, so the horizon sits level at the top like a map
+  const t = new THREE.Vector3(0, -1, 0).sub(n.clone().multiplyScalar(-n.y)).normalize();
+  if (window.innerWidth <= 640) d *= 1.3;
+  const tilt = 52 * DEG, pos = center.clone().add(n.multiplyScalar(d * Math.cos(tilt))).add(t.multiplyScalar(d * Math.sin(tilt)));
+  focus = center.clone(); flyCam(pos, center.clone());
+}
+const CHIPS = [["world", "Whole world"], ["blr", "Bengaluru · laptop"], ["bom", "Mumbai"], ["del", "New Delhi"], ["web", "On the web"], ["stl", "St. Louis"], ["fra", "Frankfurt"], ["mtv", "California"], ["dxb", "Dubai"]];
+const chipsEl = document.getElementById("chips");
+CHIPS.forEach(([id, text]) => {
+  const b = document.createElement("button"); b.type = "button"; b.className = "pill"; b.textContent = text; b.dataset.id = id; b.setAttribute("aria-pressed", "false");
+  b.addEventListener("click", () => { if (id === "world") { clearSelection(); const h = HOME(); flyTo(h, h.length()); setChip("world"); } else select({ station: stationObjs[id].s }); });
+  chipsEl.appendChild(b);
+});
+function setChip(id) { chipsEl.querySelectorAll(".pill").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === id))); }
+document.getElementById("aboutBtn").addEventListener("click", () => { selected = null; bubble.hidden = true; openCard(aboutCard()); });
+window.addEventListener("keydown", e => { if (e.key === "Escape") clearSelection(); });
+
+/* picking */
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+function pick(x, y) {
+  const rect = canvas.getBoundingClientRect();
+  mouse.set(((x - rect.left) / rect.width) * 2 - 1, -((y - rect.top) / rect.height) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  const hits = ray.intersectObjects(pickables, false);
+  for (const h of hits) { if (h.object === globe) return null; if (h.object.userData.pick) return { bot: h.object.userData.pick }; if (h.object.userData.station) return { station: h.object.userData.station }; }
+  return null;
+}
+let down = null;
+canvas.addEventListener("pointerdown", e => { down = { x: e.clientX, y: e.clientY }; if (flight) { flight = null; controls.minDistance = focus ? 1.5 : R + 2.6; controls.maxDistance = focus ? 16 : 70; } });
+canvas.addEventListener("pointerup", e => {
+  if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) { down = null; return; }
+  down = null; const p = pick(e.clientX, e.clientY);
+  if (p && p.bot === plane) select({ bot: plane }); else if (p) select(p);
+});
+let hoverT = 0;
+canvas.addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse") return;
+  const now = performance.now(); if (now - hoverT < 50) return; hoverT = now;
+  const p = pick(e.clientX, e.clientY);
+  if (p) { const name = p.bot ? p.bot.userData.info.name : p.station.name; tip.textContent = name; tip.style.left = e.clientX + "px"; tip.style.top = e.clientY + "px"; tip.hidden = false; canvas.style.cursor = "pointer"; }
+  else { tip.hidden = true; canvas.style.cursor = "grab"; }
+});
+canvas.addEventListener("pointerleave", () => { tip.hidden = true; });
+
+/* ------------------------------------------------------------------ resize + loop */
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false); camera.aspect = w / h;
+  camera.fov = w < 640 ? 50 : 38; camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize); resize();
+setChip("world");
+
+const clock = new THREE.Clock();
+const viewShift = { x: 0, y: 0 };
+const tmpV = new THREE.Vector3(), tmpN = new THREE.Vector3(), camDir = new THREE.Vector3();
+function placeMover(m, time) {
+  const cycle = m.dur + 2.5, local = ((time - m.delay) % cycle + cycle) % cycle;
+  const u = Math.min(1, local / m.dur), visible = time >= m.delay && local <= m.dur;
+  m.obj.visible = visible; if (!visible) return;
+  const p = m.path.at(u), q = m.path.at(Math.min(1, u + 0.01));
+  const up = p.clone().normalize(), fwd = q.clone().sub(p); fwd.sub(up.clone().multiplyScalar(fwd.dot(up)));
+  if (fwd.lengthSq() < 1e-8) return;
+  fwd.normalize(); const x = new THREE.Vector3().crossVectors(up, fwd);
+  m.obj.position.copy(p); m.obj.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(x, up, fwd));
+  if (m.kind === "plane") { m.obj.position.add(up.multiplyScalar(0.05 * Math.sin(time * 6))); }
+}
+function tick() {
+  const dt = Math.min(0.05, clock.getDelta()), time = clock.elapsedTime, speed = REDUCED ? 0.25 : 1;
+  if (flight) {
+    flight.t += dt / flight.dur; const e = ease(Math.min(1, flight.t));
+    const len = flight.from.length() + (flight.toPos.length() - flight.from.length()) * e;
+    camera.position.copy(slerpDir(flight.from, flight.toPos, e).multiplyScalar(len));
+    controls.target.copy(flight.fromT.clone().lerp(flight.toTarget, e));
+    if (flight.t >= 1) { flight = null; controls.minDistance = focus ? 1.5 : R + 2.6; controls.maxDistance = focus ? 16 : 70; }
+  }
+  controls.update();
+  if (camera.position.length() < R + 0.9) camera.position.setLength(R + 0.9);
+  // keep the open card off the subject: shift the picture left (desktop) or up (phone sheet)
+  const wide = window.innerWidth > 640, cardOpen = !cardEl.hidden;
+  const wantX = cardOpen && wide ? (cardEl.offsetWidth + 16) / 2 : 0, wantY = cardOpen && !wide ? cardEl.offsetHeight / 2 : 0;
+  viewShift.x += (wantX - viewShift.x) * Math.min(1, dt * 6); viewShift.y += (wantY - viewShift.y) * Math.min(1, dt * 6);
+  if (Math.abs(viewShift.x) > 0.5 || Math.abs(viewShift.y) > 0.5) camera.setViewOffset(window.innerWidth, window.innerHeight, viewShift.x, viewShift.y, window.innerWidth, window.innerHeight);
+  else if (camera.view && camera.view.enabled) camera.clearViewOffset();
+  clouds.rotation.y += dt * 0.012 * speed;
+  Object.values(stationObjs).forEach((st, i) => { st.g.children[0].position.y = Math.sin(time * 0.8 + i) * 0.06 * speed; });
+  if (laptopObj && laptopObj.userData.screen) laptopObj.userData.screen.material.emissiveIntensity = 0.85 + 0.15 * Math.sin(time * 2);
+  botObjs.forEach(b => {
+    const w = b.userData.walk;
+    if (w) {
+      w.ang += dt * w.speed * speed;
+      b.position.set(Math.cos(w.ang) * w.rad, 0.03 + b.parent.children[0].position.y, Math.sin(w.ang) * w.rad);
+      b.rotation.y = -w.ang + (w.speed > 0 ? Math.PI : 0);
+      b.userData.legs.forEach((leg, k) => { leg.rotation.x = Math.sin(time * 9 + (k % 2 ? 0 : Math.PI)) * 0.5 * speed; });
+    } else if (b.userData.info && b.userData.info.sleeping) {
+      b.position.y = 0.03 + b.parent.children[0].position.y; b.userData.inner.scale.y = 1 + Math.sin(time * 1.5) * 0.03;
+    }
+    if (b.userData.flame) b.userData.flame.scale.y = 0.8 + Math.random() * 0.5;
+  });
+  movers.forEach(m => placeMover(m, time * speed));
+  // selected bot bounce + speech bubble
+  if (selected && selected.bot) {
+    const b = selected.bot; if (b.userData.inner) b.userData.inner.position.y = Math.abs(Math.sin(time * 5)) * 0.12;
+    b.getWorldPosition(tmpV); tmpN.copy(tmpV).normalize(); camDir.copy(camera.position).normalize();
+    const facing = tmpN.dot(camDir) > 0.1 && b.visible !== false;
+    const sp = tmpV.clone().add(tmpN.multiplyScalar(0.55)).project(camera);
+    bubble.hidden = !facing || sp.z > 1 || window.innerWidth <= 640;   // phones: the card already shows the quote bubble.style.left = ((sp.x + 1) / 2 * window.innerWidth) + "px"; bubble.style.top = ((1 - sp.y) / 2 * window.innerHeight) + "px";
+  }
+  botObjs.forEach(b => { if ((!selected || selected.bot !== b) && b.userData.inner) b.userData.inner.position.y = 0; });
+  // labels
+  camDir.copy(camera.position).normalize(); const dist = camera.position.length();
+  const compact = !focus && dist > 22;
+  if (compact !== document.body.classList.contains("compact")) { document.body.classList.toggle("compact", compact); labels.forEach(lb => { lb.w = 0; }); }
+  const blocked = [headerEl, navChips, aboutEl].concat(cardEl.hidden ? [] : [cardEl]).map(el => el.getBoundingClientRect());
+  const placed = [];
+  const hits = (a, b) => a.x < b.right && a.x + a.w > b.left && a.y < b.bottom && a.y + a.h > b.top;
+  labels.forEach(lb => {
+    const p = lb.anchor.clone().project(camera), facing = lb.normal.dot(camera.position.clone().sub(lb.anchor).normalize());
+    let show = facing > (lb.minor ? 0.35 : 0.12) && p.z < 1 && (!lb.minor || dist < 26 || focus);
+    let x = (p.x + 1) / 2 * window.innerWidth, y = (1 - p.y) / 2 * window.innerHeight;
+    if (show) {
+      if (!lb.w) { lb.w = lb.el.offsetWidth; lb.h = lb.el.offsetHeight; }
+      // try the spot above the island, then nudged left, right or higher; hide only if all collide
+      x = Math.min(Math.max(x, lb.w / 2 + 8), window.innerWidth - lb.w / 2 - 8);   // keep labels on screen
+      const tries = [[0, 0], [-(lb.w / 2 + 10), 0], [lb.w / 2 + 10, 0], [0, -(lb.h + 8)]];
+      let ok = false;
+      for (const [dx, dy] of tries) {
+        const r = { x: x + dx - lb.w / 2 - 4, y: y + dy - lb.h - 4, w: lb.w + 8, h: lb.h + 8 };
+        if (!blocked.some(b => hits(r, b)) && !placed.some(b => hits(r, b))) { placed.push({ left: r.x, right: r.x + r.w, top: r.y, bottom: r.y + r.h }); x += dx; y += dy; ok = true; break; }
+      }
+      show = ok;
+    }
+    lb.el.style.opacity = show ? "1" : "0"; lb.el.style.pointerEvents = show && !lb.minor ? "auto" : "none";
+    lb.el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -100%)`;
+  });
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+document.getElementById("loading").remove();
+if (!polys) { const h = document.getElementById("hint"); h.textContent = "Coastlines didn't load, so the globe shows only sea. Reload to try again."; }
+tick();
+})();
+</script>
