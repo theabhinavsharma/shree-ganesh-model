@@ -70,7 +70,14 @@ def features(D: dict) -> dict:
     cal, syms = D["cal"], D["syms"]
     px = rp.load_panel(["open", "high", "low", "close", "sma_50", "sma_200"])
     px = px[px["trade_date"].isin(set(cal))].reset_index(drop=True)
-    px["lo252"] = px.groupby("symbol")["low"].transform(lambda s: s.rolling(252, min_periods=60).min())
+    # 2026-10-17: renamed companies keep their history for the 52-week low and the 50 / 200-day averages
+    # (rp.with_history; INC-2026-10-17-rename-history-gap). Other symbols: unchanged (panel averages, own lows).
+    hx = rp.with_history(px, ["open", "high", "low", "close", "sma_50", "sma_200"])
+    hx["lo252"] = hx.groupby("symbol")["low"].transform(lambda s: s.rolling(252, min_periods=60).min())
+    succ = hx["symbol"].isin(set(hx.loc[hx["_pre"], "symbol"]))
+    for w in (50, 200):                                # the panel's definition: rolling mean, min_periods = window
+        hx.loc[succ, f"sma_{w}"] = hx[succ].groupby("symbol")["close"].transform(lambda s, w=w: s.rolling(w, min_periods=w).mean())
+    px = hx[~hx["_pre"]].drop(columns="_pre").reset_index(drop=True); del hx
     C = rp.wide(px, "close", cal).reindex(columns=syms)
     prev = C.ffill().shift(1)
     with np.errstate(invalid="ignore", divide="ignore"):

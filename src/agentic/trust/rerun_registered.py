@@ -8,7 +8,7 @@ against the V3.1 test's fresh numbers). Then:
   trust.live_rule_verdicts (block)  the arms in reproduce.LIVE_ARMS still pass
   trust.verdict_changes (warn)      any verdict that differs from the previous week's is listed
   trust.results_reproduce (block)   reproduce.py re-runs each test again and must match these fresh numbers
-Exit 1 if any test fails to run (script error, wiring check, data gate). Log: logs/trust/reruns.jsonl
+Usage: rerun_registered.py [tag]  (default weekly-<date>). Exit 1 if any test fails to run (script error, wiring check, data gate). Log: logs/trust/reruns.jsonl
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ PER_TEST_SECS = 1800
 
 
 def main() -> int:
-    tag = f"weekly-{datetime.now():%Y%m%d}"; bad = 0
+    tag = sys.argv[1] if len(sys.argv) > 1 else f"weekly-{datetime.now():%Y%m%d}"; bad = 0   # optional tag for a by-hand re-run after a data fix
     LOG.parent.mkdir(parents=True, exist_ok=True)
     for exp, (script, _) in reproduce.TESTS.items():
         env = dict(os.environ, SGM_RERUN_TAG=tag, **reproduce.ENV.get(exp, {})); env.pop("SGM_REPRO", None); t0 = time.time()

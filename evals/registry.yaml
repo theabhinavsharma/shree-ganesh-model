@@ -280,6 +280,16 @@ evals:
     owner: system
     check: verdict_changes
 
+  - id: strategy.renames_keep_history
+    statement: "A renamed company keeps its price history in the screen: after ZOMATO became ETERNAL, the 1-year return and 200-day average still count the ZOMATO days."
+    why: "Added 2026-10-17 (INC-2026-10-17-rename-history-gap). The screen built those features per symbol, so for up to a year after a rename a company could not pass the trend test: 132 renamed stocks, 4,545 liquid stock-weeks since 2019 (ETERNAL, TMPV, LTM, GVT&D, HBLENGINE ...)."
+    source_of_truth: "sim_leader_portfolio_7x.load + sim_screen_rank_exit.features (research_panel.with_history) on every rename of the last 2 years whose predecessor traded >= 252 sessions"
+    threshold: "every such successor's latest row has ret252 and sma_200"
+    action: block
+    cadence: weekly
+    owner: system
+    check: renames_keep_history
+
   - id: trust.claude_golden
     statement: "A fresh Claude session answers the golden questions about this system correctly, including saying 'that does not exist' to trap questions."
     why: "Measures Claude's hallucination rate on this project directly instead of guessing it."

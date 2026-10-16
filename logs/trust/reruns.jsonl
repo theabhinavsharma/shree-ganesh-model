@@ -4,3 +4,9 @@
 {"ts": "2026-10-16T22:45:44", "exp": "EXP-2026-09-30-theme-engine", "tag": "weekly-20261016", "ok": true, "secs": 31, "detail": "verdict ['TFADE']"}
 {"ts": "2026-10-16T22:46:30", "exp": "EXP-2026-10-11-v3-l1-newlist-cost", "tag": "weekly-20261016", "ok": true, "secs": 46, "detail": "verdict ['V3_L1c', 'V3_L1Nc']"}
 {"ts": "2026-10-16T22:47:25", "exp": "EXP-2026-10-12-v31-t2t", "tag": "weekly-20261016", "ok": true, "secs": 55, "detail": "verdict ['V3.1_NOT2T', 'V3.1_NOT2T_REFILL']"}
+{"ts": "2026-10-17T02:07:57", "exp": "EXP-2026-09-29-industry-fundamentals", "tag": "renamefix-20261017", "ok": true, "secs": 85, "detail": "verdict no arm passes"}
+{"ts": "2026-10-17T02:09:17", "exp": "EXP-2026-09-29-industry-policy", "tag": "renamefix-20261017", "ok": true, "secs": 80, "detail": "verdict ['G1']"}
+{"ts": "2026-10-17T02:11:18", "exp": "EXP-2026-09-30-sector-shrink", "tag": "renamefix-20261017", "ok": true, "secs": 122, "detail": "verdict no arm passes"}
+{"ts": "2026-10-17T02:12:36", "exp": "EXP-2026-09-30-theme-engine", "tag": "renamefix-20261017", "ok": true, "secs": 78, "detail": "verdict ['TFADE']"}
+{"ts": "2026-10-17T02:14:07", "exp": "EXP-2026-10-11-v3-l1-newlist-cost", "tag": "renamefix-20261017", "ok": true, "secs": 90, "detail": "verdict ['V3_L1c', 'V3_L1Nc']"}
+{"ts": "2026-10-17T02:15:41", "exp": "EXP-2026-10-12-v31-t2t", "tag": "renamefix-20261017", "ok": true, "secs": 94, "detail": "verdict ['V3.1_NOT2T']"}

@@ -248,9 +248,15 @@ def load(symbols: list[str] | None) -> dict:
     n_fake_rows = int(on_fake.sum())
     px = px[~on_fake].reset_index(drop=True)          # before ret60/ret252, wide frames, breadth, benchmark
     px["series"] = px["series"].astype(str).astype("category")
-    g = px.groupby("symbol")["close"]
-    px["ret60"] = g.pct_change(60, fill_method=None)  # registered signal: the symbol's own rows (critic 3)
-    px["ret252"] = g.pct_change(252, fill_method=None)
+    # 2026-10-17: a renamed company keeps its history (rp.with_history; INC-2026-10-17-rename-history-gap). Only the
+    # successors' rows change; every other symbol's ret60 / ret252 is computed exactly as before.
+    hx = rp.with_history(px[["symbol", "trade_date", "open", "close"]], ["open", "close"])
+    g = hx.groupby("symbol")["close"]
+    hx["ret60"] = g.pct_change(60, fill_method=None)  # registered signal: the company's own rows (critic 3)
+    hx["ret252"] = g.pct_change(252, fill_method=None)
+    hx = hx[~hx["_pre"]].reset_index(drop=True)
+    assert len(hx) == len(px) and (hx["symbol"].to_numpy() == px["symbol"].to_numpy()).all(), "with_history changed the row order"
+    px["ret60"], px["ret252"] = hx["ret60"].to_numpy(), hx["ret252"].to_numpy(); del hx
     px["adv"] = px["avg_traded_value_20d"] / 1e7
     px["core"] = (px["adv"] >= 5) & (rp.raw_price(px, "close") > 50)
     mc = pd.read_parquet(MCAP, columns=["symbol", "trade_date", "mcap_cr", "mcap_source"], filters=filt)

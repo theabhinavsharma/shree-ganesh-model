@@ -141,6 +141,53 @@ def stitch_renames(ret_wide: pd.DataFrame, close_wide: pd.DataFrame) -> pd.DataF
     return out
 
 
+def with_history(px: pd.DataFrame, price_cols: list[str]) -> pd.DataFrame:
+    """px plus its renamed predecessors' rows relabelled to the successor (column _pre=True), so rolling features of a
+    successor's rows (1-year return, 52-week low, 200-day average) see the company's whole history. 2026-10-17
+    (INC-2026-10-17-rename-history-gap): ZOMATO -> ETERNAL and 131 other renames lost their history for up to a year.
+    A link counts under stitch_renames' rule (successor's first row within 10 days after the predecessor's last; chains
+    followed). Predecessor prices continue unscaled when the successor's first open is within 15% of the predecessor's
+    last close; otherwise they are scaled by that ratio (a scheme or split at the switch). Only predecessor rows dated
+    before the successor's first row are added; callers compute their features, then drop rows with _pre.
+    price_cols: the price-level columns to scale (open/high/low/close/sma_*...). Needs 'close' in px."""
+    rm = rename_map(); g = px.groupby("symbol")["trade_date"]
+    first, last = g.min(), g.max()
+    links = {o: n for o, n in rm.items() if o in last.index and n in first.index and o != n
+             and last[o] <= first[n] and (first[n] - last[o]).days <= 10}
+    if not links:
+        return px.assign(_pre=False)
+    ends = px[px["symbol"].isin(set(links) | set(links.values()))].sort_values(["symbol", "trade_date"])
+    lastc = ends.groupby("symbol")["close"].last()
+    starto = ends.groupby("symbol")["open" if "open" in ends.columns else "close"].first()
+    k = {}
+    for o, n in links.items():
+        r = float(starto.get(n, np.nan) / lastc.get(o, np.nan)) if lastc.get(o) else np.nan
+        k[o] = r if np.isfinite(r) and abs(r - 1) > 0.15 else 1.0
+
+    def final(sym):
+        f, seen = 1.0, {sym}
+        while sym in links and links[sym] not in seen:
+            f *= k[sym]; sym = links[sym]; seen.add(sym)
+        return sym, f
+    parts = []
+    for o in links:
+        succ, f = final(o)
+        rows = px[(px["symbol"] == o) & (px["trade_date"] < first[succ])].copy()
+        if rows.empty:
+            continue
+        for c in price_cols:
+            if c in rows.columns:
+                rows[c] = rows[c] * f
+        if "price_adjustment_factor_to_present" in rows.columns:      # keep then-traded (raw) prices unchanged
+            rows["price_adjustment_factor_to_present"] = pd.to_numeric(rows["price_adjustment_factor_to_present"], errors="coerce") * f
+        rows["symbol"] = succ; parts.append(rows)
+    if not parts:
+        return px.assign(_pre=False)
+    out = pd.concat([pd.concat(parts).assign(_pre=True), px.assign(_pre=False)], ignore_index=True)
+    out = out.drop_duplicates(["symbol", "trade_date"], keep="last")        # a successor's own row wins
+    return out.sort_values(["symbol", "trade_date"], kind="mergesort").reset_index(drop=True)
+
+
 def next_open_entry(open_wide: pd.DataFrame, high_wide: pd.DataFrame, low_wide: pd.DataFrame,
                     close_wide: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """Live-contract entry for a signal at the close of t: buy at the OPEN of session t+1.

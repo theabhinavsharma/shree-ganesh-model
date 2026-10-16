@@ -500,6 +500,29 @@ def verdict_changes(ctx: dict) -> dict:
     return _res("WARN" if changed else "PASS", len(changed), "; ".join(changed) or "no verdict changed")
 
 
+def renames_keep_history(ctx: dict) -> dict:
+    """2026-10-17 (INC-2026-10-17-rename-history-gap): a renamed company keeps its price history in the V3 screen's inputs.
+    Every rename whose successor started in the last 2 years, still trades, and whose predecessor traded >= 252 sessions:
+    the successor's latest row in the screen frame (sre.features via sp.load) has a 1-year return and a 200-day average."""
+    sys.path.insert(0, str(ROOT / "src/agentic"))
+    import research_panel as rp, sim_leader_portfolio_7x as sp, sim_screen_rank_exit as sre
+    t = pd.read_parquet(rp.PANEL, columns=["symbol", "trade_date"]); t["trade_date"] = pd.to_datetime(t["trade_date"])
+    g = t.groupby("symbol")["trade_date"]; first, last, n = g.min(), g.max(), g.size(); end = t["trade_date"].max(); del t
+    rm = rp.rename_map()
+    links = {o: s for o, s in rm.items() if o in last.index and s in first.index and o != s and last[o] <= first[s]
+             and (first[s] - last[o]).days <= 10}
+    succ = {s for o, s in links.items() if first[s] >= end - pd.Timedelta(days=730) and last[s] >= end - pd.Timedelta(days=10) and n[o] >= 252}
+    if not succ:
+        return _res("PASS", 0, "no recent renames to check")
+    syms = set(succ)
+    for _ in range(3):                                   # chains: predecessors of predecessors
+        syms |= {o for o, s in links.items() if s in syms}
+    D = sp.load(sorted(syms)); F = sre.features(D)["F"]
+    L = F[F["symbol"].isin(succ)].sort_values("trade_date").groupby("symbol").tail(1)
+    bad = sorted(L.loc[L["ret252"].isna() | L["sma_200"].isna(), "symbol"])
+    return _res("FAIL" if bad else "PASS", len(bad), f"{len(L)} recent renames checked" + (f"; no history: {', '.join(bad[:8])}" if bad else ""))
+
+
 def claude_golden(ctx: dict) -> dict:
     auth = re.compile(r"Failed to authenticate|authentication_error|/login|Invalid API key")
     runs = [r for r in _jsonl(ROOT / "logs/trust/golden_runs.jsonl")      # a run where the CLI was logged out graded nothing
