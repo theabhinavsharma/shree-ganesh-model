@@ -1,6 +1,6 @@
 """Famous-hypothesis tests that flag stocks (configs/famous_hypotheses.yaml; each REGISTERED in logs/experiments.jsonl first).
 
-Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap | darvas_box | weinstein_stage2
+Usage: /usr/bin/python3 src/agentic/test_famous_overlay.py promoter_pref_premium | kedia_small_size | promoter_pref_any | orderbook_mcap | darvas_box | weinstein_stage2 | bigsmall_catchup
 Plain English: for a flag (e.g. 'promoter took preferential shares at a premium in the last 90 days', 'market cap <= Rs 1,000 cr'):
 A (evidence) - each stock's 6-month return after costs on every weekly list since Apr 2019, flagged vs not, in all liquid stocks,
 the V3.1 pool and the pool's top 25; verdict = top-25 weekly gap with a block-bootstrap (26-week blocks) 95% range above 0.
@@ -21,7 +21,8 @@ HYP = {"promoter_pref_premium": dict(exp="EXP-2026-10-15-promoter-pref-premium",
        "promoter_pref_any": dict(exp="EXP-2026-10-15-promoter-pref-any", main="PREF", extra="PREM"),
        "orderbook_mcap": dict(exp="EXP-2026-10-15-orderbook-to-mcap", main="OBM1", extra="OBM2", pool=True),
        "darvas_box": dict(exp="EXP-2026-10-15-darvas-box", main="DARVAS", extra="DARVAS", pool=True),
-       "weinstein_stage2": dict(exp="EXP-2026-10-15-weinstein-stage2", main="STAGE2", extra="STAGE2", pool=True)}
+       "weinstein_stage2": dict(exp="EXP-2026-10-15-weinstein-stage2", main="STAGE2", extra="STAGE2", pool=True),
+       "bigsmall_catchup": dict(exp="EXP-2026-10-16-bigsmall-catchup", main="CATCHUP", extra="CATCHUP10", pool=True)}
 
 
 def promoter_flags(cal, tpos):
@@ -99,6 +100,36 @@ def price_flags(D, cal, kind):
     return f, (lambda s, d: (s in cidx) and bool(K[tpos[d], cidx[s]]))
 
 
+def catchup_flags(D, cal, imap, F1, weeks, mc):
+    """Big -> small catch-up inside an industry (EXP-2026-10-16-bigsmall-catchup): in industries with >= 6 liquid members of known
+    market cap, BIG = top 30% by market cap (at least 2), SMALL = the rest; a SMALL stock is flagged when BIG's equal-weight return
+    close d-20 -> close d is > 0 and beats the stock's own by >= 5 (CATCHUP) / >= 10 (CATCHUP10) percentage points.
+    Returns (flags, 'stock sits in such an industry' function)."""
+    lg = np.vstack([np.zeros((1, D["Rv"].shape[1])), np.cumsum(np.log1p(np.nan_to_num(D["Rv"])), axis=0)])
+    tpos = {d: i for i, d in enumerate(cal)}; cidx = D["cidx"]; alld = set().union(*weeks.values())
+    W = F1.loc[F1["core"].fillna(False).astype(bool) & F1["trade_date"].isin(alld), ["symbol", "trade_date"]]
+    liq = W.groupby("trade_date")["symbol"].apply(list).to_dict(); cache = {}
+
+    def day(d):
+        if d not in cache:
+            i = tpos[d]; rows, gap, known = [], {}, set()
+            for s in liq.get(d, []):
+                q, ind, m = cidx.get(s), imap.get(s), mc(s, d)
+                if q is not None and isinstance(ind, str) and np.isfinite(m):
+                    rows.append((ind, s, float(m), float(np.exp(lg[i + 1, q] - lg[i - 19, q]) - 1)))
+            for _, g in pd.DataFrame(rows, columns=["ind", "s", "m", "r"]).groupby("ind"):
+                if len(g) < 6:
+                    continue
+                g = g.sort_values(["m", "s"], ascending=[False, True]); nb = max(2, int(np.ceil(0.3 * len(g))))
+                br = g["r"].iloc[:nb].mean(); known.update(g["s"])
+                if br > 0:
+                    gap.update({s: (br - r) * 100 for s, r in zip(g["s"].iloc[nb:], g["r"].iloc[nb:])})
+            cache[d] = (gap, known)
+        return cache[d]
+    th = lambda x: (lambda s, d: day(d)[0].get(s, -np.inf) >= x)  # noqa: E731
+    return {"CATCHUP": th(5.0), "CATCHUP10": th(10.0)}, (lambda s, d: s in day(d)[1])
+
+
 def size_flags():
     A = pd.read_parquet(ROOT / "logs/leader_sleeve/anatomy_1p5x/rows.parquet", columns=["symbol", "trade_date", "mcap_cr"])
     A["trade_date"] = pd.to_datetime(A["trade_date"]); A = A.dropna(subset=["mcap_cr"])
@@ -149,6 +180,11 @@ def main(key):
         info["error_share"] = round(err[0] / max(1, err[1]), 4); info["valued"] = err[1]
         checks += [dr.span("order-book statements", Bk["filed"], pd.Timestamp("2016-06-30"), cal[-1] - pd.Timedelta(days=60)),
                    dr.qc("order books that are plausible (<= 20x market cap) among valued stock-dates", 1 - info["error_share"], 0.9)]
+    elif key == "bigsmall_catchup":
+        _, mc = size_flags(); flags, inside = catchup_flags(D, cal, imap, F1, weeks, mc)
+        K = pd.DataFrame([dict(d=d, known=(1.0 if np.isfinite(mc(s, d)) else np.nan), inside=inside(s, d)) for s, d in zip(liq["symbol"], liq["trade_date"])])
+        info = dict(share_in_big_small_industries=round(float(K["inside"].mean()), 3))
+        checks += [dr.coverage("market cap known for liquid stocks on list dates", K, "d", ["known"], range(START.year, cal[-1].year + 1))]
     else:
         flags, mc = size_flags(); info = {}
         K = pd.DataFrame([dict(d=d, known=(1.0 if pd.notna(mc(s, d)) else np.nan)) for s, d in zip(liq["symbol"], liq["trade_date"])])

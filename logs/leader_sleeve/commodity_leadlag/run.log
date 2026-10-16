@@ -1,0 +1,46 @@
+
+=== DATA READINESS · EXP-2026-10-16-commodity-leadlag (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ span         industry scores
+  ✅ coverage     4-week periods with >= 20 industries of >= 5 liquid members
+  ✅ span         brent (daily, known_from)
+  ✅ span         henry_hub_gas (daily, known_from)
+  ✅ span         usdinr (daily, known_from)
+  ✅ span         broad_dollar (daily, known_from)
+  ✅ span         copper (monthly, known_from)
+  ✅ span         aluminium (monthly, known_from)
+  ✅ span         zinc (monthly, known_from)
+  ✅ span         nickel (monthly, known_from)
+  ✅ span         iron_ore (monthly, known_from)
+  ✅ span         sugar (monthly, known_from)
+  ✅ span         cotton (monthly, known_from)
+  ✅ span         wheat (monthly, known_from)
+periods 133 · industries 189 (median with >= 5 liquid members 58)
+map 2019: periods 35 · pairs tested 420 · significant links 0 · p<0.05 share 21.4% · smallest p 4.8e-04
+map 2020: periods 48 · pairs tested 456 · significant links 0 · p<0.05 share 19.7% · smallest p 4.2e-04
+map 2021: periods 60 · pairs tested 504 · significant links 0 · p<0.05 share 11.9% · smallest p 4.5e-04
+map 2022: periods 73 · pairs tested 588 · significant links 10 · p<0.05 share 14.3% · smallest p 2.7e-04
+map 2023: periods 85 · pairs tested 660 · significant links 0 · p<0.05 share 9.2% · smallest p 1.5e-03
+map 2024: periods 97 · pairs tested 732 · significant links 0 · p<0.05 share 6.4% · smallest p 3.3e-03
+map 2025: periods 110 · pairs tested 840 · significant links 0 · p<0.05 share 8.5% · smallest p 8.9e-04
+map 2026: periods 122 · pairs tested 936 · significant links 0 · p<0.05 share 8.7% · smallest p 2.8e-04
+/Users/abhinavs./Code/Zoom/src/agentic/test_leadlag_drivers.py:78: RuntimeWarning: Mean of empty slice.
+  return np.where(cnt >= minm, sm / cnt, np.nan), float(r[LIQ[i0]].mean()), cnt
+/Users/abhinavs./Code/Zoom/src/agentic/test_leadlag_drivers.py:180: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  row["ic"] = stats.spearmanr([sc[k] for k in ks], nxt[ks]).statistic; row["own_ic_same"] = stats.spearmanr(past[ks], nxt[ks]).statistic
+wiring check: nothing added == v3_rule V3.1 minus trade-for-trade on 373/373 weeks
+schedule 0: V3.2 50.3/61.9/-38.5 · E3A 50.3/61.8/-38.5
+schedule 1: V3.2 49.4/64.0/-38.8 · E3A 49.3/64.3/-38.8
+schedule 2: V3.2 50.7/62.3/-37.9 · E3A 50.6/62.5/-37.9
+schedule 3: V3.2 48.9/63.1/-37.4 · E3A 49.1/63.4/-37.4
+schedule 4: V3.2 47.7/62.3/-38.7 · E3A 48.0/62.6/-38.7
+
+=== EXP-2026-10-16-commodity-leadlag · weekly entries 2019-04-01..2026-10-15 ===
+Part A · weeks with >= 5 scored industries 48/369 · mean IC +0.030 (95% -0.120..+0.242) · 2019-22 +0.030 · 2023+ +nan · own momentum IC (same) +0.188 · no pass
+  by year: 2022: +0.030
+  V3.2 CAGR  56.0 · 2019-22  50.3 · 2023+  61.9 · maxDD  -38.5 · range 54.9..56.6 · years 2023:+89 2024:+150 2025:-1 2026:+36 · next open 53.9
+  E3A  CAGR  56.0 · 2019-22  50.3 · 2023+  61.8 · maxDD  -38.5 · range 55.2..56.6 · years 2023:+89 2024:+151 2025:-1 2026:+36 · next open 53.8
+  E3A vs V3.2: beats in 2/5 · gap -0.0 pts/yr (95% -0.3..+0.2) · range excludes 0 in 0/5 · no pass
+  what changed: {"weeks": 373, "weeks_with_additions": 24, "lists_changed": 13, "picks_new": {"picks": 15, "avg6m": 12.1}, "picks_pushed_out": {"picks": 13, "avg6m": 22.4}, "v32_all_picks": {"picks": 2293, "avg6m": 31.1}}
+done in 43s

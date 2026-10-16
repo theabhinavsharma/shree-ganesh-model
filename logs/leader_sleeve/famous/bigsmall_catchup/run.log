@@ -1,0 +1,39 @@
+
+=== DATA READINESS · EXP-2026-10-16-bigsmall-catchup (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ coverage     market cap known for liquid stocks on list dates
+wiring check: V3.2 rebuilt == v3_rule on 373/373 weeks
+
+=== EXP-2026-10-16-bigsmall-catchup · weekly lists 2019-04-01..2026-10-15 · {'share_in_big_small_industries': 0.747} ===
+CATCHUP · all liquid stocks  flagged  40061 (11.28%) avg +12.1% med +3.0% +50% 14.3% lost 46.0%  ||  others avg +11.0% med +4.0% +50% 11.8% lost 44.3%
+CATCHUP · V3.1 pool          flagged   5488 (17.41%) avg +19.1% med +9.3% +50% 19.5% lost 39.9%  ||  others avg +15.3% med +6.9% +50% 16.1% lost 41.4%
+CATCHUP · pool top 25        flagged   1383 (17.43%) avg +29.0% med +15.2% +50% 27.0% lost 34.4%  ||  others avg +22.6% med +11.7% +50% 21.8% lost 38.2%  ||  weekly gap +1.56 (95% -3.72..6.37, 303 weeks)
+CATCHUP10 · all liquid stocks flagged  21077 (5.93%) avg +13.0% med +3.5% +50% 15.1% lost 45.7%  ||  others avg +11.0% med +3.9% +50% 11.9% lost 44.5%
+CATCHUP10 · V3.1 pool        flagged   3253 (10.32%) avg +18.9% med +8.5% +50% 19.7% lost 40.5%  ||  others avg +15.6% med +7.3% +50% 16.3% lost 41.2%
+CATCHUP10 · pool top 25      flagged    862 (10.86%) avg +27.6% med +13.4% +50% 26.8% lost 35.8%  ||  others avg +23.2% med +12.2% +50% 22.2% lost 37.7%  ||  weekly gap +0.35 (95% -6.22..6.83, 273 weeks)
+A (evidence, CATCHUP in the pool's top 25): no
+V3.2         CAGR  56.0 · 2019-22  50.3 · 2023+  61.9 · maxDD  -38.5 · range 54.9..56.6
+V3.2_CATCHUP CAGR  52.4 · 2019-22  51.4 · 2023+  53.4 · maxDD  -38.6 · range 52.3..55.1
+V3.2_CATCHUP_POOL CAGR  40.4 · 2019-22  46.0 · 2023+  35.1 · maxDD  -38.6 · range 38.1..40.4
+B: V3.2_CATCHUP beats V3.2 in 0/5 · lists changed 307/373 · no pass
+B2: V3.2_CATCHUP_POOL beats V3.2 in 0/5 · no pass
+done in 83s
+       83.28 real        80.32 user         3.30 sys
+          5986287616  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+             1376651  page reclaims
+                  18  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                1412  voluntary context switches
+               58285  involuntary context switches
+       1344976102834  instructions retired
+        350235254369  cycles elapsed
+          6756063208  peak memory footprint

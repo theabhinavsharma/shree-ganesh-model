@@ -1,0 +1,12 @@
+{
+ "dataset": "ic_weekly.csv",
+ "experiment": "EXP-2026-10-16-commodity-leadlag",
+ "producer": "src/agentic/test_leadlag_drivers.py commodity",
+ "definitions": "EXP-2026-10-16-commodity-leadlag (E3) and EXP-2026-10-16-cluster-leadlag (E6), registered in logs/experiments.jsonl first.\n\nUsage: /usr/bin/python3 src/agentic/test_leadlag_drivers.py commodity | cluster\nPlain English: the industry lead-lag method of test_industry_leadlag.py (E1) with different leaders / followers.\ncommodity: leaders = 12 commodity and currency series (FRED, point in time by known_from), followers = industries; 'about to get\n  hot' industries (lead score top 10%, heat_pct < 0.70, not policy-vetoed) join V3.2's G1 gate.\ncluster: each January, liquid stocks are grouped into 30 clusters by how they moved together over the previous 2 years\n  (Ward clustering of z-scored residual weekly returns); leaders and followers = clusters; members of the top-10% clusters by lead\n  score join V3.2's eligible set (except stocks whose industry is policy-vetoed that date).\nMaps are found each January from earlier years only (4-week periods from 2016, OLS controlling for the follower's own past 4\nweeks and the market's, Benjamini-Hochberg q <= 0.10). Part A = weekly rank correlation of lead score vs next 4 weeks; Part B =\nthe widened V3.2 vs V3.2: both eras, maxDD not worse by > 2 points, schedule 0 and >= 4 of 5.\n",
+ "contents": "weekly Spearman rank correlation, schedule 0",
+ "units": {
+  "ic": "lead score vs next-4-week return",
+  "own_ic_same": "own past 4 weeks vs next 4 weeks, same groups"
+ },
+ "updated": "2026-10-16T14:22:33"
+}
