@@ -12,7 +12,9 @@ import { fileURLToPath } from "node:url";
 const [journey = "euro", capsOut = "caps.json", mode = "gpu", task = "record"] = process.argv.slice(2);
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const PORT = task === "measure" ? 9334 : 9333, URL = "http://localhost:8795/?record&at=2026-10-17T07:00:00Z";
+// SGM_AT sets the sky: 07:00 UTC is daylight from Frankfurt to Bengaluru; 12:30 UTC is dawn in St. Louis and sunset in India
+const AT = process.env.SGM_AT || "2026-10-17T07:00:00Z";
+const PORT = Number(process.env.SGM_PORT) || (task === "measure" ? 9334 : 9333), URL = `http://localhost:8795/?record&at=${AT}`;
 const gpu = mode === "gpu" ? ["--use-angle=metal", "--enable-gpu", "--ignore-gpu-blocklist"] : ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
 const chrome = spawn(CHROME, ["--headless=new", `--remote-debugging-port=${PORT}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "sgm-rec-"))}`,
   "--window-size=1280,720", "--hide-scrollbars", "--no-first-run", "--disable-background-timer-throttling", "--disable-renderer-backgrounding", ...gpu, "about:blank"],
@@ -35,13 +37,15 @@ if (task === "measure") {
   for (let i = 0; i < 180; i++) { await sleep(2000); const h = await evaluate("window.__H ? JSON.stringify(window.__H) : ''"); if (h) { writeFileSync(capsOut, h); console.log("heights ->", capsOut); break; } }
   ws.close(); chrome.kill(); process.exit(0);
 }
-await evaluate(`window.JOURNEY = ${JSON.stringify(journey)}; ${readFileSync(join(HERE, "recorder.js"), "utf8")}; 'started'`);
+// SGM_FROM / SGM_TO re-record a slice of frames into the same folder (the rest of the film is stepped through unsaved)
+const range = `window.REC_FROM = ${Number(process.env.SGM_FROM || 0)}; ${process.env.SGM_TO ? `window.REC_TO = ${Number(process.env.SGM_TO)};` : ""}`;
+await evaluate(`window.JOURNEY = ${JSON.stringify(journey)}; ${range} ${readFileSync(join(HERE, "recorder.js"), "utf8")}; 'started'`);
 const t0 = Date.now();
 while (true) {
   await sleep(10000);
   const st = JSON.parse(await evaluate("JSON.stringify({ k: __rec.k, t: __rec.t, done: __rec.done, err: __rec.err })") || "{}");
   console.log(`${Math.round((Date.now() - t0) / 1000)}s frame ${st.k} t=${(st.t || 0).toFixed(2)}`);
   if (st.err) { console.error(st.err); break; }
-  if (st.done) { writeFileSync(capsOut, await evaluate("JSON.stringify(__rec.caps)")); console.log("caps ->", capsOut); break; }
+  if (st.done) { if (!process.env.SGM_FROM) writeFileSync(capsOut, await evaluate("JSON.stringify(__rec.caps)")); console.log("done ->", capsOut); break; }
 }
 ws.close(); chrome.kill();

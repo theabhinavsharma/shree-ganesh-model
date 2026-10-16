@@ -19,7 +19,8 @@ const wrap = a => Math.atan2(Math.sin(a), Math.cos(a));
 const TO_VERSOVA = [[19.12, 72.78], [19.1365, 72.800], [19.13568, 72.80797]];   // in to the water's edge at Versova beach, Mumbai
 const PRADO_COVE = [[43.26149, 5.37175], [43.2608, 5.3709], [43.26045, 5.3692], [43.2595, 5.3640]];   // out of the cove at Prado beach, Marseille
 const J = {
-  euro: { name: "Euro", what: "exchange rates", flag: "DE", road1: "euro_fra_mrs", ship: "sub", startLabel: "European Central Bank", portLabel: "Marseille",
+  // skyUTC: the film plays in daylight (07:00 UTC is day from Frankfurt to Bengaluru); exploring keeps the real sky
+  euro: { name: "Euro", what: "exchange rates", flag: "DE", road1: "euro_fra_mrs", ship: "sub", skyUTC: 7, skyLine: "Shown in daylight", startLabel: "European Central Bank", portLabel: "Marseille",
     sea: [...PRADO_COVE, ...X.SEA.med, ...TO_VERSOVA],
     say: {
       intro: "Euro's journey: today's exchange rates, from Frankfurt to your laptop in Bengaluru.",
@@ -30,7 +31,7 @@ const J = {
       handoff: "Mumbai. The submarine surfaces off Versova and throws the crate to a courier.",
       home: "Into your laptop. 21 data checks tick off. Exchange rates are kept as market context; they don't pick stocks."
     } },
-  fed: { name: "Fed", what: "world prices", flag: "US", road1: "fed_stl_nj", ship: "tanker", startLabel: "St. Louis Fed (FRED)", portLabel: "New Jersey shore",
+  fed: { name: "Fed", what: "world prices", flag: "US", road1: "fed_stl_nj", ship: "tanker", skyUTC: 12.5, skyLine: "Shown at dawn in St. Louis, sunset in India", startLabel: "St. Louis Fed (FRED)", portLabel: "New Jersey shore",
     sea: [[40.29965, -73.97619], [40.29, -73.95], ...X.SEA.atlantic, ...TO_VERSOVA],   // starts just past the surf at Long Branch
     say: {
       intro: "Fed's journey: oil, metal and crop prices, the dollar and US rates, from St. Louis to your laptop in Bengaluru.",
@@ -43,6 +44,8 @@ const J = {
     } }
 };
 const ROAD2 = "courier_mum_blr";
+// films the user has checked go on the live site; the others still play from their deep link (#follow-<id>) for review
+const LIVE_FILMS = [];   // none yet: in real time the street-level map loads too slowly (2026-10-17); films play from #follow-<id> for review
 const road2Say = km => `Over the Western Ghats and across the Deccan: the courier runs ${km} km of highway to Bengaluru.`;
 // seconds of film per phase (about 30 s in all)
 const PHASES = [["intro", 2.2], ["dive", 2.8], ["road1", 7.0], ["board", 2.0], ["sea", 6.0], ["handoff", 1.8], ["road2", 6.4], ["home", 3.6]];
@@ -122,13 +125,15 @@ async function loadRoute(id) { if (!routes[id]) routes[id] = await (await fetch(
 
 async function prepare(id) {
   if (F.id === id && F.ready) return;
-  teardown(); F.id = id; F.ready = false; F.H = null;
+  teardown(); F.id = id; F.ready = false; F.H = null; F.warm = false;
   const j = J[id], r1 = await loadRoute(j.road1), r2 = await loadRoute(ROAD2);
   F.j = j; F.km1 = Math.round(r1.distance_km).toLocaleString("en-IN"); F.km2 = Math.round(r2.distance_km).toLocaleString("en-IN");
   F.road1 = trackFromLonLat(r1.coordinates); F.sea = trackFromSea(j.sea); F.road2 = trackFromLonLat(r2.coordinates);
   // the first and last 35 m of each road at running pace, with the camera just behind; time-lapse in between
-  F.p1 = profile(F.road1.len, 0.3, 35); F.ps = profile(F.sea.len, 0.16, 350); F.p2 = profile(F.road2.len, 0.3, 35);
+  // the courier stops 160 m short of the giant laptop (about 185 m wide, it sits over the last stretch of road) and throws the crate in
   F.home = [W.D.HOME.lon, W.D.HOME.lat];
+  F.r2Stop = F.road2.len; while (F.r2Stop > 0 && metres(pointAt(F.road2, F.r2Stop), F.home) < 160) F.r2Stop -= 5;
+  F.p1 = profile(F.road1.len, 0.3, 35); F.ps = profile(F.sea.len, 0.16, 350); F.p2 = profile(F.r2Stop, 0.3, 35);
   // each character's own model when it exists (bot_<id>), else its country's bot
   F.runner = await model([BOTS + `bot_${id}_carry.glb`, BOTS + `bot_${j.flag}_carry.glb`], 1.8, 40);
   F.ship = await model(j.ship === "sub" ? [PROPS + "submarine.glb"] : [PROPS + "tanker_oil.glb"], j.ship === "sub" ? 9 : 14, 70);
@@ -204,6 +209,15 @@ function pitchFor(r, rmin, rmax, p0, p1) { return lerp(p0, p1, clamp(Math.log(r 
 function say(text) { if (F.caption !== text) { F.caption = text; $("chaseText").textContent = text; } }
 function arc(a, b, ha, hb, k, peak) { return [lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(ha, hb, k) + Math.sin(Math.PI * k) * peak]; }
 function metres(a, b) { return C.Cartesian3.distance(C.Cartesian3.fromDegrees(a[0], a[1]), C.Cartesian3.fromDegrees(b[0], b[1])); }
+// the street-level camera stands on the route itself, so it is always in the street, never inside a building:
+// on the first half of a road it waits 18 m ahead and the bot runs towards it (you see its face); on the second half it
+// follows 18 m behind along the road just covered. It sits 8 m up and looks at the bot's chest.
+const CAM_BACK = 18, CAM_UP = 8;
+function streetCam(key, tr, s, g, p) {
+  const lead = s < tr.len / 2, sc = clamp(lead ? s + CAM_BACK : s - CAM_BACK, 0, tr.len), cp = pointAt(tr, sc);
+  const ch = roadH(key, tr, sc, 0) + CAM_UP, horiz = Math.max(4, metres(cp, p)), vert = ch - (g + 1.1);
+  return { heading: X.headingAt(C.Cartesian3.fromDegrees(cp[0], cp[1]), C.Cartesian3.fromDegrees(p[0], p[1])), pitch: -Math.atan2(vert, horiz), range: Math.hypot(horiz, vert) };
+}
 function speedAt(pr, u, dur) { const a = Math.max(0, u - 0.004), b = Math.min(1, u + 0.004); return (pr.s(b) - pr.s(a)) / ((b - a) * dur); }
 
 function step(dt) {
@@ -213,9 +227,9 @@ function step(dt) {
   if (ph.i !== F.phase) enterPhase(ph);
   const s0 = F.road1.ll[0], b0 = bearingAt(F.road1, 0, 60);
   const roadEnd = F.road1.ll[F.road1.ll.length - 1], seaStart = F.sea.ll[0], seaEnd = F.sea.ll[F.sea.ll.length - 1];
-  const r2Start = F.road2.ll[0], r2End = F.road2.ll[F.road2.ll.length - 1];
+  const r2Start = F.road2.ll[0], r2End = pointAt(F.road2, F.r2Stop);
   const hStart = roadH("r1", F.road1, 0, 0), hPort = roadH("r1", F.road1, F.road1.len, 0);
-  const hMum = roadH("r2", F.road2, 0, 0), hHome = roadH("r2", F.road2, F.road2.len, 0);
+  const hMum = roadH("r2", F.road2, 0, 0), hHome = roadH("r2", F.road2, F.r2Stop, 0);
   F.g1 = hStart; F.gPort = hPort; F.gHome = hHome;
   // where each piece is
   let runner = null, ship = null, courier = null, crate = null;
@@ -223,19 +237,24 @@ function step(dt) {
     runner = { lon: s0[0], lat: s0[1], h: hStart + 0.2, hd: b0 };
     const k = ph.name === "intro" ? 0 : ease(ph.u);
     if (ph.name === "intro") { d.target = F.center; d.range = F.R0 * (1 - 0.08 * ph.u); d.heading = 0; d.pitch = -89 * RAD; d.tau = 0.05; }
-    else {                                              // dive from space to the front door
-      const e = Math.pow(k, 0.85);
+    else {                                              // dive from space to the front door, ending on the street camera
+      const e = Math.pow(k, 0.85), sc = streetCam("r1", F.road1, 0, hStart, s0);
       d.target = [lerp(F.center[0], s0[0], ease(Math.min(1, ph.u * 1.4))), lerp(F.center[1], s0[1], ease(Math.min(1, ph.u * 1.4)))];
-      d.range = Math.exp(lerp(Math.log(F.R0), Math.log(22), e)); d.heading = lerp(0, b0, k); d.pitch = lerp(-89, -18, k) * RAD; d.tau = 0.05; d.h = hStart; d.look = 1.1;
+      d.range = Math.exp(lerp(Math.log(F.R0), Math.log(sc.range), e)); d.heading = wrap(sc.heading) * k; d.tau = 0.05; d.h = hStart; d.look = 1.1;
+      // look steeply down while above the rooftops, then swoop onto the street: a shallow angle from far back goes through buildings
+      d.pitch = d.range > 90 ? lerp(-89, -58, k) * RAD : lerp(-58 * RAD, sc.pitch, clamp(Math.log(90 / d.range) / Math.log(90 / sc.range), 0, 1));
     }
   } else if (ph.name === "road1" || ph.name === "road2") {
     const key = ph.name === "road1" ? "r1" : "r2", tr = ph.name === "road1" ? F.road1 : F.road2, pr = ph.name === "road1" ? F.p1 : F.p2;
     const s = pr.s(ph.u), v = speedAt(pr, ph.u, ph.dur), p = pointAt(tr, s), hd = bearingAt(tr, s, clamp(v * 0.25, 25, 40000));
-    d.range = rangeFor(v, 22, 2.2e5);
-    const g = roadH(key, tr, s, d.range), who = { lon: p[0], lat: p[1], h: g + 0.2, hd };
+    const droneR = rangeFor(v, 22, 2.2e5);
+    const g = roadH(key, tr, s, droneR), who = { lon: p[0], lat: p[1], h: g + 0.2, hd };
     if (ph.name === "road1") runner = who; else courier = who;
-    const up = clamp(Math.log(d.range / 22) / Math.log(3000 / 22), 0, 1);   // 0 right behind the runner, 1 once the drone is up high
-    d.target = p; d.h = g; d.look = 1.1; d.heading = hd + lerp(0.0, 0.45 + 0.85 * Math.sin(ph.u * Math.PI * 1.6), up); d.pitch = pitchFor(d.range, 22, 2.2e5, -18, -58);
+    const up = clamp(Math.log(droneR / 22) / Math.log(3000 / 22), 0, 1);   // 0 on the street camera, 1 once the drone is up high
+    const st = streetCam(key, tr, s, g, p), droneH = hd + 0.45 + 0.85 * Math.sin(ph.u * Math.PI * 1.6);
+    d.target = p; d.h = g; d.look = 1.1;
+    d.range = Math.exp(lerp(Math.log(st.range), Math.log(droneR), up)); d.heading = st.heading + wrap(droneH - st.heading) * up;
+    d.pitch = lerp(st.pitch, pitchFor(droneR, 22, 2.2e5, -18, -58), up);
     streakTo(F.cov[key], tr, s, g + 1.5 + (d.range > 3000 ? d.range * 0.002 : 0));
     if (ph.name === "road1") ship = { lon: seaStart[0], lat: seaStart[1], h: seaH(0), hd: bearingAt(F.sea, 0, 3000) };
   } else if (ph.name === "board") {                     // the runner crouches, then jumps from the shore into the ship
@@ -287,7 +306,7 @@ function step(dt) {
   cam.look = lerp(cam.look === undefined ? 6 : cam.look, d.look || 6, follow ? 1 : a);
   camera.lookAt(C.Cartesian3.fromDegrees(cam.lon, cam.lat, cam.h + cam.look), new C.HeadingPitchRange(cam.heading, cam.pitch, cam.range));
   const bar = $("chaseProgress"); if (bar) bar.style.transform = `scaleX(${clamp(F.t / TOTAL, 0, 1)})`;
-  if (F.t >= TOTAL && !F.ended) end();
+  if (F.t >= TOTAL && !F.ended && !F.warming) end();
 }
 function setPiece(m, at, key, lbl, up) {
   if (!m) return;
@@ -319,14 +338,47 @@ async function play(id) {
   W.closeCard(); ["intro", "caption", "chips", "lineup"].forEach(k => { const e = $(k); if (e) e.hidden = true; });
   $("chase").hidden = false; $("chaseEnd").hidden = true; F.caption = null; say("Getting the map ready…");
   ctl.enableInputs = false; X.setAmbient(false);
+  if (!X.RECORD) {                                       // the film's own sky, not the visitor's time of day
+    const d = new Date(); d.setUTCHours(0, 0, 0, 0); d.setTime(d.getTime() + J[id].skyUTC * 3600e3);
+    viewer.clock.currentTime = C.JulianDate.fromDate(d); X.setSunline(J[id].skyLine);
+  }
+  if (F.loading && F.loadingId === id) { $("chaseCurtain").hidden = false; await F.loading; }
+  else await load(id);
+  $("chaseCurtain").hidden = true;
+  Object.values(F.cov).forEach(st => { st.pts = []; st.idx = 0; st.head = null; });
+  F.t = 0; F.phase = -1; F.ended = false; F.caption = null; F.slowUsed = 0; cam.init = false; cam.look = undefined; X.playStatic("me", "wave", false);
+  F.playing = !X.RECORD; last = performance.now();
+}
+// models, routes and heights; then (live only) a visit to each street-level spot so Google's tiles are cached before the
+// film needs them. "Start the journey" runs this behind the crew lineup, which covers the whole screen.
+async function load(id) {
   await prepare(id);
   if (!F.H) {                                          // heights measured once and saved with the routes; measured live if the file is missing
     try { const r = await fetch(`world/routes/heights_${id}.json`); if (r.ok) F.H = (await r.json()).heights; } catch (e) {}
     if (F.H) ["r1a", "r1b", "r2a", "r2b"].forEach(k => { F.H[k] = smooth(F.H[k]); });
     if (!F.H) await measure();
   }
-  Object.values(F.cov).forEach(st => { st.pts = []; st.idx = 0; st.head = null; });
-  F.t = 0; F.phase = -1; F.ended = false; F.caption = null; cam.init = false; cam.look = undefined; F.playing = !X.RECORD; last = performance.now();
+  if (!X.RECORD && !F.warm) { await warm(); F.warm = true; }
+}
+function preload(id) {
+  if (!J[id] || X.RECORD) return;
+  F.loadingId = id; F.loading = load(id).catch(() => {}).then(() => { F.loading = null; camera.lookAtTransform(C.Matrix4.IDENTITY); });
+  return F.loading;
+}
+// a dry run of the film behind the lineup: fast-forward, and at every street or harbour moment wait until that exact
+// view's tiles are in, so the real film finds them in the cache (capped at 14 s; the curtain covers any overrun)
+async function warm() {
+  X.ensureTileset();
+  const t0 = performance.now();
+  F.t = 0; F.phase = -1; cam.init = false; F.warming = true;
+  while (F.t < TOTAL - 0.6 && performance.now() - t0 < 14000) {
+    step(0.25);
+    if (cam.range < 3000) {
+      const ts0 = performance.now(); let calm = 0;
+      while (performance.now() - ts0 < 1500) { await sleep(100); const ts = X.tileset(); calm = ts && ts.show && ts.tilesLoaded ? calm + 1 : 0; if (calm >= 2) break; }
+    } else await sleep(30);
+  }
+  F.warming = false; F.models.forEach(m => { m.show = false; }); camera.lookAtTransform(C.Matrix4.IDENTITY);
 }
 // behind a curtain, visit the four street-level places: Google's 3D tiles load and stay cached, and the ground is measured there
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -366,12 +418,12 @@ async function measure() {
 }
 function end() {
   F.ended = true; F.playing = false;
-  const others = Object.keys(J).filter(k => k !== F.id);
-  $("chaseEnd").hidden = false;
-  $("chaseOther").textContent = `Watch ${J[others[0]].name}'s journey`; $("chaseOther").dataset.id = others[0];
+  const others = LIVE_FILMS.filter(k => k !== F.id);
+  $("chaseEnd").hidden = false; $("chaseOther").hidden = !others.length;
+  if (others.length) { $("chaseOther").textContent = `Watch ${J[others[0]].name}'s journey`; $("chaseOther").dataset.id = others[0]; }
 }
 function stop() {
-  F.playing = false; camera.lookAtTransform(C.Matrix4.IDENTITY); ctl.enableInputs = true; X.setAmbient(true); X.playStatic("me", "wave", false);
+  F.playing = false; if (!X.RECORD) { viewer.clock.currentTime = X.AT ? C.JulianDate.fromIso8601(X.AT) : C.JulianDate.now(); X.setSunline(null); } camera.lookAtTransform(C.Matrix4.IDENTITY); ctl.enableInputs = true; X.setAmbient(true); X.playStatic("me", "wave", false);
   F.models.forEach(m => { m.show = false; }); F.ents.forEach(e => { e.show = false; });
   $("chase").hidden = true; W.startExplore();
 }
@@ -381,11 +433,18 @@ $("chaseAgain").addEventListener("click", () => play(F.id));
 $("chaseOther").addEventListener("click", e => play(e.currentTarget.dataset.id));
 scene.preUpdate.addEventListener(() => {
   const now = performance.now(), dt = Math.min(0.1, (now - last) / 1000); last = now;
-  if (F.playing && !X.RECORD) step(dt * (W.REDUCED ? 0.6 : 1));
+  const ts = X.tileset();
+  // the map normally holds back loading while the camera moves (fine when someone drags it); a film never stops moving,
+  // so during a film (and its dry run) tiles load as they're needed
+  if (ts && !X.RECORD) { const film = F.playing || !!F.warming; ts.foveatedScreenSpaceError = !film; ts.cullRequestsWhileMoving = !film; }
+  if (!F.playing || X.RECORD) return;
+  let k = W.REDUCED ? 0.6 : 1;   // close to the ground with tiles still coming in: run at 30% speed, at most 6 extra seconds per film
+  if (cam.range < 2500 && ts && ts.show && !ts.tilesLoaded && (F.slowUsed || 0) < 6) { k *= 0.3; F.slowUsed = (F.slowUsed || 0) + dt * 0.7; }
+  step(dt * k);
 });
 
 /* record mode (?record): the page is driven one frame at a time from outside, so a preview video can be made from it */
-window.SGM_CHASE = { has: id => !!J[id], play, stop, ids: Object.keys(J), TOTAL,
+window.SGM_CHASE = { has: id => LIVE_FILMS.includes(id), play, stop, preload, ids: Object.keys(J), TOTAL,
   measured: () => F.H, remeasure: async () => { F.H = null; await measure(); return F.H; },
   async prepareRecord(id) { viewer.useDefaultRenderLoop = false; viewer.clock.shouldAnimate = false; F.clock0 = C.JulianDate.clone(viewer.clock.currentTime); await play(id); return F.H; },
   frame(dt) { step(dt); viewer.clock.currentTime = C.JulianDate.addSeconds(F.clock0, F.t, new C.JulianDate()); return { t: F.t, phase: PHASES[Math.min(PHASES.length - 1, F.phase)][0], caption: F.caption, done: F.t >= TOTAL }; } };

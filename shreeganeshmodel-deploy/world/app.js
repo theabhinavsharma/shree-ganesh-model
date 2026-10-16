@@ -45,7 +45,7 @@ function ensureTileset() {
   C.GoogleMaps.defaultApiKey = CFG.googleKey;
   C.createGooglePhotorealistic3DTileset(undefined, { showCreditsOnScreen: true, maximumScreenSpaceError: PHONE() ? 24 : 16,
     // when recording, time stands still between frames, so the "wait until the camera stops" loading tricks would never fire
-    foveatedScreenSpaceError: !RECORD, cullRequestsWhileMoving: !RECORD, cacheBytes: RECORD ? 3e9 : undefined })
+    foveatedScreenSpaceError: !RECORD, cullRequestsWhileMoving: !RECORD, cacheBytes: RECORD ? 3e9 : PHONE() ? undefined : 1.5e9 })
     .then(ts => { tileset = ts; scene.primitives.add(ts); })
     .catch(err => showNote("Google's 3D city didn't load (" + (err && err.message || err) + "). Showing the satellite globe instead."));
 }
@@ -396,7 +396,7 @@ function nearestStation(carto) {
   D.STATIONS.forEach(s => { if (!s.real) return; const d = metres([C.Math.toDegrees(carto.longitude), C.Math.toDegrees(carto.latitude)], [s.real[1], s.real[0]]); if (d < bd) { bd = d; best = s; } });
   return bd < 1500000 ? best : null;
 }
-let lastLine = 0;
+let lastLine = 0, sunOverride = null;                 // a follow-cam film shows its own line ("Shown in daylight")
 scene.preRender.addEventListener((sc, time) => {
   const carto = camera.positionCartographic, h = carto.height, low = h < LOW;
   if (low) ensureTileset();
@@ -416,7 +416,7 @@ scene.preRender.addEventListener((sc, time) => {
     lastLine = now; const st = nearestStation(ground);
     const part = elev >= 8 ? "day" : elev >= -4 ? (elev >= 0 ? "evening light" : "dusk") : "night";
     const clock = st ? new Intl.DateTimeFormat("en-IN", { hour: "numeric", minute: "2-digit", timeZone: TZ[st.id] }).format(new Date()) : "";
-    $("sunline").textContent = st ? `${st.name} · ${clock} · ${part}` : (h > 3e6 ? "The real sky right now" : `Over the sea · ${part}`);
+    $("sunline").textContent = sunOverride || (st ? `${st.name} · ${clock} · ${part}` : (h > 3e6 ? "The real sky right now" : `Over the sea · ${part}`));
   }
 });
 
@@ -424,7 +424,7 @@ scene.preRender.addEventListener((sc, time) => {
 window.SGM_WORLD = { viewer, C, D, flyTo, flyBuilding, startExplore, showBot, openCard, closeCard, simpleCard, GROUND, PHONE, REDUCED,
                      showCaption: t => { $("captionText").textContent = t; $("caption").hidden = false; },
                      // for the follow-cam journeys (world/chase.js)
-                     chase: { loadModel, headingAt, seaPath, SEA, P, AMBER, CYAN, WAKE, setAmbient, RECORD, LOW, tileset: () => tileset, ensureTileset, staticModels: () => statics.map(x => x.model),
+                     chase: { setSunline: t => { sunOverride = t; $("sunline").textContent = t || ""; lastLine = 0; }, AT, loadModel, headingAt, seaPath, SEA, P, AMBER, CYAN, WAKE, setAmbient, RECORD, LOW, tileset: () => tileset, ensureTileset, staticModels: () => statics.map(x => x.model),
                               playStatic: (prop, name, once) => statics.filter(x => x.pick && x.pick.prop === prop).forEach(x => { try { x.model.activeAnimations.removeAll();
                                 x.model.activeAnimations.add({ name, loop: once ? C.ModelAnimationLoop.NONE : C.ModelAnimationLoop.REPEAT }); } catch (e) {} }) } };
 function routeHash() {                                  // #nse jumps to NSE, #explore skips the intro

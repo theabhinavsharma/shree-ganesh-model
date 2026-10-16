@@ -1,10 +1,7 @@
-/* The "Start the journey" sequence, from the user's drawings (2026-10-17):
-   1 the crew lines up in lanes and starts running right (world/lineup.js)
-   2 zoom out across several camera angles: bots run from their home cities to the coast
-   3 they board the ships (Ship 1 + the submarine for the cable; Ship 2 across the Pacific)
-   4 India: Ship 1 docks in Mumbai, Ship 2 in Chennai; NSE in Mumbai, PIB next to Parliament in Delhi; all paths to Bengaluru
-   5 Bengaluru: you, the laptop, the ML bots, and money moving between SBI and your stocks
-   Then free exploring. Each step waits for "Next". */
+/* "Start the journey" (user's call, 2026-10-17): the crew lines up in lanes (world/lineup.js, from the user's first
+   drawing). On "Go!" they run off and the follow-cam film takes over (world/chase.js): Euro's whole run on the real
+   Earth, by road from Frankfurt and by submarine from Marseille, then a courier to the laptop in Bengaluru. The film's
+   end panel offers Fed's journey or free exploring. The earlier slideshow of camera stops is retired (see git history). */
 (function () {
 "use strict";
 const W = window.SGM_WORLD; if (!W) return;
@@ -15,52 +12,37 @@ const WHAT = { bhav: "Stock prices", sarkari: "Government news", fed: "Oil and w
                gnews: "World headlines", claude: "The Friday market note", pigeon: "Messages to your phone" };
 const CREW = Object.keys(SHORT).map(id => { const b = D.BOTS.find(x => x.id === id);
   return { id, name: b.name, flag: D.FLAG[b.st], what: WHAT[id], fromShort: SHORT[id] }; });
+const FIRST_FILM = "euro";
 
-function steps() {
-  const P = W.PHONE();
-  return [
-    { text: "Meet the crew. Every evening at 6:45 PM these bots fetch the data behind your Friday list.", lineup: true, next: "Go!" },
-    { text: "They set off from home. Fed runs out of the St. Louis Fed with oil and world prices.", go: () => W.flyTo(-87.5, 32, P ? 1.3e6 : 9e5, 18, -42, 3.5) },
-    { text: "Euro leaves the European Central Bank in Frankfurt with exchange rates.", go: () => W.flyTo(6, 38.5, P ? 1.1e6 : 8e5, 0, -45, 4) },
-    { text: "At the coast they board the ships. Ship 1 carries oil and world prices across the Atlantic and the Red Sea; the submarine marks the undersea cable.", go: () => W.flyTo(0, 28, P ? 26e6 : 18e6, 0, -90, 4) },
-    { text: "From California, Ship 2 brings Claude's Friday note and world headlines across the Pacific.", go: () => W.flyTo(160, 18, P ? 28e6 : 22e6, 0, -90, 4) },
-    { text: "India. Ship 1 docks in Mumbai and Ship 2 in Chennai. NSE adds today's stock prices, and PIB in Delhi, next to Parliament, adds government news. Everything heads to Bengaluru.", go: () => W.flyTo(78, 5.5, P ? 3.9e6 : 2.6e6, 0, -55, 4) },
-    { text: "Bengaluru. The ML bots turn it all into the Friday list. You decide, and money moves between your SBI account and your stocks.", go: () => W.flyTo(81.5, 9.2, P ? 6.5e5 : 5.0e5, 315, -36, 4), next: "Explore on my own" }
-  ];
-}
-let step = -1, busy = false, lineupDone = null;
+let busy = false, lineupDone = null;
 async function waitLineup() {
   for (let i = 0; i < 40 && !window.SGM_LINEUP; i++) await new Promise(r => setTimeout(r, 100));
   return window.SGM_LINEUP;
 }
-async function run(i) {
-  const S = steps(); if (i >= S.length) return W.startExplore();
-  step = i; busy = true; const s = S[i];
-  W.closeCard(); W.showCaption(s.text);
-  const next = $("nextBtn"); next.disabled = true; next.textContent = s.next || "Next";
-  if (s.lineup) {
-    const L = await waitLineup();
-    if (!L) { busy = false; return run(i + 1); }
-    lineupDone = L.play(CREW);
-    next.disabled = false; busy = false;
-    return;
-  }
-  await s.go(); next.disabled = false; busy = false;
+function film() {
+  W.closeCard(); $("caption").hidden = true;
+  if (window.SGM_CHASE && window.SGM_CHASE.has(FIRST_FILM)) window.SGM_CHASE.play(FIRST_FILM); else W.startExplore();   // until a film is live, the lineup leads into exploring
 }
-async function onNext() {
+async function start() {
+  busy = true; W.closeCard();
+  W.showCaption("Meet the crew. Every evening at 6:45 PM these bots fetch the data behind your Friday list. Press Go! to see where they go.");
+  const next = $("nextBtn"); next.disabled = true; next.textContent = "Go!";
+  const L = await waitLineup();
+  if (!L) { busy = false; return film(); }
+  lineupDone = L.play(CREW);
+  if (window.SGM_CHASE && window.SGM_CHASE.has(FIRST_FILM)) window.SGM_CHASE.preload(FIRST_FILM);   // the map loads behind the lineup while the crew is on screen
+  next.disabled = false; busy = false;
+}
+async function onNext() {                               // "Go!": the crew runs off, then the film takes over
   if (busy) return;
-  const S = steps();
-  if (S[step] && S[step].lineup && lineupDone) {        // "Go!": the crew runs off, then the Earth takes over
-    busy = true; $("nextBtn").disabled = true; window.SGM_LINEUP.go(); await lineupDone; lineupDone = null; busy = false;
-    return run(step + 1);
-  }
-  if (step >= S.length - 1) return W.startExplore();
-  run(step + 1);
+  busy = true; $("nextBtn").disabled = true;
+  if (lineupDone) { window.SGM_LINEUP.go(); await lineupDone; lineupDone = null; }
+  busy = false; film();
 }
 function skip() { const l = $("lineup"); if (l) l.hidden = true; lineupDone = null; W.startExplore(); }
-$("startBtn").addEventListener("click", () => { $("intro").hidden = true; run(0); });
+$("startBtn").addEventListener("click", () => { $("intro").hidden = true; start(); });
 $("exploreBtn").addEventListener("click", () => { $("intro").hidden = true; W.startExplore(); });
 $("nextBtn").addEventListener("click", onNext);
 $("skipBtn").addEventListener("click", skip);
-if (location.hash === "#journey") { $("intro").hidden = true; run(0); }          // deep link: start the journey directly
+if (location.hash === "#journey") { $("intro").hidden = true; start(); }          // deep link: start the journey directly
 })();

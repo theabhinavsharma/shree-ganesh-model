@@ -1,4 +1,4 @@
-<title>Euro's Journey</title>
+<title>Journey Films</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +24,10 @@ figure { margin: 0; display: grid; gap: 8px; }
 video { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; border: 1px solid var(--line); background: #000; }
 video::cue { font-family: var(--font-body); font-size: 17px; background: rgba(7, 11, 20, 0.82); color: #fff; }
 figcaption { font-size: 13.5px; color: var(--ink-2); }
+.switch { display: flex; gap: 8px; flex-wrap: wrap; }
+.switch button { font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.switch button[aria-selected="true"] { background: var(--orange); border-color: var(--orange); color: #1d130e; }
+.switch button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 .cap { margin: 0; min-height: 3.2em; padding: 10px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 16px; }
 h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0 0 12px; text-wrap: balance; }
 .beats { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: beat; }
@@ -44,80 +48,85 @@ footer b { color: var(--ink); }
 
 <div class="wrap">
   <header>
-    <h1>Euro's journey, on the real Earth</h1>
-    <p class="lede">The follow-cam preview: one bot's whole run in about 30 seconds. It starts at the European Central Bank in Frankfurt and ends in your laptop in Bengaluru. This is a recording of the page running on the laptop, frame by frame.</p>
+    <h1>The journey films, on the real Earth</h1>
+    <p class="lede">Each film follows one bot's whole run in about 30 seconds, from the place its data comes from to your laptop in Bengaluru. "Start the journey" on the home page now plays these. They are recordings of the page running on the laptop, frame by frame.</p>
     <span class="status"><i></i>Not live. shreeganeshmodel.vercel.app is unchanged until you say go.</span>
   </header>
 
   <figure>
-    <video controls playsinline preload="metadata" poster="euro.jpg">
-      <source src="euro.mp4" type="video/mp4">
-    </video>
+    <div class="switch" role="tablist" aria-label="Film">
+      <button type="button" role="tab" data-film="euro" aria-selected="true">Euro · Frankfurt by submarine</button>
+      <button type="button" role="tab" data-film="fed" aria-selected="false">Fed · St. Louis by tanker</button>
+    </div>
+    <video controls playsinline preload="metadata" poster="euro.jpg"><source src="euro.mp4" type="video/mp4"></video>
     <p class="cap" id="cap" aria-live="polite">Press play.</p>
-    <figcaption>Sky set to 9 AM in Frankfurt for this recording. Visitors see the real time of day wherever the camera is.</figcaption>
+    <figcaption id="sky"></figcaption>
   </figure>
 
   <section>
     <h2>What happens, beat by beat</h2>
-    <ol class="beats">
-      <li><span class="t">0:00</span><div><b>From space</b><p>The whole route on the real globe. The dashed line is the road still ahead.</p></div></li>
-      <li><span class="t">0:02</span><div><b>Frankfurt</b><p>The camera dives to the European Central Bank. Euro picks up the day's rates and sets off down the street, human-sized.</p></div></li>
-      <li><span class="t">0:05</span><div><b>The road</b><p>Street level for the first stretch, then the drone climbs and the run turns into a time-lapse: 1,016 km to Marseille, with the amber streak behind.</p></div></li>
-      <li><span class="t">0:12</span><div><b>Marseille</b><p>Across the Prado park onto the beach, where Euro jumps into the submarine waiting in the cove.</p></div></li>
-      <li><span class="t">0:14</span><div><b>The sea</b><p>The Mediterranean, Suez, the Red Sea and the Arabian Sea, leaving a cyan streak.</p></div></li>
-      <li><span class="t">0:20</span><div><b>Mumbai</b><p>The submarine surfaces off Versova beach and throws the crate to a courier on the sand.</p></div></li>
-      <li><span class="t">0:22</span><div><b>The courier</b><p>996 km over the Western Ghats and across the Deccan to Bengaluru.</p></div></li>
-      <li><span class="t">0:28</span><div><b>Bengaluru</b><p>The crate flies into the giant laptop by Vidhana Soudha, 21 data checks tick off, and you cheer.</p></div></li>
-    </ol>
+    <ol class="beats" id="beats"></ol>
   </section>
 
   <section class="cols">
     <div class="panel">
       <h3>How the camera works</h3>
       <ul>
-        <li>The bot is the size of a person, about 1.8 m.</li>
+        <li>The bots are the size of a person, about 1.8 m.</li>
         <li><b>Street level:</b> for the first and last stretch of each road, the camera runs just behind the bot, at running pace, through Google's 3D map of the real street.</li>
         <li><b>The long middle:</b> the camera climbs like a drone and the run speeds up into a time-lapse. Further from the ground, the bot is shown larger than life so it never shrinks to a dot.</li>
-        <li><span class="key" style="background:var(--amber)"></span>A bright streak stays on every road the crate has covered. <span class="key" style="background:var(--cyan)"></span>The sea leg is cyan. The dashed white line is the route still ahead.</li>
+        <li><span class="key" style="background:var(--amber)"></span>A bright streak stays on every road already covered. <span class="key" style="background:var(--cyan)"></span>The submarine's sea leg is cyan, and the tanker leaves a white wake. The dashed white line is the route still ahead.</li>
       </ul>
     </div>
     <div class="panel">
       <h3>What's real and what's simplified</h3>
       <ul>
-        <li>Real: the buildings and streets (Google's 3D map), and the road routes (OpenStreetMap, 1,016 km and 996 km of actual road).</li>
-        <li>Simplified: the sea route follows the undersea-cable path, drawn as a submarine. The real data takes a fraction of a second through the cable.</li>
-        <li>The start (ECB), the beaches (Prado in Marseille, Versova in Mumbai) and Vidhana Soudha in Bengaluru are public places. No home address is shown.</li>
-        <li>Exchange rates are kept as market context. They don't pick stocks; the film says so at the end.</li>
+        <li>Real: the buildings and streets (Google's 3D map), and the roads (OpenStreetMap). That's 1,016 km Frankfurt to Marseille, 1,532 km St. Louis to the New Jersey shore, and 996 km Mumbai to Bengaluru.</li>
+        <li>Simplified: the sea routes follow the undersea-cable paths, drawn as a submarine and a tanker. The real data takes a fraction of a second through the cable.</li>
+        <li>Every stop is a public place: the ECB, the St. Louis Fed, Prado beach, Long Branch beach, Versova beach and Vidhana Soudha. No home address is shown.</li>
+        <li>Each film ends with what the data is used for. Exchange rates are context only; Fed's prices feed Friday's rising and fading themes.</li>
       </ul>
     </div>
   </section>
 
   <section class="cols">
     <div class="panel">
-      <h3>Next</h3>
+      <h3>On the live site</h3>
       <ul>
-        <li>Fed's journey is ready to record. Fed runs from the St. Louis Fed to Long Branch beach in New Jersey and jumps aboard Ship 1, which crosses the Atlantic. The beach and the harbour are picked and measured the same way as Marseille's.</li>
-        <li>Every character now has its own look (a visor, a top hat, a cowboy hat, a pigeon face, a dog face and so on). Films and pages pick up each character's own model. In this film, Euro's coin rides on its crate.</li>
-        <li>Your call: should <b>Start the journey</b> on the home page play these follow-cam films instead of today's slideshow?</li>
+        <li><b>Start the journey:</b> the crew lines up. Press Go! and Euro's film plays. At the end: watch Fed's, watch again, or explore.</li>
+        <li><b>Map loading:</b> while the crew is on screen, the page loads the street-level spots, so the film starts sharp.</li>
+        <li><b>Sky:</b> films play in daylight (Fed's at dawn in St. Louis and sunset in India). Exploring the globe keeps the real time of day.</li>
+        <li><b>Bot cards:</b> each bot with a film has a "Watch its journey" button. Links like /#follow-fed open a film directly.</li>
       </ul>
     </div>
     <div class="panel">
       <h3>Limits</h3>
       <ul>
-        <li>Google's 3D map is built from aerial photos. At street level, trees and parked cars right next to the camera look soft, so the camera stays a few metres up.</li>
-        <li>On a slow connection the map can look blurry for a moment until its tiles load. The page loads the four street-level spots before the film starts.</li>
+        <li>Google's 3D map is built from aerial photos. Trees and parked cars right beside the camera look soft, so the camera stays a few metres up.</li>
+        <li>On a slow connection the first street shot can be soft for a moment while tiles finish loading.</li>
+        <li>Films exist for Euro and Fed so far. The other bots appear on the globe and the crew page.</li>
+        <li>Not yet checked on a real phone.</li>
       </ul>
     </div>
   </section>
 
   <footer>
     <span>3D map: Google. Roads: © OpenStreetMap contributors, routed with OSRM. Globe imagery: NASA EOSDIS GIBS.</span>
-    <span>Tell me what to change, or say <b>go live</b> and I'll publish it with the rest of the Data World.</span>
+    <span>Say it looks good and I'll put the Data World live (home page with these films, the crew page, and Older Models), then check the live site.</span>
   </footer>
 </div>
 <script>
-// the film's captions, from the recording (docs/sgm-world/follow/euro.vtt), shown under the video in step with it
-const CUES = [[0.0, 2.05, "Euro's journey: today's exchange rates, from Frankfurt to your laptop in Bengaluru."], [2.05, 4.9, "Euro picks up the day's rates at the European Central Bank in Frankfurt and sets off."], [4.9, 11.85, "Up the Rhine, past Lyon and down the Rhône to the Mediterranean: 1,016 km of real road."], [11.85, 13.85, "Marseille, where Europe's undersea cables meet the sea. Euro jumps into the submarine."], [13.85, 19.85, "Under the Mediterranean, through Suez and the Red Sea, across the Arabian Sea. In real life the data takes a fraction of a second through the cable."], [19.85, 21.65, "Mumbai. The submarine surfaces off Versova and throws the crate to a courier."], [21.65, 28.05, "Over the Western Ghats and across the Deccan: the courier runs 996 km of highway to Bengaluru."], [28.05, 31.7, "Into your laptop. 21 data checks tick off. Exchange rates are kept as market context; they don't pick stocks."]];
-const video = document.querySelector("video"), cap = document.getElementById("cap");
-video.addEventListener("timeupdate", () => { const t = video.currentTime, c = CUES.find(([a, b]) => t >= a && t < b); cap.textContent = c ? c[2] : cap.textContent; });
+const FILMS = __FILMS__;
+const video = document.querySelector("video"), cap = document.getElementById("cap"), beatsEl = document.getElementById("beats"), skyEl = document.getElementById("sky");
+let film = FILMS.euro;
+function show(id) {
+  film = FILMS[id];
+  document.querySelectorAll(".switch button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.film === id)));
+  video.poster = film.poster; video.src = film.src; video.load(); cap.textContent = "Press play.";
+  skyEl.textContent = film.sky;
+  beatsEl.innerHTML = film.beats.map(([t, b, d]) => `<li><span class="t">${t}</span><div><b>${b}</b><p>${d}</p></div></li>`).join("");
+}
+document.querySelectorAll(".switch button").forEach(b => b.addEventListener("click", () => show(b.dataset.film)));
+video.addEventListener("timeupdate", () => { const t = video.currentTime, c = film.cues.find(([a, b]) => t >= a && t < b); if (c) cap.textContent = c[2]; });
+show("euro");
 </script>
