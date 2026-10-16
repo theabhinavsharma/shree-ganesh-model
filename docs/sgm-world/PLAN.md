@@ -47,8 +47,8 @@ A 3D world you can fly through that explains the whole SGM automation. Every inp
 
 ## Realistic-world milestones
 - [x] R0 Site restructure: world is `index.html`, showcase at `/older-models/` (weekly sync script), top-right "Older Models" link.
-- [ ] R1 Test run: real-time globe and street level at NSE, one bot route, phone check. (Code done; waiting on the Google key and the bot models.)
-- [ ] R2 Journey from the user's drawings, plus free explore.
+- [x] R1 Test run: real-time globe, Google 3D city at NSE (key live 2026-10-17), bot routes. Phone check still to do on a real phone.
+- [x] R2 Journey from the user's 5 drawings (crew line-up, zoom-out angles, ships, India, Bengaluru) + free explore. Cards in plain words with 2 buttons (next bot; company list or second bot). The user will define the buttons' final actions later.
 - [ ] R3 Every source at its real building, its route and the zoom layers.
 - [ ] R4 Laptop workshop, boss giant, money lane.
 - [ ] Deploy to production only after the user says yes.
@@ -65,3 +65,4 @@ A 3D world you can fly through that explains the whole SGM automation. Every inp
     5. One look: toy diorama throughout.
   - Known gaps: the laptop interior is not built (M2); boss giant and scroll story are waiting for the user's photo and drawings.
 - 2026-10-16 late: R0 done. R1 code works locally: the night side over India from space; BKC street map with the NSE label at OpenStreetMap's node; night grade. Google billing is waiting on the user (no billing account existed). Bot models are being built by a parallel agent.
+- 2026-10-17: key live (Google Cloud project "My First Project", key locked to shreeganeshmodel.vercel.app and localhost:8795, Map Tiles API only; free trial ₹28,796 credit, so the card isn't charged without an upgrade; Google won't allow lowering the daily cap on a trial). Key backed up to Drive (SGM backups/keys). Bots in full-flag T-shirts; props built by the agent: oil tanker, container ship, submarine, ML bot, "ME" figure (from the user's sketch; photo later), giant laptop, ₹ note, data crate. Journey wired: lineup.js (three.js) then journey.js (Cesium). Paths glow (amber data, cyan messages, green money); bots and ships leave trails; at night the toys are drawn unlit so they stay visible. Company lists: src/agentic/build_world_companies.py → world/companies.json. Not deployed yet; waiting for the user's yes.

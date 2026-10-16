@@ -14,6 +14,8 @@
 <script src="https://cdn.jsdelivr.net/npm/cesium@1.121.0/Build/Cesium/Cesium.js"></script>
 <script src="world/config.js" onerror="window.SGM_CONFIG = window.SGM_CONFIG || {}"></script>
 <script src="world/data.js"></script>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+<script type="module" src="world/lineup.js"></script>
 </head>
 <body>
 <div id="cesium" aria-label="3D Earth showing where SGM's data comes from"></div>
@@ -43,10 +45,16 @@
   </div>
 </section>
 
+<section id="lineup" class="lineup" hidden aria-label="The crew">
+  <canvas></canvas>
+  <div class="lanes"></div>
+</section>
+
 <nav id="chips" class="chips" hidden aria-label="Fly to"></nav>
 <aside id="card" class="card" hidden aria-live="polite"></aside>
 <div id="note" class="note" hidden></div>
 
 <script src="world/app.js"></script>
+<script src="world/journey.js"></script>
 </body>
 </html>

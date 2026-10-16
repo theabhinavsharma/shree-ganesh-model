@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SGM props preview</title>
+<style>
+  :root { --bg: #eef1f4; --ink: #24262b; --chip: rgba(255,255,255,.88); --line: #d5d9df; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; overflow: hidden; }
+  #ui { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: center; z-index: 2; pointer-events: none; }
+  #ui > * { pointer-events: auto; }
+  button { font: 600 13px/1 inherit; font-family: inherit; color: var(--ink); background: var(--chip);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+  button[aria-pressed="true"] { background: #24262b; color: #fff; border-color: #24262b; }
+  #status { font-size: 12px; color: #5b616b; }
+  .label { font: 600 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink);
+    background: var(--chip); border: 1px solid var(--line); padding: 3px 6px; border-radius: 6px;
+    white-space: nowrap; text-align: center; }
+  .label small { display: block; font-weight: 500; color: #5b616b; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="ui">
+  <button id="btnIdle" aria-pressed="true">idle</button>
+  <button id="btnAction" aria-pressed="false">action (hammer / wave)</button>
+  <button id="btnPause" aria-pressed="false">pause</button>
+  <button id="btnSpin" aria-pressed="false">turntable</button>
+  <span id="status">loading…</span>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+
+// Each prop is shown scaled to fit the same slot; the label gives its real size in model units.
+// URL params: ?anim=action  ?t=0.2 (freeze)  ?only=submarine,bot_ML  ?labels=0
+//             ?focus=me_figure (close-up; fd=distance, fy=look-at height in slot units, cam=x,y,z)
+const q = new URLSearchParams(location.search);
+const ALL = [
+  { name: 'tanker_oil', yaw: -62 },
+  { name: 'container_ship', yaw: -62 },
+  { name: 'submarine', yaw: -62 },
+  { name: 'laptop_giant', yaw: -20 },
+  { name: 'me_figure', yaw: -15, action: 'wave' },
+  { name: 'bot_ML', yaw: -20, action: 'hammer' },
+  { name: 'rupee_note', yaw: -15 },
+  { name: 'data_crate', yaw: -25 },
+];
+const PROPS = q.get('only') ? ALL.filter((p) => q.get('only').split(',').includes(p.name)) : ALL;
+const SLOT = 2.2, SPACING = 2.9;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const labels = new CSS2DRenderer();
+labels.setSize(innerWidth, innerHeight);
+Object.assign(labels.domElement.style, { position: 'absolute', top: '0', left: '0', pointerEvents: 'none' });
+if (q.get('labels') !== '0') document.body.appendChild(labels.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xeef1f4);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xc9d1da, 1.5));
+const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+sun.position.set(-5, 10, 8);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -14, right: 14, top: 6, bottom: -6, near: 1, far: 40 });
+sun.shadow.bias = -0.0005;
+scene.add(sun);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 30), new THREE.MeshStandardMaterial({ color: 0xf7f8fa, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const camera = new THREE.PerspectiveCamera(22, innerWidth / innerHeight, 0.05, 300);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+const rowWidth = (PROPS.length - 1) * SPACING;
+function frameRow() {
+  const hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
+  const dist = (rowWidth / 2 + 2.6) / Math.tan(hfov / 2);
+  camera.position.set(0, 0.24 * dist, dist);
+  controls.target.set(0, 0.8, 0);
+}
+frameRow();
+
+let mode = q.get('anim') === 'action' ? 'action' : 'idle';
+let paused = q.has('t'), spin = false;
+const items = {};
+const loader = new GLTFLoader();
+let loaded = 0;
+const status = document.getElementById('status');
+
+PROPS.forEach((cfg, i) => {
+  loader.load(`./${cfg.name}.glb`, (gltf) => {
+    const obj = gltf.scene;
+    obj.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    const size = new THREE.Box3().setFromObject(obj).getSize(new THREE.Vector3());
+    const k = SLOT / Math.max(size.x, size.y, size.z);
+    const holder = new THREE.Group();
+    holder.position.x = (i - (PROPS.length - 1) / 2) * SPACING;
+    const turn = new THREE.Group();
+    turn.rotation.y = THREE.MathUtils.degToRad(cfg.yaw);
+    turn.scale.setScalar(k);
+    turn.add(obj);
+    holder.add(turn);
+    scene.add(holder);
+    const div = document.createElement('div');
+    div.className = 'label';
+    div.innerHTML = `${cfg.name}<small>${size.x.toFixed(2)} × ${size.y.toFixed(2)} × ${size.z.toFixed(2)} · shown ×${k.toFixed(2)}</small>`;
+    const lab = new CSS2DObject(div);
+    lab.position.set(0, -0.25, 1.2);
+    holder.add(lab);
+    const mixer = new THREE.AnimationMixer(obj);
+    const clips = Object.fromEntries(gltf.animations.map((c) => [c.name, c]));
+    items[cfg.name] = { cfg, holder, turn, obj, mixer, clips };
+    play(cfg.name);
+    loaded++;
+    status.textContent = `${loaded}/${PROPS.length} loaded`;
+    if (loaded === PROPS.length) onAllLoaded();
+  }, undefined, (err) => { status.textContent = `failed to load ${cfg.name}: ${err.message || err}`; console.error(err); });
+});
+
+function play(name) {
+  const it = items[name];
+  const clipName = mode === 'action' && it.cfg.action ? it.cfg.action : 'idle';
+  it.mixer.stopAllAction();
+  it.mixer.clipAction(it.clips[clipName]).reset().play();
+  if (q.has('t')) it.mixer.setTime(parseFloat(q.get('t')) || 0);
+}
+function setMode(m) {
+  mode = m;
+  Object.keys(items).forEach(play);
+  document.getElementById('btnIdle').setAttribute('aria-pressed', String(m === 'idle'));
+  document.getElementById('btnAction').setAttribute('aria-pressed', String(m === 'action'));
+}
+function onAllLoaded() {
+  const f = q.get('focus');
+  if (f && items[f]) {
+    const p = items[f].holder.position;
+    const h = parseFloat(q.get('fy') || '1.0');
+    const d = parseFloat(q.get('fd') || '5');
+    camera.position.set(p.x + 0.4, h + 0.4, d);
+    if (q.get('cam')) {
+      const [cx, cy, cz] = q.get('cam').split(',').map(Number);
+      camera.position.set(p.x + cx, h + cy, cz);
+    }
+    controls.target.set(p.x, h, 0);
+  }
+  document.body.dataset.ready = '1';
+}
+document.getElementById('btnIdle').onclick = () => setMode('idle');
+document.getElementById('btnAction').onclick = () => setMode('action');
+document.getElementById('btnPause').onclick = (e) => { paused = !paused; e.target.setAttribute('aria-pressed', String(paused)); };
+document.getElementById('btnSpin').onclick = (e) => { spin = !spin; e.target.setAttribute('aria-pressed', String(spin)); };
+document.getElementById('btnPause').setAttribute('aria-pressed', String(paused));
+if (mode === 'action') setMode('action');
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  labels.setSize(innerWidth, innerHeight);
+  if (!q.get('focus')) frameRow();
+});
+
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const dt = clock.getDelta();
+  if (!paused) Object.values(items).forEach((it) => it.mixer.update(dt));
+  if (spin) Object.values(items).forEach((it) => { it.turn.rotation.y += dt * 0.6; });
+  controls.update();
+  renderer.render(scene, camera);
+  labels.render(scene, camera);
+});
+window.__props = { items, setMode, camera, controls, THREE };
+</script>
+</body>
+</html>

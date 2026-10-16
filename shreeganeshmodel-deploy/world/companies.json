@@ -1,0 +1,355 @@
+{
+ "built": "2026-10-17",
+ "market_cap_as_of": "2026-10-16",
+ "policy_as_of": "2026-10-16",
+ "source": "screener.in industry labels (NSE four-level industry), market caps from the repo's mcap_pit table, government focus from PIB-based policy scores",
+ "groups": {
+  "oil": {
+   "title": "Oil and fuel companies in India",
+   "industries": [
+    "Oil Exploration & Production",
+    "Refineries & Marketing",
+    "Gas Transmission/Marketing",
+    "LPG/CNG/PNG/LNG Supplier",
+    "Oil Equipment & Services",
+    "Oil Storage & Transportation"
+   ],
+   "companies": [
+    {
+     "symbol": "RELIANCE",
+     "name": "Reliance Industries Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "ONGC",
+     "name": "Oil & Natural Gas Corporation Limited",
+     "industry": "Oil Exploration & Production"
+    },
+    {
+     "symbol": "IOC",
+     "name": "Indian Oil Corporation Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "BPCL",
+     "name": "Bharat Petroleum Corporation Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "GAIL",
+     "name": "GAIL (India) Limited",
+     "industry": "Gas Transmission/Marketing"
+    },
+    {
+     "symbol": "HINDPETRO",
+     "name": "Hindustan Petroleum Corporation Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "OIL",
+     "name": "Oil India Limited",
+     "industry": "Oil Exploration & Production"
+    },
+    {
+     "symbol": "ATGL",
+     "name": "Adani Total Gas Limited",
+     "industry": "LPG/CNG/PNG/LNG Supplier"
+    },
+    {
+     "symbol": "PETRONET",
+     "name": "Petronet LNG Limited",
+     "industry": "LPG/CNG/PNG/LNG Supplier"
+    },
+    {
+     "symbol": "AEGISVOPAK",
+     "name": "Aegis Vopak Terminals Limited",
+     "industry": "Oil Storage & Transportation"
+    },
+    {
+     "symbol": "MRPL",
+     "name": "Mangalore Refinery and Petrochemicals Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "CHENNPETRO",
+     "name": "Chennai Petroleum Corporation Limited",
+     "industry": "Refineries & Marketing"
+    },
+    {
+     "symbol": "IGL",
+     "name": "Indraprastha Gas Limited",
+     "industry": "LPG/CNG/PNG/LNG Supplier"
+    },
+    {
+     "symbol": "GUJENERGY",
+     "name": "GUJARAT ENERGY LIMITED",
+     "industry": "LPG/CNG/PNG/LNG Supplier"
+    },
+    {
+     "symbol": "MGL",
+     "name": "Mahanagar Gas Limited",
+     "industry": "LPG/CNG/PNG/LNG Supplier"
+    }
+   ]
+  },
+  "exporters": {
+   "title": "Companies that earn in dollars (IT and pharma exporters)",
+   "industries": [
+    "Computers - Software & Consulting",
+    "IT Enabled Services",
+    "Pharmaceuticals"
+   ],
+   "companies": [
+    {
+     "symbol": "TCS",
+     "name": "Tata Consultancy Services Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "INFY",
+     "name": "Infosys Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "SUNPHARMA",
+     "name": "Sun Pharmaceutical Industries Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "HCLTECH",
+     "name": "HCL Technologies Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "DIVISLAB",
+     "name": "Divi's Laboratories Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "WIPRO",
+     "name": "Wipro Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "TECHM",
+     "name": "Tech Mahindra Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "TORNTPHARM",
+     "name": "Torrent Pharmaceuticals Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "LTM",
+     "name": "LTM Limited",
+     "industry": "Computers - Software & Consulting"
+    },
+    {
+     "symbol": "ZYDUSLIFE",
+     "name": "Zydus Lifesciences Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "LAURUSLABS",
+     "name": "Laurus Labs Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "CIPLA",
+     "name": "Cipla Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "DRREDDY",
+     "name": "Dr. Reddy's Laboratories Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "AUROPHARMA",
+     "name": "Aurobindo Pharma Limited",
+     "industry": "Pharmaceuticals"
+    },
+    {
+     "symbol": "MANKIND",
+     "name": "Mankind Pharma Limited",
+     "industry": "Pharmaceuticals"
+    }
+   ]
+  },
+  "metals": {
+   "title": "Metal companies in India",
+   "industries": [
+    "Iron & Steel",
+    "Aluminium",
+    "Copper",
+    "Zinc",
+    "Diversified Metals"
+   ],
+   "companies": [
+    {
+     "symbol": "JSWSTEEL",
+     "name": "JSW Steel Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "HINDZINC",
+     "name": "Hindustan Zinc Limited",
+     "industry": "Zinc"
+    },
+    {
+     "symbol": "TATASTEEL",
+     "name": "Tata Steel Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "HINDALCO",
+     "name": "Hindalco Industries Limited",
+     "industry": "Aluminium"
+    },
+    {
+     "symbol": "JINDALSTEL",
+     "name": "JINDAL STEEL LIMITED",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "VEDL",
+     "name": "Vedanta Limited",
+     "industry": "Diversified Metals"
+    },
+    {
+     "symbol": "VAML",
+     "name": "Vedanta Aluminium Metal Limited",
+     "industry": "Aluminium"
+    },
+    {
+     "symbol": "SAIL",
+     "name": "Steel Authority of India Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "JSL",
+     "name": "Jindal Stainless Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "NATIONALUM",
+     "name": "National Aluminium Company Limited",
+     "industry": "Aluminium"
+    },
+    {
+     "symbol": "HINDCOPPER",
+     "name": "Hindustan Copper Limited",
+     "industry": "Copper"
+    },
+    {
+     "symbol": "SARDAEN",
+     "name": "Sarda Energy & Minerals Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "NSLNISP",
+     "name": "NMDC Steel Limited",
+     "industry": "Iron & Steel"
+    },
+    {
+     "symbol": "JAINREC",
+     "name": "Jain Resource Recycling Limited",
+     "industry": "Diversified Metals"
+    },
+    {
+     "symbol": "SANDUMA",
+     "name": "Sandur Manganese & Iron Ores Limited",
+     "industry": "Iron & Steel"
+    }
+   ]
+  },
+  "govt": {
+   "title": "Industries in the government's news most right now",
+   "industries": [
+    "Iron & Steel Products",
+    "Household Appliances",
+    "Cables - Electricals",
+    "Plastic Products - Industrial",
+    "Breweries & Distilleries"
+   ],
+   "companies": [
+    {
+     "symbol": "POLYCAB",
+     "name": "Polycab India Limited",
+     "industry": "Cables - Electricals"
+    },
+    {
+     "symbol": "LGEINDIA",
+     "name": "LG Electronics India Limited",
+     "industry": "Household Appliances"
+    },
+    {
+     "symbol": "UNITDSPR",
+     "name": "United Spirits Limited",
+     "industry": "Breweries & Distilleries"
+    },
+    {
+     "symbol": "WELCORP",
+     "name": "Welspun Corp Limited",
+     "industry": "Iron & Steel Products"
+    },
+    {
+     "symbol": "RADICO",
+     "name": "Radico Khaitan Limited",
+     "industry": "Breweries & Distilleries"
+    },
+    {
+     "symbol": "APLAPOLLO",
+     "name": "APL Apollo Tubes Limited",
+     "industry": "Iron & Steel Products"
+    },
+    {
+     "symbol": "SUPREMEIND",
+     "name": "Supreme Industries Limited",
+     "industry": "Plastic Products - Industrial"
+    },
+    {
+     "symbol": "KEI",
+     "name": "KEI Industries Limited",
+     "industry": "Cables - Electricals"
+    },
+    {
+     "symbol": "ASTRAL",
+     "name": "Astral Limited",
+     "industry": "Plastic Products - Industrial"
+    },
+    {
+     "symbol": "VOLTAS",
+     "name": "Voltas Limited",
+     "industry": "Household Appliances"
+    },
+    {
+     "symbol": "SHYAMMETL",
+     "name": "Shyam Metalics and Energy Limited",
+     "industry": "Iron & Steel Products"
+    },
+    {
+     "symbol": "BLUESTARCO",
+     "name": "Blue Star Limited",
+     "industry": "Household Appliances"
+    },
+    {
+     "symbol": "UBL",
+     "name": "United Breweries Limited",
+     "industry": "Breweries & Distilleries"
+    },
+    {
+     "symbol": "RRKABEL",
+     "name": "R R Kabel Limited",
+     "industry": "Cables - Electricals"
+    },
+    {
+     "symbol": "AMBER",
+     "name": "Amber Enterprises India Limited",
+     "industry": "Household Appliances"
+    }
+   ]
+  }
+ }
+}

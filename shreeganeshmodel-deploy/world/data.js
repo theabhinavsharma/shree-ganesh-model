@@ -107,13 +107,89 @@ const BOTS = [
 ];
 const USE_TEXT = { live: "Feeds the live rule (V3.2)", msg: "Messages and running the system", ctx: "Context and research", off: "Not in use" };
 const USE_COLOR = { live: 0x3a8752, msg: 0x2f6fae, ctx: 0xc08a3a, off: 0x978b82 };
+// Claude writes the Friday regime note (scheduled task, Fridays 3 PM IST); Anthropic is based in San Francisco
+STATIONS.push({ id: "sfo", name: "San Francisco", sub: "Claude, by Anthropic", real: [37.79, -122.40], at: [37.79, -122.40], alt: 1.6, r: 0.8, kind: "source",
+  about: "Claude is the AI made by Anthropic in San Francisco. Every Friday it writes a short note on what kind of market we're in, before the buy list goes out." });
+BOTS.push({ id: "claude", st: "sfo", name: "Claude", hat: "cap", pants: 0x3b3b55, use: "msg", role: "Friday market note, Claude",
+  says: "Every Friday I read world prices, foreign money flows and the news, and write a short note on what kind of market we're in.",
+  carries: ["The Friday regime note"], from: ["claude.ai"], when: "Fridays 3 PM IST", writes: "reports/regime/", used: "Context for the Friday list; it doesn't pick stocks." });
+
+// Plain-language card text (the user's ask, 2026-10-17): what I bring, where from, what it means, and where to go next.
+// next = the closest bot that uses or is affected by this data; cta = a company list (world/companies.json) or, when no
+// list fits, the second-closest bot.
+const LAYMAN = {
+  bhav: { brings: "Today's price of every stock on NSE", from: "NSE, the National Stock Exchange in Mumbai",
+    means: "The price is what people paid for one share today. Watching prices over weeks shows which companies keep climbing, which is the main thing our model looks for.",
+    next: ["split", "Check the split-fixer bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  split: { brings: "Stock splits, bonus shares and dividends", from: "NSE company announcements",
+    means: "When a company splits one share into ten, the price falls tenfold overnight but nobody loses money. This bot fixes old prices so the model isn't fooled.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "filer", "Check the orders and profits bot"] },
+  filer: { brings: "New orders and quarterly profits that companies announce", from: "Companies' own filings on NSE",
+    means: "A big new order or a jump in profit often means more business ahead. These are the companies' own words, filed with the exchange.",
+    next: ["promo", "Check the owners bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  promo: { brings: "When company owners buy or pledge their own shares", from: "NSE disclosures",
+    means: "If the people who run a company buy more of its shares, they're betting on it. If they pledge shares to borrow money, that can be a warning sign.",
+    next: ["filer", "Check the orders and profits bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  tally: { brings: "Who bought and sold the market today, big deals, the fear index and market holidays", from: "NSE",
+    means: "Shows whether big investors are buying or selling India, how nervous the market is (India VIX), and which days the market is shut. Those days set your buy and sell dates.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  nsdl: { brings: "Foreign investors' money going into or out of Indian shares", from: "NSDL, Mumbai",
+    means: "When foreign funds pour money into India, prices tend to rise; when they pull out, prices tend to fall. We read it daily, and by sector every two weeks.",
+    next: ["euro", "Check the exchange-rate bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  amfi: { brings: "How much money Indian mutual funds manage", from: "AMFI, the mutual fund association",
+    means: "Mutual funds hold the savings of millions of Indians. More money in funds means steady buying power for shares.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "khabri", "Check the news bot"] },
+  khabri: { brings: "Business headlines and brokers' tips", from: "Economic Times and Moneycontrol",
+    means: "A quick read of the news mood. Lots of scary headlines usually means a nervous market. It's background only; it doesn't pick stocks.",
+    next: ["gnews", "Check the world-news bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  dalal: { brings: "Nothing right now", from: "BSE, Dalal Street",
+    means: "BSE is India's other stock exchange. We only used it for one watch-list, and BSE has blocked our requests since Sep 30.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "tally", "Check the market-counter bot"] },
+  sarkari: { brings: "Every government press release", from: "PIB, the government's press office in New Delhi, next to Parliament",
+    means: "When the government keeps talking about an industry, such as railways, defence or solar, orders and money often follow. We count those mentions to see which industries it is pushing.",
+    next: ["filer", "Check the orders bot"], cta: ["list", "govt", "Check industries in the government's news"] },
+  khabri2: { brings: "Business headlines from Delhi papers", from: "Business Standard and Mint",
+    means: "Same as the Mumbai news bot: background mood, not stock picks.",
+    next: ["khabri", "Check the Mumbai news bot"], cta: ["bot", "gnews", "Check the world-news bot"] },
+  screeny: { brings: "Which industry each company is in, plus company accounts", from: "screener.in",
+    means: "To spot hot industries we first need to know which industry each company belongs to. On Saturdays it also brings company accounts.",
+    next: ["bhav", "Check the price bot"], cta: ["bot", "sarkari", "Check the government bot"] },
+  tikki: { brings: "What well-known investors own", from: "tickertape.in",
+    means: "Shows which shares famous investors hold. We keep it for research; it doesn't decide picks.",
+    next: ["amfi", "Check the mutual-fund bot"], cta: ["bot", "nsdl", "Check the foreign-money bot"] },
+  fed: { brings: "Oil, metal and crop prices, the dollar and US interest rates", from: "FRED, the St. Louis Fed's free data library",
+    means: "It's oil: what the world's machines and cars run on. Its price decides whether bringing in raw material for your goods costs a lot or a little, which changes companies' costs and profits. Metals and crops work the same way for steel makers, sugar mills and textile firms.",
+    next: ["filer", "Check the profit bot"], cta: ["list", "oil", "Check oil and fuel companies in India"] },
+  euro: { brings: "Daily exchange rates: the rupee against the dollar, euro, pound and yen", from: "The European Central Bank in Frankfurt (via the free Frankfurter service)",
+    means: "When the rupee weakens, companies that sell abroad and get paid in dollars earn more rupees, like IT and pharma exporters. Companies that import pay more.",
+    next: ["filer", "Check the profit bot"], cta: ["list", "exporters", "Check companies that earn in dollars"] },
+  gnews: { brings: "World headlines", from: "Google News",
+    means: "A quick read of the world's mood. A scary week abroad often makes Indian markets nervous too.",
+    next: ["khabri", "Check the India news bot"], cta: ["bot", "nsdl", "Check the foreign-money bot"] },
+  drive: { brings: "Backups of your work", from: "Your laptop", means: "Keeps a copy in Google Drive so a broken laptop loses nothing.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "watch", "Check the watchdog bot"] },
+  pigeon: { brings: "Your messages: the daily note and the Friday buy list", from: "Your laptop, sent through Telegram",
+    means: "Everything the system decides reaches you as a short message on your phone.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "watch", "Check the watchdog bot"] },
+  clock: { brings: "The timetable", from: "Your laptop", means: "Starts every job on time, so nobody has to remember to click anything.",
+    next: ["watch", "Check the watchdog bot"], cta: ["bot", "pigeon", "Check the messenger bot"] },
+  watch: { brings: "Health checks on every run", from: "Your laptop", means: "Every half hour it checks that nothing is stuck and that your messages went out.",
+    next: ["clock", "Check the scheduler bot"], cta: ["bot", "pigeon", "Check the messenger bot"] },
+  paisa: { brings: "Your salary", from: "Your SBI account", means: "Your salary lands in SBI; part of it goes into the weekly batches of stocks.",
+    next: ["pigeon", "Check the messenger bot"], cta: ["bot", "bhav", "Check the price bot"] },
+  claude: { brings: "The Friday market note", from: "Claude, the AI made by Anthropic in San Francisco",
+    means: "Every Friday afternoon Claude reads world prices, foreign money flows and news, then writes a short note on what kind of market we're in and which past periods it resembles.",
+    next: ["nsdl", "Check the foreign-money bot"], cta: ["bot", "fed", "Check the world-prices bot"] }
+};
 // country of origin for the bots' flag T-shirts
-const FLAG = { bom: "IN", del: "IN", web: "IN", blr: "IN", stl: "US", mtv: "US", fra: "DE", dxb: "AE" };
+const FLAG = { bom: "IN", del: "IN", web: "IN", blr: "IN", stl: "US", mtv: "US", sfo: "US", fra: "DE", dxb: "AE" };
 // exact buildings checked on OpenStreetMap (Nominatim), 2026-10-16
 const BUILDINGS = {
-  nse: { name: "National Stock Exchange · Exchange Plaza", st: "bom", lon: 72.8598629, lat: 19.0601927, note: "OpenStreetMap office node, G Block, Bandra Kurla Complex" }
+  nse: { name: "National Stock Exchange · Exchange Plaza", st: "bom", lon: 72.8598629, lat: 19.0601927, note: "OpenStreetMap office node, G Block, Bandra Kurla Complex" },
+  pib: { name: "PIB · National Media Centre (next to Parliament)", st: "del", lon: 77.2169618, lat: 28.6182232, note: "OpenStreetMap, Raisina Road; Parliament House is about 700 m west" },
+  sbi: { name: "SBI head office · State Bank Bhavan", st: "bom", lon: 72.8254442, lat: 18.9261941, note: "OpenStreetMap, Nariman Point" }
 };
 // Bengaluru is shown at a public landmark (Vidhana Soudha), never a home address
 const HOME = { name: "Your laptop · Bengaluru", lon: 77.5907, lat: 12.9796, note: "Shown at Vidhana Soudha, a public landmark" };
-return { DAILY, STATIONS, BOTS, USE_TEXT, USE_COLOR, FLAG, BUILDINGS, HOME };
+return { DAILY, STATIONS, BOTS, USE_TEXT, USE_COLOR, FLAG, BUILDINGS, HOME, LAYMAN };
 })();

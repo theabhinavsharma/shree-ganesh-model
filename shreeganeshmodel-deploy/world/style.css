@@ -72,3 +72,31 @@ button { font: inherit; cursor: pointer; }
   body.card-open .brand { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* the crew line-up (journey frame 1) */
+.lineup { position: fixed; inset: 0; z-index: 2; background: linear-gradient(180deg, #f3d9bd 0%, #e9c39d 55%, #c98a5e 100%); transition: opacity .7s; }
+.lineup.gone { opacity: 0; }
+.lineup canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.lineup .lanes { position: absolute; inset: 0; pointer-events: none; }
+.lane { position: absolute; left: 0; top: 0; display: grid; text-align: right; color: #2b1d14; padding-right: 10px; transition: opacity .3s; white-space: nowrap; }
+.lane b { font-family: var(--font-display); font-weight: 600; font-size: 17px; line-height: 1.1; }
+.lane span { font-size: 13px; }
+.lane small { font-size: 11.5px; color: #6b4b36; }
+@media (max-width: 640px) { .lane b { font-size: 14px; } .lane span { font-size: 11.5px; } .lane small { display: none; } }
+body:has(.lineup:not([hidden])) .brand h1, body:has(.lineup:not([hidden])) .sun { color: #2b1d14; text-shadow: none; }
+
+/* plain-language bot cards */
+.card .who { display: flex; align-items: center; gap: 10px; margin-right: 34px; }
+.card .who h3 { margin: 0; }
+.flagchip { font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.1); border: 1px solid var(--panel-edge); }
+.card .hello { margin: 10px 0 14px; padding: 10px 12px; border-radius: 12px; background: rgba(232, 135, 92, 0.14); font-size: 14.5px; }
+.card dl.plain dd { font-size: 15px; }
+.ctas { display: grid; gap: 8px; margin-top: 16px; }
+.cta { text-align: left; border: 1px solid var(--accent); background: rgba(232,135,92,0.12); color: var(--ink); border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 600; }
+.cta:hover { background: rgba(232,135,92,0.24); }
+.card details { margin-top: 14px; border-top: 1px solid var(--panel-edge); padding-top: 10px; }
+.card summary { cursor: pointer; font-size: 13px; color: var(--ink-2); }
+.card details dl { margin-top: 10px; }
+.cos { margin: 4px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+.cos li b { display: block; font-size: 14px; font-weight: 600; }
+.cos li span { font-size: 12px; color: var(--ink-2); }
