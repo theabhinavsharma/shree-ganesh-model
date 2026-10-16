@@ -1,0 +1,13 @@
+{
+ "dataset": "unscored_industries.csv",
+ "experiment": "EXP-2026-10-17-small-industries",
+ "producer": "src/agentic/test_small_industries.py",
+ "definitions": "EXP-2026-10-17-small-industries (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: an industry gets a heat score only with >= 5 names trading Rs 5 cr a day, so stocks in small niche\nindustries can never pass V3.2's hot-industry gate. Two fixes are tested against V3.2:\n  SMALLHEAT  an unscored industry's heat = mean 60-session return of its members liquid on V3.1's bar (Rs 1 cr, > Rs 50),\n             however few, placed against that day's scored industries; eligible at >= 0.70 like G1 (no policy veto)\n  SMALLFREE  every unscored industry eligible, no heat test\nEverything else as V3.2 (trend test / new-listing exemption, model rank top 9, financial / fading / trade-for-trade drops,\nno refill). PASS: both eras, maxDD not worse by > 2 points, schedule 0 and >= 4 of 5. Also: picks from unscored industries.\n",
+ "contents": "per list date: industries without a heat score, their liquid members' mean 60-session return and its place among scored industries",
+ "units": {
+  "heat": "fraction (0.1 = 10%)",
+  "n": "liquid members on V3.1's bar",
+  "pct": "share of scored industries at or below, 0-1"
+ },
+ "updated": "2026-10-17T02:30:31"
+}
