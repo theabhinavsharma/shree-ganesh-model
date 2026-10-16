@@ -373,3 +373,24 @@ incidents:
     lesson: 'A check that compares results across weeks must separate code drift from data drift: re-run on this week''s data
       first, block on verdict flips of the live rule, and reproduce against the fresh numbers.'
     commit: '9466883'
+  - id: INC-2026-10-17-rename-history-gap
+    date: '2026-10-17'
+    title: Renamed companies lost their price history in the V3 screen for up to a year
+    found_by: User asked whether Zomato / Swiggy / Meesho are in the universe (2026-10-16); ETERNAL's 1-year return and 200-day
+      average were blank for months after the ZOMATO rename
+    root_cause: Returns were stitched across renames (research_panel.stitch_renames), but the screen's trend features (ret60/ret252
+      in sim_leader_portfolio_7x.load, lo252 and the panel's sma_50/sma_200 in sim_screen_rank_exit.features) were computed
+      per symbol, so a successor started with no history; renamed successors were also kept out of the new-listing exemption.
+    blast_radius: 132 renamed stocks, 4,545 liquid stock-weeks since Apr 2019 could not pass the trend test (ETERNAL, TMPV,
+      LTM, GVT&D, HBLENGINE, GMRAIRPORT ...). V3.2 backtest 57.8 -> 57.1 after the fix, verdicts unchanged; this week's picks
+      unchanged.
+    fix: research_panel.with_history prepends predecessor rows for feature computation in load() and features(); industry scores
+      rebuilt; registered tests re-run (renamefix-20261017). Model builder features still per symbol (debt ledger).
+    guard_eval: strategy.renames_keep_history
+    skills:
+    - sgm-triage
+    - sgm-new-idea
+    lesson: Anything computed over a stock's history (returns, lows, averages, model features) must run on the company's stitched
+      history across NSE renames, not the ticker's; check a recent rename (e.g. ZOMATO -> ETERNAL) has a 1-year return the week
+      after the switch.
+    commit: 13d327c

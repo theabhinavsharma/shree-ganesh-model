@@ -32,6 +32,7 @@
   "prov.external_rows_sourced",
   "prov.order_amount_grounded",
   "strategy.preregistered",
+  "strategy.renames_keep_history",
   "trust.claims_sourced",
   "trust.claude_golden",
   "trust.lessons_intact",
@@ -63,7 +64,8 @@
   "INC-2026-10-12-insider-gap-mar-apr-2026",
   "INC-2026-10-12-payout-reinvested-in-stub",
   "INC-2026-10-13-monday-feeds-stale",
-  "INC-2026-10-16-reproduce-blocks-on-market-drift"
+  "INC-2026-10-16-reproduce-blocks-on-market-drift",
+  "INC-2026-10-17-rename-history-gap"
  ],
  "lessons": {
   "sgm-triage": [
@@ -81,6 +83,7 @@
    "a4fcb7e24af1",
    "ab9b6efbe2d1",
    "b31a1ac5e634",
+   "db466e7757e1",
    "fc2cd9e0bb4e"
   ],
   "sgm-new-data-source": [
@@ -109,6 +112,7 @@
    "74a5a781ad81",
    "8baf4d91b659",
    "b5686081fc85",
+   "db466e7757e1",
    "fc2cd9e0bb4e"
   ],
   "sgm-incident": [
