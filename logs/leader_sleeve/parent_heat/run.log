@@ -1,0 +1,24 @@
+unscored industry-dates with a parent score: 99.0% · decided by broad_industry 152743, sector 52468, broad_sector 5174 · hot parent (>= 0.70): 30.3%
+liquid stock-weeks (schedule 0) in unscored industries: 118,455 of 386,039 (30.7%) · unscored industries per week: median 115 · members: median 2, one-name 30%
+
+=== DATA READINESS · EXP-2026-10-18-parent-heat (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ span         industry scores
+  ✅ coverage     weekly list dates with industry scores
+  ✅ qc           liquid stocks with an industry label on list dates (share)
+wiring check: nothing added == v3_rule V3.2 on 373/373 weeks
+schedule 0: V3.2 52.1/66.0/-38.3 · PARENTHEAT 44.0/70.1/-44.8
+schedule 1: V3.2 52.4/66.1/-38.7 · PARENTHEAT 43.4/67.5/-45.2
+schedule 2: V3.2 52.1/63.2/-37.7 · PARENTHEAT 43.6/66.9/-45.3
+schedule 3: V3.2 50.5/60.9/-37.0 · PARENTHEAT 41.9/71.1/-45.1
+schedule 4: V3.2 48.6/61.6/-38.4 · PARENTHEAT 43.5/65.5/-45.4
+
+=== EXP-2026-10-18-parent-heat · weekly entries 2019-04-01..2026-10-16 · schedule 0 (years = avg of 5) ===
+V3.2      CAGR  59.0 · 2019-22  52.1 · 2023+  66.0 · maxDD  -38.3 · range 55.0..59.2 · years 2023:+95 2024:+140 2025:+1 2026:+37 · next open 57.2
+PARENTHEAT CAGR  56.6 · 2019-22  44.0 · 2023+  70.1 · maxDD  -44.8 · range 54.2..56.6 · years 2023:+103 2024:+130 2025:+8 2026:+43 · next open 54.2
+PARENTHEAT vs V3.2: beats in 0/5 · gap -1.5 pts/yr (95% -8.6..+6.3) · no pass
+   what changed: {"lists_changed": 338, "picks_from_small": {"picks": 948, "avg6m": 25.5, "hit50": 21.8}, "picks_pushed_out": {"picks": 911, "avg6m": 29.6, "hit50": 26.1}, "share_from_small": 40.5, "top_small_names": {"MAANALU": 34, "KECL": 24, "TANLA": 19, "ASHAPURMIN": 18, "ASIANENE": 18, "ARFIN": 18, "ADANITRANS": 17, "SKMEGGPROD": 17}}
+V3.2 all picks: {'picks': 2304, 'avg6m': 32.9}
+done in 89s
+exit 0

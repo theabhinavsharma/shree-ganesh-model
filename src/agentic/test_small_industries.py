@@ -7,8 +7,12 @@ industries can never pass V3.2's hot-industry gate. Two fixes are tested against
   SMALLFREE  every unscored industry eligible, no heat test
 Everything else as V3.2 (trend test / new-listing exemption, model rank top 9, financial / fading / trade-for-trade drops,
 no refill). PASS: both eras, maxDD not worse by > 2 points, schedule 0 and >= 4 of 5. Also: picks from unscored industries.
+Mode `parent` (EXP-2026-10-18-parent-heat): PARENTHEAT = an unscored industry takes the heat percentile of its nearest
+scored parent in NSE's hierarchy (broad_industry, then sector, then broad_sector; groups with >= 5 core names at Rs 5 cr,
+mean 60-session return, percentile among that level's groups that day); eligible at >= 0.70.
+Usage: test_small_industries.py [small | parent]
 """
-import json, os, sys, time
+import html, json, os, sys, time
 from datetime import datetime
 from pathlib import Path
 import numpy as np, pandas as pd
@@ -17,7 +21,10 @@ sys.path.insert(0, str(ROOT / "src/agentic")); sys.path.insert(0, str(ROOT / "sr
 import data_ready as dr, research_panel as rp, sim_leader_portfolio_7x as sp, sim_screen_rank_exit as sre, v3_rule  # noqa: E402
 from test_v3_l1_newlist_cost import run_cost  # noqa: E402
 from test_v32_hold_after_tax import engines, boot  # noqa: E402
-EXP_ID = "EXP-2026-10-17-small-industries"; OUTDIR = ROOT / "logs/leader_sleeve/small_industries"
+MODE = sys.argv[1] if len(sys.argv) > 1 else "small"
+EXP_ID = {"small": "EXP-2026-10-17-small-industries", "parent": "EXP-2026-10-18-parent-heat"}[MODE]
+OUTDIR = ROOT / "logs/leader_sleeve" / {"small": "small_industries", "parent": "parent_heat"}[MODE]
+LEVELS = ("broad_industry", "sector", "broad_sector")
 START, HOLD, YEARS = pd.Timestamp("2019-04-01"), 126, (2023, 2024, 2025, 2026)
 
 
@@ -48,6 +55,27 @@ def main():
     U["pct"] = [np.searchsorted(ref_heat[d], h, side="right") / len(ref_heat[d]) if d in ref_heat and len(ref_heat[d]) else np.nan for d, h in zip(U["trade_date"], U["heat"])]
     ADD = {"SMALLHEAT": U[U["pct"] >= 0.70][["trade_date", "industry"]].rename(columns={"trade_date": "date"}),
            "SMALLFREE": U[["trade_date", "industry"]].rename(columns={"trade_date": "date"})}
+    if MODE == "parent":
+        H = pd.read_parquet(ROOT / "data/derived/screener_industry.parquet"); H = H[H["status"].str.startswith("OK")].dropna(subset=["industry"])
+        H["industry"] = H["industry"].map(html.unescape)
+        par = {lv: H.dropna(subset=[lv]).groupby("industry")[lv].agg(lambda x: x.mode().iat[0]) for lv in LEVELS}
+        C5 = X["F"][X["F"]["trade_date"].isin(set(alld)) & X["F"]["core"].fillna(False).astype(bool) & X["F"]["ret60"].notna()][["symbol", "trade_date", "ret60"]].copy()
+        C5["industry"] = C5["symbol"].map(imap); C5 = C5.dropna(subset=["industry"]); lp = {}
+        for lv in LEVELS:
+            C5[lv] = C5["industry"].map(par[lv]); g = C5.dropna(subset=[lv]).groupby(["trade_date", lv])["ret60"].agg(["mean", "size"])
+            g = g[g["size"] >= 5].copy(); g["pct"] = g.groupby(level=0)["mean"].rank(pct=True); lp[lv] = g["pct"].to_dict()
+        pp, pl = [], []
+        for d, ind in zip(U["trade_date"], U["industry"]):
+            v, l = np.nan, None
+            for lv in LEVELS:
+                k = (d, par[lv].get(ind))
+                if k in lp[lv]:
+                    v, l = lp[lv][k], lv; break
+            pp.append(v); pl.append(l)
+        U["parent_pct"], U["parent_level"] = pp, pl
+        ADD = {"PARENTHEAT": U[U["parent_pct"] >= 0.70][["trade_date", "industry"]].rename(columns={"trade_date": "date"})}
+        print(f"unscored industry-dates with a parent score: {U['parent_pct'].notna().mean() * 100:.1f}% · decided by " + ", ".join(f"{k} {v}" for k, v in U["parent_level"].value_counts().items())
+              + f" · hot parent (>= 0.70): {(U['parent_pct'] >= 0.70).mean() * 100:.1f}%", flush=True)
     w0 = W[W["trade_date"].isin(set(weeks[0]))]
     print(f"liquid stock-weeks (schedule 0) in unscored industries: {int((~w0['scored']).sum()):,} of {len(w0):,} ({(~w0['scored']).mean() * 100:.1f}%) · "
           f"unscored industries per week: median {int(U[U['trade_date'].isin(set(weeks[0]))].groupby('trade_date').size().median())} · "
@@ -77,7 +105,7 @@ def main():
     def met(nav):
         m = sp.metrics(nav); n = nav / nav.iloc[0]; ye = n.groupby(n.index.year).last(); r = (ye / ye.shift(1).fillna(1.0) - 1) * 100
         return {**{k: float(m[k]) for k in ("cagr", "cagr_disc", "cagr_conf", "maxdd")}, **{y: float(r.get(y, np.nan)) for y in YEARS}}
-    _, run_open = engines(); ARMS = ("V3.2", "SMALLHEAT", "SMALLFREE")
+    _, run_open = engines(); ARMS = ("V3.2", "SMALLHEAT", "SMALLFREE") if MODE == "small" else ("V3.2", "PARENTHEAT")
     res, opn, navs, ph, pk0 = {a: [] for a in ARMS}, {a: [] for a in ARMS}, {}, {a: [] for a in ARMS[1:]}, {}
     for o in range(5):
         for a in ARMS:
@@ -130,8 +158,8 @@ def main():
     for f, what, units in (("results.csv", "one row per arm, schedule 0; years = average of 5 schedules", dict(cagr="percent a year", maxdd="percent")),
                            ("unscored_industries.csv", "per list date: industries without a heat score, their liquid members' mean 60-session return and its place among scored industries",
                             dict(heat="fraction (0.1 = 10%)", n="liquid members on V3.1's bar", pct="share of scored industries at or below, 0-1"))):
-        (OUTDIR / f"{f}.manifest.json").write_text(json.dumps(dict(dataset=f, experiment=EXP_ID, producer="src/agentic/test_small_industries.py", definitions=__doc__, contents=what, units=units, updated=now), indent=1))
-    (OUTDIR / "README.md").write_text(f"# {EXP_ID}\n\nSmall-industry stocks through the hot-industry gate: " + ", ".join(f"{a} {'PASS' if v else 'no pass'}" for a, v in passed.items())
+        (OUTDIR / f"{f}.manifest.json").write_text(json.dumps(dict(dataset=f, experiment=EXP_ID, producer=f"src/agentic/test_small_industries.py {MODE}", definitions=__doc__, contents=what, units=units, updated=now), indent=1))
+    (OUTDIR / "README.md").write_text(f"# {EXP_ID}\n\n{'Small-industry stocks' if MODE == 'small' else 'Small-industry stocks with a hot parent group'} through the hot-industry gate: " + ", ".join(f"{a} {'PASS' if v else 'no pass'}" for a, v in passed.items())
                                       + ". results.csv, unscored_industries.csv, run.log.\n")
     with (ROOT / "logs/experiments.jsonl").open("a") as fh:
         fh.write(json.dumps(dict(ts=now, id=EXP_ID + ("-RESULT" if not os.environ.get("SGM_RERUN_TAG") else "-RERUN-" + os.environ["SGM_RERUN_TAG"]),
