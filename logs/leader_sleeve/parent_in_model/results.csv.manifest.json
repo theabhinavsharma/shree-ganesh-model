@@ -1,0 +1,12 @@
+{
+ "dataset": "results.csv",
+ "experiment": "EXP-2026-10-18-parent-in-model",
+ "producer": "src/agentic/test_small_industries.py model",
+ "definitions": "EXP-2026-10-17-small-industries (registered in logs/experiments.jsonl before any outcome was computed).\n\nPlain English: an industry gets a heat score only with >= 5 names trading Rs 5 cr a day, so stocks in small niche\nindustries can never pass V3.2's hot-industry gate. Two fixes are tested against V3.2:\n  SMALLHEAT  an unscored industry's heat = mean 60-session return of its members liquid on V3.1's bar (Rs 1 cr, > Rs 50),\n             however few, placed against that day's scored industries; eligible at >= 0.70 like G1 (no policy veto)\n  SMALLFREE  every unscored industry eligible, no heat test\nEverything else as V3.2 (trend test / new-listing exemption, model rank top 9, financial / fading / trade-for-trade drops,\nno refill). PASS: both eras, maxDD not worse by > 2 points, schedule 0 and >= 4 of 5. Also: picks from unscored industries.\nMode `parent` (EXP-2026-10-18-parent-heat): PARENTHEAT = an unscored industry takes the heat percentile of its nearest\nscored parent in NSE's hierarchy (broad_industry, then sector, then broad_sector; groups with >= 5 core names at Rs 5 cr,\nmean 60-session return, percentile among that level's groups that day); eligible at >= 0.70.\nMode `model` (EXP-2026-10-18-parent-in-model): model B = the live trainer on rows whose small-industry stocks get their\nparent group's industry inputs (build_rows_parent_fill.py; logs/leader_sleeve/parent_in_model/model_B; live model untouched).\nArms: V3.2, A_PARENT (live model + PARENTHEAT), B_G1, B_PARENT, B_SMALLFREE (model B with each gate).\nUsage: test_small_industries.py [small | parent | model]\n",
+ "contents": "one row per arm, schedule 0; years = average of 5 schedules",
+ "units": {
+  "cagr": "percent a year",
+  "maxdd": "percent"
+ },
+ "updated": "2026-10-18T04:16:02"
+}

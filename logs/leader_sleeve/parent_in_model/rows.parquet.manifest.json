@@ -1,0 +1,24 @@
+{
+ "dataset": "rows.parquet",
+ "experiment": "EXP-2026-10-18-parent-in-model",
+ "producer": "src/agentic/build_rows_parent_fill.py",
+ "source": "logs/leader_sleeve/anatomy_1p5x/rows.parquet",
+ "definitions": "Model rows with parent-group industry inputs for small industries (EXP-2026-10-18-parent-in-model; A/B only).\n\nPlain English: in the model's training / scoring rows, a stock whose industry has fewer than 5 names gets no industry\ninputs (ind_heat_pct, ind_heat, ind_ret20, ind_breadth are blank). This copy fills them from the stock's nearest parent\ngroup in NSE's hierarchy that has >= 5 names on the same date (broad_industry, then sector, then broad_sector), computed\nthe way anatomy_1p5x computes them (mean 60- and 20-session return, share above the 50-day average); ind_heat_pct = the\nparent heat's place among that day's industry heats (share at or below). ind_n is left as it is. Reads the live rows,\nwrites logs/leader_sleeve/parent_in_model/rows.parquet (+ manifest); the live rows and model are not touched.\n",
+ "info": {
+  "rows": 823770,
+  "small_rows": 95796,
+  "filled": 95795,
+  "by_level": {
+   "broad_industry": 83500,
+   "sector": 11670,
+   "broad_sector": 625
+  }
+ },
+ "units": {
+  "ind_heat": "fraction",
+  "ind_ret20": "fraction",
+  "ind_breadth": "share 0-1",
+  "ind_heat_pct": "percentile 0-1"
+ },
+ "updated": "2026-10-18T04:09:55"
+}

@@ -1,0 +1,33 @@
+unscored industry-dates with a parent score: 99.0% · decided by broad_industry 152743, sector 52468, broad_sector 5174 · hot parent (>= 0.70): 30.3%
+liquid stock-weeks (schedule 0) in unscored industries: 118,455 of 386,039 (30.7%) · unscored industries per week: median 115 · members: median 2, one-name 30%
+
+=== DATA READINESS · EXP-2026-10-18-parent-in-model (RESULT) · READY ===
+  ✅ completeness price panel stock-days vs NSE's own bhavcopy (EQ/BE/BZ rows per session)
+  ✅ span         model scores
+  ✅ span         industry scores
+  ✅ coverage     weekly list dates with industry scores
+  ✅ qc           liquid stocks with an industry label on list dates (share)
+  ✅ span         model B scores
+wiring check: nothing added == v3_rule V3.2 on 373/373 weeks
+schedule 0: V3.2 52.1/66.0/-38.3 · A_PARENT 44.0/70.1/-44.8 · B_G1 43.9/59.1/-38.4 · B_PARENT 38.8/55.4/-43.0 · B_SMALLFREE 41.2/45.5/-40.3
+schedule 1: V3.2 52.4/66.1/-38.7 · A_PARENT 43.4/67.5/-45.2 · B_G1 43.3/57.9/-38.3 · B_PARENT 37.3/53.3/-43.5 · B_SMALLFREE 39.2/50.5/-41.2
+schedule 2: V3.2 52.1/63.2/-37.7 · A_PARENT 43.6/66.9/-45.3 · B_G1 42.4/54.6/-37.5 · B_PARENT 37.4/55.5/-43.7 · B_SMALLFREE 40.2/46.0/-41.3
+schedule 3: V3.2 50.5/60.9/-37.0 · A_PARENT 41.9/71.1/-45.1 · B_G1 42.3/54.1/-37.5 · B_PARENT 37.1/53.1/-43.6 · B_SMALLFREE 40.3/46.3/-40.7
+schedule 4: V3.2 48.6/61.6/-38.4 · A_PARENT 43.5/65.5/-45.4 · B_G1 42.7/54.7/-38.3 · B_PARENT 39.8/51.7/-43.7 · B_SMALLFREE 42.4/47.3/-40.9
+
+=== EXP-2026-10-18-parent-in-model · weekly entries 2019-04-01..2026-10-16 · schedule 0 (years = avg of 5) ===
+V3.2      CAGR  59.0 · 2019-22  52.1 · 2023+  66.0 · maxDD  -38.3 · range 55.0..59.2 · years 2023:+95 2024:+140 2025:+1 2026:+37 · next open 57.2
+A_PARENT  CAGR  56.6 · 2019-22  44.0 · 2023+  70.1 · maxDD  -44.8 · range 54.2..56.6 · years 2023:+103 2024:+130 2025:+8 2026:+43 · next open 54.2
+B_G1      CAGR  51.4 · 2019-22  43.9 · 2023+  59.1 · maxDD  -38.4 · range 48.1..51.4 · years 2023:+108 2024:+114 2025:-5 2026:+28 · next open 49.5
+B_PARENT  CAGR  46.9 · 2019-22  38.8 · 2023+  55.4 · maxDD  -43.0 · range 45.0..46.9 · years 2023:+102 2024:+95 2025:+2 2026:+27 · next open 45.4
+B_SMALLFREE CAGR  43.3 · 2019-22  41.2 · 2023+  45.5 · maxDD  -40.3 · range 43.1..44.8 · years 2023:+91 2024:+85 2025:-6 2026:+30 · next open 41.3
+A_PARENT vs V3.2: beats in 0/5 · gap -1.5 pts/yr (95% -8.6..+6.3) · no pass
+   what changed: {"lists_changed": 338, "picks_from_small": {"picks": 948, "avg6m": 25.5, "hit50": 21.8}, "picks_pushed_out": {"picks": 911, "avg6m": 29.6, "hit50": 26.1}, "share_from_small": 40.5, "top_small_names": {"MAANALU": 34, "KECL": 24, "TANLA": 19, "ASHAPURMIN": 18, "ASIANENE": 18, "ARFIN": 18, "ADANITRANS": 17, "SKMEGGPROD": 17}}
+B_G1 vs V3.2: beats in 0/5 · gap -4.9 pts/yr (95% -9.3..-0.6) · no pass
+   what changed: {"lists_changed": 359, "picks_from_small": {"picks": 0, "avg6m": null, "hit50": null}, "picks_pushed_out": {"picks": 828, "avg6m": 36.2, "hit50": 29.7}, "share_from_small": 0.0, "top_small_names": {}}
+B_PARENT vs V3.2: beats in 0/5 · gap -7.9 pts/yr (95% -14.6..-1.2) · no pass
+   what changed: {"lists_changed": 369, "picks_from_small": {"picks": 907, "avg6m": 24.7, "hit50": 21.5}, "picks_pushed_out": {"picks": 1302, "avg6m": 33.6, "hit50": 28.7}, "share_from_small": 39.4, "top_small_names": {"MAANALU": 26, "ASIANENE": 24, "ASHAPURMIN": 22, "BHAGYANGR": 20, "BORORENEW": 20, "ARFIN": 20, "KECL": 19, "ADANITRANS": 19}}
+B_SMALLFREE vs V3.2: beats in 0/5 · gap -10.3 pts/yr (95% -18.5..-2.4) · no pass
+   what changed: {"lists_changed": 372, "picks_from_small": {"picks": 1358, "avg6m": 23.8, "hit50": 22.3}, "picks_pushed_out": {"picks": 1641, "avg6m": 32.6, "hit50": 28.2}, "share_from_small": 60.4, "top_small_names": {"SKMEGGPROD": 38, "TANLA": 38, "ASIANENE": 34, "GREENPANEL": 30, "JUMPNET": 29, "FOCUS": 28, "GLOBAL": 27, "BORORENEW": 27}}
+V3.2 all picks: {'picks': 2304, 'avg6m': 32.9}
+done in 93s
